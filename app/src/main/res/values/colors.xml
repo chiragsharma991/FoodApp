@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="primary_color">#ff673ab7</color>
+    <color name="dark_primary_color">#ff512da8</color>
+    <color name="light_primary_color">#000</color>
+    <!--<color name="accent_color">#019E0F</color>-->
+    <color name="accent_color">#000</color>
+    <color name="primary_text_color">#fff</color>
+    <color name="secondary_text_color">#ffc2c2c2</color>
+    <color name="divider_color">#ffb6b6b6</color>
+    <color name="bg_gray">#ffeeeeee</color>
+    <color name="text_color">#ffffffff</color>
+    <color name="window_background">#ffebeff1</color>
+    <color name="color_tab_1">#455C65</color>
+    <color name="color_tab_2">#00886A</color>
+    <color name="color_tab_3">#8B6B62</color>
+    <color name="colorSecondaryText">#757575</color>
+    <color name="color_tab_4">#6C4A42</color>
+    <color name="dark_blue">#41579F</color>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#019E0F</color>
+    <color name="black">#000</color>
+    <color name="black_transparent">#999</color>
+    <color name="white">#fff</color>
+    <color name="white_light_grey">#f4f6f7</color>
+    <color name="transparent_gray">#b8999896</color>
+    <color name="green">#019E0F</color>
+    <color name="red">#CF2A28</color>
+    <color name="theme_color">#dd131d</color>
+    <color name="nav_theme_color">#100000</color>
+    <color name="theme_color_primary_dark">#b91420</color>
+    <color name="gray">#F0EFF5</color>
+    <color name="darkgray">#6D737B</color>
+    <color name="light_gray">#E1E1E1</color>
+    <color name="orange">#ff9800</color>
+    <color name="border_gray">#5C5C5C</color>
+    <color name="feed_item_bg">#ffffff</color>
+    <color name="bg_color">#F0EFF5</color>
+    <color name="default_bg_color">#FAFAFA</color>
+    <color name="grey">#dddddd</color>
+    <color name="colorDarkTransparent">#CC000000</color>
+
+    <!--
+        <color name="actionbar_color">#DCDCDC</color>
+    -->
+    <color name="actionbar_color">#fff</color>
+    <color name="light_red">#ece65154</color>
+    <color name="my_spinner_text_color">#000</color>
+    <color name="text">#212121</color>
+    <color name="param_lue">#383736</color>
+
+    <!-- FloatingToolbar -->
+    <color name="floating_popup_divider_dark">#2F2F2F</color>
+    <color name="floating_popup_divider_light">#E9E9E9</color>
+
+
+
+</resources>
