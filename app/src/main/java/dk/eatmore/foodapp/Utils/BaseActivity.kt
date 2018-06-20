@@ -82,7 +82,7 @@ abstract class BaseActivity : AppCompatActivity()
                         if (response.isSuccessful) {
                             onAliCallInteraction.onSuccess(response.body())
                         } else {
-                            var mErrorBody: String = response.errorBody()!!.string()
+                           // var mErrorBody: String = response.errorBody()!!.string()
                         }
                     } catch (e: Exception) {
                         log("error of catch ",e.toString())
@@ -102,13 +102,13 @@ abstract class BaseActivity : AppCompatActivity()
     }
 
     fun showSnackBar(view: View, string: String) {
-        Snackbar.make(view!!, string, Snackbar.LENGTH_SHORT).show()
+        Snackbar.make(view, string, Snackbar.LENGTH_SHORT).show()
     }
 
     fun hideKeyboard() {
         try {
             val imm = getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-            imm!!.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
+            imm.hideSoftInputFromWindow(currentFocus!!.windowToken, 0)
         }catch (e : Exception){
             e.printStackTrace()
         }

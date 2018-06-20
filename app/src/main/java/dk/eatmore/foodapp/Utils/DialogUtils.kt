@@ -100,7 +100,7 @@ object DialogUtils {
         builderSingle.setCustomTitle(view)
        // builderSingle.setMessage("testing")
 
-        val arrayAdapter = ArrayAdapter<String>(activity!!, R.layout.simple_expandable_list_item_1
+        val arrayAdapter = ArrayAdapter<String>(activity, R.layout.simple_expandable_list_item_1
         )
         for (i in 0..list.size-1){
             arrayAdapter.add(list.get(i))

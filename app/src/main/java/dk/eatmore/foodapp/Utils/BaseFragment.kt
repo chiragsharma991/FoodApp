@@ -182,7 +182,7 @@ abstract class BaseFragment : Fragment() {
                         if (response.isSuccessful) {
                             onAliCallInteraction.onSuccess(response.body())
                         } else {
-                            var mErrorBody: String = response.errorBody()!!.string()
+                           // var mErrorBody: String = response.errorBody()!!.string()
                             onAliCallInteraction.onFail(404)
                         }
                     } catch (e: Exception) {
