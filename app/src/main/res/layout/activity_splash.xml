@@ -29,35 +29,15 @@
             app:layout_constraintGuide_percent="0.5" />
 
         <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/navigate"
-            android:layout_width="@dimen/_30sdp"
-            android:layout_height="@dimen/_30sdp"
-            android:layout_marginEnd="8dp"
-            android:layout_marginRight="8dp"
-            android:layout_marginTop="40dp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
-            app:layout_constraintStart_toStartOf="@+id/find_postal_lbl"
-            app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/navigate"
-
-            />
-
-
-        <android.support.v7.widget.AppCompatImageView
             android:id="@+id/appCompatImageView_overlay_white"
             android:layout_width="0dp"
             android:layout_height="0dp"
             android:background="@color/white"
             android:scaleType="centerCrop"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintLeft_toLeftOf="parent"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="1.0" />
+            app:layout_constraintTop_toBottomOf="parent"
+            tools:layout_editor_absoluteX="0dp" />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/appCompatImageView_image"
@@ -84,15 +64,15 @@
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintVertical_bias="0.0" />
 
+
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/find_postal_lbl"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
+            android:alpha="0"
             android:layout_marginRight="8dp"
-            android:alpha="1"
-            android:fontFamily="@font/aller_rg"
             android:text="Enter your postalcode"
             app:layout_constraintBottom_toTopOf="@+id/find_rest_edt"
             app:layout_constraintEnd_toEndOf="@+id/find_rest_edt"
@@ -108,19 +88,32 @@
             android:layout_marginEnd="16dp"
             android:layout_marginLeft="16dp"
             android:layout_marginRight="16dp"
-            android:layout_marginStart="16dp"
-            android:layout_marginTop="16dp"
             android:background="@drawable/round_corner"
-            android:fontFamily="@font/aller_rg"
+            android:layout_marginStart="16dp"
             android:paddingLeft="@dimen/_8sdp"
+            android:layout_marginTop="16dp"
             app:cardCornerRadius="@dimen/_4sdp"
-            app:layout_constraintBottom_toBottomOf="@+id/appCompatImageView_overlay_white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/appCompatImageView_overlay_white">
-
+            app:layout_constraintTop_toBottomOf="@+id/appCompatImageView_overlay_white"
+            >
 
         </android.support.v7.widget.AppCompatEditText>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/navigate"
+            android:layout_width="@dimen/_30sdp"
+            android:layout_height="@dimen/_30sdp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            app:srcCompat="@drawable/navigate"
+            android:layout_marginTop="16dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/find_postal_lbl"
+            app:layout_constraintBottom_toTopOf="parent"
+
+            />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/find_location"
@@ -151,7 +144,6 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="8dp"
             android:background="@color/primary_color"
-            android:fontFamily="@font/aller_rg"
             android:text="Find restaurants"
             android:textAllCaps="false"
             android:textColor="@color/white"
@@ -159,12 +151,14 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/find_rest_edt" />
 
-
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/appCompatTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:background="@color/white"
             android:fontFamily="@font/lato_semibolditalic"
+            android:paddingLeft="@dimen/_8sdp"
+            android:paddingRight="@dimen/_8sdp"
             android:text="EatMore"
             android:textColor="@color/red"
             android:textSize="@dimen/_45sdp"
@@ -174,18 +168,8 @@
             app:layout_constraintHorizontal_bias="0.502"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.100" />
+            app:layout_constraintVertical_bias="0.395" />
 
-        <View
-            android:id="@+id/view_left"
-            android:layout_width="0dp"
-            android:layout_height="5dp"
-            android:background="@color/white"
-            app:layout_constraintEnd_toEndOf="@+id/appCompatTextView"
-            app:layout_constraintStart_toStartOf="@+id/appCompatTextView"
-            app:layout_constraintTop_toBottomOf="@+id/appCompatTextView">
-
-        </View>
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/find_txt"
@@ -198,9 +182,21 @@
             android:textColor="@color/red"
             android:textSize="@dimen/_25sdp"
             android:textStyle="italic"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/view_left" />
+
+
+        <View
+            android:id="@+id/view_left"
+            android:layout_width="0dp"
+            android:layout_height="5dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/white"
+            app:layout_constraintEnd_toEndOf="@+id/appCompatTextView"
+            app:layout_constraintStart_toStartOf="@+id/appCompatTextView"
+            app:layout_constraintTop_toBottomOf="@+id/appCompatTextView">
+
+        </View>
 
 
     </android.support.constraint.ConstraintLayout>

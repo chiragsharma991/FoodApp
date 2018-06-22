@@ -1,0 +1,247 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+    <data>
+
+
+    </data>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/constraint"
+        tools:context=".MainActivity"
+        >
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline2"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            app:layout_constraintGuide_percent="0.5" />
+
+        <android.support.constraint.Guideline
+            android:id="@+id/guideline3"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintGuide_percent="0.5"
+            />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/appCompatImageView"
+            android:layout_width="0dp"
+            android:layout_height="match_parent"
+            android:scaleType="centerCrop"
+            app:srcCompat="@drawable/food_slash"
+            android:alpha="0"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/appCompatImageView_overlay"
+            android:layout_width="0dp"
+            android:layout_height="570dp"
+            android:alpha="0"
+            android:background="@color/red"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.0" />
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/appCompatImageView_overlay_white"
+            android:layout_width="0dp"
+            android:layout_height="570dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.666" />
+
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmer_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:duration="100"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.100000024">
+
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/appCompatTextView"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:fontFamily="@font/lato_heavyitalic"
+                android:text="EatMore"
+                android:textColor="@color/red"
+                android:textSize="@dimen/_45sdp"
+                android:textStyle="italic"
+                tools:layout_editor_absoluteX="69dp"
+                tools:layout_editor_absoluteY="189dp" />
+
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/find_txt"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginTop="8dp"
+            android:fontFamily="@font/lato_semibolditalic"
+            android:gravity="center_horizontal"
+            android:text="Find your flavour\nthis valentine's "
+            android:textColor="@color/red"
+            android:textSize="@dimen/_25sdp"
+            android:textStyle="italic"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="@+id/shimmer_view"
+            app:layout_constraintStart_toStartOf="@+id/shimmer_view"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.20999998" />
+
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/find_postal_lbl"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginRight="8dp"
+            android:text="Enter your postalcode"
+            app:layout_constraintBottom_toTopOf="@+id/find_rest_edt"
+            app:layout_constraintEnd_toEndOf="@+id/find_rest_edt"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="@+id/find_rest_edt" />
+
+        <View
+            android:id="@+id/view_left"
+            android:layout_width="0dp"
+            android:layout_height="5dp"
+            android:alpha="0"
+            android:layout_marginBottom="8dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="@+id/appCompatImageView"
+            app:layout_constraintEnd_toEndOf="@+id/shimmer_view"
+            app:layout_constraintStart_toStartOf="@+id/shimmer_view"
+            app:layout_constraintTop_toTopOf="parent"
+            app:layout_constraintVertical_bias="0.48000002">
+
+        </View>
+
+
+        <!--   <android.support.v7.widget.AppCompatEditText
+               android:layout_width="268dp"
+               android:layout_height="@dimen/_45sdp"
+
+               android:layout_marginBottom="8dp"
+               android:layout_marginEnd="8dp"
+               android:layout_marginLeft="8dp"
+               android:layout_marginRight="8dp"
+               android:layout_marginStart="8dp"
+               android:layout_marginTop="8dp"
+               android:background="@drawable/round_corner"
+               app:layout_constraintBottom_toBottomOf="parent"
+               app:layout_constraintEnd_toEndOf="parent"
+               app:layout_constraintStart_toStartOf="parent"
+               app:layout_constraintTop_toTopOf="parent" />
+   -->
+
+
+        <android.support.v7.widget.AppCompatEditText
+            android:id="@+id/find_rest_edt"
+            android:layout_width="0dp"
+            android:layout_height="@dimen/_45sdp"
+            android:layout_marginBottom="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:background="@drawable/round_corner"
+            android:layout_marginStart="16dp"
+            android:paddingLeft="@dimen/_8sdp"
+            android:layout_marginTop="16dp"
+            app:cardCornerRadius="@dimen/_4sdp"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="@+id/appCompatImageView_overlay"
+            app:layout_constraintTop_toTopOf="@+id/appCompatImageView_overlay">
+
+
+        </android.support.v7.widget.AppCompatEditText>
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/find_location"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+
+            android:layout_marginBottom="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            app:layout_constraintBottom_toBottomOf="@+id/find_rest_edt"
+            app:layout_constraintEnd_toEndOf="@+id/find_rest_edt"
+            app:layout_constraintHorizontal_bias="1.0"
+            app:layout_constraintStart_toStartOf="@+id/find_rest_edt"
+            app:layout_constraintTop_toTopOf="@+id/find_rest_edt"
+            app:srcCompat="@drawable/location" />
+
+
+        <android.support.v7.widget.AppCompatButton
+            android:id="@+id/find_rest_btn"
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_45sdp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginTop="8dp"
+            android:background="@color/primary_color"
+            android:text="Find restaurants"
+            android:textAllCaps="false"
+            android:textColor="@color/white"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/find_rest_edt" />
+
+
+        <ImageView
+            android:id="@+id/navigate"
+            android:layout_width="@dimen/_40sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginEnd="8dp"
+
+            android:layout_marginLeft="8dp"
+            android:layout_marginRight="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:src="@drawable/navigate"
+            android:tint="@color/red"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.0"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+</layout>
+

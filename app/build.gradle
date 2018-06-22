@@ -21,6 +21,8 @@ android {
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        vectorDrawables.useSupportLibrary = true
+
     }
     buildTypes {
         release {
@@ -44,7 +46,6 @@ dependencies {
 
     implementation "android.arch.lifecycle:extensions:1.1.0"
     annotationProcessor "android.arch.lifecycle:compiler:1.0.0"
-
 
     //Retrofit
     implementation 'com.squareup.retrofit2:retrofit:2.3.0'

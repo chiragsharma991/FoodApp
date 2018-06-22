@@ -19,9 +19,10 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
         val user =User()
 
-        val binding:ActivityMainBinding= DataBindingUtil.setContentView(this,R.layout.activity_main)
+ /*       val binding:ActivityMainBinding= DataBindingUtil.setContentView(this,R.layout.activity_main)
 
         //test
          usersViewModel = ViewModelProviders.of(this).get(MainViewModel::class.java!!)
@@ -55,20 +56,16 @@ class MainActivity : AppCompatActivity() {
         usersViewModel.getUser().observe(this, Observer { user -> Log.e("TAG", user!!.email)
 
         binding.user= usersViewModel.getUser().value
+*/
+        }
 
-        })
 
 
-    }
-
-    private fun showList(count: String) {
-        Log.e("main"," count  "+count)
-    }
-
-    override fun onDestroy() {
-        super.onDestroy()
-    //    usersViewModel.name.removeObservers(this)
 
 
     }
-}
+
+
+
+
+
