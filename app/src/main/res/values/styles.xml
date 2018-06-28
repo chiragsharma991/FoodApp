@@ -5,7 +5,7 @@
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/white</item>
         <item name="colorPrimaryDark">@color/white</item>
-        <item name="colorAccent">@color/primary_color</item>
+        <item name="colorAccent">@color/theme_color</item>
     </style>
 
     <style name="AppTheme.NoActionBar">
@@ -30,5 +30,50 @@
         <item name="android:textColorPrimary">@color/theme_color_primary_dark</item>
         <item name="android:background">@android:color/transparent</item>
     </style>
+
+
+
+    <!--Text view -->
+    
+    <style name="TextViewLarge" parent="@android:style/Widget.Holo.Light.TextView">
+        <item name="android:textColor">@color/black_light</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/hindvadodara_medium</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
+
+    </style>
+    <style name="TextViewMid" parent="@android:style/Widget.Holo.Light.TextView">
+        <item name="android:textColor">@color/black_light</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/hindvadodara_medium</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+
+    </style>
+    <style name="TextViewSmall" parent="@android:style/Widget.Holo.Light.TextView">
+        <item name="android:textColor">@color/black_light</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/hindvadodara_medium</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+
+    </style>
+
+
+
+    <!--EditText-->
+
+    <style name="EditText" parent="Widget.AppCompat.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/_40sdp</item>
+        <item name="android:paddingLeft">@dimen/_8sdp</item>
+        <item name="android:background">@drawable/round_corner</item>
+        <item name="android:fontFamily">@font/hindvadodara_medium</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
+
+
+
 
 </resources>

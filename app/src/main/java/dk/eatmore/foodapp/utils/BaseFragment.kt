@@ -1,4 +1,4 @@
-package dk.eatmore.foodapp.Utils
+package dk.eatmore.foodapp.utils
 
 import android.Manifest
 import android.app.Activity
@@ -21,8 +21,10 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.support.v4.app.ActivityCompat
 import android.content.pm.PackageManager
+import android.databinding.DataBindingUtil
 import android.os.Build
 import dk.eatmore.foodapp.BuildConfig
+import dk.eatmore.foodapp.databinding.FindrestaurantBinding
 import dk.eatmore.foodapp.rest.ApiClient
 import dk.eatmore.foodapp.rest.ApiInterface
 
@@ -32,7 +34,6 @@ abstract class BaseFragment : Fragment() {
     abstract fun getLayout(): Int
     abstract fun initView(view: View?, savedInstanceState: Bundle?)
     lateinit var displayMetrics: DisplayMetrics
-    abstract fun handleBackButton() : Boolean
 
 
 
@@ -47,9 +48,6 @@ abstract class BaseFragment : Fragment() {
         retainInstance = true
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(getLayout(), container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -74,33 +72,7 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
-    fun popFragment(): Boolean {
-        var isPop = false
-        try {
-            if (childFragmentManager.backStackEntryCount > 0) {
-                /**
-                 * Check Filter Fragment Appear or not, Filter Type Fragment Also
-                 */
-                hideKeyboard()
 
-                var fragment = childFragmentManager.findFragmentByTag(childFragmentManager.getBackStackEntryAt(childFragmentManager.backStackEntryCount - 1).name)
-                if(fragment != null && fragment is BaseFragment){
-                    if(fragment.handleBackButton()){
-                        isPop = true
-                        childFragmentManager.popBackStack()
-                    }else{
-                        isPop = true
-                    }
-                }else {
-                    isPop = true
-                    childFragmentManager.popBackStack()
-                }
-            }
-        } catch (e: Exception) {
-            e.printStackTrace()
-        }
-        return isPop
-    }
 
     /*  fun popFragment(parentFragment: Fragment?) {
           try {

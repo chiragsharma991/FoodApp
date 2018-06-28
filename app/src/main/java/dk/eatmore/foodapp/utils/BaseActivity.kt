@@ -1,4 +1,4 @@
-package dk.eatmore.foodapp.Utils
+package dk.eatmore.foodapp.utils
 
 import android.Manifest
 import android.content.Context
@@ -18,7 +18,6 @@ import dk.eatmore.foodapp.BuildConfig
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
-import android.R
 
 
 abstract class BaseActivity : AppCompatActivity()

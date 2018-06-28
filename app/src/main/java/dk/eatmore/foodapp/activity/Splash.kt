@@ -1,16 +1,14 @@
 package dk.eatmore.foodapp.activity
 
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.support.annotation.RequiresApi
 import android.support.constraint.ConstraintSet
 import android.transition.ChangeBounds
 import android.transition.TransitionManager
 import android.view.animation.AnticipateOvershootInterpolator
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.Utils.BaseActivity
+import dk.eatmore.foodapp.utils.BaseActivity
 import kotlinx.android.synthetic.main.activity_splash.*
 
 class Splash : BaseActivity() {

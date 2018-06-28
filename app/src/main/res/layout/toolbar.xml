@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/toolbar"
+    android:layout_width="match_parent"
+    android:elevation="@null"
+    app:layout_scrollFlags="scroll|enterAlways"
+    android:layout_height="?attr/actionBarSize"
+    android:background="@color/background"
+    android:minHeight="?attr/actionBarSize"
+    android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+    app:contentScrim="@android:color/white"
+    app:layout_collapseMode="pin"
+    >
+
+    <LinearLayout
+        android:id="@+id/lin_back"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center_vertical">
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/img_toolbar_back"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingLeft="0dp"
+            android:paddingBottom="@dimen/_10sdp"
+            android:paddingTop="@dimen/_10sdp"
+            android:paddingRight="@dimen/_10sdp"
+            app:srcCompat="@drawable/navigate"
+            tools:ignore="VectorDrawableCompat" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/txt_toolbar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+            android:layout_marginLeft="@dimen/_5sdp"
+            android:textColor="@color/theme_color"
+            />
+
+
+
+
+    </LinearLayout>
+
+
+</android.support.v7.widget.Toolbar>
+
