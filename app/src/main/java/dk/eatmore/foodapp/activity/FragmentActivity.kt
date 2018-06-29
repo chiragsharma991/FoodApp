@@ -23,11 +23,14 @@ class FragmentActivity :BaseActivity(){
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = DataBindingUtil.setContentView(this,R.layout.fragment_activity)
-        initView()
+        initView(savedInstanceState)
+     //   log(TAG, "savedInstanceState..."+savedInstanceState)
+
     }
 
-    private fun initView() {
+    private fun initView(savedInstanceState: Bundle?) {
         fullScreen()
+        if(savedInstanceState==null)
         supportFragmentManager.beginTransaction().replace(R.id.container_view, findRestaurant, FindRestaurant.TAG).addToBackStack(FindRestaurant.TAG).commit()
 
 

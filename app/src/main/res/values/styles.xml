@@ -1,4 +1,4 @@
-<resources>
+<resources xmlns:tools="http://schemas.android.com/tools">
 
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
@@ -36,29 +36,48 @@
     <!--Text view -->
     
     <style name="TextViewLarge" parent="@android:style/Widget.Holo.Light.TextView">
-        <item name="android:textColor">@color/black_light</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="android:fontFamily">@font/hindvadodara_medium</item>
         <item name="android:textAppearance">?android:attr/textAppearanceLarge</item>
 
     </style>
     <style name="TextViewMid" parent="@android:style/Widget.Holo.Light.TextView">
-        <item name="android:textColor">@color/black_light</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:fontFamily">@font/hindvadodara_medium</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
 
     </style>
     <style name="TextViewSmall" parent="@android:style/Widget.Holo.Light.TextView">
-        <item name="android:textColor">@color/black_light</item>
+        <item name="android:textColor">@color/black</item>
         <item name="android:layout_width">wrap_content</item>
         <item name="android:layout_height">wrap_content</item>
         <item name="android:fontFamily">@font/hindvadodara_medium</item>
+        <item name="android:includeFontPadding">false</item>
         <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
 
     </style>
+
+
+    <!--Button-->
+
+    <style name="Button" parent="Widget.AppCompat.Button">
+        <item name="android:textColor">@color/white</item>
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ubuntu_l</item>
+        <item name="android:textAllCaps">false</item>
+        <item name="android:backgroundTint" tools:targetApi="lollipop">@color/theme_color</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+
+    </style>
+
+
 
 
 

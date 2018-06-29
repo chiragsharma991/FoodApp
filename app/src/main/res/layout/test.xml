@@ -1,17 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.v4.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    app:layout_behavior="@string/appbar_scrolling_view_behavior"
-    tools:context=".activity.FragmentActivity"
-    tools:showIn="@layout/fragment_activity">
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:layout_width="wrap_content"
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/text_margin"
-        android:text="@string/large_text" />
+        android:id="@+id/row_order_cardview"
+        android:clickable="true"
+        app:cardBackgroundColor="@android:color/darker_gray"
+        android:layout_margin="@dimen/_5sdp"
+        app:cardElevation="@dimen/_2sdp"
+        >
 
-</android.support.v4.widget.NestedScrollView>
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline5"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <android.support.constraint.Guideline
+                android:id="@+id/guideline4"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                app:layout_constraintGuide_percent="0.5" />
+
+            <LinearLayout
+                android:id="@+id/row_image_container"
+                android:layout_width="38dp"
+                android:layout_height="match_parent"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toStartOf="@+id/row_txt_container"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:background="@color/black_light"
+                    android:padding="@dimen/_5sdp"
+                    app:srcCompat="@mipmap/logo"
+
+
+                    />
+
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/row_txt_container"
+                android:layout_width="156dp"
+                android:layout_height="match_parent"
+                android:layout_marginBottom="8dp"
+                android:layout_marginEnd="8dp"
+                android:layout_marginRight="8dp"
+                android:orientation="vertical"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/row_btn_container"
+                app:layout_constraintStart_toEndOf="@+id/row_image_container"
+                app:layout_constraintTop_toTopOf="parent">
+
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TextViewMid"
+                    android:text="Pronto pizza"
+                    android:includeFontPadding="false"
+                    android:lineSpacingExtra="0dp"
+
+                    />
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TextViewSmall"
+                    android:text="Kr.110,00"
+                    android:textColor="@color/black_light" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TextViewSmall"
+                    android:text="31-05-2018 delivery"
+                    android:textColor="@color/black_light" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TextViewSmall"
+                    android:text="make an assesment"
+                    android:textColor="@color/theme_color" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/row_btn_container"
+                android:layout_width="122dp"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/row_txt_container"
+                app:layout_constraintTop_toTopOf="parent">
+
+                <android.support.v7.widget.AppCompatButton
+                    style="@style/Button"
+                    android:background="@color/theme_color"
+                    android:text="Reorder" />
+
+                <android.support.v7.widget.AppCompatButton
+                    style="@style/Button"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="@color/background_light"
+                    android:backgroundTint="@color/background_light"
+                    android:text="Details"
+                    android:textColor="@color/black" />
+
+
+            </LinearLayout>
+
+
+        </android.support.constraint.ConstraintLayout>
+
+    </android.support.v7.widget.CardView>
+
+
+
+</android.support.constraint.ConstraintLayout>

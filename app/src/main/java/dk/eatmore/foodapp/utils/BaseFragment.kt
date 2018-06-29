@@ -25,6 +25,7 @@ import android.databinding.DataBindingUtil
 import android.os.Build
 import dk.eatmore.foodapp.BuildConfig
 import dk.eatmore.foodapp.databinding.FindrestaurantBinding
+import dk.eatmore.foodapp.fragment.FindRestaurant
 import dk.eatmore.foodapp.rest.ApiClient
 import dk.eatmore.foodapp.rest.ApiInterface
 
@@ -46,6 +47,9 @@ abstract class BaseFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
+
+
+
     }
 
 
@@ -174,7 +178,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     interface OnApiCallInteraction {
-        //  100 > network not foune  : 404 > server error.
+        //  100 > network not found  : 404 > server error.
         fun <T> onSuccess(body: T?)
         fun onFail(error : Int)
     }
