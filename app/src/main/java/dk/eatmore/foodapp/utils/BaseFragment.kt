@@ -137,9 +137,13 @@ abstract class BaseFragment : Fragment() {
         return activity!!
     }
 
-    fun log(tag: String, msg: String) {
+    fun loge(tag: String, msg: String) {
         if (BuildConfig.DEBUG)
             Log.e(tag, msg)
+    }
+    fun logd(tag: String, msg: String) {
+        if (BuildConfig.DEBUG)
+            Log.d(tag, msg)
     }
 
     /**
@@ -167,7 +171,7 @@ abstract class BaseFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<T>, t: Throwable) {
-                    log("Base", ""+t.message)
+                    loge("Base", ""+t.message)
                     onAliCallInteraction.onFail(100)
                 }
             })

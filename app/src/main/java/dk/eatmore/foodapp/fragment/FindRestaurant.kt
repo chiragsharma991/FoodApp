@@ -61,7 +61,6 @@ class FindRestaurant : BaseFragment() {
         findRestaurantViewModel = ViewModelProviders.of(this).get(FindRestaurantUIModel::class.java!!)
          // log(TAG, "savedInstanceState..."+savedInstanceState)
 
-        log(" fragment", "savedInstanceState..."+savedInstanceState)
 
 
 
@@ -69,7 +68,6 @@ class FindRestaurant : BaseFragment() {
 
             fetchOrders(false)
             findRestaurantViewModel.getUser().observe(this, Observer<LastOrder> {
-                log(" notifyied chenage...","----")
 
             })
 
@@ -95,13 +93,13 @@ class FindRestaurant : BaseFragment() {
 
             override fun <T> onSuccess(body: T?) {
 
-                log(TAG, "api call success..."+(body as LastOrder).status)
+                loge(TAG, "api call success..."+(body as LastOrder).status)
 
                 if ((body as LastOrder).status) {
 
                     findRestaurantViewModel.set(body)
 
-                    log(TAG, "View model..."+findRestaurantViewModel.uiData.value!!.msg)
+                    loge(TAG, "View model..."+findRestaurantViewModel.uiData.value!!.msg)
 
 
                 } else {
@@ -111,7 +109,7 @@ class FindRestaurant : BaseFragment() {
             }
 
             override fun onFail(error: Int) {
-                log(TAG, "api call failed...")
+                loge(TAG, "api call failed...")
 
                 when (error) {
                     404 -> {
@@ -134,18 +132,18 @@ class FindRestaurant : BaseFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        log(TAG,"on destroy...")
+        logd(TAG,"on destroy...")
     }
 
     override fun onDetach() {
         super.onDetach()
-        log(TAG,"on detech...")
+        logd(TAG,"on detech...")
 
     }
 
     override fun onPause() {
         super.onPause()
-        log(TAG,"on pause...")
+        logd(TAG,"on pause...")
 
     }
 

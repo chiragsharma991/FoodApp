@@ -3,17 +3,18 @@ package dk.eatmore.foodapp.activity
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.utils.BaseActivity
 import dk.eatmore.foodapp.databinding.FragmentActivityBinding
 import dk.eatmore.foodapp.fragment.FindRestaurant
+import dk.eatmore.foodapp.fragment.HomeContainerFragment
+import dk.eatmore.foodapp.utils.BaseActivity
 
-class FragmentActivity :BaseActivity(){
+class HomeActivity : BaseActivity(){
 
-    private lateinit var binding: FragmentActivityBinding
-    private val findRestaurant= FindRestaurant.newInstance()
+    private lateinit var mHomeContainerFragment: HomeContainerFragment
+
 
     companion object {
-        val TAG="FragmentActivity"
+        val TAG="HomeActivity"
         fun newInstance() : FragmentActivity{
             return FragmentActivity()
         }
@@ -22,16 +23,19 @@ class FragmentActivity :BaseActivity(){
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = DataBindingUtil.setContentView(this,R.layout.fragment_activity)
+        setContentView(R.layout.home_activity)
         initView(savedInstanceState)
-     //   log(TAG, "savedInstanceState..."+savedInstanceState)
+        //   log(TAG, "savedInstanceState..."+savedInstanceState)
 
     }
 
+
     private fun initView(savedInstanceState: Bundle?) {
-        fullScreen()
-        if(savedInstanceState==null)
-        supportFragmentManager.beginTransaction().replace(R.id.container_view, findRestaurant, FindRestaurant.TAG).addToBackStack(FindRestaurant.TAG).commit()
+        //fullScreen()
+        if(savedInstanceState==null){
+            mHomeContainerFragment = HomeContainerFragment.newInstance()
+            supportFragmentManager.beginTransaction().replace(R.id.home_container, mHomeContainerFragment, "").commit()
+        }
 
 
     }
@@ -46,6 +50,7 @@ class FragmentActivity :BaseActivity(){
         logd(TAG,"on pause...")
 
     }
+
 
 
 }

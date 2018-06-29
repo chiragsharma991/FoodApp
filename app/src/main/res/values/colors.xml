@@ -20,6 +20,7 @@
     <color name="dark_blue">#41579F</color>
     <color name="colorPrimary">#3F51B5</color>
     <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorLanguageUnselectedGrey">#ADADAD</color>
     <color name="colorAccent">#019E0F</color>
     <color name="black">#000</color>
     <color name="black_light">#4c4c4c</color>

@@ -48,9 +48,14 @@ abstract class BaseActivity : AppCompatActivity()
         }
     }
 
-    fun log(tag: String, msg: String) {
+    fun loge(tag: String, msg: String) {
         if (BuildConfig.DEBUG)
-            Log.e(tag, msg)
+            Log.d(tag, msg)
+    }
+
+    fun logd(tag: String, msg: String) {
+        if (BuildConfig.DEBUG)
+            Log.d(tag, msg)
     }
 
     fun fullScreen() {
@@ -84,13 +89,13 @@ abstract class BaseActivity : AppCompatActivity()
                            // var mErrorBody: String = response.errorBody()!!.string()
                         }
                     } catch (e: Exception) {
-                        log("error of catch ",e.toString())
+                        loge("error of catch ",e.toString())
                         e.printStackTrace()
                     }
                 }
 
                 override fun onFailure(call: Call<T>, t: Throwable) {
-                    log("on failure","-----"+t.message)
+                    loge("on failure","-----"+t.message)
                     onAliCallInteraction.onFail(404)
                 }
             })
