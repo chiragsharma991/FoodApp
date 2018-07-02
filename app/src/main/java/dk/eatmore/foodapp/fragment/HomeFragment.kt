@@ -13,6 +13,7 @@ import android.widget.Toast
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.adapter.OrderListAdapter
 import dk.eatmore.foodapp.databinding.FindrestaurantBinding
+import dk.eatmore.foodapp.databinding.FragmentHomeFragmentBinding
 import dk.eatmore.foodapp.model.LastOrder
 import dk.eatmore.foodapp.utils.BaseFragment
 import kotlinx.android.synthetic.main.findrestaurant.*
@@ -20,7 +21,7 @@ import kotlinx.android.synthetic.main.findrestaurant.*
 
 class HomeFragment : BaseFragment() {
 
-    private lateinit var binding: FindrestaurantBinding
+    private lateinit var binding: FragmentHomeFragmentBinding
     lateinit var clickEvent : HomeFragment.MyClickHandler
     private  var mAdapter: OrderListAdapter?=null
 
@@ -36,10 +37,10 @@ class HomeFragment : BaseFragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(getLayout(), container, false)
+       // return inflater.inflate(getLayout(), container, false)
 
-        //binding= DataBindingUtil.inflate(inflater,getLayout(),container,false)
-        //return binding.root
+        binding= DataBindingUtil.inflate(inflater,getLayout(),container,false)
+        return binding.root
 
     }
 
@@ -51,8 +52,8 @@ class HomeFragment : BaseFragment() {
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
 
-       // clickEvent =MyClickHandler(this)
-     //   binding.handlers=clickEvent
+        clickEvent =MyClickHandler(this)
+        binding.handlers=clickEvent
         mAdapter = OrderListAdapter(context!!)
         recycler_view.layoutManager = LinearLayoutManager(getActivityBase())
         recycler_view.adapter = mAdapter

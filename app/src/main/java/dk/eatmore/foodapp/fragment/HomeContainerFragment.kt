@@ -78,6 +78,10 @@ class HomeContainerFragment : BaseFragment() {
 
             }
         })
+        rel_home.setOnClickListener { view_pager.setCurrentItem(0, true) }
+        rel_order.setOnClickListener { view_pager.setCurrentItem(1, true) }
+        rel_profile.setOnClickListener { view_pager.setCurrentItem(2, true) }
+
 
 
     }
@@ -89,7 +93,7 @@ class HomeContainerFragment : BaseFragment() {
 
     private fun changeMenu(position: Int) {
         if (position == 0) {
-            img_home.setColorFilter(ContextCompat.getColor(getActivityBase(), R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+            img_home.setColorFilter(ContextCompat.getColor(getActivityBase(), R.color.theme_color), android.graphics.PorterDuff.Mode.SRC_IN);
             view_divider_home.visibility = View.VISIBLE
         } else {
             img_home.setColorFilter(ContextCompat.getColor(getActivityBase(), R.color.colorLanguageUnselectedGrey), android.graphics.PorterDuff.Mode.SRC_IN);
@@ -97,7 +101,7 @@ class HomeContainerFragment : BaseFragment() {
         }
 
         if (position == 1) {
-            img_fav.setColorFilter(ContextCompat.getColor(getActivityBase(), R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+            img_fav.setColorFilter(ContextCompat.getColor(getActivityBase(), R.color.theme_color), android.graphics.PorterDuff.Mode.SRC_IN);
             view_divider_fav.visibility = View.VISIBLE
         } else {
             img_fav.setColorFilter(ContextCompat.getColor(getActivityBase(), R.color.colorLanguageUnselectedGrey), android.graphics.PorterDuff.Mode.SRC_IN);
@@ -105,7 +109,7 @@ class HomeContainerFragment : BaseFragment() {
         }
 
         if (position == 2) {
-            img_profile.setColorFilter(ContextCompat.getColor(getActivityBase(), R.color.colorAccent), android.graphics.PorterDuff.Mode.SRC_IN);
+            img_profile.setColorFilter(ContextCompat.getColor(getActivityBase(), R.color.theme_color), android.graphics.PorterDuff.Mode.SRC_IN);
             view_divider_profile.visibility = View.VISIBLE
         } else {
             img_profile.setColorFilter(ContextCompat.getColor(getActivityBase(), R.color.colorLanguageUnselectedGrey), android.graphics.PorterDuff.Mode.SRC_IN);

@@ -31,8 +31,9 @@ class HomeActivity : BaseActivity(){
 
 
     private fun initView(savedInstanceState: Bundle?) {
-        //fullScreen()
+        fullScreen()
         if(savedInstanceState==null){
+            // if you not take in this condition than if you change orientation then fragment added again and again.
             mHomeContainerFragment = HomeContainerFragment.newInstance()
             supportFragmentManager.beginTransaction().replace(R.id.home_container, mHomeContainerFragment, "").commit()
         }
