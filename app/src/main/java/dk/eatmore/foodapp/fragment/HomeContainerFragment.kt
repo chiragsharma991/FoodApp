@@ -1,31 +1,19 @@
 package dk.eatmore.foodapp.fragment
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProviders
-import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.ViewPager
-import android.support.v7.widget.LinearLayoutManager
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.databinding.FindrestaurantBinding
+import dk.eatmore.foodapp.fragment.Dashboard.AccountFragment
+import dk.eatmore.foodapp.fragment.Dashboard.HomeFragment
+import dk.eatmore.foodapp.fragment.Dashboard.OrderFragment
 import dk.eatmore.foodapp.utils.BaseFragment
-import android.widget.Toast
-import dk.eatmore.foodapp.adapter.OrderListAdapter
-import dk.eatmore.foodapp.model.LastOrder
-import dk.eatmore.foodapp.model.User
-import dk.eatmore.foodapp.rest.ApiCall
-import kotlinx.android.synthetic.main.findrestaurant.*
 import kotlinx.android.synthetic.main.fragment_home_container.*
 import kotlinx.android.synthetic.main.layout_bottom_menu.*
 

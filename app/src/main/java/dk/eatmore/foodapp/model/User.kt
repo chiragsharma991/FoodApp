@@ -5,7 +5,6 @@ import android.arch.lifecycle.ViewModel
 import android.databinding.BaseObservable
 import android.databinding.Bindable
 import android.util.Log
-import com.android.databinding.library.baseAdapters.BR
 
 data class User  (
         var name: String = "",

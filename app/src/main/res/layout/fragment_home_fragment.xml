@@ -1,172 +1,187 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout  xmlns:android="http://schemas.android.com/apk/res/android"
+
+    >
 
     <data>
 
         <variable
             name="handlers"
-            type="dk.eatmore.foodapp.fragment.HomeFragment.MyClickHandler">
+            type="dk.eatmore.foodapp.fragment.Dashboard.HomeFragment.MyClickHandler">
 
         </variable>
 
     </data>
 
 
-    <FrameLayout
-        android:id="@+id/home_fragment_container"
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        >
 
-        <android.support.design.widget.CoordinatorLayout
+
+        <FrameLayout
+            android:id="@+id/home_fragment_container"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true">
+            android:layout_height="match_parent">
 
-            <android.support.design.widget.AppBarLayout
-                android:id="@+id/app_bar"
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_300sdp"
-                android:fitsSystemWindows="true"
-
-                >
-
-
-                <android.support.design.widget.CollapsingToolbarLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:fitsSystemWindows="true"
-                    app:layout_scrollFlags="scroll|exitUntilCollapsed">
-
-                    <android.support.v7.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        app:cardElevation="@dimen/_5sdp">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-
-                            >
-
-                            <android.support.v7.widget.AppCompatImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:fitsSystemWindows="true"
-                                android:scaleType="centerCrop"
-                                android:src="@mipmap/banner" />
-
-                            <View
-                                android:id="@+id/fadeBackgroudView"
-                                android:layout_width="wrap_content"
-                                android:layout_height="match_parent"
-                                android:layout_alignParentBottom="true"
-                                android:foreground="@drawable/gradient_variant" />
-
-                        </RelativeLayout>
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:gravity="center_horizontal"
-                                android:orientation="vertical">
-                                <!--  <ImageView
-                                      android:layout_width="match_parent"
-                                      android:layout_height="@dimen/_25sdp"
-                                      android:layout_marginLeft="@dimen/_8sdp"
-                                      android:layout_marginRight="@dimen/_8sdp"
-                                      android:layout_marginTop="@dimen/_8sdp"
-                                      android:contentDescription="logo"
-                                      android:src="@mipmap/logo" />-->
-
-                                <TextView
-                                    style="@style/TextViewMid"
-                                    android:layout_marginTop="@dimen/_16sdp"
-                                    android:alpha="0.7"
-                                    android:fontFamily="@font/ubuntu_m"
-                                    android:text="DELICIOUS FOOD FOR EVERY MOOD"
-                                    android:textColor="@color/theme_color" />
-
-                                <TextView
-                                    style="@style/TextViewMid"
-                                    android:text="Order from food over 200 restaurants" />
-
-                                <TextView
-                                    style="@style/TextViewMid"
-                                    android:layout_marginTop="@dimen/_32sdp"
-                                    android:text="Order your take away food online" />
-
-
-                            </LinearLayout>
-
-                        </RelativeLayout>
-
-
-                    </android.support.v7.widget.CardView>
-
-
-                </android.support.design.widget.CollapsingToolbarLayout>
-
-
-            </android.support.design.widget.AppBarLayout>
-
-            <android.support.v4.widget.NestedScrollView
+            <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_marginTop="@dimen/_32sdp"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                >
+                android:background="@color/background_light"
+                android:fitsSystemWindows="true">
 
-                <android.support.v7.widget.RecyclerView
-                    android:id="@+id/recycler_view"
-                    android:padding="@dimen/_2sdp"
-                    android:clipToPadding="false"
+                <android.support.design.widget.AppBarLayout
+                    android:id="@+id/app_bar"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="@dimen/_300sdp"
+                    android:fitsSystemWindows="true"
 
-            </android.support.v4.widget.NestedScrollView>
-
-
-            <RelativeLayout
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/_32sdp"
-                android:layout_marginRight="@dimen/_32sdp"
-                android:layout_marginTop="@dimen/_32sdp"
-                app:layout_anchor="@id/app_bar"
-                app:layout_anchorGravity="bottom|center_horizontal"
-
-                >
-
-                <android.support.v7.widget.AppCompatEditText
-                    android:id="@+id/find_rest_edt"
-                    style="@style/EditText"
-                    android:hint="Enter your postal code">
-
-                </android.support.v7.widget.AppCompatEditText>
-
-                <ImageView
-                    android:layout_width="@dimen/_40sdp"
-                    android:layout_height="@dimen/_40sdp"
-                    android:layout_alignParentRight="true"
-                    android:background="@color/theme_color"
-                    android:onClick="@{handlers::onFindClicked}"
-                    android:scaleType="centerInside"
-                    app:srcCompat="@drawable/search" />
-
-            </RelativeLayout>
-
-        </android.support.design.widget.CoordinatorLayout>
+                    >
 
 
+                    <android.support.design.widget.CollapsingToolbarLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:fitsSystemWindows="true"
+                        app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-    </FrameLayout>
+                        <android.support.v7.widget.CardView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            app:cardElevation="@dimen/_5sdp">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+
+                                >
+
+                                <android.support.v7.widget.AppCompatImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:fitsSystemWindows="true"
+                                    android:scaleType="centerCrop"
+                                    android:src="@mipmap/banner" />
+
+                                <View
+                                    android:id="@+id/fadeBackgroudView"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="match_parent"
+                                    android:layout_alignParentBottom="true"
+                                    android:foreground="@drawable/gradient_variant"
+                                    />
+
+                            </RelativeLayout>
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:gravity="center_vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:gravity="center_horizontal"
+                                    android:orientation="vertical">
+                                    <!--  <ImageView
+                                          android:layout_width="match_parent"
+                                          android:layout_height="@dimen/_25sdp"
+                                          android:layout_marginLeft="@dimen/_8sdp"
+                                          android:layout_marginRight="@dimen/_8sdp"
+                                          android:layout_marginTop="@dimen/_8sdp"
+                                          android:contentDescription="logo"
+                                          android:src="@mipmap/logo" />-->
+
+                                    <TextView
+                                        style="@style/TextViewMid"
+                                        android:layout_marginTop="@dimen/_16sdp"
+                                        android:alpha="0.7"
+                                        android:fontFamily="@font/ubuntu_m"
+                                        android:text="@string/delicious_food_for_every_mood"
+                                        android:textColor="@color/theme_color" />
+
+                                    <TextView
+                                        style="@style/TextViewMid"
+                                        android:text="@string/order_from_food_over_200_restaurants" />
+
+                                    <TextView
+                                        style="@style/TextViewMid"
+                                        android:layout_marginTop="@dimen/_32sdp"
+                                        android:text="@string/order_your_take_away_food_online" />
+
+
+                                </LinearLayout>
+
+                            </RelativeLayout>
+
+
+                        </android.support.v7.widget.CardView>
+
+
+                    </android.support.design.widget.CollapsingToolbarLayout>
+
+
+                </android.support.design.widget.AppBarLayout>
+
+                <android.support.v4.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/_32sdp"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    >
+
+                    <android.support.v7.widget.RecyclerView
+                        android:id="@+id/recycler_view"
+                        android:padding="@dimen/_2sdp"
+                        android:nestedScrollingEnabled="true"
+                        android:clipToPadding="false"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        tools:targetApi="lollipop" />
+
+                </android.support.v4.widget.NestedScrollView>
+
+
+                <RelativeLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginLeft="@dimen/_32sdp"
+                    android:layout_marginRight="@dimen/_32sdp"
+                    android:layout_marginTop="@dimen/_32sdp"
+                    app:layout_anchor="@id/app_bar"
+                    app:layout_anchorGravity="bottom|center_horizontal"
+
+                    >
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/find_rest_edt"
+                        style="@style/EditText"
+                        android:hint="Enter your postal code">
+
+                    </android.support.v7.widget.AppCompatEditText>
+
+                    <ImageView
+                        android:layout_width="@dimen/_40sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_alignParentRight="true"
+                        android:onClick="@{handlers::onFindClicked}"
+                        android:background="@color/theme_color"
+                        android:scaleType="centerInside"
+                        app:srcCompat="@drawable/search" />
+
+                </RelativeLayout>
+
+            </android.support.design.widget.CoordinatorLayout>
+
+
+        </FrameLayout>
+
+    </RelativeLayout>
+
 
 
 

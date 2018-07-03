@@ -1,22 +1,66 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools">
+<layout xmlns:bind="http://schemas.android.com/apk/res/android"
+    >
 
     <data>
 
+        <variable
+            name="ui_order"
+            type="dk.eatmore.foodapp.model.OrderFragment.UI_OrderFragment">
+
+        </variable>
 
 
     </data>
 
 
-    <FrameLayout
-        android:id="@+id/home_order_container"
+    <RelativeLayout
+        xmlns:android="http://schemas.android.com/apk/res/android"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        >
+        <include layout="@layout/toolbar"
+            android:id="@+id/toolbar"
+            >
+
+        </include>
 
 
-    </FrameLayout>
+
+        <FrameLayout
+            android:id="@+id/home_account_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/toolbar"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/background_light"
+
+                >
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view"
+                    android:padding="@dimen/_2sdp"
+                    android:clipToPadding="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+            </RelativeLayout>
+
+
+        </FrameLayout>
+
+    </RelativeLayout>
+
+
+
 
 
 

@@ -24,8 +24,6 @@ import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.os.Build
 import dk.eatmore.foodapp.BuildConfig
-import dk.eatmore.foodapp.databinding.FindrestaurantBinding
-import dk.eatmore.foodapp.fragment.FindRestaurant
 import dk.eatmore.foodapp.rest.ApiClient
 import dk.eatmore.foodapp.rest.ApiInterface
 
@@ -156,7 +154,7 @@ abstract class BaseFragment : Fragment() {
 
     fun <T> callAPI(call: Call<T>, onAliCallInteraction: OnApiCallInteraction) {
         if (isInternetAvailable()) {
-            call.enqueue(object : Callback<T> {
+            call.enqueue(object : Callback< T> {
                 override fun onResponse(call: Call<T>, response: Response<T>) {
                     try {
                         if (response.isSuccessful) {

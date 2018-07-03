@@ -1,10 +1,7 @@
-package dk.eatmore.foodapp.activity
+package dk.eatmore.foodapp.activity.Main
 
-import android.databinding.DataBindingUtil
 import android.os.Bundle
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.databinding.FragmentActivityBinding
-import dk.eatmore.foodapp.fragment.FindRestaurant
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.utils.BaseActivity
 
@@ -15,8 +12,8 @@ class HomeActivity : BaseActivity(){
 
     companion object {
         val TAG="HomeActivity"
-        fun newInstance() : FragmentActivity{
-            return FragmentActivity()
+        fun newInstance() : HomeActivity {
+            return HomeActivity()
         }
     }
 

@@ -12,6 +12,8 @@
         <item name="colorAccent">@color/theme_color</item>
         <item name="android:textColorPrimary">@color/theme_color_primary_dark</item>
         <item name="android:background">@android:color/white</item>
+        <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+
     </style>
 
     <style name="AppCompatAlertDialogDefaultStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
@@ -82,6 +84,14 @@
         <item name="android:layout_height">@dimen/_40sdp</item>
         <item name="android:paddingLeft">@dimen/_8sdp</item>
         <item name="android:background">@drawable/round_corner</item>
+        <item name="android:fontFamily">@font/hindvadodara_medium</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
+
+    <style name="EditText_Normal" parent="Widget.AppCompat.EditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">@dimen/_40sdp</item>
+        <item name="android:paddingLeft">@dimen/_8sdp</item>
         <item name="android:fontFamily">@font/hindvadodara_medium</item>
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
     </style>

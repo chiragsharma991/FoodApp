@@ -127,7 +127,7 @@
                         style="@style/Button"
                         android:layout_height="@dimen/_32sdp"
                         android:background="@color/theme_color"
-                        android:text="Reorder" />
+                        android:text="@string/reorder" />
 
                     <android.support.v7.widget.AppCompatButton
                         style="@style/Button"
@@ -136,7 +136,7 @@
                         android:layout_marginTop="@dimen/_5sdp"
                         android:background="@color/background_light"
                         android:backgroundTint="@color/background_light"
-                        android:text="Details"
+                        android:text="@string/details"
                         android:textColor="@color/black" />
 
                 </RelativeLayout>
