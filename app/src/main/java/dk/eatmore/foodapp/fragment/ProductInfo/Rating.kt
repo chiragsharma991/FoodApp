@@ -1,12 +1,18 @@
 package dk.eatmore.foodapp.fragment.ProductInfo
 
 import android.os.Bundle
+import android.support.v7.widget.LinearLayoutManager
+import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
+import dk.eatmore.foodapp.adapter.GenericAdapter
+import dk.eatmore.foodapp.adapter.ViewHolderFactory
 import dk.eatmore.foodapp.databinding.FragmentAccountContainerBinding
+import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.utils.BaseFragment
+import kotlinx.android.synthetic.main.rating_restaurant.*
 
 class Rating : BaseFragment() {
 
@@ -46,8 +52,21 @@ class Rating : BaseFragment() {
             logd(TAG,"saveInstance NOT NULL")
 
         }
+        val list= listOf<Any>(User("05/06/2018","charisharma16@gmail.com"),User("02/09/2018","monti@gmail.com"),User("22/03/2018","shayanti@gmail.com"))
 
-
+        val mAdapter=object : GenericAdapter<Any>(list){
+            override fun getLayoutId(position: Int, obj: Any): Int {
+               return when(obj){
+                   is User -> R.layout.row_rating_list
+                   else -> R.layout.row_rating_list
+               }
+            }
+            override fun getViewHolder(view: View, viewType: Int): RecyclerView.ViewHolder {
+                return ViewHolderFactory.create(view,viewType)
+            }
+        }
+        recycler_view.layoutManager = LinearLayoutManager(getActivityBase())
+        recycler_view.adapter = mAdapter
     }
 
 
@@ -67,6 +86,8 @@ class Rating : BaseFragment() {
         logd(TAG, "on pause...")
 
     }
+
+
 
 }
 

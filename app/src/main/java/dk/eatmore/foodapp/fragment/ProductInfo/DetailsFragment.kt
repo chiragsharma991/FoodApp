@@ -12,6 +12,13 @@ import dk.eatmore.foodapp.adapter.OrderListAdapter
 import dk.eatmore.foodapp.fragment.Dashboard.HomeFragment
 import dk.eatmore.foodapp.utils.BaseFragment
 import kotlinx.android.synthetic.main.fragment_details.*
+import android.support.v4.content.ContextCompat
+import android.graphics.BitmapFactory
+import android.graphics.Bitmap
+import android.support.v7.graphics.Palette
+import android.util.Log
+import kotlinx.android.synthetic.main.test_two.*
+
 
 class DetailsFragment : BaseFragment() {
 
@@ -45,7 +52,8 @@ class DetailsFragment : BaseFragment() {
 
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
-
+        toolbar.setNavigationIcon(ContextCompat.getDrawable(context!!,R.drawable.close))
+        toolbar.setNavigationOnClickListener{ loge(TAG,"on back press") }
         adapter = ViewPagerAdapter(childFragmentManager)
         adapter!!.addFragment(Menu(), getString(R.string.menu))
         adapter!!.addFragment(Rating(), getString(R.string.rating))
@@ -53,8 +61,41 @@ class DetailsFragment : BaseFragment() {
         viewpager.offscreenPageLimit=3
         viewpager.setAdapter(adapter)
         tabs.setupWithViewPager(viewpager)
+        setPalette()
+
+
+
+
+
+
     }
 
+    private fun setPalette() {
+
+        val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.banner)
+        Palette.from(bitmap).generate(object : Palette.PaletteAsyncListener {
+            override  fun onGenerated(palette: Palette) {
+
+                val vibrant = palette.vibrantSwatch
+
+                if (vibrant != null) {
+                    val mutedColor = palette.vibrantSwatch!!.getRgb()
+                    collapse_toolbar.setBackgroundColor(mutedColor);
+                    collapse_toolbar.setStatusBarScrimColor(palette.getDarkMutedColor(mutedColor));
+                    collapse_toolbar.setContentScrimColor(palette.getMutedColor(mutedColor));
+
+                }else{
+
+                    collapse_toolbar.setBackgroundColor(ContextCompat.getColor(context!!,R.color.divider_color));
+                    collapse_toolbar.setStatusBarScrimColor(ContextCompat.getColor(context!!,R.color.divider_color))
+                    collapse_toolbar.setContentScrimColor(ContextCompat.getColor(context!!,R.color.divider_color))
+                }
+
+            }
+        })
+
+
+    }
 
 
     override fun onDestroy() {

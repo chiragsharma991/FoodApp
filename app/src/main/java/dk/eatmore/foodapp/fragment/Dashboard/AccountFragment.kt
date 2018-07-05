@@ -46,7 +46,7 @@ class AccountFragment : BaseFragment() {
             logd(TAG,"saveInstance NOT NULL")
 
         }
-        txt_toolbar.text=getString(R.string.my_profile)
+       // txt_toolbar.text=getString(R.string.my_profile)
 
 
     }

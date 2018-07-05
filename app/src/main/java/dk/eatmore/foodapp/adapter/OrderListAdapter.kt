@@ -4,13 +4,12 @@ import android.content.Context
 import android.databinding.DataBindingUtil
 import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.databinding.RowOrderPreferredBinding
-import kotlinx.android.extensions.LayoutContainer
+import dk.eatmore.foodapp.fragment.Dashboard.HomeFragment
 
-class OrderListAdapter(val context: Context, val callback : AdapterListener): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class OrderListAdapter(val context: Context, val callback: AdapterListener): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     private val VIEW_ITEM = 1
     lateinit var listner : AdapterListener

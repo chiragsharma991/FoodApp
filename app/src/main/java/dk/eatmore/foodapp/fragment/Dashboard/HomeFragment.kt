@@ -17,8 +17,8 @@ import dk.eatmore.foodapp.adapter.OrderListAdapter
 import dk.eatmore.foodapp.databinding.FragmentHomeFragmentBinding
 import dk.eatmore.foodapp.model.HomeFragment.UI_HomeFragment
 import dk.eatmore.foodapp.utils.BaseFragment
-import kotlinx.android.synthetic.main.fragment_home_fragment.*
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
+import kotlinx.android.synthetic.main.fragment_home_fragment.*
 
 
 class HomeFragment : BaseFragment() {
@@ -77,6 +77,7 @@ class HomeFragment : BaseFragment() {
             layoutManager = LinearLayoutManager(getActivityBase())
             adapter = mAdapter
         }
+
 
 
 

@@ -54,7 +54,7 @@
             android:fontFamily="@font/hindvadodara_medium"
             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
             android:layout_marginLeft="@dimen/_5sdp"
-            android:textColor="@color/red"
+                android:textColor="@color/red"
             />
 
 

@@ -65,7 +65,7 @@ class OrderFragment : BaseFragment() {
             logd(TAG,"saveInstance NOT NULL")
         }
 
-        txt_toolbar.text=getString(R.string.orders)
+      //  txt_toolbar.text=getString(R.string.orders)
         recycler_view.apply {
 
             mAdapter = OrderListAdapter(context!!,object: OrderListAdapter.AdapterListener {

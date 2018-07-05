@@ -67,5 +67,8 @@ dependencies {
     // shimmer
     implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
 
+    // palette
+    implementation 'com.android.support:palette-v7:27.1.1'
+
 
 }
