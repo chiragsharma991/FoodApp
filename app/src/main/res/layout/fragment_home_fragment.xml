@@ -26,19 +26,19 @@
         <FrameLayout
             android:id="@+id/home_fragment_container"
             android:layout_width="match_parent"
+            android:fitsSystemWindows="false"
             android:layout_height="match_parent">
 
             <android.support.design.widget.CoordinatorLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="@color/background_light"
-                android:fitsSystemWindows="true">
+                >
 
                 <android.support.design.widget.AppBarLayout
                     android:id="@+id/app_bar"
                     android:layout_width="match_parent"
                     android:layout_height="@dimen/_300sdp"
-                    android:fitsSystemWindows="true"
 
                     >
 
@@ -46,8 +46,10 @@
                     <android.support.design.widget.CollapsingToolbarLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:fitsSystemWindows="true"
+                        app:contentScrim="?attr/colorPrimary"
                         app:layout_scrollFlags="scroll|exitUntilCollapsed">
+
+
 
                         <android.support.v7.widget.CardView
                             android:layout_width="match_parent"
@@ -122,6 +124,14 @@
                         </android.support.v7.widget.CardView>
 
 
+                     <!--   <include
+                            layout="@layout/toolbar"
+                            >
+
+                        </include>-->
+
+
+
                     </android.support.design.widget.CollapsingToolbarLayout>
 
 
@@ -137,7 +147,7 @@
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recycler_view"
                         android:padding="@dimen/_2sdp"
-                        android:nestedScrollingEnabled="true"
+                        android:nestedScrollingEnabled="false"
                         android:clipToPadding="false"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"

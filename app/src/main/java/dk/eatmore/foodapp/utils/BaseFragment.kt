@@ -58,7 +58,7 @@ abstract class BaseFragment : Fragment() {
 
     fun addFragment(container: Int, fragment: Fragment, tag: String) {
         hideKeyboard()
-        childFragmentManager.beginTransaction().add(container, fragment, tag).setTransition(FragmentTransaction.TRANSIT_FRAGMENT_OPEN).addToBackStack(tag).commit()
+        childFragmentManager.beginTransaction().add(container, fragment, tag).addToBackStack(tag).commit()
     }
 
     fun isPermissionGranted(): Boolean {

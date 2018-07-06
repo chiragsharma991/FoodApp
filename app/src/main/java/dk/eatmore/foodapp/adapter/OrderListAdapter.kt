@@ -7,7 +7,6 @@ import android.view.LayoutInflater
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.databinding.RowOrderPreferredBinding
-import dk.eatmore.foodapp.fragment.Dashboard.HomeFragment
 
 class OrderListAdapter(val context: Context, val callback: AdapterListener): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
@@ -22,7 +21,7 @@ class OrderListAdapter(val context: Context, val callback: AdapterListener): Rec
         var vh :RecyclerView.ViewHolder?=null
         if(viewType == VIEW_ITEM){
             this.listner=callback
-           val binding :RowOrderPreferredBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context),R.layout.row_order_preferred,parent,false)
+           val binding :RowOrderPreferredBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.row_order_preferred,parent,false)
             vh = MyViewHolder(binding)
         }
 

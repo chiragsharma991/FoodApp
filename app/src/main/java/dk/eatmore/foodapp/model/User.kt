@@ -9,7 +9,22 @@ import android.util.Log
 data class User  (
         var name: String = "",
         var email: String=""
-) /*: BaseObservable() {
+)
+
+data class MenuRestaurant  (
+        var name: String = ""
+)
+
+
+
+
+
+
+
+
+
+
+/*: BaseObservable() {
 
     var _name: String @Bindable get() = name
         set(a) {

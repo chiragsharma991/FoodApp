@@ -5,19 +5,11 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.support.v4.content.ContextCompat
 import android.support.v7.app.AlertDialog
-import android.view.LayoutInflater
 import android.support.v4.app.FragmentActivity
-import android.text.TextUtils
 import android.util.Log
 import android.view.View
 import android.widget.ArrayAdapter
-import android.widget.LinearLayout
-import android.widget.TextView
-import kotlin.math.log
-import android.view.Gravity
-import android.content.DialogInterface
 import dk.eatmore.foodapp.R
-import org.w3c.dom.Text
 
 
 object DialogUtils {

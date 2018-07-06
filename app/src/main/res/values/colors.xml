@@ -11,6 +11,7 @@
     <color name="bg_gray">#ffeeeeee</color>
     <color name="text_color">#ffffffff</color>
     <color name="background">#ffffff</color>
+    <color name="background_light_dark">#e9e7e7</color>
     <color name="background_light">#f3f3f3</color>
     <color name="color_tab_1">#455C65</color>
     <color name="color_tab_2">#00886A</color>
@@ -24,6 +25,7 @@
     <color name="colorAccent">#019E0F</color>
     <color name="black">#000</color>
     <color name="black_light">#4c4c4c</color>
+    <color name="black_default">#808080</color>
     <color name="black_transparent">#999</color>
     <color name="white">#fff</color>
     <color name="white_light_grey">#f4f6f7</color>

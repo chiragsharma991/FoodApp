@@ -5,9 +5,15 @@ import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.databinding.DataBindingUtil
+import android.os.Build
 import android.os.Bundle
+import android.support.annotation.RequiresApi
 import android.support.v7.widget.LinearLayoutManager
+import android.transition.ChangeBounds
+import android.transition.Slide
+import android.transition.Visibility
 import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -40,7 +46,7 @@ class HomeFragment : BaseFragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-     //   return inflater.inflate(getLayout(), container, false)
+       // return inflater.inflate(getLayout(), container, false)
 
         binding= DataBindingUtil.inflate(inflater,getLayout(),container,false)
         return binding.root
@@ -51,6 +57,14 @@ class HomeFragment : BaseFragment() {
         return R.layout.fragment_home_fragment
     }
 
+
+    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
+    private fun buildEnterTransition(): Visibility {
+        val enterTransition = Slide()
+        enterTransition.setDuration(500)
+        enterTransition.slideEdge = Gravity.RIGHT
+        return enterTransition
+    }
 
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
@@ -70,14 +84,31 @@ class HomeFragment : BaseFragment() {
                 override fun itemClicked(position: Int) {
                     loge(TAG,"on click....")
                     fragment = DetailsFragment.newInstance()
+                    var enter :Slide?=null
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+
+                         enter = Slide()
+                        enter.setDuration(500)
+                        enter.slideEdge = Gravity.RIGHT
+                    }
+
+
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
+                        val changeBoundsTransition :ChangeBounds = ChangeBounds()
+                        changeBoundsTransition.duration = 500
+                        fragment!!.enterTransition=enter
+                        fragment!!.setSharedElementEnterTransition(changeBoundsTransition)
+                    }
+
+
                     addFragment(R.id.home_fragment_container,fragment!!,DetailsFragment.TAG)
+
 
                 }
             })
             layoutManager = LinearLayoutManager(getActivityBase())
             adapter = mAdapter
         }
-
 
 
 

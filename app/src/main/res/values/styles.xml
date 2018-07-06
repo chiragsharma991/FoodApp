@@ -86,6 +86,8 @@
     <style name="EditText" parent="Widget.AppCompat.EditText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/_40sdp</item>
+        <item name="android:lines">1</item>
+        <item name="android:singleLine">true</item>
         <item name="android:paddingLeft">@dimen/_8sdp</item>
         <item name="android:background">@drawable/round_corner</item>
         <item name="android:fontFamily">@font/hindvadodara_medium</item>
@@ -98,6 +100,23 @@
         <item name="android:paddingLeft">@dimen/_8sdp</item>
         <item name="android:fontFamily">@font/hindvadodara_medium</item>
         <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
+
+
+    <!--Card view-->
+
+    <style name="CardViewStyle" parent="CardView">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:layout_margin">@dimen/_5sdp</item>
+        <item name="cardBackgroundColor">@android:color/white</item>
+        <item name="cardElevation">@dimen/_2sdp</item>
+
+    </style>
+
+
+    <style name="tab_text" parent="@android:style/TextAppearance.Widget.TabWidget">
+        <item name="android:fontFamily">@font/hindvadodara_medium</item>
     </style>
 
 

@@ -7,17 +7,14 @@ import android.support.v4.app.FragmentPagerAdapter
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.adapter.OrderListAdapter
 import dk.eatmore.foodapp.fragment.Dashboard.HomeFragment
 import dk.eatmore.foodapp.utils.BaseFragment
 import kotlinx.android.synthetic.main.fragment_details.*
 import android.support.v4.content.ContextCompat
 import android.graphics.BitmapFactory
-import android.graphics.Bitmap
 import android.support.v7.graphics.Palette
-import android.util.Log
-import kotlinx.android.synthetic.main.test_two.*
+import dk.eatmore.foodapp.R
 
 
 class DetailsFragment : BaseFragment() {
@@ -52,8 +49,20 @@ class DetailsFragment : BaseFragment() {
 
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
+
+        if(savedInstanceState == null){
+            logd(DetailsFragment.TAG,"saveInstance NULL")
+
+        }else{
+            logd(DetailsFragment.TAG,"saveInstance NOT NULL")
+
+        }
+
+
         toolbar.setNavigationIcon(ContextCompat.getDrawable(context!!,R.drawable.close))
-        toolbar.setNavigationOnClickListener{ loge(TAG,"on back press") }
+        toolbar.setNavigationOnClickListener{
+            loge(TAG,"onclick")
+            parentFragment!!.childFragmentManager.popBackStack() }
         adapter = ViewPagerAdapter(childFragmentManager)
         adapter!!.addFragment(Menu(), getString(R.string.menu))
         adapter!!.addFragment(Rating(), getString(R.string.rating))
