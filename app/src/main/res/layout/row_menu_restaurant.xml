@@ -1,35 +1,71 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:orientation="vertical"
+
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
     >
+
+    <data>
+
+        <variable
+            name="user"
+            type="dk.eatmore.foodapp.model.User">
+
+        </variable>
+
+        <variable
+            name="handler"
+            type="dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickInterface" />
+
+    </data>
+
 
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_margin="@dimen/_8sdp"
-        android:gravity="center_vertical"
-        android:orientation="horizontal">
+        android:onClick="@{() -> handler.onClick(user)}"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_8sdp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
 
-        <android.support.v7.widget.AppCompatTextView
-            style="@style/TextViewSmall"
-            android:id="@+id/menu_raw_txt"
-            android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/_3sdp"
-            android:layout_weight="1"
-            android:layout_marginRight="@dimen/_5sdp"
-            android:text="Sandras"
-            android:textColor="@color/black_light" />
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/TextViewSmall"
+                android:id="@+id/menu_raw_txt"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/_3sdp"
+                android:layout_weight="1"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:text="@{user.name}"
+                android:textColor="@color/black_light" />
 
 
-        <android.support.v7.widget.AppCompatImageView
-            android:layout_width="@dimen/_20sdp"
-            android:layout_height="@dimen/_20sdp"
-            android:scaleType="fitXY"
-            app:srcCompat="@drawable/right_arrow"
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:scaleType="fitXY"
+                app:srcCompat="@drawable/right_arrow"
+                />
+
+
+
+
+        </LinearLayout>
+
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha="0.2"
+            android:background="@color/divider_color"
             />
 
 
@@ -37,16 +73,6 @@
 
     </LinearLayout>
 
-
-    <View
-        android:id="@+id/view"
-        android:layout_width="match_parent"
-        android:layout_height="1dp"
-        android:alpha="0.2"
-        android:background="@color/divider_color"
-        />
+</layout>
 
 
-
-
-</LinearLayout>

@@ -1,5 +1,6 @@
 package dk.eatmore.foodapp.fragment.ProductInfo
 
+import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -13,8 +14,17 @@ import dk.eatmore.foodapp.utils.BaseFragment
 import kotlinx.android.synthetic.main.fragment_details.*
 import android.support.v4.content.ContextCompat
 import android.graphics.BitmapFactory
+import android.support.design.widget.AppBarLayout
+import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v4.util.Pair
 import android.support.v7.graphics.Palette
+import android.view.animation.Animation
+import android.view.animation.TranslateAnimation
 import dk.eatmore.foodapp.R
+import dk.eatmore.foodapp.activity.Main.CartActivity
+import dk.eatmore.foodapp.activity.Main.EpayActivity
+import dk.eatmore.foodapp.utils.TransitionHelper
 
 
 class DetailsFragment : BaseFragment() {
@@ -22,7 +32,6 @@ class DetailsFragment : BaseFragment() {
     lateinit var clickEvent : HomeFragment.MyClickHandler
     private  var mAdapter: OrderListAdapter?=null
     var adapter: ViewPagerAdapter? = null
-
 
     companion object {
 
@@ -47,11 +56,55 @@ class DetailsFragment : BaseFragment() {
     }
 
 
+    fun getParent() : Fragment? {
+        return parentFragment
+    }
+
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
 
         if(savedInstanceState == null){
+
+
+            detail_fab_btn.startAnimation(translateAnim(800f, 0f, 0f, 0f,1000,true))
+            detail_item_info.startAnimation(translateAnim(-800f, 0f, 0f, 0f,1000,true))
+            DrawableCompat.setTint(ContextCompat.getDrawable(context!!,R.drawable.close)!!, ContextCompat.getColor(context!!, R.color.white));
             logd(DetailsFragment.TAG,"saveInstance NULL")
+            toolbar.setNavigationIcon(ContextCompat.getDrawable(context!!,R.drawable.close))
+            toolbar.setNavigationOnClickListener{
+                loge(TAG,"onclick")
+                parentFragment!!.childFragmentManager.popBackStack() }
+            adapter = ViewPagerAdapter(childFragmentManager)
+            adapter!!.addFragment(Menu(), getString(R.string.menu))
+            adapter!!.addFragment(Rating(), getString(R.string.rating))
+            adapter!!.addFragment(Info(), getString(R.string.info))
+            viewpager.offscreenPageLimit=3
+            viewpager.setAdapter(adapter)
+            tabs.setupWithViewPager(viewpager)
+            setPalette()
+            detail_fab_btn.setOnClickListener{
+                val animation = TranslateAnimation(0f, 0f, 0f, 5f)
+                animation.duration = 100
+                animation.fillAfter = false
+                animation.setAnimationListener(object : Animation.AnimationListener {
+                    override fun onAnimationRepeat(animation: Animation) {
+
+                    }
+                    override fun onAnimationStart(animation: Animation) {}
+                    override fun onAnimationEnd(animation: Animation) {
+                        val intent= Intent(activity, EpayActivity::class.java)
+                        val pairs: Array<Pair<View, String>> = TransitionHelper.createSafeTransitionParticipants(activity!!, true)
+                        val transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, *pairs)
+                        startActivity(intent, transitionActivityOptions.toBundle())
+                    }
+                })
+                detail_fab_btn.startAnimation(animation)
+
+
+            }
+
+
+
 
         }else{
             logd(DetailsFragment.TAG,"saveInstance NOT NULL")
@@ -59,18 +112,6 @@ class DetailsFragment : BaseFragment() {
         }
 
 
-        toolbar.setNavigationIcon(ContextCompat.getDrawable(context!!,R.drawable.close))
-        toolbar.setNavigationOnClickListener{
-            loge(TAG,"onclick")
-            parentFragment!!.childFragmentManager.popBackStack() }
-        adapter = ViewPagerAdapter(childFragmentManager)
-        adapter!!.addFragment(Menu(), getString(R.string.menu))
-        adapter!!.addFragment(Rating(), getString(R.string.rating))
-        adapter!!.addFragment(Info(), getString(R.string.info))
-        viewpager.offscreenPageLimit=3
-        viewpager.setAdapter(adapter)
-        tabs.setupWithViewPager(viewpager)
-        setPalette()
 
 
 
@@ -79,7 +120,10 @@ class DetailsFragment : BaseFragment() {
 
     }
 
-    private fun setPalette() {
+
+
+
+     fun setPalette() {
 
         val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.banner)
         Palette.from(bitmap).generate(object : Palette.PaletteAsyncListener {
@@ -95,8 +139,8 @@ class DetailsFragment : BaseFragment() {
 
                 }else{
 
-                    collapse_toolbar.setBackgroundColor(ContextCompat.getColor(context!!,R.color.divider_color));
-                    collapse_toolbar.setStatusBarScrimColor(ContextCompat.getColor(context!!,R.color.divider_color))
+                    collapse_toolbar.setBackgroundColor(ContextCompat.getColor(context!!,R.color.background_light));
+                    collapse_toolbar.setStatusBarScrimColor(ContextCompat.getColor(context!!,R.color.background_light))
                     collapse_toolbar.setContentScrimColor(ContextCompat.getColor(context!!,R.color.divider_color))
                 }
 
@@ -115,14 +159,13 @@ class DetailsFragment : BaseFragment() {
     override fun onDetach() {
         super.onDetach()
         logd(TAG,"on detech...")
-
     }
 
     override fun onPause() {
         super.onPause()
         logd(TAG,"on pause...")
-
     }
+
 
 
 

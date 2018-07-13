@@ -43,7 +43,7 @@ class OrderListAdapter(val context: Context, val callback: AdapterListener): Rec
     }
 
 
-    class MyViewHolder(val binding :RowOrderPreferredBinding) : RecyclerView.ViewHolder(binding.root)  {
+    private  class MyViewHolder(val binding :RowOrderPreferredBinding) : RecyclerView.ViewHolder(binding.root)  {
 
     }
 

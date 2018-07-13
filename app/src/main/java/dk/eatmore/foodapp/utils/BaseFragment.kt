@@ -23,9 +23,17 @@ import android.support.v4.app.ActivityCompat
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.os.Build
+import android.view.animation.TranslateAnimation
 import dk.eatmore.foodapp.BuildConfig
+import dk.eatmore.foodapp.activity.Main.HomeActivity
+import dk.eatmore.foodapp.fragment.Dashboard.HomeFragment
+import dk.eatmore.foodapp.fragment.HomeContainerFragment
+import dk.eatmore.foodapp.fragment.ProductInfo.CategoryList
+import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.rest.ApiClient
 import dk.eatmore.foodapp.rest.ApiInterface
+import kotlinx.android.synthetic.main.fragment_details.*
+import kotlinx.android.synthetic.main.fragment_home_fragment.*
 
 
 abstract class BaseFragment : Fragment() {
@@ -45,9 +53,6 @@ abstract class BaseFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
-
-
-
     }
 
 
@@ -76,19 +81,38 @@ abstract class BaseFragment : Fragment() {
 
 
 
-    /*  fun popFragment(parentFragment: Fragment?) {
-          try {
-              if (parentFragment is AdminDashboardContainerFragment) {
-                  parentFragment.popFragment()
-              } else if (parentFragment is ProductListFragment) {
-                  parentFragment.popFragment()
-              }else if (parentFragment is RetailerDashboardFragment) {
-                  parentFragment.popFragment()
-              }
-          } catch (e: Exception) {
-              e.printStackTrace()
-          }
-      }*/
+    fun popFragment(): Boolean {
+        var isPop = false
+        try {
+            if (childFragmentManager.backStackEntryCount > 0) {
+                /**
+                 * Check Filter Fragment Appear or not, Filter Type Fragment Also
+                 */
+                hideKeyboard()
+                loge("backStackCount",childFragmentManager.backStackEntryCount.toString())
+                var fragment = childFragmentManager.findFragmentByTag(childFragmentManager.getBackStackEntryAt(childFragmentManager.backStackEntryCount - 1).name)
+                if(fragment != null && fragment.isVisible){
+                    isPop = true
+                    when (fragment){
+                       is CategoryList ->{
+                           val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
+                           val homeFragment : HomeFragment=(fragmentof as HomeContainerFragment).getHomeFragment()
+                           (homeFragment.fragment as DetailsFragment).setPalette()
+                           (homeFragment.fragment as DetailsFragment).appbar.setExpanded(true,true)
+                           childFragmentManager.popBackStack()
+
+                       } else ->  childFragmentManager.popBackStack()
+
+
+                    }
+
+                }
+            }
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+        return isPop
+    }
 
     fun popAllFragment() {
 
@@ -194,6 +218,17 @@ abstract class BaseFragment : Fragment() {
             val imm = getActivityBase().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
             imm.hideSoftInputFromWindow(view!!.windowToken, 0)
             //imm.toggleSoftInput(InputMethodManager.HIDE_IMPLICIT_ONLY, 0);
+
+
+        }
+    }
+    fun showKeyboard() {
+        if (view != null) {
+            val imm = getActivityBase().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+          //  imm.hideSoftInputFromWindow(view!!.windowToken, 0)
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,InputMethodManager.HIDE_IMPLICIT_ONLY);
+
+
         }
     }
 
@@ -211,6 +246,16 @@ abstract class BaseFragment : Fragment() {
         val s = SimpleDateFormat(dateFormat)
         cal.add(Calendar.DAY_OF_YEAR, days)
         return s.format(Date(cal.timeInMillis))
+    }
+
+
+    // Transition
+
+    fun translateAnim(from_x :Float ,to_x : Float, from_y : Float , to_y : Float , duration : Long, fill :Boolean) : TranslateAnimation{
+        val animation = TranslateAnimation(from_x, to_x, from_y, to_y)
+        animation.duration = duration
+        animation.fillAfter = fill
+        return  animation
     }
 
 

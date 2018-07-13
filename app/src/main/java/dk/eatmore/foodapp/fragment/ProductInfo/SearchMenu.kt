@@ -5,10 +5,15 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
+import dk.eatmore.foodapp.activity.Main.HomeActivity
 import dk.eatmore.foodapp.databinding.FragmentAccountContainerBinding
 import dk.eatmore.foodapp.utils.BaseFragment
+import dk.eatmore.foodapp.utils.DrawableClickListener.DrawablePosition
+import dk.eatmore.foodapp.utils.DrawableClickListener
+import kotlinx.android.synthetic.main.search_menu.*
 
-class Info : BaseFragment() {
+
+class SearchMenu : BaseFragment() {
 
     private lateinit var binding: FragmentAccountContainerBinding
 
@@ -16,21 +21,19 @@ class Info : BaseFragment() {
 
     companion object {
 
-        val TAG = "Info"
-        fun newInstance(): Info {
-            return Info()
+        val TAG = "SearchMenu"
+        fun newInstance(): SearchMenu {
+            return SearchMenu()
         }
 
     }
 
 
     override fun getLayout(): Int {
-        return R.layout.info_restaurant
+        return R.layout.search_menu
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
-        loge(TAG,"create view...")
         return inflater.inflate(getLayout(), container, false)
 
         //   binding=DataBindingUtil.inflate(inflater,getLayout(),container,false)
@@ -39,25 +42,34 @@ class Info : BaseFragment() {
     }
 
 
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        loge(TAG,"on create...")
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-        loge(TAG,"on Activity start...")
-    }
-
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
+            search_edt.requestFocus()
+            showKeyboard()
+            search_edt.setDrawableClickListener(object : DrawableClickListener {
+
+
+                override fun onClick(target: DrawablePosition) {
+                    when (target) {
+                        DrawableClickListener.DrawablePosition.LEFT -> {
+                            (activity as HomeActivity).onBackPressed()
+                        }
+
+                        else -> {
+                            search_edt.text.clear()
+                        }
+                    }//Do something here
+                }
+
+            })
 
 
         }else{
             logd(TAG,"saveInstance NOT NULL")
 
         }
+
 
 
     }
@@ -81,6 +93,4 @@ class Info : BaseFragment() {
     }
 
 }
-
-
 

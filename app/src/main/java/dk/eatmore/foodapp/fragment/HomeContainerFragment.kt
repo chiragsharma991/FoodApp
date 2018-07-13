@@ -13,6 +13,7 @@ import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.fragment.Dashboard.AccountFragment
 import dk.eatmore.foodapp.fragment.Dashboard.HomeFragment
 import dk.eatmore.foodapp.fragment.Dashboard.OrderFragment
+import dk.eatmore.foodapp.fragment.ProductInfo.Rating
 import dk.eatmore.foodapp.utils.BaseFragment
 import kotlinx.android.synthetic.main.fragment_home_container.*
 import kotlinx.android.synthetic.main.layout_bottom_menu.*
@@ -29,6 +30,8 @@ class HomeContainerFragment : BaseFragment() {
         fun newInstance() : HomeContainerFragment {
             return HomeContainerFragment()
         }
+
+
     }
 
     override fun getLayout(): Int {
@@ -36,39 +39,57 @@ class HomeContainerFragment : BaseFragment() {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
         return inflater.inflate(getLayout(), container, false)
 
+    }
+
+    fun getContainerFragment(): BaseFragment {
+        return mAdapter.getContainerFragment(view_pager.currentItem) as BaseFragment
+    }
+    fun getHomeFragment(): HomeFragment {
+        return mAdapter.getHomeFragment()
     }
 
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
 
-        view_pager.apply {
-            mAdapter = HomeFragmentViewPagerAdapter(childFragmentManager)
-            adapter = mAdapter
-            offscreenPageLimit = mAdapter.count
+        if(savedInstanceState == null){
+            logd(TAG,"saveInstance NULL")
+
+            view_pager.apply {
+                mAdapter = HomeFragmentViewPagerAdapter(childFragmentManager)
+                adapter = mAdapter
+                offscreenPageLimit = mAdapter.count
+            }
+
+            /**
+             * First Time Initialize Menu
+             */
+            changeMenu(0)
+            view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
+                override fun onPageSelected(position: Int) {
+                    changeMenu(position)
+                }
+
+                override fun onPageScrollStateChanged(state: Int) {
+
+                }
+
+                override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
+
+                }
+            })
+            rel_home.setOnClickListener { view_pager.setCurrentItem(0, true) }
+            rel_order.setOnClickListener { view_pager.setCurrentItem(1, true) }
+            rel_profile.setOnClickListener { view_pager.setCurrentItem(2, true) }
+
+
+        }else{
+            logd(TAG,"saveInstance NOT NULL")
+
         }
 
-        /**
-         * First Time Initialize Menu
-         */
-        changeMenu(0)
-        view_pager.addOnPageChangeListener(object : ViewPager.OnPageChangeListener {
-            override fun onPageSelected(position: Int) {
-                changeMenu(position)
-            }
-
-            override fun onPageScrollStateChanged(state: Int) {
-
-            }
-
-            override fun onPageScrolled(position: Int, positionOffset: Float, positionOffsetPixels: Int) {
-
-            }
-        })
-        rel_home.setOnClickListener { view_pager.setCurrentItem(0, true) }
-        rel_order.setOnClickListener { view_pager.setCurrentItem(1, true) }
-        rel_profile.setOnClickListener { view_pager.setCurrentItem(2, true) }
 
 
 

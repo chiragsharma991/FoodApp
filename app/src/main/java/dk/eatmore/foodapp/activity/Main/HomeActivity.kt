@@ -1,6 +1,7 @@
 package dk.eatmore.foodapp.activity.Main
 
 import android.os.Bundle
+import android.support.v4.app.Fragment
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.utils.BaseActivity
@@ -31,12 +32,27 @@ class HomeActivity : BaseActivity(){
         fullScreen()
         if(savedInstanceState==null){
             // if you not take in this condition than if you change orientation then fragment added again and again.
-            mHomeContainerFragment = HomeContainerFragment.newInstance()
-            supportFragmentManager.beginTransaction().replace(R.id.home_container, mHomeContainerFragment, "").commit()
+        }
+        else{
         }
 
+        mHomeContainerFragment = HomeContainerFragment.newInstance()
+        supportFragmentManager.beginTransaction().replace(R.id.home_container, mHomeContainerFragment,HomeContainerFragment.TAG).commit()
 
     }
+
+    fun getFragmentFromAdapter() :Fragment{
+
+        return  mHomeContainerFragment
+    }
+
+    override fun onBackPressed() {
+        var pop = mHomeContainerFragment.getContainerFragment().popFragment()
+
+    }
+
+
+
 
     override fun onDestroy() {
         super.onDestroy()

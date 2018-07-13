@@ -46,27 +46,35 @@ class Rating : BaseFragment() {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
+            val list= listOf<Any>(User("05/06/2018","charisharma16@gmail.com"),User("02/09/2018","monti@gmail.com"),User("22/03/2018","shayanti@gmail.com"))
+
+            val mAdapter=object : GenericAdapter<Any>(list){
+                override fun getLayoutId(position: Int, obj: Any): Int {
+                    return when(obj){
+                        is User -> R.layout.row_rating_list
+                        else -> R.layout.row_rating_list
+                    }
+                }
+                override fun getViewHolder(view: View, viewType: Int): RecyclerView.ViewHolder {
+                    return ViewHolderFactory.create(view,viewType,object : ViewHolderFactory.Clicklistner {
+                        override fun clickOn() {
+
+
+                        }
+
+                    })
+                }
+            }
+            recycler_view.layoutManager = LinearLayoutManager(getActivityBase())
+            recycler_view.adapter = mAdapter
 
 
         }else{
             logd(TAG,"saveInstance NOT NULL")
 
         }
-        val list= listOf<Any>(User("05/06/2018","charisharma16@gmail.com"),User("02/09/2018","monti@gmail.com"),User("22/03/2018","shayanti@gmail.com"))
 
-        val mAdapter=object : GenericAdapter<Any>(list){
-            override fun getLayoutId(position: Int, obj: Any): Int {
-               return when(obj){
-                   is User -> R.layout.row_rating_list
-                   else -> R.layout.row_rating_list
-               }
-            }
-            override fun getViewHolder(view: View, viewType: Int): RecyclerView.ViewHolder {
-                return ViewHolderFactory.create(view,viewType)
-            }
-        }
-        recycler_view.layoutManager = LinearLayoutManager(getActivityBase())
-        recycler_view.adapter = mAdapter
+
     }
 
 

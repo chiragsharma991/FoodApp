@@ -1,0 +1,94 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+
+    </data>
+
+
+    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:layoutDirection="locale">
+
+        <include layout="@layout/toolbar">
+
+        </include>
+
+
+        <FrameLayout
+            android:id="@+id/home_account_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/toolbar"
+            android:fitsSystemWindows="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/background_light"
+
+                >
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    >
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/epay_total_lbl"
+                        style="@style/TextViewMid"
+                        android:layout_marginTop="24dp"
+                        android:singleLine="true"
+                        android:text="Total (2 Goods)"
+
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/epay_total_txt"
+                        style="@style/TextViewLarge"
+                        android:layout_marginTop="16dp"
+                        android:singleLine="true"
+                        android:text="300,00 Kr,"
+                        android:textColor="@color/theme_color_secondary_dark"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+
+                        app:layout_constraintTop_toBottomOf="@+id/epay_total_lbl" />
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/epay_continue_btn"
+                        style="@style/Button"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginEnd="32dp"
+                        android:layout_marginStart="32dp"
+                        android:layout_marginTop="16dp"
+                        android:backgroundTint="@color/theme_color"
+                        android:text="@string/continue_"
+                        android:textColor="@color/white"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/epay_total_txt" />
+
+
+
+                </android.support.constraint.ConstraintLayout>
+
+
+            </RelativeLayout>
+
+
+        </FrameLayout>
+
+
+    </RelativeLayout>
+
+</layout>

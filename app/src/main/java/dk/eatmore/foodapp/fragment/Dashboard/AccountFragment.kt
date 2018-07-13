@@ -40,13 +40,16 @@ class AccountFragment : BaseFragment() {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
+            txt_toolbar.text=getString(R.string.my_profile)
+
 
 
         }else{
             logd(TAG,"saveInstance NOT NULL")
 
         }
-        txt_toolbar.text=getString(R.string.my_profile)
+
+
 
 
     }

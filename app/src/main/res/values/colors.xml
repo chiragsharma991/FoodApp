@@ -35,6 +35,7 @@
     <color name="theme_color">#e62b25</color>
     <color name="theme_color_primary_dark">#e62b25</color>
     <color name="theme_color_secondary">#217fe4</color>
+    <color name="theme_color_secondary_dark">#4F8F00</color>
     <color name="nav_theme_color">#100000</color>
     <color name="gray">#F0EFF5</color>
     <color name="darkgray">#6D737B</color>

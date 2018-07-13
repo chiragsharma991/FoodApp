@@ -23,6 +23,8 @@
         "technologically advanced and open to imagination and magic.\n"
     </string>
     <string name="search_the_menu">Search the menu</string>
+    <string name="transition_string">card_transition</string>
+    <string name="continue_">Continue</string>
 
 
 </resources>

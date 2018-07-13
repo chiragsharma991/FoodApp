@@ -8,6 +8,7 @@ import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.transition.ChangeBounds
 import android.transition.Slide
@@ -32,7 +33,7 @@ class HomeFragment : BaseFragment() {
     private lateinit var binding: FragmentHomeFragmentBinding
     lateinit var clickEvent : MyClickHandler
     private  var mAdapter: OrderListAdapter?=null
-    private var fragment: DetailsFragment?=null
+    var fragment: DetailsFragment?=null
 
 
     companion object {
@@ -47,7 +48,6 @@ class HomeFragment : BaseFragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
        // return inflater.inflate(getLayout(), container, false)
-
         binding= DataBindingUtil.inflate(inflater,getLayout(),container,false)
         return binding.root
 
@@ -58,15 +58,6 @@ class HomeFragment : BaseFragment() {
     }
 
 
-    @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
-    private fun buildEnterTransition(): Visibility {
-        val enterTransition = Slide()
-        enterTransition.setDuration(500)
-        enterTransition.slideEdge = Gravity.RIGHT
-        return enterTransition
-    }
-
-
     override fun initView(view: View?, savedInstanceState: Bundle?) {
 
         if(savedInstanceState == null){
@@ -74,40 +65,36 @@ class HomeFragment : BaseFragment() {
             clickEvent =MyClickHandler(this)
             binding.handlers=clickEvent
 
+            recycler_view.apply {
+                mAdapter = OrderListAdapter(context!!,object: OrderListAdapter.AdapterListener {
+                    override fun itemClicked(position: Int) {
+                        loge(TAG,"on click....")
+                        fragment = DetailsFragment.newInstance()
+                        var enter :Slide?=null
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            enter = Slide()
+                            enter.setDuration(500)
+                            enter.slideEdge = Gravity.BOTTOM
+                            val changeBoundsTransition :ChangeBounds = ChangeBounds()
+                            changeBoundsTransition.duration = 300
+                            //fragment!!.sharedElementEnterTransition=changeBoundsTransition
+                            fragment!!.sharedElementEnterTransition=changeBoundsTransition
+                            fragment!!.enterTransition=enter
+
+                        }
+                        addFragment(R.id.home_fragment_container,fragment!!,DetailsFragment.TAG)
+
+
+                    }
+                })
+                layoutManager = LinearLayoutManager(getActivityBase())
+                adapter = mAdapter
+            }
+
+
         }else{
             logd(TAG,"saveInstance NOT NULL")
 
-        }
-
-        recycler_view.apply {
-            mAdapter = OrderListAdapter(context!!,object: OrderListAdapter.AdapterListener {
-                override fun itemClicked(position: Int) {
-                    loge(TAG,"on click....")
-                    fragment = DetailsFragment.newInstance()
-                    var enter :Slide?=null
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-
-                         enter = Slide()
-                        enter.setDuration(500)
-                        enter.slideEdge = Gravity.RIGHT
-                    }
-
-
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-                        val changeBoundsTransition :ChangeBounds = ChangeBounds()
-                        changeBoundsTransition.duration = 500
-                        fragment!!.enterTransition=enter
-                        fragment!!.setSharedElementEnterTransition(changeBoundsTransition)
-                    }
-
-
-                    addFragment(R.id.home_fragment_container,fragment!!,DetailsFragment.TAG)
-
-
-                }
-            })
-            layoutManager = LinearLayoutManager(getActivityBase())
-            adapter = mAdapter
         }
 
 

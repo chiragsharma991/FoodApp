@@ -55,27 +55,30 @@ class OrderFragment : BaseFragment() {
 
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
-           /* ui_model = ViewModelProviders.of(this).get(UIModel::class.java)
-            ui_model!!.getUIModel().observe(this, Observer<UI_OrderFragment>{
-                loge(TAG,"observer success---")
-                binding.uiOrder=ui_model!!.getUIModel().value
-            })
-            ui_model!!.init()*/
+            txt_toolbar.text=getString(R.string.orders)
+            recycler_view.apply {
+
+                mAdapter = OrderListAdapter(context!!,object: OrderListAdapter.AdapterListener {
+                    override fun itemClicked(position: Int) {
+                        loge(TAG,"on click....")
+                    }
+                })
+                layoutManager = LinearLayoutManager(getActivityBase())
+                adapter = mAdapter
+            }
+
+
+
         }else{
             logd(TAG,"saveInstance NOT NULL")
         }
 
-        txt_toolbar.text=getString(R.string.orders)
-        recycler_view.apply {
-
-            mAdapter = OrderListAdapter(context!!,object: OrderListAdapter.AdapterListener {
-                override fun itemClicked(position: Int) {
-                    loge(TAG,"on click....")
-                }
-            })
-            layoutManager = LinearLayoutManager(getActivityBase())
-            adapter = mAdapter
-        }
+        /* ui_model = ViewModelProviders.of(this).get(UIModel::class.java)
+        ui_model!!.getUIModel().observe(this, Observer<UI_OrderFragment>{
+            loge(TAG,"observer success---")
+            binding.uiOrder=ui_model!!.getUIModel().value
+        })
+        ui_model!!.init()*/
 
 
 

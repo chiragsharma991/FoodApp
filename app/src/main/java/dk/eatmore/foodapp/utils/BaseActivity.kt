@@ -7,11 +7,13 @@ import android.net.ConnectivityManager
 import android.os.Build
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
+import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
 import android.view.WindowManager
+import android.view.animation.TranslateAnimation
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import dk.eatmore.foodapp.BuildConfig
@@ -144,6 +146,8 @@ abstract class BaseActivity : AppCompatActivity()
     fun popWithTag(tag : String) {
         supportFragmentManager.popBackStack(tag,0)
 
+
+
     }
     fun pop() {
         supportFragmentManager.popBackStack()
@@ -192,5 +196,15 @@ abstract class BaseActivity : AppCompatActivity()
             mFragTransaction.addToBackStack(tag)
         mFragTransaction.commit()
     }
+
+    // Transition
+
+    fun translateAnim(from_x :Float ,to_x : Float, from_y : Float , to_y : Float , duration : Long, fill :Boolean) : TranslateAnimation {
+        val animation = TranslateAnimation(from_x, to_x, from_y, to_y)
+        animation.duration = duration
+        animation.fillAfter = fill
+        return  animation
+    }
+
 
 }

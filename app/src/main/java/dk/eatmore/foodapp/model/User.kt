@@ -15,6 +15,10 @@ data class MenuRestaurant  (
         var name: String = ""
 )
 
+data class CategoryRestaurant  (
+        var name: String = ""
+)
+
 
 
 

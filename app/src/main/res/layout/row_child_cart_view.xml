@@ -1,0 +1,191 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <data>
+
+
+
+    </data>
+
+    <RelativeLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+<LinearLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_8sdp"
+            android:gravity="center_vertical"
+            android:layout_weight="2"
+            android:orientation="horizontal">
+
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/TextViewSmall"
+                android:layout_width="0dp"
+                android:id="@+id/row_cart_child_txt"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/_3sdp"
+                android:singleLine="true"
+                android:layout_weight="1.3"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:text="Sandras"
+                android:textColor="@color/black_light" />
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:gravity="right"
+                android:layout_weight="0.7"
+                >
+
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TextViewSmall"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:gravity="right"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:text="100 Kr."
+                    android:singleLine="true"
+                    android:textColor="@color/black_light" />
+
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:id="@+id/row_child_cart_add_btn"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/background_light"
+                    android:scaleType="fitXY"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    app:srcCompat="@drawable/add_item" />
+
+
+
+
+            </LinearLayout>
+
+
+
+
+
+        </LinearLayout>
+
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:id="@+id/row_child_cart_additional"
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="@dimen/_8sdp"
+            android:gravity="center_vertical"
+            android:layout_weight="2"
+            android:orientation="horizontal">
+
+            <LinearLayout
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal"
+                android:layout_weight="0.7"
+                >
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_gravity="center_vertical"
+                    android:background="@color/background_light"
+                    android:scaleType="fitXY"
+                    android:id="@+id/row_child_cart_remove_btn"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    app:srcCompat="@drawable/remove_item" />
+
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TextViewSmall"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:gravity="right"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:text="100 Kr."
+                    android:singleLine="true"
+                    android:textColor="@color/black_light" />
+
+
+
+
+
+
+
+            </LinearLayout>
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/TextViewSmall"
+                android:layout_width="0dp"
+                android:id="@+id/row_child_cart_qty_txt"
+                android:gravity="right"
+                android:layout_gravity="center_vertical"
+                android:layout_marginLeft="@dimen/_3sdp"
+                android:singleLine="true"
+                android:layout_weight="1.3"
+                android:layout_marginRight="@dimen/_5sdp"
+                android:text="01"
+                android:textColor="@color/black_light" />
+
+
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <View
+        android:id="@+id/view"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="0.1"
+        android:background="@color/divider_color"
+        />
+
+
+
+
+</LinearLayout>
+
+
+
+
+
+
+
+
+
+    </RelativeLayout>
+
+</layout>
+
+
+
