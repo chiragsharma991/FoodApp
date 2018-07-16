@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_margin="2dp"
+    android:background="@drawable/ingredientsselector"
+    android:text="Helloworld"
+    android:id="@+id/ingredient_name"
+    android:textAppearance="?android:textAppearanceSmall"
+    android:fontFamily="@font/hindvadodara_medium"
+    android:gravity="center"
+    android:textColor="#fff">
+
+</TextView>

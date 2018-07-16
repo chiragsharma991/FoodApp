@@ -1,5 +1,6 @@
 package dk.eatmore.foodapp.activity.Main
 
+import android.app.PendingIntent.getActivity
 import android.os.Build
 import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
@@ -9,7 +10,14 @@ import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.transition.Slide
 import android.transition.Transition
+import android.util.Log
 import android.view.Gravity
+import android.view.LayoutInflater
+import android.view.View
+import android.widget.TextView
+import com.zhy.view.flowlayout.FlowLayout
+import com.zhy.view.flowlayout.TagAdapter
+import com.zhy.view.flowlayout.TagFlowLayout
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.adapter.CartViewAdapter
 import dk.eatmore.foodapp.adapter.OrderListAdapter
@@ -17,12 +25,13 @@ import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.utils.BaseActivity
 import kotlinx.android.synthetic.main.activity_cart.*
 import kotlinx.android.synthetic.main.toolbar.*
-import java.util.ArrayList
+import java.util.*
 
 class CartActivity : BaseActivity() {
 
     var transition : Transition?=null
     private val userList = ArrayList<User>()
+
     private  var mAdapter: CartViewAdapter?=null
 
 
@@ -45,6 +54,34 @@ class CartActivity : BaseActivity() {
             transition = buildEnterTransition()
             window.enterTransition = transition
         }
+        val mVals = arrayOfNulls<String>(10)
+        for (i in 0..9){
+            mVals[i]="Test $i"
+        }
+
+        val tagadapter = object : TagAdapter<String>(mVals){
+            override fun getView(parent: FlowLayout?, position: Int, t: String?): View {
+                val tv = LayoutInflater.from(this@CartActivity).inflate(R.layout.ingredients_selct_layout,
+                        flowlayout, false) as TextView
+                tv.text = t
+                return tv
+
+            }
+
+        }
+        flowlayout.setAdapter(tagadapter)
+        val set = HashSet<Int>()
+        for (j in mVals.indices) {
+            set.add(j)
+        }
+        tagadapter.setSelectedList(set)
+
+        flowlayout.setOnSelectListener(TagFlowLayout.OnSelectListener { selectPosSet ->
+            Log.e(TAG, "selected ---" + selectPosSet)
+            // ingredientsJsonArray = null;
+
+        })
+
 
     }
 
