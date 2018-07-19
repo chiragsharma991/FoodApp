@@ -1,0 +1,303 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:zhy="http://schemas.android.com/tools">
+
+    <data>
+
+
+    </data>
+
+
+    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:background="@color/white"
+        android:layoutDirection="locale">
+
+        <include layout="@layout/toolbar"
+            android:layout_marginTop="@dimen/_25sdp"
+            android:id="@+id/toolbar"
+            android:layout_width="match_parent"
+            android:layout_height="?attr/actionBarSize"
+            >
+
+        </include>
+
+
+        <FrameLayout
+            android:id="@+id/home_account_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/toolbar"
+            android:fitsSystemWindows="true">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:visibility="visible"
+                android:background="@color/background_light"
+                >
+
+                <android.support.v4.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+
+                    >
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_3sdp">
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="@dimen/_5sdp"
+                            android:orientation="vertical">
+
+                            <android.support.v7.widget.CardView
+                                android:id="@+id/address_card"
+                                style="@style/CardViewStyle">
+
+
+                                <LinearLayout
+                                    android:id="@+id/signup_view"
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="@dimen/_8sdp"
+                                    android:layout_marginTop="?attr/actionBarSize"
+                                    android:orientation="vertical"
+                                    android:visibility="visible">
+
+                                    <android.support.design.widget.TextInputLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <EditText
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:backgroundTint="@color/gray"
+                                            android:fontFamily="@font/hindvadodara_medium"
+                                            android:hint="Address"
+                                            android:textAppearance="?android:attr/textAppearanceSmall" />
+                                    </android.support.design.widget.TextInputLayout>
+
+                                    <android.support.design.widget.TextInputLayout
+                                        android:id="@+id/input_layout_email"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <EditText
+                                            android:id="@+id/input_email"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:singleLine="true"
+                                            android:backgroundTint="@color/gray"
+                                            android:fontFamily="@font/hindvadodara_medium"
+                                            android:hint="Line2"
+                                            android:textAppearance="?android:attr/textAppearanceSmall" />
+                                    </android.support.design.widget.TextInputLayout>
+
+                                    <android.support.design.widget.TextInputLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <EditText
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:singleLine="true"
+                                            android:backgroundTint="@color/gray"
+                                            android:fontFamily="@font/hindvadodara_medium"
+                                            android:hint="Line3"
+                                            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                                    </android.support.design.widget.TextInputLayout>
+
+                                    <android.support.design.widget.TextInputLayout
+                                        android:id="@+id/input_layout_password"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <EditText
+                                            android:id="@+id/input_password"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:backgroundTint="@color/gray"
+                                            android:singleLine="true"
+                                            android:fontFamily="@font/hindvadodara_medium"
+                                            android:hint="Line4"
+                                            android:inputType="textPassword"
+                                            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                                    </android.support.design.widget.TextInputLayout>
+
+                                    <android.support.design.widget.TextInputLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <EditText
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:backgroundTint="@color/gray"
+                                            android:singleLine="true"
+                                            android:fontFamily="@font/hindvadodara_medium"
+                                            android:hint="By"
+                                            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                                    </android.support.design.widget.TextInputLayout>
+
+                                    <android.support.design.widget.TextInputLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content">
+
+                                        <EditText
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:backgroundTint="@color/gray"
+                                            android:fontFamily="@font/hindvadodara_medium"
+                                            android:hint="Post number"
+                                            android:singleLine="true"
+                                            android:inputType="textPassword"
+                                            android:textAppearance="?android:attr/textAppearanceSmall" />
+
+                                    </android.support.design.widget.TextInputLayout>
+
+
+                                </LinearLayout>
+
+
+                            </android.support.v7.widget.CardView>
+
+                            <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginLeft="@dimen/_5sdp"
+                                android:layout_marginRight="@dimen/_5sdp"
+                                android:orientation="vertical">
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_margin="@dimen/_8sdp"
+                                    android:gravity="center_vertical"
+                                    android:orientation="horizontal">
+
+
+                                    <android.support.v7.widget.AppCompatTextView
+                                        android:id="@+id/menu_raw_txt"
+                                        style="@style/TextViewSmall"
+                                        android:layout_gravity="center_vertical"
+                                        android:text="Name this address"
+                                        android:textColor="@color/black_light" />
+
+
+                                </LinearLayout>
+
+
+                            </LinearLayout>
+
+                            <android.support.v7.widget.CardView style="@style/CardViewStyle"
+                                >
+
+
+                                <LinearLayout
+                                    android:layout_width="fill_parent"
+                                    android:layout_height="match_parent"
+                                    android:layout_margin="@dimen/_8sdp"
+                                    android:layout_marginTop="?attr/actionBarSize"
+                                    android:orientation="vertical"
+                                    android:visibility="visible">
+
+                                    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical">
+
+                                        <android.support.v7.widget.AppCompatTextView
+                                            style="@style/TextViewSmall"
+                                            android:layout_centerVertical="true"
+                                            android:text="Home"
+                                            android:textColor="@color/black_light" />
+
+                                        <RadioButton
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_alignParentEnd="true"
+                                            android:layout_centerVertical="true"
+
+                                            />
+
+
+                                    </RelativeLayout>
+                                    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/_5sdp"
+                                        android:orientation="vertical">
+
+                                        <android.support.v7.widget.AppCompatTextView
+                                            style="@style/TextViewSmall"
+                                            android:layout_centerVertical="true"
+                                            android:text="Occupation"
+                                            android:textColor="@color/black_light" />
+
+                                        <RadioButton
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_alignParentEnd="true"
+                                            android:layout_centerVertical="true"
+
+                                            />
+
+
+                                    </RelativeLayout>
+                                    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginTop="@dimen/_5sdp"
+                                        android:orientation="vertical">
+
+                                        <android.support.v7.widget.AppCompatTextView
+                                            style="@style/TextViewSmall"
+                                            android:layout_centerVertical="true"
+                                            android:text="Other"
+                                            android:textColor="@color/black_light" />
+
+                                        <RadioButton
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:layout_alignParentEnd="true"
+                                            android:layout_centerVertical="true"
+
+                                            />
+
+
+                                    </RelativeLayout>
+
+
+                                </LinearLayout>
+
+
+                            </android.support.v7.widget.CardView>
+
+
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
+
+                </android.support.v4.widget.NestedScrollView>
+
+
+            </RelativeLayout>
+
+
+        </FrameLayout>
+
+
+    </RelativeLayout>
+
+</layout>
