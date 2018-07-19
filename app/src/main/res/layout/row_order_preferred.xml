@@ -20,6 +20,7 @@
         <android.support.v7.widget.CardView
             android:id="@+id/row_order_cardview"
             style="@style/CardViewStyle"
+            android:foreground="?android:attr/selectableItemBackground"
             >
 
             <android.support.constraint.ConstraintLayout
@@ -194,6 +195,7 @@
                         <android.support.v7.widget.AppCompatButton
                             style="@style/Button"
                             android:layout_height="@dimen/_32sdp"
+                            android:id="@+id/order_now"
                             android:layout_alignParentBottom="true"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:background="@color/background_light"

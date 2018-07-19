@@ -6,39 +6,26 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.adapter.OrderListAdapter
 import dk.eatmore.foodapp.databinding.FragmentAccountContainerBinding
 import dk.eatmore.foodapp.utils.BaseFragment
-import kotlinx.android.synthetic.main.fragment_order_container.*
 import kotlinx.android.synthetic.main.menu_restaurant.*
 import android.support.design.widget.TabLayout
-import android.support.v7.widget.RecyclerView
 import android.transition.ChangeBounds
 import android.transition.Slide
 import android.view.Gravity
-import android.widget.Toast
-import dk.eatmore.foodapp.adapter.GenericAdapter
-import dk.eatmore.foodapp.adapter.ViewHolderFactory
-import dk.eatmore.foodapp.fragment.Dashboard.HomeFragment
-import dk.eatmore.foodapp.model.MenuRestaurant
+import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.model.User
-import kotlinx.android.synthetic.main.rating_restaurant.*
-import android.annotation.TargetApi
 import android.support.transition.*
 import android.support.v4.content.ContextCompat
-import dk.eatmore.foodapp.activity.Main.HomeActivity
+import dk.eatmore.foodapp.activity.main.HomeActivity
 import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerCallback
 import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickInterface
 import dk.eatmore.foodapp.adapter.UniversalAdapter.UniversalAdapter
-import dk.eatmore.foodapp.databinding.RowCategoryListBinding
 import dk.eatmore.foodapp.databinding.RowMenuRestaurantBinding
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
-import kotlinx.android.synthetic.main.category_list.*
 import kotlinx.android.synthetic.main.fragment_details.*
 import java.util.ArrayList
-import kotlin.math.log
 
 
 class Menu : BaseFragment(), RecyclerClickInterface {
@@ -104,57 +91,9 @@ class Menu : BaseFragment(), RecyclerClickInterface {
             recycler_view_menu.layoutManager = LinearLayoutManager(getActivityBase())
             recycler_view_menu.adapter = mAdapter
 
-
-
-
-/*
-
-            val mAdapter=object : GenericAdapter<Any>(list){
-                override fun getLayoutId(position: Int, obj: Any): Int {
-                    return when(obj){
-                        is MenuRestaurant -> R.layout.row_menu_restaurant
-                        else -> R.layout.row_rating_list
-                    }
-                }
-                override fun getViewHolder(view: View, viewType: Int): RecyclerView.ViewHolder {
-                    return ViewHolderFactory.create(view,viewType,object : ViewHolderFactory.Clicklistner{
-                        override fun clickOn() {
-
-                            (parentFragment as DetailsFragment).appbar.setExpanded(false,true)
-                            (parentFragment as DetailsFragment).collapse_toolbar.setBackgroundColor(ContextCompat.getColor(context!!,R.color.white));
-                            (parentFragment as DetailsFragment).collapse_toolbar.setStatusBarScrimColor(ContextCompat.getColor(context!!,R.color.white))
-                            (parentFragment as DetailsFragment).collapse_toolbar.setContentScrimColor(ContextCompat.getColor(context!!,R.color.white))
-
-
-                            val fragment = CategoryList.newInstance()
-                            var enter :Slide?=null
-                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                                enter = Slide()
-                                enter.setDuration(500)
-                                enter.slideEdge = Gravity.RIGHT
-                                val changeBoundsTransition :ChangeBounds = ChangeBounds()
-                                changeBoundsTransition.duration = 500
-                                fragment.sharedElementEnterTransition=changeBoundsTransition
-                                fragment.enterTransition=enter
-
-
-                            }
-                            homeFragment.addFragment(R.id.home_fragment_container,fragment,CategoryList.TAG)
-
-                        }
-                    })
-                }
-            }
-            recycler_view_menu.layoutManager = LinearLayoutManager(getActivityBase())
-            recycler_view_menu.adapter = mAdapter
-*/
-
-
-
             menu_search.setOnClickListener{
 
 
-                if(fragmentof !=null){
                     logd(TAG,"")
                     val fragment = SearchMenu.newInstance()
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -178,10 +117,9 @@ class Menu : BaseFragment(), RecyclerClickInterface {
                                 .commit()
                     }
                     else {
-                        homeFragment.addFragment(R.id.home_fragment_container,fragment,SearchMenu.TAG)
+                        homeFragment.addFragment(R.id.home_fragment_container,fragment,SearchMenu.TAG,false)
                     }
 
-                }
 
             }
 
@@ -203,7 +141,6 @@ class Menu : BaseFragment(), RecyclerClickInterface {
 
         val fragment = CategoryList.newInstance()
         var enter :Slide?=null
-
         val bundle = Bundle()
         bundle.putString("TITLE",user.name)
         fragment.arguments=bundle
@@ -215,10 +152,8 @@ class Menu : BaseFragment(), RecyclerClickInterface {
             changeBoundsTransition.duration = 500
             fragment.sharedElementEnterTransition=changeBoundsTransition
             fragment.enterTransition=enter
-
-
         }
-        homeFragment.addFragment(R.id.home_fragment_container,fragment,CategoryList.TAG)
+        homeFragment.addFragment(R.id.home_fragment_container,fragment,CategoryList.TAG,false)
 
     }
 

@@ -70,6 +70,7 @@ dependencies {
     // palette
     implementation 'com.android.support:palette-v7:27.1.1'
 
+    //Flow layout
     implementation 'com.zhy:flowlayout-lib:1.0.3'
 
 

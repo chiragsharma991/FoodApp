@@ -7,12 +7,9 @@ import android.net.ConnectivityManager
 import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
-import android.support.v4.app.FragmentTransaction
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.view.inputmethod.InputMethodManager
 import retrofit2.Call
 import retrofit2.Callback
@@ -21,19 +18,20 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.support.v4.app.ActivityCompat
 import android.content.pm.PackageManager
-import android.databinding.DataBindingUtil
 import android.os.Build
+import android.support.v4.content.ContextCompat
+import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.animation.TranslateAnimation
 import dk.eatmore.foodapp.BuildConfig
-import dk.eatmore.foodapp.activity.Main.HomeActivity
-import dk.eatmore.foodapp.fragment.Dashboard.HomeFragment
+import dk.eatmore.foodapp.R
+import dk.eatmore.foodapp.activity.main.HomeActivity
+import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.CategoryList
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.rest.ApiClient
 import dk.eatmore.foodapp.rest.ApiInterface
 import kotlinx.android.synthetic.main.fragment_details.*
-import kotlinx.android.synthetic.main.fragment_home_fragment.*
 
 
 abstract class BaseFragment : Fragment() {
@@ -61,9 +59,12 @@ abstract class BaseFragment : Fragment() {
         initView(view, savedInstanceState)
     }
 
-    fun addFragment(container: Int, fragment: Fragment, tag: String) {
+    fun addFragment(container: Int, fragment: Fragment, tag: String,isAnimated :Boolean) {
         hideKeyboard()
-        childFragmentManager.beginTransaction().add(container, fragment, tag).addToBackStack(tag).commit()
+        val mfragmentTransaction=childFragmentManager.beginTransaction()
+        if(isAnimated)
+        mfragmentTransaction.setCustomAnimations(R.anim.enter_from_right,0,0,R.anim.exit_from_left)
+        mfragmentTransaction.add(container, fragment, tag).addToBackStack(tag).commit()
     }
 
     fun isPermissionGranted(): Boolean {
@@ -96,7 +97,7 @@ abstract class BaseFragment : Fragment() {
                     when (fragment){
                        is CategoryList ->{
                            val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
-                           val homeFragment : HomeFragment=(fragmentof as HomeContainerFragment).getHomeFragment()
+                           val homeFragment : HomeFragment =(fragmentof as HomeContainerFragment).getHomeFragment()
                            (homeFragment.fragment as DetailsFragment).setPalette()
                            (homeFragment.fragment as DetailsFragment).appbar.setExpanded(true,true)
                            childFragmentManager.popBackStack()
@@ -105,6 +106,7 @@ abstract class BaseFragment : Fragment() {
 
 
                     }
+                    DrawableCompat.setTint(ContextCompat.getDrawable(activity!!, R.drawable.close)!!, ContextCompat.getColor(activity!!, R.color.white));
 
                 }
             }

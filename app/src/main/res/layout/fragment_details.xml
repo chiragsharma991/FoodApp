@@ -40,11 +40,10 @@
             app:titleEnabled="false">
 
             <ImageView
-                android:id="@+id/htab_header"
+                android:id="@+id/details_back_img"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:scaleType="centerCrop"
-                android:src="@drawable/food_slash"
                 app:layout_collapseMode="parallax"/>
 
             <View
@@ -59,41 +58,73 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical"
+                android:orientation="horizontal"
                 android:id="@+id/detail_item_info"
-                android:layout_marginLeft="@dimen/_5sdp"
+                android:layout_marginLeft="@dimen/_25sdp"
+                android:layout_marginRight="@dimen/_5sdp"
                 android:layout_marginTop="@dimen/_110sdp"
+                android:weightSum="2"
                 >
-                <TextView
-                    style="@style/TextViewMid"
-                    android:textColor="@color/white"
-                    android:text="Rohavedplad Pizza and Grill" />
 
-                <TextView
-                    style="@style/TextViewSmall"
-                    android:textColor="@color/white"
-                    android:text="Italienisk Amerikansk" />
-
-                <RatingBar
-                    style="?android:attr/ratingBarStyleSmall"
+                <LinearLayout
                     android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:isIndicator="true"
-                    android:numStars="6"
-                    android:rating="3"
-                    android:stepSize="1" />
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    >
 
-                <TextView
-                    style="@style/TextViewSmall"
-                    android:textColor="@color/white"
-                    android:text="(1471) 6400" />
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="@dimen/_90sdp"
+                        android:layout_height="@dimen/_90sdp"
+                        app:srcCompat="@mipmap/food_icon"
+                        android:scaleType="fitXY"
+
+                        />
+
+
+                </LinearLayout>
+
+
+                <LinearLayout
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:layout_marginLeft="@dimen/_10sdp"
+                    >
+
+
+                    <TextView
+                        style="@style/TextViewMid"
+                        android:textColor="@color/white"
+                        android:text="Rohavedplad Pizza and Grill" />
+
+                    <TextView
+                        style="@style/TextViewSmall"
+                        android:textColor="@color/white"
+                        android:text="Italienisk Amerikansk" />
+
+                    <RatingBar
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:isIndicator="true"
+                        android:numStars="6"
+                        android:rating="3"
+                        android:stepSize="1" />
+
+                    <TextView
+                        style="@style/TextViewSmall"
+                        android:textColor="@color/white"
+                        android:text="(1471) 6400" />
+
+                </LinearLayout>
+
 
 
             </LinearLayout>
 
 
             <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar"
+                android:id="@+id/toolbar_fragment"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 android:layout_gravity="top"

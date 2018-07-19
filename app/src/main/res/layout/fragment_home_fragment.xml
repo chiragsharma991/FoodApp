@@ -7,7 +7,7 @@
 
         <variable
             name="handlers"
-            type="dk.eatmore.foodapp.fragment.Dashboard.HomeFragment.MyClickHandler">
+            type="dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment.MyClickHandler">
 
         </variable>
 
@@ -146,7 +146,7 @@
 
                     <android.support.v7.widget.RecyclerView
                         android:id="@+id/recycler_view"
-                        android:padding="@dimen/_2sdp"
+                        android:padding="@dimen/_3sdp"
                         android:nestedScrollingEnabled="false"
                         android:clipToPadding="false"
                         android:layout_width="match_parent"
@@ -170,6 +170,7 @@
                     <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/find_rest_edt"
                         style="@style/EditText"
+                        android:textAppearance="?android:textAppearanceMedium"
                         android:hint="Enter your postal code">
 
                     </android.support.v7.widget.AppCompatEditText>

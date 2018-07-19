@@ -25,6 +25,8 @@
     <string name="search_the_menu">Search the menu</string>
     <string name="transition_string">card_transition</string>
     <string name="continue_">Continue</string>
+    <string name="ok">OK</string>
+    <string name="add">Add</string>
 
 
 </resources>

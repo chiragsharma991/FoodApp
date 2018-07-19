@@ -1,0 +1,370 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    >
+
+    <data>
+
+
+    </data>
+
+
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/activity_main"
+        android:layout_width="match_parent"
+        android:background="@color/background_light"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@color/divider_color">
+
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:contentScrim="?attr/colorPrimary"
+                app:expandedTitleTextAppearance="@style/TextAppearance.AppCompat.Title"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed"
+                app:titleEnabled="false">
+
+                <View
+                    android:id="@+id/fadeBackgroudView"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_alignParentBottom="true"
+                    android:foreground="@drawable/gradient_variant"
+                    />
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginBottom="@dimen/_70sdp"
+
+                    >
+                    <android.support.constraint.ConstraintLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+
+                        >
+
+                        <android.support.constraint.Guideline
+                            android:id="@+id/guideline"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.38" />
+
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="0dp"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginStart="5dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_weight="0.7"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent">
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:layout_marginRight="@dimen/_25sdp"
+                                android:background="@color/gray"
+                                android:padding="@dimen/_5sdp"
+
+                                />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="5dp"
+                            android:layout_marginEnd="5dp"
+                            android:layout_marginTop="5dp"
+                            android:layout_weight="1.3"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/guideline"
+                            app:layout_constraintTop_toTopOf="parent">
+
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewMid"
+                                android:textColor="@color/white"
+                                android:id="@+id/ordered_item_name"
+                                android:singleLine="true"
+                                android:text="Promo Pizza" />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:layout_gravity="center_vertical"
+                                android:text="08/07/2019"
+                                android:textColor="@color/white"
+                                />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="130,00 kr. (2 Topics)"
+                                android:textColor="@color/white"
+                                />
+
+                            <RatingBar
+                                style="?android:attr/ratingBarStyleSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_4sdp"
+                                android:isIndicator="true"
+                                android:numStars="6"
+                                android:rating="3"
+                                android:stepSize="1" />
+
+
+
+
+                        </LinearLayout>
+
+
+
+
+
+                    </android.support.constraint.ConstraintLayout>
+
+
+
+
+                </RelativeLayout>
+
+
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+        </android.support.design.widget.AppBarLayout>
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/_3sdp"
+            app:behavior_overlapTop="50dp"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                >
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/row_order_cardview"
+                    style="@style/CardViewStyle"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_margin="@dimen/_8sdp"
+                        android:gravity="center_horizontal"
+                        >
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/TextViewMid"
+                            android:singleLine="true"
+                            android:text="09/07/2019 (22:15)"
+                            android:layout_marginBottom="@dimen/_8sdp"
+                            />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/TextViewSmall"
+                            android:textColor="@color/black_light"
+                            android:text="08/07/2019"
+                            />
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/TextViewSmall"
+                            android:text="Restaurant Address"
+                            />
+
+
+                        <View
+                            android:id="@+id/view"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:alpha="0.2"
+                            android:background="@color/divider_color"
+                            />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/TextViewSmall"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_gravity="left"
+                            android:text="08/07/2019"
+                            />
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/TextViewSmall"
+                            android:text="Restaurant Address"
+                            android:layout_gravity="left"
+                            android:textColor="@color/black_light"
+                            />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginBottom="@dimen/_8sdp"
+                            android:alpha="0.2"
+                            android:background="@color/divider_color"
+                            />
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="Student Pizza, M"
+                                android:textColor="@color/black_light"
+
+                                />
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="60,00 Kr."
+                                android:textColor="@color/black_light"
+                                android:layout_alignParentRight="true"
+                                />
+
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="Roast Pizza, M"
+                                android:textColor="@color/black_light"
+
+                                />
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="55,00 Kr."
+                                android:textColor="@color/black_light"
+                                android:layout_alignParentRight="true"
+                                />
+
+                        </RelativeLayout>
+
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginBottom="@dimen/_8sdp"
+                            android:alpha="0.2"
+                            android:background="@color/divider_color"
+                            />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="Subtotal"
+                                android:textColor="@color/black_light"
+
+                                />
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="115,00 Kr."
+                                android:textColor="@color/black_light"
+                                android:layout_alignParentRight="true"
+                                />
+
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginBottom="@dimen/_8sdp"
+                            android:alpha="0.2"
+                            android:background="@color/divider_color"
+                            />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="enkdigj at:"
+                                />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="bloghu"
+                                android:textColor="@color/black_light"
+
+                                />
+
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="Total"
+
+                                />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="115,00 Kr."
+                                android:layout_alignParentRight="true"
+                                />
+
+
+                        </RelativeLayout>
+
+
+
+                    </LinearLayout>
+
+                  <!--  <TextView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:padding="10dp"
+                        android:text="The flexible space shrinks until only the toolbar remains. The title shrinks to 20sp in the navigation bar. When scrolling to the top of the page, the flexible space and the title grow into place again.The flexible space shrinks until only the toolbar remains. The title shrinks to 20sp in the navigation bar. When scrolling to the top of the page, the flexible space and the title grow into place again.The flexible space shrinks until only the toolbar remains. The title shrinks to 20sp in the navigation bar. When scrolling to the top of the page, the flexible space and the title grow into place again.The flexible space shrinks until only the toolbar remains. The title shrinks to 20sp in the navigation bar. When scrolling to the top of the page, the flexible space and the title grow into place again.The flexible space shrinks until only the toolbar remains. The title shrinks to 20sp in the navigation bar. When scrolling to the top of the page, the flexible space and the title grow into place again. The flexible space shrinks until only the toolbar remains. The title shrinks to 20sp in the navigation bar. When scrolling to the top of the page, the flexible space and the title grow into place again.The flexible space shrinks until only the toolbar remains. The title shrinks to 20sp in the navigation bar. When scrolling to the top of the page, the flexible space and the title grow into place again.The flexible space shrinks until only the toolbar remains. The title shrinks to 20sp in the navigation bar. When scrolling to the top of the page, the flexible space and the title grow into place again.The flexible space shrinks until only the toolbar remains. The title shrinks to 20sp in the navigation bar. When scrolling to the top of the page, the flexible space and the title grow into place again. The flexible space shrinks until only the toolbar remains. The title shrinks to 20sp in the navigation bar. When scrolling to the top of the page, the flexible space and the title grow into place again.The flexible space shrinks until only the toolbar remains. The title shrinks to 20sp in the navigation bar. When scrolling to the top of the page, the flexible space and the title grow into place again.The flexible space shrinks until only the toolbar remains. The title shrinks to 20sp in the navigation bar. When scrolling to the top of the page, the flexible space and the title grow into place again.The flexible space shrinks until only the toolbar remains. The title shrinks to 20sp in the navigation bar. When scrolling to the top of the page, the flexible space and the title grow into place again. The flexible space shrinks until only the toolbar remains. The title shrinks to 20sp in the navigation bar. When scrolling to the top of the page, the flexible space and the title grow into place again.The flexible space shrinks until only the toolbar remains. The title shrinks to 20sp in the navigation bar. When scrolling to the top of the page, the flexible space and the title grow into place again.The flexible space shrinks until only the toolbar remains. The title shrinks to 20sp in the navigation bar. When scrolling to the top of the page, the flexible space and the title grow into place again." />
+                -->
+
+                </android.support.v7.widget.CardView>
+            </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+    </android.support.design.widget.CoordinatorLayout>
+
+
+
+
+
+
+</layout>
+

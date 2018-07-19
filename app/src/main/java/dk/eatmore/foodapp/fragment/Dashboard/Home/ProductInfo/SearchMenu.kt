@@ -5,7 +5,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.Main.HomeActivity
+import dk.eatmore.foodapp.activity.main.HomeActivity
 import dk.eatmore.foodapp.databinding.FragmentAccountContainerBinding
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.DrawableClickListener.DrawablePosition

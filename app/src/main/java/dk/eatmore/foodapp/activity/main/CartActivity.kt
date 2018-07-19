@@ -1,8 +1,6 @@
-package dk.eatmore.foodapp.activity.Main
+package dk.eatmore.foodapp.activity.main
 
-import android.app.PendingIntent.getActivity
 import android.os.Build
-import android.support.v7.app.AppCompatActivity
 import android.os.Bundle
 import android.support.annotation.RequiresApi
 import android.support.v4.content.ContextCompat
@@ -20,7 +18,6 @@ import com.zhy.view.flowlayout.TagAdapter
 import com.zhy.view.flowlayout.TagFlowLayout
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.adapter.CartViewAdapter
-import dk.eatmore.foodapp.adapter.OrderListAdapter
 import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.utils.BaseActivity
 import kotlinx.android.synthetic.main.activity_cart.*

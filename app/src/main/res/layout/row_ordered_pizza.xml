@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <data>
+
+        <variable
+            name="user"
+            type="dk.eatmore.foodapp.model.User">
+
+        </variable>
+
+        <variable
+            name="handler"
+            type="dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickInterface" />
+
+    </data>
+
+    <RelativeLayout
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+        <android.support.v7.widget.CardView
+            android:id="@+id/row_order_cardview"
+            style="@style/CardViewStyle"
+            android:onClick="@{()->handler.onClick(user)}"
+            android:foreground="?android:attr/selectableItemBackground"
+            >
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                >
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.29" />
+
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="0.7"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/gray"
+                        android:padding="@dimen/_5sdp"
+
+                        />
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_weight="1.3"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    app:layout_constraintTop_toTopOf="parent">
+
+
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/TextViewMid"
+                        android:id="@+id/ordered_item_name"
+                        android:singleLine="true"
+                        android:text="@{user.name}" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/TextViewSmall"
+                        android:layout_gravity="center_vertical"
+                        android:text="08/07/2019"
+                        android:textColor="@color/black_light" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/TextViewSmall"
+                        android:text="130,00 kr. (2 Topics)"
+
+                        />
+
+                    <RatingBar
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_4sdp"
+                        android:isIndicator="true"
+                        android:numStars="6"
+                        android:rating="3"
+                        android:stepSize="1" />
+
+
+
+
+                </LinearLayout>
+
+
+
+
+
+            </android.support.constraint.ConstraintLayout>
+
+
+        </android.support.v7.widget.CardView>
+
+
+
+    </RelativeLayout>
+
+</layout>
+
+
+

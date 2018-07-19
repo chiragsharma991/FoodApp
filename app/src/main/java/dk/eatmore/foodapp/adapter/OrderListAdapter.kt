@@ -1,14 +1,19 @@
 package dk.eatmore.foodapp.adapter
 
-import android.content.Context
 import android.databinding.DataBindingUtil
+import android.os.Build
 import android.support.v7.widget.RecyclerView
+import android.transition.ChangeBounds
+import android.transition.Slide
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.databinding.RowOrderPreferredBinding
+import dk.eatmore.foodapp.fragment.Dashboard.Home.Address
+import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 
-class OrderListAdapter(val context: Context, val callback: AdapterListener): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class OrderListAdapter(val homefragment: HomeFragment, val callback: AdapterListener): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     private val VIEW_ITEM = 1
     lateinit var listner : AdapterListener
@@ -35,6 +40,19 @@ class OrderListAdapter(val context: Context, val callback: AdapterListener): Rec
            // holder.init()
             holder.binding.rowOrderCardview.setOnClickListener {
                 listner.itemClicked(position)
+            }
+            holder.binding.orderNow.setOnClickListener{
+                val fragment = Address.newInstance()
+                val enter : Slide?
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    enter = Slide()
+                    enter.setDuration(500)
+                    enter.slideEdge = Gravity.RIGHT
+                    fragment.enterTransition=enter
+                }
+
+                homefragment.addFragment(R.id.home_fragment_container,fragment,Address.TAG,false)
+
             }
 
 

@@ -1,4 +1,4 @@
-package dk.eatmore.foodapp.fragment.Dashboard
+package dk.eatmore.foodapp.fragment.Dashboard.Account
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -6,28 +6,29 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.databinding.FragmentAccountContainerBinding
+import dk.eatmore.foodapp.databinding.FragmentSignupBinding
 import dk.eatmore.foodapp.utils.BaseFragment
-import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.fragment_signup.*
 
-class AccountFragment : BaseFragment() {
+class Signup : BaseFragment() {
 
-    private lateinit var binding: FragmentAccountContainerBinding
+    private lateinit var binding: FragmentSignupBinding
 
 
 
     companion object {
 
-        val TAG = "AccountFragment"
-        fun newInstance(): AccountFragment {
-            return AccountFragment()
+        val TAG = "Signup"
+        var ID :Int=1
+        fun newInstance(): Signup {
+            return Signup()
         }
 
     }
 
 
     override fun getLayout(): Int {
-        return R.layout.fragment_account_container
+        return R.layout.fragment_signup
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -40,8 +41,16 @@ class AccountFragment : BaseFragment() {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
-            txt_toolbar.text=getString(R.string.my_profile)
-
+            when (ID){
+                1 ->{
+                    signup_view.visibility=View.VISIBLE
+                    forget_password_view.visibility=View.GONE
+                }
+                2->{
+                    signup_view.visibility=View.GONE
+                    forget_password_view.visibility=View.VISIBLE
+                }
+            }
 
 
         }else{
@@ -73,6 +82,3 @@ class AccountFragment : BaseFragment() {
     }
 
 }
-
-
-

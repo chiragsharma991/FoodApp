@@ -1,4 +1,4 @@
-package dk.eatmore.foodapp.activity.Main
+package dk.eatmore.foodapp.activity.main
 
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -44,12 +44,14 @@ class HomeActivity : BaseActivity(){
     fun getFragmentFromAdapter() :Fragment{
 
         return  mHomeContainerFragment
+
     }
 
     override fun onBackPressed() {
         var pop = mHomeContainerFragment.getContainerFragment().popFragment()
 
     }
+
 
 
 

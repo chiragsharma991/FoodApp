@@ -6,6 +6,7 @@
     android:background="@drawable/ingredientsselector"
     android:text="Helloworld"
     android:id="@+id/ingredient_name"
+    android:padding="@dimen/_5sdp"
     android:textAppearance="?android:textAppearanceSmall"
     android:fontFamily="@font/hindvadodara_medium"
     android:gravity="center"

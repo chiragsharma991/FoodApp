@@ -100,7 +100,7 @@ class CustomEditText : EditText {
                     }
                 }
 
-                if (bounds!!.contains(x, y) && clickListener != null) {
+                if (bounds.contains(x, y) && clickListener != null) {
                     clickListener!!
                             .onClick(DrawableClickListener.DrawablePosition.LEFT)
                     event.action = MotionEvent.ACTION_CANCEL

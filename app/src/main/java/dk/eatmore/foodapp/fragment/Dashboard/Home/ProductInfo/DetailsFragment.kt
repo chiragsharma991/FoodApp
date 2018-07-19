@@ -9,12 +9,11 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.adapter.OrderListAdapter
-import dk.eatmore.foodapp.fragment.Dashboard.HomeFragment
+import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.utils.BaseFragment
 import kotlinx.android.synthetic.main.fragment_details.*
 import android.support.v4.content.ContextCompat
 import android.graphics.BitmapFactory
-import android.support.design.widget.AppBarLayout
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.util.Pair
@@ -22,8 +21,7 @@ import android.support.v7.graphics.Palette
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.Main.CartActivity
-import dk.eatmore.foodapp.activity.Main.EpayActivity
+import dk.eatmore.foodapp.activity.main.EpayActivity
 import dk.eatmore.foodapp.utils.TransitionHelper
 
 
@@ -65,13 +63,13 @@ class DetailsFragment : BaseFragment() {
 
         if(savedInstanceState == null){
 
-
+         //   Glide.with(this).load(ContextCompat.getDrawable(context!!,R.drawable.food_slash)).into(details_back_img);
             detail_fab_btn.startAnimation(translateAnim(800f, 0f, 0f, 0f,1000,true))
             detail_item_info.startAnimation(translateAnim(-800f, 0f, 0f, 0f,1000,true))
             DrawableCompat.setTint(ContextCompat.getDrawable(context!!,R.drawable.close)!!, ContextCompat.getColor(context!!, R.color.white));
             logd(DetailsFragment.TAG,"saveInstance NULL")
-            toolbar.setNavigationIcon(ContextCompat.getDrawable(context!!,R.drawable.close))
-            toolbar.setNavigationOnClickListener{
+            toolbar_fragment.setNavigationIcon(ContextCompat.getDrawable(context!!,R.drawable.close))
+            toolbar_fragment.setNavigationOnClickListener{
                 loge(TAG,"onclick")
                 parentFragment!!.childFragmentManager.popBackStack() }
             adapter = ViewPagerAdapter(childFragmentManager)
