@@ -11,15 +11,19 @@ import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.CartActivity
+import dk.eatmore.foodapp.activity.main.HomeActivity
 import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerCallback
 import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickInterface
 import dk.eatmore.foodapp.adapter.UniversalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.FragmentAccountContainerBinding
 import dk.eatmore.foodapp.databinding.RowCategoryListBinding
+import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
+import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.TransitionHelper
 import kotlinx.android.synthetic.main.category_list.*
+import kotlinx.android.synthetic.main.fragment_details.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.util.*
 
@@ -132,6 +136,14 @@ class CategoryList : BaseFragment(), RecyclerClickInterface {
         super.onPause()
         logd(TAG, "on pause...")
 
+    }
+
+    fun backpress(): Boolean {
+        val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
+        val homeFragment : HomeFragment =(fragmentof as HomeContainerFragment).getHomeFragment()
+        (homeFragment.fragment as DetailsFragment).setPalette()
+        (homeFragment.fragment as DetailsFragment).appbar.setExpanded(true,true)
+        return true
     }
 
 

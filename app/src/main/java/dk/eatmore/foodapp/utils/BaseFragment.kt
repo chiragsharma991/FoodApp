@@ -25,6 +25,7 @@ import android.view.animation.TranslateAnimation
 import dk.eatmore.foodapp.BuildConfig
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.HomeActivity
+import dk.eatmore.foodapp.fragment.Dashboard.Account.Profile
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.CategoryList
@@ -39,7 +40,6 @@ abstract class BaseFragment : Fragment() {
     abstract fun getLayout(): Int
     abstract fun initView(view: View?, savedInstanceState: Bundle?)
     lateinit var displayMetrics: DisplayMetrics
-
 
 
     override fun onAttach(context: Context?) {
@@ -59,11 +59,11 @@ abstract class BaseFragment : Fragment() {
         initView(view, savedInstanceState)
     }
 
-    fun addFragment(container: Int, fragment: Fragment, tag: String,isAnimated :Boolean) {
+    fun addFragment(container: Int, fragment: Fragment, tag: String, isAnimated: Boolean) {
         hideKeyboard()
-        val mfragmentTransaction=childFragmentManager.beginTransaction()
-        if(isAnimated)
-        mfragmentTransaction.setCustomAnimations(R.anim.enter_from_right,0,0,R.anim.exit_from_left)
+        val mfragmentTransaction = childFragmentManager.beginTransaction()
+        if (isAnimated)
+            mfragmentTransaction.setCustomAnimations(R.anim.enter_from_right, 0, 0, R.anim.exit_from_left)
         mfragmentTransaction.add(container, fragment, tag).addToBackStack(tag).commit()
     }
 
@@ -81,7 +81,6 @@ abstract class BaseFragment : Fragment() {
     }
 
 
-
     fun popFragment(): Boolean {
         var isPop = false
         try {
@@ -90,19 +89,20 @@ abstract class BaseFragment : Fragment() {
                  * Check Filter Fragment Appear or not, Filter Type Fragment Also
                  */
                 hideKeyboard()
-                loge("backStackCount",childFragmentManager.backStackEntryCount.toString())
+                loge("backStackCount", childFragmentManager.backStackEntryCount.toString())
                 var fragment = childFragmentManager.findFragmentByTag(childFragmentManager.getBackStackEntryAt(childFragmentManager.backStackEntryCount - 1).name)
-                if(fragment != null && fragment.isVisible){
+                if (fragment != null && fragment.isVisible) {
                     isPop = true
-                    when (fragment){
-                       is CategoryList ->{
-                           val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
-                           val homeFragment : HomeFragment =(fragmentof as HomeContainerFragment).getHomeFragment()
-                           (homeFragment.fragment as DetailsFragment).setPalette()
-                           (homeFragment.fragment as DetailsFragment).appbar.setExpanded(true,true)
-                           childFragmentManager.popBackStack()
+                    when (fragment) {
 
-                       } else ->  childFragmentManager.popBackStack()
+                        is CategoryList -> {
+                            fragment.backpress()
+                            childFragmentManager.popBackStack()
+                        }
+                        is Profile -> {
+                            if (!fragment.backpress()) childFragmentManager.popBackStack()
+                        }
+                        else -> childFragmentManager.popBackStack()
 
 
                     }
@@ -124,8 +124,8 @@ abstract class BaseFragment : Fragment() {
               }*/
     }
 
-    fun popWithTag(tag : String) {
-        childFragmentManager.popBackStack(tag,0)
+    fun popWithTag(tag: String) {
+        childFragmentManager.popBackStack(tag, 0)
     }
 
     fun pop() {
@@ -147,14 +147,14 @@ abstract class BaseFragment : Fragment() {
         /* val mSnackbar = Snackbar
                  .make(view!!, getString(R.string.you_are_not_login__), Snackbar.LENGTH_LONG)
                  .setAction(getString(R.string.sign_in)) {
-                     *//**
+                     */
+        /**
          * putExtra for it comes from ProfileScreen
          *//*
                     startActivityForResult(Intent(activity, PreLoginActivity::class.java).putExtra(Constants.EXTRA_FROM_PROFILE, true), REQUEST_CODE_LOGIN)
                 }
         mSnackbar.show()*/
     }
-
 
 
     fun getActivityBase(): Activity {
@@ -165,6 +165,7 @@ abstract class BaseFragment : Fragment() {
         if (BuildConfig.DEBUG)
             Log.e(tag, msg)
     }
+
     fun logd(tag: String, msg: String) {
         if (BuildConfig.DEBUG)
             Log.d(tag, msg)
@@ -180,13 +181,13 @@ abstract class BaseFragment : Fragment() {
 
     fun <T> callAPI(call: Call<T>, onAliCallInteraction: OnApiCallInteraction) {
         if (isInternetAvailable()) {
-            call.enqueue(object : Callback< T> {
+            call.enqueue(object : Callback<T> {
                 override fun onResponse(call: Call<T>, response: Response<T>) {
                     try {
                         if (response.isSuccessful) {
                             onAliCallInteraction.onSuccess(response.body())
                         } else {
-                           // var mErrorBody: String = response.errorBody()!!.string()
+                            // var mErrorBody: String = response.errorBody()!!.string()
                             onAliCallInteraction.onFail(404)
                         }
                     } catch (e: Exception) {
@@ -195,7 +196,7 @@ abstract class BaseFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<T>, t: Throwable) {
-                    loge("Base", ""+t.message)
+                    loge("Base", "" + t.message)
                     onAliCallInteraction.onFail(100)
                 }
             })
@@ -208,7 +209,8 @@ abstract class BaseFragment : Fragment() {
     interface OnApiCallInteraction {
         //  100 > network not found  : 404 > server error.
         fun <T> onSuccess(body: T?)
-        fun onFail(error : Int)
+
+        fun onFail(error: Int)
     }
 
     /**
@@ -224,11 +226,12 @@ abstract class BaseFragment : Fragment() {
 
         }
     }
+
     fun showKeyboard() {
         if (view != null) {
             val imm = getActivityBase().getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
-          //  imm.hideSoftInputFromWindow(view!!.windowToken, 0)
-            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED,InputMethodManager.HIDE_IMPLICIT_ONLY);
+            //  imm.hideSoftInputFromWindow(view!!.windowToken, 0)
+            imm.toggleSoftInput(InputMethodManager.SHOW_FORCED, InputMethodManager.HIDE_IMPLICIT_ONLY);
 
 
         }
@@ -253,11 +256,11 @@ abstract class BaseFragment : Fragment() {
 
     // Transition
 
-    fun translateAnim(from_x :Float ,to_x : Float, from_y : Float , to_y : Float , duration : Long, fill :Boolean) : TranslateAnimation{
+    fun translateAnim(from_x: Float, to_x: Float, from_y: Float, to_y: Float, duration: Long, fill: Boolean): TranslateAnimation {
         val animation = TranslateAnimation(from_x, to_x, from_y, to_y)
         animation.duration = duration
         animation.fillAfter = fill
-        return  animation
+        return animation
     }
 
 

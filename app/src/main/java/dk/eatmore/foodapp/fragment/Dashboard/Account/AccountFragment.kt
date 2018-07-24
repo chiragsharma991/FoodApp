@@ -43,6 +43,25 @@ class AccountFragment : BaseFragment() {
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
             txt_toolbar.text=getString(R.string.my_profile)
+            acc_forgot_txt.setOnClickListener {
+                val fragment = Signup.newInstance()
+                Signup.ID =2
+                addFragment(R.id.home_account_container,fragment, Signup.TAG,true)
+            }
+
+
+            acc_signup_txt.setOnClickListener{
+                //    toolbar.setNavigationIcon(ContextCompat.getDrawable(context!!,R.drawable.back))
+                val fragment = Signup.newInstance()
+                Signup.ID =1
+                addFragment(R.id.home_account_container,fragment, Signup.TAG,true)
+            }
+            acc_login_btn.setOnClickListener{
+                //    toolbar.setNavigationIcon(ContextCompat.getDrawable(context!!,R.drawable.back))
+                val fragment = Profile.newInstance()
+                addFragment(R.id.home_account_container,fragment, Profile.TAG,true)
+            }
+
 
 
         }else{
@@ -50,19 +69,6 @@ class AccountFragment : BaseFragment() {
 
         }
 
-        acc_forgot_txt.setOnClickListener {
-            val fragment = Signup.newInstance()
-            Signup.ID =2
-            addFragment(R.id.home_account_container,fragment, Signup.TAG,true)
-        }
-
-
-        acc_signup_txt.setOnClickListener{
-        //    toolbar.setNavigationIcon(ContextCompat.getDrawable(context!!,R.drawable.back))
-            val fragment = Signup.newInstance()
-            Signup.ID =1
-            addFragment(R.id.home_account_container,fragment, Signup.TAG,true)
-        }
 
 
     }

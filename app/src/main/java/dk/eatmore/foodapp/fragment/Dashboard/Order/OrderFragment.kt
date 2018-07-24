@@ -78,6 +78,7 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface {
         }else{
             logd(TAG,"saveInstance NOT NULL")
         }
+/*
 
          ui_model = ViewModelProviders.of(this).get(UIModel::class.java)
         ui_model!!.getUIModel().observe(this, Observer<UI_OrderFragment>{
@@ -85,6 +86,7 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface {
             binding.uiOrder=ui_model!!.getUIModel().value
         })
         ui_model!!.init()
+*/
 
 
 

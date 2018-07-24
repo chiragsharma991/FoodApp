@@ -52,7 +52,7 @@ class EpayActivity : BaseActivity() {
         }  }
 
     override fun onBackPressed() {
-
+        DrawableCompat.setTint(ContextCompat.getDrawable(this,R.drawable.close)!!, ContextCompat.getColor(this, R.color.white));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             finishAfterTransition()
         else
