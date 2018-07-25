@@ -1,4 +1,4 @@
-package dk.eatmore.foodapp.fragment.Dashboard.Order
+package dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
@@ -17,6 +17,7 @@ import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickInterface
 import dk.eatmore.foodapp.adapter.UniversalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.FragmentOrderContainerBinding
 import dk.eatmore.foodapp.databinding.RowOrderedPizzaBinding
+import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedRestaurant
 import dk.eatmore.foodapp.model.OrderFragment.UI_OrderFragment
 import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.utils.BaseFragment

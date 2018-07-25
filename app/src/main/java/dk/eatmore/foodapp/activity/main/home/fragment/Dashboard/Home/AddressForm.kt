@@ -9,7 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.HomeActivity
+import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.adapter.CartViewAdapter
 import dk.eatmore.foodapp.databinding.RagistrationFormBinding
 import dk.eatmore.foodapp.fragment.HomeContainerFragment

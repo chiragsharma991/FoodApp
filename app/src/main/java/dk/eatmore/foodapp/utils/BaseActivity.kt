@@ -17,6 +17,7 @@ import android.view.animation.TranslateAnimation
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
 import dk.eatmore.foodapp.BuildConfig
+import dk.eatmore.foodapp.R
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -190,7 +191,7 @@ abstract class BaseActivity : AppCompatActivity()
 
         var mFragTransaction = supportFragmentManager.beginTransaction()
         if (isAnimation)
-           // mFragTransaction.setCustomAnimations(R.anim.en,0,0,R.anim.ex)
+            mFragTransaction.setCustomAnimations(R.anim.enter_from_right, 0, 0, R.anim.exit_from_left)
         mFragTransaction.add(container, fragment, tag)
         if (isAddToBackStack)
             mFragTransaction.addToBackStack(tag)

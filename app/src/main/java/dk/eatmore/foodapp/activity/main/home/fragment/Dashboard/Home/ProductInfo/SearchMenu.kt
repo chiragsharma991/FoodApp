@@ -1,11 +1,11 @@
-package dk.eatmore.foodapp.fragment.ProductInfo
+package dk.eatmore.foodapp.activity.main.home.fragment.ProductInfo
 
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.HomeActivity
+import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.databinding.FragmentAccountContainerBinding
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.DrawableClickListener.DrawablePosition

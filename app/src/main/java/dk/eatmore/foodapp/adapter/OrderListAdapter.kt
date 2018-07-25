@@ -46,7 +46,7 @@ class OrderListAdapter(val homefragment: HomeFragment, val callback: AdapterList
                 val enter : Slide?
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     enter = Slide()
-                    enter.setDuration(500)
+                    enter.setDuration(300)
                     enter.slideEdge = Gravity.RIGHT
                     fragment.enterTransition=enter
                 }

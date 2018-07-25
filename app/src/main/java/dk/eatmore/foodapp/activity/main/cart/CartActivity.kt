@@ -1,4 +1,4 @@
-package dk.eatmore.foodapp.activity.main
+package dk.eatmore.foodapp.activity.main.cart
 
 import android.os.Build
 import android.os.Bundle
@@ -121,7 +121,7 @@ class CartActivity : BaseActivity() {
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun buildEnterTransition(): Transition {
         val enterTransition = Slide()
-        enterTransition.setDuration(500)
+        enterTransition.setDuration(300)
         enterTransition.slideEdge = Gravity.BOTTOM
         return enterTransition
     }

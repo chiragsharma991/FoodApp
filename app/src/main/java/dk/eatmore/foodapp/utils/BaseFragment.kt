@@ -24,15 +24,10 @@ import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.animation.TranslateAnimation
 import dk.eatmore.foodapp.BuildConfig
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.HomeActivity
-import dk.eatmore.foodapp.fragment.Dashboard.Account.Profile
-import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
-import dk.eatmore.foodapp.fragment.HomeContainerFragment
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.Profile
 import dk.eatmore.foodapp.fragment.ProductInfo.CategoryList
-import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.rest.ApiClient
 import dk.eatmore.foodapp.rest.ApiInterface
-import kotlinx.android.synthetic.main.fragment_details.*
 
 
 abstract class BaseFragment : Fragment() {

@@ -73,6 +73,10 @@ dependencies {
     //Flow layout
     implementation 'com.zhy:flowlayout-lib:1.0.3'
 
+    // Bambora payment gateway
+    implementation 'com.bambora.bnpayment:bn-payment:1.+'
+
+
 
 
 }

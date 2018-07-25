@@ -10,8 +10,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.CartActivity
-import dk.eatmore.foodapp.activity.main.HomeActivity
+import dk.eatmore.foodapp.activity.main.cart.CartActivity
+import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerCallback
 import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickInterface
 import dk.eatmore.foodapp.adapter.UniversalAdapter.UniversalAdapter
@@ -82,7 +82,7 @@ class CategoryList : BaseFragment(), RecyclerClickInterface {
 
     override fun onClick(user: User) {
 
-        val intent=Intent(activity,CartActivity::class.java)
+        val intent=Intent(activity, CartActivity::class.java)
         intent.putExtra("TITLE",user.name)
         val pairs: Array<Pair<View,String>> = TransitionHelper.createSafeTransitionParticipants(activity!!, true)
         val transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, *pairs)

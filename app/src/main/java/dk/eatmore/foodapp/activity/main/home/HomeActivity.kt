@@ -1,4 +1,4 @@
-package dk.eatmore.foodapp.activity.main
+package dk.eatmore.foodapp.activity.main.home
 
 import android.os.Bundle
 import android.support.v4.app.Fragment

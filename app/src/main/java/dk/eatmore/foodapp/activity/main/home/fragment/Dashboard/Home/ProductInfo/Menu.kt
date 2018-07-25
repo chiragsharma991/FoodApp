@@ -18,7 +18,8 @@ import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.model.User
 import android.support.transition.*
 import android.support.v4.content.ContextCompat
-import dk.eatmore.foodapp.activity.main.HomeActivity
+import dk.eatmore.foodapp.activity.main.home.HomeActivity
+import dk.eatmore.foodapp.activity.main.home.fragment.ProductInfo.SearchMenu
 import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerCallback
 import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickInterface
 import dk.eatmore.foodapp.adapter.UniversalAdapter.UniversalAdapter
@@ -117,7 +118,7 @@ class Menu : BaseFragment(), RecyclerClickInterface {
                                 .commit()
                     }
                     else {
-                        homeFragment.addFragment(R.id.home_fragment_container,fragment,SearchMenu.TAG,false)
+                        homeFragment.addFragment(R.id.home_fragment_container,fragment, SearchMenu.TAG,false)
                     }
 
 
@@ -146,10 +147,10 @@ class Menu : BaseFragment(), RecyclerClickInterface {
         fragment.arguments=bundle
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             enter = Slide()
-            enter.setDuration(500)
+            enter.setDuration(300)
             enter.slideEdge = Gravity.RIGHT
             val changeBoundsTransition :ChangeBounds = ChangeBounds()
-            changeBoundsTransition.duration = 500
+            changeBoundsTransition.duration = 300
             fragment.sharedElementEnterTransition=changeBoundsTransition
             fragment.enterTransition=enter
         }

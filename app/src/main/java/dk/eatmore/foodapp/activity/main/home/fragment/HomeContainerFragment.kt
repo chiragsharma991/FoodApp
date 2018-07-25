@@ -10,9 +10,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.fragment.Dashboard.Account.AccountFragment
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.AccountFragment
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
-import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.utils.BaseFragment
 import kotlinx.android.synthetic.main.fragment_home_container.*
 import kotlinx.android.synthetic.main.layout_bottom_menu.*

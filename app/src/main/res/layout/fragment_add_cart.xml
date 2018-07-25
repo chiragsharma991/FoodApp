@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    >
+
+    <data>
+
+
+    </data>
+
+
+    <FrameLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/profile_container"
+        android:layout_width="match_parent"
+        android:background="@color/background_light"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="@dimen/_8sdp"
+                        android:gravity="center_vertical"
+                        android:orientation="horizontal">
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/TextViewSmall"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/_3sdp"
+                            android:layout_weight="1"
+                            android:layout_marginRight="@dimen/_5sdp"
+                            android:text="CREDIT &amp; DEBIT CARDS"
+                            />
+
+
+                    </LinearLayout>
+
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/add_new_card"
+                        android:elevation="0dp"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        >
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_margin="@dimen/_8sdp"
+
+                            >
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <android.support.v7.widget.AppCompatImageView
+                                    android:layout_width="@dimen/_25sdp"
+                                    android:layout_height="@dimen/_25sdp"
+                                    android:scaleType="fitXY"
+                                    app:srcCompat="@drawable/credit_card"
+                                     />
+
+
+
+                                <android.support.v7.widget.AppCompatTextView
+                                    style="@style/TextViewSmall"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginLeft="@dimen/_5sdp"
+                                    android:layout_marginRight="@dimen/_5sdp"
+                                    android:text="ADD NEW CARD"
+                                    android:textColor="@color/theme_color"
+                                    />
+
+
+                            </LinearLayout>
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:layout_gravity="center_vertical"
+                                android:text="Save and Pay via ZETA,HDFC Food Cards, Ticket Restaurants Meal Cards and more."
+                                android:layout_marginLeft="@dimen/_30sdp"
+                                android:textColor="@color/divider_color"
+                                />
+
+
+
+                        </LinearLayout>
+
+
+
+
+
+                    </android.support.v7.widget.CardView>
+                    <android.support.v7.widget.CardView
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:visibility="gone"
+                        android:elevation="0dp"
+                        >
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            >
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_margin="@dimen/_8sdp"
+                                android:gravity="center_vertical"
+                                android:orientation="vertical">
+
+
+                                <android.support.v7.widget.RecyclerView
+                                    android:id="@+id/recycler_view"
+                                    android:nestedScrollingEnabled="false"
+                                    android:clipToPadding="false"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+
+                                    />
+
+
+
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+
+
+
+
+                    </android.support.v7.widget.CardView>
+
+
+
+
+
+                </LinearLayout>
+
+            </android.support.v4.widget.NestedScrollView>
+
+
+        </LinearLayout>
+
+
+
+    </FrameLayout>
+
+
+
+
+
+
+</layout>
+

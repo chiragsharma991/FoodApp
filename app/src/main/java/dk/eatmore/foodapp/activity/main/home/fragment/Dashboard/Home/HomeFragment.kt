@@ -70,10 +70,10 @@ class HomeFragment : BaseFragment() {
                         var enter :Slide?=null
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                             enter = Slide()
-                            enter.setDuration(500)
+                            enter.setDuration(300)
                             enter.slideEdge = Gravity.BOTTOM
                             val changeBoundsTransition :ChangeBounds = ChangeBounds()
-                            changeBoundsTransition.duration = 500
+                            changeBoundsTransition.duration = 300
                             //fragment!!.sharedElementEnterTransition=changeBoundsTransition
                             fragment!!.sharedElementEnterTransition=changeBoundsTransition
                             fragment!!.enterTransition=enter

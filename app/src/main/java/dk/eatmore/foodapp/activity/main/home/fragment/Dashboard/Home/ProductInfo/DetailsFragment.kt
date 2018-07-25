@@ -21,7 +21,9 @@ import android.support.v7.graphics.Palette
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.EpayActivity
+import dk.eatmore.foodapp.activity.main.epay.EpayActivity
+import dk.eatmore.foodapp.activity.main.home.fragment.ProductInfo.Info
+import dk.eatmore.foodapp.activity.main.home.fragment.ProductInfo.Rating
 import dk.eatmore.foodapp.utils.TransitionHelper
 
 

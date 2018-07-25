@@ -12,7 +12,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.HomeActivity
+import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerCallback
 import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickInterface
 import dk.eatmore.foodapp.adapter.UniversalAdapter.UniversalAdapter
@@ -73,10 +73,10 @@ class Address : BaseFragment(), RecyclerClickInterface {
                 var enter : Slide?=null
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     enter = Slide()
-                    enter.setDuration(500)
+                    enter.setDuration(300)
                     enter.slideEdge = Gravity.BOTTOM
                     val changeBoundsTransition : ChangeBounds = ChangeBounds()
-                    changeBoundsTransition.duration = 500
+                    changeBoundsTransition.duration = 300
                     fragment.sharedElementEnterTransition=changeBoundsTransition
                     fragment.enterTransition=enter
                 }
@@ -99,7 +99,7 @@ class Address : BaseFragment(), RecyclerClickInterface {
                 //ragistered_address_view.startAnimation(AnimationUtils.loadAnimation(context,R.anim.enter_from_right))
                 ragistered_address_view.visibility=View.VISIBLE
                 val animation1 = AnimationUtils.loadAnimation(context,R.anim.enter_from_right)
-                animation1.duration = 500 // animation duration
+                animation1.duration = 300 // animation duration
                 ragistered_address_view.startAnimation(animation1)//your_view for mine is imageView
             }
 
@@ -109,10 +109,10 @@ class Address : BaseFragment(), RecyclerClickInterface {
                 var enter : Slide?=null
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     enter = Slide()
-                    enter!!.setDuration(500)
+                    enter!!.setDuration(300)
                     enter!!.slideEdge = Gravity.RIGHT
                     val changeBoundsTransition : ChangeBounds = ChangeBounds()
-                    changeBoundsTransition.duration = 500
+                    changeBoundsTransition.duration = 300
                     fragment.sharedElementEnterTransition=changeBoundsTransition
                     fragment.enterTransition=enter
                 }

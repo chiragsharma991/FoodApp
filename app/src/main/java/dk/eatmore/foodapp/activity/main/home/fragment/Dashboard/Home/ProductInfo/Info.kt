@@ -1,4 +1,4 @@
-package dk.eatmore.foodapp.fragment.ProductInfo
+package dk.eatmore.foodapp.activity.main.home.fragment.ProductInfo
 
 import android.os.Bundle
 import android.view.LayoutInflater

@@ -15,7 +15,7 @@
         android:theme="@style/AppTheme">
 
         <activity
-            android:name=".activity.main.HomeActivity"
+            android:name=".activity.main.home.HomeActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar"
             >
@@ -26,13 +26,13 @@
             </intent-filter>
         </activity>
 
-        <activity android:name=".activity.main.CartActivity"
+        <activity android:name=".activity.main.cart.CartActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar"
             >
         </activity>
 
-        <activity android:name=".activity.main.EpayActivity"
+        <activity android:name=".activity.main.epay.EpayActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar"
             >

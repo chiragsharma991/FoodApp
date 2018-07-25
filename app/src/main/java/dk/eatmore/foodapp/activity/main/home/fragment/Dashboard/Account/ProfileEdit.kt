@@ -1,10 +1,12 @@
-package dk.eatmore.foodapp.fragment.Dashboard.Account
+package dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.bambora.nativepayment.handlers.BNPaymentHandler
+import com.bambora.nativepayment.models.creditcard.CreditCard
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.databinding.FragmentProfileBinding
 import dk.eatmore.foodapp.databinding.FragmentProfileEditBinding
@@ -12,8 +14,10 @@ import dk.eatmore.foodapp.databinding.FragmentSignupBinding
 import dk.eatmore.foodapp.utils.BaseFragment
 import kotlinx.android.synthetic.main.fragment_profile_edit.*
 import kotlinx.android.synthetic.main.fragment_signup.*
+import java.util.ArrayList
 
 class ProfileEdit : BaseFragment() {
+
 
     private lateinit var binding: FragmentProfileEditBinding
 
@@ -44,14 +48,11 @@ class ProfileEdit : BaseFragment() {
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
             profile_save_txt.setOnClickListener{
-
             //    parentFragment!!.childFragmentManager.popBackStack()
-
             }
 
         }else{
             logd(TAG,"saveInstance NOT NULL")
-
         }
 
 

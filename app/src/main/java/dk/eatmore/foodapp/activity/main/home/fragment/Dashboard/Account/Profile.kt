@@ -1,4 +1,4 @@
-package dk.eatmore.foodapp.fragment.Dashboard.Account
+package dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle

@@ -1,4 +1,4 @@
-package dk.eatmore.foodapp.fragment.Dashboard.Account
+package dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -7,6 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.databinding.FragmentAccountContainerBinding
+import dk.eatmore.foodapp.fragment.Dashboard.Account.Signup
 import dk.eatmore.foodapp.utils.BaseFragment
 import kotlinx.android.synthetic.main.fragment_account_container.*
 import kotlinx.android.synthetic.main.toolbar.*
