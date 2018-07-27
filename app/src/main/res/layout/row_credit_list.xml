@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    >
+
+    <data>
+
+        <variable
+            name="list"
+            type="com.bambora.nativepayment.models.creditcard.CreditCard">
+
+        </variable>
+
+        <variable
+            name="handler"
+            type="dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickInterface" />
+
+    </data>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:orientation="vertical"
+
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            android:layout_marginTop="@dimen/_5sdp"
+            >
+
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="@dimen/_25sdp"
+                    android:layout_height="@dimen/_25sdp"
+                    android:scaleType="fitXY"
+                    android:layout_marginTop="2dp"
+                    app:srcCompat="@drawable/credit_card_grey"
+                    />
+
+
+
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TextViewSmall"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginLeft="@dimen/_5sdp"
+                    android:layout_marginRight="@dimen/_5sdp"
+                    android:text="@{list.getAlias()}"
+                    android:textColor="@color/black_light"
+                    />
+
+
+            </LinearLayout>
+
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/TextViewSmall"
+                android:layout_gravity="center_vertical"
+                android:text="@{list.getTruncatedCardNumber()}"
+                android:layout_marginLeft="@dimen/_30sdp"
+                android:textColor="@color/divider_color"
+                />
+
+
+
+        </LinearLayout>
+
+        <View
+            android:id="@+id/view"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginTop="@dimen/_8sdp"
+            android:alpha="0.1"
+            android:background="@color/divider_color"
+            />
+
+
+
+
+    </LinearLayout>
+
+</layout>
+
+
+
+
+

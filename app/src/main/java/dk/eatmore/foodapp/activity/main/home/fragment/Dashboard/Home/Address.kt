@@ -99,7 +99,7 @@ class Address : BaseFragment(), RecyclerClickInterface {
                 //ragistered_address_view.startAnimation(AnimationUtils.loadAnimation(context,R.anim.enter_from_right))
                 ragistered_address_view.visibility=View.VISIBLE
                 val animation1 = AnimationUtils.loadAnimation(context,R.anim.enter_from_right)
-                animation1.duration = 300 // animation duration
+                animation1.duration = 500 // animation duration
                 ragistered_address_view.startAnimation(animation1)//your_view for mine is imageView
             }
 

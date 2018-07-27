@@ -66,8 +66,8 @@ class DetailsFragment : BaseFragment() {
         if(savedInstanceState == null){
 
          //   Glide.with(this).load(ContextCompat.getDrawable(context!!,R.drawable.food_slash)).into(details_back_img);
-            detail_fab_btn.startAnimation(translateAnim(800f, 0f, 0f, 0f,1000,true))
-            detail_item_info.startAnimation(translateAnim(-800f, 0f, 0f, 0f,1000,true))
+            detail_fab_btn.startAnimation(translateAnim(800f, 0f, 0f, 0f,700,true))
+            detail_item_info.startAnimation(translateAnim(-800f, 0f, 0f, 0f,700,true))
             DrawableCompat.setTint(ContextCompat.getDrawable(context!!,R.drawable.close)!!, ContextCompat.getColor(context!!, R.color.white));
             logd(DetailsFragment.TAG,"saveInstance NULL")
             toolbar_fragment.setNavigationIcon(ContextCompat.getDrawable(context!!,R.drawable.close))

@@ -62,6 +62,7 @@
                                 <android.support.design.widget.TextInputLayout
                                     android:id="@+id/input_layout_email"
                                     android:layout_width="match_parent"
+                                    app:errorTextAppearance="@style/error_appearance"
                                     android:layout_height="wrap_content">
 
                                     <com.bambora.nativepayment.widget.edittext.CardNumberEditText
@@ -88,6 +89,7 @@
                                     <android.support.design.widget.TextInputLayout
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
+                                        app:errorTextAppearance="@style/error_appearance"
                                         android:layout_weight="1"
                                         >
 
@@ -119,6 +121,7 @@
                                     <android.support.design.widget.TextInputLayout
                                         android:layout_width="0dp"
                                         android:layout_height="wrap_content"
+                                        app:errorTextAppearance="@style/error_appearance"
                                         android:layout_weight="1"
                                         >
                                         <com.bambora.nativepayment.widget.edittext.SecurityCodeEditText
@@ -141,10 +144,11 @@
                                 <android.support.design.widget.TextInputLayout
                                     android:id="@+id/input_layout_password"
                                     android:layout_width="match_parent"
+                                    app:errorTextAppearance="@style/error_appearance"
                                     android:layout_height="wrap_content">
 
                                     <EditText
-                                        android:id="@+id/input_password"
+                                        android:id="@+id/name_on_card"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:backgroundTint="@color/gray"
@@ -168,11 +172,12 @@
 
 
                                 <android.support.v7.widget.AppCompatButton
-                                    android:id="@+id/acc_login_btn"
+                                    android:id="@+id/secure_payment_btn"
                                     android:layout_marginTop="@dimen/_8sdp"
                                     style="@style/Button"
                                     android:text="Proceed to payment"
                                     android:textColor="@color/white"
+                                    android:alpha="0.5"
                                     />
 
 
