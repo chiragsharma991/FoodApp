@@ -2,9 +2,12 @@ package dk.eatmore.foodapp.activity.main.epay.fragment
 
 
 import android.databinding.DataBindingUtil
+import android.graphics.drawable.Animatable
 import android.os.Bundle
+import android.os.Handler
 import android.support.design.widget.TextInputLayout
 import android.support.v4.content.ContextCompat
+import android.text.TextUtils
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -27,13 +30,19 @@ import kotlinx.android.synthetic.main.fragment_edit_cart.*
 import kotlinx.android.synthetic.main.native_card_registration_form.view.*
 import kotlinx.android.synthetic.main.notification_template_lines_media.view.*
 import java.util.HashMap
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.animation.AnimationUtils
+import dk.eatmore.foodapp.activity.main.epay.EpayActivity
+import kotlinx.android.synthetic.main.fragment_address.*
+import kotlinx.android.synthetic.main.transaction_status.*
+
 
 class EditCart : BaseFragment(), ICardRegistrationCallback, CardFormEditText.IOnValidationEventListener {
 
 
     private val inputValidStates = HashMap<EditText, Boolean>()
-
-
+    private lateinit var clickEvent: MyClickHandler
     private lateinit var binding: FragmentEditCartBinding
 
 
@@ -58,13 +67,24 @@ class EditCart : BaseFragment(), ICardRegistrationCallback, CardFormEditText.IOn
     }
 
 
+
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
-//            expiry_date_edt
-            //          security_code_edt
-
-            // Setup BNPaymentHandler
+            clickEvent =MyClickHandler(this)
+            binding.handlers=clickEvent
+            edit_card_view.visibility=View.VISIBLE
+            processDialog.visibility=View.GONE
+            transaction_status.visibility=View.GONE
+            secure_payment_btn.setEnabled(false)
+            card_number_edt.requestFocus() ; secure_payment_btn.text="Enter valid card number"
+            name_on_card.addTextChangedListener(object : TextWatcher {
+                override fun onTextChanged(s: CharSequence, start: Int, before: Int, count: Int) {}
+                override fun beforeTextChanged(s: CharSequence, start: Int, count: Int, after: Int) {}
+                override fun afterTextChanged(s: Editable) {
+                    validationCard()
+                }
+            })
 
             val BNPaymentBuilder = BNPaymentHandler.BNPaymentBuilder(context)
                     .merchantAccount("T638003301")
@@ -103,21 +123,36 @@ class EditCart : BaseFragment(), ICardRegistrationCallback, CardFormEditText.IOn
                 break
             }
         }
-        secure_payment_btn.setEnabled(enabled)
-        secure_payment_btn.alpha=if(enabled) 1.0F else 0.5F
+        loge("name check",""+TextUtils.isEmpty(name_on_card.text.trim()))
+        secure_payment_btn.setEnabled(enabled && !TextUtils.isEmpty(name_on_card.text.trim()))
+        secure_payment_btn.alpha=if(enabled && !TextUtils.isEmpty(name_on_card.text.trim())) 1.0F else 0.5F
     }
 
 
     private val onRegisterButtonClickListener = View.OnClickListener {
-        Log.e("TAG", "onClick: " + card_number_edt.text.toString() + " " + expiry_date_edt.enteredExpiryMonth + " " + expiry_date_edt.getEnteredExpiryYear() + " " + security_code_edt.text.toString())
-        BNPaymentHandler.getInstance().registerCreditCard(
-                context,
-                card_number_edt.text.toString(),
-                expiry_date_edt.getEnteredExpiryMonth(),
-                expiry_date_edt.getEnteredExpiryYear(),
-                security_code_edt.getText().toString(),
-                this@EditCart
-        )
+        EpayActivity.amIFinish=false
+        edit_card_view.visibility=View.GONE
+        processDialog.visibility=View.VISIBLE
+        transaction_status.visibility=View.GONE
+        processDialog.startAnimation(rightToLeftAnimation(context!!))//your_view for mine is imageView
+        (activity as EpayActivity).toolbar.visibility=View.GONE
+        hideKeyboard()
+        Handler().postDelayed({
+
+            Log.e("TAG", "onClick: " + card_number_edt.text.toString() + " " + expiry_date_edt.enteredExpiryMonth + " " + expiry_date_edt.getEnteredExpiryYear() + " " + security_code_edt.text.toString())
+            BNPaymentHandler.getInstance().registerCreditCard(
+                    context,
+                    card_number_edt.text.toString(),
+                    expiry_date_edt.getEnteredExpiryMonth(),
+                    expiry_date_edt.getEnteredExpiryYear(),
+                    security_code_edt.getText().toString(),
+                    this@EditCart
+            )
+
+
+        },1000)
+
+
     }
 
 
@@ -140,23 +175,45 @@ class EditCart : BaseFragment(), ICardRegistrationCallback, CardFormEditText.IOn
         loge("onInputValidated---", "" + inputValid)
 
         inputValidStates[view] = inputValid
-        updateButtonState()
+        validationCard()
+
     }
 
-    //---//
+    fun validationCard(){
+
+        if(!inputValidStates[card_number_edt]!!)
+            secure_payment_btn.text="Enter valid card number"
+        else if(!inputValidStates[expiry_date_edt]!!)
+            secure_payment_btn.text="Enter date"
+        else if(!inputValidStates[security_code_edt]!!)
+            secure_payment_btn.text="Enter cvv"
+        else if(TextUtils.isEmpty(name_on_card.text.trim()))
+            secure_payment_btn.text="Enter name"
+        else secure_payment_btn.text="Proceed to payment"
+        updateButtonState()
+
+    }
+
 
 
     // Ragistration callbacks
 
     override fun onRegistrationSuccess(creditcard: CreditCard?) {
         loge("TAG", "success---")
-        BNPaymentHandler.getInstance().setCreditCardAlias(context,name_on_card.text.toString(),creditcard!!.creditCardToken,object :CreditCardManager.IOnCreditCardSaved{
-            override fun onCreditCardSaved(p0: CreditCard?) {
-                loge("credit card saved...","")
-            }
+        edit_card_view.visibility=View.GONE
+        processDialog.visibility=View.GONE
+        transaction_status.visibility=View.VISIBLE
+        transaction_status.startAnimation(rightToLeftAnimation(context!!))//your_view for mine is imageView
+        tx_status_img.setImageResource(R.drawable.animated_vector_check)
+        (tx_status_img.getDrawable() as Animatable).start()
 
-        })
-
+        if(security_check.isChecked){
+            BNPaymentHandler.getInstance().setCreditCardAlias(context,name_on_card.text.toString(),creditcard!!.creditCardToken,object :CreditCardManager.IOnCreditCardSaved{
+                override fun onCreditCardSaved(p0: CreditCard?) {
+                    loge("credit card saved...","")
+                }
+            })
+        }
         //paymentHandler.setCreditCardAlias(this, aliasInput, creditCard.getCreditCardToken(), null)
 
 
@@ -164,6 +221,12 @@ class EditCart : BaseFragment(), ICardRegistrationCallback, CardFormEditText.IOn
 
     override fun onRegistrationError(p0: RequestError?) {
         loge("TAG", "Request error---")
+        edit_card_view.visibility=View.GONE
+        processDialog.visibility=View.GONE
+        transaction_status.visibility=View.VISIBLE
+        transaction_status.startAnimation(rightToLeftAnimation(context!!))//your_view for mine is imageView
+        tx_status_img.setImageResource(R.drawable.animated_vector_cross)
+        (tx_status_img.getDrawable() as Animatable).start()
 
     }
 
@@ -187,6 +250,19 @@ class EditCart : BaseFragment(), ICardRegistrationCallback, CardFormEditText.IOn
         logd(TAG, "on pause...")
 
     }
+
+
+     class  MyClickHandler(val editcart: EditCart) {
+
+
+        fun backToOrder(view: View) {
+            //loge("TAG","click---")
+            Log.e("TAG","click---")
+            (editcart.activity as EpayActivity).finishActivity()
+        }
+
+    }
+
 
 }
 

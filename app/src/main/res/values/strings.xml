@@ -1,4 +1,5 @@
 <resources>
+    <string name="facebook_app_id">262163201052137</string>
     <string name="app_name">EatMore</string>
     <string name="cancel">cancel</string>
     <string name="delicious_food_for_every_mood">DELICIOUS FOOD FOR EVERY MOOD</string>

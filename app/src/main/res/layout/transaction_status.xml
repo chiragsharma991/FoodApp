@@ -1,0 +1,210 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout>
+
+    <data>
+
+        <variable
+            name="user"
+            type="dk.eatmore.foodapp.model.User">
+
+        </variable>
+
+
+        <variable
+            name="handlers"
+            type="dk.eatmore.foodapp.activity.main.epay.fragment.EditCart.MyClickHandler">
+
+        </variable>
+
+    </data>
+
+
+    <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        xmlns:app="http://schemas.android.com/apk/res-auto">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/total_pay_rel"
+                android:orientation="vertical">
+
+
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/address_card"
+                    style="@style/CardViewStyle"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_margin="@dimen/_8sdp"
+                    >
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_margin="@dimen/_8sdp"
+                        >
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:layout_width="@dimen/_50sdp"
+                            android:id="@+id/tx_status_img"
+                            android:layout_height="@dimen/_50sdp"
+                            android:scaleType="fitXY"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginBottom="@dimen/_8sdp"
+                            android:layout_gravity="center_horizontal"
+                            android:src="@drawable/animated_vector_check"
+
+                            />
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/TextViewMid"
+                            android:text="\u20B9 1234.52"
+                            android:textStyle="bold"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_gravity="center_horizontal"
+                            />
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/TextViewMid"
+                            android:text="Request Successful"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_gravity="center_horizontal"
+                            />
+
+                        <View
+                            android:id="@+id/view"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:alpha="0.2"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:background="@color/divider_color"
+                            />
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/TextViewSmall"
+                            android:text="We have successfully send \n your request"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:gravity="center_horizontal"
+                            android:layout_gravity="center_horizontal"
+                            />
+
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:alpha="0.2"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:background="@color/divider_color"
+                            />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_marginLeft="@dimen/_16sdp"
+                            android:layout_marginRight="@dimen/_16sdp"
+                            >
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="Requeted from"
+                                android:layout_marginTop="@dimen/_8sdp"
+
+                                />
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="Hello Test"
+
+                                />
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="Test@softtech360.in"
+                                />
+
+                            <View
+                                android:layout_width="match_parent"
+                                android:layout_height="1dp"
+                                android:alpha="0.1"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:layout_marginBottom="@dimen/_8sdp"
+                                android:background="@color/divider_color"
+                                />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="Reference Expires in: 30 minutes"
+
+                                />
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="UPI Reference ID: 8548459562"
+
+                                />
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:textColor="@color/black_light"
+                                android:text="3:30PM 11NOV2018"
+                                />
+
+                        </LinearLayout>
+
+
+
+
+
+
+
+                    </LinearLayout>
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:id="@+id/proceed_view"
+                        android:layout_gravity="bottom"
+                        android:onClick="@{handlers::backToOrder}"
+                        >
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:alpha="0.2"
+                            android:background="@color/divider_color"
+                            />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/TextViewMid"
+                            android:id="@+id/sec_txt"
+                            android:text="Continue Order"
+                            android:layout_centerInParent="true"
+                            android:textColor="@color/theme_color"
+                            />
+
+                    </RelativeLayout>
+
+
+
+
+                </android.support.v7.widget.CardView>
+
+            </LinearLayout>
+
+
+        </RelativeLayout>
+
+
+
+    </RelativeLayout>
+
+</layout>

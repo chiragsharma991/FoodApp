@@ -6,6 +6,9 @@ import android.support.annotation.RequiresApi
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.transition.*
+import android.util.Log
+import android.view.View
+import android.widget.Toast
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.epay.fragment.AddCart
 import dk.eatmore.foodapp.utils.BaseActivity
@@ -20,6 +23,7 @@ class EpayActivity : BaseActivity() {
 
     companion object {
         val TAG="EpayActivity"
+        var amIFinish :Boolean=true
         fun newInstance() : EpayActivity {
             return EpayActivity()
         }
@@ -29,12 +33,13 @@ class EpayActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_epay)
+        amIFinish=true
         fullScreen()
         initView(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             transition = buildEnterTransition()
             window.enterTransition = transition
-            window.returnTransition=buildReturnTransition()
+          //  window.returnTransition=buildReturnTransition()
         }
 
     }
@@ -47,12 +52,13 @@ class EpayActivity : BaseActivity() {
         }
         else{
         }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) toolbar.elevation =0.0f
         DrawableCompat.setTint(ContextCompat.getDrawable(this,R.drawable.close)!!, ContextCompat.getColor(this, R.color.theme_color));
         toolbar.setNavigationIcon(ContextCompat.getDrawable(this,R.drawable.close))
         txt_toolbar.text="Basket"
         toolbar.setNavigationOnClickListener{
-            onBackPressed()
+          finishActivity()
         }
         epay_continue_btn.setOnClickListener{
             addcart_fragment = AddCart.newInstance()
@@ -64,6 +70,14 @@ class EpayActivity : BaseActivity() {
     }
 
     override fun onBackPressed() {
+        if(amIFinish){
+            if(!popFragment()) {
+                finishActivity()
+            }
+        }
+    }
+
+    fun finishActivity(){
         DrawableCompat.setTint(ContextCompat.getDrawable(this,R.drawable.close)!!, ContextCompat.getColor(this, R.color.white));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             finishAfterTransition()
@@ -84,5 +98,8 @@ class EpayActivity : BaseActivity() {
         enterTransition.setDuration(300)
         return enterTransition
     }
+
+
+
 
 }

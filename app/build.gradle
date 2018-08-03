@@ -76,8 +76,16 @@ dependencies {
     // Bambora payment gateway
     implementation 'com.bambora.bnpayment:bn-payment:1.+'
 
+    //Facebook
+    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
+
+    // Firebase
+    implementation 'com.google.firebase:firebase-core:16.0.0'
+    implementation 'com.google.firebase:firebase-auth:16.0.2'
+    implementation 'com.google.android.gms:play-services-auth:15.0.1'
 
 
 }
 
+apply plugin: 'com.google.gms.google-services'
 

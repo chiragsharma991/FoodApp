@@ -63,6 +63,9 @@ class DetailsFragment : BaseFragment() {
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
 
+
+
+
         if(savedInstanceState == null){
 
          //   Glide.with(this).load(ContextCompat.getDrawable(context!!,R.drawable.food_slash)).into(details_back_img);

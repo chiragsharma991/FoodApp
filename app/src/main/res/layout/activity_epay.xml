@@ -43,7 +43,7 @@
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/epay_total_lbl"
                         style="@style/TextViewMid"
-                        android:layout_marginTop="24dp"
+                        android:layout_marginTop="@dimen/_8sdp"
                         android:singleLine="true"
                         android:text="Total (2 Goods)"
 
@@ -54,7 +54,7 @@
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/epay_total_txt"
                         style="@style/TextViewLarge"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="@dimen/_8sdp"
                         android:singleLine="true"
                         android:text="300,00 Kr,"
                         android:textColor="@color/theme_color_secondary_dark"
@@ -69,7 +69,7 @@
                         android:layout_alignParentBottom="true"
                         android:layout_marginEnd="32dp"
                         android:layout_marginStart="32dp"
-                        android:layout_marginTop="16dp"
+                        android:layout_marginTop="@dimen/_8sdp"
                         android:backgroundTint="@color/theme_color"
                         android:text="@string/continue_"
                         android:textColor="@color/white"

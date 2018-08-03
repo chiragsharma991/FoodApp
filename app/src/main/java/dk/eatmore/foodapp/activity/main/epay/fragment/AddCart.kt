@@ -106,7 +106,7 @@ class AddCart : BaseFragment(), RecyclerClickInterface , CreditCardManager.IOnCr
     }
 
     override fun onCreditCardRead(creditCards: MutableList<CreditCard>?) {
-        loge("credit list---",""+creditCards!!.size+" "+creditCards.get(0).alias)
+    //    loge("credit list---",""+creditCards!!.size+" "+creditCards.get(0).alias)
         this.creditCards.clear()
         if (creditCards != null) {
             this.creditCards.addAll(creditCards)

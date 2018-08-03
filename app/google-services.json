@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "444368018776",
+    "firebase_url": "https://foodapp-72fb0.firebaseio.com",
+    "project_id": "foodapp-72fb0",
+    "storage_bucket": "foodapp-72fb0.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:444368018776:android:6fc36211beeb0673",
+        "android_client_info": {
+          "package_name": "dk.eatmore.foodapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "444368018776-d1al1el23rnm7qfvi9e7ruakadgjjkn3.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCHpT5msI1MhrBE3SgIARRfyrikHQmfSh8"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

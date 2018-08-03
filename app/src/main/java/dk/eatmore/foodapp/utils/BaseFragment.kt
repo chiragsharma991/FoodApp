@@ -21,6 +21,8 @@ import android.content.pm.PackageManager
 import android.os.Build
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
+import android.view.animation.Animation
+import android.view.animation.AnimationUtils
 import android.view.animation.TranslateAnimation
 import dk.eatmore.foodapp.BuildConfig
 import dk.eatmore.foodapp.R
@@ -62,6 +64,12 @@ abstract class BaseFragment : Fragment() {
         mfragmentTransaction.add(container, fragment, tag).addToBackStack(tag).commit()
     }
 
+    fun rightToLeftAnimation(context:Context): Animation {
+        val animation = AnimationUtils.loadAnimation(context, R.anim.enter_from_right)
+        animation.duration = 250
+        return animation
+    }
+
     fun isPermissionGranted(): Boolean {
         if (Build.VERSION.SDK_INT >= 23) {
             if (context!!.checkSelfPermission(android.Manifest.permission.CALL_PHONE) === PackageManager.PERMISSION_GRANTED) {
@@ -101,7 +109,7 @@ abstract class BaseFragment : Fragment() {
 
 
                     }
-                    DrawableCompat.setTint(ContextCompat.getDrawable(activity!!, R.drawable.close)!!, ContextCompat.getColor(activity!!, R.color.white));
+                 //   DrawableCompat.setTint(ContextCompat.getDrawable(activity!!, R.drawable.close)!!, ContextCompat.getColor(activity!!, R.color.white));
 
                 }
             }
