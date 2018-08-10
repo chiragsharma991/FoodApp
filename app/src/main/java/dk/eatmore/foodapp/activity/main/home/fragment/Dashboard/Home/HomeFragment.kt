@@ -99,17 +99,13 @@ class HomeFragment : BaseFragment() {
                             //fragment!!.sharedElementEnterTransition=changeBoundsTransition
                             fragment!!.sharedElementEnterTransition=changeBoundsTransition
                             fragment!!.enterTransition=enter
-
                         }
                         addFragment(R.id.home_fragment_container,fragment!!,DetailsFragment.TAG,false)
-
-
                     }
                 })
                 layoutManager = LinearLayoutManager(getActivityBase())
                 adapter = mAdapter
             }
-
 
         }else{
             logd(TAG,"saveInstance NOT NULL")

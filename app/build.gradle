@@ -88,10 +88,6 @@ dependencies {
     // lottie animation
     implementation 'com.airbnb.android:lottie:2.5.0'
 
-    // bottom bar
-    implementation 'com.aurelhubert:ahbottomnavigation:2.0.6'
-
-
 
 }
 
