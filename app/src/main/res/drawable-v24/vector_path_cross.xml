@@ -7,7 +7,7 @@
     <path
         android:name="cross_path"
         android:pathData="M6,6 l0,0 M16,6 l0,0"
-        android:strokeColor="@color/red"
+        android:strokeColor="@color/white"
         android:strokeWidth="2" />
   </group>
 </vector>

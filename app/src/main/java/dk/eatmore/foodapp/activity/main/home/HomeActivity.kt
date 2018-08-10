@@ -3,6 +3,7 @@ package dk.eatmore.foodapp.activity.main.home
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
+import android.view.View
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.utils.BaseActivity
@@ -42,7 +43,10 @@ class HomeActivity : BaseActivity(){
 
 
     private fun initView(savedInstanceState: Bundle?) {
+       // getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+
         fullScreen()
+      //  changeStatusBarColor(R.color.white)
         if(savedInstanceState==null){
             // if you not take in this condition than if you change orientation then fragment added again and again.
         }

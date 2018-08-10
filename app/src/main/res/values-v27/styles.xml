@@ -10,6 +10,18 @@
         <item name="android:statusBarColor">@android:color/white</item>
         <item name="android:navigationBarColor">#01000000</item>
         <item name="android:navigationBarDividerColor">@color/divider_color</item>
+        <item name="android:windowLightStatusBar">false</item>
+
+    </style>
+
+    <style name="AppTheme.Splash">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowContentTransitions">true</item>
+        <item name="android:windowAllowEnterTransitionOverlap">false</item>
+        <item name="android:windowAllowReturnTransitionOverlap">false</item>
+        <item name="android:statusBarColor">@android:color/white</item>
+        <item name="android:navigationBarDividerColor">@color/black</item>
 
     </style>
 </resources>

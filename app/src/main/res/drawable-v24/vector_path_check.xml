@@ -8,6 +8,6 @@
         android:name="check_path"
         android:pathData="M6,10 l0,0 l0,0"
         android:strokeColor="@color/green"
-        android:strokeWidth="2" />
+        android:strokeWidth="3" />
   </group>
 </vector>

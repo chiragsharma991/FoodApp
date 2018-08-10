@@ -1,6 +1,7 @@
 package dk.eatmore.foodapp.activity.main.epay.fragment
 
 
+import android.content.res.ColorStateList
 import android.databinding.DataBindingUtil
 import android.graphics.drawable.Animatable
 import android.os.Bundle
@@ -203,9 +204,10 @@ class EditCart : BaseFragment(), ICardRegistrationCallback, CardFormEditText.IOn
         edit_card_view.visibility=View.GONE
         processDialog.visibility=View.GONE
         transaction_status.visibility=View.VISIBLE
+        tx_status_float.setBackgroundColor(ContextCompat.getColor(context!!,R.color.green))
         transaction_status.startAnimation(rightToLeftAnimation(context!!))//your_view for mine is imageView
-        tx_status_img.setImageResource(R.drawable.animated_vector_check)
-        (tx_status_img.getDrawable() as Animatable).start()
+        tx_status_float.setImageResource(R.drawable.animated_vector_check)
+        (tx_status_float.getDrawable() as Animatable).start()
 
         if(security_check.isChecked){
             BNPaymentHandler.getInstance().setCreditCardAlias(context,name_on_card.text.toString(),creditcard!!.creditCardToken,object :CreditCardManager.IOnCreditCardSaved{
@@ -224,9 +226,10 @@ class EditCart : BaseFragment(), ICardRegistrationCallback, CardFormEditText.IOn
         edit_card_view.visibility=View.GONE
         processDialog.visibility=View.GONE
         transaction_status.visibility=View.VISIBLE
+        tx_status_float.setBackgroundColor(ContextCompat.getColor(context!!,R.color.red))
         transaction_status.startAnimation(rightToLeftAnimation(context!!))//your_view for mine is imageView
-        tx_status_img.setImageResource(R.drawable.animated_vector_cross)
-        (tx_status_img.getDrawable() as Animatable).start()
+        tx_status_float.setImageResource(R.drawable.animated_vector_cross)
+        (tx_status_float.getDrawable() as Animatable).start()
 
     }
 

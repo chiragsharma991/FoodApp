@@ -71,8 +71,7 @@
             android:id="@+id/backgroundImgOverelay"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            android:layout_marginBottom="16dp"
-            android:layout_marginEnd="0dp"
+            android:layout_marginBottom="24dp"
             android:scaleType="centerCrop"
             android:scaleX="1"
             android:scaleY="1"
@@ -125,57 +124,69 @@
 
 
 
-
-
-
-
-
-
-        <android.support.v7.widget.AppCompatImageView
-            android:id="@+id/eatmore_logo_img"
-            android:layout_width="@dimen/_200sdp"
-            android:layout_height="26dp"
-            android:visibility="visible"
-            app:srcCompat="@mipmap/eatmore_logo"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.502"
-            app:layout_constraintStart_toStartOf="parent"
-            android:scaleType="fitXY"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintVertical_bias="0.395" />
-
-
         <com.airbnb.lottie.LottieAnimationView
             android:id="@+id/lottie_loader"
             android:layout_width="170dp"
             android:layout_height="80dp"
             android:layout_centerInParent="true"
             android:layout_marginBottom="16dp"
-            app:layout_constraintBottom_toBottomOf="parent"
             app:lottie_colorFilter="@color/white"
             app:lottie_autoPlay="true"
             android:visibility="visible"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:lottie_fileName="snap_loader_white.json"
             app:lottie_loop="true"
             />
 
 
+        <com.facebook.shimmer.ShimmerFrameLayout
+            android:id="@+id/shimmerLayout"
+            android:layout_width="@dimen/_200sdp"
+            android:layout_height="@dimen/_40sdp"
+            android:layout_marginBottom="8dp"
+            android:scaleType="fitXY"
+            app:auto_start="false"
+            app:duration="800"
+            app:layout_constraintBottom_toTopOf="@+id/guideline3"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            >
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/eatmore_logo_img"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:scaleType="fitXY"
+                android:visibility="visible"
+                app:layout_constraintBottom_toTopOf="@+id/guideline3"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:srcCompat="@mipmap/eatmore_logo" />
+
+        </com.facebook.shimmer.ShimmerFrameLayout>
+        
+
+
+
         <View
             android:id="@+id/base_view"
             android:layout_width="0dp"
-            android:layout_height="7dp"
-            android:layout_marginEnd="8dp"
+            android:layout_height="5dp"
+            android:layout_marginBottom="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:alpha="1"
             android:background="@color/white"
-            android:visibility="visible"
+            android:visibility="invisible"
             app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/guideline2"
-            app:layout_constraintStart_toStartOf="@+id/guideline2"
+            app:layout_constraintEnd_toEndOf="@+id/shimmerLayout"
+            app:layout_constraintStart_toStartOf="@+id/shimmerLayout"
             app:layout_constraintTop_toTopOf="parent">
 
         </View>
+
 
 
         <View

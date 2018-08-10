@@ -77,15 +77,18 @@ dependencies {
     implementation 'com.bambora.bnpayment:bn-payment:1.+'
 
     //Facebook
-    implementation 'com.facebook.android:facebook-android-sdk:[4,5)'
+    implementation 'com.facebook.android:facebook-android-sdk:4.35.0'
 
     // Firebase
-    implementation 'com.google.firebase:firebase-core:16.0.0'
+    implementation 'com.google.firebase:firebase-core:16.0.1'
     implementation 'com.google.firebase:firebase-auth:16.0.2'
+    implementation 'com.google.firebase:firebase-messaging:17.1.0'
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
+
+    // lottie animation
+    implementation 'com.airbnb.android:lottie:2.5.0'
 
 
 }
 
 apply plugin: 'com.google.gms.google-services'
-

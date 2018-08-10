@@ -54,17 +54,25 @@
                         android:layout_margin="@dimen/_8sdp"
                         >
 
-                        <android.support.v7.widget.AppCompatImageView
-                            android:layout_width="@dimen/_50sdp"
-                            android:id="@+id/tx_status_img"
-                            android:layout_height="@dimen/_50sdp"
-                            android:scaleType="fitXY"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:layout_marginBottom="@dimen/_8sdp"
+
+                        <android.support.design.widget.FloatingActionButton
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:id="@+id/tx_status_float"
+                            app:rippleColor="@color/white"
+                            android:backgroundTint="@color/red"
+                            android:scaleType="center"
+                            app:borderWidth="0dp"
                             android:layout_gravity="center_horizontal"
                             android:src="@drawable/animated_vector_check"
-
+                            android:elevation="0dp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginBottom="@dimen/_8sdp"
                             />
+
+
+
+
 
 
                         <android.support.v7.widget.AppCompatTextView
