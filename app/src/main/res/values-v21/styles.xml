@@ -8,8 +8,7 @@
         <item name="android:windowAllowEnterTransitionOverlap">false</item>
         <item name="android:windowAllowReturnTransitionOverlap">false</item>
         <item name="android:statusBarColor">@android:color/white</item>
-
-
+        <item name="android:backgroundDimEnabled">false</item>
     </style>
 
 
@@ -31,6 +30,7 @@
         <item name="android:textColorPrimary">@color/theme_color_primary_dark</item>
         <item name="android:background">@android:color/white</item>
         <item name="android:windowDrawsSystemBarBackgrounds">true</item>
+        <item name="android:backgroundDimEnabled">true</item>
 
     </style>
 

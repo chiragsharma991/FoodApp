@@ -18,10 +18,6 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
         <include layout="@layout/toolbar"
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
-            android:layout_marginTop="@dimen/_25sdp"
             >
 
         </include>
@@ -32,8 +28,8 @@
             android:id="@+id/home_account_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:layout_below="@+id/toolbar_layout"
             android:fitsSystemWindows="true"
-            android:layout_below="@+id/toolbar"
             android:background="@color/background_light"
             >
 

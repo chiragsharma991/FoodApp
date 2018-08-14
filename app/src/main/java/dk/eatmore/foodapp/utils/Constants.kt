@@ -3,9 +3,9 @@ package dk.eatmore.foodapp.utils
 class Constants {
 
     companion object {
-        val ENGLISH_LAN = "en"
-        val ARABIC_LAN = "ar"
-        val BAD_REQUEST = 400
+        val FACEBOOK = "facebook"
+        val GOOGLE = "google"
+        val DIRECT = "direct"
         val LOCKED = 423
         val NOT_ACCEPTABLE = 406
         val UNAUTHORIZED = 401

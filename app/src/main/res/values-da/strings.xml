@@ -32,6 +32,12 @@
     <string name="go_on_playstore">Go on PlayStore</string>
     <string name="new_update">New uppdate is available now</string>
     <string name="dismiss">Dismiss</string>
+    <string name="login_val_email">Username/Password cannot be blank</string>
+    <string name="invalid_email">Invalid email Address</string>
+    <string name="login_val_pass">Username/Password cannot be blank</string>
+    <string name="internet_not_available">Please check internet connection</string>
+    <string name="error_404">Server not found... Try again</string>
+    <string name="please_wait">Please wait...</string>
 
 
 </resources>

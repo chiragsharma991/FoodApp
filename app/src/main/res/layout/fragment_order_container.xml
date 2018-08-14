@@ -23,7 +23,6 @@
         android:fitsSystemWindows="true"
         >
         <include layout="@layout/toolbar"
-            android:id="@+id/toolbar"
             >
 
         </include>
@@ -34,13 +33,13 @@
             android:id="@+id/home_order_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar"
+            android:layout_below="@+id/toolbar_layout"
             >
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/background_light"
+                android:background="@color/white"
 
                 >
 

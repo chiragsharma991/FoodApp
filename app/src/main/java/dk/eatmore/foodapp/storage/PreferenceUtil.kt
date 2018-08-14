@@ -137,11 +137,12 @@ object PreferenceUtil {
     val USER_NAME = "user_name"
     val USER_ID = "id"
     val R_TOKEN = "r_token"
-    val RESTAURANT_NAME = "restaurant_name"
+    val E_MAIL = "restaurant_name"
     val R_KEY = "r_key"
     val TOKEN = "token"
     val LANGUAGE = "language"
-    val KEEP_SCREEN_ON = "keep_screen_on"
+    val PHONE = "keep_screen_on"
+    val LOGIN_FROM = "login_from"
     val KSTATUS = "kStatus"
 
 

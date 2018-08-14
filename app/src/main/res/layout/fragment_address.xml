@@ -20,10 +20,7 @@
 
 
             <include layout="@layout/toolbar"
-                    android:id="@+id/toolbar"
-                android:layout_width="match_parent"
-                android:layout_height="?attr/actionBarSize"
-                android:layout_marginTop="@dimen/_25sdp"
+
                 >
 
             </include>
@@ -36,7 +33,7 @@
                 android:layout_height="match_parent"
                 android:visibility="visible"
                 android:fitsSystemWindows="true"
-                android:layout_below="@+id/toolbar"
+                android:layout_below="@+id/toolbar_layout"
                 android:animateLayoutChanges="true"
                 android:background="@color/background_light"
 

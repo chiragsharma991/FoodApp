@@ -17,10 +17,7 @@
         android:layoutDirection="locale">
 
         <include layout="@layout/toolbar"
-            android:layout_marginTop="@dimen/_25sdp"
-            android:id="@+id/toolbar"
-            android:layout_width="match_parent"
-            android:layout_height="?attr/actionBarSize"
+
             >
 
         </include>
@@ -30,7 +27,7 @@
             android:id="@+id/home_account_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar"
+            android:layout_below="@+id/toolbar_layout"
             android:fitsSystemWindows="true">
 
             <RelativeLayout

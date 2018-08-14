@@ -7,6 +7,19 @@
     <data>
 
 
+        <variable
+            name="xml_profile"
+            type="dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.UI_Profile"
+            >
+
+        </variable>
+
+        <variable
+            name="handlers"
+            type="dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.Profile.MyClickHandler">
+
+        </variable>
+
     </data>
 
 
@@ -62,7 +75,7 @@
                                     android:layout_marginLeft="@dimen/_3sdp"
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
-                                    android:text="UserName"
+                                    android:text="@{xml_profile.userName}"
                                     />
 
 
@@ -81,7 +94,7 @@
                                     android:layout_marginLeft="@dimen/_3sdp"
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
-                                    android:text="941325458 "
+                                    android:text="@{xml_profile.phone}"
                                     android:textColor="@color/black_light"
                                     />
                                 <android.support.v7.widget.AppCompatTextView
@@ -90,7 +103,7 @@
                                     android:layout_marginLeft="@dimen/_3sdp"
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
-                                    android:text="test@gmail.com"
+                                    android:text="@{xml_profile.email}"
                                     android:textColor="@color/black_light"
                                     />
 
@@ -372,6 +385,7 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:orientation="vertical"
+                            android:onClick="@{handlers::signout}"
                             >
 
 

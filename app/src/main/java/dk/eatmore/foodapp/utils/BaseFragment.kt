@@ -2,6 +2,7 @@ package dk.eatmore.foodapp.utils
 
 import android.Manifest
 import android.app.Activity
+import android.app.ProgressDialog
 import android.content.Context
 import android.net.ConnectivityManager
 import android.os.Bundle
@@ -24,6 +25,7 @@ import android.support.v4.graphics.drawable.DrawableCompat
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.TranslateAnimation
+import android.widget.ProgressBar
 import dk.eatmore.foodapp.BuildConfig
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.Profile
@@ -37,6 +39,8 @@ abstract class BaseFragment : Fragment() {
     abstract fun getLayout(): Int
     abstract fun initView(view: View?, savedInstanceState: Bundle?)
     lateinit var displayMetrics: DisplayMetrics
+    private  var dialog: ProgressDialog? = null
+
 
 
     override fun onAttach(context: Context?) {
@@ -141,22 +145,26 @@ abstract class BaseFragment : Fragment() {
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting
     }
 
-    fun showSnackBar(string: String) {
-        if (view != null && userVisibleHint)
-            Snackbar.make(view!!, string, Snackbar.LENGTH_SHORT).show()
+
+    fun showSnackBar(view: View, string: String) {
+        Snackbar.make(view, string, Snackbar.LENGTH_SHORT).show()
     }
 
-    fun showSnackbarLogin() {
-        /* val mSnackbar = Snackbar
-                 .make(view!!, getString(R.string.you_are_not_login__), Snackbar.LENGTH_LONG)
-                 .setAction(getString(R.string.sign_in)) {
-                     */
-        /**
-         * putExtra for it comes from ProfileScreen
-         *//*
-                    startActivityForResult(Intent(activity, PreLoginActivity::class.java).putExtra(Constants.EXTRA_FROM_PROFILE, true), REQUEST_CODE_LOGIN)
-                }
-        mSnackbar.show()*/
+
+
+    fun showProgressDialog() {
+        if(dialog ==null){
+            dialog = ProgressDialog(activity);
+            dialog!!.setMessage(getString(R.string.please_wait))
+            dialog!!.setCancelable(false)
+            dialog!!.setCanceledOnTouchOutside(false)
+            dialog!!.show()
+        }else{
+            dialog!!.dismiss()
+            dialog=null
+        }
+
+
     }
 
 

@@ -20,4 +20,15 @@ interface ApiInterface {
     ): Call<LastOrder>
 
 
+    @FormUrlEncoded
+    @POST("User/user/login")
+    fun setLogin(
+            @Field("username") username: String ,
+            @Field("password_hash") password_hash: String,
+            @Field("type") type: String,
+            @Field("login_type") login_type: String,
+            @Field("language") language: String
+    ): Call<JsonObject>
+
+
 }

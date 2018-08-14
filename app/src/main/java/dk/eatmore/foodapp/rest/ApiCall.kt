@@ -19,6 +19,11 @@ class ApiCall {
 
         }
 
+        fun login(username : String, password_hash : String, type : String,login_type : String) : Call<JsonObject> {
+            return getApiInterface().setLogin(username, password_hash, type,login_type, PreferenceUtil.getString(PreferenceUtil.LANGUAGE,"")!!)
+        }
+
+
     }
 
 

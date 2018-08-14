@@ -43,24 +43,16 @@ class HomeActivity : BaseActivity(){
 
 
     private fun initView(savedInstanceState: Bundle?) {
-       // getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
 
-        fullScreen()
-      //  changeStatusBarColor(R.color.white)
+       //  fullScreen()
+        //  changeStatusBarColor(R.color.white)
         if(savedInstanceState==null){
             // if you not take in this condition than if you change orientation then fragment added again and again.
         }
         else{
+
         }
-
-
-
-
-
-
-
-
-
         mHomeContainerFragment = HomeContainerFragment.newInstance()
         supportFragmentManager.beginTransaction().replace(R.id.home_container, mHomeContainerFragment,HomeContainerFragment.TAG).commit()
 
@@ -73,6 +65,7 @@ class HomeActivity : BaseActivity(){
     }
 
     override fun onBackPressed() {
+        loge(TAG,"back pressed...")
         var pop = mHomeContainerFragment.getContainerFragment().popFragment()
 
     }

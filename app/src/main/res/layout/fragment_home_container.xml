@@ -1,12 +1,14 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:background="@android:color/white"
+    android:fitsSystemWindows="true"
     android:layout_width="match_parent" android:layout_height="match_parent">
 
 
     <dk.eatmore.foodapp.utils.NonSwipeableViewPager
         android:id="@+id/view_pager"
         android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
         android:layout_above="@+id/bottom_menu"
         android:layout_height="match_parent"/>
 

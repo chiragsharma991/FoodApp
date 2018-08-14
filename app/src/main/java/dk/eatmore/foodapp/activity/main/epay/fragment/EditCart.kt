@@ -36,6 +36,7 @@ import android.text.TextWatcher
 import android.view.animation.AnimationUtils
 import dk.eatmore.foodapp.activity.main.epay.EpayActivity
 import kotlinx.android.synthetic.main.fragment_address.*
+import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.transaction_status.*
 
 
@@ -136,7 +137,7 @@ class EditCart : BaseFragment(), ICardRegistrationCallback, CardFormEditText.IOn
         processDialog.visibility=View.VISIBLE
         transaction_status.visibility=View.GONE
         processDialog.startAnimation(rightToLeftAnimation(context!!))//your_view for mine is imageView
-        (activity as EpayActivity).toolbar.visibility=View.GONE
+        (activity as EpayActivity).toolbar_layout.visibility=View.GONE
         hideKeyboard()
         Handler().postDelayed({
 
