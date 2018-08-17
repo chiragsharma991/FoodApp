@@ -8,9 +8,9 @@
         <item name="android:windowAllowEnterTransitionOverlap">false</item>
         <item name="android:windowAllowReturnTransitionOverlap">false</item>
         <item name="android:statusBarColor">@android:color/white</item>
-        <item name="android:navigationBarColor">#01000000</item>
-        <item name="android:navigationBarDividerColor">@color/divider_color</item>
+        <item name="android:navigationBarColor">#44000000</item>
         <item name="android:windowLightStatusBar">false</item>
+        <item name="android:windowLightNavigationBar">false</item>
         <item name="android:backgroundDimEnabled">false</item>
 
 

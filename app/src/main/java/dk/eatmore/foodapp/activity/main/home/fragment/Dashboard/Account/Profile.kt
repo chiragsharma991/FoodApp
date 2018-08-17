@@ -148,31 +148,32 @@ class Profile : BaseFragment() {
 
     }
 
-
-
     class MyClickHandler(val profile: Profile) {
 
         fun signout(view: View) {
             profile.logOut()
         }
-
     }
+
+
+
+    private class UIModel : ViewModel() {
+
+
+        var uiData = MutableLiveData<UI_Profile>()
+
+        fun init() {
+            val ui_profile = UI_Profile(PreferenceUtil.getString(PreferenceUtil.USER_NAME, "")!!, PreferenceUtil.getString(PreferenceUtil.PHONE, "")!!, PreferenceUtil.getString(PreferenceUtil.E_MAIL, "")!!)
+            uiData.value = ui_profile
+        }
+
+        fun getUIModel(): LiveData<UI_Profile> {
+            return uiData
+        }
+    }
+
+    data class UI_Profile(var userName: String, var phone: String, var email: String)
+
 
 }
 
-private class UIModel : ViewModel() {
-
-
-    var uiData = MutableLiveData<UI_Profile>()
-
-    fun init() {
-        val ui_profile = UI_Profile(PreferenceUtil.getString(PreferenceUtil.USER_NAME, "")!!, PreferenceUtil.getString(PreferenceUtil.PHONE, "")!!, PreferenceUtil.getString(PreferenceUtil.E_MAIL, "")!!)
-        uiData.value = ui_profile
-    }
-
-    fun getUIModel(): LiveData<UI_Profile> {
-        return uiData
-    }
-}
-
-data class UI_Profile(var userName: String, var phone: String, var email: String)

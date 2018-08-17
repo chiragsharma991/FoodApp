@@ -1,5 +1,9 @@
 package dk.eatmore.foodapp.fragment.ProductInfo
 
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProviders
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -19,22 +23,31 @@ import dk.eatmore.foodapp.model.User
 import android.support.transition.*
 import android.support.v4.content.ContextCompat
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.Profile
 import dk.eatmore.foodapp.activity.main.home.fragment.ProductInfo.SearchMenu
 import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerCallback
 import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickInterface
+import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickListner
 import dk.eatmore.foodapp.adapter.UniversalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.RowMenuRestaurantBinding
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
+import dk.eatmore.foodapp.model.HomeFragment.MenuListItem
+import dk.eatmore.foodapp.model.HomeFragment.ProductListModel
+import dk.eatmore.foodapp.rest.ApiCall
+import dk.eatmore.foodapp.utils.Constants
+import kotlinx.android.synthetic.main.fragment_account_container.*
 import kotlinx.android.synthetic.main.fragment_details.*
 import java.util.ArrayList
 
 
-class Menu : BaseFragment(), RecyclerClickInterface {
+class Menu : BaseFragment(), RecyclerClickListner {
+
 
     private lateinit var binding: FragmentAccountContainerBinding
-    private var mAdapter: UniversalAdapter<User, RowMenuRestaurantBinding>? = null
+    private var mAdapter: UniversalAdapter<MenuListItem, RowMenuRestaurantBinding>? = null
     private lateinit var homeFragment: HomeFragment
     private val list = ArrayList<User>()
+    private  var ui_model: UIModel?=null
 
 
 
@@ -65,6 +78,13 @@ class Menu : BaseFragment(), RecyclerClickInterface {
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if(savedInstanceState == null){
+            if(ui_model == null) {
+                ui_model=createViewModel()
+                loge(TAG,"view model is null")
+
+            }else{
+                loge(TAG,"view model is not null")
+            }
             logd(TAG,"saveInstance NULL")
             val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
             homeFragment=(fragmentof as HomeContainerFragment).getHomeFragment()
@@ -74,24 +94,11 @@ class Menu : BaseFragment(), RecyclerClickInterface {
                 override fun onTabReselected(tab: TabLayout.Tab?) {
                     logd(TAG, menu_tabs.selectedTabPosition.toString())
                 }
-
                 override fun onTabUnselected(tab: TabLayout.Tab?) {
                 }
-
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                 }
-
             })
-
-            fillData()
-            mAdapter = UniversalAdapter(context!!, list, R.layout.row_menu_restaurant, object : RecyclerCallback<RowMenuRestaurantBinding, User> {
-                override fun bindData(binder: RowMenuRestaurantBinding, model: User) {
-                    setRecyclerData(binder, model)
-                }
-            })
-            recycler_view_menu.layoutManager = LinearLayoutManager(getActivityBase())
-            recycler_view_menu.adapter = mAdapter
-
             menu_search.setOnClickListener{
 
 
@@ -123,7 +130,7 @@ class Menu : BaseFragment(), RecyclerClickInterface {
 
 
             }
-
+            fetch_ProductList()
 
         }else{
             logd(TAG,"saveInstance NOT NULL")
@@ -132,8 +139,72 @@ class Menu : BaseFragment(), RecyclerClickInterface {
 
     }
 
-    override fun onClick(user: User) {
+    private fun createViewModel(): UIModel =
+            ViewModelProviders.of(this).get(UIModel::class.java).apply {
+                productList.observe(this@Menu, Observer<ArrayList<MenuListItem>> {
+                    refreshUI()
+                })
+            }
 
+
+
+    private fun refreshUI() {
+        loge(TAG, "refreshUI..."+ui_model!!.productList.value!!.size)
+        //       val myclickhandler = Profile.MyClickHandler(this)
+//        val xml_profile = ui_model.getUIModel().value
+//        binding.xmlProfile = xml_profile
+//        binding.handlers=myclickhandler
+
+
+
+        mAdapter = UniversalAdapter(context!!, ui_model!!.productList.value, R.layout.row_menu_restaurant, object : RecyclerCallback<RowMenuRestaurantBinding, MenuListItem> {
+            override fun bindData(binder: RowMenuRestaurantBinding, model: MenuListItem) {
+                setRecyclerData(binder, model)
+            }
+        })
+        recycler_view_menu.layoutManager = LinearLayoutManager(getActivityBase())
+        recycler_view_menu.adapter = mAdapter
+
+
+    }
+
+
+
+    private fun fetch_ProductList() {
+
+        callAPI(ApiCall.getProductList(
+                r_token = Constants.R_TOKEN,
+                r_key = Constants.R_KEY,
+                customer_id = "1706"
+        ), object : BaseFragment.OnApiCallInteraction {
+
+            override fun <T> onSuccess(body: T?) {
+                val productlistmodel= body as ProductListModel
+                if (productlistmodel.status) {
+                    loge(TAG," menu list size"+productlistmodel.menu!!.size)
+                    ui_model!!.productList.value=productlistmodel.menu
+                }
+            }
+            override fun onFail(error: Int) {
+                when (error) {
+                    404 -> {
+                        showSnackBar(clayout, getString(R.string.error_404))
+                    }
+                    100 -> {
+
+                        showSnackBar(clayout, getString(R.string.internet_not_available))
+                    }
+                }
+                //showProgressDialog()
+            }
+        })
+
+
+    }
+
+    override fun<T> onClick(model: T?) {
+
+        val data= model as MenuListItem
         (parentFragment as DetailsFragment).appbar.setExpanded(false,true)
         (parentFragment as DetailsFragment).collapse_toolbar.setBackgroundColor(ContextCompat.getColor(context!!,R.color.white));
         (parentFragment as DetailsFragment).collapse_toolbar.setStatusBarScrimColor(ContextCompat.getColor(context!!,R.color.white))
@@ -143,7 +214,8 @@ class Menu : BaseFragment(), RecyclerClickInterface {
         val fragment = CategoryList.newInstance()
         var enter :Slide?=null
         val bundle = Bundle()
-        bundle.putString("TITLE",user.name)
+        bundle.putString("TITLE",data.c_name)
+        bundle.putSerializable("MenuListItem", data)
         fragment.arguments=bundle
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             enter = Slide()
@@ -159,33 +231,9 @@ class Menu : BaseFragment(), RecyclerClickInterface {
     }
 
 
-    private fun setRecyclerData(binder: RowMenuRestaurantBinding, model: User) {
-        binder.user=model
+    private fun setRecyclerData(binder: RowMenuRestaurantBinding, model: MenuListItem) {
+        binder.data=model
         binder.handler=this
-    }
-
-    private fun fillData() {
-        val user1 = User()
-        user1.name="Pizza"
-        list.add(user1)
-
-        val user2 = User()
-        user2.name="Coca-Cola"
-        list.add(user2)
-
-        val user3 = User()
-        user3.name="Deep-Pan"
-        list.add(user3)
-
-        val user4 = User()
-        user4.name="Brown stick"
-        list.add(user4)
-
-        val user5 = User()
-        user5.name="Choco Moko"
-        list.add(user4)
-
-
     }
 
 
@@ -206,6 +254,14 @@ class Menu : BaseFragment(), RecyclerClickInterface {
         logd(TAG, "on pause...")
 
     }
+
+     class UIModel : ViewModel() {
+
+        var productList = MutableLiveData<ArrayList<MenuListItem>>()
+
+
+    }
+
 
 
 }

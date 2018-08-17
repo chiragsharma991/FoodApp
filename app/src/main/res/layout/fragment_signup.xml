@@ -6,6 +6,13 @@
     <data>
 
 
+            <variable
+                name="handlers"
+                type="dk.eatmore.foodapp.fragment.Dashboard.Account.Signup.MyClickHandler">
+
+            </variable>
+
+
     </data>
 
 
@@ -49,9 +56,43 @@
 
                         <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
+                            android:id="@+id/sign_up_user_inputlayout"
                             android:layout_height="wrap_content">
 
                             <EditText
+                                android:layout_width="match_parent"
+                                android:id="@+id/sign_up_user_edt"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/hindvadodara_medium"
+                                android:textAppearance="?android:attr/textAppearanceSmall"
+                                android:backgroundTint="@color/gray"
+                                android:singleLine="true"
+                                android:hint="User name" />
+
+                        </android.support.design.widget.TextInputLayout>
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/sign_up_email_inputlayout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:id="@+id/sign_up_email_edt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/hindvadodara_medium"
+                                android:textAppearance="?android:attr/textAppearanceSmall"
+                                android:inputType="textEmailAddress"
+                                android:singleLine="true"
+                                android:backgroundTint="@color/gray"
+                                android:hint="Email address" />
+                        </android.support.design.widget.TextInputLayout>
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:id="@+id/sign_up_phn_inputlayout"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:id="@+id/sign_up_phn_edt"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:backgroundTint="@color/gray"
@@ -62,46 +103,13 @@
                                 android:hint="10 digit mobile number" />
 
                         </android.support.design.widget.TextInputLayout>
-
                         <android.support.design.widget.TextInputLayout
-                            android:id="@+id/input_layout_email"
+                            android:id="@+id/sign_up_password_inputlayout"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
                             <EditText
-                                android:id="@+id/input_email"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/hindvadodara_medium"
-                                android:textAppearance="?android:attr/textAppearanceSmall"
-                                android:inputType="textEmailAddress"
-                                android:singleLine="true"
-                                android:backgroundTint="@color/gray"
-                                android:hint="Email Address" />
-                        </android.support.design.widget.TextInputLayout>
-
-                        <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <EditText
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/hindvadodara_medium"
-                                android:textAppearance="?android:attr/textAppearanceSmall"
-                                android:backgroundTint="@color/gray"
-                                android:singleLine="true"
-                                android:hint="Name" />
-
-                        </android.support.design.widget.TextInputLayout>
-
-                        <android.support.design.widget.TextInputLayout
-                            android:id="@+id/input_layout_password"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <EditText
-                                android:id="@+id/input_password"
+                                android:id="@+id/sign_up_password_edt"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="textPassword"
@@ -113,10 +121,29 @@
                                 />
 
                         </android.support.design.widget.TextInputLayout>
+                        <android.support.design.widget.TextInputLayout
+                            android:layout_width="match_parent"
+                            android:id="@+id/sign_up_cnf_password_inputlayout"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:inputType="textPassword"
+                                android:id="@+id/sign_up_cnf_password_edt"
+                                android:textAppearance="?android:attr/textAppearanceSmall"
+                                android:fontFamily="@font/hindvadodara_medium"
+                                android:hint="Confirm password"
+                                android:singleLine="true"
+                                android:backgroundTint="@color/gray"
+                                />
+
+                        </android.support.design.widget.TextInputLayout>
 
                         <android.support.v7.widget.AppCompatButton
                             android:id="@+id/acc_login_btn"
                             style="@style/Button"
+                            android:onClick="@{handlers::signupFunction}"
                             android:layout_marginTop="40dp"
                             android:text="Signup"
                             android:textColor="@color/white"

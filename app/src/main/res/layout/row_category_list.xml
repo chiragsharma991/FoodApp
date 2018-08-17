@@ -8,14 +8,14 @@
     <data>
 
         <variable
-            name="user"
-            type="dk.eatmore.foodapp.model.User">
+            name="data"
+            type="dk.eatmore.foodapp.model.HomeFragment.ProductListItem">
 
         </variable>
 
         <variable
             name="handler"
-            type="dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickInterface" />
+            type="dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickListner" />
 
     </data>
 
@@ -29,7 +29,7 @@
         <android.support.v7.widget.CardView
             android:id="@+id/row_cat_cardview"
             style="@style/CardViewStyle"
-            android:onClick="@{()->handler.onClick(user)}"
+            android:onClick="@{()->handler.onClick(data)}"
             >
 
             <android.support.constraint.ConstraintLayout
@@ -60,7 +60,7 @@
                     android:id="@+id/cat_title"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1.05"
-                    android:text="@{user.name}"
+                    android:text="@{data.p_name}"
                     android:textColor="@color/black_light"
                     android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -87,7 +87,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginTop="8dp"
                     android:layout_weight="1.05"
-                    android:text="200,00kr."
+                    android:text="@{data.p_price}"
                     android:textColor="@color/black_light"
                     android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_two"
@@ -103,7 +103,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginTop="8dp"
                     android:layout_weight="1.05"
-                    android:text="this is simple text of Restaurant item."
+                    android:text="@{data.p_desc}"
                     android:textColor="@color/black_light"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

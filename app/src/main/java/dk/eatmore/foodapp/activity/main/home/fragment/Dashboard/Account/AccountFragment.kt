@@ -104,7 +104,19 @@ class AccountFragment : BaseFragment() {
 
     private fun loginAttempt() {
         showProgressDialog()
-        callAPI(ApiCall.login(acc_email_edt.text.toString(), acc_password_edt.text.toString(), "POS", "Owner"), object : BaseFragment.OnApiCallInteraction {
+        callAPI(ApiCall.login(
+                username =acc_email_edt.text.toString(),
+                password_hash = acc_password_edt.text.toString(),
+                r_key = Constants.R_KEY,
+                r_token = Constants.R_TOKEN,
+                device_type = "Android",
+                is_facebook = "0",
+                is_google = "0",
+                language = "en"
+
+
+
+        ), object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
                 val json = body as JsonObject  // please be mind you are using jsonobject(Gson)
@@ -112,16 +124,15 @@ class AccountFragment : BaseFragment() {
 
                     moveOnDashboard(
                             userName = json.getAsJsonObject("user_details").get("first_name").asString + " " + json.getAsJsonObject("user_details").get("last_name").asString,
-                            r_token = json.get("r_token").asString,
-                            r_key = json.get("r_key").asString,
-                            email = "test123@gmail.com",
-                            phone = "7803445764",
-                            login_from = Constants.DIRECT
+                            email = json.getAsJsonObject("user_details").get("email").asString,
+                            phone = json.getAsJsonObject("user_details").get("telephone_no").asString,
+                            login_from = Constants.DIRECT,
+                            language = "en"
                     )
                     showSnackBar(clayout, json.get("msg").asString)
 
                 } else {
-                    showSnackBar(clayout, json.get("error").asString)
+                    showSnackBar(clayout, json.get("msg").asString)
                     showProgressDialog()
                 }
             }
@@ -145,19 +156,17 @@ class AccountFragment : BaseFragment() {
 
     fun moveOnDashboard(
             userName: String,
-            r_key: String,
-            r_token: String,
             email: String,
             phone: String,
-            login_from: String
+            login_from : String,
+            language : String
     ) {
 
         PreferenceUtil.putValue(PreferenceUtil.USER_NAME, userName)
-        PreferenceUtil.putValue(PreferenceUtil.R_KEY, "" + r_key)
-        PreferenceUtil.putValue(PreferenceUtil.R_TOKEN, "" + r_token)
         PreferenceUtil.putValue(PreferenceUtil.E_MAIL, email)
-        PreferenceUtil.putValue(PreferenceUtil.PHONE, phone)  // default wakeLock should be ON
+        PreferenceUtil.putValue(PreferenceUtil.LANGUAGE,language )
         PreferenceUtil.putValue(PreferenceUtil.LOGIN_FROM, login_from)
+        PreferenceUtil.putValue(PreferenceUtil.PHONE, phone)  // default wakeLock should be ON
         PreferenceUtil.putValue(PreferenceUtil.KSTATUS, true)  // show close restaurant
         PreferenceUtil.save()
         showProgressDialog()
@@ -295,9 +304,8 @@ class AccountFragment : BaseFragment() {
                             userName = displayName.toString(),
                             phone = phone.toString(),
                             email = email.toString(),
-                            r_key = "",
-                            r_token = "",
-                            login_from = Constants.GOOGLE
+                            login_from = Constants.GOOGLE,
+                            language = "en"
                     )
                 } else {
                     Log.e(HomeFragment.TAG, "GsignInWithCredential:failure", task.getException());
@@ -330,9 +338,8 @@ class AccountFragment : BaseFragment() {
                                     userName = displayName.toString(),
                                     phone = phone.toString(),
                                     email = email.toString(),
-                                    r_key = "",
-                                    r_token = "",
-                                    login_from = Constants.FACEBOOK
+                                    login_from = Constants.FACEBOOK,
+                                    language = "en"
                             )
                         } else {
                             // If sign in fails, display a message to the user.

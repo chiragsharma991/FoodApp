@@ -42,10 +42,11 @@ class CartActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         setContentView(R.layout.activity_cart)
         val title=intent.extras.getString("TITLE","")
         txt_toolbar.text=title
-        fullScreen()
+       // fullScreen()
         initView(savedInstanceState)
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             transition = buildEnterTransition()

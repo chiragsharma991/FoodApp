@@ -14,6 +14,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:id="@+id/toolbar_layout"
+        android:clipToPadding="false"
         android:orientation="vertical"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
@@ -27,10 +28,10 @@
                 android:layout_width="match_parent"
                 android:id="@+id/toolbar"
                 android:elevation="@dimen/_5sdp"
+                android:clipToPadding="false"
                 app:layout_scrollFlags="scroll|enterAlways"
                 android:layout_height="?attr/actionBarSize"
                 android:background="@color/background"
-                app:contentInsetStart="0dp"
                 android:minHeight="?attr/actionBarSize"
                 android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 app:contentScrim="@android:color/white"
@@ -101,12 +102,11 @@
             android:id="@+id/view"
             android:layout_width="match_parent"
             android:layout_height="0.5dp"
+            android:elevation="@dimen/_2sdp"
             android:layout_alignParentBottom="true"
-            android:alpha="0.6"
+            android:alpha="0.2"
             android:background="@color/divider_color"
             />
-
-
 
 
     </LinearLayout>

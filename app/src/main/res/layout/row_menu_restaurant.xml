@@ -8,14 +8,14 @@
     <data>
 
         <variable
-            name="user"
-            type="dk.eatmore.foodapp.model.User">
+            name="data"
+            type="dk.eatmore.foodapp.model.HomeFragment.MenuListItem">
 
         </variable>
 
         <variable
             name="handler"
-            type="dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickInterface" />
+            type="dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickListner" />
 
     </data>
 
@@ -23,7 +23,7 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:onClick="@{() -> handler.onClick(user)}"
+        android:onClick="@{() -> handler.onClick(data)}"
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:orientation="vertical"
         >
@@ -43,7 +43,7 @@
                 android:layout_marginLeft="@dimen/_3sdp"
                 android:layout_weight="1"
                 android:layout_marginRight="@dimen/_5sdp"
-                android:text="@{user.name}"
+                android:text="@{data.c_name}"
                 android:textColor="@color/black_light" />
 
 

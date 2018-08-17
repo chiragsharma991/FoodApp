@@ -2,18 +2,14 @@
 
 
 
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    xmlns:tools="http://schemas.android.com/tools"
-    >
 
 
 <android.support.design.widget.CoordinatorLayout
-
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/htab_maincontent"
+    android:fitsSystemWindows="true"
     android:background="@color/background_light"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -23,6 +19,7 @@
         android:id="@+id/appbar"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:fitsSystemWindows="true"
         android:background="?attr/colorPrimary"
         android:theme="@style/AppTheme.NoActionBar"
         >
@@ -30,7 +27,8 @@
         <android.support.design.widget.CollapsingToolbarLayout
             android:id="@+id/collapse_toolbar"
             android:layout_width="match_parent"
-            android:layout_height="256dp"
+            android:layout_height="206dp"
+            android:fitsSystemWindows="true"
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
             app:titleEnabled="false">
@@ -42,13 +40,13 @@
                 android:scaleType="centerCrop"
                 app:layout_collapseMode="parallax"/>
 
-            <View
+           <!-- <View
                 android:id="@+id/fadeBackgroudView"
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:layout_alignParentBottom="true"
                 android:foreground="@drawable/gradient_variant"
-                />
+                />-->
 
 
             <LinearLayout
@@ -56,9 +54,9 @@
                 android:layout_height="match_parent"
                 android:orientation="horizontal"
                 android:id="@+id/detail_item_info"
+                android:layout_marginTop="@dimen/_56sdp"
                 android:layout_marginLeft="@dimen/_25sdp"
                 android:layout_marginRight="@dimen/_5sdp"
-                android:layout_marginTop="@dimen/_110sdp"
                 android:weightSum="2"
                 >
 
@@ -90,12 +88,12 @@
 
                     <TextView
                         style="@style/TextViewMid"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:text="Rohavedplad Pizza and Grill" />
 
                     <TextView
                         style="@style/TextViewSmall"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:text="Italienisk Amerikansk" />
 
                     <RatingBar
@@ -109,7 +107,7 @@
 
                     <TextView
                         style="@style/TextViewSmall"
-                        android:textColor="@color/white"
+                        android:textColor="@color/black"
                         android:text="(1471) 6400" />
 
                 </LinearLayout>
@@ -137,9 +135,9 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
-                app:tabIndicatorColor="@color/white"
-                app:tabSelectedTextColor="@color/white"
-                app:tabTextColor="@color/white"/>
+                app:tabIndicatorColor="@color/theme_color"
+                app:tabSelectedTextColor="@color/black"
+                app:tabTextColor="@color/black_default"/>
 
 
 
@@ -157,6 +155,7 @@
     <android.support.v4.view.ViewPager
         android:id="@+id/viewpager"
         android:layout_width="match_parent"
+        android:fitsSystemWindows="true"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior"/>
 
@@ -178,4 +177,3 @@
 
 
 </android.support.design.widget.CoordinatorLayout>
-</RelativeLayout>

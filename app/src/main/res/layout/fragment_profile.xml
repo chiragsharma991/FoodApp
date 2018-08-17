@@ -9,7 +9,7 @@
 
         <variable
             name="xml_profile"
-            type="dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.UI_Profile"
+            type="dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.Profile.UI_Profile"
             >
 
         </variable>

@@ -14,11 +14,14 @@ import dk.eatmore.foodapp.activity.main.cart.CartActivity
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerCallback
 import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickInterface
+import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickListner
 import dk.eatmore.foodapp.adapter.UniversalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.FragmentAccountContainerBinding
 import dk.eatmore.foodapp.databinding.RowCategoryListBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
+import dk.eatmore.foodapp.model.HomeFragment.MenuListItem
+import dk.eatmore.foodapp.model.HomeFragment.ProductListItem
 import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.TransitionHelper
@@ -27,11 +30,12 @@ import kotlinx.android.synthetic.main.fragment_details.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.util.*
 
-class CategoryList : BaseFragment(), RecyclerClickInterface {
+class CategoryList : BaseFragment(), RecyclerClickListner {
+
 
 
     private lateinit var binding: FragmentAccountContainerBinding
-    private var mAdapter: UniversalAdapter<User, RowCategoryListBinding>? = null
+    private var mAdapter: UniversalAdapter<ProductListItem, RowCategoryListBinding>? = null
     private val userList = ArrayList<User>()
 
 
@@ -61,15 +65,17 @@ class CategoryList : BaseFragment(), RecyclerClickInterface {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
+            val menuListItem = arguments?.getSerializable("MenuListItem") as MenuListItem
             val bundle=arguments
            // val title=if(arguments!=null) bundle!!.getString("TITLE","") else ""
            // val title= bundle?.getString("TITLE","") ?:""
 
 
             txt_toolbar.text=bundle?.getString("TITLE","") ?:""
+            loge(TAG,menuListItem.c_desc+" "+menuListItem.product_list!!.size)
             fillData()
-            mAdapter = UniversalAdapter(context!!, userList, R.layout.row_category_list, object : RecyclerCallback<RowCategoryListBinding, User> {
-                override fun bindData(binder: RowCategoryListBinding, model: User) {
+            mAdapter = UniversalAdapter(context!!, menuListItem.product_list, R.layout.row_category_list, object : RecyclerCallback<RowCategoryListBinding, ProductListItem> {
+                override fun bindData(binder: RowCategoryListBinding, model: ProductListItem) {
                     setRecyclerData(binder, model)
                 }
             })
@@ -80,15 +86,18 @@ class CategoryList : BaseFragment(), RecyclerClickInterface {
         }
     }
 
-    override fun onClick(user: User) {
-
+    override fun <T> onClick(model: T?) {
+        val data= model as ProductListItem
         val intent=Intent(activity, CartActivity::class.java)
-        intent.putExtra("TITLE",user.name)
+        intent.putExtra("TITLE",data.p_name)
         val pairs: Array<Pair<View,String>> = TransitionHelper.createSafeTransitionParticipants(activity!!, true)
         val transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, *pairs)
         startActivity(intent, transitionActivityOptions.toBundle())
 
+
     }
+
+
 
 
     private fun fillData() {
@@ -116,8 +125,8 @@ class CategoryList : BaseFragment(), RecyclerClickInterface {
     }
 
 
-    private fun setRecyclerData(binder: RowCategoryListBinding, model: User) {
-        binder.user=model
+    private fun setRecyclerData(binder: RowCategoryListBinding, model: ProductListItem) {
+        binder.data=model
         binder.handler=this
     }
 
