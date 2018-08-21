@@ -9,7 +9,7 @@
 
         <variable
             name="data"
-            type="dk.eatmore.foodapp.model.HomeFragment.MenuListItem">
+            type="dk.eatmore.foodapp.model.home.MenuListItem">
 
         </variable>
 

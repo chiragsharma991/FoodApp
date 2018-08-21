@@ -6,7 +6,7 @@
 
         <variable
             name="ui_order"
-            type="dk.eatmore.foodapp.model.OrderFragment.UI_OrderFragment">
+            type="dk.eatmore.foodapp.model.order.UI_OrderFragment">
 
         </variable>
 

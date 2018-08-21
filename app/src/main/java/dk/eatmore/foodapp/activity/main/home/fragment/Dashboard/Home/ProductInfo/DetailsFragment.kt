@@ -1,10 +1,5 @@
 package dk.eatmore.foodapp.fragment.ProductInfo
 
-import android.arch.lifecycle.LiveData
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.Observer
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -19,28 +14,16 @@ import dk.eatmore.foodapp.utils.BaseFragment
 import kotlinx.android.synthetic.main.fragment_details.*
 import android.support.v4.content.ContextCompat
 import android.graphics.BitmapFactory
-import android.support.constraint.Constraints
 import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.util.Pair
 import android.support.v7.graphics.Palette
-import android.view.MenuItem
 import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
-import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.epay.EpayActivity
-import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.Profile
 import dk.eatmore.foodapp.activity.main.home.fragment.ProductInfo.Info
 import dk.eatmore.foodapp.activity.main.home.fragment.ProductInfo.Rating
-import dk.eatmore.foodapp.model.HomeFragment.MenuListItem
-import dk.eatmore.foodapp.model.HomeFragment.ProductListModel
-import dk.eatmore.foodapp.rest.ApiCall
-import dk.eatmore.foodapp.rest.ApiCall.Companion.getProductList
-import dk.eatmore.foodapp.storage.PreferenceUtil
-import dk.eatmore.foodapp.utils.Constants
 import dk.eatmore.foodapp.utils.TransitionHelper
-import kotlinx.android.synthetic.main.fragment_account_container.*
 
 
 class DetailsFragment : BaseFragment() {

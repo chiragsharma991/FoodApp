@@ -13,15 +13,14 @@ import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerCallback
-import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickInterface
 import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickListner
 import dk.eatmore.foodapp.adapter.UniversalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.FragmentAccountContainerBinding
 import dk.eatmore.foodapp.databinding.RowCategoryListBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
-import dk.eatmore.foodapp.model.HomeFragment.MenuListItem
-import dk.eatmore.foodapp.model.HomeFragment.ProductListItem
+import dk.eatmore.foodapp.model.home.MenuListItem
+import dk.eatmore.foodapp.model.home.ProductListItem
 import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.TransitionHelper
@@ -90,6 +89,7 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
         val data= model as ProductListItem
         val intent=Intent(activity, CartActivity::class.java)
         intent.putExtra("TITLE",data.p_name)
+        intent.putExtra("PID",data.p_id)
         val pairs: Array<Pair<View,String>> = TransitionHelper.createSafeTransitionParticipants(activity!!, true)
         val transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, *pairs)
         startActivity(intent, transitionActivityOptions.toBundle())

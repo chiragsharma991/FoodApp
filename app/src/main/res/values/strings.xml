@@ -38,6 +38,10 @@
     <string name="internet_not_available">Please check internet connection</string>
     <string name="error_404">Server not found... Try again</string>
     <string name="please_wait">Please wait...</string>
+    <string name="enter_valid_email_address">Enter valid email address</string>
+    <string name="enter_unique_password">Enter unique password</string>
+    <string name="enter_the_confirm_password">Enter the confirm password</string>
+    <string name="signup">Signup</string>
 
 
 </resources>

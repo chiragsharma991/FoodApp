@@ -23,16 +23,14 @@ import dk.eatmore.foodapp.model.User
 import android.support.transition.*
 import android.support.v4.content.ContextCompat
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
-import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.Profile
 import dk.eatmore.foodapp.activity.main.home.fragment.ProductInfo.SearchMenu
 import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerCallback
-import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickInterface
 import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickListner
 import dk.eatmore.foodapp.adapter.UniversalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.RowMenuRestaurantBinding
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
-import dk.eatmore.foodapp.model.HomeFragment.MenuListItem
-import dk.eatmore.foodapp.model.HomeFragment.ProductListModel
+import dk.eatmore.foodapp.model.home.MenuListItem
+import dk.eatmore.foodapp.model.home.ProductListModel
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.fragment_account_container.*
@@ -78,13 +76,8 @@ class Menu : BaseFragment(), RecyclerClickListner {
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if(savedInstanceState == null){
-            if(ui_model == null) {
-                ui_model=createViewModel()
-                loge(TAG,"view model is null")
-
-            }else{
-                loge(TAG,"view model is not null")
-            }
+            if(ui_model == null)
+            ui_model=createViewModel()
             logd(TAG,"saveInstance NULL")
             val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
             homeFragment=(fragmentof as HomeContainerFragment).getHomeFragment()

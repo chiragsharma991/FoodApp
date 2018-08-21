@@ -20,6 +20,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
+        android:id="@+id/clayout"
         android:layout_height="match_parent"
         android:background="@color/background_light"
         >
@@ -55,23 +56,8 @@
                         >
 
                         <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:id="@+id/sign_up_user_inputlayout"
-                            android:layout_height="wrap_content">
-
-                            <EditText
-                                android:layout_width="match_parent"
-                                android:id="@+id/sign_up_user_edt"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/hindvadodara_medium"
-                                android:textAppearance="?android:attr/textAppearanceSmall"
-                                android:backgroundTint="@color/gray"
-                                android:singleLine="true"
-                                android:hint="User name" />
-
-                        </android.support.design.widget.TextInputLayout>
-                        <android.support.design.widget.TextInputLayout
                             android:id="@+id/sign_up_email_inputlayout"
+                            app:errorTextAppearance="@style/error_appearance"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
@@ -87,24 +73,8 @@
                                 android:hint="Email address" />
                         </android.support.design.widget.TextInputLayout>
                         <android.support.design.widget.TextInputLayout
-                            android:layout_width="match_parent"
-                            android:id="@+id/sign_up_phn_inputlayout"
-                            android:layout_height="wrap_content">
-
-                            <EditText
-                                android:id="@+id/sign_up_phn_edt"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:backgroundTint="@color/gray"
-                                android:textAppearance="?android:attr/textAppearanceSmall"
-                                android:fontFamily="@font/hindvadodara_medium"
-                                android:singleLine="true"
-                                android:inputType="number"
-                                android:hint="10 digit mobile number" />
-
-                        </android.support.design.widget.TextInputLayout>
-                        <android.support.design.widget.TextInputLayout
                             android:id="@+id/sign_up_password_inputlayout"
+                            app:errorTextAppearance="@style/error_appearance"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
@@ -123,6 +93,7 @@
                         </android.support.design.widget.TextInputLayout>
                         <android.support.design.widget.TextInputLayout
                             android:layout_width="match_parent"
+                            app:errorTextAppearance="@style/error_appearance"
                             android:id="@+id/sign_up_cnf_password_inputlayout"
                             android:layout_height="wrap_content">
 
@@ -141,11 +112,12 @@
                         </android.support.design.widget.TextInputLayout>
 
                         <android.support.v7.widget.AppCompatButton
-                            android:id="@+id/acc_login_btn"
+                            android:id="@+id/acc_signup_btn"
                             style="@style/Button"
                             android:onClick="@{handlers::signupFunction}"
                             android:layout_marginTop="40dp"
-                            android:text="Signup"
+                            android:text="@string/signup"
+                            android:alpha="0.5"
                             android:textColor="@color/white"
                             />
 

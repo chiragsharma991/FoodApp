@@ -55,7 +55,7 @@ abstract class BaseActivity : AppCompatActivity()
 
     fun loge(tag: String, msg: String) {
         if (BuildConfig.DEBUG)
-            Log.d(tag, msg)
+            Log.e(tag, msg)
     }
 
     fun logd(tag: String, msg: String) {

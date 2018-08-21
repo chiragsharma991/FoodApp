@@ -133,8 +133,9 @@ class AccountFragment : BaseFragment() {
 
                 } else {
                     showSnackBar(clayout, json.get("msg").asString)
-                    showProgressDialog()
                 }
+                showProgressDialog()
+
             }
 
             override fun onFail(error: Int) {

@@ -1,4 +1,4 @@
-package dk.eatmore.foodapp.model.OrderFragment
+package dk.eatmore.foodapp.model.order
 
 data class UI_OrderFragment(
         var toolbarTitle :String="",

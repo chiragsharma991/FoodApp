@@ -1,8 +1,10 @@
 package dk.eatmore.foodapp.rest
 
 import com.google.gson.JsonObject
-import dk.eatmore.foodapp.model.HomeFragment.ProductListModel
+import dk.eatmore.foodapp.model.home.ProductListModel
 import dk.eatmore.foodapp.model.LastOrder
+import dk.eatmore.foodapp.model.cart.Data
+import dk.eatmore.foodapp.model.cart.ProductDetails
 import retrofit2.Call
 import retrofit2.http.Field
 import retrofit2.http.FormUrlEncoded
@@ -35,14 +37,39 @@ interface ApiInterface {
     ): Call<JsonObject>
 
 
+    @FormUrlEncoded
+    @POST("Enduser/enduser/create_record")
+    fun signup(
+            @Field("username") username: String ,
+            @Field("password_hash") password_hash: String,
+            @Field("postal_code") postal_code: String,
+            @Field("house_no") house_no: String,
+            @Field("telephone_no") telephone_no: String,
+            @Field("first_name") first_name: String,
+            @Field("email") email: String,
+            @Field("r_token") r_token: String,
+            @Field("r_key") r_key: String
+    ): Call<JsonObject>
+
+
 
     @FormUrlEncoded
     @POST("Category/category/menu")
     fun setProductList(
-            @Field("r_token") username: String ,
-            @Field("r_key") password_hash: String,
-            @Field("customer_id") type: String
+            @Field("r_token") r_token: String ,
+            @Field("r_key") r_key: String,
+            @Field("customer_id") customer_id: String
     ): Call<ProductListModel>
+
+
+
+    @FormUrlEncoded
+    @POST("Product/productmaster/product-details")
+    fun setProductDetails(
+            @Field("r_token") r_token: String ,
+            @Field("r_key") r_key: String,
+            @Field("p_id") p_id: String
+    ): Call<ProductDetails>
 
 
 }
