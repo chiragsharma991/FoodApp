@@ -15,14 +15,15 @@ data class ProductDetails(
 data class Data(
         val featured: String = "",
         val restaurantId: String = "",
-        val pDesc: String = "",
+       val pDesc: String = "",
         val pPrice: String = "",
         val productNo: String = "",
         val pName: String = "",
-        val isAttributes: String = "",
+       val isAttributes: String = "",
         val pId: String = "",
-        val product_ingredients: ArrayList<ProductIngredientsItem>?,
-        val product_attribute_list: ArrayList<ProductAttributeListItem>?) : Serializable
+        val product_ingredients: ArrayList<ProductIngredientsItem>? =null,
+        val product_attribute_list: ArrayList<ProductAttributeListItem>?=null
+) : Serializable
 
 
 //-----------
@@ -45,7 +46,7 @@ data class ProductAttributeListItem(
         val action_dt: String = "",
         val a_name: String = "",
         val p_id: String = "",
-        val product_attribute_value: ArrayList<ProductAttributeValueItem>?,
+        val product_attribute_value: ArrayList<ProductAttributeValueItem>?=null,
         val default_attribute_value: DefaultAttributeValue) : Serializable
 
 //------------------
@@ -60,8 +61,8 @@ data class ProductAttributeValueItem(
         val pamId: String = "",
         val a_value: String = "",
         val restaurant_id: String = "",
-        val actionDt: String = ""
-//        val extra_topping_group_deatils: ArrayList<Extra_topping_group_deatils>
+        val actionDt: String = "",
+        val extra_topping_group_deatils: Extra_topping_group_deatils
 ) : Serializable
 
 data class Extra_topping_group_deatils(
@@ -72,7 +73,8 @@ data class Extra_topping_group_deatils(
         val restaurant_id: String = "",
         val tg_name: String = "",
         val tm_id: String = "",
-        val topping_subgroup_list: ArrayList<Topping_subgroup_list>?=null ) : Serializable
+        val topping_subgroup_list: ArrayList<Topping_subgroup_list>? =null
+) : Serializable
 
 data class Topping_subgroup_list(
         val action_by: String = "",
@@ -83,7 +85,8 @@ data class Topping_subgroup_list(
         val tm_id: String = "",
         val tsg_name: String = "",
         val tsg_id: String = "",
-        val topping_subgroup_details: ArrayList<Topping_subgroup_details>?=null ) : Serializable
+        val topping_subgroup_details: ArrayList<Topping_subgroup_details>?= null
+) : Serializable
 
 
 data class Topping_subgroup_details(

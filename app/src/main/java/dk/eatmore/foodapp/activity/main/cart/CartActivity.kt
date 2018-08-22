@@ -16,10 +16,12 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import com.google.gson.JsonObject
 import com.zhy.view.flowlayout.FlowLayout
 import com.zhy.view.flowlayout.TagAdapter
 import com.zhy.view.flowlayout.TagFlowLayout
 import dk.eatmore.foodapp.R
+import dk.eatmore.foodapp.R.id.clayout
 import dk.eatmore.foodapp.activity.main.cart.fragment.Extratoppings
 import dk.eatmore.foodapp.adapter.CartViewAdapter
 import dk.eatmore.foodapp.fragment.ProductInfo.Menu
@@ -77,6 +79,17 @@ class CartActivity : BaseActivity() {
 
             override fun <T> onSuccess(body: T?) {
                 val productdetails = body as ProductDetails
+           /*     loge(TAG,"json "+json_object.toString())
+                if(json_object.get("status").asBoolean){
+                    val productDetails = ProductDetails(
+                            msg = json_object.get("msg").asString,
+                            status = json_object.get("status").asBoolean,
+                            data =  getData(json_object)
+                    )
+                    loge(TAG," result size is "+productDetails.data.product_ingredients!!.size)
+                }
+*/
+
                 if (productdetails.status) {
                     ui_model!!.product_ingredients.value = productdetails.data.product_ingredients
                     ui_model!!.product_attribute_list.value = productdetails.data.product_attribute_list
@@ -94,9 +107,36 @@ class CartActivity : BaseActivity() {
                     }
                 }
                 //showProgressDialog()
+
+
+
             }
         })
 
+
+    }
+
+    private fun getData(json_object : JsonObject) : Data{
+
+        val data = Data(
+                pName = json_object.getAsJsonObject("data").get("p_name").asString,
+                pId = json_object.getAsJsonObject("data").get("p_id").asString,
+                product_ingredients = getProductIngredients(json_object)
+        )
+        return  data
+    }
+
+    private fun getProductIngredients(json_object : JsonObject) : ArrayList<ProductIngredientsItem>{
+        val list : ArrayList<ProductIngredientsItem> = ArrayList()
+        for (i in 0..json_object.getAsJsonObject("data").getAsJsonArray("product_ingredients").size() -1 ){
+            val productingredientsitem = ProductIngredientsItem(
+                    i_id = json_object.getAsJsonObject("data").getAsJsonArray("product_ingredients").get(i).asJsonObject.get("i_id").asString,
+                    i_name = json_object.getAsJsonObject("data").getAsJsonArray("product_ingredients").get(i).asJsonObject.get("i_name").asString
+            )
+            list.add(productingredientsitem)
+        }
+
+        return list
 
     }
 
@@ -152,9 +192,9 @@ class CartActivity : BaseActivity() {
             loge(TAG, "attr size is " + ui_model!!.product_attribute_list.value!!.size)
             mAdapter = CartViewAdapter(context!!, ui_model!!.product_attribute_list.value!!, object : CartViewAdapter.AdapterListener {
                 override fun itemClicked(parentView: Boolean, parentPosition: Int, chilPosition: Int) {
-                    loge(TAG, "click----" + parentView + " " + parentPosition + " " + chilPosition)
-                    val fragment = Extratoppings.newInstance(parentPosition, chilPosition, ui_model!!)
-                    addFragment(R.id.cart_container, fragment, Extratoppings.TAG, true)
+                    loge(TAG, "click----" + ui_model!!.product_attribute_list.value!![parentPosition].product_attribute_value!!.get(chilPosition).extra_topping_group_deatils)
+                  //  val fragment = Extratoppings.newInstance(parentPosition, chilPosition, ui_model!!)
+                 //   addFragment(R.id.cart_container, fragment, Extratoppings.TAG, true)
                 }
             })
             layoutManager = LinearLayoutManager(context)
