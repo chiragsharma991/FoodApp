@@ -1,6 +1,7 @@
 package dk.eatmore.foodapp.model.cart
 
 import com.google.gson.annotations.SerializedName
+import java.io.Serializable
 
 
 data class ProductDetails(
@@ -8,7 +9,7 @@ data class ProductDetails(
         val data: Data,
         val productImagePath: String = "",
         val productImageThumbnailPath: String = "",
-        val status: Boolean = false)
+        val status: Boolean = false) : Serializable
 
 
 data class Data(
@@ -21,14 +22,17 @@ data class Data(
         val isAttributes: String = "",
         val pId: String = "",
         val product_ingredients: ArrayList<ProductIngredientsItem>?,
-        val product_attribute_list: ArrayList<ProductAttributeListItem>?)
+        val product_attribute_list: ArrayList<ProductAttributeListItem>?) : Serializable
 
+
+//-----------
 
 data class ProductIngredientsItem(
         val i_id: String = "",
         val restaurant_id: String = "",
         val actionDt: String = "",
-        val i_name: String = "")
+        val i_name: String = "") : Serializable
+
 
 
 data class ProductAttributeListItem(
@@ -42,7 +46,9 @@ data class ProductAttributeListItem(
         val a_name: String = "",
         val p_id: String = "",
         val product_attribute_value: ArrayList<ProductAttributeValueItem>?,
-        val default_attribute_value: DefaultAttributeValue)
+        val default_attribute_value: DefaultAttributeValue) : Serializable
+
+//------------------
 
 data class ProductAttributeValueItem(
         val actionBy: String = "",
@@ -54,7 +60,48 @@ data class ProductAttributeValueItem(
         val pamId: String = "",
         val a_value: String = "",
         val restaurant_id: String = "",
-        val actionDt: String = "")
+        val actionDt: String = ""
+//        val extra_topping_group_deatils: ArrayList<Extra_topping_group_deatils>
+) : Serializable
+
+data class Extra_topping_group_deatils(
+        val action_by: String = "",
+        val action_dt: String = "",
+        val is_deleted: String = "",
+        val is_activated: String = "",
+        val restaurant_id: String = "",
+        val tg_name: String = "",
+        val tm_id: String = "",
+        val topping_subgroup_list: ArrayList<Topping_subgroup_list>?=null ) : Serializable
+
+data class Topping_subgroup_list(
+        val action_by: String = "",
+        val action_dt: String = "",
+        val is_deleted: String = "",
+        val is_activated: String = "",
+        val restaurant_id: String = "",
+        val tm_id: String = "",
+        val tsg_name: String = "",
+        val tsg_id: String = "",
+        val topping_subgroup_details: ArrayList<Topping_subgroup_details>?=null ) : Serializable
+
+
+data class Topping_subgroup_details(
+        val action_by: String = "",
+        val action_dt: String = "",
+        val is_deleted: String = "",
+        val is_activated: String = "",
+        val restaurant_id: String = "",
+        val i_id: String = "",
+        val i_name: String = "",
+        val pad_id: String = "",
+        val tsgd_id: String = "",
+        val tsg_id: String = "",
+        val t_price: String = "") : Serializable
+
+
+//-------------------
+
 
 data class DefaultAttributeValue(
         val actionBy: String = "",
@@ -66,4 +113,4 @@ data class DefaultAttributeValue(
         val pamId: String = "",
         val aValue: String = "",
         val restaurantId: String = "",
-        val actionDt: String = "")
+        val actionDt: String = "") : Serializable

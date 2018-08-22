@@ -43,37 +43,27 @@ import kotlin.collections.ArrayList
 
 class CartActivity : BaseActivity() {
 
-    var transition : Transition?=null
+    var transition: Transition? = null
     private val userList = ArrayList<User>()
-    private  var ui_model: UIModel?=null
+    private var ui_model: UIModel? = null
     private lateinit var p_id: String
-    private  var mAdapter: CartViewAdapter?=null
-    private var tagadapter : TagAdapter<String>?=null
+    private var mAdapter: CartViewAdapter? = null
+    private var tagadapter: TagAdapter<String>? = null
 
     companion object {
-        val TAG="CartActivity"
-        fun newInstance() : CartActivity {
+        val TAG = "CartActivity"
+        fun newInstance(): CartActivity {
             return CartActivity()
         }
     }
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        loge(TAG,"on create...")
+        loge(TAG, "on create...")
         super.onCreate(savedInstanceState)
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         setContentView(R.layout.activity_cart)
         initView(savedInstanceState)
-        if(savedInstanceState ==null){
-            ui_model=createViewModel()
-            fetch_ProductDetailList()
-
-        }else{
-            ui_model=createViewModel()
-            refreshIngredients()
-            refreshAttributes()
-        }
-
     }
 
 
@@ -82,16 +72,17 @@ class CartActivity : BaseActivity() {
         callAPI(ApiCall.getProductDetails(
                 r_token = Constants.R_TOKEN,
                 r_key = Constants.R_KEY,
-                p_id =  p_id
+                p_id = p_id
         ), object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
-                val productdetails= body as ProductDetails
+                val productdetails = body as ProductDetails
                 if (productdetails.status) {
-                    ui_model!!.product_ingredients.value=productdetails.data.product_ingredients
-                    ui_model!!.product_attribute_list.value=productdetails.data.product_attribute_list
+                    ui_model!!.product_ingredients.value = productdetails.data.product_ingredients
+                    ui_model!!.product_attribute_list.value = productdetails.data.product_attribute_list
                 }
             }
+
             override fun onFail(error: Int) {
                 when (error) {
                     404 -> {
@@ -110,86 +101,90 @@ class CartActivity : BaseActivity() {
     }
 
 
-
     private fun createViewModel(): UIModel =
             ViewModelProviders.of(this).get(UIModel::class.java).apply {
-                product_ingredients.observe(this@CartActivity,Observer<ArrayList<ProductIngredientsItem>> {
+                product_ingredients.observe(this@CartActivity, Observer<ArrayList<ProductIngredientsItem>> {
                     refreshIngredients()
                 })
-                product_attribute_list.observe(this@CartActivity,Observer<ArrayList<ProductAttributeListItem>> {
+                product_attribute_list.observe(this@CartActivity, Observer<ArrayList<ProductAttributeListItem>> {
                     refreshAttributes()
                 })
             }
 
 
     private fun refreshIngredients() {
-        loge(TAG,"refresh ---")
+        loge(TAG, "refresh ---")
 
         val mVals = arrayOfNulls<String>(ui_model!!.product_ingredients.value!!.size)
-        for (i in 0..ui_model!!.product_ingredients.value!!.size -1 ){
-            mVals[i]= ui_model!!.product_ingredients.value!![i].i_name
+        for (i in 0..ui_model!!.product_ingredients.value!!.size - 1) {
+            mVals[i] = ui_model!!.product_ingredients.value!![i].i_name
         }
 
-        tagadapter = object : TagAdapter<String>(mVals){
-             override fun getView(parent: FlowLayout?, position: Int, t: String?): View {
-                 val tv = LayoutInflater.from(this@CartActivity).inflate(R.layout.ingredients_selct_layout,
-                         flowlayout, false) as TextView
-                 tv.text = t
-                 return tv
+        tagadapter = object : TagAdapter<String>(mVals) {
+            override fun getView(parent: FlowLayout?, position: Int, t: String?): View {
+                val tv = LayoutInflater.from(this@CartActivity).inflate(R.layout.ingredients_selct_layout,
+                        flowlayout, false) as TextView
+                tv.text = t
+                return tv
 
-             }
+            }
 
-         }
-         flowlayout.setAdapter(tagadapter)
-         val set = HashSet<Int>()
-         for (j in mVals.indices) {
-             set.add(j)
-         }
-         (tagadapter as TagAdapter<String>).setSelectedList(set)
+        }
+        flowlayout.setAdapter(tagadapter)
+        val set = HashSet<Int>()
+        for (j in mVals.indices) {
+            set.add(j)
+        }
+        (tagadapter as TagAdapter<String>).setSelectedList(set)
 
-         flowlayout.setOnSelectListener(TagFlowLayout.OnSelectListener { selectPosSet ->
-             Log.e(TAG, "selected ---" + selectPosSet+" checked list "+set.toString())
-             // ingredientsJsonArray = null;
+        flowlayout.setOnSelectListener(TagFlowLayout.OnSelectListener { selectPosSet ->
+            Log.e(TAG, "selected ---" + selectPosSet + " checked list " + set.toString())
+            // ingredientsJsonArray = null;
 
-         })
-
-
-
+        })
 
 
     }
 
-    private fun refreshAttributes(){
+    private fun refreshAttributes() {
 
         recycler_view_cart.apply {
-            loge(TAG,"attr size is "+ui_model!!.product_attribute_list.value!!.size)
-        mAdapter = CartViewAdapter(context!!,ui_model!!.product_attribute_list.value!!,object: CartViewAdapter.AdapterListener {
-            override fun itemClicked(parentView: Boolean, parentPosition: Int, chilPosition: Int) {
-                loge(TAG,"click----"+parentView+" "+parentPosition+" "+chilPosition)
-                val fragment = Extratoppings.newInstance()
-                addFragment(R.id.cart_container, fragment, Extratoppings.TAG, true)
-            }
-        })
-        layoutManager = LinearLayoutManager(context)
-        adapter = mAdapter
-    }
+            loge(TAG, "attr size is " + ui_model!!.product_attribute_list.value!!.size)
+            mAdapter = CartViewAdapter(context!!, ui_model!!.product_attribute_list.value!!, object : CartViewAdapter.AdapterListener {
+                override fun itemClicked(parentView: Boolean, parentPosition: Int, chilPosition: Int) {
+                    loge(TAG, "click----" + parentView + " " + parentPosition + " " + chilPosition)
+                    val fragment = Extratoppings.newInstance(parentPosition, chilPosition, ui_model!!)
+                    addFragment(R.id.cart_container, fragment, Extratoppings.TAG, true)
+                }
+            })
+            layoutManager = LinearLayoutManager(context)
+            adapter = mAdapter
+        }
 
     }
-
 
 
     private fun initView(savedInstanceState: Bundle?) {
 
-        val title=intent.extras.getString("TITLE","")
-        p_id=intent.extras.getString("PID","")
-        txt_toolbar.text=title
-        toolbar.setNavigationIcon(ContextCompat.getDrawable(this,R.drawable.close))
-        toolbar.setNavigationOnClickListener{
+        val title = intent.extras.getString("TITLE", "")
+        p_id = intent.extras.getString("PID", "")
+        txt_toolbar.text = title
+        toolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.close))
+        toolbar.setNavigationOnClickListener {
             onBackPressed()
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             transition = buildEnterTransition()
             window.enterTransition = transition
+        }
+        ui_model = createViewModel()
+        if (ui_model!!.product_attribute_list.value == null) {
+            fetch_ProductDetailList()
+
+        } else {
+            refreshIngredients()
+            refreshAttributes()
+
         }
 
 
@@ -218,24 +213,23 @@ class CartActivity : BaseActivity() {
 
     private fun fillData() {
         val user1 = User()
-        user1.name="Small"
+        user1.name = "Small"
         userList.add(user1)
 
         val user2 = User()
-        user2.name="midium"
+        user2.name = "midium"
         userList.add(user2)
 
         val user3 = User()
-        user3.name="large"
+        user3.name = "large"
         userList.add(user3)
 
         val user4 = User()
-        user4.name="extra large"
+        user4.name = "extra large"
         userList.add(user4)
 
 
     }
-
 
 
     class UIModel : ViewModel() {
@@ -245,7 +239,6 @@ class CartActivity : BaseActivity() {
 
 
     }
-
 
 
 }
