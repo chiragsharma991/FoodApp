@@ -1,4 +1,4 @@
-package dk.eatmore.foodapp.adapter.UniversalAdapter
+package dk.eatmore.foodapp.adapter.universalAdapter
 
 import android.databinding.ViewDataBinding
 

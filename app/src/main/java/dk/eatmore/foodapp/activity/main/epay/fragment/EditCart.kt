@@ -1,7 +1,6 @@
 package dk.eatmore.foodapp.activity.main.epay.fragment
 
 
-import android.content.res.ColorStateList
 import android.databinding.DataBindingUtil
 import android.graphics.drawable.Animatable
 import android.os.Bundle
@@ -19,23 +18,15 @@ import com.bambora.nativepayment.interfaces.ICardRegistrationCallback
 import com.bambora.nativepayment.managers.CreditCardManager
 import com.bambora.nativepayment.models.creditcard.CreditCard
 import com.bambora.nativepayment.network.RequestError
-import com.bambora.nativepayment.utils.CompatHelper
 import com.bambora.nativepayment.widget.edittext.CardFormEditText
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerCallback
-import dk.eatmore.foodapp.adapter.UniversalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.*
-import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.utils.BaseFragment
 import kotlinx.android.synthetic.main.fragment_edit_cart.*
-import kotlinx.android.synthetic.main.native_card_registration_form.view.*
-import kotlinx.android.synthetic.main.notification_template_lines_media.view.*
 import java.util.HashMap
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.animation.AnimationUtils
 import dk.eatmore.foodapp.activity.main.epay.EpayActivity
-import kotlinx.android.synthetic.main.fragment_address.*
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.transaction_status.*
 

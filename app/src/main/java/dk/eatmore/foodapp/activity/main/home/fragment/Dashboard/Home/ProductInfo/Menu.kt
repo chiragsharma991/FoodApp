@@ -24,9 +24,9 @@ import android.support.transition.*
 import android.support.v4.content.ContextCompat
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.ProductInfo.SearchMenu
-import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerCallback
-import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickListner
-import dk.eatmore.foodapp.adapter.UniversalAdapter.UniversalAdapter
+import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerCallback
+import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerClickListner
+import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.RowMenuRestaurantBinding
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.model.home.MenuListItem
@@ -174,7 +174,7 @@ class Menu : BaseFragment(), RecyclerClickListner {
             override fun <T> onSuccess(body: T?) {
                 val productlistmodel= body as ProductListModel
                 if (productlistmodel.status) {
-                    loge(TAG," menu list size"+productlistmodel.menu!!.size)
+                    loge(TAG," menu list size"+""+productlistmodel.menu!!.get(1).c_name+" "+productlistmodel.menu.get(1).product_list!!.size)
                     ui_model!!.productList.value=productlistmodel.menu
                 }
             }

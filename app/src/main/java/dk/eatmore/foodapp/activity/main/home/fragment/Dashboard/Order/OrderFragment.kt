@@ -10,9 +10,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerCallback
-import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickInterface
-import dk.eatmore.foodapp.adapter.UniversalAdapter.UniversalAdapter
+import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerCallback
+import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerClickInterface
+import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.FragmentOrderContainerBinding
 import dk.eatmore.foodapp.databinding.RowOrderedPizzaBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedRestaurant

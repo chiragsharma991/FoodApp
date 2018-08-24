@@ -15,7 +15,7 @@
 
         <variable
             name="handler"
-            type="dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickInterface" />
+            type="dk.eatmore.foodapp.adapter.universalAdapter.RecyclerClickInterface" />
 
     </data>
 

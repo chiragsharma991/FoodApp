@@ -1,8 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<layout
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+
     >
 
     <data>
@@ -15,15 +17,14 @@
 
         <variable
             name="handler"
-            type="dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickListner" />
+            type="dk.eatmore.foodapp.adapter.universalAdapter.RecyclerClickListner" />
 
     </data>
 
     <RelativeLayout
-        xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        >
 
 
         <android.support.v7.widget.CardView
@@ -56,6 +57,8 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     style="@style/TextViewSmall"
+                    android:layout_height="wrap_content"
+                    android:layout_width="0dp"
                     android:layout_gravity="center_vertical"
                     android:id="@+id/cat_title"
                     android:layout_marginEnd="8dp"
@@ -73,8 +76,12 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/appCompatTextView"
                     style="@style/TextViewSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="from asd asd asd "
+                    android:text="@{data.p_price}"
+                    android:textStyle="bold"
+                    android:gravity="right"
                     android:textColor="@color/black_light"
                     app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_two"
                     app:layout_constraintHorizontal_bias="1.0"
@@ -84,16 +91,16 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/appCompatTextView3"
                     style="@style/TextViewSmall"
+                    android:layout_height="46dp"
                     android:layout_gravity="center_vertical"
                     android:layout_marginTop="8dp"
                     android:layout_weight="1.05"
-                    android:text="@{data.p_price}"
+                    android:text="@{data.p_desc}"
                     android:textColor="@color/black_light"
-                    android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_two"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toStartOf="@+id/guidline_vertical_one"
-                    app:layout_constraintTop_toBottomOf="@+id/appCompatTextView" />
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/cat_title" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/appCompatTextView2"
@@ -103,7 +110,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginTop="8dp"
                     android:layout_weight="1.05"
-                    android:text="@{data.p_desc}"
+                    android:visibility="gone"
                     android:textColor="@color/black_light"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"

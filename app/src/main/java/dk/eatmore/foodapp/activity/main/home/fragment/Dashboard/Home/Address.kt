@@ -13,9 +13,9 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
-import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerCallback
-import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickInterface
-import dk.eatmore.foodapp.adapter.UniversalAdapter.UniversalAdapter
+import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerCallback
+import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerClickInterface
+import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.FragmentAddressBinding
 import dk.eatmore.foodapp.databinding.RowAddressBinding
 import dk.eatmore.foodapp.fragment.HomeContainerFragment

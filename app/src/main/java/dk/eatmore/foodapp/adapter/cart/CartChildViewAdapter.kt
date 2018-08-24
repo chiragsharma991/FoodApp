@@ -1,4 +1,4 @@
-package dk.eatmore.foodapp.adapter
+package dk.eatmore.foodapp.adapter.cart
 
 import android.content.Context
 import android.databinding.DataBindingUtil
@@ -9,14 +9,12 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.databinding.RowCartViewBinding
+import dk.eatmore.foodapp.activity.main.cart.CalculateAttribute
 import dk.eatmore.foodapp.databinding.RowChildCartViewBinding
-import dk.eatmore.foodapp.databinding.RowOrderPreferredBinding
-import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.model.cart.ProductAttributeValueItem
 import java.util.ArrayList
 
-class CartChildViewAdapter(val context: Context, val listner: CartViewAdapter.AdapterListener, val parentPosition: Int, val list_child: ArrayList<ProductAttributeValueItem>, val padID: String) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CartChildViewAdapter(val context: Context, val listner: CartViewAdapter.AdapterListener, val parentPosition: Int, val list_child: ArrayList<ProductAttributeValueItem>, val padID: String, var p_id : String, var calculateAttribute: ArrayList<ArrayList<CalculateAttribute>>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_ITEM = 1
     private var count: Int = 1
@@ -37,14 +35,19 @@ class CartChildViewAdapter(val context: Context, val listner: CartViewAdapter.Ad
         // (holder as MyViewHolder).binding
         if (holder is MyViewHolder) {
 
-            holder.binding.rowCartChildTxt.text = list_child[position].a_value
-            Log.e("take id ",""+padID+" "+list_child[position].pad_id)
-            if (padID.equals(list_child[position].pad_id))
-                holder.binding.rowCartChildTxt.setTextColor(ContextCompat.getColor(context, R.color.theme_color_secondary_dark))
-            else
-                holder.binding.rowCartChildTxt.setTextColor(ContextCompat.getColor(context, R.color.black_light))
-            holder.binding.rowChildCartQtyTxt.text = count.toString()
-            holder.binding.rowChildCartAdditional.visibility = View.GONE
+            holder.binding.data=list_child[position]
+            Log.e("TAG"," active is -- "+list_child[position].is_itemselected)
+
+            if (list_child[position].is_itemselected){
+                holder.binding.itemRccTxt.setTextColor(ContextCompat.getColor(context, R.color.theme_color_secondary_dark))
+                holder.binding.priceRccTxt.setTextColor(ContextCompat.getColor(context, R.color.theme_color_secondary_dark))
+                val model=CalculateAttribute(p_id,list_child[position].pad_id,list_child[position].a_price)
+                calculateAttribute.get(parentPosition).set(0,model)
+            }else{
+                holder.binding.itemRccTxt.setTextColor(ContextCompat.getColor(context, R.color.black_light))
+                holder.binding.priceRccTxt.setTextColor(ContextCompat.getColor(context, R.color.black_light))
+            }
+
             holder.binding.rowChildCartItemlayout.setOnClickListener {
                 listner.itemClicked(false,parentPosition,position)
 

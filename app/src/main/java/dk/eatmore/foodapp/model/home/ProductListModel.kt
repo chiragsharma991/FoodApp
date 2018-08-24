@@ -21,7 +21,7 @@ data class MenuListItem(val c_desc: String = "",
 
 data class ProductListItem(val productIngredients: String = "",
                            val restaurantId: String = "",
-                           val productAttribute: ArrayList<ProductAttributeItem>? = null,
+                           val product_attribute: ArrayList<ProductAttributeItem>? = null,
                            val p_desc: String = "",
                            val p_price: String = "",
                            val productNo: String = "",
@@ -33,11 +33,11 @@ data class ProductListItem(val productIngredients: String = "",
                            val p_id: String = "") :Serializable
 
 
-data class ProductAttributeItem(val pamId: String = "",
-                                val aName: String = "",
-                                val defaultAttributeValue: DefaultAttributeValue) :Serializable
+data class ProductAttributeItem(val pam_id: String = "",
+                                val a_name: String = "",
+                                val default_attribute_value: DefaultAttributeValue) :Serializable
 
 
-data class DefaultAttributeValue(val padId: String = "",
-                                 val aPrice: String = "",
-                                 val aValue: String = "") :Serializable
+data class DefaultAttributeValue(val pad_id: String = "",
+                                 val a_price: String = "",
+                                 val a_value: String = "") :Serializable

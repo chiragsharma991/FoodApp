@@ -13,6 +13,7 @@
         xmlns:app="http://schemas.android.com/apk/res-auto"
         android:layoutDirection="locale"
         android:fitsSystemWindows="true"
+        android:background="@color/background_light"
         android:layout_width="match_parent"
         android:layout_height="match_parent">
 
@@ -25,67 +26,30 @@
             android:layout_below="@+id/toolbar_layout"
             >
 
-            <RelativeLayout
+            <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/background_light"
+                android:layout_height="wrap_content"
                 >
 
-                <LinearLayout
+            <RelativeLayout
+
+
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:orientation="vertical"
+                    android:background="@color/background_light"
                     >
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
+                        android:layout_height="match_parent"
                         android:orientation="vertical"
                         >
-
-                        <LinearLayout
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recycler_view_extratoppings"
+                            android:clipToPadding="false"
+                            android:nestedScrollingEnabled="false"
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_margin="@dimen/_8sdp"
-                            android:orientation="vertical"
-                            >
-                            <android.support.v7.widget.AppCompatTextView
-                                style="@style/TextViewSmall"
-                                android:singleLine="true"
-                                android:textColor="@color/black_light"
-                                android:textStyle="bold"
-                                android:text="Ingradients" />
-
-
-                        </LinearLayout>
-
-
-                        <View
-                            android:id="@+id/view"
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:alpha="0.2"
-                            android:background="@color/divider_color"
-                            />
-
-
-                        <com.zhy.view.flowlayout.TagFlowLayout
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:layout_marginLeft="@dimen/_5sdp"
-                            android:layout_marginRight="@dimen/_5sdp"
-                            android:layout_marginBottom="@dimen/_5sdp"
-                            android:id="@+id/flowlayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-
-                            />
-
-                        <View
-                            android:layout_width="match_parent"
-                            android:layout_height="1dp"
-                            android:alpha="0.2"
-                            android:background="@color/divider_color"
-                            />
+                            android:layout_height="wrap_content"/>
 
 
 
@@ -94,26 +58,17 @@
 
 
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recycler_view_cart"
-                        android:nestedScrollingEnabled="true"
-                        android:clipToPadding="false"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
 
 
-
-                </LinearLayout>
-
-
-
-
-
-
-            </RelativeLayout>
+                </RelativeLayout>
+            </android.support.v4.widget.NestedScrollView>
 
 
         </FrameLayout>
+
+
+
+
 
 
     </RelativeLayout>

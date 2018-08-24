@@ -12,9 +12,9 @@ import com.bambora.nativepayment.managers.CreditCardManager
 import com.bambora.nativepayment.models.creditcard.CreditCard
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.epay.EpayActivity
-import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerCallback
-import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickInterface
-import dk.eatmore.foodapp.adapter.UniversalAdapter.UniversalAdapter
+import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerCallback
+import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerClickInterface
+import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.*
 import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.utils.BaseFragment

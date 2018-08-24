@@ -12,9 +12,9 @@ import android.view.ViewGroup
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
-import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerCallback
-import dk.eatmore.foodapp.adapter.UniversalAdapter.RecyclerClickListner
-import dk.eatmore.foodapp.adapter.UniversalAdapter.UniversalAdapter
+import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerCallback
+import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerClickListner
+import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.FragmentAccountContainerBinding
 import dk.eatmore.foodapp.databinding.RowCategoryListBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment

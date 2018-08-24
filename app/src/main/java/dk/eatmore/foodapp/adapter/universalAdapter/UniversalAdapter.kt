@@ -1,4 +1,4 @@
-package dk.eatmore.foodapp.adapter.UniversalAdapter
+package dk.eatmore.foodapp.adapter.universalAdapter
 
 import android.content.Context
 import android.databinding.DataBindingUtil
@@ -42,7 +42,7 @@ class UniversalAdapter<T, VM : ViewDataBinding>(private val context: Context, pr
     }
 
     override fun getItemCount(): Int {
-        return items?.size?: 0  // value or if you got null then 0
+        return items?.size ?: 0  // value or if you got null then 0
     }
 
 }
