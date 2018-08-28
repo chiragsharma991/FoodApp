@@ -142,7 +142,6 @@ class Menu : BaseFragment(), RecyclerClickListner {
 
 
     private fun refreshUI() {
-        loge(TAG, "refreshUI..."+ui_model!!.productList.value!!.size)
         //       val myclickhandler = Profile.MyClickHandler(this)
 //        val xml_profile = ui_model.getUIModel().value
 //        binding.xmlProfile = xml_profile
@@ -181,11 +180,11 @@ class Menu : BaseFragment(), RecyclerClickListner {
             override fun onFail(error: Int) {
                 when (error) {
                     404 -> {
-                        showSnackBar(clayout, getString(R.string.error_404))
+                        showSnackBar(clayout_menu, getString(R.string.error_404))
                     }
                     100 -> {
 
-                        showSnackBar(clayout, getString(R.string.internet_not_available))
+                        showSnackBar(clayout_menu, getString(R.string.internet_not_available))
                     }
                 }
                 //showProgressDialog()

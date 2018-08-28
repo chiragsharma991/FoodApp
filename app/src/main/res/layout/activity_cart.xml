@@ -37,9 +37,10 @@
         android:layout_below="@+id/toolbar_layout"
         >
 
-        <RelativeLayout
+        <android.support.design.widget.CoordinatorLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:id="@+id/clayout_crt"
             android:background="@color/background_light"
             >
 
@@ -130,7 +131,7 @@
 
 
 
-        </RelativeLayout>
+        </android.support.design.widget.CoordinatorLayout>
 
 
     </FrameLayout>
@@ -151,7 +152,7 @@
 
         <android.support.v7.widget.AppCompatTextView
             style="@style/TextViewMid"
-            android:id="@+id/sec_txt"
+            android:id="@+id/addtocart_txt"
             android:text="@string/add_to_cart"
             android:layout_centerInParent="true"
             android:textColor="@color/theme_color"

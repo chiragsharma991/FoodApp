@@ -17,6 +17,7 @@ import java.util.ArrayList
 import android.widget.CompoundButton
 import dk.eatmore.foodapp.activity.main.cart.CalculateAttribute
 import dk.eatmore.foodapp.activity.main.cart.CalculateExtratoppings
+import dk.eatmore.foodapp.activity.main.cart.CartActivity
 
 
 class ExtratoppingsChildAdapter(val context: Context, val listner: ExtratoppingsAdapter.AdapterListener, val parentPosition: Int, val list_child: ArrayList<Topping_subgroup_details>, val calculateExtratoppings : ArrayList<CalculateExtratoppings>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -74,6 +75,8 @@ class ExtratoppingsChildAdapter(val context: Context, val listner: Extratoppings
 
                    }
                }
+
+               CartActivity.ui_model!!.any_selection.value=true
             }
 
 

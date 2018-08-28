@@ -39,6 +39,10 @@ class ApiCall {
             return getApiInterface().setProductDetails(r_token, r_key, p_id)
         }
 
+        fun addtocart(jsonObject: JsonObject) : Call<JsonObject> {
+            return getApiInterface().addtocart(jsonObject)
+        }
+
 
     }
 

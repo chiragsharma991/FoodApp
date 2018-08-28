@@ -91,7 +91,6 @@ class Profile : BaseFragment() {
             }
 
     private fun refreshUI() {
-        loge(TAG, "refreshUI...")
         val myclickhandler = MyClickHandler(this)
         val xml_profile = ui_model.getUIModel().value
         binding.xmlProfile = xml_profile

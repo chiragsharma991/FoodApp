@@ -26,7 +26,7 @@ data class Data(
         val productNo: String = "",
         val pName: String = "",
         val isAttributes: String = "",
-        val pId: String = "",
+        val p_id: String = "",
         val product_ingredients: ArrayList<ProductIngredientsItem> = arrayListOf(),
         val product_attribute_list: ArrayList<ProductAttributeListItem> = arrayListOf()
 ) : Serializable
@@ -38,6 +38,7 @@ data class ProductIngredientsItem(
         val i_id: String = "",
         val restaurant_id: String = "",
         val actionDt: String = "",
+        var selected_ingredient :Boolean = true,
         val i_name: String = "") : Serializable
 
 

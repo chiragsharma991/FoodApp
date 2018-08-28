@@ -6,9 +6,7 @@ import dk.eatmore.foodapp.model.LastOrder
 import dk.eatmore.foodapp.model.cart.Data
 import dk.eatmore.foodapp.model.cart.ProductDetails
 import retrofit2.Call
-import retrofit2.http.Field
-import retrofit2.http.FormUrlEncoded
-import retrofit2.http.POST
+import retrofit2.http.*
 
 
 interface ApiInterface {
@@ -70,6 +68,11 @@ interface ApiInterface {
             @Field("r_key") r_key: String,
             @Field("p_id") p_id: String
     ): Call<ProductDetails>
+
+
+    @POST("Cart/cart/addtocart")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun addtocart(@Body jsonObject: JsonObject): Call<JsonObject>
 
 
 }

@@ -14,7 +14,7 @@ import dk.eatmore.foodapp.databinding.RowChildCartViewBinding
 import dk.eatmore.foodapp.model.cart.ProductAttributeValueItem
 import java.util.ArrayList
 
-class CartChildViewAdapter(val context: Context, val listner: CartViewAdapter.AdapterListener, val parentPosition: Int, val list_child: ArrayList<ProductAttributeValueItem>, val padID: String, var p_id : String, var calculateAttribute: ArrayList<ArrayList<CalculateAttribute>>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CartChildViewAdapter(val context: Context, val listner: CartViewAdapter.AdapterListener, val parentPosition: Int, val list_child: ArrayList<ProductAttributeValueItem>, var p_id : String, var calculateAttribute: ArrayList<CalculateAttribute>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private val VIEW_ITEM = 1
     private var count: Int = 1
@@ -36,13 +36,14 @@ class CartChildViewAdapter(val context: Context, val listner: CartViewAdapter.Ad
         if (holder is MyViewHolder) {
 
             holder.binding.data=list_child[position]
-            Log.e("TAG"," active is -- "+list_child[position].is_itemselected)
 
             if (list_child[position].is_itemselected){
                 holder.binding.itemRccTxt.setTextColor(ContextCompat.getColor(context, R.color.theme_color_secondary_dark))
                 holder.binding.priceRccTxt.setTextColor(ContextCompat.getColor(context, R.color.theme_color_secondary_dark))
-                val model=CalculateAttribute(p_id,list_child[position].pad_id,list_child[position].a_price)
-                calculateAttribute.get(parentPosition).set(0,model)
+           //     val model=CalculateAttribute(p_id,list_child[position].pad_id,list_child[position].a_price)
+                calculateAttribute.get(parentPosition).p_id = p_id
+                calculateAttribute.get(parentPosition).pad_id = list_child[position].pad_id
+                calculateAttribute.get(parentPosition).a_price = list_child[position].a_price
             }else{
                 holder.binding.itemRccTxt.setTextColor(ContextCompat.getColor(context, R.color.black_light))
                 holder.binding.priceRccTxt.setTextColor(ContextCompat.getColor(context, R.color.black_light))

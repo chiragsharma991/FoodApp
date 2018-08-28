@@ -13,7 +13,7 @@ import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.model.cart.ProductAttributeListItem
 import java.util.ArrayList
 
-class CartViewAdapter(val c: Context, val list :ArrayList<ProductAttributeListItem>,var calculateAttribute:ArrayList<ArrayList<CalculateAttribute>>, val callback: AdapterListener): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
+class CartViewAdapter(val c: Context, val list :ArrayList<ProductAttributeListItem>,var calculateAttribute:ArrayList<CalculateAttribute>, val callback: AdapterListener): RecyclerView.Adapter<RecyclerView.ViewHolder>(){
 
     private val VIEW_ITEM = 1
     lateinit var listner : AdapterListener
@@ -55,7 +55,7 @@ class CartViewAdapter(val c: Context, val list :ArrayList<ProductAttributeListIt
             }*/
 
             holder.binding.rowCartChildRecyclerView.apply {
-                val mAdapter = CartChildViewAdapter(c, listner, position, list[position].product_attribute_value!!, list[position].default_attribute_value.pad_id,list[position].p_id,calculateAttribute)
+                val mAdapter = CartChildViewAdapter(c, listner, position, list[position].product_attribute_value!!,list[position].p_id,calculateAttribute)
                 layoutManager = LinearLayoutManager(c)
                 adapter = mAdapter
             }
