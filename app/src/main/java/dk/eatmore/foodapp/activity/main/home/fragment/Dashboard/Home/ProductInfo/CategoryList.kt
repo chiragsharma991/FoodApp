@@ -3,12 +3,15 @@ package dk.eatmore.foodapp.fragment.ProductInfo
 
 import android.content.Intent
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.util.Pair
+import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AlphaAnimation
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
@@ -23,10 +26,10 @@ import dk.eatmore.foodapp.model.home.MenuListItem
 import dk.eatmore.foodapp.model.home.ProductListItem
 import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.utils.BaseFragment
+import dk.eatmore.foodapp.utils.BindDataUtils
 import dk.eatmore.foodapp.utils.TransitionHelper
 import kotlinx.android.synthetic.main.category_list.*
-import kotlinx.android.synthetic.main.fragment_details.*
-import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.toolbar_plusone.*
 import java.util.*
 
 class CategoryList : BaseFragment(), RecyclerClickListner {
@@ -36,6 +39,7 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
     private lateinit var binding: FragmentAccountContainerBinding
     private var mAdapter: UniversalAdapter<ProductListItem, RowCategoryListBinding>? = null
     private val userList = ArrayList<User>()
+    private lateinit var productpricecalculation: ProductPriceCalculation
 
 
     companion object {
@@ -52,6 +56,7 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
         return R.layout.category_list
     }
 
+
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(getLayout(), container, false)
 
@@ -61,18 +66,17 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
     }
 
 
+
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
+            productpricecalculation=ProductPriceCalculation(this)
             val menuListItem = arguments?.getSerializable("MenuListItem") as MenuListItem
             val bundle=arguments
-           // val title=if(arguments!=null) bundle!!.getString("TITLE","") else ""
-           // val title= bundle?.getString("TITLE","") ?:""
 
-
-            txt_toolbar.text=bundle?.getString("TITLE","") ?:""
+            subtxt_toolbar.text=bundle?.getString("TITLE","") ?:""
+            setanim_toolbartitle(appbar,txt_toolbar,bundle?.getString("TITLE","") ?:"")
             loge(TAG,menuListItem.c_desc+" "+menuListItem.product_list!!.size)
-            fillData()
             mAdapter = UniversalAdapter(context!!, menuListItem.product_list, R.layout.row_category_list, object : RecyclerCallback<RowCategoryListBinding, ProductListItem> {
                 override fun bindData(binder: RowCategoryListBinding, model: ProductListItem) {
                     setRecyclerData(binder, model)
@@ -85,11 +89,18 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
         }
     }
 
+
+
+
     override fun <T> onClick(model: T?) {
+        //                    android:text="@{data.product_attribute == null ? util.convertCurrencyToDanish(data.p_price) : productpricecalculation.getprice(data)}"
+
+
         val data= model as ProductListItem
         val intent=Intent(activity, CartActivity::class.java)
         intent.putExtra("TITLE",data.p_name)
         intent.putExtra("PID",data.p_id)
+        intent.putExtra("p_price",if(data.product_attribute ==null) BindDataUtils.convertCurrencyToDanish(data.p_price) else productpricecalculation.getprice(data))
         val pairs: Array<Pair<View,String>> = TransitionHelper.createSafeTransitionParticipants(activity!!, true)
         val transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, *pairs)
         startActivity(intent, transitionActivityOptions.toBundle())
@@ -98,35 +109,10 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
     }
 
 
-
-
-    private fun fillData() {
-        val user1 = User()
-        user1.name="Pizza"
-        userList.add(user1)
-
-        val user2 = User()
-        user2.name="Coca-Cola"
-        userList.add(user2)
-
-        val user3 = User()
-        user3.name="Deep-Pan"
-        userList.add(user3)
-
-        val user4 = User()
-        user4.name="Brown stick"
-        userList.add(user4)
-
-        val user5 = User()
-        user5.name="Choco Moko"
-        userList.add(user4)
-
-
-    }
-
-
     private fun setRecyclerData(binder: RowCategoryListBinding, model: ProductListItem) {
         binder.data=model
+        binder.productpricecalculation = productpricecalculation
+        binder.util=BindDataUtils
         binder.handler=this
     }
 
@@ -154,6 +140,21 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
         (homeFragment.fragment as DetailsFragment).appbar.setExpanded(true,true)
         return true
     }
+
+
+    class  ProductPriceCalculation(val categorylist : CategoryList) {
+
+        var attribute_cost :Double=0.0
+        fun getprice( productListItem: ProductListItem):String {
+            attribute_cost=0.0
+            for(i in 0..productListItem.product_attribute.size -1){
+                attribute_cost =attribute_cost + productListItem.product_attribute.get(i).default_attribute_value.a_price.toDouble()
+            }
+            return BindDataUtils.convertCurrencyToDanish(attribute_cost.toString()) ?: "null"
+        }
+
+    }
+
 
 
 

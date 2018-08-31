@@ -12,6 +12,7 @@ import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.cart.CalculateAttribute
 import dk.eatmore.foodapp.databinding.RowChildCartViewBinding
 import dk.eatmore.foodapp.model.cart.ProductAttributeValueItem
+import dk.eatmore.foodapp.utils.BindDataUtils
 import java.util.ArrayList
 
 class CartChildViewAdapter(val context: Context, val listner: CartViewAdapter.AdapterListener, val parentPosition: Int, val list_child: ArrayList<ProductAttributeValueItem>, var p_id : String, var calculateAttribute: ArrayList<CalculateAttribute>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -24,6 +25,7 @@ class CartChildViewAdapter(val context: Context, val listner: CartViewAdapter.Ad
         var vh: RecyclerView.ViewHolder? = null
         if (viewType == VIEW_ITEM) {
             val binding: RowChildCartViewBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.row_child_cart_view, parent, false)
+            binding.util=BindDataUtils
             vh = MyViewHolder(binding)
         }
 

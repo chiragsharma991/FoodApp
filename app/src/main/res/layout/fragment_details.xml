@@ -10,6 +10,8 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:id="@+id/htab_maincontent"
     android:fitsSystemWindows="true"
+    android:clickable="true"
+    android:focusable="true"
     android:background="@color/background_light"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -117,16 +119,16 @@
             </LinearLayout>
 
 
-            <android.support.v7.widget.Toolbar
-                android:id="@+id/toolbar_fragment"
+
+            <include layout="@layout/toolbar_plusone"
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
-                android:layout_gravity="top"
-                android:layout_marginBottom="@dimen/_48sdp"
-                app:layout_collapseMode="pin"
-                android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                >
 
-                />
+            </include>
+
+
+
 
 
             <android.support.design.widget.TabLayout
@@ -135,6 +137,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_gravity="bottom"
+                app:layout_collapseMode="pin"
                 app:tabIndicatorColor="@color/theme_color"
                 app:tabSelectedTextColor="@color/black"
                 app:tabTextColor="@color/black_default"/>
@@ -165,6 +168,7 @@
         android:layout_height="wrap_content"
         android:id="@+id/detail_fab_btn"
         app:rippleColor="@color/white"
+        android:visibility="gone"
         android:backgroundTint="@color/theme_color_secondary"
         app:srcCompat="@drawable/shopping_cart"
         android:scaleType="center"

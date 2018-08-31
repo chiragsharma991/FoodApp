@@ -20,8 +20,11 @@ import java.util.*
 import android.support.v4.app.ActivityCompat
 import android.content.pm.PackageManager
 import android.os.Build
+import android.support.design.widget.AppBarLayout
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v7.widget.AppCompatTextView
+import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.TranslateAnimation
@@ -32,6 +35,8 @@ import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.Profile
 import dk.eatmore.foodapp.fragment.ProductInfo.CategoryList
 import dk.eatmore.foodapp.rest.ApiClient
 import dk.eatmore.foodapp.rest.ApiInterface
+import kotlinx.android.synthetic.main.category_list.*
+import kotlinx.android.synthetic.main.toolbar_plusone.*
 
 
 abstract class BaseFragment : Fragment() {
@@ -85,6 +90,40 @@ abstract class BaseFragment : Fragment() {
         } else { //permission is automatically granted on sdk<23 upon installation
             return true
         }
+    }
+
+
+     fun setanim_toolbartitle(appbar :AppBarLayout , appcompattextview : AppCompatTextView ,title : String) {
+
+         val appbar=appbar
+         val appcompattextview= appcompattextview
+         val title = title
+
+         appbar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+             internal var isShow = true
+             internal var scrollRange = -1
+
+             override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
+                 if (scrollRange == -1) {
+                     scrollRange = appBarLayout.totalScrollRange
+                 }
+                 if ((scrollRange + verticalOffset == 0) && isShow) {
+                     val alpha = AlphaAnimation(1.0f,0.0f)
+                     alpha.duration=500
+                     val bundle=arguments
+                     appcompattextview.text=title
+                     // appcompattextview.startAnimation(alpha)
+                     appcompattextview.visibility=View.VISIBLE
+                     isShow = false
+
+                 } else if (!isShow) {
+                     if(scrollRange + verticalOffset > scrollRange-50){
+                         appcompattextview.visibility=View.GONE
+                         isShow = true
+                     }
+                 }
+             }
+         })
     }
 
 

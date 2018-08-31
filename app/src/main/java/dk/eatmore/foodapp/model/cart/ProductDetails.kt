@@ -22,11 +22,12 @@ data class Data(
         val featured: String = "",
         val restaurantId: String = "",
         val pDesc: String = "",
-        val pPrice: String = "",
+        val p_price: String = "",
         val productNo: String = "",
         val pName: String = "",
-        val isAttributes: String = "",
+        val is_attributes: String = "",
         val p_id: String = "",
+        val extra_topping_group_deatils: Extra_topping_group_deatils  = Extra_topping_group_deatils("","","","","","","", arrayListOf()),
         val product_ingredients: ArrayList<ProductIngredientsItem> = arrayListOf(),
         val product_attribute_list: ArrayList<ProductAttributeListItem> = arrayListOf()
 ) : Serializable

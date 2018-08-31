@@ -70,6 +70,13 @@ abstract class BaseActivity : AppCompatActivity()
         }
     }
 
+    fun finishThisActivity(){
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+            finishAfterTransition()
+        else
+            finish()
+    }
 
     fun rightToLeftAnimation(context:Context): Animation {
         val animation = AnimationUtils.loadAnimation(context, R.anim.enter_from_right)

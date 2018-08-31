@@ -3,36 +3,35 @@ package dk.eatmore.foodapp.utils
 import android.databinding.BindingAdapter
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatTextView
+import android.util.Log
 import android.view.View
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.model.cart.ProductAttributeValueItem
+import dk.eatmore.foodapp.model.home.ProductListItem
+import java.text.NumberFormat
+import java.util.*
 
 object BindDataUtils {
 
+/*
     @BindingAdapter("visibleGone")
     fun showHide(view: View, show: Boolean) {
         view.visibility = if (show) View.VISIBLE else View.GONE
     }
+*/
 
-
-    fun ttt( data: ProductAttributeValueItem): String {
-        if (data.is_itemselected)
-            return "1"
-          //  return ContextCompat.getColor(text.context, R.color.theme_color_secondary_dark)
-        else
-          //  return ContextCompat.getColor(text.context, R.color.black_light)
-            return "3"
-
+    fun convertCurrencyToDanish(amount: String): String? {
+        val deviceLocale = Locale.getDefault().language //  if (deviceLocale.equalsIgnoreCase("en")) {
+        //      return formatValueToMoney(amount);
+        //  } else {
+        val mNumberFormat = NumberFormat.getCurrencyInstance(Locale.GERMANY)
+        var convertedAmount: String? = mNumberFormat.format(amount.toDouble())
+        println(convertedAmount)
+        if (convertedAmount != null && convertedAmount.length > 2) {
+            convertedAmount = convertedAmount.substring(0, convertedAmount.length - 2)
+        }
+        return convertedAmount+"kr"
+        //  }
     }
-
-
-    /*   fun convertToSuffix(count: Long): String {
-           if (count < 1000) return "" + count
-           val exp = (Math.log(count.toDouble()) / Math.log(1000.0)).toInt()
-           return String.format("%.1f%c",
-                   count / Math.pow(1000.0, exp.toDouble()),
-                   "kmgtpe"[exp - 1])
-       }*/
-
-
 }
+

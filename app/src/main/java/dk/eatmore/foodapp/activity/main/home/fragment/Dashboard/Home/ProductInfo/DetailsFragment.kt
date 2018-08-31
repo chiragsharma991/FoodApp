@@ -11,7 +11,6 @@ import android.view.ViewGroup
 import dk.eatmore.foodapp.adapter.OrderListAdapter
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.utils.BaseFragment
-import kotlinx.android.synthetic.main.fragment_details.*
 import android.support.v4.content.ContextCompat
 import android.graphics.BitmapFactory
 import android.support.v4.app.ActivityOptionsCompat
@@ -24,6 +23,12 @@ import dk.eatmore.foodapp.activity.main.epay.EpayActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.ProductInfo.Info
 import dk.eatmore.foodapp.activity.main.home.fragment.ProductInfo.Rating
 import dk.eatmore.foodapp.utils.TransitionHelper
+import android.support.design.widget.AppBarLayout
+import android.view.animation.AlphaAnimation
+import android.widget.TextView
+import kotlinx.android.synthetic.main.fragment_details.*
+import kotlinx.android.synthetic.main.notification_template_lines_media.view.*
+import kotlinx.android.synthetic.main.toolbar_plusone.*
 
 
 class DetailsFragment : BaseFragment() {
@@ -71,10 +76,10 @@ class DetailsFragment : BaseFragment() {
             detail_item_info.startAnimation(translateAnim(-800f, 0f, 0f, 0f,700,true))
            // DrawableCompat.setTint(ContextCompat.getDrawable(context!!,R.drawable.close)!!, ContextCompat.getColor(context!!, R.color.white));
             logd(DetailsFragment.TAG,"saveInstance NULL")
-            toolbar_fragment.setNavigationIcon(ContextCompat.getDrawable(context!!,R.drawable.close))
-            toolbar_fragment.setNavigationOnClickListener{
-                loge(TAG,"onclick")
-                parentFragment!!.childFragmentManager.popBackStack() }
+            img_toolbar_back.setImageResource(R.drawable.close)
+            img_toolbar_back.setOnClickListener{
+                parentFragment!!.childFragmentManager.popBackStack()
+            }
             adapter = ViewPagerAdapter(childFragmentManager)
             adapter!!.addFragment(Menu(), getString(R.string.menu))
             adapter!!.addFragment(Rating(), getString(R.string.rating))
@@ -82,7 +87,7 @@ class DetailsFragment : BaseFragment() {
             viewpager.offscreenPageLimit=3
             viewpager.setAdapter(adapter)
             tabs.setupWithViewPager(viewpager)
-            setPalette()
+          //  setPalette()
             detail_fab_btn.setOnClickListener{
                 val animation = TranslateAnimation(0f, 0f, 0f, 5f)
                 animation.duration = 100
@@ -104,18 +109,11 @@ class DetailsFragment : BaseFragment() {
 
             }
 
-
-
         }else{
             logd(DetailsFragment.TAG,"saveInstance NOT NULL")
 
         }
     }
-
-
-
-
-
 
 
 

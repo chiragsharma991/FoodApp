@@ -21,7 +21,7 @@ data class MenuListItem(val c_desc: String = "",
 
 data class ProductListItem(val productIngredients: String = "",
                            val restaurantId: String = "",
-                           val product_attribute: ArrayList<ProductAttributeItem>? = null,
+                           val product_attribute: ArrayList<ProductAttributeItem> = arrayListOf(),
                            val p_desc: String = "",
                            val p_price: String = "",
                            val productNo: String = "",
@@ -30,7 +30,9 @@ data class ProductListItem(val productIngredients: String = "",
                            val cId: String = "",
                            val isAttributes: String = "",
                            val pImage: String = "",
-                           val p_id: String = "") :Serializable
+                           val p_id: String = "") :Serializable{
+
+}
 
 
 data class ProductAttributeItem(val pam_id: String = "",

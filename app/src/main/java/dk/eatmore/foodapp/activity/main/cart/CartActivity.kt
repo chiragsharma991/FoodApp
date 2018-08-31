@@ -16,6 +16,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.zhy.view.flowlayout.FlowLayout
 import com.zhy.view.flowlayout.TagAdapter
@@ -23,18 +24,17 @@ import com.zhy.view.flowlayout.TagFlowLayout
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.R.id.addtocart_view
 import dk.eatmore.foodapp.activity.main.cart.fragment.Extratoppings
+import dk.eatmore.foodapp.activity.main.cart.fragment.OnlyExtratoppings
 import dk.eatmore.foodapp.adapter.cart.CartViewAdapter
 import dk.eatmore.foodapp.model.User
+import dk.eatmore.foodapp.model.cart.Data
 import dk.eatmore.foodapp.model.cart.ProductAttributeListItem
 import dk.eatmore.foodapp.model.cart.ProductDetails
 import dk.eatmore.foodapp.model.cart.ProductIngredientsItem
-import dk.eatmore.foodapp.utils.BaseActivity
 import java.util.*
 import dk.eatmore.foodapp.rest.ApiCall
-import dk.eatmore.foodapp.utils.BaseFragment
-import dk.eatmore.foodapp.utils.CartListFunction
+import dk.eatmore.foodapp.utils.*
 import dk.eatmore.foodapp.utils.CartListFunction.getjsonparmsofAddtocart
-import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.activity_cart.*
 import kotlinx.android.synthetic.main.toolbar_plus.*
 import java.io.Serializable
@@ -47,11 +47,13 @@ class CartActivity : BaseActivity() {
     private val userList = ArrayList<User>()
     private var mAdapter: CartViewAdapter? = null
     private var tagadapter: TagAdapter<String>? = null
+    private lateinit var productdetails: ProductDetails
 
 
     companion object {
         val TAG = "CartActivity"
         var item_p_id = ""
+        var p_price = ""
         var ui_model: UIModel? = null
         fun newInstance(): CartActivity {
             return CartActivity()
@@ -77,11 +79,21 @@ class CartActivity : BaseActivity() {
         ), object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
-                val productdetails = body as ProductDetails
+                productdetails = body as ProductDetails
                 if (productdetails.status) {
-                    ui_model!!.product_ingredients.value = productdetails.data.product_ingredients
-                    ui_model!!.product_attribute_list.value = productdetails.data.product_attribute_list
-                    ui_model!!.any_selection.value=true
+                    // if you get only extratoppings then condition will true anotherwise false:
+                    if (productdetails.data.is_attributes.equals("0")) {
+                        val fragment = OnlyExtratoppings.newInstance(productdetails.data.extra_topping_group_deatils)
+                        addFragment(R.id.cart_container, fragment, OnlyExtratoppings.TAG, false)
+                        ui_model!!.product_ingredients.value = productdetails.data.product_ingredients
+
+                    } else {
+                        ui_model!!.product_ingredients.value = productdetails.data.product_ingredients
+                        ui_model!!.product_attribute_list.value = productdetails.data.product_attribute_list
+                    }
+
+
+                    // ui_model!!.any_selection.value=true
                 }
             }
 
@@ -116,13 +128,14 @@ class CartActivity : BaseActivity() {
                     refreshAttributes()
                 })
                 any_selection.observe(this@CartActivity, Observer<Boolean> {
-                    addtocart_txt.text = getString(R.string.add_to_cart) + " " + CartListFunction.calculateValuesofAddtocart(ui_model!!.product_attribute_list).toString()
+
+                    val text = String.format(getString(R.string.add_to_cart), BindDataUtils.convertCurrencyToDanish(CartListFunction.calculateValuesofAddtocart(ui_model!!.product_attribute_list, productdetails).toString()))
+                    addtocart_txt.text = text
                 })
             }
 
 
     private fun refreshIngredients() {
-        loge(TAG, "refreshIngredients---")
         val mVals = arrayOfNulls<String>(ui_model!!.product_ingredients.value!!.size)
         for (i in 0..ui_model!!.product_ingredients.value!!.size - 1) {
             mVals[i] = ui_model!!.product_ingredients.value!![i].i_name
@@ -190,12 +203,12 @@ class CartActivity : BaseActivity() {
 
                         if (ui_model!!.product_attribute_list.value!![parentPosition].product_attribute_value!!.get(chilPosition).extra_topping_group_deatils.topping_subgroup_list.size > 0) {
                             val fragment = Extratoppings.newInstance(parentPosition, chilPosition, ui_model!!, ui_model!!.calculateAttribute.value!!.get(parentPosition).calculateExtratoppings)
-                            addFragment(R.id.cart_container, fragment, Extratoppings.TAG, true)
+                            addFragment(R.id.cart_container, fragment, Extratoppings.TAG, false)
                         }
                     } else {
                         if (ui_model!!.product_attribute_list.value!![parentPosition].product_attribute_value!!.get(chilPosition).extra_topping_group_deatils.topping_subgroup_list.size > 0) {
                             val fragment = Extratoppings.newInstance(parentPosition, chilPosition, ui_model!!, ui_model!!.calculateAttribute.value!!.get(parentPosition).calculateExtratoppings)
-                            addFragment(R.id.cart_container, fragment, Extratoppings.TAG, true)
+                            addFragment(R.id.cart_container, fragment, Extratoppings.TAG, false)
                         }
                     }
                     mAdapter!!.notifyDataSetChanged()
@@ -213,6 +226,7 @@ class CartActivity : BaseActivity() {
     private fun initView(savedInstanceState: Bundle?) {
         val title = intent.extras.getString("TITLE", "")
         item_p_id = intent.extras.getString("PID", "")
+        p_price = intent.extras.getString("p_price", "")
         txt_toolbar.text = title
         toolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.close))
         toolbar.setNavigationOnClickListener {
@@ -225,6 +239,8 @@ class CartActivity : BaseActivity() {
             transition = buildEnterTransition()
             window.enterTransition = transition
         }
+        val text = String.format(getString(R.string.add_to_cart), p_price)
+        addtocart_txt.text = text
         ui_model = createViewModel()
         if (ui_model!!.product_attribute_list.value == null) {
             fetch_ProductDetailList()
@@ -244,11 +260,11 @@ class CartActivity : BaseActivity() {
             postParam.addProperty("r_key", Constants.R_KEY)
             postParam.addProperty("is_login", "1")
             postParam.addProperty("p_id", item_p_id)
-            postParam.addProperty("p_price", CartListFunction.calculateValuesofAddtocart(ui_model!!.product_attribute_list).toString())
+            postParam.addProperty("p_price", CartListFunction.calculateValuesofAddtocart(ui_model!!.product_attribute_list, productdetails).toString())
             postParam.addProperty("p_quantity", "1")
-            postParam.addProperty("ingredients", getjsonparmsofAddtocart(item_p_id, ui_model!!.product_ingredients, ui_model!!.product_attribute_list, 0).toString())
-            postParam.addProperty("attrubutes", getjsonparmsofAddtocart(item_p_id, ui_model!!.product_ingredients, ui_model!!.product_attribute_list, 1).toString())
-            postParam.addProperty("extratoppings", getjsonparmsofAddtocart(item_p_id, ui_model!!.product_ingredients, ui_model!!.product_attribute_list, 2).toString())
+            postParam.addProperty("ingredients", getjsonparmsofAddtocart(item_p_id, ui_model!!.product_ingredients, ui_model!!.product_attribute_list, productdetails, 0).toString())
+            postParam.addProperty("attrubutes", getjsonparmsofAddtocart(item_p_id, ui_model!!.product_ingredients, ui_model!!.product_attribute_list, productdetails, 1).toString())
+            postParam.addProperty("extratoppings", getjsonparmsofAddtocart(item_p_id, ui_model!!.product_ingredients, ui_model!!.product_attribute_list, productdetails, 2).toString())
 
             callAPI(ApiCall.addtocart(
                     jsonObject = postParam
@@ -257,7 +273,12 @@ class CartActivity : BaseActivity() {
                 override fun <T> onSuccess(body: T?) {
                     val jsonObject = body as JsonObject
                     if (jsonObject.get("status").asBoolean) {
-                        showSnackBar(clayout_crt, jsonObject.get("msg").asString)
+
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                            finishAfterTransition()
+                        else
+                            finish()
+                        //  showSnackBar(clayout_crt, jsonObject.get("msg").asString)
                     } else {
                         showSnackBar(clayout_crt, getString(R.string.error_404))
                     }
@@ -316,14 +337,24 @@ class CartActivity : BaseActivity() {
 
     override fun onBackPressed() {
 
+
         if (supportFragmentManager.backStackEntryCount > 0) {
-            supportFragmentManager.popBackStack()
-        } else {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                finishAfterTransition()
-            else
-                finish()
+            var fragment = supportFragmentManager.findFragmentByTag(supportFragmentManager.getBackStackEntryAt(supportFragmentManager.backStackEntryCount - 1).name)
+            if (fragment != null) {
+                when (fragment) {
+
+                    is OnlyExtratoppings -> {
+                        finishThisActivity()
+                    }
+                    is Extratoppings -> {
+                        supportFragmentManager.popBackStack()
+                    }
+                }
+            }
+        }else{
+            finishThisActivity()
         }
+
 
     }
 

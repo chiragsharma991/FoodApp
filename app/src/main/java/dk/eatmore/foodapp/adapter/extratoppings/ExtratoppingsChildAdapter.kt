@@ -18,6 +18,7 @@ import android.widget.CompoundButton
 import dk.eatmore.foodapp.activity.main.cart.CalculateAttribute
 import dk.eatmore.foodapp.activity.main.cart.CalculateExtratoppings
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
+import dk.eatmore.foodapp.utils.BindDataUtils
 
 
 class ExtratoppingsChildAdapter(val context: Context, val listner: ExtratoppingsAdapter.AdapterListener, val parentPosition: Int, val list_child: ArrayList<Topping_subgroup_details>, val calculateExtratoppings : ArrayList<CalculateExtratoppings>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -30,6 +31,7 @@ class ExtratoppingsChildAdapter(val context: Context, val listner: Extratoppings
         var vh: RecyclerView.ViewHolder? = null
         if (viewType == VIEW_ITEM) {
             val binding: RowChildExtratopViewBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.row_child_extratop_view, parent, false)
+            binding.util=BindDataUtils
             vh = MyViewHolder(binding)
         }
 

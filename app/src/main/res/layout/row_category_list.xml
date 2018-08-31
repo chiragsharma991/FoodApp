@@ -9,6 +9,12 @@
 
     <data>
 
+        <variable name="util" type="dk.eatmore.foodapp.utils.BindDataUtils"/>
+
+        <variable
+            name="productpricecalculation"
+            type="dk.eatmore.foodapp.fragment.ProductInfo.CategoryList.ProductPriceCalculation"/>
+
         <variable
             name="data"
             type="dk.eatmore.foodapp.model.home.ProductListItem">
@@ -79,7 +85,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@{data.p_price}"
+                    android:text="@{data.product_attribute == null ? util.convertCurrencyToDanish(data.p_price) : productpricecalculation.getprice(data)}"
                     android:textStyle="bold"
                     android:gravity="right"
                     android:textColor="@color/black_light"

@@ -6,6 +6,8 @@
     <data>
 
 
+        <variable name="util" type="dk.eatmore.foodapp.utils.BindDataUtils"/>
+
 
         <variable
             name="data"
@@ -69,7 +71,7 @@
                             android:layout_marginRight="@dimen/_5sdp"
                             android:gravity="right"
                             android:singleLine="true"
-                            android:text="@{data.a_price}"
+                            android:text="@{util.convertCurrencyToDanish(data.a_price)}"
                             android:textColor="@color/black_light" />
 
 

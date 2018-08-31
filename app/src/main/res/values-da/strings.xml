@@ -42,7 +42,7 @@
     <string name="enter_unique_password">Enter unique password</string>
     <string name="enter_the_confirm_password">Enter the confirm password</string>
     <string name="signup">Signup</string>
-    <string name="add_to_cart"><![CDATA[ADD TO CART >]]></string>
+    <string name="add_to_cart">ADD TO CART %1$s</string>
 
 
 </resources>

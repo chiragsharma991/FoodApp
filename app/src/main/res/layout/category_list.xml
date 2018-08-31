@@ -11,32 +11,105 @@
 
     </data>
 
-    <RelativeLayout
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:id="@+id/htab_maincontent"
+        android:fitsSystemWindows="true"
+        android:clickable="true"
+        android:focusable="true"
+        android:background="@color/background_light"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
-        xmlns:app="http://schemas.android.com/apk/res-auto">
+        >
 
-        <include layout="@layout/toolbar"
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:id="@+id/appbar"
+            android:layout_height="wrap_content"
+            android:fitsSystemWindows="true"
+            android:background="?attr/colorPrimary"
+            android:theme="@style/AppTheme.NoActionBar"
             >
 
-        </include>
+            <android.support.design.widget.CollapsingToolbarLayout
+                android:id="@+id/collapse_toolbar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:fitsSystemWindows="true"
+                app:contentScrim="?attr/colorPrimary"
+                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                app:titleEnabled="false">
 
+
+
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="horizontal"
+                    android:layout_marginTop="@dimen/_48sdp"
+                    android:layout_marginBottom="@dimen/_5sdp"
+                    android:id="@+id/detail_item_info"
+                    >
+
+
+                    <LinearLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_marginLeft="@dimen/_15sdp"
+                        >
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/subtxt_toolbar"
+                            android:layout_width="wrap_content"
+                            android:layout_centerVertical="true"
+                            android:includeFontPadding="false"
+                            android:layout_height="wrap_content"
+                            android:layout_toEndOf="@+id/img_toolbar_back"
+                            android:fontFamily="@font/hindvadodara_medium"
+                            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
+                            android:textColor="@color/black"
+                            />
+                    </LinearLayout>
+
+
+
+                </LinearLayout>
+
+
+                <include layout="@layout/toolbar_plusone"
+                    >
+
+                </include>
+
+
+
+
+
+            </android.support.design.widget.CollapsingToolbarLayout>
+
+
+
+
+
+        </android.support.design.widget.AppBarLayout>
 
 
         <RelativeLayout
             android:id="@+id/home_account_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar_layout"
+            android:layout_below="@+id/toolbar"
             android:fitsSystemWindows="true"
             android:background="@color/background_light"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             >
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
                 >
 
                 <android.support.v7.widget.RecyclerView
@@ -54,7 +127,8 @@
 
 
 
-    </RelativeLayout>
+
+    </android.support.design.widget.CoordinatorLayout>
 
 </layout>
 
