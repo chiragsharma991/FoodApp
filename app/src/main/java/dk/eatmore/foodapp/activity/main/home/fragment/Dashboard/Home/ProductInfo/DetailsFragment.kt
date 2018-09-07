@@ -88,7 +88,7 @@ class DetailsFragment : BaseFragment() {
             viewpager.setAdapter(adapter)
             tabs.setupWithViewPager(viewpager)
           //  setPalette()
-            detail_fab_btn.setOnClickListener{
+            viewcart.setOnClickListener{
                 val animation = TranslateAnimation(0f, 0f, 0f, 5f)
                 animation.duration = 100
                 animation.fillAfter = false

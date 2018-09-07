@@ -5,6 +5,7 @@ import dk.eatmore.foodapp.model.home.ProductListModel
 import dk.eatmore.foodapp.model.LastOrder
 import dk.eatmore.foodapp.model.cart.Data
 import dk.eatmore.foodapp.model.cart.ProductDetails
+import dk.eatmore.foodapp.model.epay.ViewcardModel
 import retrofit2.Call
 
 
@@ -38,9 +39,16 @@ class ApiCall {
         fun getProductDetails(r_token : String , r_key : String, p_id : String ) : Call<ProductDetails> {
             return getApiInterface().setProductDetails(r_token, r_key, p_id)
         }
+        fun getPickuptime(r_token : String , r_key : String, shipping : String, language : String ) : Call<JsonObject> {
+            return getApiInterface().getPickuptime(r_token, r_key, shipping,language)
+        }
 
         fun addtocart(jsonObject: JsonObject) : Call<JsonObject> {
             return getApiInterface().addtocart(jsonObject)
+        }
+
+        fun viewcart(jsonObject: JsonObject) : Call<ViewcardModel> {
+            return getApiInterface().viewcart(jsonObject)
         }
 
 

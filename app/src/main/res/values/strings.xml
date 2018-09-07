@@ -27,7 +27,6 @@
     <string name="search_the_menu">Search the menu</string>
     <string name="transition_string">card_transition</string>
     <string name="continue_">Continue</string>
-    <string name="ok">OK</string>
     <string name="add">Add</string>
     <string name="go_on_playstore">Go on PlayStore</string>
     <string name="new_update">New uppdate is available now</string>
@@ -43,7 +42,14 @@
     <string name="enter_the_confirm_password">Enter the confirm password</string>
     <string name="signup">Signup</string>
     <string name="add_to_cart">ADD TO CART %1$s</string>
-
+    <string name="minues">- %1$s</string>
+    <string name="total_goods">Total (%1$s Goods)</string>
+    <string name="plus">+ %1$s</string>
+    <string name="add_new_address">Add new address</string>
+    <string name="address">Address</string>
+    <string name="ok">OK</string>
+    <string name="go_to_payment">Go to payment</string>
+    <string name="select_delivery_time">Select delivery time:</string>
 
 
 </resources>

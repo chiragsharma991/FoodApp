@@ -5,6 +5,7 @@ import dk.eatmore.foodapp.model.home.ProductListModel
 import dk.eatmore.foodapp.model.LastOrder
 import dk.eatmore.foodapp.model.cart.Data
 import dk.eatmore.foodapp.model.cart.ProductDetails
+import dk.eatmore.foodapp.model.epay.ViewcardModel
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -69,10 +70,23 @@ interface ApiInterface {
             @Field("p_id") p_id: String
     ): Call<ProductDetails>
 
+    @FormUrlEncoded
+    @POST("Cart/cart/restpickupdeltime")
+    fun getPickuptime(
+            @Field("r_token") r_token: String ,
+            @Field("r_key") r_key: String,
+            @Field("shipping") shipping: String,
+            @Field("language") language: String
+    ): Call<JsonObject>
+
 
     @POST("Cart/cart/addtocart")
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun addtocart(@Body jsonObject: JsonObject): Call<JsonObject>
+
+    @POST("Cart/cart/viewcart")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun viewcart(@Body jsonObject: JsonObject): Call<ViewcardModel>
 
 
 }

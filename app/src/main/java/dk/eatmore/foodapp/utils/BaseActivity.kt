@@ -9,6 +9,7 @@ import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.app.Fragment
+import android.support.v4.app.FragmentManager
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
@@ -161,7 +162,7 @@ abstract class BaseActivity : AppCompatActivity()
         }
     }
     fun popWithTag(tag : String) {
-        supportFragmentManager.popBackStack(tag,0)
+        supportFragmentManager.popBackStack(tag,FragmentManager.POP_BACK_STACK_INCLUSIVE)
 
 
 

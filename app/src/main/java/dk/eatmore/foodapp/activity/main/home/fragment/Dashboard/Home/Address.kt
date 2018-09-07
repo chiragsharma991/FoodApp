@@ -12,6 +12,8 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import dk.eatmore.foodapp.R
+import dk.eatmore.foodapp.activity.main.epay.EpayActivity
+import dk.eatmore.foodapp.activity.main.epay.fragment.DeliveryTimeslot
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerCallback
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerClickInterface
@@ -60,30 +62,10 @@ class Address : BaseFragment(), RecyclerClickInterface {
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if(savedInstanceState == null){
-            address_list_view.visibility=View.VISIBLE
-            ragistered_address_view.visibility=View.GONE
+            address_list_view.visibility=View.GONE
+            ragistered_address_view.visibility=View.VISIBLE
             logd(TAG,"saveInstance NULL")
-            val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
-            homeFragment=(fragmentof as HomeContainerFragment).getHomeFragment()
-            txt_toolbar.text="Address"
-            txt_toolbar_right.visibility= View.VISIBLE
-            txt_toolbar_right.text=getString(R.string.add)
-            txt_toolbar_right.setOnClickListener{
-                val fragment = AddressForm.newInstance()
-                var enter : Slide?=null
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    enter = Slide()
-                    enter.setDuration(300)
-                    enter.slideEdge = Gravity.BOTTOM
-                    val changeBoundsTransition : ChangeBounds = ChangeBounds()
-                    changeBoundsTransition.duration = 300
-                    fragment.sharedElementEnterTransition=changeBoundsTransition
-                    fragment.enterTransition=enter
-                }
-                homeFragment.addFragment(R.id.home_fragment_container,fragment, AddressForm.TAG,false)
-
-
-            }
+            setToolbarforThis()
             fillData()
             mAdapter = UniversalAdapter(context!!, list, R.layout.row_address, object : RecyclerCallback<RowAddressBinding, User> {
                 override fun bindData(binder: RowAddressBinding, model: User) {
@@ -95,40 +77,66 @@ class Address : BaseFragment(), RecyclerClickInterface {
             recycler_view_address.adapter = mAdapter
 
             proceed_view.setOnClickListener{
+                (activity as EpayActivity).txt_toolbar_right.visibility= View.GONE
                 address_list_view.visibility=View.GONE
-                //ragistered_address_view.startAnimation(AnimationUtils.loadAnimation(context,R.anim.enter_from_right))
                 ragistered_address_view.visibility=View.VISIBLE
-                val animation1 = AnimationUtils.loadAnimation(context,R.anim.enter_from_right)
-                animation1.duration = 500 // animation duration
-                ragistered_address_view.startAnimation(animation1)//your_view for mine is imageView
             }
 
             address_edt.setOnClickListener{
-
-                val fragment = AddressForm.newInstance()
-                var enter : Slide?=null
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    enter = Slide()
-                    enter!!.setDuration(300)
-                    enter!!.slideEdge = Gravity.RIGHT
-                    val changeBoundsTransition : ChangeBounds = ChangeBounds()
-                    changeBoundsTransition.duration = 300
-                    fragment.sharedElementEnterTransition=changeBoundsTransition
-                    fragment.enterTransition=enter
-                }
-                homeFragment.addFragment(R.id.home_fragment_container,fragment, AddressForm.TAG,false)
-
+                (activity as EpayActivity).txt_toolbar_right.visibility= View.VISIBLE
+                ragistered_address_view.visibility=View.GONE
+                address_list_view.visibility=View.VISIBLE
             }
 
+            proceed_view_nxt.setOnClickListener{
+                val fragment = DeliveryTimeslot.newInstance()
+                (activity as EpayActivity).addFragment(R.id.epay_container,fragment, DeliveryTimeslot.TAG,true)
+            }
 
         }else{
             logd(TAG,"saveInstance NOT NULL")
-
+            (activity as EpayActivity).popWithTag(Address.TAG)
         }
 
     }
 
-    override fun onClick(user: User) {
+
+    fun setToolbarforThis(){
+
+        (activity as EpayActivity).txt_toolbar.text=getString(R.string.address)
+        (activity as EpayActivity).img_toolbar_back.setImageResource(R.drawable.back)
+        (activity as EpayActivity).img_toolbar_back.setOnClickListener {
+            loge(TAG,"address---")
+            if(address_list_view.visibility==View.VISIBLE){
+                address_list_view.visibility=View.GONE
+                ragistered_address_view.visibility=View.VISIBLE
+                (activity as EpayActivity).txt_toolbar_right.visibility=View.GONE
+            }else{
+                (activity as EpayActivity).popFragment()
+                (activity as EpayActivity).setToolbarforThis()
+            }
+        }
+        (activity as EpayActivity).txt_toolbar_right.visibility= if(address_list_view.visibility==View.VISIBLE) View.VISIBLE else View.GONE
+        (activity as EpayActivity).txt_toolbar_right.text=getString(R.string.add)
+        (activity as EpayActivity).txt_toolbar_right.setOnClickListener{
+            val fragment = AddressForm.newInstance()
+            var enter : Slide?=null
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                enter = Slide()
+                enter.setDuration(300)
+                enter.slideEdge = Gravity.BOTTOM
+                val changeBoundsTransition : ChangeBounds = ChangeBounds()
+                changeBoundsTransition.duration = 300
+                fragment.sharedElementEnterTransition=changeBoundsTransition
+                fragment.enterTransition=enter
+            }
+            addFragment(R.id.address_container,fragment, AddressForm.TAG,false)
+        }
+
+    }
+
+
+        override fun onClick(user: User) {
 
 
     }

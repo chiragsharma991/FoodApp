@@ -14,11 +14,19 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
+        android:background="@color/background_light"
         >
 
-        <include layout="@layout/toolbar">
+    <!--    <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/app_bar"
+            >-->
+            <include layout="@layout/toolbar">
 
-        </include>
+            </include>
+
+        <!--</android.support.design.widget.AppBarLayout>-->
 
 
         <FrameLayout
@@ -31,139 +39,285 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/background_light"
+                android:layout_marginTop="@dimen/_1sdp"
+                android:background="@color/white"
 
                 >
 
-                <android.support.constraint.ConstraintLayout
+                <android.support.v4.widget.NestedScrollView
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-
+                    android:fillViewport="true"
                     >
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/epay_total_lbl"
-                        style="@style/TextViewMid"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:singleLine="true"
-                        android:text="Total (2 Goods)"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/epay_total_txt"
-                        style="@style/TextViewLarge"
-                        android:singleLine="true"
-                        android:text="300,00 Kr,"
-                        android:textColor="@color/theme_color_secondary_dark"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/epay_total_lbl" />
-
-                    <android.support.v7.widget.AppCompatButton
-                        android:id="@+id/epay_continue_btn"
-                        style="@style/Button"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginEnd="72dp"
-                        android:layout_marginStart="72dp"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:backgroundTint="@color/theme_color"
-                        android:text="@string/continue_"
-                        android:textColor="@color/white"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/epay_total_txt" />
-
-
-                    <LinearLayout
+                    <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="0dp"
-                        android:layout_marginTop="8dp"
-                        android:orientation="vertical"
-                        android:background="@color/white"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/epay_continue_btn">
+                        android:layout_height="match_parent"
+
+                        >
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/epay_total_lbl"
+                            style="@style/TextViewMid"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:singleLine="true"
+                            android:text="Total (0 Goods)"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/epay_total_txt"
+                            style="@style/TextViewLarge"
+                            android:singleLine="true"
+                            android:text="00,00 Kr,"
+                            android:textColor="@color/theme_color_secondary_dark"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/epay_total_lbl" />
+
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/epay_continue_btn"
+                            style="@style/Button"
+                            android:layout_alignParentBottom="true"
+                            android:layout_marginEnd="72dp"
+                            android:layout_marginStart="72dp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:backgroundTint="@color/theme_color"
+                            android:text="@string/continue_"
+                            android:textColor="@color/white"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/epay_total_txt" />
 
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:id="@+id/your_orderview"
-                            android:layout_height="wrap_content"
-                            android:orientation="horizontal"
-                            android:padding="@dimen/_8sdp"
-                            android:background="@color/background_light"
-                            >
+                            android:layout_height="0dp"
+                            android:layout_marginTop="8dp"
+                            android:orientation="vertical"
+                            android:background="@color/white"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/epay_continue_btn">
 
-                            <android.support.v7.widget.AppCompatTextView
-                                style="@style/TextViewMid"
-                                android:layout_width="0dp"
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:id="@+id/your_orderview"
                                 android:layout_height="wrap_content"
-                                android:singleLine="true"
-                                android:text="Your Order"
-                                android:gravity="start"
-                                android:layout_weight="1.7"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                android:orientation="horizontal"
+                                android:padding="@dimen/_8sdp"
+                                android:background="@color/background_light"
+                                >
 
-                            <android.support.v7.widget.AppCompatTextView
-                                style="@style/TextViewMid"
-                                android:singleLine="true"
-                                android:text="Right"
-                                android:layout_weight="0.3"
-                                android:gravity="end"
-                                android:textColor="@color/theme_color"
-                                android:layout_alignParentRight="true"
-                                app:layout_constraintEnd_toEndOf="parent"
-                                app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toTopOf="parent" />
+                                <android.support.v7.widget.AppCompatTextView
+                                    style="@style/TextViewMid"
+                                    android:layout_width="0dp"
+                                    android:layout_height="wrap_content"
+                                    android:singleLine="true"
+                                    android:text="Your Order"
+                                    android:gravity="start"
+                                    android:layout_weight="1.7"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+                                <android.support.v7.widget.AppCompatTextView
+                                    style="@style/TextViewMid"
+                                    android:singleLine="true"
+                                    android:text="Right"
+                                    android:layout_weight="0.3"
+                                    android:gravity="end"
+                                    android:textColor="@color/theme_color"
+                                    android:layout_alignParentRight="true"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toTopOf="parent" />
+
+
+                            </LinearLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                >
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical"
+                                    android:id="@+id/add_parentitem_view"
+                                    >
+
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_16sdp"
+                                    android:layout_marginStart="@dimen/_8sdp"
+                                    android:layout_marginEnd="@dimen/_8sdp"
+                                    android:orientation="horizontal"
+                                    >
+                                    <android.support.v7.widget.AppCompatTextView
+                                        style="@style/TextViewSmall"
+                                        android:singleLine="true"
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="0dp"
+                                        android:gravity="start"
+                                        android:layout_weight="1.7"
+                                        android:layout_marginEnd="@dimen/_8sdp"
+                                        android:text="Subtotal"
+                                        android:textStyle="bold"
+                                        android:textColor="@color/black_light"
+                                        />
+
+                                    <android.support.v7.widget.AppCompatTextView
+                                        style="@style/TextViewSmall"
+                                        android:id="@+id/subtotal"
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="0dp"
+                                        android:singleLine="true"
+                                        android:text="45,00kr"
+                                        android:textStyle="bold"
+                                        android:gravity="end"
+                                        android:layout_weight="0.3"
+                                        android:layout_alignParentEnd="true"
+                                        android:textColor="@color/black_light"
+                                        />
+
+
+
+
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_8sdp"
+                                    android:layout_marginEnd="@dimen/_8sdp"
+                                    android:orientation="horizontal"
+                                    >
+                                    <android.support.v7.widget.AppCompatTextView
+                                        style="@style/TextViewSmall"
+                                        android:singleLine="true"
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="0dp"
+                                        android:gravity="start"
+                                        android:layout_weight="1.7"
+                                        android:layout_marginEnd="@dimen/_8sdp"
+                                        android:text="Tax"
+                                        android:textColor="@color/black_light"
+                                        />
+
+                                    <android.support.v7.widget.AppCompatTextView
+                                        style="@style/TextViewSmall"
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="0dp"
+                                        android:singleLine="true"
+                                        android:text="0,00kr"
+                                        android:gravity="end"
+                                        android:layout_weight="0.3"
+                                        android:layout_alignParentEnd="true"
+                                        android:textColor="@color/black_light"
+                                        />
+
+
+
+
+                                </LinearLayout>
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginTop="@dimen/_16sdp"
+                                    android:layout_marginStart="@dimen/_8sdp"
+                                    android:layout_marginEnd="@dimen/_8sdp"
+                                    android:orientation="horizontal"
+                                    >
+                                    <android.support.v7.widget.AppCompatTextView
+                                        style="@style/TextViewSmall"
+                                        android:singleLine="true"
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="0dp"
+                                        android:gravity="start"
+                                        android:layout_weight="1.7"
+                                        android:layout_marginEnd="@dimen/_8sdp"
+                                        android:text="Total"
+                                        android:textStyle="bold"
+                                        android:textColor="@color/black_light"
+                                        />
+
+                                    <android.support.v7.widget.AppCompatTextView
+                                        style="@style/TextViewSmall"
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="0dp"
+                                        android:id="@+id/total"
+                                        android:singleLine="true"
+                                        android:text="145,00kr"
+                                        android:textStyle="bold"
+                                        android:gravity="end"
+                                        android:layout_weight="0.3"
+                                        android:layout_alignParentEnd="true"
+                                        android:textColor="@color/black_light"
+                                        />
+
+
+
+
+                                </LinearLayout>
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_marginStart="@dimen/_8sdp"
+                                    android:layout_marginEnd="@dimen/_8sdp"
+                                    android:layout_marginBottom="@dimen/_8sdp"
+                                    android:orientation="horizontal"
+                                    >
+                                    <android.support.v7.widget.AppCompatTextView
+                                        style="@style/TextViewSmall"
+                                        android:singleLine="true"
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="0dp"
+                                        android:gravity="start"
+                                        android:layout_weight="1.7"
+                                        android:layout_marginEnd="@dimen/_8sdp"
+                                        android:text="Restaurant Address:"
+                                        android:textColor="@color/black_light"
+                                        />
+
+                                    <android.support.v7.widget.AppCompatTextView
+                                        style="@style/TextViewSmall"
+                                        android:layout_height="wrap_content"
+                                        android:layout_width="0dp"
+                                        android:singleLine="true"
+                                        android:text="5,00kr"
+                                        android:gravity="end"
+                                        android:visibility="invisible"
+                                        android:layout_weight="0.3"
+                                        android:layout_alignParentEnd="true"
+                                        android:textColor="@color/black_light"
+                                        />
+
+
+
+
+                                </LinearLayout>
+
+                            </LinearLayout>
+
+
 
 
                         </LinearLayout>
 
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:padding="@dimen/_8sdp"
-                            android:orientation="horizontal"
-                            >
-                            <android.support.v7.widget.AppCompatTextView
-                                style="@style/TextViewSmall"
-                                android:singleLine="true"
-                                android:gravity="start"
-                                android:layout_weight="1.7"
-                                android:text="Margherita pizza"
-                                android:textColor="@color/black_light"
-                                />
-
-                            <android.support.v7.widget.AppCompatTextView
-                                style="@style/TextViewSmall"
-                                android:singleLine="true"
-                                android:text="45,00kr"
-                                android:gravity="end"
-                                android:layout_weight="0.3"
-                                android:layout_alignParentEnd="true"
-                                android:textColor="@color/black_light"
-                                />
 
 
+                    </android.support.constraint.ConstraintLayout>
+                </android.support.v4.widget.NestedScrollView>
 
-
-                        </LinearLayout>
-
-
-
-
-
-                    </LinearLayout>
-
-
-
-                </android.support.constraint.ConstraintLayout>
 
 
             </RelativeLayout>

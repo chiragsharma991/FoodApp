@@ -192,6 +192,7 @@ class EditCart : BaseFragment(), ICardRegistrationCallback, CardFormEditText.IOn
     // Ragistration callbacks
 
     override fun onRegistrationSuccess(creditcard: CreditCard?) {
+/*
         loge("TAG", "success---")
         edit_card_view.visibility=View.GONE
         processDialog.visibility=View.GONE
@@ -210,18 +211,19 @@ class EditCart : BaseFragment(), ICardRegistrationCallback, CardFormEditText.IOn
         }
         //paymentHandler.setCreditCardAlias(this, aliasInput, creditCard.getCreditCardToken(), null)
 
+*/
 
     }
 
     override fun onRegistrationError(p0: RequestError?) {
         loge("TAG", "Request error---")
-        edit_card_view.visibility=View.GONE
+    /*    edit_card_view.visibility=View.GONE
         processDialog.visibility=View.GONE
         transaction_status.visibility=View.VISIBLE
         tx_status_float.setBackgroundColor(ContextCompat.getColor(context!!,R.color.red))
         transaction_status.startAnimation(rightToLeftAnimation(context!!))//your_view for mine is imageView
         tx_status_float.setImageResource(R.drawable.animated_vector_cross)
-        (tx_status_float.getDrawable() as Animatable).start()
+        (tx_status_float.getDrawable() as Animatable).start()*/
 
     }
 

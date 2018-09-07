@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
+import dk.eatmore.foodapp.activity.main.epay.EpayActivity
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.adapter.cart.CartViewAdapter
 import dk.eatmore.foodapp.databinding.RagistrationFormBinding
@@ -50,17 +51,19 @@ class AddressForm : BaseFragment() {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
-            val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
-            homeFragment=(fragmentof as HomeContainerFragment).getHomeFragment()
-            DrawableCompat.setTint(ContextCompat.getDrawable(activity!!, R.drawable.close)!!, ContextCompat.getColor(activity!!, R.color.theme_color));
-            txt_toolbar.text = ""
-            txt_toolbar_right.visibility = View.VISIBLE
-            txt_toolbar_right.text = getString(R.string.ok)
-            toolbar.setNavigationIcon(ContextCompat.getDrawable(activity!!, R.drawable.close))
-            toolbar.setNavigationOnClickListener {
-                (activity as HomeActivity).onBackPressed()
+            setToolbarforThis()
 
-            }
+            //    val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
+        //    homeFragment=(fragmentof as HomeContainerFragment).getHomeFragment()
+           // DrawableCompat.setTint(ContextCompat.getDrawable(activity!!, R.drawable.close)!!, ContextCompat.getColor(activity!!, R.color.theme_color));
+          //  txt_toolbar.text = ""
+          //  txt_toolbar_right.visibility = View.VISIBLE
+          //  txt_toolbar_right.text = getString(R.string.ok)
+          //  toolbar.setNavigationIcon(ContextCompat.getDrawable(activity!!, R.drawable.close))
+         //   toolbar.setNavigationOnClickListener {
+          //      (activity as HomeActivity).onBackPressed()
+
+         //   }
 
         }else{
 
@@ -69,6 +72,26 @@ class AddressForm : BaseFragment() {
 
     }
 
+    fun setToolbarforThis(){
+        (activity as EpayActivity).txt_toolbar.text=getString(R.string.add_new_address)
+        (activity as EpayActivity).txt_toolbar_right.text=getString(R.string.ok)
+        (activity as EpayActivity).img_toolbar_back.setOnClickListener{
+            loge(Address.TAG,"addressForm---")
+
+            if(this.isVisible){
+                (parentFragment as Address).setToolbarforThis()
+                (parentFragment as Address).popFragment()
+            }
+        }
+
+        (activity as EpayActivity).txt_toolbar_right.setOnClickListener{
+
+        }
 
 
-}
+    }
+
+
+
+
+    }

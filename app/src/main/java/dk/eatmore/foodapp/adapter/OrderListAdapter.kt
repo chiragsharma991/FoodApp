@@ -42,16 +42,16 @@ class OrderListAdapter(val homefragment: HomeFragment, val callback: AdapterList
                 listner.itemClicked(position)
             }
             holder.binding.orderNow.setOnClickListener{
-                val fragment = Address.newInstance()
-                val enter : Slide?
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    enter = Slide()
-                    enter.setDuration(300)
-                    enter.slideEdge = Gravity.RIGHT
-                    fragment.enterTransition=enter
-                }
-
-                homefragment.addFragment(R.id.home_fragment_container,fragment,Address.TAG,false)
+//                val fragment = Address.newInstance()
+//                val enter : Slide?
+//                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+//                    enter = Slide()
+//                    enter.setDuration(300)
+//                    enter.slideEdge = Gravity.RIGHT
+//                    fragment.enterTransition=enter
+//                }
+//
+//                homefragment.addFragment(R.id.home_fragment_container,fragment,Address.TAG,false)
 
             }
 

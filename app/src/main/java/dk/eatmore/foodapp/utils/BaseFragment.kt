@@ -184,6 +184,16 @@ abstract class BaseFragment : Fragment() {
         return activeNetworkInfo != null && activeNetworkInfo.isConnectedOrConnecting
     }
 
+    fun seterror(view : View){
+        if(!isInternetAvailable()){
+            showSnackBar(view,getString(R.string.internet_not_available))
+        }else{
+            showSnackBar(view,getString(R.string.error_404))
+
+
+        }
+    }
+
 
     fun showSnackBar(view: View, string: String) {
         Snackbar.make(view, string, Snackbar.LENGTH_SHORT).show()

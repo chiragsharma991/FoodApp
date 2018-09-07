@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="vertical"
+    >
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:orientation="horizontal"
+        >
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/TextViewSmall"
+            android:singleLine="true"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:gravity="start"
+            android:id="@+id/item_name"
+            android:layout_weight="1.7"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:textColor="@color/black_light"
+            />
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/TextViewSmall"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:singleLine="true"
+            android:id="@+id/item_price"
+            android:gravity="end"
+            android:layout_weight="0.3"
+            android:layout_alignParentEnd="true"
+            android:textColor="@color/black_light"
+            />
+
+
+
+
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/add_subitem_view"
+
+        >
+
+
+    </LinearLayout>
+
+
+</LinearLayout>
