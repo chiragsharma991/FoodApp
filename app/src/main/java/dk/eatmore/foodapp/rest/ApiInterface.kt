@@ -70,6 +70,14 @@ interface ApiInterface {
             @Field("p_id") p_id: String
     ): Call<ProductDetails>
 
+
+    @FormUrlEncoded
+    @POST("Openinghours/openinghours/all_record")
+    fun openingHours(
+            @Field("r_token") r_token: String ,
+            @Field("r_key") r_key: String
+    ): Call<JsonObject>
+
     @FormUrlEncoded
     @POST("Cart/cart/restpickupdeltime")
     fun getPickuptime(

@@ -1,20 +1,33 @@
 package dk.eatmore.foodapp.activity.main.epay.fragment
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
-import android.os.Build
-import android.os.Bundle
+import android.graphics.drawable.Animatable
+import android.net.Uri
+import android.os.*
 import android.support.constraint.ConstraintSet
 import android.support.transition.ChangeBounds
 import android.support.transition.TransitionManager
+import android.support.v4.content.ContextCompat
+import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.support.v7.widget.LinearLayoutManager
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.transition.Transition
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AnimationUtils
 import android.view.animation.AnticipateOvershootInterpolator
+import android.widget.Toast
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
@@ -32,7 +45,7 @@ import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.paymentmethod.*
-import kotlinx.android.synthetic.main.toolbar.*
+import kotlinx.android.synthetic.main.toolbar_plusone.*
 
 
 class Paymentmethod : BaseFragment() {
@@ -42,10 +55,18 @@ class Paymentmethod : BaseFragment() {
     private var timeslot: ArrayList<String>?=null
     private var selectedtimeslot_position : Int = 0
     private lateinit var mAdapter : PaymentmethodAdapter
+    lateinit var currentView: String
+
+
+
+
 
 
     companion object {
         val TAG = "Paymentmethod"
+
+
+
         fun newInstance(): Paymentmethod {
             return Paymentmethod()
         }
@@ -62,15 +83,27 @@ class Paymentmethod : BaseFragment() {
     }
 
 
+
+
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
+            currentView=Constants.PAYMENTMETHOD
             setToolbarforThis()
+            proceed_view.setOnClickListener{(activity as EpayActivity).finishActivity()}
+            transaction_statusview.visibility=View.GONE
+            processDialog.visibility=View.VISIBLE
           //  fetch_PickupTime()
             recycler_view.apply {
                 val list= arrayOfNulls<Int>(2)
                 mAdapter = PaymentmethodAdapter(context!!,list, object : PaymentmethodAdapter.AdapterListener {
                     override fun itemClicked(parentView: Boolean, position: Int) {
+                        currentView=Constants.PROGRESSDIALOG
+                        (activity as EpayActivity).img_toolbar_back.setImageResource(R.drawable.close)
+                        (activity as EpayActivity).img_toolbar_back.setOnClickListener{
+                            if(currentView !=Constants.PROGRESSDIALOG)
+                            (activity as EpayActivity).finishActivity()
+                        }
                         showComponents()
                     }
                 })
@@ -139,20 +172,97 @@ class Paymentmethod : BaseFragment() {
 
 
     private fun showComponents(){
-
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Log.e("run","success---")
             val constraintSet = ConstraintSet()
             constraintSet.clone(activity, R.layout.transaction_status)
 
             val transition = ChangeBounds()
-            //transition.interpolator = AnticipateOvershootInterpolator(1.0f)
-            transition.duration = 800
-            //    transition.setInterpolator(new FastOutSlowInInterpolator());
+            transition.interpolator = AnticipateOvershootInterpolator(1.0f)
+             transition.duration = 800
+                transition.setInterpolator( FastOutSlowInInterpolator());
 
 
             TransitionManager.beginDelayedTransition(constraint,transition)
             constraintSet.applyTo(constraint) //here constraint is the name of view to which we are applying the constraintSet
+            Handler().postDelayed({
+                transaction_statusview.visibility=View.VISIBLE
+                processDialog.visibility=View.GONE
+
+                lottie_transaction_status.visibility=View.VISIBLE
+                lottie_transaction_status.scale=0.4f
+                status_view.visibility=View.INVISIBLE
+
+                status_icon.setImageResource(R.drawable.animated_vector_cross)
+                (status_icon.getDrawable() as Animatable).start()
+
+                lottie_transaction_status.playAnimation()
+                val v : Vibrator = context!!.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) v.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
+                else v.vibrate(200);
+                addspantext()
+                currentView=Constants.PAYMENTSTATUS
+
+
+            },4000)
+
+
+        }
+
+
+    }
+
+
+    fun addspantext(){
+        val span = SpannableString(getString(R.string.if_you_have_any_questions)+ " " + "88826543")
+        span.setSpan(clickableSpan, getString(R.string.if_you_have_any_questions).trim({ it <= ' ' }).length+1,
+                getString(R.string.if_you_have_any_questions).trim({ it <= ' ' }).length + 8 + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        phone_txt.text = span
+        phone_txt.movementMethod = LinkMovementMethod.getInstance()
+
+    }
+
+    val clickableSpan = object : ClickableSpan() {
+        var dialog: AlertDialog? = null
+        override fun onClick(textView: View) {
+            Log.e(TAG, "onClick:--- ")
+            dialog = AlertDialog.Builder(activity).setMessage("Do you want to call ${"88826543"}").setCancelable(true).setPositiveButton("yes") { dialogInterface, i ->
+                if (isPermissionGranted()) {
+                    val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "88826543"))
+                    startActivity(intent)
+                }
+            }.setNegativeButton("no") { dialogInterface, i -> dialog!!.dismiss() }.show()
+        }
+
+        override fun updateDrawState(ds: TextPaint) {
+            //
+            super.updateDrawState(ds)
+            ds.isUnderlineText = true
+            //                ds.setColor(getResources().getColor(R.color.orange));
+            try {
+                val colour = ContextCompat.getColor(context!!, R.color.dark_blue)
+                ds.color = colour
+            } catch (e: Exception) {
+                Log.e(TAG, "updateDrawState: error " + e.message)
+            }
+
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        loge(TAG,"permission result---")
+        when (requestCode) {
+            1 -> {
+
+                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" +"88826543"))
+                    startActivity(intent)
+                    //    Toast.makeText(this, getString(R.string.permission_granted), Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
+                }
+                return
+            }
         }
 
 

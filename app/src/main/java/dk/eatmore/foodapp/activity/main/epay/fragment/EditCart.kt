@@ -67,7 +67,7 @@ class EditCart : BaseFragment(), ICardRegistrationCallback, CardFormEditText.IOn
             clickEvent =MyClickHandler(this)
             binding.handlers=clickEvent
             edit_card_view.visibility=View.VISIBLE
-            processDialog.visibility=View.GONE
+        //    processDialog.visibility=View.GONE
             transaction_status.visibility=View.GONE
             secure_payment_btn.setEnabled(false)
             card_number_edt.requestFocus() ; secure_payment_btn.text="Enter valid card number"
@@ -123,7 +123,7 @@ class EditCart : BaseFragment(), ICardRegistrationCallback, CardFormEditText.IOn
 
 
     private val onRegisterButtonClickListener = View.OnClickListener {
-        EpayActivity.amIFinish=false
+    /*    EpayActivity.amIFinish=false
         edit_card_view.visibility=View.GONE
         processDialog.visibility=View.VISIBLE
         transaction_status.visibility=View.GONE
@@ -143,7 +143,7 @@ class EditCart : BaseFragment(), ICardRegistrationCallback, CardFormEditText.IOn
             )
 
 
-        },1000)
+        },1000)*/
 
 
     }

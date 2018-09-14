@@ -21,7 +21,11 @@ import dk.eatmore.foodapp.activity.main.cart.CalculateAttribute
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
 import dk.eatmore.foodapp.activity.main.cart.fragment.OnlyExtratoppings
 import dk.eatmore.foodapp.activity.main.epay.fragment.AddCart
+import dk.eatmore.foodapp.activity.main.epay.fragment.DeliveryTimeslot
+import dk.eatmore.foodapp.activity.main.epay.fragment.Paymentmethod
 import dk.eatmore.foodapp.fragment.Dashboard.Home.Address
+import dk.eatmore.foodapp.fragment.Dashboard.Home.AddressForm
+import dk.eatmore.foodapp.fragment.ProductInfo.CategoryList
 import dk.eatmore.foodapp.model.cart.ProductAttributeListItem
 import dk.eatmore.foodapp.model.cart.ProductDetails
 import dk.eatmore.foodapp.model.cart.ProductIngredientsItem
@@ -33,6 +37,7 @@ import kotlinx.android.synthetic.main.activity_epay.*
 import kotlinx.android.synthetic.main.dynamic_raw_item.*
 import kotlinx.android.synthetic.main.dynamic_raw_item.view.*
 import kotlinx.android.synthetic.main.dynamic_raw_subitem.view.*
+import kotlinx.android.synthetic.main.paymentmethod.*
 import kotlinx.android.synthetic.main.toolbar.*
 
 class EpayActivity : BaseActivity() {
@@ -198,18 +203,44 @@ class EpayActivity : BaseActivity() {
 
 
     override fun onBackPressed() {
-    /*    if(amIFinish){
-            if(!popFragment()) {
-                finishActivity()
+        if(supportFragmentManager.backStackEntryCount > 0){
+            val fragment =supportFragmentManager.findFragmentByTag(supportFragmentManager.getBackStackEntryAt(supportFragmentManager.backStackEntryCount-1).name)
+            if(fragment !=null && fragment.isVisible){
+                  when (fragment) {
+
+                        is Paymentmethod -> {
+                          when(fragment.currentView){
+                              Constants.PAYMENTMETHOD -> {fragment.onBackpress() }
+                              Constants.PROGRESSDIALOG ->{ }
+                              Constants.PAYMENTSTATUS -> {finishActivity()}
+                          }
+                        }
+                        is DeliveryTimeslot -> fragment.onBackpress()
+
+                        is Address ->{
+                            // test this condition if fragment have child fragment then:
+                            if(fragment.childFragmentManager.backStackEntryCount > 0){
+
+                                val anychild_fragment =fragment.childFragmentManager.findFragmentByTag(fragment.childFragmentManager.getBackStackEntryAt(fragment.childFragmentManager.backStackEntryCount-1).name)
+
+                                if(anychild_fragment is AddressForm) anychild_fragment.onBackpress()
+
+                            }else{
+                                fragment.onBackpress()
+                            }
+
+                        }
+                        else -> finishActivity()
+
+                  }
             }
-        }*/
+        }
+        else finishActivity()
     }
 
 
-
-
     fun finishActivity(){
-        DrawableCompat.setTint(ContextCompat.getDrawable(this,R.drawable.close)!!, ContextCompat.getColor(this, R.color.white));
+       // DrawableCompat.setTint(ContextCompat.getDrawable(this,R.drawable.close)!!, ContextCompat.getColor(this, R.color.white));
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
             finishAfterTransition()
         else

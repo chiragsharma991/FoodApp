@@ -51,6 +51,10 @@ class ApiCall {
             return getApiInterface().viewcart(jsonObject)
         }
 
+        fun openingHours(r_token : String , r_key : String) : Call<JsonObject> {
+            return getApiInterface().openingHours(r_token, r_key)
+        }
+
 
     }
 

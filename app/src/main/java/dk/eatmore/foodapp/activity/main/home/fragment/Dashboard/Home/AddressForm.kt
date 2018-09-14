@@ -75,20 +75,19 @@ class AddressForm : BaseFragment() {
     fun setToolbarforThis(){
         (activity as EpayActivity).txt_toolbar.text=getString(R.string.add_new_address)
         (activity as EpayActivity).txt_toolbar_right.text=getString(R.string.ok)
-        (activity as EpayActivity).img_toolbar_back.setOnClickListener{
-            loge(Address.TAG,"addressForm---")
-
-            if(this.isVisible){
-                (parentFragment as Address).setToolbarforThis()
-                (parentFragment as Address).popFragment()
-            }
-        }
-
+        (activity as EpayActivity).img_toolbar_back.setOnClickListener{ onBackpress() }
         (activity as EpayActivity).txt_toolbar_right.setOnClickListener{
 
         }
 
 
+    }
+
+    fun onBackpress(){
+        if(this.isVisible){
+            (parentFragment as Address).setToolbarforThis()
+            (parentFragment as Address).popFragment()
+        }
     }
 
 

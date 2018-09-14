@@ -17,14 +17,14 @@
         android:background="@color/background_light"
         >
 
-    <!--    <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:id="@+id/app_bar"
-            >-->
-            <include layout="@layout/toolbar">
+        <!--    <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/app_bar"
+                >-->
+        <include layout="@layout/toolbar">
 
-            </include>
+        </include>
 
         <!--</android.support.design.widget.AppBarLayout>-->
 
@@ -49,6 +49,7 @@
                     android:layout_height="match_parent"
                     android:fillViewport="true"
                     >
+
 
                     <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
@@ -94,45 +95,45 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="0dp"
+                            android:layout_height="wrap_content"
                             android:layout_marginTop="8dp"
-                            android:orientation="vertical"
                             android:background="@color/white"
+                            android:orientation="vertical"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/epay_continue_btn">
+                            app:layout_constraintTop_toBottomOf="@+id/epay_continue_btn"
+                            app:layout_constraintVertical_bias="0.0">
 
 
                             <LinearLayout
-                                android:layout_width="match_parent"
                                 android:id="@+id/your_orderview"
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="horizontal"
-                                android:padding="@dimen/_8sdp"
                                 android:background="@color/background_light"
-                                >
+                                android:orientation="horizontal"
+                                android:padding="@dimen/_8sdp">
 
                                 <android.support.v7.widget.AppCompatTextView
                                     style="@style/TextViewMid"
                                     android:layout_width="0dp"
                                     android:layout_height="wrap_content"
+                                    android:layout_weight="1.7"
+                                    android:gravity="start"
                                     android:singleLine="true"
                                     android:text="Your Order"
-                                    android:gravity="start"
-                                    android:layout_weight="1.7"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
 
                                 <android.support.v7.widget.AppCompatTextView
                                     style="@style/TextViewMid"
-                                    android:singleLine="true"
-                                    android:text="Right"
+                                    android:layout_alignParentRight="true"
                                     android:layout_weight="0.3"
                                     android:gravity="end"
+                                    android:singleLine="true"
+                                    android:text="Right"
                                     android:textColor="@color/theme_color"
-                                    android:layout_alignParentRight="true"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -141,172 +142,189 @@
                             </LinearLayout>
 
 
-                            <LinearLayout
+                            <dk.eatmore.foodapp.utils.ZigzagView
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
+                                app:zigzagBackgroundColor="@color/white"
+                                app:zigzagElevation="2dp"
+                                app:zigzagHeight="5dp"
+                                android:layout_marginBottom="@dimen/_8sdp"
+                                app:zigzagShadowAlpha="0.9"
+                                app:zigzagSides="bottom"
                                 >
-                                <LinearLayout
+                                <RelativeLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="vertical"
-                                    android:id="@+id/add_parentitem_view"
-                                    >
+                                    android:layout_height="wrap_content">
 
-                                </LinearLayout>
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_16sdp"
-                                    android:layout_marginStart="@dimen/_8sdp"
-                                    android:layout_marginEnd="@dimen/_8sdp"
-                                    android:orientation="horizontal"
-                                    >
-                                    <android.support.v7.widget.AppCompatTextView
-                                        style="@style/TextViewSmall"
-                                        android:singleLine="true"
+                                    <LinearLayout
+                                        android:id="@+id/add_parentitem_view"
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_width="0dp"
-                                        android:gravity="start"
-                                        android:layout_weight="1.7"
+                                        android:orientation="vertical">
+
+                                    </LinearLayout>
+
+                                    <ImageView
+                                        android:layout_width="match_parent"
+                                        android:layout_height="2dp"
+                                        android:layout_below="@+id/add_parentitem_view"
                                         android:layout_marginEnd="@dimen/_8sdp"
-                                        android:text="Subtotal"
-                                        android:textStyle="bold"
-                                        android:textColor="@color/black_light"
-                                        />
+                                        android:layout_marginStart="@dimen/_8sdp"
+                                        android:layout_marginTop="@dimen/_8sdp"
+                                        android:layerType="software"
+                                        android:src="@drawable/dashline" />
 
-                                    <android.support.v7.widget.AppCompatTextView
-                                        style="@style/TextViewSmall"
-                                        android:id="@+id/subtotal"
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_width="0dp"
-                                        android:singleLine="true"
-                                        android:text="45,00kr"
-                                        android:textStyle="bold"
-                                        android:gravity="end"
-                                        android:layout_weight="0.3"
-                                        android:layout_alignParentEnd="true"
-                                        android:textColor="@color/black_light"
-                                        />
+                                        android:layout_below="@+id/add_parentitem_view"
+                                        android:orientation="vertical">
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginEnd="@dimen/_8sdp"
+                                            android:layout_marginStart="@dimen/_8sdp"
+                                            android:layout_marginTop="@dimen/_16sdp"
+                                            android:orientation="horizontal">
+
+                                            <android.support.v7.widget.AppCompatTextView
+                                                style="@style/TextViewSmall"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginEnd="@dimen/_8sdp"
+                                                android:layout_weight="1.2"
+                                                android:gravity="start"
+                                                android:singleLine="true"
+                                                android:text="Subtotal"
+                                                android:textColor="@color/black_light"
+                                                android:textStyle="bold" />
+
+                                            <android.support.v7.widget.AppCompatTextView
+                                                android:id="@+id/subtotal"
+                                                style="@style/TextViewSmall"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_alignParentEnd="true"
+                                                android:layout_weight="0.8"
+                                                android:gravity="end"
+                                                android:singleLine="true"
+                                                android:text="45,00kr"
+                                                android:textColor="@color/black_light"
+                                                android:textStyle="bold" />
+
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginEnd="@dimen/_8sdp"
+                                            android:layout_marginStart="@dimen/_8sdp"
+                                            android:orientation="horizontal">
+
+                                            <android.support.v7.widget.AppCompatTextView
+                                                style="@style/TextViewSmall"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginEnd="@dimen/_8sdp"
+                                                android:layout_weight="1.7"
+                                                android:gravity="start"
+                                                android:singleLine="true"
+                                                android:text="Tax"
+                                                android:textColor="@color/black_light" />
+
+                                            <android.support.v7.widget.AppCompatTextView
+                                                style="@style/TextViewSmall"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_alignParentEnd="true"
+                                                android:layout_weight="0.3"
+                                                android:gravity="end"
+                                                android:singleLine="true"
+                                                android:text="0,00kr"
+                                                android:textColor="@color/black_light" />
+
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginEnd="@dimen/_8sdp"
+                                            android:layout_marginStart="@dimen/_8sdp"
+                                            android:layout_marginTop="@dimen/_8sdp"
+                                            android:orientation="horizontal">
+
+                                            <android.support.v7.widget.AppCompatTextView
+                                                style="@style/TextViewSmall"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginEnd="@dimen/_8sdp"
+                                                android:layout_weight="1.2"
+                                                android:gravity="start"
+                                                android:singleLine="true"
+                                                android:text="Total"
+                                                android:textColor="@color/black_light"
+                                                android:textStyle="bold" />
+
+                                            <android.support.v7.widget.AppCompatTextView
+                                                android:id="@+id/total"
+                                                style="@style/TextViewSmall"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_alignParentEnd="true"
+                                                android:layout_weight="0.8"
+                                                android:gravity="end"
+                                                android:singleLine="true"
+                                                android:text="145,00kr"
+                                                android:textColor="@color/black_light"
+                                                android:textStyle="bold" />
+
+
+                                        </LinearLayout>
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginBottom="@dimen/_8sdp"
+                                            android:layout_marginEnd="@dimen/_8sdp"
+                                            android:layout_marginStart="@dimen/_8sdp"
+                                            android:orientation="horizontal">
+
+                                            <android.support.v7.widget.AppCompatTextView
+                                                style="@style/TextViewSmall"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginEnd="@dimen/_8sdp"
+                                                android:layout_weight="1.2"
+                                                android:gravity="start"
+                                                android:singleLine="true"
+                                                android:text="Restaurant Address:"
+                                                android:textColor="@color/black_light" />
+
+                                            <android.support.v7.widget.AppCompatTextView
+                                                style="@style/TextViewSmall"
+                                                android:layout_width="0dp"
+                                                android:layout_height="wrap_content"
+                                                android:layout_alignParentEnd="true"
+                                                android:layout_weight="0.8"
+                                                android:gravity="end"
+                                                android:singleLine="true"
+                                                android:text="5,00kr"
+                                                android:textColor="@color/black_light"
+                                                android:visibility="invisible" />
+
+
+                                        </LinearLayout>
+                                    </LinearLayout>
+
+
+                                </RelativeLayout>
 
 
 
-
-                                </LinearLayout>
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_8sdp"
-                                    android:layout_marginEnd="@dimen/_8sdp"
-                                    android:orientation="horizontal"
-                                    >
-                                    <android.support.v7.widget.AppCompatTextView
-                                        style="@style/TextViewSmall"
-                                        android:singleLine="true"
-                                        android:layout_height="wrap_content"
-                                        android:layout_width="0dp"
-                                        android:gravity="start"
-                                        android:layout_weight="1.7"
-                                        android:layout_marginEnd="@dimen/_8sdp"
-                                        android:text="Tax"
-                                        android:textColor="@color/black_light"
-                                        />
-
-                                    <android.support.v7.widget.AppCompatTextView
-                                        style="@style/TextViewSmall"
-                                        android:layout_height="wrap_content"
-                                        android:layout_width="0dp"
-                                        android:singleLine="true"
-                                        android:text="0,00kr"
-                                        android:gravity="end"
-                                        android:layout_weight="0.3"
-                                        android:layout_alignParentEnd="true"
-                                        android:textColor="@color/black_light"
-                                        />
-
-
-
-
-                                </LinearLayout>
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_16sdp"
-                                    android:layout_marginStart="@dimen/_8sdp"
-                                    android:layout_marginEnd="@dimen/_8sdp"
-                                    android:orientation="horizontal"
-                                    >
-                                    <android.support.v7.widget.AppCompatTextView
-                                        style="@style/TextViewSmall"
-                                        android:singleLine="true"
-                                        android:layout_height="wrap_content"
-                                        android:layout_width="0dp"
-                                        android:gravity="start"
-                                        android:layout_weight="1.7"
-                                        android:layout_marginEnd="@dimen/_8sdp"
-                                        android:text="Total"
-                                        android:textStyle="bold"
-                                        android:textColor="@color/black_light"
-                                        />
-
-                                    <android.support.v7.widget.AppCompatTextView
-                                        style="@style/TextViewSmall"
-                                        android:layout_height="wrap_content"
-                                        android:layout_width="0dp"
-                                        android:id="@+id/total"
-                                        android:singleLine="true"
-                                        android:text="145,00kr"
-                                        android:textStyle="bold"
-                                        android:gravity="end"
-                                        android:layout_weight="0.3"
-                                        android:layout_alignParentEnd="true"
-                                        android:textColor="@color/black_light"
-                                        />
-
-
-
-
-                                </LinearLayout>
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_marginStart="@dimen/_8sdp"
-                                    android:layout_marginEnd="@dimen/_8sdp"
-                                    android:layout_marginBottom="@dimen/_8sdp"
-                                    android:orientation="horizontal"
-                                    >
-                                    <android.support.v7.widget.AppCompatTextView
-                                        style="@style/TextViewSmall"
-                                        android:singleLine="true"
-                                        android:layout_height="wrap_content"
-                                        android:layout_width="0dp"
-                                        android:gravity="start"
-                                        android:layout_weight="1.7"
-                                        android:layout_marginEnd="@dimen/_8sdp"
-                                        android:text="Restaurant Address:"
-                                        android:textColor="@color/black_light"
-                                        />
-
-                                    <android.support.v7.widget.AppCompatTextView
-                                        style="@style/TextViewSmall"
-                                        android:layout_height="wrap_content"
-                                        android:layout_width="0dp"
-                                        android:singleLine="true"
-                                        android:text="5,00kr"
-                                        android:gravity="end"
-                                        android:visibility="invisible"
-                                        android:layout_weight="0.3"
-                                        android:layout_alignParentEnd="true"
-                                        android:textColor="@color/black_light"
-                                        />
-
-
-
-
-                                </LinearLayout>
-
-                            </LinearLayout>
+                            </dk.eatmore.foodapp.utils.ZigzagView>
 
 
 
@@ -316,6 +334,11 @@
 
 
                     </android.support.constraint.ConstraintLayout>
+
+
+
+
+
                 </android.support.v4.widget.NestedScrollView>
 
 

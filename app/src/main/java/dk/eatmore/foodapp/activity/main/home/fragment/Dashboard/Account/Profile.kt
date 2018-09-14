@@ -26,6 +26,8 @@ class Profile : BaseFragment() {
 
     private lateinit var binding: FragmentProfileBinding
     private var profileEdit_fragment: ProfileEdit? = null
+    private var healthreport: HealthReport? = null
+    private var termscondition: TermsCondition? = null
     private var coupan_fragment: Coupan? = null
     private lateinit var ui_model: UIModel
 
@@ -58,13 +60,25 @@ class Profile : BaseFragment() {
             ui_model.init()
 
 
+            health_report.setOnClickListener {
+                healthreport = HealthReport.newInstance()
+                addFragment(R.id.profile_container, healthreport!!, HealthReport.TAG, true)
+            }
             profile_info_txt.setOnClickListener {
                 profileEdit_fragment = ProfileEdit.newInstance()
                 addFragment(R.id.profile_container, profileEdit_fragment!!, ProfileEdit.TAG, true)
             }
+            Opening_hours.setOnClickListener {
+                val openinghours = OpeningHours.newInstance()
+                addFragment(R.id.profile_container, openinghours, OpeningHours.TAG, true)
+            }
             gift_card_txt.setOnClickListener {
                 coupan_fragment = Coupan.newInstance()
                 addFragment(R.id.profile_container, coupan_fragment!!, Coupan.TAG, true)
+            }
+            terms_of_services.setOnClickListener {
+                termscondition = TermsCondition.newInstance()
+                addFragment(R.id.profile_container, termscondition!!, TermsCondition.TAG, true)
             }
 
         } else {
@@ -94,20 +108,21 @@ class Profile : BaseFragment() {
         val myclickhandler = MyClickHandler(this)
         val xml_profile = ui_model.getUIModel().value
         binding.xmlProfile = xml_profile
-        binding.handlers=myclickhandler
+        binding.handlers = myclickhandler
 
     }
 
-     fun logOut() {
+    fun logOut() {
 
-        DialogUtils.openDialog(context!!,"Are you sure you would logout?","",
-                "Logout","cancel", ContextCompat.getColor(context!!,R.color.theme_color), object : DialogUtils.OnDialogClickListener {
+        DialogUtils.openDialog(context!!, "Are you sure you would logout?", "",
+                "Logout", "cancel", ContextCompat.getColor(context!!, R.color.theme_color), object : DialogUtils.OnDialogClickListener {
             override fun onPositiveButtonClick(position: Int) {
                 (parentFragment as AccountFragment).signOut()
                 PreferenceUtil.clearAll()
                 PreferenceUtil.save()
                 (activity as HomeActivity).onBackPressed()
             }
+
             override fun onNegativeButtonClick() {
             }
         })
@@ -121,11 +136,17 @@ class Profile : BaseFragment() {
         } else if (coupan_fragment != null && coupan_fragment!!.isVisible) {
             childFragmentManager.popBackStack()
             return true
+        } else if (healthreport != null && healthreport!!.isVisible) {
+            childFragmentManager.popBackStack()
+            return true
+        } else if (termscondition != null && termscondition!!.isVisible) {
+            childFragmentManager.popBackStack()
+            return true
         } else {
             if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
                 return true
             } else {
-                return false
+                return false  // this return would work for logout.
             }
         }
     }
@@ -153,7 +174,6 @@ class Profile : BaseFragment() {
             profile.logOut()
         }
     }
-
 
 
     private class UIModel : ViewModel() {

@@ -46,6 +46,7 @@ class PaymentmethodAdapter(val c: Context,val list : Array<Int?> ,val callback: 
 
             when(position){
                 0 ->{
+                    Log.e("epay--","Holder 0")
                     holder.binding.paymenttypeTxt.text="Online payment"
                     holder.binding.webiview.visibility= View.VISIBLE
                     holder.binding.cashBtn.visibility= View.GONE
@@ -55,6 +56,7 @@ class PaymentmethodAdapter(val c: Context,val list : Array<Int?> ,val callback: 
 
                 }
                 1->{
+                    Log.e("epay--","Holder 1")
                     holder.binding.paymenttypeTxt.text="Cash payment"
                     holder.binding.webiview.visibility= View.GONE
                     holder.binding.cashBtn.visibility= View.VISIBLE
@@ -82,29 +84,39 @@ class PaymentmethodAdapter(val c: Context,val list : Array<Int?> ,val callback: 
 
 
     override fun PaymentWindowLoaded() {
+        Log.e("epay--","PaymentWindowLoaded")
     }
 
     override fun PaymentAccepted(p0: MutableMap<String, String>?) {
+        Log.e("epay--","PaymentAccepted")
     }
 
     override fun PaymentWindowCancelled() {
+        Log.e("epay--","PaymentWindowCancelled")
     }
 
     override fun Debug(p0: String?) {
+        Log.e("epay--","Debug")
+
     }
 
     override fun ErrorOccurred(p0: Int, p1: String?, p2: String?) {
+        Log.e("epay--","ErrorOccurred")
+
     }
 
     override fun PaymentWindowLoading() {
+        Log.e("epay--","PaymentWindowLoading")
+
     }
 
     override fun PaymentLoadingAcceptPage() {
+        Log.e("epay--","PaymentLoadingAcceptPage")
     }
 
     fun getData(): Map<String, String> {
 
-        data.put("merchantnumber", "6673007")
+        data.put("merchantnumber", "8024206")
 
         //http://tech.epay.dk/en/specification#259
         data.put("currency", "DKK")
@@ -116,7 +128,7 @@ class PaymentmethodAdapter(val c: Context,val list : Array<Int?> ,val callback: 
         //int tempOrderno = r.nextInt(80 - 65) + 61235;
 
         //http://tech.epay.dk/en/specification#261
-        data.put("orderid", "57511")
+        data.put("orderid", "57510")
 
         //http://tech.epay.dk/en/specification#262
         //data.put("windowid", "1");

@@ -81,10 +81,11 @@ abstract class BaseFragment : Fragment() {
 
     fun isPermissionGranted(): Boolean {
         if (Build.VERSION.SDK_INT >= 23) {
-            if (context!!.checkSelfPermission(android.Manifest.permission.CALL_PHONE) === PackageManager.PERMISSION_GRANTED) {
+            if (context!!.checkSelfPermission(android.Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                 return true
             } else {
-                ActivityCompat.requestPermissions(activity!!, arrayOf(Manifest.permission.CALL_PHONE), 1)
+                //ActivityCompat.requestPermissions(activity!!, arrayOf(Manifest.permission.CALL_PHONE), 1)
+                requestPermissions(arrayOf(Manifest.permission.CALL_PHONE), 1)
                 return false
             }
         } else { //permission is automatically granted on sdk<23 upon installation
@@ -136,7 +137,7 @@ abstract class BaseFragment : Fragment() {
                  */
                 hideKeyboard()
                 loge("backStackCount", childFragmentManager.backStackEntryCount.toString())
-                var fragment = childFragmentManager.findFragmentByTag(childFragmentManager.getBackStackEntryAt(childFragmentManager.backStackEntryCount - 1).name)
+                val fragment = childFragmentManager.findFragmentByTag(childFragmentManager.getBackStackEntryAt(childFragmentManager.backStackEntryCount - 1).name)
                 if (fragment != null && fragment.isVisible) {
                     isPop = true
                     when (fragment) {

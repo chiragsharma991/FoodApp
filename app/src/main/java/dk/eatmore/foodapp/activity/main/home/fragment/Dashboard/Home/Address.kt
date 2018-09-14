@@ -106,15 +106,7 @@ class Address : BaseFragment(), RecyclerClickInterface {
         (activity as EpayActivity).txt_toolbar.text=getString(R.string.address)
         (activity as EpayActivity).img_toolbar_back.setImageResource(R.drawable.back)
         (activity as EpayActivity).img_toolbar_back.setOnClickListener {
-            loge(TAG,"address---")
-            if(address_list_view.visibility==View.VISIBLE){
-                address_list_view.visibility=View.GONE
-                ragistered_address_view.visibility=View.VISIBLE
-                (activity as EpayActivity).txt_toolbar_right.visibility=View.GONE
-            }else{
-                (activity as EpayActivity).popFragment()
-                (activity as EpayActivity).setToolbarforThis()
-            }
+            onBackpress()
         }
         (activity as EpayActivity).txt_toolbar_right.visibility= if(address_list_view.visibility==View.VISIBLE) View.VISIBLE else View.GONE
         (activity as EpayActivity).txt_toolbar_right.text=getString(R.string.add)
@@ -131,6 +123,19 @@ class Address : BaseFragment(), RecyclerClickInterface {
                 fragment.enterTransition=enter
             }
             addFragment(R.id.address_container,fragment, AddressForm.TAG,false)
+        }
+
+    }
+
+    fun onBackpress(){
+
+        if(address_list_view.visibility==View.VISIBLE){
+            address_list_view.visibility=View.GONE
+            ragistered_address_view.visibility=View.VISIBLE
+            (activity as EpayActivity).txt_toolbar_right.visibility=View.GONE
+        }else{
+            (activity as EpayActivity).popFragment()
+            (activity as EpayActivity).setToolbarforThis()
         }
 
     }

@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    >
+
+    <data>
+
+
+    </data>
+
+
+    <FrameLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/profile_container"
+        android:layout_width="match_parent"
+        android:focusable="true"
+        android:clickable="true"
+        android:background="@color/white"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="visible"
+            android:background="@color/background_light"
+            >
+
+            <WebView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/webview"
+                >
+
+            </WebView>
+
+
+        </RelativeLayout>
+
+
+
+    </FrameLayout>
+
+
+
+
+
+
+</layout>
+

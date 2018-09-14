@@ -193,6 +193,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/_8sdp"
+                                android:id="@+id/health_report"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
@@ -203,7 +204,7 @@
                                     android:layout_marginLeft="@dimen/_3sdp"
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
-                                    android:text="Demo Text"
+                                    android:text="Health Report"
                                     android:textColor="@color/black_light"
                                     />
 
@@ -222,6 +223,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/_8sdp"
+                                android:id="@+id/terms_of_services"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
@@ -232,7 +234,7 @@
                                     android:layout_marginLeft="@dimen/_3sdp"
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
-                                    android:text="Text"
+                                    android:text="Terms of Services"
                                     android:textColor="@color/black_light"
                                     />
 
@@ -253,6 +255,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_margin="@dimen/_8sdp"
+                                android:id="@+id/Opening_hours"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
@@ -263,7 +266,7 @@
                                     android:layout_marginLeft="@dimen/_3sdp"
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
-                                    android:text="Ehyter"
+                                    android:text="Opening Hours"
                                     android:textColor="@color/black_light"
                                     />
 
