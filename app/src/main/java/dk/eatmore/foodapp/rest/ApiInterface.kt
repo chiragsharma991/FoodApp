@@ -36,20 +36,21 @@ interface ApiInterface {
     ): Call<JsonObject>
 
 
+
     @FormUrlEncoded
-    @POST("Enduser/enduser/create_record")
-    fun signup(
-            @Field("username") username: String ,
-            @Field("password_hash") password_hash: String,
-            @Field("postal_code") postal_code: String,
-            @Field("house_no") house_no: String,
-            @Field("telephone_no") telephone_no: String,
+    @POST("Enduser/enduser/login")
+    fun setFBLogin(
+            @Field("auth_key") auth_key: String ,
+            @Field("eatmore_app") eatmore_app: Boolean,
             @Field("first_name") first_name: String,
             @Field("email") email: String,
-            @Field("r_token") r_token: String,
-            @Field("r_key") r_key: String
+            @Field("fb_id") fb_id: String
     ): Call<JsonObject>
 
+
+    @POST("Enduser/enduser/sign-up")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun signup(@Body jsonObject: JsonObject): Call<JsonObject>
 
 
     @FormUrlEncoded

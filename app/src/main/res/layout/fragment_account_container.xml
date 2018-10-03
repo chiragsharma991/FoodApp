@@ -166,6 +166,7 @@
                                     android:layout_height="@dimen/_30sdp"
                                     android:layout_gravity="top"
                                     android:layout_marginTop="16dp"
+                                    android:visibility="gone"
                                     android:scaleType="fitXY"
                                     android:onClick="@{handlers::googleSign}"
                                     android:src="@mipmap/google"

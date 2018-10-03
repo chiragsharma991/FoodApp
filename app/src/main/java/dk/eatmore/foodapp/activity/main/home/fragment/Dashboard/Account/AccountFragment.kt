@@ -11,17 +11,12 @@ import dk.eatmore.foodapp.databinding.FragmentAccountContainerBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Account.Signup
 import dk.eatmore.foodapp.utils.BaseFragment
 import kotlinx.android.synthetic.main.fragment_account_container.*
-import android.provider.ContactsContract.Intents.Insert.EMAIL
 import android.util.Log
 import com.facebook.*
 import com.facebook.login.LoginResult
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import kotlinx.android.synthetic.main.toolbar.*
-import java.util.*
-import kotlin.math.log
 import android.widget.Toast
-import android.support.annotation.NonNull
-import android.support.v4.content.ContextCompat
 import android.text.TextUtils
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -36,7 +31,7 @@ import com.google.gson.JsonObject
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.Constants
-import dk.eatmore.foodapp.utils.DialogUtils
+import retrofit2.Call
 import java.util.regex.Pattern
 
 
@@ -47,7 +42,7 @@ class AccountFragment : BaseFragment() {
     val callbackManager = CallbackManager.Factory.create()
     lateinit var mAuth: FirebaseAuth
     private lateinit var mGoogleSignInClient: GoogleSignInClient
-
+    var facebookemail=""; var first_name="";  var last_name=""; var fbid=""; var phone=""; var profileuri=""
 
     companion object {
 
@@ -68,6 +63,7 @@ class AccountFragment : BaseFragment() {
         return binding.root
 
     }
+
 
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
@@ -91,7 +87,21 @@ class AccountFragment : BaseFragment() {
             }
             acc_login_btn.setOnClickListener {
 
-                if (isValidate()) loginAttempt()
+                if (isValidate()){
+                   val call= ApiCall.login(
+                            username = acc_email_edt.text.toString(),
+                            password_hash = acc_password_edt.text.toString(),
+                            r_key = Constants.R_KEY,
+                            r_token = Constants.R_TOKEN,
+                            device_type = "Android",
+                            is_facebook = "0",
+                            is_google = "0",
+                            language = "en"
+                    )
+                    showProgressDialog()
+                    loginAttempt(call)
+
+                }
 
 
             }
@@ -102,39 +112,42 @@ class AccountFragment : BaseFragment() {
         }
     }
 
-    private fun loginAttempt() {
+    private fun <T> loginAttempt(call: Call<T>) {
         showProgressDialog()
-        callAPI(ApiCall.login(
-                username =acc_email_edt.text.toString(),
-                password_hash = acc_password_edt.text.toString(),
-                r_key = Constants.R_KEY,
-                r_token = Constants.R_TOKEN,
-                device_type = "Android",
-                is_facebook = "0",
-                is_google = "0",
-                language = "en"
-
-
-
-        ), object : BaseFragment.OnApiCallInteraction {
+        loge(AccountFragment.TAG, "loginAttempt...")
+        callAPI(call, object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
                 val json = body as JsonObject  // please be mind you are using jsonobject(Gson)
                 if (json.get("status").asBoolean) {
 
-                    moveOnDashboard(
-                            userName = json.getAsJsonObject("user_details").get("first_name").asString + " " + json.getAsJsonObject("user_details").get("last_name").asString,
-                            email = json.getAsJsonObject("user_details").get("email").asString,
-                            phone = json.getAsJsonObject("user_details").get("telephone_no").asString,
-                            login_from = Constants.DIRECT,
-                            language = "en"
-                    )
-                    showSnackBar(clayout, json.get("msg").asString)
+                    if(json.get("fb_new_user").asString == "0") {
+                        // exsisting user:
+                        moveOnProfileInfo(
+                                userName = json.getAsJsonObject("user_details").get("first_name").asString + " " + json.getAsJsonObject("user_details").get("last_name").asString,
+                                email = json.getAsJsonObject("user_details").get("email").asString,
+                                phone = json.getAsJsonObject("user_details").get("telephone_no").asString,
+                                login_from = Constants.DIRECT,
+                                language = "en"
+                        )
+                        loge(TAG,"old user...")
+                        showSnackBar(clayout, json.get("msg").asString)
+                        showProgressDialog()
+
+
+                    }else{
+                        //new user
+                        loge(TAG,"new user...")
+
+                      //  signupwidFacebook()
+                    }
+
 
                 } else {
                     showSnackBar(clayout, json.get("msg").asString)
+                    showProgressDialog()
+
                 }
-                showProgressDialog()
 
             }
 
@@ -154,18 +167,87 @@ class AccountFragment : BaseFragment() {
         })
     }
 
+    private fun signupwidFacebook() {
 
-    fun moveOnDashboard(
+        /**
+         *  you are new user from facbook so please sign up and u can move on dashboard: But-
+         *  if you have not email / name  then move on
+         * another screen and fill details and call signup.
+         * */
+        //    var facebookemail=""; var first_name="";  var last_name=""; var fbid=""; var phone=""; var profileuri=""
+        if(facebookemail=="" && first_name==""){
+
+            showProgressDialog()
+            val fragment = FacebookSignup.newInstance()
+            val bundle=Bundle()
+            bundle.putString("first_name",first_name)
+            bundle.putString("fbid",fbid)
+            bundle.putString("last_name",last_name)
+            bundle.putString("phone",phone)
+            fragment.arguments=bundle
+            addFragment(R.id.home_account_container, fragment, Signup.TAG, false)
+
+        }else{
+            loge(AccountFragment.TAG, "signup...")
+            callAPI(ApiCall.Signup(
+                    createRowdata(
+                            auth_key = Constants.AUTH_VALUE,
+                            eatmore_app = true,
+                            email = facebookemail,
+                            first_name = first_name,
+                            fb_id = fbid
+                    )
+            ), object : BaseFragment.OnApiCallInteraction {
+
+                override fun <T> onSuccess(body: T?) {
+                    val json = body as JsonObject  // please be mind you are using jsonobject(Gson)
+                    if (json.get("status").asBoolean) {
+                        showProgressDialog()
+                        showSnackBar(clayout, json.get("msg").asString)
+                        moveOnProfileInfo(
+                                userName = json.getAsJsonObject("user_details").get("first_name").asString + " " + json.getAsJsonObject("user_details").get("last_name").asString,
+                                email = json.getAsJsonObject("user_details").get("email").asString,
+                                phone = json.getAsJsonObject("user_details").get("telephone_no").asString,
+                                login_from = Constants.FACEBOOK,
+                                language = "en"
+                        )
+
+                    } else {
+                        showProgressDialog()
+                        showSnackBar(clayout, json.get("msg").asString)
+                    }
+                }
+
+                override fun onFail(error: Int) {
+
+                    when (error) {
+                        404 -> {
+                            showSnackBar(clayout, getString(R.string.error_404))
+                        }
+                        100 -> {
+
+                            showSnackBar(clayout, getString(R.string.internet_not_available))
+                        }
+                    }
+                    showProgressDialog()
+                }
+            })
+        }
+
+    }
+
+
+    fun moveOnProfileInfo(
             userName: String,
             email: String,
             phone: String,
-            login_from : String,
-            language : String
+            login_from: String,
+            language: String
     ) {
 
         PreferenceUtil.putValue(PreferenceUtil.USER_NAME, userName)
         PreferenceUtil.putValue(PreferenceUtil.E_MAIL, email)
-        PreferenceUtil.putValue(PreferenceUtil.LANGUAGE,language )
+        PreferenceUtil.putValue(PreferenceUtil.LANGUAGE, language)
         PreferenceUtil.putValue(PreferenceUtil.LOGIN_FROM, login_from)
         PreferenceUtil.putValue(PreferenceUtil.PHONE, phone)  // default wakeLock should be ON
         PreferenceUtil.putValue(PreferenceUtil.KSTATUS, true)  // show close restaurant
@@ -208,7 +290,8 @@ class AccountFragment : BaseFragment() {
 
 
     fun facebookSign() {
-        showProgressDialog()
+
+       // showProgressDialog()
         loge(TAG, "call to Facebook")
         mAuth = FirebaseAuth.getInstance();
         login_buttonUser.performClick()
@@ -221,23 +304,67 @@ class AccountFragment : BaseFragment() {
                         loge(TAG, "---success---")
                         handleFacebookAccessToken(loginResult.getAccessToken());
 
-                        /*       val request = GraphRequest.newMeRequest(
-                                       loginResult.accessToken
-                               ) { `object`, response ->
-                                   // Application code
-                                   try {
-                                       loge(TAG,"Response:"+response.toString())
-                                       val fbJsonObject = response.jsonObject
+                        val request = GraphRequest.newMeRequest(
+                                loginResult.accessToken
+                        ) { `object`, response ->
+                            // Application code
+                            try {
+                                loge(TAG, "Response:" + response.toString())
+                                val fbJsonObject = response.jsonObject
 
-                                   } catch (e: Exception) {
-                                       Log.e("e", "e $e")
-                                       e.printStackTrace()
-                                   }
-                               }
-                               val parameters = Bundle()
-                               parameters.putString("fields", "id,email,first_name,last_name")
-                               request.parameters = parameters
-                               request.executeAsync()*/
+                                if (fbJsonObject.has("email"))
+                                    facebookemail = fbJsonObject.getString("email")
+                                else
+                                    facebookemail = ""
+
+                                if (fbJsonObject.has("first_name"))
+                                    first_name = fbJsonObject.getString("first_name")
+                                else
+                                    first_name = ""
+
+                                if (fbJsonObject.has("last_name"))
+                                    first_name = fbJsonObject.getString("first_name") + " " + fbJsonObject.getString("last_name")
+                                else
+                                    last_name = ""
+
+                                if (fbJsonObject.has("id"))
+                                    fbid = fbJsonObject.getString("id")
+                                else
+                                    fbid = ""
+
+                                if (fbJsonObject.has("phone"))
+                                    phone = fbJsonObject.getString("phone")
+                                else
+                                    phone = ""
+
+                                if (com.facebook.Profile.getCurrentProfile() != null) {
+                                    profileuri = "" + com.facebook.Profile.getCurrentProfile().getProfilePictureUri(200, 200)
+                                    Log.e("Response", "userfile $profileuri")
+                                } else {
+                                    profileuri = ""
+                                }
+
+
+                                Log.e(TAG, "FsignInWithCredential:success" + facebookemail + " " + phone + " " + profileuri + " " + first_name+" "+last_name)
+
+                                val call= ApiCall.FBlogin(
+                                      first_name=first_name,
+                                        fb_id = fbid,
+                                        email = facebookemail,
+                                        eatmore_app = true,
+                                        auth_key = Constants.AUTH_VALUE
+                                )
+                                loginAttempt(call)
+
+                            } catch (e: Exception) {
+                                Log.e("e", "e $e")
+                                e.printStackTrace()
+                            }
+                        }
+                        val parameters = Bundle()
+                        parameters.putString("fields", "id,email,first_name,last_name")
+                        request.parameters = parameters
+                        request.executeAsync()
 
                     }
 
@@ -301,7 +428,7 @@ class AccountFragment : BaseFragment() {
                     val photo = mAuth.getCurrentUser()!!.photoUrl
                     val phone = mAuth.getCurrentUser()!!.phoneNumber
                     Log.e(TAG, "GsignInWithCredential:success" + email + " " + phone + " " + photo + " " + displayName)
-                    moveOnDashboard(
+                    moveOnProfileInfo(
                             userName = displayName.toString(),
                             phone = phone.toString(),
                             email = email.toString(),
@@ -329,19 +456,19 @@ class AccountFragment : BaseFragment() {
                     fun onComplete(task: Task<AuthResult>) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            val displayName = mAuth.getCurrentUser()!!.displayName
-                            val email = mAuth.getCurrentUser()!!.email
-                            val photo = mAuth.getCurrentUser()!!.photoUrl
-                            val phone = mAuth.getCurrentUser()!!.phoneNumber
-                            Log.e(TAG, "FsignInWithCredential:success" + email + " " + phone + " " + photo + " " + displayName)
+                            /*      val displayName = mAuth.getCurrentUser()!!.displayName
+                                  val email = mAuth.getCurrentUser()!!.email
+                                  val photo = mAuth.getCurrentUser()!!.photoUrl
+                                  val phone = mAuth.getCurrentUser()!!.phoneNumber
+                                  Log.e(TAG, "FsignInWithCredential:success" + email + " " + phone + " " + photo + " " + displayName)
 
-                            moveOnDashboard(
-                                    userName = displayName.toString(),
-                                    phone = phone.toString(),
-                                    email = email.toString(),
-                                    login_from = Constants.FACEBOOK,
-                                    language = "en"
-                            )
+                                  moveOnProfileInfo(
+                                          userName = displayName.toString(),
+                                          phone = phone.toString(),
+                                          email = email.toString(),
+                                          login_from = Constants.FACEBOOK,
+                                          language = "en"
+                                  )*/
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.e(TAG, "FsignInWithCredential:failure", task.getException())
@@ -356,17 +483,29 @@ class AccountFragment : BaseFragment() {
     }
 
 
-     fun signOut() {
-        loge(TAG,"sign out...")
+    fun signOut() {
+        loge(TAG, "sign out...")
 
-        if (PreferenceUtil.getString(PreferenceUtil.LOGIN_FROM, "").equals(Constants.FACEBOOK)){
+        if (PreferenceUtil.getString(PreferenceUtil.LOGIN_FROM, "").equals(Constants.FACEBOOK)) {
             LoginManager.getInstance().logOut()
             mAuth.signOut()
-        }
-        else if(PreferenceUtil.getString(PreferenceUtil.LOGIN_FROM, "").equals(Constants.GOOGLE)){
+        } else if (PreferenceUtil.getString(PreferenceUtil.LOGIN_FROM, "").equals(Constants.GOOGLE)) {
             mGoogleSignInClient.signOut().addOnCompleteListener(activity!!, {})
             mAuth.signOut()
         }
+
+    }
+
+
+    fun createRowdata( auth_key: String , eatmore_app:Boolean , first_name:String , email:String , fb_id:String ) : JsonObject {
+        val jsonobject= JsonObject()
+        jsonobject.addProperty(Constants.AUTH_KEY,auth_key)
+        jsonobject.addProperty(Constants.EATMORE_APP,eatmore_app)
+        jsonobject.addProperty(Constants.FIRST_NAME,first_name)
+        jsonobject.addProperty(Constants.EMAIL,email)
+        jsonobject.addProperty(Constants.FB_ID,fb_id)
+
+        return jsonobject
 
     }
 

@@ -54,7 +54,23 @@
                         android:orientation="vertical"
                         android:layout_margin="@dimen/_8sdp"
                         >
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/sign_up_firstname_inputlayout"
+                            app:errorTextAppearance="@style/error_appearance"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
 
+                            <EditText
+                                android:id="@+id/first_name"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/hindvadodara_medium"
+                                android:textAppearance="?android:attr/textAppearanceSmall"
+                                android:inputType="textEmailAddress"
+                                android:singleLine="true"
+                                android:backgroundTint="@color/gray"
+                                android:hint="@string/first_name" />
+                        </android.support.design.widget.TextInputLayout>
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/sign_up_email_inputlayout"
                             app:errorTextAppearance="@style/error_appearance"
@@ -120,6 +136,36 @@
                             android:alpha="0.5"
                             android:textColor="@color/white"
                             />
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            >
+                            <android.support.v7.widget.AppCompatCheckBox
+                                android:layout_width="wrap_content"
+                                android:id="@+id/subscribe_chk"
+                                android:checked="true"
+                                android:alpha="0.5"
+                                android:layout_height="wrap_content"
+
+                                />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:layout_toRightOf="@+id/subscribe_chk"
+                                android:id="@+id/subscribe_txt"
+                                android:alpha="0.5"
+                                android:layout_marginLeft="@dimen/_3sdp"
+                                android:layout_gravity="center_vertical"
+                                android:text="@string/subscribe"
+                                android:textColor="@color/black_light" />
+
+
+                        </RelativeLayout>
+
+
 
                     </LinearLayout>
 

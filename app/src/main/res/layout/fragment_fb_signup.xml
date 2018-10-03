@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+
+    >
+
+    <data>
+
+
+        <variable
+            name="handlers"
+            type="dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.FacebookSignup.MyClickHandler">
+
+        </variable>
+
+
+    </data>
+
+
+    <android.support.design.widget.CoordinatorLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_width="match_parent"
+        android:id="@+id/clayout"
+        android:layout_height="match_parent"
+        android:background="@color/background_light"
+        >
+
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_3sdp"
+                >
+
+                <android.support.v7.widget.CardView
+                    android:id="@+id/row_order_cardview"
+                    style="@style/CardViewStyle"
+                    android:foreground="?android:attr/selectableItemBackground"
+                    >
+
+                    <!--SignUp View-->
+
+                    <LinearLayout
+                        android:layout_width="fill_parent"
+                        android:layout_height="match_parent"
+                        android:id="@+id/signup_view"
+                        android:visibility="visible"
+                        android:layout_marginTop="?attr/actionBarSize"
+                        android:orientation="vertical"
+                        android:layout_margin="@dimen/_8sdp"
+                        >
+                        <android.support.design.widget.TextInputLayout
+                            android:id="@+id/email_inputlayout"
+                            app:errorTextAppearance="@style/error_appearance"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content">
+
+                            <EditText
+                                android:id="@+id/email_edt"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:fontFamily="@font/hindvadodara_medium"
+                                android:textAppearance="?android:attr/textAppearanceSmall"
+                                android:inputType="textEmailAddress"
+                                android:singleLine="true"
+                                android:backgroundTint="@color/gray"
+                                android:hint="Email address" />
+                        </android.support.design.widget.TextInputLayout>
+
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/continue_btn"
+                            style="@style/Button"
+                            android:onClick="@{handlers::signupFunction}"
+                            android:layout_marginTop="40dp"
+                            android:text="@string/continue_"
+                            android:textColor="@color/white"
+                            />
+
+
+
+
+
+                    </LinearLayout>
+
+
+                </android.support.v7.widget.CardView>
+
+            </RelativeLayout>
+
+
+
+        </android.support.v4.widget.NestedScrollView>
+
+
+    </android.support.design.widget.CoordinatorLayout>
+
+
+
+
+
+
+</layout>
+

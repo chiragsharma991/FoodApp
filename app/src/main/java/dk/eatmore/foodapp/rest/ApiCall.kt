@@ -26,8 +26,12 @@ class ApiCall {
             return getApiInterface().setLogin(username, password_hash, device_type,is_facebook, is_google, language,r_token,r_key )
         }
 
-        fun Signup(username : String, password_hash : String, postal_code : String , house_no : String, telephone_no:String, r_key:String, r_token : String, first_name :String ,email: String ) : Call<JsonObject> {
-            return getApiInterface().signup(username, password_hash, postal_code,house_no, telephone_no, first_name,email,r_token,r_key )
+        fun FBlogin(auth_key : String, eatmore_app : Boolean, first_name : String , email : String, fb_id:String ) : Call<JsonObject> {
+            return getApiInterface().setFBLogin(auth_key, eatmore_app, first_name,email, fb_id )
+        }
+
+        fun Signup(jsonObject: JsonObject ) : Call<JsonObject> {
+            return getApiInterface().signup(jsonObject )
         }
 
 

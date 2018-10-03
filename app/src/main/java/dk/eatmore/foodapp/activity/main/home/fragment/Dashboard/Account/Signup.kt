@@ -2,10 +2,8 @@ package dk.eatmore.foodapp.fragment.Dashboard.Account
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
-import android.support.design.widget.TextInputLayout
-import android.support.v4.content.ContextCompat
+import android.os.Handler
 import android.text.Editable
-import android.text.TextUtils
 import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
@@ -13,7 +11,7 @@ import android.view.ViewGroup
 import android.widget.EditText
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.AccountFragment
+import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.databinding.FragmentSignupBinding
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.utils.BaseFragment
@@ -56,18 +54,21 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
         if (savedInstanceState == null) {
             clickEvent = MyClickHandler(this)
             binding.handlers = clickEvent
-            sign_up_email_edt.requestFocus()
+            first_name.requestFocus()
             acc_signup_btn.setEnabled(false)
             acc_signup_btn.text = getString(R.string.enter_valid_email_address)
 
+            first_name.addTextChangedListener(this)
             sign_up_email_edt.addTextChangedListener(this)
             sign_up_password_edt.addTextChangedListener(this)
             sign_up_cnf_password_edt.addTextChangedListener(this)
 
+            first_name.setOnFocusChangeListener(this)
             sign_up_email_edt.setOnFocusChangeListener(this)
             sign_up_password_edt.setOnFocusChangeListener(this)
             sign_up_cnf_password_edt.setOnFocusChangeListener(this)
 
+            inputValidStates[first_name] = false
             inputValidStates[sign_up_email_edt] = false
             inputValidStates[sign_up_password_edt] = false
             inputValidStates[sign_up_cnf_password_edt] = false
@@ -101,8 +102,15 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
     }
 
     override fun afterTextChanged(s: Editable?) {
-        if (sign_up_email_edt.text.hashCode() == s!!.hashCode()) {
 
+        if (first_name.text.hashCode() == s!!.hashCode()) {
+            if (first_name.text.trim().toString().length > 0) {
+                inputValidStates[first_name] = true
+            } else {
+                inputValidStates[first_name] = false
+            }
+        }
+        else if (sign_up_email_edt.text.hashCode() == s.hashCode()) {
             if (validMail(sign_up_email_edt.text.toString())) {
                 inputValidStates[sign_up_email_edt] = true
             } else {
@@ -144,9 +152,22 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
     fun validationFields() {
         updateButtonState()
 
+        if (!inputValidStates[first_name]!!) {
+            acc_signup_btn.text = "Enter your full name"
+            sign_up_firstname_inputlayout.error= " "
+            sign_up_email_inputlayout.isErrorEnabled=false
+            sign_up_password_inputlayout.isErrorEnabled=false
+            sign_up_cnf_password_inputlayout.isErrorEnabled=false
+            return
+        }else{
+            sign_up_firstname_inputlayout.isErrorEnabled=false
+        }
         if (!inputValidStates[sign_up_email_edt]!!) {
             acc_signup_btn.text = getString(R.string.enter_valid_email_address)
-            sign_up_email_inputlayout.error= "check the value "
+            sign_up_email_inputlayout.error= " "
+            sign_up_firstname_inputlayout.isErrorEnabled=false
+            sign_up_password_inputlayout.isErrorEnabled=false
+            sign_up_cnf_password_inputlayout.isErrorEnabled=false
             return
         }else{
             sign_up_email_inputlayout.isErrorEnabled=false
@@ -154,16 +175,21 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
         if (!inputValidStates[sign_up_password_edt]!!) {
             acc_signup_btn.text = getString(R.string.enter_unique_password)
             sign_up_password_inputlayout.error=" "
+            sign_up_firstname_inputlayout.isErrorEnabled=false
+            sign_up_email_inputlayout.isErrorEnabled=false
+            sign_up_cnf_password_inputlayout.isErrorEnabled=false
             return
         }else{
             sign_up_password_inputlayout.isErrorEnabled=false
 
         }
-
         if (!inputValidStates[sign_up_cnf_password_edt]!!) {
             loge(TAG,"invalid state false...")
             acc_signup_btn.text = getString(R.string.enter_the_confirm_password)
             sign_up_cnf_password_inputlayout.error=" "
+            sign_up_firstname_inputlayout.isErrorEnabled=false
+            sign_up_email_inputlayout.isErrorEnabled=false
+            sign_up_password_inputlayout.isErrorEnabled=false
             return
         }else{
             acc_signup_btn.text = getString(R.string.signup)
@@ -181,6 +207,8 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
         }
         acc_signup_btn.setEnabled(enabled)
         acc_signup_btn.alpha = if (enabled) 1.0F else 0.5F
+        subscribe_chk.alpha = if (enabled) 1.0F else 0.5F
+        subscribe_txt.alpha = if (enabled) 1.0F else 0.5F
     }
 
 
@@ -188,21 +216,24 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
         loge(TAG, "signup...")
         showProgressDialog()
         callAPI(ApiCall.Signup(
-                username = "Hardcode test",
-                password_hash = sign_up_password_edt.text.toString(),
-                r_key = Constants.R_KEY,
-                r_token = Constants.R_TOKEN,
+        createRowdata(
+                auth_key = Constants.AUTH_VALUE,
+                eatmore_app = true,
                 email = sign_up_email_edt.text.toString(),
-                first_name = "Hardcode fst name",
-                house_no = "1255",
-                postal_code = "800",
-                telephone_no = "9764728465"
+                first_name = first_name.text.toString(),
+                password_hash = sign_up_password_edt.text.toString(),
+                subscribe =if (subscribe_chk.isChecked ) "1" else "0"
+        )
         ), object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
                 val json = body as JsonObject  // please be mind you are using jsonobject(Gson)
                 if (json.get("status").asBoolean) {
                     showSnackBar(clayout, json.get("msg").asString)
+                    Handler().postDelayed({
+                        (activity as HomeActivity).onBackPressed()
+                    },800)
+
                 } else {
                     showSnackBar(clayout, json.get("msg").asString)
                 }
@@ -279,6 +310,19 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
         val pattern = Pattern.compile(EMAIL_PATTERN)
         val matcher = pattern.matcher(email)
         return matcher.matches()
+
+    }
+
+    fun createRowdata( auth_key: String , eatmore_app:Boolean , first_name:String , email:String , password_hash:String , subscribe:String ) : JsonObject {
+        val jsonobject= JsonObject()
+        jsonobject.addProperty(Constants.AUTH_KEY,auth_key)
+        jsonobject.addProperty(Constants.EATMORE_APP,eatmore_app)
+        jsonobject.addProperty(Constants.FIRST_NAME,first_name)
+        jsonobject.addProperty(Constants.EMAIL,email)
+        jsonobject.addProperty(Constants.PASSWORD_HASH,password_hash)
+        jsonobject.addProperty(Constants.SUBSCRIBE,subscribe)
+
+        return jsonobject
 
     }
 

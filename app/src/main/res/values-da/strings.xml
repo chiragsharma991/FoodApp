@@ -53,8 +53,8 @@
     <string name="select_delivery_time">Select delivery time:</string>
     <string name="if_you_have_any_questions">If you have any questions or enquiries please call us on:</string>
     <string name="permission_denied">Permission denied</string>
-
-
+    <string name="first_name">First name</string>
+    <string name="subscribe">Modtag nyhedsbrev fra EatMore. Bare rolig vi spammer dig selvfølgelig ikke. Du accepterer at vi må kontakte dig via e-mail, telefon, push notifikationer eller sms med gode tilbud og informationer omkring konkurrencer, produkter og tjenester. Du kan til enhver tid afmelde dig.</string>
 
 
 </resources>
