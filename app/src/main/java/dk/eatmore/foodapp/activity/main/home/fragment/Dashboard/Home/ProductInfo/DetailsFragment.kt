@@ -78,7 +78,7 @@ class DetailsFragment : BaseFragment() {
             logd(DetailsFragment.TAG,"saveInstance NULL")
             img_toolbar_back.setImageResource(R.drawable.close)
             img_toolbar_back.setOnClickListener{
-                parentFragment!!.childFragmentManager.popBackStack()
+                  onBackpress()
             }
             adapter = ViewPagerAdapter(childFragmentManager)
             adapter!!.addFragment(Menu(), getString(R.string.menu))
@@ -116,7 +116,10 @@ class DetailsFragment : BaseFragment() {
     }
 
 
+fun onBackpress(){
+    parentFragment!!.childFragmentManager.popBackStack()
 
+}
 
 
     fun setPalette() {

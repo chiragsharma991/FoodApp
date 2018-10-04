@@ -6,6 +6,7 @@ import dk.eatmore.foodapp.model.LastOrder
 import dk.eatmore.foodapp.model.cart.Data
 import dk.eatmore.foodapp.model.cart.ProductDetails
 import dk.eatmore.foodapp.model.epay.ViewcardModel
+import dk.eatmore.foodapp.model.home.RestaurantListModel
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -22,35 +23,23 @@ interface ApiInterface {
     ): Call<LastOrder>
 
 
-    @FormUrlEncoded
-    @POST("Enduser/enduser/login")
-    fun setLogin(
-            @Field("username") username: String ,
-            @Field("password_hash") password_hash: String,
-            @Field("device_type") device_type: String,
-            @Field("is_facebook") is_facebook: String,
-            @Field("is_google") is_google: String,
-            @Field("language") language: String,
-            @Field("r_token") r_token: String,
-            @Field("r_key") r_key: String
-    ): Call<JsonObject>
-
-
-
-    @FormUrlEncoded
-    @POST("Enduser/enduser/login")
-    fun setFBLogin(
-            @Field("auth_key") auth_key: String ,
-            @Field("eatmore_app") eatmore_app: Boolean,
-            @Field("first_name") first_name: String,
-            @Field("email") email: String,
-            @Field("fb_id") fb_id: String
-    ): Call<JsonObject>
-
-
     @POST("Enduser/enduser/sign-up")
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun signup(@Body jsonObject: JsonObject): Call<JsonObject>
+
+
+    @POST("Enduser/enduser/login")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun fBlogin(@Body jsonObject: JsonObject): Call<JsonObject>
+
+
+    @POST("Enduser/enduser/login")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun login(@Body jsonObject: JsonObject): Call<JsonObject>
+
+    @POST("Enduser/enduser/restaurant-list")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun restaurantList(@Body jsonObject: JsonObject): Call<RestaurantListModel>
 
 
     @FormUrlEncoded
@@ -77,6 +66,16 @@ interface ApiInterface {
     fun openingHours(
             @Field("r_token") r_token: String ,
             @Field("r_key") r_key: String
+    ): Call<JsonObject>
+
+
+    @FormUrlEncoded
+    @POST("Enduser/enduser/last-login")
+    fun lastLogin(
+            @Field("r_token") r_token: String ,
+            @Field("r_key") r_key: String,
+            @Field("customer_id") customer_id: String,
+            @Field("device_type") device_type: String
     ): Call<JsonObject>
 
     @FormUrlEncoded

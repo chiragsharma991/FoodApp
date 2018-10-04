@@ -215,7 +215,7 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
     private fun signupFunction() {
         loge(TAG, "signup...")
         showProgressDialog()
-        callAPI(ApiCall.Signup(
+        callAPI(ApiCall.signup(
         createRowdata(
                 auth_key = Constants.AUTH_VALUE,
                 eatmore_app = true,

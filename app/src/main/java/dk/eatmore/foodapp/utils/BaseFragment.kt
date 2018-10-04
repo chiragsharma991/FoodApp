@@ -257,7 +257,7 @@ abstract class BaseFragment : Fragment() {
                 }
 
                 override fun onFailure(call: Call<T>, t: Throwable) {
-                    loge("Base", "" + t.message)
+                    loge("onFailure--##---", "" + t.message)
                     onAliCallInteraction.onFail(100)
                 }
             })

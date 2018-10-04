@@ -51,6 +51,7 @@ class Splash : BaseActivity() {
 
     companion object {
         val TAG = "Splash"
+        var can_i_use_lastLogin=true
         fun newInstance(): Splash {
             return Splash()
         }

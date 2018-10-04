@@ -18,6 +18,7 @@ import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.FragmentAccountContainerBinding
 import dk.eatmore.foodapp.databinding.InfoRestaurantBinding
 import dk.eatmore.foodapp.databinding.RowOpeningHoursBinding
+import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
@@ -169,7 +170,7 @@ class Info : BaseFragment() {
 
     override fun onDetach() {
         super.onDetach()
-        ui_model!!.openinghoursList.value=null
+       // ui_model!!.openinghoursList.value!!.clear()
         logd(TAG, "on detech...")
 
     }

@@ -33,6 +33,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInOptions
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.*
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.RestaurantList
 
 
 class HomeFragment : BaseFragment() {
@@ -226,76 +227,8 @@ class HomeFragment : BaseFragment() {
 
 
         fun onFindClicked(view: View) {
-            Toast.makeText(homefragment.activity, "Button long pressed!", Toast.LENGTH_SHORT).show();
-            val gso :GoogleSignInOptions =  GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
-                    .requestIdToken(getString(R.string.default_web_client_id))
-                    .requestEmail()
-                    .build();
-
-
-            mGoogleSignInClient = GoogleSignIn.getClient(activity!!, gso);
-
-            // [START initialize_auth]
-            mAuth = FirebaseAuth.getInstance();
-
-
-            val signInIntent : Intent = mGoogleSignInClient.getSignInIntent();
-        startActivityForResult(signInIntent, 9001);
-
-
-
-      /*      login_buttonUser.performClick()
-
-            login_buttonUser.setFragment(this@HomeFragment)
-            login_buttonUser.setReadPermissions(Arrays.asList(EMAIL));
-            if (!AccessToken.isCurrentAccessTokenActive()) {
-                loge(TAG,"token not expired")
-                login_buttonUser.registerCallback(callbackManager,
-                        object : FacebookCallback<LoginResult> {
-                            override fun onSuccess(loginResult: LoginResult) {
-                                // App code
-                                loge(TAG,"---success---")
-
-                                val request = GraphRequest.newMeRequest(
-                                        loginResult.accessToken
-                                ) { `object`, response ->
-                                    // Application code
-                                    try {
-                                        Log.e("facebook", "Response " + response.toString())
-
-                                        val fbJsonObject = response.jsonObject
-
-                                    } catch (e: Exception) {
-                                        Log.e("e", "e $e")
-                                        e.printStackTrace()
-                                    }
-                                }
-                                val parameters = Bundle()
-                                parameters.putString("fields", "id,email,first_name,last_name")
-                                request.parameters = parameters
-                                request.executeAsync()
-
-                            }
-
-                            override fun onCancel() {
-                                // App code
-                                loge(TAG,"---cancel---")
-
-                            }
-
-                            override fun onError(exception: FacebookException) {
-                                // App code
-                                loge(TAG,"---exception---")
-
-                            }
-                        })
-
-
-            }else{
-                loge(TAG,"token  expired")
-
-            }*/
-
+            val restaurantlist=RestaurantList.newInstance()
+            addFragment(R.id.home_fragment_container,restaurantlist,RestaurantList.TAG,true)
 
         }
 

@@ -19,3 +19,12 @@ Notes :
 * Dp:
    - whenever you start ui take reference of 8 dp and start.
    - normally in between row : 5dp and hardly 8dp
+
+
+
+   --Research:
+
+   1. how to add facebook callback in activity to fragment.
+
+   --Error:
+   1. Info fragment : null pointer on detech .

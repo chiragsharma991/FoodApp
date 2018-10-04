@@ -56,10 +56,8 @@ class FacebookSignup : BaseFragment(), TextWatcher {
         if (savedInstanceState == null) {
 
             clickEvent = MyClickHandler(this)
-          //  binding.handlers = clickEvent
+            binding.handlers = clickEvent
             email_edt.requestFocus()
-            continue_btn.setEnabled(false)
-
             email_edt.addTextChangedListener(this)
 
 
@@ -75,6 +73,7 @@ class FacebookSignup : BaseFragment(), TextWatcher {
     override fun afterTextChanged(s: Editable?) {
 
         if (email_edt.text.hashCode() == s!!.hashCode()) {
+            email_inputlayout.isErrorEnabled=false
 
         }
 
@@ -90,58 +89,28 @@ class FacebookSignup : BaseFragment(), TextWatcher {
 
     }
 
+    fun validMail(email: String): Boolean {
+
+        val EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
+        val pattern = Pattern.compile(EMAIL_PATTERN)
+        val matcher = pattern.matcher(email)
+        return matcher.matches()
+
+    }
 
 
     private fun FBsignupFunction() {
-        loge(TAG, "signup...")
-        showProgressDialog()
-        callAPI(ApiCall.Signup(
-                createRowdata(
-                        auth_key = Constants.AUTH_VALUE,
-                        eatmore_app = true,
-                        email = email_edt.text.toString(),
-                        first_name = arguments!!.getString("first_name",""),
-                        fb_id = arguments!!.getString("fbid","")
-                )
-        ), object : BaseFragment.OnApiCallInteraction {
 
-            override fun <T> onSuccess(body: T?) {
-                val json = body as JsonObject  // please be mind you are using jsonobject(Gson)
-                if (json.get("status").asBoolean) {
-                    showSnackBar(clayout, json.get("msg").asString)
-                    Handler().postDelayed({
-                        (activity as HomeActivity).onBackPressed()
-                        //exception
-                        (parentFragment as AccountFragment).moveOnProfileInfo(
-                                userName = arguments!!.getString("first_name","")+" "+arguments!!.getString("last_name",""),
-                                email = email_edt.text.toString(),
-                                phone = arguments!!.getString("phone",""),
-                                login_from = Constants.FACEBOOK,
-                                language = "en"
-                        )
-                    },800)
+        if(validMail(email_edt.text.trim().toString())){
+            continue_btn.isEnabled=false
+            Handler().postDelayed({
+                (parentFragment as AccountFragment).recallfbLogin(email_edt.text.trim().toString())
+                (activity as HomeActivity).onBackPressed()
+            },800)
 
-                } else {
-                    showSnackBar(clayout, json.get("msg").asString)
-                }
-                showProgressDialog()
-
-            }
-
-            override fun onFail(error: Int) {
-
-                when (error) {
-                    404 -> {
-                        showSnackBar(clayout, getString(R.string.error_404))
-                    }
-                    100 -> {
-
-                        showSnackBar(clayout, getString(R.string.internet_not_available))
-                    }
-                }
-                showProgressDialog()
-            }
-        })
+        }else{
+            email_inputlayout.error=getString(R.string.enter_valid_email_address)
+        }
 
     }
 

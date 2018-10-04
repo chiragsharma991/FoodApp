@@ -56,7 +56,6 @@
                         >
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/email_inputlayout"
-                            app:errorTextAppearance="@style/error_appearance"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 

@@ -6,6 +6,7 @@ import dk.eatmore.foodapp.model.LastOrder
 import dk.eatmore.foodapp.model.cart.Data
 import dk.eatmore.foodapp.model.cart.ProductDetails
 import dk.eatmore.foodapp.model.epay.ViewcardModel
+import dk.eatmore.foodapp.model.home.RestaurantListModel
 import retrofit2.Call
 
 
@@ -22,15 +23,16 @@ class ApiCall {
 
         }
 
-        fun login(username : String, password_hash : String, device_type : String , is_facebook : String, is_google:String, r_key:String, r_token : String, language :String ) : Call<JsonObject> {
-            return getApiInterface().setLogin(username, password_hash, device_type,is_facebook, is_google, language,r_token,r_key )
+
+        fun fBlogin(jsonObject: JsonObject ) : Call<JsonObject> {
+            return getApiInterface().fBlogin(jsonObject)
         }
 
-        fun FBlogin(auth_key : String, eatmore_app : Boolean, first_name : String , email : String, fb_id:String ) : Call<JsonObject> {
-            return getApiInterface().setFBLogin(auth_key, eatmore_app, first_name,email, fb_id )
+        fun login(jsonObject: JsonObject ) : Call<JsonObject> {
+            return getApiInterface().login(jsonObject)
         }
 
-        fun Signup(jsonObject: JsonObject ) : Call<JsonObject> {
+        fun signup(jsonObject: JsonObject ) : Call<JsonObject> {
             return getApiInterface().signup(jsonObject )
         }
 
@@ -43,6 +45,12 @@ class ApiCall {
         fun getProductDetails(r_token : String , r_key : String, p_id : String ) : Call<ProductDetails> {
             return getApiInterface().setProductDetails(r_token, r_key, p_id)
         }
+
+        fun restaurantList(jsonObject: JsonObject ) : Call<RestaurantListModel> {
+            return getApiInterface().restaurantList(jsonObject)
+        }
+
+
         fun getPickuptime(r_token : String , r_key : String, shipping : String, language : String ) : Call<JsonObject> {
             return getApiInterface().getPickuptime(r_token, r_key, shipping,language)
         }
@@ -57,6 +65,10 @@ class ApiCall {
 
         fun openingHours(r_token : String , r_key : String) : Call<JsonObject> {
             return getApiInterface().openingHours(r_token, r_key)
+        }
+
+        fun lastLogin(r_token : String , r_key : String , customer_id : String , device_type: String ) : Call<JsonObject> {
+            return getApiInterface().lastLogin(r_token, r_key,customer_id,device_type)
         }
 
 
