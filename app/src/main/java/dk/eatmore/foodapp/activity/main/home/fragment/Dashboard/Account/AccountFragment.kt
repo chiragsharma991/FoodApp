@@ -111,8 +111,8 @@ class AccountFragment : BaseFragment() {
             }
             // show Profle screen every time if user is already login.
             if(PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS,false)){
-                val fragment = Profile.newInstance()
-                addFragment(R.id.home_account_container, fragment, Profile.TAG, true)
+             //   val fragment = Profile.newInstance()
+               // addFragment(R.id.home_account_container, fragment, Profile.TAG, true)
             }
 
 
@@ -264,8 +264,8 @@ class AccountFragment : BaseFragment() {
         PreferenceUtil.putValue(PreferenceUtil.KSTATUS, true)  // show close restaurant
         PreferenceUtil.save()
         //showProgressDialog()
-        val fragment = Profile.newInstance()
-        addFragment(R.id.home_account_container, fragment, Profile.TAG, true)
+      //  val fragment = Profile.newInstance()
+      //  addFragment(R.id.home_account_container, fragment, Profile.TAG, true)
 
     }
 
