@@ -75,6 +75,7 @@ class AccountFragment : BaseFragment() {
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
+            mAuth = FirebaseAuth.getInstance();
             clickEvent = MyClickHandler(this)
             binding.handlers = clickEvent
             logd(TAG, "saveInstance NULL")
@@ -111,8 +112,8 @@ class AccountFragment : BaseFragment() {
             }
             // show Profle screen every time if user is already login.
             if(PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS,false)){
-             //   val fragment = Profile.newInstance()
-               // addFragment(R.id.home_account_container, fragment, Profile.TAG, true)
+                val fragment = Profile.newInstance()
+                addFragment(R.id.home_account_container, fragment, Profile.TAG, true)
             }
 
 
@@ -264,8 +265,8 @@ class AccountFragment : BaseFragment() {
         PreferenceUtil.putValue(PreferenceUtil.KSTATUS, true)  // show close restaurant
         PreferenceUtil.save()
         //showProgressDialog()
-      //  val fragment = Profile.newInstance()
-      //  addFragment(R.id.home_account_container, fragment, Profile.TAG, true)
+        val fragment = Profile.newInstance()
+        addFragment(R.id.home_account_container, fragment, Profile.TAG, true)
 
     }
 
@@ -302,7 +303,6 @@ class AccountFragment : BaseFragment() {
 
     fun facebookSign() {
         loge(TAG, "call to Facebook")
-        mAuth = FirebaseAuth.getInstance();
         login_buttonUser.performClick()
         login_buttonUser.setFragment(this@AccountFragment)
         login_buttonUser.setReadPermissions("email", "public_profile");
@@ -353,7 +353,6 @@ class AccountFragment : BaseFragment() {
                                     profileuri = ""
                                 }
                                 Log.e(TAG, "FsignInWithCredential:success" + facebookemail + " " + fbid + " " + profileuri + " " + first_name+" "+last_name)
-                                facebookemail=""
 
                                 if(facebookemail==""){
                                     // case: any miss email from fb sdk :
@@ -448,7 +447,7 @@ class AccountFragment : BaseFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         loge(TAG, "---Activity Result---" + requestCode)
         super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == 9001) {
+      /*  if (requestCode == 9001) {
             val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data);
 
             try {
@@ -460,7 +459,7 @@ class AccountFragment : BaseFragment() {
             }
         } else if (requestCode == 64206) {
             callbackManager.onActivityResult(requestCode, resultCode, data);
-        }
+        }*/
     }
 
     private fun handleGoogleAccessToken(googleSignInAccount: GoogleSignInAccount) {
@@ -535,10 +534,10 @@ class AccountFragment : BaseFragment() {
             LoginManager.getInstance().logOut()
             mAuth.signOut()
         }
-        else if(PreferenceUtil.getString(PreferenceUtil.LOGIN_FROM, "").equals(Constants.GOOGLE)){
-            mGoogleSignInClient.signOut().addOnCompleteListener(activity!!, {})
-            mAuth.signOut()
-        }
+//        else if(PreferenceUtil.getString(PreferenceUtil.LOGIN_FROM, "").equals(Constants.GOOGLE)){
+//            mGoogleSignInClient.signOut().addOnCompleteListener(activity!!, {})
+//            mAuth.signOut()
+//        }
 
     }
 

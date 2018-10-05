@@ -24,7 +24,16 @@ Notes :
 
    --Research:
 
+   - call on activity result in fragment instead of activity (FB)
+
    1. how to add facebook callback in activity to fragment.
 
-   --Error:
-   1. Info fragment : null pointer on detech .
+   2. Info fragment : null pointer on detech .
+
+   3. Databinding : add concte string and show double values
+
+   4. dataclass: add constructer and init to add logic to change values in dataclass variable
+
+   5. Add sticky notes.
+
+   6. add toolbar in fragment and back button with hide and change another icon

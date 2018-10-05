@@ -182,7 +182,7 @@ class Profile : BaseFragment() {
         var uiData = MutableLiveData<UI_Profile>()
 
         fun init() {
-            val ui_profile = UI_Profile(PreferenceUtil.getString(PreferenceUtil.USER_NAME, "")!!, PreferenceUtil.getString(PreferenceUtil.PHONE, "")!!, PreferenceUtil.getString(PreferenceUtil.E_MAIL, "")!!)
+            val ui_profile = UI_Profile(PreferenceUtil.getString(PreferenceUtil.FIRST_NAME, "")!!, PreferenceUtil.getString(PreferenceUtil.PHONE, "")!!, PreferenceUtil.getString(PreferenceUtil.E_MAIL, "")!!)
             uiData.value = ui_profile
         }
 

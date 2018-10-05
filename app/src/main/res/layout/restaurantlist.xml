@@ -21,18 +21,25 @@
         android:clickable="true"
         android:layout_height="match_parent">
 
-        <include layout="@layout/toolbar_plus"
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/appbar"
             >
+            <include layout="@layout/toolbar"
+                >
 
-        </include>
+            </include>
+
+        </android.support.design.widget.AppBarLayout>
 
 
         <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_above="@+id/addtocart_view"
             android:fitsSystemWindows="true"
-            android:layout_below="@+id/toolbar_layout"
+            android:layout_below="@+id/appbar"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
             >
 
             <android.support.design.widget.CoordinatorLayout

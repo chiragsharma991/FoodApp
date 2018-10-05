@@ -22,7 +22,7 @@ data class Restaurant(
         val postal_code: String = "",
         val restaurant_name: String = "",
         val address: String = "",
-        val restaurant_rating: Double = 0.0
+        val total_rating: Float = 0.0f
 
 )
 

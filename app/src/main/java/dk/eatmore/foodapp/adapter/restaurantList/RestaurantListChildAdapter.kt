@@ -36,8 +36,8 @@ class RestaurantListChildAdapter(val context: Context, val listner: RestaurantLi
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is MyViewHolder) {
-
             holder.binding.restaurant=list.get(parentPosition).restaurant.get(position)
+            holder.binding.ordertype=list.get(parentPosition).ordertype
             holder.binding.rowChildItem.setOnClickListener {
                 listner.itemClicked(false,parentPosition,position)
 

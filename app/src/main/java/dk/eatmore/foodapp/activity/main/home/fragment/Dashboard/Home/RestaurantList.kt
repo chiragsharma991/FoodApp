@@ -17,10 +17,12 @@ import dk.eatmore.foodapp.activity.main.cart.CalculateAttribute
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
 import dk.eatmore.foodapp.activity.main.cart.fragment.Extratoppings
 import dk.eatmore.foodapp.activity.main.cart.fragment.OnlyExtratoppings
+import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.adapter.cart.CartViewAdapter
 import dk.eatmore.foodapp.adapter.restaurantList.RestaurantListParentAdapter
 import dk.eatmore.foodapp.databinding.FragmentFbSignupBinding
 import dk.eatmore.foodapp.databinding.RestaurantlistBinding
+import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.model.cart.ProductAttributeListItem
 import dk.eatmore.foodapp.model.cart.ProductDetails
 import dk.eatmore.foodapp.model.cart.ProductIngredientsItem
@@ -35,6 +37,7 @@ import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.activity_cart.*
 import kotlinx.android.synthetic.main.fragment_account_container.*
 import kotlinx.android.synthetic.main.restaurantlist.*
+import kotlinx.android.synthetic.main.toolbar.*
 import java.util.HashMap
 
 
@@ -71,6 +74,7 @@ class RestaurantList : BaseFragment() {
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
+            setToolbarforThis()
             ui_model = createViewModel()
             if (ui_model!!.restaurantList.value == null) {
                 fetch_ProductDetailList()
@@ -83,6 +87,14 @@ class RestaurantList : BaseFragment() {
         }
 
     }
+
+    fun setToolbarforThis(){
+        img_toolbar_back.setImageResource(R.drawable.back)
+        img_toolbar_back.setOnClickListener{
+            onBackpress()
+        }
+    }
+
 
     private fun fetch_ProductDetailList() {
 
@@ -121,11 +133,11 @@ class RestaurantList : BaseFragment() {
     private fun refreshview() {
         loge(TAG,"refresh view...")
         list= ArrayList()
-        var statuswiserestaurant= StatusWiseRestaurant("Open Now",ui_model!!.restaurantList.value!!.restaurant_list.open_now)
+        var statuswiserestaurant= StatusWiseRestaurant(getString(R.string.open_now),getString(R.string.ordernow),ui_model!!.restaurantList.value!!.restaurant_list.open_now)
         list.add(statuswiserestaurant)
-        statuswiserestaurant= StatusWiseRestaurant("Pre Order",ui_model!!.restaurantList.value!!.restaurant_list.pre_order)
+        statuswiserestaurant= StatusWiseRestaurant(getString(R.string.pre_order),getString(R.string.preorder),ui_model!!.restaurantList.value!!.restaurant_list.pre_order)
         list.add(statuswiserestaurant)
-        statuswiserestaurant= StatusWiseRestaurant("Closed",ui_model!!.restaurantList.value!!.restaurant_list.closed)
+        statuswiserestaurant= StatusWiseRestaurant(getString(R.string.closed),getString(R.string.notavailable),ui_model!!.restaurantList.value!!.restaurant_list.closed)
         list.add(statuswiserestaurant)
         recycler_view_parent.apply {
 
@@ -178,8 +190,13 @@ class RestaurantList : BaseFragment() {
 
     }
 
+    fun onBackpress(){
+        (activity as HomeActivity).onBackPressed()
+    }
+
     data class StatusWiseRestaurant(
             val status: String = "",
+            val ordertype: String = "",
             val restaurant: ArrayList<Restaurant>
     )
 

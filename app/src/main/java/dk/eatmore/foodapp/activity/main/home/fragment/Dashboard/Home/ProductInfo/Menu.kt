@@ -33,7 +33,6 @@ import dk.eatmore.foodapp.model.home.MenuListItem
 import dk.eatmore.foodapp.model.home.ProductListModel
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.utils.Constants
-import kotlinx.android.synthetic.main.fragment_account_container.*
 import kotlinx.android.synthetic.main.fragment_details.*
 import java.util.ArrayList
 

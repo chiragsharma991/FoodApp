@@ -90,15 +90,7 @@
 
                                 <android.support.v7.widget.AppCompatTextView
                                     style="@style/TextViewSmall"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="@dimen/_3sdp"
-                                    android:layout_weight="1"
-                                    android:layout_marginRight="@dimen/_5sdp"
-                                    android:text="@{xml_profile.phone}"
-                                    android:textColor="@color/black_light"
-                                    />
-                                <android.support.v7.widget.AppCompatTextView
-                                    style="@style/TextViewSmall"
+                                    android:layout_width="match_parent"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="@dimen/_3sdp"
                                     android:layout_weight="1"
@@ -106,7 +98,17 @@
                                     android:text="@{xml_profile.email}"
                                     android:textColor="@color/black_light"
                                     />
-
+                          <!--      <android.support.v7.widget.AppCompatTextView
+                                    style="@style/TextViewSmall"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_width="match_parent"
+                                    android:layout_marginLeft="@dimen/_3sdp"
+                                    android:layout_weight="1"
+                                    android:layout_marginRight="@dimen/_5sdp"
+                                    android:text=""
+                                    android:textColor="@color/black_light"
+                                    />
+-->
 
                             </LinearLayout>
 

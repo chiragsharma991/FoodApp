@@ -45,6 +45,7 @@
     <string name="minues">- %1$s</string>
     <string name="total_goods">Total (%1$s Goods)</string>
     <string name="plus">+ %1$s</string>
+    <string name="restaurant_rating">(%1$s ratings)</string>
     <string name="add_new_address">Add new address</string>
     <string name="address">Address</string>
     <string name="ok">OK</string>
@@ -54,6 +55,12 @@
     <string name="permission_denied">Permission denied</string>
     <string name="first_name">First name</string>
     <string name="subscribe">Modtag nyhedsbrev fra EatMore. Bare rolig vi spammer dig selvfølgelig ikke. Du accepterer at vi må kontakte dig via e-mail, telefon, push notifikationer eller sms med gode tilbud og informationer omkring konkurrencer, produkter og tjenester. Du kan til enhver tid afmelde dig.</string>
+    <string name="open_now">Open Now</string>
+    <string name="pre_order">Pre Order</string>
+    <string name="closed">Closed</string>
+    <string name="ordernow">Order Now</string>
+    <string name="preorder">Pre Order</string>
+    <string name="notavailable">Not available</string>
 
 
 </resources>
