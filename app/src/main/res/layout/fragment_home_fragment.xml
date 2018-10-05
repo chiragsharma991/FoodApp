@@ -39,7 +39,7 @@
                 <android.support.design.widget.AppBarLayout
                     android:id="@+id/app_bar"
                     android:layout_width="match_parent"
-                    android:layout_height="@dimen/_300sdp"
+                    android:layout_height="match_parent"
 
                     >
 
@@ -111,6 +111,39 @@
                                         style="@style/TextViewMid"
                                         android:text="@string/order_from_food_over_200_restaurants" />
 
+                                    <RelativeLayout
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:layout_marginLeft="@dimen/_32sdp"
+                                        android:layout_marginRight="@dimen/_32sdp"
+                                        android:layout_marginTop="@dimen/_32sdp"
+                                        app:layout_anchor="@id/app_bar"
+                                        app:layout_anchorGravity="bottom|center_horizontal"
+
+                                        >
+
+                                        <android.support.v7.widget.AppCompatEditText
+                                            android:id="@+id/find_rest_edt"
+                                            style="@style/EditText"
+                                            android:singleLine="true"
+                                            android:inputType="number"
+                                            android:textAppearance="?android:attr/textAppearanceSmall"
+                                            android:hint="Enter your postal code">
+
+                                        </android.support.v7.widget.AppCompatEditText>
+
+                                        <ImageView
+                                            android:layout_width="@dimen/_40sdp"
+                                            android:layout_height="@dimen/_40sdp"
+                                            android:layout_alignParentRight="true"
+                                            android:onClick="@{handlers::onFindClicked}"
+                                            android:background="@color/theme_color"
+                                            android:scaleType="centerInside"
+                                            app:srcCompat="@drawable/search" />
+
+                                    </RelativeLayout>
+
+
                                     <TextView
                                         style="@style/TextViewMid"
                                         android:layout_marginTop="@dimen/_32sdp"
@@ -142,6 +175,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_marginTop="@dimen/_32sdp"
+                    android:visibility="gone"
                     app:layout_behavior="@string/appbar_scrolling_view_behavior"
                     >
 
@@ -157,35 +191,6 @@
                 </android.support.v4.widget.NestedScrollView>
 
 
-                <RelativeLayout
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_marginLeft="@dimen/_32sdp"
-                    android:layout_marginRight="@dimen/_32sdp"
-                    android:layout_marginTop="@dimen/_32sdp"
-                    app:layout_anchor="@id/app_bar"
-                    app:layout_anchorGravity="bottom|center_horizontal"
-
-                    >
-
-                    <android.support.v7.widget.AppCompatEditText
-                        android:id="@+id/find_rest_edt"
-                        style="@style/EditText"
-                        android:textAppearance="?android:textAppearanceMedium"
-                        android:hint="Enter your postal code">
-
-                    </android.support.v7.widget.AppCompatEditText>
-
-                    <ImageView
-                        android:layout_width="@dimen/_40sdp"
-                        android:layout_height="@dimen/_40sdp"
-                        android:layout_alignParentRight="true"
-                        android:onClick="@{handlers::onFindClicked}"
-                        android:background="@color/theme_color"
-                        android:scaleType="centerInside"
-                        app:srcCompat="@drawable/search" />
-
-                </RelativeLayout>
 
             </android.support.design.widget.CoordinatorLayout>
 

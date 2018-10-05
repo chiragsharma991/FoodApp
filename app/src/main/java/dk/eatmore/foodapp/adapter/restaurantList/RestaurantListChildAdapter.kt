@@ -7,6 +7,7 @@ import android.support.v7.widget.RecyclerView
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import com.bumptech.glide.Glide
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.cart.CalculateAttribute
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.RestaurantList
@@ -36,6 +37,7 @@ class RestaurantListChildAdapter(val context: Context, val listner: RestaurantLi
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is MyViewHolder) {
+            Glide.with(context).load(list.get(parentPosition).restaurant.get(position).app_icon).into(holder.binding.imageview);
             holder.binding.restaurant=list.get(parentPosition).restaurant.get(position)
             holder.binding.ordertype=list.get(parentPosition).ordertype
             holder.binding.rowChildItem.setOnClickListener {

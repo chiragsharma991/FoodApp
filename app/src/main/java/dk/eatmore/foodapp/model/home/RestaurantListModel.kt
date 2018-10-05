@@ -22,8 +22,8 @@ data class Restaurant(
         val postal_code: String = "",
         val restaurant_name: String = "",
         val address: String = "",
-        val total_rating: Float = 0.0f
-
+        val total_rating: Float = 0.0f,
+        val app_icon: String = ""
 )
 
 

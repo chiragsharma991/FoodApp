@@ -6,8 +6,12 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
+import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
+import android.transition.ChangeBounds
+import android.transition.Slide
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -23,6 +27,7 @@ import dk.eatmore.foodapp.adapter.restaurantList.RestaurantListParentAdapter
 import dk.eatmore.foodapp.databinding.FragmentFbSignupBinding
 import dk.eatmore.foodapp.databinding.RestaurantlistBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
+import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.model.cart.ProductAttributeListItem
 import dk.eatmore.foodapp.model.cart.ProductDetails
 import dk.eatmore.foodapp.model.cart.ProductIngredientsItem
@@ -54,10 +59,13 @@ class RestaurantList : BaseFragment() {
 
         val TAG = "RestaurantList"
         var ui_model: RestaurantList.UIModel? = null
-        fun newInstance(): RestaurantList {
-            return RestaurantList()
+        fun newInstance(postal_code : String): RestaurantList {
+            val fragment = RestaurantList()
+            val bundle = Bundle()
+            bundle.putString(Constants.POSTAL_CODE ,postal_code)
+            fragment.arguments=bundle
+            return fragment
         }
-
     }
 
 
@@ -97,11 +105,12 @@ class RestaurantList : BaseFragment() {
 
 
     private fun fetch_ProductDetailList() {
+        val bundle=arguments
 
         val jsonobject= JsonObject()
         jsonobject.addProperty(Constants.AUTH_KEY,Constants.AUTH_VALUE)
         jsonobject.addProperty(Constants.EATMORE_APP,true)
-        jsonobject.addProperty(Constants.POSTAL_CODE,"6400")
+        jsonobject.addProperty(Constants.POSTAL_CODE,bundle!!.getString(Constants.POSTAL_CODE,"0"))
 
         callAPI(ApiCall.restaurantList(jsonobject), object : BaseFragment.OnApiCallInteraction {
 
@@ -144,6 +153,19 @@ class RestaurantList : BaseFragment() {
             mAdapter = RestaurantListParentAdapter(context!!,list, object : RestaurantListParentAdapter.AdapterListener {
                 override fun itemClicked(parentView: Boolean, parentPosition: Int, chilPosition: Int) {
                     loge(TAG,"clicked---")
+                    val fragment = DetailsFragment.newInstance()
+                    var enter : Slide?=null
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        enter = Slide()
+                        enter.setDuration(300)
+                        enter.slideEdge = Gravity.BOTTOM
+                        val changeBoundsTransition : ChangeBounds = ChangeBounds()
+                        changeBoundsTransition.duration = 300
+                        //fragment!!.sharedElementEnterTransition=changeBoundsTransition
+                        fragment.sharedElementEnterTransition=changeBoundsTransition
+                        fragment.enterTransition=enter
+                    }
+                    (parentFragment as HomeFragment).addFragment(R.id.home_fragment_container,fragment, DetailsFragment.TAG,false)
                 }
             })
             layoutManager = LinearLayoutManager(context)

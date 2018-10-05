@@ -36,9 +36,6 @@
 
 
 
-
-
-
         <FrameLayout
             android:id="@+id/home_order_container"
             android:layout_width="match_parent"

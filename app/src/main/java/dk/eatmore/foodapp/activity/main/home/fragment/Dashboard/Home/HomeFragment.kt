@@ -8,6 +8,10 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
+import android.support.annotation.NonNull
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.CoordinatorLayout
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.transition.ChangeBounds
 import android.transition.Slide
@@ -34,6 +38,7 @@ import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.tasks.OnCompleteListener
 import com.google.firebase.auth.*
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.RestaurantList
+import dk.eatmore.foodapp.utils.Constants
 
 
 class HomeFragment : BaseFragment() {
@@ -78,6 +83,10 @@ class HomeFragment : BaseFragment() {
             clickEvent =MyClickHandler(this)
             binding.handlers=clickEvent
 
+
+
+
+/*
             recycler_view.apply {
                 mAdapter = OrderListAdapter(this@HomeFragment,object: OrderListAdapter.AdapterListener {
                     override fun itemClicked(position: Int) {
@@ -100,11 +109,25 @@ class HomeFragment : BaseFragment() {
                 layoutManager = LinearLayoutManager(getActivityBase())
                 adapter = mAdapter
             }
+*/
+            // disable app bar scrolling.
+            if (app_bar.getLayoutParams() != null) {
+                val layoutParams = app_bar.getLayoutParams() as CoordinatorLayout.LayoutParams
+                val appBarLayoutBehaviour = AppBarLayout.Behavior()
+                appBarLayoutBehaviour.setDragCallback(object : AppBarLayout.Behavior.DragCallback() {
+                    override fun canDrag(appBarLayout: AppBarLayout): Boolean {
+                        return false
+                    }
+                })
+                layoutParams.behavior = appBarLayoutBehaviour
+            }
+
 
         }else{
             logd(TAG,"saveInstance NOT NULL")
 
         }
+
 
 
 
@@ -129,106 +152,16 @@ class HomeFragment : BaseFragment() {
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-      //  callbackManager.onActivityResult(requestCode, resultCode, data);
-        loge(TAG,"---Activity Result---")
-        super.onActivityResult(requestCode, resultCode, data)
-
-          // Result returned from launching the Intent from GoogleSignInApi.getSignInIntent(...);
-        if (requestCode == 9001) {
-            val task :Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data);
-
-            try {
-                // Google Sign In was successful, authenticate with Firebase
-                 val account : GoogleSignInAccount = task.getResult(ApiException::class.java)
-                 firebaseAuthWithGoogle(account)
-
-            } catch ( e :ApiException) {
-                // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e);
-                // [START_EXCLUDE]
-         //       updateUI(null);
-                // [END_EXCLUDE]
-            }
-        }
-    }
-
-    private fun firebaseAuthWithGoogle(account: GoogleSignInAccount) {
-
-             Log.d(TAG, "firebaseAuthWithGoogle:" + account.displayName);
-        // [START_EXCLUDE silent]
-       // showProgressDialog();
-        // [END_EXCLUDE]
-
-        val  credential : AuthCredential = GoogleAuthProvider.getCredential(account.getIdToken(), null);
-        mAuth.signInWithCredential(credential).addOnCompleteListener(activity!! ,object : OnCompleteListener<AuthResult> {
-            override fun onComplete(task: Task<AuthResult>) {
-                if (task.isSuccessful()) {
-                    // Sign in success, update UI with the signed-in user's information
-                    Log.e(TAG, "signInWithCredential:success");
-                    val user :FirebaseUser = mAuth.getCurrentUser()!!;
-                    mAuth.signOut();
-                    mGoogleSignInClient.signOut().addOnCompleteListener(activity!!,
-                            object:OnCompleteListener<Void> {
-                                override fun onComplete(p0: Task<Void>) {
-
-                                    loge(TAG,"out---")
-                                }
-
-                            })
-
-                    // updateUI(user);
-                } else {
-                    // If sign in fails, display a message to the user.
-                    Log.e(TAG, "signInWithCredential:failure", task.getException());
-                 //   Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                  //  updateUI(null);
-                }
-                //                        hideProgressDialog();
-
-            }
-
-        })
-
-        }
-
-
-
-
-
-           /*     .addOnCompleteListener(this, new OnCompleteListener<AuthResult>() {
-                    @Override
-                    public void onComplete(@NonNull Task<AuthResult> task) {
-                        if (task.isSuccessful()) {
-                            // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
-                        } else {
-                            // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Snackbar.make(findViewById(R.id.main_layout), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
-                            updateUI(null);
-                        }
-
-                        // [START_EXCLUDE]
-                        hideProgressDialog();
-                        // [END_EXCLUDE]
-                    }
-                });*/
-
-
-
-    // [START auth_with_google]
-
-
-
     inner class  MyClickHandler(internal var homefragment: HomeFragment) {
 
 
         fun onFindClicked(view: View) {
-            val restaurantlist=RestaurantList.newInstance()
-            addFragment(R.id.home_fragment_container,restaurantlist,RestaurantList.TAG,true)
+
+            if(find_rest_edt.text.trim().toString().length >0 ){
+                val restaurantlist=RestaurantList.newInstance(find_rest_edt.text.trim().toString())
+                addFragment(R.id.home_fragment_container,restaurantlist,RestaurantList.TAG,true)
+            }
+
 
         }
 
