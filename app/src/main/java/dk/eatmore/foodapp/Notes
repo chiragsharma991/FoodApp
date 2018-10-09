@@ -4,6 +4,8 @@ Notes :
 
 * Life cycle process:
 
+
+
 1. Activity :
    -  add all intialise , click interface in oncreate block
    -  check view model null in to same condition
@@ -16,9 +18,41 @@ Notes :
    -  check view model null in to saveinstance null condition
 
 
+   Project Overflow:
+
+   -----------------HomeActivity-----------------  (frame layout)
+                        |
+   --------------HomeContainerFragment-----------  (view pager for 3 section)
+                        |
+   -----HomeFragment---OrderFragment---AccountFragment-----
+             |          |                     |
+
+        Homecontainer  Ordercontainer  Accountcontainer   (Every time you have to get ref of container and add in this three section)
+         fragment       fragment          fragment
+
+
+     * activity : fragment activity when we add fragment.
+     * parent fragment:
+
+     CASE 01        CASE 02    -- Activity--
+                                     |
+      --Activity--               fragment
+           |                         |
+        fragment               nested fragment
+           |                         |
+        fragment               nested fragment
+
+      Parent is Activity && Parent is Fragment not Activity
+
+
+
 * Dp:
    - whenever you start ui take reference of 8 dp and start.
    - normally in between row : 5dp and hardly 8dp
+
+
+
+
 
 
 

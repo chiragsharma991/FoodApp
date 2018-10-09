@@ -11,8 +11,8 @@
 <data>
 
     <variable
-        name="data"
-        type="dk.eatmore.foodapp.activity.main.home.fragment.ProductInfo.Info.OpeningHourModel">
+        name="opening_hours"
+        type="dk.eatmore.foodapp.model.home.Opening_hours">
 
     </variable>
 
@@ -23,28 +23,28 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_weight="2"
-        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginStart="@dimen/_2sdp"
+        android:layout_marginEnd="@dimen/_2sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
         android:orientation="horizontal">
 
 
         <android.support.v7.widget.AppCompatTextView
             style="@style/TextViewSmall"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/_3sdp"
             android:layout_weight="1.05"
-            android:textColor="@{data.openingFlag ? @color/theme_color : @color/black_light}"
-            android:text="@{data.openingDays}"
+            android:textColor="@{opening_hours.today ? @color/theme_color : @color/black_light}"
+            android:text="@{opening_hours.day}"
             />
 
 
         <android.support.v7.widget.AppCompatTextView
             style="@style/TextViewSmall"
             android:layout_gravity="center_vertical"
-            android:layout_marginLeft="@dimen/_3sdp"
             android:layout_weight="0.5"
             android:gravity="right"
-            android:text="@{data.openingTime}"
-            android:textColor="@{data.openingFlag ? @color/theme_color : @color/black_light }"
+            android:text="@{@string/openandclose(opening_hours.opens,opening_hours.closes)}"
+            android:textColor="@{opening_hours.today ? @color/theme_color : @color/black_light }"
 
             />
 

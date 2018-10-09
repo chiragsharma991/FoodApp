@@ -134,10 +134,10 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
     }
 
     fun backpress(): Boolean {
-        val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
-        val homeFragment : HomeFragment =(fragmentof as HomeContainerFragment).getHomeFragment()
-        (homeFragment.fragment as DetailsFragment).setPalette()
-        (homeFragment.fragment as DetailsFragment).appbar.setExpanded(true,true)
+     //  val fragment = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(DetailsFragment.TAG)
+     //   val homeFragment : HomeFragment =(fragmentof as HomeContainerFragment).getHomeFragment()
+     //   (parentFragment as DetailsFragment).setPalette()
+     //   (parentFragment as DetailsFragment).appbar.setExpanded(true,true)
         return true
     }
 

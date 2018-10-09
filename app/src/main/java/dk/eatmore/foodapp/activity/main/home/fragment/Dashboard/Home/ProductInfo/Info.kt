@@ -1,49 +1,53 @@
-package dk.eatmore.foodapp.activity.main.home.fragment.ProductInfo
+package dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo
 
-import android.arch.lifecycle.MutableLiveData
-import android.arch.lifecycle.ViewModel
-import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.epay.EpayActivity
-import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.OpeningHours
+import dk.eatmore.foodapp.activity.main.home.HomeActivity
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.HealthReport
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerCallback
 import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
-import dk.eatmore.foodapp.databinding.FragmentAccountContainerBinding
 import dk.eatmore.foodapp.databinding.InfoRestaurantBinding
 import dk.eatmore.foodapp.databinding.RowOpeningHoursBinding
+import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
+import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
-import dk.eatmore.foodapp.rest.ApiCall
+import dk.eatmore.foodapp.model.home.Opening_hours
+import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.info_restaurant.*
-import kotlinx.android.synthetic.main.menu_restaurant.*
-import kotlinx.android.synthetic.main.openinghours.*
-import org.json.JSONException
-import java.util.*
-import kotlin.collections.ArrayList
+import dk.eatmore.foodapp.R.id.linearLayout
+import android.databinding.adapters.ViewBindingAdapter.setPadding
+import android.databinding.adapters.TextViewBindingAdapter.setText
+import android.graphics.Typeface
+import android.support.v4.content.ContextCompat
+import android.support.v7.widget.AppCompatTextView
+import android.view.Gravity
+import android.widget.LinearLayout
+import android.widget.TextView
+
 
 class Info : BaseFragment() {
 
     private lateinit var binding: InfoRestaurantBinding
-    private lateinit var mAdapter: UniversalAdapter<OpeningHourModel, RowOpeningHoursBinding>
-    private lateinit var openinghourmodel: OpeningHourModel
-    private val openinghoursList: ArrayList<OpeningHourModel> =ArrayList()
-    var ui_model: Info.UIModel? = null
-
+    private lateinit var mAdapter: UniversalAdapter<Opening_hours, RowOpeningHoursBinding>
+    private lateinit var restaurant: Restaurant
 
 
     companion object {
 
         val TAG = "Info"
-        fun newInstance(): Info {
-            return Info()
+        fun newInstance(restaurant: Restaurant): Info {
+            val fragment = Info()
+            val bundle = Bundle()
+            bundle.putSerializable(Constants.RESTAURANT, restaurant)
+            fragment.arguments = bundle
+            return fragment
         }
 
     }
@@ -65,8 +69,11 @@ class Info : BaseFragment() {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
-            ui_model = createViewModel()
-            fetch_OpeningHours()
+            val myclickhandler = MyClickHandler(this)
+            restaurant = arguments!!.getSerializable(Constants.RESTAURANT) as Restaurant
+            binding.restaurant = restaurant
+            binding.handler = myclickhandler
+            refresh_view()
 
         } else {
             logd(TAG, "saveInstance NOT NULL")
@@ -74,93 +81,25 @@ class Info : BaseFragment() {
         }
     }
 
-    private fun setRecyclerData(binder: RowOpeningHoursBinding, model: OpeningHourModel) {
-        binder.data = model
-    }
-
-
-    private fun createViewModel(): UIModel =
-            ViewModelProviders.of(this).get(UIModel::class.java).apply {
-                openinghoursList.observe(this@Info, android.arch.lifecycle.Observer<ArrayList<OpeningHourModel>> {
-                      refresh_view()
-                })
-            }
-
-    class UIModel : ViewModel() {
-
-        var openinghoursList = MutableLiveData<ArrayList<OpeningHourModel>>()
-
-    }
 
     private fun refresh_view() {
 
-        mAdapter = UniversalAdapter(context!!, ui_model!!.openinghoursList.value, R.layout.row_opening_hours, object : RecyclerCallback<RowOpeningHoursBinding, OpeningHourModel> {
-            override fun bindData(binder: RowOpeningHoursBinding, model: OpeningHourModel) {
+        mAdapter = UniversalAdapter(context!!, restaurant.opening_hours, R.layout.row_opening_hours, object : RecyclerCallback<RowOpeningHoursBinding, Opening_hours> {
+            override fun bindData(binder: RowOpeningHoursBinding, model: Opening_hours) {
                 setRecyclerData(binder, model)
             }
         })
         recycler_view.layoutManager = LinearLayoutManager(getActivityBase())
         recycler_view.adapter = mAdapter
 
-    }
-
-
-    private fun fetch_OpeningHours() {
-
-        callAPI(ApiCall.openingHours(
-                r_token = Constants.R_TOKEN,
-                r_key = Constants.R_KEY
-        ), object : BaseFragment.OnApiCallInteraction {
-
-            override fun <T> onSuccess(body: T?) {
-                val json = body as JsonObject
-                try {
-                    openinghoursList.clear()
-                    val status = json.get("status").asBoolean
-                    if (status) {
-                        val calendar = Calendar.getInstance()
-                        val day = calendar.get(Calendar.DAY_OF_WEEK)
-
-                        val jsonArray = json.getAsJsonArray("Openinghours")
-                        for (i in 0 until jsonArray.size()) {
-                            val jsonObject = jsonArray.get(i)
-                            if (i == day - 2)
-                                openinghourmodel = OpeningHourModel(jsonObject.asJsonObject.get("day").asString,
-                                        jsonObject.asJsonObject.get("opens").asString + "   -   " + jsonObject.asJsonObject.get("closes").asString, true)
-                            else
-                                openinghourmodel = OpeningHourModel(jsonObject.asJsonObject.get("day").asString,
-                                        jsonObject.asJsonObject.get("opens").asString + "   -   " + jsonObject.asJsonObject.get("closes").asString, false)
-
-                            openinghoursList.add(openinghourmodel)
-                            //    Log.e("Calendar","Calendar"+day);
-                        }
-                        ui_model!!.openinghoursList.value=openinghoursList  //notify data
-                    }
-
-                } catch (e: JSONException) {
-                    e.printStackTrace()
-                }
-
-
-            }
-
-            override fun onFail(error: Int) {
-                when (error) {
-                    404 -> {
-                        showSnackBar(clayout, getString(R.string.error_404))
-                    }
-                    100 -> {
-
-                        showSnackBar(clayout, getString(R.string.internet_not_available))
-                    }
-                }
-            }
-        })
-
+        addDeliveryinformation()
 
     }
 
-    data class OpeningHourModel(var openingDays: String, var openingTime: String, var openingFlag: Boolean?)
+
+    private fun setRecyclerData(binder: RowOpeningHoursBinding, model: Opening_hours) {
+        binder.openingHours = model
+    }
 
 
     override fun onDestroy() {
@@ -170,7 +109,7 @@ class Info : BaseFragment() {
 
     override fun onDetach() {
         super.onDetach()
-       // ui_model!!.openinghoursList.value!!.clear()
+        // ui_model!!.openinghoursList.value!!.clear()
         logd(TAG, "on detech...")
 
     }
@@ -180,6 +119,365 @@ class Info : BaseFragment() {
         logd(TAG, "on pause...")
 
     }
+
+    class MyClickHandler(val info: Info) {
+
+
+        fun tapOnHealthReport(view: View) {
+            info.tapOnHealthReport()
+        }
+
+
+    }
+
+    private fun tapOnHealthReport() {
+
+        val fragment = HealthReport.newInstance()
+        val homefragment: HomeFragment = ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment()
+        homefragment.addFragment(R.id.home_fragment_container, fragment, HealthReport.TAG, true)
+
+
+    }
+
+    private fun addDeliveryinformation() {
+
+        try {
+
+            if (!(restaurant.shipping_charges.size > 0)) {
+                // show empty
+                return
+            }
+            linearcontainer.removeAllViewsInLayout()
+            if (restaurant.shipping_type == "by_distance") {
+
+                var parent = LinearLayout(context)
+                val parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                parms.bottomMargin = 8
+                parent.layoutParams = parms
+                parent.orientation = LinearLayout.HORIZONTAL
+
+                val headerlist = arrayListOf("Fra (km)", "Til (km)", "Pris (kr.)")
+                // Add header
+                for (i in 0..2) {
+
+                    // Add textview 1
+                    val textView1 = AppCompatTextView(context)
+                    val parms = LinearLayout.LayoutParams(0,
+                            LinearLayout.LayoutParams.WRAP_CONTENT)
+                    parms.weight = 1f
+                    if (i == 0)
+                        parms.rightMargin = 8
+                    else if (i == 1)
+                        parms.rightMargin = 8
+                    else if (i == 2)
+                        parms.rightMargin = 0
+                    textView1.layoutParams = parms
+
+
+                    textView1.text = headerlist[i]
+                    if (i == 0)
+                        textView1.gravity = Gravity.START
+                    else if (i == 1)
+                        textView1.gravity = Gravity.START
+                    else if (i == 2)
+                        textView1.gravity = Gravity.START
+                    textView1.setSingleLine(true)
+                    textView1.setTextAppearance(context, R.style.TextViewSmall)
+                    textView1.typeface= Typeface.DEFAULT_BOLD
+                    textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+
+                    parent.addView(textView1)
+
+                }
+
+                linearcontainer.addView(parent)
+
+                // Add values
+                for (i in 0 until restaurant.shipping_charges.size) {
+                    parent = LinearLayout(context)
+                    val parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                    parms.bottomMargin = 8
+                    parent.layoutParams = parms
+                    parent.orientation = LinearLayout.HORIZONTAL
+
+                    // add row
+                    for (j in 0..2) {
+                        // add column
+                        // Add textview 1
+                        val textView1 = AppCompatTextView(context)
+                        val parms = LinearLayout.LayoutParams(0,
+                                LinearLayout.LayoutParams.WRAP_CONTENT)
+                        parms.weight = 1f
+                        if (j == 0)
+                            parms.rightMargin = 8
+                        else if (j == 1)
+                            parms.rightMargin = 8
+                        else if (j == 2)
+                            parms.rightMargin = 0
+                        textView1.layoutParams = parms
+
+                        if (j == 0)
+                            textView1.text = restaurant.shipping_charges[i].from_pd
+                        else if (j == 1)
+                            textView1.text = restaurant.shipping_charges[i].to_pd
+                        else if (j == 2)
+                            textView1.text = restaurant.shipping_charges[i].price
+
+                        if (j == 0)
+                            textView1.gravity = Gravity.START
+                        else if (j == 1)
+                            textView1.gravity = Gravity.START
+                        else if (j == 2)
+                            textView1.gravity = Gravity.START
+                        textView1.setSingleLine(true)
+                        textView1.setTextAppearance(context, R.style.TextViewSmall)
+                        textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+
+                        parent.addView(textView1)
+
+                    }
+                    linearcontainer.addView(parent)
+
+
+                }
+
+
+            } else if (restaurant.shipping_type == "by_postal") {
+
+                var parent = LinearLayout(context)
+                val parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                parms.bottomMargin = 8
+                parent.layoutParams = parms
+                parent.orientation = LinearLayout.HORIZONTAL
+
+                val headerlist = arrayListOf("Postnr.", "Min. (kr.)", "Pris (kr.)")
+                // Add header
+                for (i in 0..2) {
+
+                    // Add textview 1
+                    val textView1 = AppCompatTextView(context)
+                    val parms = LinearLayout.LayoutParams(0,
+                            LinearLayout.LayoutParams.WRAP_CONTENT)
+                    parms.weight = 1f
+                    if (i == 0)
+                        parms.rightMargin = 8
+                    else if (i == 1)
+                        parms.rightMargin = 8
+                    else if (i == 2)
+                        parms.rightMargin = 0
+                    textView1.layoutParams = parms
+
+
+                    textView1.text = headerlist[i]
+                    if (i == 0)
+                        textView1.gravity = Gravity.START
+                    else if (i == 1)
+                        textView1.gravity = Gravity.START
+                    else if (i == 2)
+                        textView1.gravity = Gravity.START
+                    textView1.setSingleLine(true)
+                    textView1.setTextAppearance(context, R.style.TextViewSmall)
+                    textView1.typeface= Typeface.DEFAULT_BOLD
+                    textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+
+                    parent.addView(textView1)
+
+                }
+
+                linearcontainer.addView(parent)
+
+                // Add values
+                for (i in 0 until restaurant.shipping_charges.size) {
+                    parent = LinearLayout(context)
+                    var parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                    parms.bottomMargin = 8
+                    parent.layoutParams = parms
+                    parent.orientation = LinearLayout.HORIZONTAL
+
+                    // add row
+                    for (j in 0..2) {
+                        // add column
+                        // Add textview 1
+                        val textView1 = AppCompatTextView(context)
+                        parms = LinearLayout.LayoutParams(0,
+                                LinearLayout.LayoutParams.WRAP_CONTENT)
+                        parms.weight = 1f
+                        if (j == 0)
+                            parms.rightMargin = 8
+                        else if (j == 1)
+                            parms.rightMargin = 8
+                        else if (j == 2)
+                            parms.rightMargin = 0
+                        textView1.layoutParams = parms
+
+                        if (j == 0)
+                            textView1.text = restaurant.shipping_charges[i].postal_code
+                        else if (j == 1)
+                            textView1.text = restaurant.shipping_charges[i].minimum_order_price
+                        else if (j == 2)
+                            textView1.text = restaurant.shipping_charges[i].price
+
+                        if (j == 0)
+                            textView1.gravity = Gravity.START
+                        else if (j == 1)
+                            textView1.gravity = Gravity.START
+                        else if (j == 2)
+                            textView1.gravity = Gravity.START
+                        textView1.setSingleLine(true)
+                        textView1.setTextAppearance(context, R.style.TextViewSmall)
+                        textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+
+                        parent.addView(textView1)
+
+                    }
+                    linearcontainer.addView(parent)
+
+
+                }
+
+
+            } else if (restaurant.shipping_type == "by_order_price") {
+
+                var parent = LinearLayout(context)
+                val parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                parms.bottomMargin = 8
+                parent.layoutParams = parms
+                parent.orientation = LinearLayout.HORIZONTAL
+
+                val headerlist = arrayListOf("Fra (Pris)", "Til (Pris.)", "Pris (kr.)")
+                // Add header
+                for (i in 0..2) {
+
+                    // Add textview 1
+                    val textView1 = AppCompatTextView(context)
+                    val parms = LinearLayout.LayoutParams(0,
+                            LinearLayout.LayoutParams.WRAP_CONTENT)
+                    parms.weight = 1f
+                    if (i == 0)
+                        parms.rightMargin = 8
+                    else if (i == 1)
+                        parms.rightMargin = 8
+                    else if (i == 2)
+                        parms.rightMargin = 0
+                    textView1.layoutParams = parms
+
+
+                    textView1.text = headerlist[i]
+                    if (i == 0)
+                        textView1.gravity = Gravity.START
+                    else if (i == 1)
+                        textView1.gravity = Gravity.START
+                    else if (i == 2)
+                        textView1.gravity = Gravity.START
+                    textView1.setSingleLine(true)
+                    textView1.setTextAppearance(context, R.style.TextViewSmall)
+                    textView1.typeface= Typeface.DEFAULT_BOLD
+                    textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+
+                    parent.addView(textView1)
+
+                }
+
+                linearcontainer.addView(parent)
+
+                // Add values
+                for (i in 0 until restaurant.shipping_charges.size) {
+                    parent = LinearLayout(context)
+                    var parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                    parms.bottomMargin = 8
+                    parent.layoutParams = parms
+                    parent.orientation = LinearLayout.HORIZONTAL
+
+                    // add row
+                    for (j in 0..2) {
+                        // add column
+                        // Add textview 1
+                        val textView1 = AppCompatTextView(context)
+                        parms = LinearLayout.LayoutParams(0,
+                                LinearLayout.LayoutParams.WRAP_CONTENT)
+                        parms.weight = 1f
+                        if (j == 0)
+                            parms.rightMargin = 8
+                        else if (j == 1)
+                            parms.rightMargin = 8
+                        else if (j == 2)
+                            parms.rightMargin = 0
+                        textView1.layoutParams = parms
+
+                        if (j == 0)
+                            textView1.text = restaurant.shipping_charges[i].from_pd
+                        else if (j == 1)
+                            textView1.text = restaurant.shipping_charges[i].to_pd
+                        else if (j == 2)
+                            textView1.text = restaurant.shipping_charges[i].price
+
+                        if (j == 0)
+                            textView1.gravity = Gravity.START
+                        else if (j == 1)
+                            textView1.gravity = Gravity.START
+                        else if (j == 2)
+                            textView1.gravity = Gravity.START
+                        textView1.setSingleLine(true)
+                        textView1.setTextAppearance(context, R.style.TextViewSmall)
+                        textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+
+                        parent.addView(textView1)
+
+                    }
+                    linearcontainer.addView(parent)
+
+
+                }
+
+
+            } else if (restaurant.shipping_type == "flat_rate") {
+
+                val parent = LinearLayout(context)
+                val parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                parms.bottomMargin = 8
+                parent.layoutParams = parms
+                parent.orientation = LinearLayout.HORIZONTAL
+                val headerlist = arrayListOf("Pris (Kr.)", restaurant.shipping_charges.get(0).price)
+                // Add header
+                for (i in 0..1) {
+
+                    // Add textview 1
+                    val textView1 = AppCompatTextView(context)
+                    val parms = LinearLayout.LayoutParams(0,
+                            LinearLayout.LayoutParams.WRAP_CONTENT)
+                    parms.weight = 1f
+                    if (i == 0)
+                        parms.rightMargin = 8
+                    else if (i == 1)
+                        parms.rightMargin = 0
+                    textView1.layoutParams = parms
+                    textView1.text = headerlist[i]
+                    textView1.typeface= Typeface.DEFAULT_BOLD
+                    if (i == 0)
+                        textView1.gravity = Gravity.START
+                    else if (i == 1)
+                        textView1.gravity = Gravity.START
+                    textView1.setSingleLine(true)
+                    textView1.setTextAppearance(context, R.style.TextViewSmall)
+                    textView1.typeface= Typeface.DEFAULT_BOLD
+                    textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                    parent.addView(textView1)
+                }
+
+                linearcontainer.addView(parent)
+
+
+            }
+
+
+        } catch (e: Exception) {
+            loge(TAG, "dynamic text error:--- " + e.message)
+
+        }
+
+
+    }
+
 
 }
 

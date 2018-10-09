@@ -75,6 +75,7 @@
                     android:id="@+id/imageview"
                     android:background="@color/gray"
                     android:padding="@dimen/_5sdp"
+                    android:scaleType="fitXY"
                     />
 
 
@@ -196,7 +197,7 @@
                             android:id="@+id/ratingtxt"
                             android:layout_gravity="center_vertical"
                             android:singleLine="true"
-                            android:text="@{@string/restaurant_rating(restaurant.total_rating)}"
+                            android:text="@{@string/restaurant_rating(restaurant.total_review_count)}"
                             android:textColor="@color/black_light" />
 
 

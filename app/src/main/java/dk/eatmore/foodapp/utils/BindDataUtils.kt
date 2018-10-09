@@ -10,6 +10,9 @@ import dk.eatmore.foodapp.model.cart.ProductAttributeValueItem
 import dk.eatmore.foodapp.model.home.ProductListItem
 import java.text.NumberFormat
 import java.util.*
+import android.view.ViewGroup
+
+
 
 object BindDataUtils {
 
@@ -19,6 +22,8 @@ object BindDataUtils {
         view.visibility = if (show) View.VISIBLE else View.GONE
     }
 */
+
+
 
     fun convertCurrencyToDanish(amount: String): String? {
         val deviceLocale = Locale.getDefault().language //  if (deviceLocale.equalsIgnoreCase("en")) {
@@ -33,5 +38,13 @@ object BindDataUtils {
         return convertedAmount+"kr"
         //  }
     }
+
+
+    fun calculateRatingline() : Float {
+      return 70f
+
+    }
+
+
 }
 

@@ -24,7 +24,10 @@ import android.webkit.WebViewClient
 import android.app.Activity
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.databinding.HealthreportBinding
+import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
+import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import kotlinx.android.synthetic.main.healthreport.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 
 class HealthReport : BaseFragment() {
@@ -58,6 +61,10 @@ class HealthReport : BaseFragment() {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
+            img_toolbar_back.setImageResource(R.drawable.back)
+            img_toolbar_back.setOnClickListener {
+                onBackpress()
+            }
             setwebview()
         }else{
             logd(TAG,"saveInstance NOT NULL")
@@ -94,6 +101,8 @@ class HealthReport : BaseFragment() {
         if (webview != null && webview.canGoBack()) {
             webview.goBack();
         } else {
+            val homefragment : HomeFragment = ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment()
+            homefragment.popFragment()
         }
 
     }

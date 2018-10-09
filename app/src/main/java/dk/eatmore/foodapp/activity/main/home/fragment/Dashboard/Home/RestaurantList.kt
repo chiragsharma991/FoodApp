@@ -153,7 +153,10 @@ class RestaurantList : BaseFragment() {
             mAdapter = RestaurantListParentAdapter(context!!,list, object : RestaurantListParentAdapter.AdapterListener {
                 override fun itemClicked(parentView: Boolean, parentPosition: Int, chilPosition: Int) {
                     loge(TAG,"clicked---")
-                    val fragment = DetailsFragment.newInstance()
+                    val fragment = DetailsFragment.newInstance(
+                            restaurant = list.get(parentPosition).restaurant.get(chilPosition),
+                            status =     list.get(parentPosition).status
+                    )
                     var enter : Slide?=null
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         enter = Slide()
@@ -217,6 +220,9 @@ class RestaurantList : BaseFragment() {
     }
 
     data class StatusWiseRestaurant(
+            // status : order type like : pre order, new order
+            // order type : Mainly use to show on button
+
             val status: String = "",
             val ordertype: String = "",
             val restaurant: ArrayList<Restaurant>

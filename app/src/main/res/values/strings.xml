@@ -61,6 +61,15 @@
     <string name="ordernow">Order Now</string>
     <string name="preorder">Pre Order</string>
     <string name="notavailable">Not available</string>
+    <string name="user_have_reviewed">%1$s user have reviewed</string>
+    <string name="samlet">samlet</string>
+    <string name="kvalitet">Kvalitet</string>
+    <string name="kundeservice">Kundeservice</string>
+    <string name="leveringstid">Leveringstid</string>
+    <string name="openandclose">%1$s - %2$s</string>
+    <string name="percent">%1$s%%</string>
+    <string name="food_administration">Fødevarestyrelsen Kontrolrapport</string>
+    <string name="deliveryinformation">Leveringsinformation</string>
 
 
 </resources>

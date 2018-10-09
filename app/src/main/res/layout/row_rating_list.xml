@@ -8,6 +8,18 @@
     <data>
 
 
+        <variable
+            name="review_list"
+            type="dk.eatmore.foodapp.model.home.Review_list">
+
+        </variable>
+
+        <variable
+            name="handler"
+            type="dk.eatmore.foodapp.adapter.universalAdapter.RecyclerClickListner" />
+
+
+
     </data>
 
     <RelativeLayout
@@ -17,16 +29,12 @@
         xmlns:app="http://schemas.android.com/apk/res-auto">
 
 
-        <android.support.v7.widget.CardView
-            android:id="@+id/row_order_cardview"
-            style="@style/CardViewStyle"
-            >
+
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="vertical"
-                android:layout_margin="@dimen/_8sdp"
                 >
                 <LinearLayout
                     android:layout_width="match_parent"
@@ -40,7 +48,7 @@
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/_3sdp"
                         android:layout_weight="1.05"
-                        android:text="Sandra"
+                        android:text="@{review_list.review_by}"
                         android:textStyle="bold"
                         android:textColor="@color/black_light" />
 
@@ -52,7 +60,7 @@
                         android:layout_weight="0.5"
                         android:id="@+id/date"
                         android:gravity="right"
-                        android:text="10/06/2018"
+                        android:text="@{review_list.order_date}"
                         android:textColor="@color/black_light" />
 
 
@@ -68,8 +76,8 @@
                         android:layout_height="wrap_content"
                         android:isIndicator="true"
                         android:numStars="6"
-                        android:rating="3"
-                        android:stepSize="1" />
+                        android:rating="@{Float.valueOf(review_list.rating)}"
+                        android:stepSize="0.0" />
 
 
                 </LinearLayout>
@@ -99,7 +107,6 @@
 
 
 
-        </android.support.v7.widget.CardView>
 
 
 

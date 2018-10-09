@@ -25,6 +25,10 @@ class Constants {
         val FB_EMAIL="fb_email"
         val DEVICE_TYPE="device_type"
         val DEVICE_TYPE_VALUE="Android"
+        val R_KEY_N="r_key"
+        val R_TOKEN_N="r_token"
+        val RESTAURANT="restaurant"
+        val STATUS="status"
 
     }
 }

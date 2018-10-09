@@ -33,13 +33,13 @@ import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
 import dk.eatmore.foodapp.activity.main.cart.fragment.Extratoppings
 import dk.eatmore.foodapp.activity.main.epay.EpayActivity
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Menu
 import dk.eatmore.foodapp.adapter.PaymentmethodAdapter
 import dk.eatmore.foodapp.adapter.cart.CartViewAdapter
 import dk.eatmore.foodapp.databinding.DeliverytimeslotBinding
 import dk.eatmore.foodapp.databinding.PaymentmethodBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.Address
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
-import dk.eatmore.foodapp.fragment.ProductInfo.Menu
 import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.utils.BaseFragment

@@ -1,6 +1,7 @@
 package dk.eatmore.foodapp.fragment.ProductInfo
 
 import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
@@ -20,12 +21,18 @@ import android.view.animation.Animation
 import android.view.animation.TranslateAnimation
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.epay.EpayActivity
-import dk.eatmore.foodapp.activity.main.home.fragment.ProductInfo.Info
-import dk.eatmore.foodapp.activity.main.home.fragment.ProductInfo.Rating
 import dk.eatmore.foodapp.utils.TransitionHelper
 import android.support.design.widget.AppBarLayout
+import android.util.Log
 import android.view.animation.AlphaAnimation
 import android.widget.TextView
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Info
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Menu
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Rating
+import dk.eatmore.foodapp.databinding.FragmentDetailsBinding
+import dk.eatmore.foodapp.databinding.InfoRestaurantBinding
+import dk.eatmore.foodapp.model.home.Restaurant
+import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.fragment_details.*
 import kotlinx.android.synthetic.main.notification_template_lines_media.view.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
@@ -33,25 +40,34 @@ import kotlinx.android.synthetic.main.toolbar_plusone.*
 
 class DetailsFragment : BaseFragment() {
 
-    lateinit var clickEvent : HomeFragment.MyClickHandler
-    private  var mAdapter: OrderListAdapter?=null
+    lateinit var clickEvent: HomeFragment.MyClickHandler
+    private var mAdapter: OrderListAdapter? = null
     var adapter: ViewPagerAdapter? = null
+    private lateinit var binding: FragmentDetailsBinding
+
 
     companion object {
 
-        val TAG= "DetailsFragment"
-        fun newInstance() : DetailsFragment {
-            return DetailsFragment()
+        val TAG = "DetailsFragment"
+        fun newInstance(restaurant: Restaurant, status: String): DetailsFragment {
+
+
+            val fragment = DetailsFragment()
+            val bundle = Bundle()
+            bundle.putString(Constants.STATUS, status)
+            bundle.putSerializable(Constants.RESTAURANT, restaurant)
+            fragment.arguments = bundle
+            return fragment
         }
 
     }
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-         return inflater.inflate(getLayout(), container, false)
+        // return inflater.inflate(getLayout(), container, false)
 
-        //binding= DataBindingUtil.inflate(inflater,getLayout(),container,false)
-        //return binding.root
+        binding = DataBindingUtil.inflate(inflater, getLayout(), container, false)
+        return binding.root
 
     }
 
@@ -60,35 +76,43 @@ class DetailsFragment : BaseFragment() {
     }
 
 
-    fun getParent() : Fragment? {
-        return parentFragment
-    }
-
-
     override fun initView(view: View?, savedInstanceState: Bundle?) {
 
 
-
-
-        if(savedInstanceState == null){
-         //   Glide.with(this).load(ContextCompat.getDrawable(context!!,R.drawable.food_slash)).into(details_back_img);
-            detail_fab_btn.startAnimation(translateAnim(800f, 0f, 0f, 0f,700,true))
-            detail_item_info.startAnimation(translateAnim(-800f, 0f, 0f, 0f,700,true))
-           // DrawableCompat.setTint(ContextCompat.getDrawable(context!!,R.drawable.close)!!, ContextCompat.getColor(context!!, R.color.white));
-            logd(DetailsFragment.TAG,"saveInstance NULL")
+        if (savedInstanceState == null) {
+            //   Glide.with(this).load(ContextCompat.getDrawable(context!!,R.drawable.food_slash)).into(details_back_img);
+            val restaurant = arguments?.getSerializable(Constants.RESTAURANT) as Restaurant
+            val myclickhandler = MyClickHandler(this)
+            binding.restaurant = restaurant
+            binding.handler = myclickhandler
+            detail_fab_btn.startAnimation(translateAnim(800f, 0f, 0f, 0f, 700, true))
+            detail_item_info.startAnimation(translateAnim(-800f, 0f, 0f, 0f, 700, true))
+            // DrawableCompat.setTint(ContextCompat.getDrawable(context!!,R.drawable.close)!!, ContextCompat.getColor(context!!, R.color.white));
+            logd(DetailsFragment.TAG, "saveInstance NULL")
             img_toolbar_back.setImageResource(R.drawable.close)
-            img_toolbar_back.setOnClickListener{
-                  onBackpress()
+            img_toolbar_back.setOnClickListener {
+                onBackpress()
             }
+
             adapter = ViewPagerAdapter(childFragmentManager)
-            adapter!!.addFragment(Menu(), getString(R.string.menu))
-            adapter!!.addFragment(Rating(), getString(R.string.rating))
-            adapter!!.addFragment(Info(), getString(R.string.info))
-            viewpager.offscreenPageLimit=3
+            when (arguments!!.getString(Constants.STATUS)) {
+                getString(R.string.closed) -> {
+                   // adapter!!.addFragment(Menu.newInstance(restaurant), getString(R.string.menu))
+                    adapter!!.addFragment(Rating.newInstance(restaurant), getString(R.string.rating))
+                    adapter!!.addFragment(Info.newInstance(restaurant), getString(R.string.info))
+                    viewpager.offscreenPageLimit = 2
+                }
+                else -> {
+                    adapter!!.addFragment(Menu.newInstance(restaurant), getString(R.string.menu))
+                    adapter!!.addFragment(Rating.newInstance(restaurant), getString(R.string.rating))
+                    adapter!!.addFragment(Info.newInstance(restaurant), getString(R.string.info))
+                    viewpager.offscreenPageLimit = 3
+                }
+            }
             viewpager.setAdapter(adapter)
             tabs.setupWithViewPager(viewpager)
-          //  setPalette()
-            viewcart.setOnClickListener{
+            //  setPalette()
+            viewcart.setOnClickListener {
                 val animation = TranslateAnimation(0f, 0f, 0f, 5f)
                 animation.duration = 100
                 animation.fillAfter = false
@@ -96,9 +120,10 @@ class DetailsFragment : BaseFragment() {
                     override fun onAnimationRepeat(animation: Animation) {
 
                     }
+
                     override fun onAnimationStart(animation: Animation) {}
                     override fun onAnimationEnd(animation: Animation) {
-                        val intent= Intent(activity, EpayActivity::class.java)
+                        val intent = Intent(activity, EpayActivity::class.java)
                         val pairs: Array<Pair<View, String>> = TransitionHelper.createSafeTransitionParticipants(activity!!, true)
                         val transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, *pairs)
                         startActivity(intent, transitionActivityOptions.toBundle())
@@ -109,24 +134,24 @@ class DetailsFragment : BaseFragment() {
 
             }
 
-        }else{
-            logd(DetailsFragment.TAG,"saveInstance NOT NULL")
+        } else {
+            logd(DetailsFragment.TAG, "saveInstance NOT NULL")
 
         }
     }
 
 
-fun onBackpress(){
-    parentFragment!!.childFragmentManager.popBackStack()
+    fun onBackpress() {
+        parentFragment!!.childFragmentManager.popBackStack()
 
-}
+    }
 
 
     fun setPalette() {
 
         val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.banner)
         Palette.from(bitmap).generate(object : Palette.PaletteAsyncListener {
-            override  fun onGenerated(palette: Palette) {
+            override fun onGenerated(palette: Palette) {
 
                 val vibrant = palette.vibrantSwatch
 
@@ -136,11 +161,11 @@ fun onBackpress(){
                     collapse_toolbar.setStatusBarScrimColor(palette.getDarkMutedColor(mutedColor));
                     collapse_toolbar.setContentScrimColor(palette.getMutedColor(mutedColor));
 
-                }else{
+                } else {
 
-                    collapse_toolbar.setBackgroundColor(ContextCompat.getColor(context!!,R.color.white));
-                    collapse_toolbar.setStatusBarScrimColor(ContextCompat.getColor(context!!,R.color.white))
-                    collapse_toolbar.setContentScrimColor(ContextCompat.getColor(context!!,R.color.white))
+                    collapse_toolbar.setBackgroundColor(ContextCompat.getColor(context!!, R.color.white));
+                    collapse_toolbar.setStatusBarScrimColor(ContextCompat.getColor(context!!, R.color.white))
+                    collapse_toolbar.setContentScrimColor(ContextCompat.getColor(context!!, R.color.white))
                 }
 
             }
@@ -152,20 +177,18 @@ fun onBackpress(){
 
     override fun onDestroy() {
         super.onDestroy()
-        logd(TAG,"on destroy...")
+        logd(TAG, "on destroy...")
     }
 
     override fun onDetach() {
         super.onDetach()
-        logd(TAG,"on detech...")
+        logd(TAG, "on detech...")
     }
 
     override fun onPause() {
         super.onPause()
-        logd(TAG,"on pause...")
+        logd(TAG, "on pause...")
     }
-
-
 
 
     inner class ViewPagerAdapter(manager: FragmentManager) : FragmentPagerAdapter(manager) {
@@ -191,6 +214,29 @@ fun onBackpress(){
 
     }
 
+
+    class MyClickHandler(val detailsfragment: DetailsFragment) {
+
+
+        fun tapOnRating(view: View) {
+            Log.e(TAG,"click ---")
+            detailsfragment.tapOnRating()
+        }
+
+
+    }
+
+    private fun tapOnRating() {
+        when (arguments!!.getString(Constants.STATUS)) {
+            getString(R.string.closed) -> {
+                viewpager.setCurrentItem(0,true)
+            }
+            else -> {
+                viewpager.setCurrentItem(1,true)
+            }
+        }
+
+    }
 
 
 }

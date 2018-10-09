@@ -59,7 +59,7 @@ class HomeActivity : BaseActivity() {
 
     }
 
-    fun getFragmentFromAdapter(): Fragment {
+    fun getHomeContainerFragment(): Fragment {
 
         return mHomeContainerFragment
 

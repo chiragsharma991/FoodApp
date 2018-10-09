@@ -1,9 +1,10 @@
-package dk.eatmore.foodapp.fragment.ProductInfo
+package dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo
 
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
+import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
@@ -27,11 +28,16 @@ import dk.eatmore.foodapp.activity.main.home.fragment.ProductInfo.SearchMenu
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerCallback
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerClickListner
 import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
+import dk.eatmore.foodapp.databinding.MenuRestaurantBinding
 import dk.eatmore.foodapp.databinding.RowMenuRestaurantBinding
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
+import dk.eatmore.foodapp.fragment.ProductInfo.CategoryList
+import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.model.home.MenuListItem
 import dk.eatmore.foodapp.model.home.ProductListModel
+import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.rest.ApiCall
+import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.fragment_details.*
 import java.util.ArrayList
@@ -40,11 +46,13 @@ import java.util.ArrayList
 class Menu : BaseFragment(), RecyclerClickListner {
 
 
-    private lateinit var binding: FragmentAccountContainerBinding
+    private lateinit var binding: MenuRestaurantBinding
     private var mAdapter: UniversalAdapter<MenuListItem, RowMenuRestaurantBinding>? = null
     private lateinit var homeFragment: HomeFragment
     private val list = ArrayList<User>()
     private  var ui_model: UIModel?=null
+    private lateinit var restaurant : Restaurant
+
 
 
 
@@ -52,10 +60,14 @@ class Menu : BaseFragment(), RecyclerClickListner {
     companion object {
 
         val TAG = "Menu"
-        fun newInstance(): Menu {
-            return Menu()
-        }
 
+        fun newInstance(restaurant : Restaurant): Menu {
+            val fragment = Menu()
+            val bundle = Bundle()
+            bundle.putSerializable(Constants.RESTAURANT,restaurant)
+            fragment.arguments = bundle
+            return fragment
+        }
     }
 
 
@@ -64,10 +76,10 @@ class Menu : BaseFragment(), RecyclerClickListner {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return inflater.inflate(getLayout(), container, false)
+       // return inflater.inflate(getLayout(), container, false)
 
-        //   binding=DataBindingUtil.inflate(inflater,getLayout(),container,false)
-       // return binding.root
+        binding= DataBindingUtil.inflate(inflater,getLayout(),container,false)
+        return binding.root
 
     }
 
@@ -75,12 +87,14 @@ class Menu : BaseFragment(), RecyclerClickListner {
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if(savedInstanceState == null){
+            restaurant= arguments!!.getSerializable(Constants.RESTAURANT) as Restaurant
+            binding.restaurant=restaurant
             if(ui_model == null)
             ui_model=createViewModel()
             logd(TAG,"saveInstance NULL")
             val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
             homeFragment=(fragmentof as HomeContainerFragment).getHomeFragment()
-            menu_tabs.addTab(menu_tabs.newTab().setText("Delivery"))
+     /*       menu_tabs.addTab(menu_tabs.newTab().setText("Delivery"))
             menu_tabs.addTab(menu_tabs.newTab().setText("PickUp"))
             menu_tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
                 override fun onTabReselected(tab: TabLayout.Tab?) {
@@ -90,7 +104,7 @@ class Menu : BaseFragment(), RecyclerClickListner {
                 }
                 override fun onTabSelected(tab: TabLayout.Tab?) {
                 }
-            })
+            })*/
             menu_search.setOnClickListener{
 
 
@@ -164,9 +178,9 @@ class Menu : BaseFragment(), RecyclerClickListner {
     private fun fetch_ProductList() {
 
         callAPI(ApiCall.getProductList(
-                r_token = Constants.R_TOKEN,
-                r_key = Constants.R_KEY,
-                customer_id = "1706"
+                r_token = restaurant.r_token,
+                r_key = restaurant.r_key,
+                customer_id = PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,"")!!
         ), object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {

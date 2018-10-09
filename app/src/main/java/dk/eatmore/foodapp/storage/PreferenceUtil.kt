@@ -136,6 +136,7 @@ object PreferenceUtil {
 
     val USER_NAME = "user_name"
     val USER_ID = "id"
+    val CUSTOMER_ID = "customer_id"
     val R_TOKEN = "r_token"
     val E_MAIL = "restaurant_name"
     val R_KEY = "r_key"
