@@ -29,6 +29,10 @@ class Constants {
         val R_TOKEN_N="r_token"
         val RESTAURANT="restaurant"
         val STATUS="status"
+        val TITLE="title"
+        val PRODUCTLIST="ProductList"
+        val MENULIST="menulist"
+        val OPEFTER="Opefter"
 
     }
 }

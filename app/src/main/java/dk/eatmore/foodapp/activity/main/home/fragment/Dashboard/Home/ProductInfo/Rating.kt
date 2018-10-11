@@ -111,7 +111,6 @@ class Rating : BaseFragment(), RecyclerClickListner {
             val observer = rating_line.getViewTreeObserver()
             observer.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
                 override fun onGlobalLayout() {
-                    // TODO Auto-generated method stub
                     val headerLayoutHeight = rating_line.getHeight()
                     val headerLayoutWidth = rating_line.getWidth()
                     val density = context!!.getResources().displayMetrics.density

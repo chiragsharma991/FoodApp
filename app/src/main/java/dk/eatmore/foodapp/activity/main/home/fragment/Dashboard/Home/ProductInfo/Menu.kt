@@ -12,10 +12,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.databinding.FragmentAccountContainerBinding
 import dk.eatmore.foodapp.utils.BaseFragment
 import kotlinx.android.synthetic.main.menu_restaurant.*
-import android.support.design.widget.TabLayout
 import android.transition.ChangeBounds
 import android.transition.Slide
 import android.view.Gravity
@@ -33,13 +31,12 @@ import dk.eatmore.foodapp.databinding.RowMenuRestaurantBinding
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.CategoryList
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
-import dk.eatmore.foodapp.model.home.MenuListItem
-import dk.eatmore.foodapp.model.home.ProductListModel
-import dk.eatmore.foodapp.model.home.Restaurant
+import dk.eatmore.foodapp.model.home.*
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.fragment_details.*
+import java.io.Serializable
 import java.util.ArrayList
 
 
@@ -109,7 +106,7 @@ class Menu : BaseFragment(), RecyclerClickListner {
 
 
                     logd(TAG,"")
-                    val fragment = SearchMenu.newInstance()
+                    val fragment = SearchMenu.newInstance(ui_model!!.productList.value)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
                         /*             // 2. Shared Elements Transition
@@ -219,8 +216,8 @@ class Menu : BaseFragment(), RecyclerClickListner {
         val fragment = CategoryList.newInstance()
         var enter :Slide?=null
         val bundle = Bundle()
-        bundle.putString("TITLE",data.c_name)
-        bundle.putSerializable("MenuListItem", data)
+        bundle.putString(Constants.TITLE,data.c_name)
+        bundle.putSerializable(Constants.PRODUCTLIST, data)
         fragment.arguments=bundle
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             enter = Slide()
@@ -269,7 +266,22 @@ class Menu : BaseFragment(), RecyclerClickListner {
 
 
 
+    data class FilterCategoryList(
+                            val c_name: String = "",
+                            val product_list: ArrayList<ProductListItem> = arrayListOf()) : Serializable
+
+
+    data class ProductListItem(
+                               val p_desc: String = "",
+                               val p_price: String = "",
+                               val p_name: String = "") :Serializable
+
 }
+
+
+
+
+
 
 
 

@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+
+        <variable
+            name="menulist_item"
+            type="dk.eatmore.foodapp.model.home.MenuListItem">
+
+        </variable>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/_8sdp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
+
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TextViewSmall"
+                    android:id="@+id/row_cart_txt"
+                    android:layout_gravity="center_vertical"
+                    android:layout_weight="1"
+                    android:text="@{menulist_item.c_name}"
+                    />
+
+            </LinearLayout>
+
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.2"
+                android:background="@color/divider_color"
+                />
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:animateLayoutChanges="true"
+                android:id="@+id/parent_child"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                >
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view_child"
+                    android:paddingTop="@dimen/_3sdp"
+                    android:clipToPadding="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+
+            </RelativeLayout>
+
+
+
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+</layout>
+
+
+

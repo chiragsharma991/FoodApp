@@ -26,6 +26,7 @@ import android.support.design.widget.AppBarLayout
 import android.util.Log
 import android.view.animation.AlphaAnimation
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Info
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Menu
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Rating
@@ -89,6 +90,7 @@ class DetailsFragment : BaseFragment() {
             detail_item_info.startAnimation(translateAnim(-800f, 0f, 0f, 0f, 700, true))
             // DrawableCompat.setTint(ContextCompat.getDrawable(context!!,R.drawable.close)!!, ContextCompat.getColor(context!!, R.color.white));
             logd(DetailsFragment.TAG, "saveInstance NULL")
+            Glide.with(context!!).load(restaurant.app_icon).into(imageview);
             img_toolbar_back.setImageResource(R.drawable.close)
             img_toolbar_back.setOnClickListener {
                 onBackpress()

@@ -43,3 +43,5 @@ data class ProductAttributeItem(val pam_id: String = "",
 data class DefaultAttributeValue(val pad_id: String = "",
                                  val a_price: String = "",
                                  val a_value: String = "") :Serializable
+
+

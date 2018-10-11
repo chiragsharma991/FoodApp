@@ -86,9 +86,10 @@
 
                         <android.support.v7.widget.AppCompatImageView
                             android:layout_width="@dimen/_90sdp"
+                            android:id="@+id/imageview"
                             android:layout_height="@dimen/_90sdp"
-                            app:srcCompat="@mipmap/food_icon"
                             android:scaleType="fitXY"
+                            android:background="@color/gray"
 
                             />
 

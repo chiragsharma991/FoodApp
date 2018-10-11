@@ -27,6 +27,7 @@ import dk.eatmore.foodapp.model.home.ProductListItem
 import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.BindDataUtils
+import dk.eatmore.foodapp.utils.Constants
 import dk.eatmore.foodapp.utils.TransitionHelper
 import kotlinx.android.synthetic.main.category_list.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
@@ -71,10 +72,10 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
             productpricecalculation=ProductPriceCalculation(this)
-            val menuListItem = arguments?.getSerializable("MenuListItem") as MenuListItem
+            val menuListItem = arguments?.getSerializable(Constants.PRODUCTLIST) as MenuListItem
             val bundle=arguments
 
-            subtxt_toolbar.text=bundle?.getString("TITLE","") ?:""
+            subtxt_toolbar.text=bundle?.getString(Constants.TITLE,"") ?:""
             setanim_toolbartitle(appbar,txt_toolbar,bundle?.getString("TITLE","") ?:"")
             loge(TAG,menuListItem.c_desc+" "+menuListItem.product_list!!.size)
             mAdapter = UniversalAdapter(context!!, menuListItem.product_list, R.layout.row_category_list, object : RecyclerCallback<RowCategoryListBinding, ProductListItem> {

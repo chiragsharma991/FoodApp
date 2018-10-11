@@ -22,34 +22,52 @@
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_weight="2"
-        android:layout_marginStart="@dimen/_2sdp"
-        android:layout_marginEnd="@dimen/_2sdp"
-        android:layout_marginBottom="@dimen/_8sdp"
-        android:orientation="horizontal">
+        android:orientation="vertical"
+        >
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:layout_marginStart="@dimen/_2sdp"
+            android:layout_marginEnd="@dimen/_2sdp"
+            android:orientation="horizontal">
 
 
-        <android.support.v7.widget.AppCompatTextView
-            style="@style/TextViewSmall"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="1.05"
-            android:textColor="@{opening_hours.today ? @color/theme_color : @color/black_light}"
-            android:text="@{opening_hours.day}"
-            />
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/TextViewSmall"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="1.05"
+                android:textColor="@{opening_hours.today ? @color/theme_color : @color/black_light}"
+                android:text="@{opening_hours.day}"
+                />
 
 
-        <android.support.v7.widget.AppCompatTextView
-            style="@style/TextViewSmall"
-            android:layout_gravity="center_vertical"
-            android:layout_weight="0.5"
-            android:gravity="right"
-            android:text="@{@string/openandclose(opening_hours.opens,opening_hours.closes)}"
-            android:textColor="@{opening_hours.today ? @color/theme_color : @color/black_light }"
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/TextViewSmall"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.5"
+                android:gravity="right"
+                android:text="@{opening_hours.opens.equalsIgnoreCase(opening_hours.closes) ? @string/closed : @string/openandclose(opening_hours.opens,opening_hours.closes)}"
+                android:textColor="@{opening_hours.today ? @color/theme_color : @color/black_light }"
 
+                />
+
+
+
+        </LinearLayout>
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha="0.2"
+            android:visibility="visible"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:background="@color/divider_color"
             />
 
 
     </LinearLayout>
+
 
 </layout>
 

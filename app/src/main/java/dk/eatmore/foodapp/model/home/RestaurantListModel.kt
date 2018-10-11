@@ -3,6 +3,7 @@ package dk.eatmore.foodapp.model.home
 import android.databinding.BindingAdapter
 import android.view.View
 import com.google.gson.annotations.SerializedName
+import dk.eatmore.foodapp.utils.Constants
 import java.io.Serializable
 
 data class RestaurantListModel(
@@ -57,7 +58,7 @@ data class Shipping_charges(
         val postal_code : String="",
         val from_pd : String="",
         val price : String="",
-        val to_pd : String=""
+        val to_pd : String= Constants.OPEFTER
 
 
 
