@@ -51,7 +51,10 @@ Notes :
    - normally in between row : 5dp and hardly 8dp
 
 
-
+* Data class:
+    - If you define default null/""/arraylist in Dataclass then:
+      if API replace this value by itself whether it null or not but
+      if API have not key of that then default values would show.
 
 
 

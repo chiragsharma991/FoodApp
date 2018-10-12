@@ -22,7 +22,6 @@ import dk.eatmore.foodapp.model.User
 import android.support.transition.*
 import android.support.v4.content.ContextCompat
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
-import dk.eatmore.foodapp.activity.main.home.fragment.ProductInfo.SearchMenu
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerCallback
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerClickListner
 import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
@@ -91,17 +90,8 @@ class Menu : BaseFragment(), RecyclerClickListner {
             logd(TAG,"saveInstance NULL")
             val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
             homeFragment=(fragmentof as HomeContainerFragment).getHomeFragment()
-     /*       menu_tabs.addTab(menu_tabs.newTab().setText("Delivery"))
-            menu_tabs.addTab(menu_tabs.newTab().setText("PickUp"))
-            menu_tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
-                override fun onTabReselected(tab: TabLayout.Tab?) {
-                    logd(TAG, menu_tabs.selectedTabPosition.toString())
-                }
-                override fun onTabUnselected(tab: TabLayout.Tab?) {
-                }
-                override fun onTabSelected(tab: TabLayout.Tab?) {
-                }
-            })*/
+           // free_txt.visibility =if(restaurant.free_text =="") View.GONE else View.VISIBLE
+           // free_txt.text=restaurant.free_text.replace("\n","").replace("\r","")
             menu_search.setOnClickListener{
 
 

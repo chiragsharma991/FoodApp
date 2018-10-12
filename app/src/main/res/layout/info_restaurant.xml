@@ -46,186 +46,199 @@
 
 
 
-        <LinearLayout
+        <android.support.v4.widget.NestedScrollView
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:padding="@dimen/_16sdp"
+            android:clipToPadding="false"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            >
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+
+                android:orientation="vertical">
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TextViewMid"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:text="@{restaurant.restaurant_name}"
+                    android:textColor="@color/black_light" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TextViewSmall"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:text="@{restaurant.address}"
+                    android:textColor="@color/black_light" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TextViewSmall"
+                    android:layout_gravity="center_vertical"
+                    android:layout_width="match_parent"
+                    android:text="@string/food_administration"
+                    android:onClick="@{handler::tapOnHealthReport}"
+                    android:textColor="@color/dark_blue" />
+
+
+
+
+                <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginStart="@dimen/_16sdp"
-                    android:layout_marginEnd="@dimen/_16sdp"
                     android:layout_marginTop="@dimen/_16sdp"
-                    android:layout_marginBottom="@dimen/_16sdp"
-                    android:orientation="vertical">
+                    android:background="@color/gray"
+                    android:orientation="horizontal">
+
 
                     <android.support.v7.widget.AppCompatTextView
                         style="@style/TextViewMid"
                         android:layout_gravity="center_vertical"
-                        android:layout_width="match_parent"
-                        android:text="@{restaurant.restaurant_name}"
-                        android:textColor="@color/black_light" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
-                        android:layout_gravity="center_vertical"
-                        android:layout_width="match_parent"
-                        android:text="@{restaurant.address}"
-                        android:textColor="@color/black_light" />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
-                        android:layout_gravity="center_vertical"
-                        android:layout_width="match_parent"
-                        android:text="@string/food_administration"
-                        android:onClick="@{handler::tapOnHealthReport}"
-                        android:textColor="@color/theme_color" />
-
-
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:orientation="horizontal">
-
-
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/TextViewMid"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:layout_gravity="center_vertical"
-                            android:layout_weight="1.05"
-                            android:text="Opening hours"
-                            android:textColor="@color/black_light"
-                            />
-
-
-                    </LinearLayout>
-
-
-                    <android.support.v7.widget.RecyclerView
-                        android:layout_width="match_parent"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/recycler_view"
-                        >
-
-                    </android.support.v7.widget.RecyclerView>
-
-
-
-
-            <android.support.v7.widget.AppCompatTextView
-                style="@style/TextViewMid"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:layout_gravity="center_vertical"
-                android:text="@string/deliveryinformation"
-                android:textColor="@color/black_light"
-                android:visibility="@{restaurant.shipping_charges.size()> 0 ?  View.VISIBLE : View.GONE }"
-                android:layout_marginBottom="@dimen/_8sdp"
-                />
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="@dimen/_300sdp"
-                android:orientation="vertical"
-                android:id="@+id/linearcontainer"
-                >
-
-
-
-  <!--              <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    >
-                    <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
-                        android:singleLine="true"
-                        android:layout_height="wrap_content"
-                        android:layout_width="0dp"
-                        android:gravity="start"
-                        android:id="@+id/item_name"
-                        android:text="sdfsdfsdf"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:layout_weight="1.05"
+                        android:text="Opening hours"
                         android:textColor="@color/black_light"
                         />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
-                        android:layout_height="wrap_content"
-                        android:layout_width="0dp"
-                        android:gravity="center_horizontal"
-                        android:singleLine="true"
-                        android:id="@+id/item_price"
-                        android:text="sdfsdfsdfsdfs"
-                        android:layout_weight="1"
-                        android:layout_alignParentEnd="true"
-                        android:textColor="@color/black_light"
-                        />
-                    <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
-                        android:layout_height="wrap_content"
-                        android:layout_width="0dp"
-                        android:singleLine="true"
-                        android:gravity="end"
-                        android:text="sdfsdfsdfsdfs"
-                        android:layout_weight="1"
-                        android:layout_alignParentEnd="true"
-                        android:textColor="@color/black_light"
-                        />
-
-
 
 
                 </LinearLayout>
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_height="wrap_content"
+                    android:nestedScrollingEnabled="false"
+                    android:id="@+id/recycler_view"
+                    >
+
+                </android.support.v7.widget.RecyclerView>
+
+
+
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TextViewMid"
+                    android:layout_width="match_parent"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:background="@color/gray"
+                    android:layout_gravity="center_vertical"
+                    android:text="@string/deliveryinformation"
+                    android:textColor="@color/black_light"
+                    android:visibility="@{restaurant.shipping_charges.size()> 0 ?  View.VISIBLE : View.GONE }"
+                    />
+
+
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="horizontal"
+                    android:orientation="vertical"
+                    android:id="@+id/linearcontainer"
                     >
-                    <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
-                        android:singleLine="true"
-                        android:layout_height="wrap_content"
-                        android:layout_width="0dp"
-                        android:gravity="start"
-                        android:id="@+id/item_name"
-                        android:text="sdfsdfsdf"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="@dimen/_8sdp"
-                        android:textColor="@color/black_light"
-                        />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
-                        android:layout_height="wrap_content"
-                        android:layout_width="0dp"
-                        android:gravity="center_horizontal"
-                        android:singleLine="true"
-                        android:id="@+id/item_price"
-                        android:text="sdfsdfsdfsdfs"
-                        android:layout_weight="1"
-                        android:layout_alignParentEnd="true"
-                        android:textColor="@color/black_light"
-                        />
-                    <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
-                        android:layout_height="wrap_content"
-                        android:layout_width="0dp"
-                        android:singleLine="true"
-                        android:gravity="end"
-                        android:text="sdfsdfsdfsdfs"
-                        android:layout_weight="1"
-                        android:layout_alignParentEnd="true"
-                        android:textColor="@color/black_light"
-                        />
 
 
+
+                    <!--              <LinearLayout
+                                      android:layout_width="match_parent"
+                                      android:layout_height="wrap_content"
+                                      android:orientation="horizontal"
+                                      >
+                                      <android.support.v7.widget.AppCompatTextView
+                                          style="@style/TextViewSmall"
+                                          android:singleLine="true"
+                                          android:layout_height="wrap_content"
+                                          android:layout_width="0dp"
+                                          android:gravity="start"
+                                          android:id="@+id/item_name"
+                                          android:text="sdfsdfsdf"
+                                          android:layout_weight="1"
+                                          android:layout_marginEnd="@dimen/_8sdp"
+                                          android:textColor="@color/black_light"
+                                          />
+
+                                      <android.support.v7.widget.AppCompatTextView
+                                          style="@style/TextViewSmall"
+                                          android:layout_height="wrap_content"
+                                          android:layout_width="0dp"
+                                          android:gravity="center_horizontal"
+                                          android:singleLine="true"
+                                          android:id="@+id/item_price"
+                                          android:text="sdfsdfsdfsdfs"
+                                          android:layout_weight="1"
+                                          android:layout_alignParentEnd="true"
+                                          android:textColor="@color/black_light"
+                                          />
+                                      <android.support.v7.widget.AppCompatTextView
+                                          style="@style/TextViewSmall"
+                                          android:layout_height="wrap_content"
+                                          android:layout_width="0dp"
+                                          android:singleLine="true"
+                                          android:gravity="end"
+                                          android:text="sdfsdfsdfsdfs"
+                                          android:layout_weight="1"
+                                          android:layout_alignParentEnd="true"
+                                          android:textColor="@color/black_light"
+                                          />
+
+
+
+
+                                  </LinearLayout>
+                                  <LinearLayout
+                                      android:layout_width="match_parent"
+                                      android:layout_height="wrap_content"
+                                      android:orientation="horizontal"
+                                      >
+                                      <android.support.v7.widget.AppCompatTextView
+                                          style="@style/TextViewSmall"
+                                          android:singleLine="true"
+                                          android:layout_height="wrap_content"
+                                          android:layout_width="0dp"
+                                          android:gravity="start"
+                                          android:id="@+id/item_name"
+                                          android:text="sdfsdfsdf"
+                                          android:layout_weight="1"
+                                          android:layout_marginEnd="@dimen/_8sdp"
+                                          android:textColor="@color/black_light"
+                                          />
+
+                                      <android.support.v7.widget.AppCompatTextView
+                                          style="@style/TextViewSmall"
+                                          android:layout_height="wrap_content"
+                                          android:layout_width="0dp"
+                                          android:gravity="center_horizontal"
+                                          android:singleLine="true"
+                                          android:id="@+id/item_price"
+                                          android:text="sdfsdfsdfsdfs"
+                                          android:layout_weight="1"
+                                          android:layout_alignParentEnd="true"
+                                          android:textColor="@color/black_light"
+                                          />
+                                      <android.support.v7.widget.AppCompatTextView
+                                          style="@style/TextViewSmall"
+                                          android:layout_height="wrap_content"
+                                          android:layout_width="0dp"
+                                          android:singleLine="true"
+                                          android:gravity="end"
+                                          android:text="sdfsdfsdfsdfs"
+                                          android:layout_weight="1"
+                                          android:layout_alignParentEnd="true"
+                                          android:textColor="@color/black_light"
+                                          />
+
+
+
+
+                                  </LinearLayout>
+
+                  -->
 
 
                 </LinearLayout>
 
--->
+
 
 
             </LinearLayout>
@@ -233,7 +246,8 @@
 
 
 
-                </LinearLayout>
+        </android.support.v4.widget.NestedScrollView>
+
 
 
 

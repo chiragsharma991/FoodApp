@@ -30,6 +30,7 @@ import android.support.v7.widget.AppCompatTextView
 import android.view.Gravity
 import android.widget.LinearLayout
 import android.widget.TextView
+import dk.eatmore.foodapp.utils.BindDataUtils
 
 
 class Info : BaseFragment() {
@@ -152,7 +153,7 @@ class Info : BaseFragment() {
 
                 var parent = LinearLayout(context)
                 val parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                parms.bottomMargin = 8
+                parms.topMargin = 8
                 parent.layoutParams = parms
                 parent.orientation = LinearLayout.HORIZONTAL
 
@@ -191,12 +192,20 @@ class Info : BaseFragment() {
                 }
 
                 linearcontainer.addView(parent)
+                val view= View(context)
+                val vparms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2)
+                vparms.topMargin=8
+                view.alpha=0.3f
+                view.background=ContextCompat.getDrawable(context!!,R.color.divider_color)
+                view.layoutParams=vparms
+                linearcontainer.addView(view)
+
 
                 // Add values
                 for (i in 0 until restaurant.shipping_charges.size) {
                     parent = LinearLayout(context)
                     val parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                    parms.bottomMargin = 8
+                    parms.topMargin = 8
                     parent.layoutParams = parms
                     parent.orientation = LinearLayout.HORIZONTAL
 
@@ -217,11 +226,11 @@ class Info : BaseFragment() {
                         textView1.layoutParams = parms
 
                         if (j == 0)
-                            textView1.text = restaurant.shipping_charges[i].from_pd
+                            textView1.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].from_pd)
                         else if (j == 1)
-                            textView1.text = restaurant.shipping_charges[i].to_pd
+                            textView1.text = if(restaurant.shipping_charges[i].to_pd ==null ) Constants.OPEFTER else BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].to_pd!!)
                         else if (j == 2)
-                            textView1.text = restaurant.shipping_charges[i].price
+                            textView1.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].price)
 
                         if (j == 0)
                             textView1.gravity = Gravity.START
@@ -237,6 +246,14 @@ class Info : BaseFragment() {
 
                     }
                     linearcontainer.addView(parent)
+                    val view= View(context)
+                    val vparms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2)
+                    vparms.topMargin=8
+                    view.alpha=0.3f
+                    view.background=ContextCompat.getDrawable(context!!,R.color.divider_color)
+                    view.layoutParams=vparms
+                    linearcontainer.addView(view)
+
 
 
                 }
@@ -246,7 +263,7 @@ class Info : BaseFragment() {
 
                 var parent = LinearLayout(context)
                 val parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                parms.bottomMargin = 8
+                parms.topMargin = 8
                 parent.layoutParams = parms
                 parent.orientation = LinearLayout.HORIZONTAL
 
@@ -285,12 +302,20 @@ class Info : BaseFragment() {
                 }
 
                 linearcontainer.addView(parent)
+                val view= View(context)
+                val vparms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2)
+                vparms.topMargin=8
+                view.alpha=0.3f
+                view.background=ContextCompat.getDrawable(context!!,R.color.divider_color)
+                view.layoutParams=vparms
+                linearcontainer.addView(view)
+
 
                 // Add values
                 for (i in 0 until restaurant.shipping_charges.size) {
                     parent = LinearLayout(context)
                     var parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                    parms.bottomMargin = 8
+                    parms.topMargin = 8
                     parent.layoutParams = parms
                     parent.orientation = LinearLayout.HORIZONTAL
 
@@ -313,9 +338,9 @@ class Info : BaseFragment() {
                         if (j == 0)
                             textView1.text = restaurant.shipping_charges[i].postal_code
                         else if (j == 1)
-                            textView1.text = restaurant.shipping_charges[i].minimum_order_price
+                            textView1.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].minimum_order_price)
                         else if (j == 2)
-                            textView1.text = restaurant.shipping_charges[i].price
+                            textView1.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].price)
 
                         if (j == 0)
                             textView1.gravity = Gravity.START
@@ -331,6 +356,14 @@ class Info : BaseFragment() {
 
                     }
                     linearcontainer.addView(parent)
+                    val view= View(context)
+                    val vparms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2)
+                    vparms.topMargin=8
+                    view.alpha=0.3f
+                    view.background=ContextCompat.getDrawable(context!!,R.color.divider_color)
+                    view.layoutParams=vparms
+                    linearcontainer.addView(view)
+
 
 
                 }
@@ -340,7 +373,7 @@ class Info : BaseFragment() {
 
                 var parent = LinearLayout(context)
                 val parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                parms.bottomMargin = 8
+                parms.topMargin = 8
                 parent.layoutParams = parms
                 parent.orientation = LinearLayout.HORIZONTAL
 
@@ -379,12 +412,20 @@ class Info : BaseFragment() {
                 }
 
                 linearcontainer.addView(parent)
+                val view= View(context)
+                val vparms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2)
+                vparms.topMargin=8
+                view.alpha=0.3f
+                view.background=ContextCompat.getDrawable(context!!,R.color.divider_color)
+                view.layoutParams=vparms
+                linearcontainer.addView(view)
+
 
                 // Add values
                 for (i in 0 until restaurant.shipping_charges.size) {
                     parent = LinearLayout(context)
                     var parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                    parms.bottomMargin = 8
+                    parms.topMargin = 8
                     parent.layoutParams = parms
                     parent.orientation = LinearLayout.HORIZONTAL
 
@@ -405,11 +446,11 @@ class Info : BaseFragment() {
                         textView1.layoutParams = parms
 
                         if (j == 0)
-                            textView1.text = restaurant.shipping_charges[i].from_pd
+                            textView1.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].from_pd)
                         else if (j == 1)
-                            textView1.text = restaurant.shipping_charges[i].to_pd
+                            textView1.text = if(restaurant.shipping_charges[i].to_pd ==null) Constants.OPEFTER else BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].to_pd!!)
                         else if (j == 2)
-                            textView1.text = restaurant.shipping_charges[i].price
+                            textView1.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].price)
 
                         if (j == 0)
                             textView1.gravity = Gravity.START
@@ -425,6 +466,14 @@ class Info : BaseFragment() {
 
                     }
                     linearcontainer.addView(parent)
+                    val view= View(context)
+                    val vparms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2)
+                    vparms.topMargin=8
+                    view.alpha=0.3f
+                    view.background=ContextCompat.getDrawable(context!!,R.color.divider_color)
+                    view.layoutParams=vparms
+                    linearcontainer.addView(view)
+
 
 
                 }
@@ -434,10 +483,10 @@ class Info : BaseFragment() {
 
                 val parent = LinearLayout(context)
                 val parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
-                parms.bottomMargin = 8
+                parms.topMargin = 8
                 parent.layoutParams = parms
                 parent.orientation = LinearLayout.HORIZONTAL
-                val headerlist = arrayListOf("Pris (Kr.)", restaurant.shipping_charges.get(0).price)
+                val headerlist = arrayListOf("Pris (Kr.)", BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges.get(0).price))
                 // Add header
                 for (i in 0..1) {
 
@@ -465,6 +514,7 @@ class Info : BaseFragment() {
                 }
 
                 linearcontainer.addView(parent)
+
 
 
             }

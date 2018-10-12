@@ -32,14 +32,23 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_8sdp"
                 android:gravity="center_vertical"
                 android:orientation="horizontal">
+
+                <View
+                    android:layout_width="@dimen/_5sdp"
+                    android:layout_height="match_parent"
+                    android:background="@color/theme_color"
+                    >
+
+
+                </View>
 
 
                 <android.support.v7.widget.AppCompatTextView
                     style="@style/TextViewSmall"
                     android:id="@+id/row_cart_txt"
+                    android:layout_margin="@dimen/_8sdp"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:text="@{status}"

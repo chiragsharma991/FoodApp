@@ -8,6 +8,10 @@
     <data>
 
 
+        <import type="android.view.View">
+
+        </import>
+
         <variable
             name="review_list"
             type="dk.eatmore.foodapp.model.home.Review_list">
@@ -34,6 +38,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:orientation="vertical"
                 >
                 <LinearLayout
@@ -82,9 +87,10 @@
 
                 </LinearLayout>
                 <LinearLayout
-                    android:layout_width="match_parent"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
+                    android:visibility="@{review_list.review.equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}"
                     android:orientation="horizontal">
 
 

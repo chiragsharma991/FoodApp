@@ -83,6 +83,7 @@ class RestaurantList : BaseFragment() {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             setToolbarforThis()
+            search_again_btn.setOnClickListener{ onBackpress() }
             ui_model = createViewModel()
             if (ui_model!!.restaurantList.value == null) {
                 fetch_ProductDetailList()
@@ -97,6 +98,7 @@ class RestaurantList : BaseFragment() {
     }
 
     fun setToolbarforThis(){
+        txt_toolbar.text=getString(R.string.restaurants)
         img_toolbar_back.setImageResource(R.drawable.back)
         img_toolbar_back.setOnClickListener{
             onBackpress()
@@ -141,13 +143,24 @@ class RestaurantList : BaseFragment() {
 
     private fun refreshview() {
         loge(TAG,"refresh view...")
+        var statuswiserestaurant: StatusWiseRestaurant
         list= ArrayList()
-        var statuswiserestaurant= StatusWiseRestaurant(getString(R.string.open_now),getString(R.string.ordernow),ui_model!!.restaurantList.value!!.restaurant_list.open_now)
-        list.add(statuswiserestaurant)
-        statuswiserestaurant= StatusWiseRestaurant(getString(R.string.pre_order),getString(R.string.preorder),ui_model!!.restaurantList.value!!.restaurant_list.pre_order)
-        list.add(statuswiserestaurant)
-        statuswiserestaurant= StatusWiseRestaurant(getString(R.string.closed),getString(R.string.notavailable),ui_model!!.restaurantList.value!!.restaurant_list.closed)
-        list.add(statuswiserestaurant)
+        if(ui_model!!.restaurantList.value!!.restaurant_list.open_now.size > 0){
+            statuswiserestaurant= StatusWiseRestaurant(getString(R.string.open_now),getString(R.string.ordernow),ui_model!!.restaurantList.value!!.restaurant_list.open_now)
+            list.add(statuswiserestaurant)
+        }
+        if(ui_model!!.restaurantList.value!!.restaurant_list.pre_order.size > 0){
+            statuswiserestaurant= StatusWiseRestaurant(getString(R.string.pre_order),getString(R.string.preorder),ui_model!!.restaurantList.value!!.restaurant_list.pre_order)
+            list.add(statuswiserestaurant)
+        }
+        if(ui_model!!.restaurantList.value!!.restaurant_list.closed.size > 0){
+            statuswiserestaurant= StatusWiseRestaurant(getString(R.string.closed),getString(R.string.notavailable),ui_model!!.restaurantList.value!!.restaurant_list.closed)
+            list.add(statuswiserestaurant)
+        }
+        if(list.size <= 0 ){
+            error_view.visibility=View.VISIBLE
+        }
+
         recycler_view_parent.apply {
 
             mAdapter = RestaurantListParentAdapter(context!!,list, object : RestaurantListParentAdapter.AdapterListener {

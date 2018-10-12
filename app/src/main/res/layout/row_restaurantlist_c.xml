@@ -58,7 +58,7 @@
             <LinearLayout
                 android:id="@+id/linearLayout"
                 android:layout_width="0dp"
-                android:layout_height="90dp"
+                android:layout_height="80dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="5dp"
                 android:layout_marginBottom="8dp"
@@ -69,14 +69,32 @@
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent">
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:id="@+id/imageview"
-                    android:background="@color/gray"
-                    android:padding="@dimen/_5sdp"
-                    android:scaleType="fitXY"
-                    />
+                <android.support.v7.widget.CardView
+                    android:layout_width="@dimen/_80sdp"
+                    android:layout_height="@dimen/_80sdp"
+                    app:cardElevation="@dimen/_5sdp"
+                    app:cardCornerRadius="@dimen/_5sdp"
+                    >
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+
+                        >
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/imageview"
+                            android:background="@color/gray"
+                            android:scaleType="fitXY"
+                            />
+
+
+                    </RelativeLayout>
+
+
+                </android.support.v7.widget.CardView>
 
 
             </LinearLayout>
@@ -84,9 +102,10 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="8dp"
+                android:layout_marginStart="0dp"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
+                android:layout_marginTop="@dimen/_5sdp"
                 android:layout_weight="1.3"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
@@ -150,6 +169,7 @@
                         style="@style/TextViewSmall"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/_3sdp"
+                        android:maxLines="3"
                         android:text="@{restaurant.address}"
                         android:textColor="@color/black_light" />
 

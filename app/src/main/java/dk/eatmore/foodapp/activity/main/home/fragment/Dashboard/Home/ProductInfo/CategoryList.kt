@@ -77,7 +77,7 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
 
             subtxt_toolbar.text=bundle?.getString(Constants.TITLE,"") ?:""
             setanim_toolbartitle(appbar,txt_toolbar,bundle?.getString("TITLE","") ?:"")
-            loge(TAG,menuListItem.c_desc+" "+menuListItem.product_list!!.size)
+           // loge(TAG,"product_attribute --- "+menuListItem.product_list!!.get(0).product_attribute)
             mAdapter = UniversalAdapter(context!!, menuListItem.product_list, R.layout.row_category_list, object : RecyclerCallback<RowCategoryListBinding, ProductListItem> {
                 override fun bindData(binder: RowCategoryListBinding, model: ProductListItem) {
                     setRecyclerData(binder, model)

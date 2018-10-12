@@ -58,7 +58,7 @@ data class Shipping_charges(
         val postal_code : String="",
         val from_pd : String="",
         val price : String="",
-        val to_pd : String= Constants.OPEFTER
+        val to_pd : String=""
 
 
 

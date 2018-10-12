@@ -71,6 +71,11 @@
     <string name="percent">%1$s%%</string>
     <string name="food_administration">Fødevarestyrelsen Kontrolrapport</string>
     <string name="deliveryinformation">Leveringsinformation</string>
+    <string name="no_data_found">No data found !</string>
+    <string name="please_search_the_item">Please search the item</string>
+    <string name="unfortunately_error">Unfortunately, we did not find any restaurant \n  in your area.</string>
+    <string name="search_again">Search again</string>
+    <string name="restaurants">Restaurants</string>
 
 
 </resources>

@@ -38,6 +38,19 @@ object BindDataUtils {
         return convertedAmount+"kr"
         //  }
     }
+    fun convertCurrencyToDanishWithoutLabel(amount: String): String? {
+        val deviceLocale = Locale.getDefault().language //  if (deviceLocale.equalsIgnoreCase("en")) {
+        //      return formatValueToMoney(amount);
+        //  } else {
+        val mNumberFormat = NumberFormat.getCurrencyInstance(Locale.GERMANY)
+        var convertedAmount: String? = mNumberFormat.format(amount.toDouble())
+        println(convertedAmount)
+        if (convertedAmount != null && convertedAmount.length > 2) {
+            convertedAmount = convertedAmount.substring(0, convertedAmount.length - 2)
+        }
+        return convertedAmount
+        //  }
+    }
 
 
     fun calculateRatingline() : Float {

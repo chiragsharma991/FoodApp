@@ -16,11 +16,7 @@
 
         </variable>
 
-        <variable
-            name="productprice_calculation"
-            type="dk.eatmore.foodapp.adapter.searchmenu.SearchlistChildAdapter.ProductPriceCalculation">
 
-        </variable>
 
 
     </data>
@@ -52,19 +48,18 @@
                 app:layout_constraintGuide_percent="0.9" />
 
 
-
             <android.support.v7.widget.AppCompatTextView
-                style="@style/TextViewSmall"
-                android:layout_height="wrap_content"
-                android:layout_width="0dp"
-                android:layout_gravity="center_vertical"
                 android:id="@+id/cat_title"
+                style="@style/TextViewSmall"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
                 android:layout_marginEnd="8dp"
+                android:layout_marginBottom="8dp"
                 android:layout_weight="1.05"
-                android:text="@{productlist_item.p_name}"
                 android:textColor="@color/black_light"
                 android:textStyle="bold"
-                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintBottom_toTopOf="@+id/cat_desc"
                 app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_one"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -72,12 +67,11 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/appCompatTextView"
+                android:id="@+id/cat_price"
                 style="@style/TextViewSmall"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
-                android:text="test"
                 android:textStyle="bold"
                 android:gravity="right"
                 android:textColor="@color/black_light"
@@ -87,14 +81,15 @@
                 app:layout_constraintTop_toTopOf="parent" />
 
             <android.support.v7.widget.AppCompatTextView
-                android:id="@+id/appCompatTextView3"
+                android:id="@+id/cat_desc"
                 style="@style/TextViewSmall"
                 android:layout_height="46dp"
                 android:layout_gravity="center_vertical"
-                android:layout_marginTop="8dp"
+                android:layout_marginBottom="8dp"
                 android:layout_weight="1.05"
-                android:text="@{productlist_item.p_desc}"
                 android:textColor="@color/black_light"
+                android:visibility="visible"
+                app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_two"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
@@ -114,7 +109,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/appCompatTextView3"
+                app:layout_constraintTop_toBottomOf="@+id/cat_desc"
                 app:layout_constraintVertical_bias="0.0" />
 
             <android.support.v7.widget.AppCompatImageView
@@ -122,13 +117,24 @@
                 android:layout_height="@dimen/_20sdp"
                 android:layout_gravity="top"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
                 android:background="@color/background_light"
                 android:scaleType="fitXY"
+                app:layout_constraintBottom_toBottomOf="@+id/cat_price"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guidline_vertical_two"
                 app:layout_constraintTop_toTopOf="parent"
                 app:srcCompat="@drawable/add" />
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.2"
+                android:background="@color/divider_color"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent" />
+
 
 
         </android.support.constraint.ConstraintLayout>

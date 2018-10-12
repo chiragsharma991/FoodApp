@@ -49,13 +49,8 @@
                 android:background="@color/white"
                 >
 
-                <android.support.v4.widget.NestedScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    >
-                    <LinearLayout
 
-
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
@@ -78,10 +73,51 @@
                         </FrameLayout>
 
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/error_view"
+                            android:visibility="gone"
+                            android:gravity="center_vertical|center_horizontal"
+                            >
 
-                    </LinearLayout>
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
 
-                </android.support.v4.widget.NestedScrollView>
+                                >
+                                <android.support.v7.widget.AppCompatTextView
+                                    android:id="@+id/error_txt"
+                                    style="@style/TextViewSmall"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/unfortunately_error"
+                                    android:gravity="center_horizontal"
+                                    android:textColor="@color/black_default"
+
+                                    />
+
+                                <android.support.v7.widget.AppCompatButton
+                                    style="@style/Button"
+                                    android:id="@+id/search_again_btn"
+                                    android:layout_marginTop="@dimen/_8sdp"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:text="@string/search_again"
+                                    android:layout_below="@+id/error_txt"
+                                    android:layout_centerHorizontal="true"
+                                    />
+
+
+                            </RelativeLayout>
+
+
+
+
+                        </LinearLayout>
+
+
+                    </RelativeLayout>
+
 
 
 
