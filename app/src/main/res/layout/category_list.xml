@@ -49,16 +49,14 @@
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
                     android:layout_marginTop="@dimen/_48sdp"
-                    android:layout_marginBottom="@dimen/_5sdp"
                     android:id="@+id/detail_item_info"
                     >
 
 
                     <LinearLayout
-                        android:layout_width="wrap_content"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
-                        android:layout_marginLeft="@dimen/_15sdp"
                         >
 
                         <android.support.v7.widget.AppCompatTextView
@@ -69,9 +67,22 @@
                             android:layout_height="wrap_content"
                             android:layout_toEndOf="@+id/img_toolbar_back"
                             android:fontFamily="@font/hindvadodara_medium"
+                            android:layout_marginEnd="@dimen/_14sdp"
+                            android:layout_marginStart="@dimen/_14sdp"
                             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
                             android:textColor="@color/black"
                             />
+
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_below="@+id/add_parentitem_view"
+                            android:layout_marginEnd="@dimen/_14sdp"
+                            android:layout_marginStart="@dimen/_14sdp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:visibility="visible"
+                            android:layerType="software"
+                            android:src="@drawable/dashline" />
                     </LinearLayout>
 
 
@@ -103,7 +114,7 @@
             android:layout_height="match_parent"
             android:layout_below="@+id/toolbar"
             android:fitsSystemWindows="true"
-            android:background="@color/background_light"
+            android:background="@color/white"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             >
 
@@ -114,8 +125,8 @@
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view_category"
-                    android:padding="@dimen/_2sdp"
                     android:clipToPadding="false"
+                    android:paddingTop="@dimen/_16sdp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 

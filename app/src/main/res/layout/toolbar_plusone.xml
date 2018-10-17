@@ -49,6 +49,7 @@
 
         <android.support.v7.widget.AppCompatTextView
             android:id="@+id/txt_toolbar"
+            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
             android:layout_width="wrap_content"
             android:layout_centerVertical="true"
             android:includeFontPadding="false"
@@ -57,7 +58,6 @@
             android:singleLine="true"
             android:layout_toEndOf="@+id/img_toolbar_back"
             android:fontFamily="@font/hindvadodara_medium"
-            style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
             android:textColor="@color/black"
             />
 

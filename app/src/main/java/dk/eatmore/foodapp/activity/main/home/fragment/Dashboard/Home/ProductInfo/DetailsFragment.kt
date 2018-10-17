@@ -30,11 +30,11 @@ import com.bumptech.glide.Glide
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Info
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Menu
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Rating
-import dk.eatmore.foodapp.databinding.FragmentDetailsBinding
+import dk.eatmore.foodapp.databinding.FragmentDetailBinding
 import dk.eatmore.foodapp.databinding.InfoRestaurantBinding
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.utils.Constants
-import kotlinx.android.synthetic.main.fragment_details.*
+import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.notification_template_lines_media.view.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
 
@@ -44,7 +44,7 @@ class DetailsFragment : BaseFragment() {
     lateinit var clickEvent: HomeFragment.MyClickHandler
     private var mAdapter: OrderListAdapter? = null
     var adapter: ViewPagerAdapter? = null
-    private lateinit var binding: FragmentDetailsBinding
+    private lateinit var binding: FragmentDetailBinding
 
 
     companion object {
@@ -65,7 +65,7 @@ class DetailsFragment : BaseFragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // return inflater.inflate(getLayout(), container, false)
+       //  return inflater.inflate(getLayout(), container, false)
 
         binding = DataBindingUtil.inflate(inflater, getLayout(), container, false)
         return binding.root
@@ -73,7 +73,7 @@ class DetailsFragment : BaseFragment() {
     }
 
     override fun getLayout(): Int {
-        return R.layout.fragment_details
+        return R.layout.fragment_detail
     }
 
 
@@ -86,8 +86,8 @@ class DetailsFragment : BaseFragment() {
             val myclickhandler = MyClickHandler(this)
             binding.restaurant = restaurant
             binding.handler = myclickhandler
-            detail_fab_btn.startAnimation(translateAnim(800f, 0f, 0f, 0f, 700, true))
-            detail_item_info.startAnimation(translateAnim(-800f, 0f, 0f, 0f, 700, true))
+            //detail_fab_btn.startAnimation(translateAnim(800f, 0f, 0f, 0f, 700, true))
+            //detail_item_info.startAnimation(translateAnim(-800f, 0f, 0f, 0f, 700, true))
             // DrawableCompat.setTint(ContextCompat.getDrawable(context!!,R.drawable.close)!!, ContextCompat.getColor(context!!, R.color.white));
             logd(DetailsFragment.TAG, "saveInstance NULL")
             Glide.with(context!!).load(restaurant.app_icon).into(imageview);

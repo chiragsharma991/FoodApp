@@ -26,9 +26,9 @@ data class ProductListItem(val productIngredients: String = "",
                            val p_price: String = "",
                            val productNo: String = "",
                            val p_name: String = "",
-                           val extraToppingGroup: String = "",
+                           val extra_topping_group: String? =null,
                            val cId: String = "",
-                           val isAttributes: String = "",
+                           val is_attributes: String = "",
                            val pImage: String = "",
                            val p_id: String = "") :Serializable{
 

@@ -49,7 +49,7 @@
         <android.support.v4.widget.NestedScrollView
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:padding="@dimen/_16sdp"
+            android:padding="@dimen/_8sdp"
             android:clipToPadding="false"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
             >
@@ -57,31 +57,40 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-
                 android:orientation="vertical">
 
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextViewMid"
-                    android:layout_gravity="center_vertical"
+                <LinearLayout
                     android:layout_width="match_parent"
-                    android:text="@{restaurant.restaurant_name}"
-                    android:textColor="@color/black_light" />
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    android:padding="@dimen/_8sdp"
+                    >
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/TextViewMid"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="match_parent"
+                        android:text="@{restaurant.restaurant_name}"
+                        android:textColor="@color/black_light" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextViewSmall"
-                    android:layout_gravity="center_vertical"
-                    android:layout_width="match_parent"
-                    android:text="@{restaurant.address}"
-                    android:textColor="@color/black_light" />
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/TextViewSmall"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="match_parent"
+                        android:text="@{restaurant.address}"
+                        android:textColor="@color/black_light" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextViewSmall"
-                    android:layout_gravity="center_vertical"
-                    android:layout_width="match_parent"
-                    android:text="@string/food_administration"
-                    android:onClick="@{handler::tapOnHealthReport}"
-                    android:textColor="@color/dark_blue" />
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/TextViewSmall"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="match_parent"
+                        android:text="@string/food_administration"
+                        android:onClick="@{handler::tapOnHealthReport}"
+                        android:textColor="@color/dark_blue" />
 
+
+
+
+                </LinearLayout>
 
 
 
@@ -90,6 +99,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_16sdp"
                     android:background="@color/gray"
+                    android:padding="@dimen/_8sdp"
                     android:orientation="horizontal">
 
 
@@ -108,6 +118,8 @@
                 <android.support.v7.widget.RecyclerView
                     android:layout_width="match_parent"
                     android:layout_marginTop="@dimen/_8sdp"
+                    android:paddingStart="@dimen/_8sdp"
+                    android:paddingEnd="@dimen/_8sdp"
                     android:layout_height="wrap_content"
                     android:nestedScrollingEnabled="false"
                     android:id="@+id/recycler_view"
@@ -118,25 +130,42 @@
 
 
 
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextViewMid"
+
+
+                <LinearLayout
                     android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
                     android:layout_marginBottom="@dimen/_8sdp"
                     android:background="@color/gray"
-                    android:layout_gravity="center_vertical"
-                    android:text="@string/deliveryinformation"
-                    android:textColor="@color/black_light"
-                    android:visibility="@{restaurant.shipping_charges.size()> 0 ?  View.VISIBLE : View.GONE }"
-                    />
+                    android:padding="@dimen/_8sdp"
+                    android:orientation="horizontal">
 
+
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/TextViewMid"
+                        android:layout_width="match_parent"
+                        android:layout_gravity="center_vertical"
+                        android:text="@string/deliveryinformation"
+                        android:textColor="@color/black_light"
+                        android:visibility="@{restaurant.shipping_charges.size()> 0 ?  View.VISIBLE : View.GONE }"
+                        />
+
+
+                </LinearLayout>
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="vertical"
                     android:id="@+id/linearcontainer"
+                    android:paddingStart="@dimen/_8sdp"
+                    android:paddingEnd="@dimen/_8sdp"
                     >
+
+
+
+
 
 
 

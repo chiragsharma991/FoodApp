@@ -49,7 +49,8 @@ class SearchlistChildAdapter(val context: Context, val listner: SearchlistParent
             // holder.binding.productlistItem= list_filtered[parentPosition].product_list!![position]
             holder.binding.catTitle.text = list_filtered[parentPosition].product_list!![position].p_name
             holder.binding.catDesc.text = list_filtered[parentPosition].product_list!![position].p_desc
-            holder.binding.catPrice.text = if(list_filtered[parentPosition].product_list!![position].product_attribute.size > 0)  getprice(list_filtered[parentPosition].product_list!![position]) else BindDataUtils.convertCurrencyToDanish(list_filtered[parentPosition].product_list!![position].p_price)
+            val size=if(list_filtered[parentPosition].product_list!![position].product_attribute==null ) 0 else list_filtered[parentPosition].product_list!![position].product_attribute.size
+            holder.binding.catPrice.text = if(size > 0)  getprice(list_filtered[parentPosition].product_list!![position]) else BindDataUtils.convertCurrencyToDanish(list_filtered[parentPosition].product_list!![position].p_price)
 
 
             // Find charText in wp

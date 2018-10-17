@@ -76,7 +76,8 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
             val bundle=arguments
 
             subtxt_toolbar.text=bundle?.getString(Constants.TITLE,"") ?:""
-            setanim_toolbartitle(appbar,txt_toolbar,bundle?.getString("TITLE","") ?:"")
+            setanim_toolbartitle(appbar,txt_toolbar,bundle?.getString(Constants.TITLE,"") ?:"")
+            img_toolbar_back.setOnClickListener{(activity as HomeActivity).onBackPressed() }
            // loge(TAG,"product_attribute --- "+menuListItem.product_list!!.get(0).product_attribute)
             mAdapter = UniversalAdapter(context!!, menuListItem.product_list, R.layout.row_category_list, object : RecyclerCallback<RowCategoryListBinding, ProductListItem> {
                 override fun bindData(binder: RowCategoryListBinding, model: ProductListItem) {

@@ -41,19 +41,18 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/appbar"
+            android:background="@color/white"
             >
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/background_light"
-
                 >
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view"
-                    android:padding="@dimen/_3sdp"
                     android:clipToPadding="false"
+                    android:paddingTop="@dimen/_5sdp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 

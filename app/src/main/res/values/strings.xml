@@ -75,6 +75,7 @@
     <string name="unfortunately_error">Unfortunately, we did not find any restaurant \n  in your area.</string>
     <string name="search_again">Search again</string>
     <string name="restaurants">Restaurants</string>
+    <string name="loading">Loading...</string>
 
 
 </resources>

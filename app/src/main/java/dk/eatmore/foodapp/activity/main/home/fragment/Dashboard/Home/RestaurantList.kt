@@ -8,6 +8,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
+import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.LinearLayoutManager
 import android.transition.ChangeBounds
 import android.transition.Slide
@@ -17,33 +18,19 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.cart.CalculateAttribute
-import dk.eatmore.foodapp.activity.main.cart.CartActivity
-import dk.eatmore.foodapp.activity.main.cart.fragment.Extratoppings
-import dk.eatmore.foodapp.activity.main.cart.fragment.OnlyExtratoppings
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
-import dk.eatmore.foodapp.adapter.cart.CartViewAdapter
 import dk.eatmore.foodapp.adapter.restaurantList.RestaurantListParentAdapter
-import dk.eatmore.foodapp.databinding.FragmentFbSignupBinding
 import dk.eatmore.foodapp.databinding.RestaurantlistBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
-import dk.eatmore.foodapp.model.cart.ProductAttributeListItem
-import dk.eatmore.foodapp.model.cart.ProductDetails
-import dk.eatmore.foodapp.model.cart.ProductIngredientsItem
-import dk.eatmore.foodapp.model.home.AreaDetails
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.model.home.RestaurantListModel
 import dk.eatmore.foodapp.rest.ApiCall
+import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
-import dk.eatmore.foodapp.utils.BindDataUtils
-import dk.eatmore.foodapp.utils.CartListFunction
 import dk.eatmore.foodapp.utils.Constants
-import kotlinx.android.synthetic.main.activity_cart.*
-import kotlinx.android.synthetic.main.fragment_account_container.*
 import kotlinx.android.synthetic.main.restaurantlist.*
 import kotlinx.android.synthetic.main.toolbar.*
-import java.util.HashMap
 
 
 class RestaurantList : BaseFragment() {
@@ -82,6 +69,7 @@ class RestaurantList : BaseFragment() {
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
+            progresswheel(progresswheel,true)
             setToolbarforThis()
             search_again_btn.setOnClickListener{ onBackpress() }
             ui_model = createViewModel()
@@ -125,7 +113,7 @@ class RestaurantList : BaseFragment() {
             }
 
             override fun onFail(error: Int) {
-           /*     when (error) {
+                when (error) {
                     404 -> {
                         showSnackBar(clayout_crt, getString(R.string.error_404))
                     }
@@ -133,7 +121,8 @@ class RestaurantList : BaseFragment() {
 
                         showSnackBar(clayout_crt, getString(R.string.internet_not_available))
                     }
-                }*/
+                }
+                progresswheel(progresswheel,false)
             }
         })
 
@@ -142,7 +131,6 @@ class RestaurantList : BaseFragment() {
 
 
     private fun refreshview() {
-        loge(TAG,"refresh view...")
         var statuswiserestaurant: StatusWiseRestaurant
         list= ArrayList()
         if(ui_model!!.restaurantList.value!!.restaurant_list.open_now.size > 0){
@@ -179,17 +167,23 @@ class RestaurantList : BaseFragment() {
                         changeBoundsTransition.duration = 300
                         //fragment!!.sharedElementEnterTransition=changeBoundsTransition
                         fragment.sharedElementEnterTransition=changeBoundsTransition
+                        fragment.sharedElementReturnTransition=changeBoundsTransition
                         fragment.enterTransition=enter
                     }
+                    PreferenceUtil.putValue(PreferenceUtil.R_KEY,list.get(parentPosition).restaurant.get(chilPosition).r_key)
+                    PreferenceUtil.putValue(PreferenceUtil.R_TOKEN,list.get(parentPosition).restaurant.get(chilPosition).r_token)
+                    PreferenceUtil.save()
                     (parentFragment as HomeFragment).addFragment(R.id.home_fragment_container,fragment, DetailsFragment.TAG,false)
                 }
             })
             layoutManager = LinearLayoutManager(context)
             adapter = mAdapter
         }
-
+        progresswheel(progresswheel,false)
 
     }
+
+
 
 
 

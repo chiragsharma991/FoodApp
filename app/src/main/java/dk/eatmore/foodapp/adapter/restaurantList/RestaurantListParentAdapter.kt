@@ -8,14 +8,9 @@ import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.cart.CalculateAttribute
-import dk.eatmore.foodapp.adapter.cart.CartChildViewAdapter
-import dk.eatmore.foodapp.databinding.RowCartViewBinding
 import dk.eatmore.foodapp.databinding.RowRestaurantlistPBinding
-import dk.eatmore.foodapp.model.User
-import dk.eatmore.foodapp.model.cart.ProductAttributeListItem
 import java.util.ArrayList
-import android.R.attr.keySet
+import android.support.v7.widget.AppCompatImageView
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.RestaurantList
 
 
@@ -71,7 +66,7 @@ class RestaurantListParentAdapter(val c: Context, val list : ArrayList<Restauran
 
 
     interface AdapterListener {
-        fun itemClicked(parentView : Boolean , parentPosition : Int, chilPosition : Int)
+        fun itemClicked(parentView: Boolean, parentPosition: Int, chilPosition: Int)
     }
 
 

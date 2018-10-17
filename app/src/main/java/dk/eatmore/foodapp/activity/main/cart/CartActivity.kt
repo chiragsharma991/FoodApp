@@ -33,6 +33,7 @@ import dk.eatmore.foodapp.model.cart.ProductDetails
 import dk.eatmore.foodapp.model.cart.ProductIngredientsItem
 import java.util.*
 import dk.eatmore.foodapp.rest.ApiCall
+import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.*
 import dk.eatmore.foodapp.utils.CartListFunction.getjsonparmsofAddtocart
 import kotlinx.android.synthetic.main.activity_cart.*
@@ -73,8 +74,8 @@ class CartActivity : BaseActivity() {
     private fun fetch_ProductDetailList() {
 
         callAPI(ApiCall.getProductDetails(
-                r_token = Constants.R_TOKEN,
-                r_key = Constants.R_KEY,
+                r_token = PreferenceUtil.getString(PreferenceUtil.R_TOKEN,"")!!,
+                r_key = PreferenceUtil.getString(PreferenceUtil.R_KEY,"")!!,
                 p_id = item_p_id
         ), object : BaseFragment.OnApiCallInteraction {
 

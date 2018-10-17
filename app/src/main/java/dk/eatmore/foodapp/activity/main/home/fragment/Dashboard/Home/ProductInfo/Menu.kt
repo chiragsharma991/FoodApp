@@ -13,7 +13,6 @@ import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.utils.BaseFragment
-import kotlinx.android.synthetic.main.menu_restaurant.*
 import android.transition.ChangeBounds
 import android.transition.Slide
 import android.view.Gravity
@@ -34,7 +33,8 @@ import dk.eatmore.foodapp.model.home.*
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.Constants
-import kotlinx.android.synthetic.main.fragment_details.*
+import kotlinx.android.synthetic.main.fragment_detail.*
+import kotlinx.android.synthetic.main.menu_restaurant.*
 import java.io.Serializable
 import java.util.ArrayList
 
@@ -92,10 +92,10 @@ class Menu : BaseFragment(), RecyclerClickListner {
             homeFragment=(fragmentof as HomeContainerFragment).getHomeFragment()
            // free_txt.visibility =if(restaurant.free_text =="") View.GONE else View.VISIBLE
            // free_txt.text=restaurant.free_text.replace("\n","").replace("\r","")
-            menu_search.setOnClickListener{
+            search_view.setOnClickListener{
 
 
-                    logd(TAG,"")
+                    logd(TAG,"click---")
                     val fragment = SearchMenu.newInstance(ui_model!!.productList.value)
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
@@ -107,10 +107,10 @@ class Menu : BaseFragment(), RecyclerClickListner {
                                      fragment.setSharedElementEnterTransition(enterTransitionSet)*/
 
                         // 3. Enter Transition for New Fragment
-                        val enterFade = Fade()
-                        enterFade.setStartDelay(0)
-                        enterFade.setDuration(300)
-                        fragment.setEnterTransition(enterFade)
+//                        val enterFade = Fade()
+//                        enterFade.setStartDelay(0)
+//                        enterFade.setDuration(300)
+//                        fragment.setEnterTransition(enterFade)
 
 
                         homeFragment.childFragmentManager.beginTransaction().add(R.id.home_fragment_container,fragment,SearchMenu.TAG).addToBackStack(SearchMenu.TAG)

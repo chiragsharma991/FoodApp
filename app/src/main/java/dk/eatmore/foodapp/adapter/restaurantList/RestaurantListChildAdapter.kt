@@ -2,20 +2,14 @@ package dk.eatmore.foodapp.adapter.restaurantList
 
 import android.content.Context
 import android.databinding.DataBindingUtil
-import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.RecyclerView
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.cart.CalculateAttribute
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.RestaurantList
-import dk.eatmore.foodapp.adapter.cart.CartViewAdapter
-import dk.eatmore.foodapp.databinding.RowChildCartViewBinding
 import dk.eatmore.foodapp.databinding.RowRestaurantlistCBinding
-import dk.eatmore.foodapp.model.cart.ProductAttributeValueItem
-import dk.eatmore.foodapp.utils.BindDataUtils
 import java.util.ArrayList
 
 
@@ -38,6 +32,8 @@ class RestaurantListChildAdapter(val context: Context, val listner: RestaurantLi
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is MyViewHolder) {
             Glide.with(context).load(list.get(parentPosition).restaurant.get(position).app_icon).into(holder.binding.imageview);
+          //  ViewCompat.setTransitionName(holder.binding.imageview, position.toString() + "vnhvn")
+
             holder.binding.restaurant=list.get(parentPosition).restaurant.get(position)
             holder.binding.ordertype=list.get(parentPosition).ordertype
             holder.binding.rowChildItem.setOnClickListener {

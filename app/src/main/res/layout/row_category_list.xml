@@ -33,16 +33,19 @@
         >
 
 
-        <android.support.v7.widget.CardView
+        <RelativeLayout
             android:id="@+id/row_cat_cardview"
-            style="@style/CardViewStyle"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
             android:onClick="@{()->handler.onClick(data)}"
             >
 
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_8sdp"
+                android:layout_marginStart="@dimen/_14sdp"
+                android:layout_marginEnd="@dimen/_14sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
                 >
 
                 <android.support.constraint.Guideline
@@ -143,7 +146,7 @@
             </android.support.constraint.ConstraintLayout>
 
 
-        </android.support.v7.widget.CardView>
+        </RelativeLayout>
 
 
 

@@ -1,68 +1,124 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
-    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
-    android:layout_height="wrap_content"
-    android:orientation="vertical"
+
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+
     >
+
+    <data>
+
+
+    </data>
+
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_marginTop="@dimen/_8sdp"
-        android:layout_marginStart="@dimen/_8sdp"
-        android:layout_marginEnd="@dimen/_8sdp"
-        android:orientation="horizontal"
-        >
-        <android.support.v7.widget.AppCompatTextView
-            style="@style/TextViewSmall"
-            android:singleLine="true"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:gravity="start"
-            android:id="@+id/item_name"
-            android:text="sdfsdfsdf"
-            android:layout_weight="1"
-            android:layout_marginEnd="@dimen/_8sdp"
-            android:textColor="@color/black_light"
-            />
-
-        <android.support.v7.widget.AppCompatTextView
-            style="@style/TextViewSmall"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:gravity="center_horizontal"
-            android:singleLine="true"
-            android:id="@+id/item_price"
-            android:text="sdfsdfsdfsdfs"
-            android:layout_weight="1"
-            android:layout_alignParentEnd="true"
-            android:textColor="@color/black_light"
-            />
-        <android.support.v7.widget.AppCompatTextView
-            style="@style/TextViewSmall"
-            android:layout_height="wrap_content"
-            android:layout_width="0dp"
-            android:singleLine="true"
-            android:gravity="end"
-            android:text="sdfsdfsdfsdfs"
-            android:layout_weight="1"
-            android:layout_alignParentEnd="true"
-            android:textColor="@color/black_light"
-            />
-
-
-
-
-    </LinearLayout>
-    <LinearLayout
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:id="@+id/toolbar_layout"
+        android:clipToPadding="false"
         android:orientation="vertical"
-        android:id="@+id/add_subitem_view"
-
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        xmlns:tools="http://schemas.android.com/tools"
         >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/appbar"
+                >
+                <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
+                    xmlns:app="http://schemas.android.com/apk/res-auto"
+                    xmlns:tools="http://schemas.android.com/tools"
+                    android:id="@+id/toolbar"
+                    android:clipToPadding="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="?attr/actionBarSize"
+                    android:minHeight="?attr/actionBarSize"
+                    android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                    app:layout_collapseMode="pin"
+                    android:background="@color/white"
+                    app:contentScrim="@android:color/white"
+                    app:contentInsetLeft="0dp"
+                    app:contentInsetStart="0dp"
+                    app:contentInsetRight="0dp"
+                    app:contentInsetEnd="0dp"
+                    >
+
+
+
+
+
+                    <RelativeLayout
+                        android:id="@+id/toolbarRel_layout"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:gravity="center_vertical">
+
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/img_toolbar_back"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:clickable="true"
+                            android:focusable="true"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:layout_alignParentStart="true"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:layout_centerVertical="true"
+                            app:srcCompat="@drawable/back"
+                            android:visibility="visible"
+                            />
+
+
+
+                        <dk.eatmore.foodapp.utils.CustomEditText
+                            android:id="@+id/search_edt"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:focusable="true"
+                            android:layout_toEndOf="@+id/img_toolbar_back"
+                            android:background="@android:color/white"
+                            android:drawablePadding="@dimen/_8sdp"
+                            android:drawableRight="@drawable/cancel"
+                            android:drawableTint="@color/black_default"
+                            android:fontFamily="@font/hindvadodara_medium"
+                            android:hint="@string/search_the_menu"
+                            android:lines="1"
+                            android:singleLine="true"
+                            android:layout_marginStart="@dimen/_10sdp"
+                            android:layout_marginEnd="@dimen/_10sdp"
+                            android:textAppearance="?android:textAppearanceSmall" />
+
+
+
+
+
+                    </RelativeLayout>
+
+
+
+
+
+
+                </android.support.v7.widget.Toolbar>
+
+
+            </android.support.design.widget.AppBarLayout>
+
+
+
+
+
+        </LinearLayout>
 
 
     </LinearLayout>
 
+</layout>
 
-</LinearLayout>

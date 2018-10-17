@@ -69,8 +69,7 @@ class SearchMenu : BaseFragment() {
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
             menu_list = arguments!!.getSerializable(Constants.MENULIST) as ArrayList<MenuListItem>
-            menu_list_filtered= arrayListOf()
-            loge(TAG,"array list is "+menu_list.size)
+            menu_list_filtered= menu_list
             search_edt.requestFocus()
             showKeyboard()
             keylistner()
@@ -88,11 +87,15 @@ class SearchMenu : BaseFragment() {
 
     private fun keylistner() {
 
+        img_toolbar_back.setOnClickListener{
+            (activity as HomeActivity).onBackPressed()
+        }
+
         search_edt.setDrawableClickListener(object : DrawableClickListener {
             override fun onClick(target: DrawablePosition) {
                 when (target) {
                     DrawableClickListener.DrawablePosition.LEFT -> {
-                       (activity as HomeActivity).onBackPressed()
+                  //     (activity as HomeActivity).onBackPressed()
                     }
                     else -> {
                         search_edt.text.clear()
@@ -138,7 +141,7 @@ class SearchMenu : BaseFragment() {
                 loge(TAG,"do in ---"+charString)
                 SearchMenu.searchString=charString.toLowerCase()
                 if (charString.isEmpty()) {
-                    menu_list_filtered = arrayListOf()
+                    menu_list_filtered = menu_list
                 } else {
                     val filteredList = ArrayList<MenuListItem>()
                     var i =0
@@ -188,16 +191,6 @@ class SearchMenu : BaseFragment() {
             }
             override fun onPostExecute(result: String) {
                 loge(TAG,"on post ---"+result)
-                if(menu_list_filtered.size > 0){
-                    error_txt.visibility=View.GONE
-
-                }else{
-                    error_txt.visibility=View.VISIBLE
-                    if(search_edt.text.length >0)
-                        error_txt.text=getString(R.string.no_data_found)
-                    else
-                        error_txt.text=getString(R.string.please_search_the_item)
-                }
                 mAdapter.refreshlist(menu_list_filtered)
 
 

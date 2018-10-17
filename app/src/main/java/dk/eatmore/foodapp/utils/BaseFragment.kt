@@ -23,6 +23,7 @@ import android.os.Build
 import android.support.design.widget.AppBarLayout
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.AppCompatTextView
 import android.view.animation.AlphaAnimation
 import android.view.animation.Animation
@@ -73,6 +74,7 @@ abstract class BaseFragment : Fragment() {
         mfragmentTransaction.add(container, fragment, tag).addToBackStack(tag).commit()
     }
 
+
     fun rightToLeftAnimation(context:Context): Animation {
         val animation = AnimationUtils.loadAnimation(context, R.anim.enter_from_right)
         animation.duration = 250
@@ -115,11 +117,13 @@ abstract class BaseFragment : Fragment() {
                      appcompattextview.text=title
                      // appcompattextview.startAnimation(alpha)
                      appcompattextview.visibility=View.VISIBLE
+                     loge("TAG","range == 0"+title)
                      isShow = false
 
                  } else if (!isShow) {
                      if(scrollRange + verticalOffset > scrollRange-50){
                          appcompattextview.visibility=View.GONE
+                         loge("TAG","range not 0")
                          isShow = true
                      }
                  }
@@ -322,6 +326,23 @@ abstract class BaseFragment : Fragment() {
         animation.duration = duration
         animation.fillAfter = fill
         return animation
+    }
+
+    fun progresswheel(progresswheel : ProgressWheel , isvisible : Boolean){
+        when (isvisible){
+            true ->{
+                progresswheel.startSpinning()
+                progresswheel.visibility=View.VISIBLE
+            }
+            false->{
+
+                progresswheel.stopSpinning()
+                progresswheel.visibility=View.GONE
+            }
+
+        }
+
+
     }
 
 
