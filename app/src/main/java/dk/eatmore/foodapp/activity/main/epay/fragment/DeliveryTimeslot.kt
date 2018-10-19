@@ -17,6 +17,7 @@ import dk.eatmore.foodapp.fragment.Dashboard.Home.Address
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.rest.ApiCall
+import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.deliverytimeslot.*
@@ -84,8 +85,8 @@ class DeliveryTimeslot : BaseFragment() {
     private fun fetch_PickupTime() {
 
         callAPI(ApiCall.getPickuptime(
-                r_token = Constants.R_TOKEN,
-                r_key = Constants.R_KEY,
+                r_token = PreferenceUtil.getString(PreferenceUtil.R_TOKEN,"")!!,
+                r_key = PreferenceUtil.getString(PreferenceUtil.R_KEY,"")!!,
                 shipping = "Pickup",
                 language = "en"
         ), object : BaseFragment.OnApiCallInteraction {

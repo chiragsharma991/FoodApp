@@ -101,6 +101,13 @@ class RestaurantList : BaseFragment() {
         jsonobject.addProperty(Constants.AUTH_KEY,Constants.AUTH_VALUE)
         jsonobject.addProperty(Constants.EATMORE_APP,true)
         jsonobject.addProperty(Constants.POSTAL_CODE,bundle!!.getString(Constants.POSTAL_CODE,"0"))
+        if(PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS,false)){
+            jsonobject.addProperty(Constants.IS_LOGIN, "1")
+            jsonobject.addProperty(Constants.CUSTOMER_ID,PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,""))
+        }else{
+            jsonobject.addProperty(Constants.IS_LOGIN, "0")
+        }
+        jsonobject.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
 
         callAPI(ApiCall.restaurantList(jsonobject), object : BaseFragment.OnApiCallInteraction {
 

@@ -103,8 +103,8 @@ class OpeningHours : BaseFragment() {
     private fun fetch_OpeningHours() {
 
         callAPI(ApiCall.openingHours(
-                r_token = Constants.R_TOKEN,
-                r_key = Constants.R_KEY
+                r_token = PreferenceUtil.getString(PreferenceUtil.R_TOKEN,"")!!,
+                r_key = PreferenceUtil.getString(PreferenceUtil.R_KEY,"")!!
         ), object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {

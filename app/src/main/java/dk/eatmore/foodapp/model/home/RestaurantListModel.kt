@@ -37,6 +37,7 @@ data class Restaurant(
         val app_icon: String = "",
         val r_key : String="",
         val r_token : String="",
+        val cartcnt : String?=null,
         val free_text : String="",
         val shipping_type : String="",
         val shipping_unit : String="",

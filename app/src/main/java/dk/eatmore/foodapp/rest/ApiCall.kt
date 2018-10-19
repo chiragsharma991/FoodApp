@@ -63,6 +63,10 @@ class ApiCall {
             return getApiInterface().viewcart(jsonObject)
         }
 
+        fun deleteitemFromcart(jsonObject: JsonObject) : Call<JsonObject> {
+            return getApiInterface().deleteitemFromcart(jsonObject)
+        }
+
         fun openingHours(r_token : String , r_key : String) : Call<JsonObject> {
             return getApiInterface().openingHours(r_token, r_key)
         }

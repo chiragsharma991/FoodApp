@@ -8,6 +8,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.provider.Settings
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
@@ -114,12 +115,13 @@ class Profile : BaseFragment() {
 
     fun logOut() {
 
-        DialogUtils.openDialog(context!!, "Are you sure you would logout?", "",
-                "Logout", "cancel", ContextCompat.getColor(context!!, R.color.theme_color), object : DialogUtils.OnDialogClickListener {
+        DialogUtils.openDialog(context!!, getString(R.string.are_you_sure_would), "",
+                getString(R.string.logout), getString(R.string.cancel), ContextCompat.getColor(context!!, R.color.theme_color), object : DialogUtils.OnDialogClickListener {
             override fun onPositiveButtonClick(position: Int) {
                 (parentFragment as AccountFragment).signOut()
                 PreferenceUtil.clearAll()
                 PreferenceUtil.save()
+                PreferenceUtil.putValue(PreferenceUtil.DEVICE_TOKEN, Settings.Secure.getString(context!!.getContentResolver(), Settings.Secure.ANDROID_ID))
                 (activity as HomeActivity).onBackPressed()
             }
 

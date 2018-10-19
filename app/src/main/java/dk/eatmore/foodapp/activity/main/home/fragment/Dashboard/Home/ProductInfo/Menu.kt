@@ -92,7 +92,7 @@ class Menu : BaseFragment(), RecyclerClickListner {
             homeFragment=(fragmentof as HomeContainerFragment).getHomeFragment()
            // free_txt.visibility =if(restaurant.free_text =="") View.GONE else View.VISIBLE
            // free_txt.text=restaurant.free_text.replace("\n","").replace("\r","")
-            search_view.setOnClickListener{
+            menu_search.setOnClickListener{
 
 
                     logd(TAG,"click---")
@@ -165,8 +165,8 @@ class Menu : BaseFragment(), RecyclerClickListner {
     private fun fetch_ProductList() {
 
         callAPI(ApiCall.getProductList(
-                r_token = restaurant.r_token,
-                r_key = restaurant.r_key,
+                r_token = PreferenceUtil.getString(PreferenceUtil.R_TOKEN,"")!!,
+                r_key = PreferenceUtil.getString(PreferenceUtil.R_KEY,"")!!,
                 customer_id = PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,"")!!
         ), object : BaseFragment.OnApiCallInteraction {
 

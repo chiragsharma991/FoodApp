@@ -37,7 +37,6 @@
             android:id="@+id/row_cat_cardview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:onClick="@{()->handler.onClick(data)}"
             >
 
             <android.support.constraint.ConstraintLayout
@@ -53,7 +52,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.75" />
+                    app:layout_constraintGuide_percent="0.6" />
 
                 <android.support.constraint.Guideline
                     android:id="@+id/guidline_vertical_two"
@@ -63,13 +62,12 @@
                     app:layout_constraintGuide_percent="0.9" />
 
 
-
                 <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextViewSmall"
-                    android:layout_height="wrap_content"
-                    android:layout_width="0dp"
-                    android:layout_gravity="center_vertical"
                     android:id="@+id/cat_title"
+                    style="@style/TextViewSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1.05"
                     android:text="@{data.p_name}"
@@ -88,10 +86,11 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:text="@{data.product_attribute == null ? util.convertCurrencyToDanish(data.p_price) : productpricecalculation.getprice(data)}"
-                    android:textStyle="bold"
+                    android:layout_marginEnd="8dp"
                     android:gravity="right"
+                    android:text="@{data.product_attribute == null ? util.convertCurrencyToDanish(data.p_price) : productpricecalculation.getprice(data)}"
                     android:textColor="@color/black_light"
+                    android:textStyle="bold"
                     app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_two"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toEndOf="@+id/guidline_vertical_one"
@@ -129,12 +128,12 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="@dimen/_20sdp"
-                    android:layout_height="@dimen/_20sdp"
+                    android:layout_width="@dimen/_30sdp"
+                    android:layout_height="@dimen/_30sdp"
                     android:layout_gravity="top"
-                    android:layout_marginEnd="8dp"
+                    android:onClick="@{()->handler.onClick(data)}"
                     android:layout_marginStart="8dp"
-                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
                     android:background="@color/background_light"
                     android:scaleType="fitXY"
                     app:layout_constraintEnd_toEndOf="parent"

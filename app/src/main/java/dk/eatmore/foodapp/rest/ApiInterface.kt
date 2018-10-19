@@ -97,4 +97,9 @@ interface ApiInterface {
     fun viewcart(@Body jsonObject: JsonObject): Call<ViewcardModel>
 
 
+    @POST("Cart/cart/deletefromcart")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun deleteitemFromcart(@Body jsonObject: JsonObject): Call<JsonObject>
+
+
 }

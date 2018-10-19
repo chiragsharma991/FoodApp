@@ -111,7 +111,6 @@
             <android.support.v7.widget.CardView
                 style="@style/CardViewStyle"
                 android:id="@+id/search_view"
-                android:clickable="false"
                 android:layout_margin="0dp"
                 android:layout_below="@+id/free_txt"
                 android:transitionName="@string/transition_string"
@@ -120,13 +119,11 @@
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:clickable="false"
                     android:gravity="center_vertical"
                     >
                     <EditText
                         android:id="@+id/menu_search"
                         android:layout_width="match_parent"
-                        android:clickable="true"
                         android:layout_height="wrap_content"
                         android:textAppearance="?android:textAppearanceSmall"
                         android:padding="@dimen/_10sdp"

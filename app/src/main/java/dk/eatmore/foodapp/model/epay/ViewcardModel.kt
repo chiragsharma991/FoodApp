@@ -5,7 +5,7 @@ import com.google.gson.annotations.SerializedName
 data class ViewcardModel(
         val msg: String = "",
         val cartcnt: String = "",
-        val order_total: Int = 0,
+        val order_total: Double = 0.0,
         val status: Boolean = false,
         val result: ArrayList<ResultItem>?
 )
@@ -16,14 +16,14 @@ data class ResultItem(
                       val restaurantId: String = "",
                       val productImage: String = "",
                       val ip: String = "",
-                      val opId: String = "",
+                      val op_id: String = "",
                       val discount: String = "",
                       val p_price: String = "",
                       val product_name: String = "",
                       val product_no: String = "",
                       val pDate: String = "",
                       val cId: String = "",
-                      val is_attributes: String = "",
+                      val is_attributes: String? = null,
                       val productImageThumbnail: String = "",
                       val removed_ingredients: List<RemovedIngredientsItem>? = null,
                       val ordered_product_attributes: List<OrderedProductAttributesItem>?= null,

@@ -77,6 +77,12 @@
     <string name="search_again">Search again</string>
     <string name="restaurants">Restaurants</string>
     <string name="loading">Loading...</string>
+    <string name="login_to_continue">Login to continue</string>
+    <string name="are_you_sure_would">Are you sure you would logout?</string>
+    <string name="logout">Logout</string>
+    <string name="no">NO</string>
+    <string name="yes">YES</string>
+    <string name="are_you_sure_to_delete">Are you sure to delete ?</string>
 
 
 </resources>

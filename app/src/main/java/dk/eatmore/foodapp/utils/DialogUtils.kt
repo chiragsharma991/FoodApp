@@ -36,7 +36,7 @@ object DialogUtils {
         val alert = builder.create()
         alert.show()
 
-        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(context,R.color.colorSecondaryText))
+        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(context,R.color.black))
         alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(color)
     }
     fun openDialogDefault(context: Context, msg: String,title : String, btnPositive : String, btnNegative: String, color:Int, onDialogClickListener: OnDialogClickListener) {

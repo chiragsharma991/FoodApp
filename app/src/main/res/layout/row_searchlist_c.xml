@@ -113,10 +113,11 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <android.support.v7.widget.AppCompatImageView
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_gravity="top"
                 android:layout_marginStart="8dp"
+                android:id="@+id/addtocart_view"
                 android:background="@color/background_light"
                 android:scaleType="fitXY"
                 app:layout_constraintBottom_toBottomOf="@+id/cat_price"

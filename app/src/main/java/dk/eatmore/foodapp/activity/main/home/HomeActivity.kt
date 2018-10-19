@@ -45,12 +45,12 @@ class HomeActivity : BaseActivity() {
 
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        loge(TAG, "---Activity Result Activity---")
+ /*   override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        loge(TAG, "---Activity Result home Activity---")
         AccountFragment.callbackManager.onActivityResult(requestCode, resultCode, data)
         super.onActivityResult(requestCode, resultCode, data)
     }
-
+*/
 
     private fun initView(savedInstanceState: Bundle?) {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);

@@ -32,6 +32,7 @@ class HomeContainerFragment : BaseFragment() {
         }
 
 
+
     }
 
     override fun getLayout(): Int {
@@ -56,7 +57,6 @@ class HomeContainerFragment : BaseFragment() {
 
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
-
             view_pager.apply {
                 mAdapter = HomeFragmentViewPagerAdapter(childFragmentManager)
                 adapter = mAdapter
@@ -94,6 +94,11 @@ class HomeContainerFragment : BaseFragment() {
 
 
     }
+
+    fun changeHomeview_page(position: Int){
+        view_pager.setCurrentItem(position)
+    }
+
 
 
 

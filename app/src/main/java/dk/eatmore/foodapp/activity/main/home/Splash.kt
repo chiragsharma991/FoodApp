@@ -30,6 +30,7 @@ import java.util.regex.PatternSyntaxException
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Build
+import android.provider.Settings
 import android.support.constraint.ConstraintSet
 import android.support.transition.ChangeBounds
 import android.support.transition.TransitionManager
@@ -82,6 +83,8 @@ class Splash : BaseActivity() {
             systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
         }
         fullScreen()
+        PreferenceUtil.putValue(PreferenceUtil.DEVICE_TOKEN,Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID))
+        PreferenceUtil.save()
         getCurrentVersion()
         screenPlay()
 

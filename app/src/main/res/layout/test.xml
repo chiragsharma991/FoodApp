@@ -1,124 +1,185 @@
 <?xml version="1.0" encoding="utf-8"?>
 
-
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
-
+<layout
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     >
-
     <data>
 
+        <import type="android.view.View">
+
+        </import>
+
+        <variable
+            name="restaurant"
+            type="dk.eatmore.foodapp.model.home.Restaurant">
+
+        </variable>
 
     </data>
 
-    <LinearLayout
+
+    <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:id="@+id/toolbar_layout"
-        android:clipToPadding="false"
-        android:orientation="vertical"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
+        android:layout_height="match_parent"
+        android:id="@+id/clayout_menu"
+        android:background="@color/white"
+        android:fitsSystemWindows="true"
         >
 
-        <LinearLayout
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:alpha="0.2"
+            android:visibility="visible"
+            android:background="@color/divider_color"
+            />
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:orientation="vertical"
+            android:padding="@dimen/_16sdp"
+            android:clipToPadding="false"
             >
-
-            <android.support.design.widget.AppBarLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:id="@+id/appbar"
-                >
-                <android.support.v7.widget.Toolbar xmlns:android="http://schemas.android.com/apk/res/android"
-                    xmlns:app="http://schemas.android.com/apk/res-auto"
-                    xmlns:tools="http://schemas.android.com/tools"
-                    android:id="@+id/toolbar"
-                    android:clipToPadding="false"
-                    android:layout_width="match_parent"
-                    android:layout_height="?attr/actionBarSize"
-                    android:minHeight="?attr/actionBarSize"
-                    android:popupTheme="@style/ThemeOverlay.AppCompat.Light"
-                    app:layout_collapseMode="pin"
-                    android:background="@color/white"
-                    app:contentScrim="@android:color/white"
-                    app:contentInsetLeft="0dp"
-                    app:contentInsetStart="0dp"
-                    app:contentInsetRight="0dp"
-                    app:contentInsetEnd="0dp"
-                    >
-
-
-
-
-
                     <RelativeLayout
-                        android:id="@+id/toolbarRel_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:gravity="center_vertical">
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="@dimen/_8sdp"
+                        android:layout_marginEnd="@dimen/_8sdp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:layout_marginBottom="@dimen/_8sdp"
+                        android:id="@+id/tab_card"
 
+                        android:gravity="center_horizontal"
 
-                        <android.support.v7.widget.AppCompatImageView
-                            android:id="@+id/img_toolbar_back"
+                        >
+                        <android.support.v7.widget.CardView
                             android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:clickable="true"
-                            android:focusable="true"
-                            android:background="?attr/selectableItemBackgroundBorderless"
-                            android:layout_alignParentStart="true"
-                            android:layout_marginStart="@dimen/_10sdp"
-                            android:layout_marginEnd="@dimen/_10sdp"
-                            android:layout_centerVertical="true"
-                            app:srcCompat="@drawable/back"
-                            android:visibility="visible"
-                            />
+                            android:layout_height="@dimen/_30sdp"
+                            app:cardBackgroundColor="@color/theme_color"
+                            app:cardCornerRadius="@dimen/_2sdp"
+                            >
+                            <RelativeLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="match_parent"
+                                >
+
+                                <android.support.design.widget.TabLayout
+                                    android:id="@+id/menu_tabs"
+                                    android:fitsSystemWindows="true"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="@dimen/_30sdp"
+                                    app:tabMode="scrollable"
+                                    android:layout_margin="@dimen/_1sdp"
+                                    android:animateLayoutChanges="true"
+                                    app:tabGravity="fill"
+                                    android:layout_gravity="bottom"
+                                    app:tabIndicatorColor="@null"
+                                    app:tabBackground="@drawable/tab_background"
+                                    app:tabTextAppearance="@style/tab_text"
+                                    app:tabSelectedTextColor="@color/white"
+                                    app:tabTextColor="@color/red"
+                                    />
 
 
 
-                        <dk.eatmore.foodapp.utils.CustomEditText
-                            android:id="@+id/search_edt"
-                            android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:focusable="true"
-                            android:layout_toEndOf="@+id/img_toolbar_back"
-                            android:background="@android:color/white"
-                            android:drawablePadding="@dimen/_8sdp"
-                            android:drawableRight="@drawable/cancel"
-                            android:drawableTint="@color/black_default"
-                            android:fontFamily="@font/hindvadodara_medium"
-                            android:hint="@string/search_the_menu"
-                            android:lines="1"
-                            android:singleLine="true"
-                            android:layout_marginStart="@dimen/_10sdp"
-                            android:layout_marginEnd="@dimen/_10sdp"
-                            android:textAppearance="?android:textAppearanceSmall" />
+                            </RelativeLayout>
 
 
 
+                        </android.support.v7.widget.CardView>
 
 
                     </RelativeLayout>
 
 
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/TextViewMid"
+                android:id="@+id/free_txt"
+                android:visibility="@{restaurant.free_text.equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}"
+                android:text="@{restaurant.free_text.replace(`\n`,``).replace(`\r`,``)}"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:textColor="@color/black_light"
+                />
 
 
 
 
-                </android.support.v7.widget.Toolbar>
+            <android.support.v7.widget.CardView
+                style="@style/CardViewStyle"
+                android:id="@+id/search_view"
+                android:clickable="false"
+                android:layout_margin="0dp"
+                android:layout_below="@+id/free_txt"
+                android:transitionName="@string/transition_string"
+                >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:clickable="false"
+                    android:gravity="center_vertical"
+                    >
+                    <EditText
+                        android:id="@+id/menu_search"
+                        android:layout_width="match_parent"
+                        android:clickable="true"
+                        android:layout_height="wrap_content"
+                        android:textAppearance="?android:textAppearanceSmall"
+                        android:padding="@dimen/_10sdp"
+                        android:focusableInTouchMode="false"
+                        android:focusable="false"
+                        android:fontFamily="@font/hindvadodara_medium"
+                        android:lines="1"
+                        android:hint="@string/search_the_menu"
+                        android:drawableLeft="@drawable/search"
+                        android:drawableTint="@color/black_default"
+                        android:drawablePadding="@dimen/_10sdp"
+                        android:singleLine="true"
+                        android:background="@android:color/white"
+                        />
 
 
-            </android.support.design.widget.AppBarLayout>
+
+
+                </RelativeLayout>
+
+
+            </android.support.v7.widget.CardView>
+
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/search_view"
+
+                >
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/recycler_view_menu"
+                    android:nestedScrollingEnabled="true"
+                    android:clipToPadding="false"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"/>
+
+            </RelativeLayout>
+
+
+
+
+        </RelativeLayout>
 
 
 
 
 
-        </LinearLayout>
+    </RelativeLayout>
 
 
-    </LinearLayout>
+
 
 </layout>
+
 

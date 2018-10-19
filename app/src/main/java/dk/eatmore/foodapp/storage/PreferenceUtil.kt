@@ -140,7 +140,7 @@ object PreferenceUtil {
     val R_TOKEN = "r_token"
     val E_MAIL = "restaurant_name"
     val R_KEY = "r_key"
-    val TOKEN = "token"
+    val DEVICE_TOKEN = "device_token"
     val LANGUAGE = "language"
     val FIRST_NAME = "first_name"
     val PHONE = "keep_screen_on"

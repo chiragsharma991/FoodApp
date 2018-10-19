@@ -16,6 +16,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import com.zhy.view.flowlayout.FlowLayout
@@ -172,7 +173,7 @@ class CartActivity : BaseActivity() {
                 ui_model!!.product_ingredients.value!![i].selected_ingredient = true
             }
 
-            loge(TAG, "boolean " + ui_model!!.product_ingredients.value!![2].selected_ingredient)
+        //    loge(TAG, "boolean " + ui_model!!.product_ingredients.value!![2].selected_ingredient)
 
         })
 
@@ -257,15 +258,22 @@ class CartActivity : BaseActivity() {
 
         addtocart_view.setOnClickListener {
             val postParam = JsonObject()
-            postParam.addProperty("r_token", Constants.R_TOKEN)
-            postParam.addProperty("r_key", Constants.R_KEY)
-            postParam.addProperty("is_login", "1")
-            postParam.addProperty("p_id", item_p_id)
-            postParam.addProperty("p_price", CartListFunction.calculateValuesofAddtocart(ui_model!!.product_attribute_list, productdetails).toString())
-            postParam.addProperty("p_quantity", "1")
-            postParam.addProperty("ingredients", getjsonparmsofAddtocart(item_p_id, ui_model!!.product_ingredients, ui_model!!.product_attribute_list, productdetails, 0).toString())
-            postParam.addProperty("attrubutes", getjsonparmsofAddtocart(item_p_id, ui_model!!.product_ingredients, ui_model!!.product_attribute_list, productdetails, 1).toString())
-            postParam.addProperty("extratoppings", getjsonparmsofAddtocart(item_p_id, ui_model!!.product_ingredients, ui_model!!.product_attribute_list, productdetails, 2).toString())
+            postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN,""))
+            postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY,""))
+            if(PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS,false)){
+                postParam.addProperty(Constants.IS_LOGIN, "1")
+                postParam.addProperty(Constants.CUSTOMER_ID,PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,""))
+            }else{
+                postParam.addProperty(Constants.IS_LOGIN, "0")
+            }
+            postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
+            postParam.addProperty(Constants.P_ID, item_p_id)
+            postParam.addProperty(Constants.P_PRICE, CartListFunction.calculateValuesofAddtocart(ui_model!!.product_attribute_list, productdetails).toString())
+            postParam.addProperty(Constants.P_QUANTITY, "1")
+            // pass 0,1,2 to get different INGREDIENTS/ATTRUBUTES/EXTRATOPPINGS
+            postParam.add(Constants.INGREDIENTS, getjsonparmsofAddtocart(item_p_id, ui_model!!.product_ingredients, ui_model!!.product_attribute_list, productdetails, 0))
+            postParam.add(Constants.ATTRUBUTES, getjsonparmsofAddtocart(item_p_id, ui_model!!.product_ingredients, ui_model!!.product_attribute_list, productdetails, 1))
+            postParam.add(Constants.EXTRATOPPINGS, getjsonparmsofAddtocart(item_p_id, ui_model!!.product_ingredients, ui_model!!.product_attribute_list, productdetails, 2))
 
             callAPI(ApiCall.addtocart(
                     jsonObject = postParam
