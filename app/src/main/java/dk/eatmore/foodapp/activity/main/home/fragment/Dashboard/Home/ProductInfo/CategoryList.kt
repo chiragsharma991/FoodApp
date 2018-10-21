@@ -34,6 +34,9 @@ import kotlinx.android.synthetic.main.activity_cart.*
 import kotlinx.android.synthetic.main.category_list.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
 import java.util.*
+import android.support.v4.content.LocalBroadcastManager
+
+
 
 class CategoryList : BaseFragment(), RecyclerClickListner {
 
@@ -72,6 +75,10 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
             productpricecalculation = ProductPriceCalculation(this)
+            setnotifybatch(0)
+            val filter = "thisIsForMyFragment"
+            val intent = Intent(filter) //If you need extra, add: intent.putExtra("extra","something");
+            LocalBroadcastManager.getInstance(activity!!).sendBroadcast(intent)
             val menuListItem = arguments?.getSerializable(Constants.PRODUCTLIST) as MenuListItem
             val bundle = arguments
 
@@ -155,6 +162,13 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
             }
         })
     }
+
+    fun setnotifybatch(count:Int){
+        badge_notification_txt.text= (DetailsFragment.totalcartcount +count).toString()
+        badge_notification_txt.visibility = if(DetailsFragment.totalcartcount == 0) View.GONE else View.VISIBLE
+
+    }
+
 
 
     private fun setRecyclerData(binder: RowCategoryListBinding, model: ProductListItem) {
