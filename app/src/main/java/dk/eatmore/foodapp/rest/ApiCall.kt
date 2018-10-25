@@ -51,8 +51,11 @@ class ApiCall {
         }
 
 
-        fun getPickuptime(r_token : String , r_key : String, shipping : String, language : String ) : Call<JsonObject> {
-            return getApiInterface().getPickuptime(r_token, r_key, shipping,language)
+        fun pickupinfo(jsonObject: JsonObject) : Call<JsonObject> {
+            return getApiInterface().pickupinfo(jsonObject)
+        }
+        fun checkout(jsonObject: JsonObject) : Call<JsonObject> {
+            return getApiInterface().checkout(jsonObject)
         }
 
         fun addtocart(jsonObject: JsonObject) : Call<JsonObject> {
@@ -75,6 +78,13 @@ class ApiCall {
             return getApiInterface().lastLogin(r_token, r_key,customer_id,device_type)
         }
 
+        fun userInfo(jsonObject: JsonObject ) : Call<JsonObject> {
+            return getApiInterface().userInfo(jsonObject)
+        }
+
+        fun deliveryDetails(jsonObject: JsonObject ) : Call<JsonObject> {
+            return getApiInterface().deliveryDetails(jsonObject)
+        }
 
     }
 

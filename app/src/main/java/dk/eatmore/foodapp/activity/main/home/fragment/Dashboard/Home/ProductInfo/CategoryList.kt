@@ -6,16 +6,20 @@ import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.util.Pair
+import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AlphaAnimation
+import android.widget.Toast
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
+import dk.eatmore.foodapp.activity.main.epay.EpayActivity
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerCallback
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerClickListner
@@ -72,6 +76,7 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
             productpricecalculation = ProductPriceCalculation(this)
+            updatebatchcount(0)
             val menuListItem = arguments?.getSerializable(Constants.PRODUCTLIST) as MenuListItem
             val bundle = arguments
 
@@ -86,8 +91,30 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
             })
             recycler_view_category.layoutManager = LinearLayoutManager(getActivityBase())
             recycler_view_category.adapter = mAdapter
+            viewcart.setOnClickListener {
+                val intent = Intent(activity, EpayActivity::class.java)
+                startActivityForResult(intent,1)
+            }
+
+
         } else {
             logd(TAG, "saveInstance NOT NULL")
+        }
+    }
+
+    fun updatebatchcount(count : Int){
+        badge_notification_txt.visibility = if (DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
+        badge_notification_txt.text= DetailsFragment.total_cartcnt.toString()
+        badge_countprice.text= BindDataUtils.convertCurrencyToDanish(DetailsFragment.total_cartamt)
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        loge("onActivityResult categorylist---",""+resultCode+" "+requestCode)
+        // request : send code with request
+        // result :  get code from target activity.
+        if(requestCode ==1 && resultCode == AppCompatActivity.RESULT_OK){
+            ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2)
         }
     }
 
@@ -133,8 +160,14 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
 
             override fun <T> onSuccess(body: T?) {
                 val jsonObject = body as JsonObject
-                if (jsonObject.get("status").asBoolean) {
+                if (jsonObject.get(Constants.STATUS).asBoolean) {
                     showProgressDialog()
+                    Toast.makeText(context,getString(R.string.item_has_been),Toast.LENGTH_SHORT).show()
+                    val intent = Intent(Constants.CARTCOUNT_BROADCAST)
+                    intent.putExtra(Constants.CARTCNT,if(jsonObject.get(Constants.CARTCNT).isJsonNull  || jsonObject.get(Constants.CARTCNT).asString =="0") 0 else (jsonObject.get(Constants.CARTCNT).asString).toInt())
+                    intent.putExtra(Constants.CARTAMT,if(jsonObject.get(Constants.CARTAMT).isJsonNull || jsonObject.get(Constants.CARTAMT).asString =="0") "00.00" else jsonObject.get(Constants.CARTAMT).asString)
+                    LocalBroadcastManager.getInstance(context!!).sendBroadcast(intent)
+
                 } else {
                     showProgressDialog()
                     showSnackBar(clayout_crt, getString(R.string.error_404))

@@ -43,6 +43,48 @@ class Constants {
         val PRODUCTLIST="ProductList"
         val MENULIST="menulist"
         val OPEFTER="Opefter"
+        val CARTCOUNT_BROADCAST="cartcount_broadcast"
+        val CARTCNT="cartcnt"
+        val CARTAMT="cartamt"
+        val USER_INFO="user_info"
+        val POSTAL_CITY="postal_city"
+        val ORDER_TOTAL="order_total"
+        val SHIPPING="shipping"
+        val STREET="street"
+        val HOUSE_NO="house_no"
+        val FLOOR_DOOR="floor_door"
+        val CITY="city"
+        val TIME_LIST="time_list"
+        val RESULT="result"
+        val ACTUAL="actual"
+        val DISPLAY="display"
+        val ADDRESS="address"
+        val DISTANCE="distance"
+        val TELEPHONE_NO="telephone_no"
+        val MIN_ORDER_SHIPPING="min_order_shipping"
+        val MINIMUM_ORDER_PRICE="minimum_order_price"
+        val COMMENTS="comments"
+        val EXPECTED_TIME="expected_time"
+        val FIRST_TIME="first_time"
+        val DISCOUNT_ID="discount_id"
+        val DISCOUNT_TYPE="discount_type"
+        val DISCOUNT_AMOUNT="discount_amount"
+        val SHIPPING_CHARGE="shipping_charge"
+        val SHIPPING_COSTS="shipping_costs"
+        val UPTO_MIN_SHIPPING="upto_min_shipping"
+        val ACCEPT_TC="accept_tc"
+        val PAYMETHOD="paymethod"
+        val CARTPRODUCTS="cartproducts"
+        val ADDITIONAL_CHARGE="additional_charge"
+        val ADDITIONAL_CHARGES_ONLINE="additional_charges_online"
+        val ADDITIONAL_CHARGES_CASH="additional_charges_cash"
+        val USER_DISTANCE="user_distance"
+        val SHIPPING_REMARK="shipping_remark"
+
+
+
+
+
 
     }
 }

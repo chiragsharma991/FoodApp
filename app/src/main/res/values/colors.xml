@@ -30,6 +30,7 @@
     <color name="white">#fff</color>
     <color name="white_light_grey">#f4f6f7</color>
     <color name="transparent_gray">#b8999896</color>
+    <color name="transparent_background">#99F0EFF5</color>
     <color name="green">#019E0F</color>
     <color name="red">#CF2A28</color>
     <color name="bottomtab_item_resting">#36000000</color>

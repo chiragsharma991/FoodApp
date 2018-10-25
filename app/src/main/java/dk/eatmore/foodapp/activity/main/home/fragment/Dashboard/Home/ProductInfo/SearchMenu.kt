@@ -5,6 +5,7 @@ import android.databinding.DataBindingUtil
 import android.os.AsyncTask
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.util.Pair
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
@@ -262,6 +263,10 @@ class SearchMenu : BaseFragment() {
                 val jsonObject = body as JsonObject
                 if (jsonObject.get("status").asBoolean) {
                     showProgressDialog()
+                    val intent = Intent(Constants.CARTCOUNT_BROADCAST)
+                    intent.putExtra(Constants.CARTCNT,if(jsonObject.get(Constants.CARTCNT).isJsonNull  || jsonObject.get(Constants.CARTCNT).asString =="0") 0 else (jsonObject.get(Constants.CARTCNT).asString).toInt())
+                    intent.putExtra(Constants.CARTAMT,if(jsonObject.get(Constants.CARTAMT).isJsonNull || jsonObject.get(Constants.CARTAMT).asString =="0") "00.00" else jsonObject.get(Constants.CARTAMT).asString)
+                    LocalBroadcastManager.getInstance(context!!).sendBroadcast(intent)
                 } else {
                     showProgressDialog()
                     showSnackBar(clayout_crt, getString(R.string.error_404))

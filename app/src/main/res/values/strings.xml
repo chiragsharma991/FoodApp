@@ -43,7 +43,7 @@
     <string name="signup">Signup</string>
     <string name="add_to_cart">ADD TO CART %1$s</string>
     <string name="minues">- %1$s</string>
-    <string name="total_goods">Total (%1$s Goods)</string>
+    <string name="total_goods">Total ( %1$s Goods )</string>
     <string name="plus">+ %1$s</string>
     <string name="restaurant_rating">(%1$s ratings)</string>
     <string name="add_new_address">Add new address</string>
@@ -82,6 +82,16 @@
     <string name="no">NO</string>
     <string name="yes">YES</string>
     <string name="are_you_sure_to_delete">Are you sure to delete ?</string>
+    <string name="item_has_been">Item has been successfully added !</string>
+    <string name="pickup">pickup</string>
+    <string name="delivery">delivery</string>
+    <string name="you_are_ordering_pickup">Du er ved at bestille din mad til afhentning!</string>
+    <string name="enter_your_valid_name">Enter your valid name</string>
+    <string name="enter_your_postal_number">Enter your postal number</string>
+    <string name="enter_the_valid_number">Enter the valid number</string>
+    <string name="enter_your_street_number">Enter your street number</string>
+    <string name="enter_your_house_number">Enter your house number</string>
+    <string name="postal_number_is_not_valid">Postal number is not valid</string>
 
 
 </resources>

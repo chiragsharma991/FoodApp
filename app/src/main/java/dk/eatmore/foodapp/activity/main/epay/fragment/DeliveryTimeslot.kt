@@ -13,7 +13,6 @@ import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.epay.EpayActivity
 import dk.eatmore.foodapp.adapter.cart.CartViewAdapter
 import dk.eatmore.foodapp.databinding.DeliverytimeslotBinding
-import dk.eatmore.foodapp.fragment.Dashboard.Home.Address
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.rest.ApiCall
@@ -33,12 +32,17 @@ class DeliveryTimeslot : BaseFragment() {
     private lateinit var homeFragment: HomeFragment
     private var timeslot: ArrayList<String>?=null
     private var selectedtimeslot_position : Int = 0
+    private  var time_list: LinkedHashMap<String,String>?=null
 
 
     companion object {
         val TAG = "DeliveryTimeslot"
-        fun newInstance(): DeliveryTimeslot {
-            return DeliveryTimeslot()
+        fun newInstance(time_list: LinkedHashMap<String, String>?): DeliveryTimeslot {
+            val bundle = Bundle()
+            val fragment = DeliveryTimeslot()
+            bundle.putSerializable(Constants.TIME_LIST,time_list)
+            fragment.arguments = bundle
+            return fragment
         }
     }
 
@@ -53,22 +57,41 @@ class DeliveryTimeslot : BaseFragment() {
     }
 
 
+
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
-            binding.isLoading=true
+            time_list= arguments?.getSerializable(Constants.TIME_LIST) as? LinkedHashMap<String, String>
             setToolbarforThis()
-            fetch_PickupTime()
+            if(time_list !=null){
+                binding.isLoading=false
+                for (entries in time_list!!.entries ){
+                    // loop for one time to get first index name:
+                    delivery_time_slot.text= time_list!![entries.key].toString()
+                    break
+                }
+            }
+            else{
+                fetch_PickupTime()
+                binding.isLoading=true
+            }
             delivery_time_slot.setOnClickListener {
-                if(timeslot?.size ?:0 > 0){
-                    selectdeliverytime(timeslot!!)
+                if( time_list?.size ?: 0 > 0 ){
+
+                    val list = ArrayList<String>()
+                    for (entries in time_list!!.entries ){
+                        list.add(time_list!![entries.key].toString())
+                    }
+                    selectdeliverytime(list)
                 }
                 else {
                     seterror(address_container)
                 }
             }
             secure_payment_btn.setOnClickListener{
-                if(timeslot?.size ?:0 > 0){
+                if(time_list?.size ?:0 > 0){
+                    EpayActivity.paymentattributes.comments=comment_edt.text.trim().toString()
+                    EpayActivity.paymentattributes.expected_time=delivery_time_slot.text.trim().toString()
                     (activity as EpayActivity).addFragment(R.id.epay_container,Paymentmethod.newInstance(),Paymentmethod.TAG,true)
                 }
                 else {
@@ -82,23 +105,32 @@ class DeliveryTimeslot : BaseFragment() {
     }
 
 
+
     private fun fetch_PickupTime() {
 
-        callAPI(ApiCall.getPickuptime(
-                r_token = PreferenceUtil.getString(PreferenceUtil.R_TOKEN,"")!!,
-                r_key = PreferenceUtil.getString(PreferenceUtil.R_KEY,"")!!,
-                shipping = "Pickup",
-                language = "en"
+        val postParam = JsonObject()
+        postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
+        postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
+        postParam.addProperty(Constants.SHIPPING, if (EpayActivity.isPickup) getString(R.string.pickup) else getString(R.string.delivery))
+
+        callAPI(ApiCall.pickupinfo(
+                jsonObject = postParam
         ), object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
                 val jsonobject = body as JsonObject
-                if (jsonobject.get("status").asBoolean) {
-                    timeslot = ArrayList()
-                    for (i in 0 until jsonobject.getAsJsonArray("times").size()) {
-                        timeslot!!.add(jsonobject.getAsJsonArray("times")[i].asJsonObject.get("dt").asString)
+                if (jsonobject.get(Constants.STATUS).asBoolean) {
+
+                    time_list =LinkedHashMap()
+                    for (i in 0.until(jsonobject.getAsJsonObject(Constants.RESULT).getAsJsonArray(Constants.TIME_LIST).size())){
+                        time_list!!.put((jsonobject.getAsJsonObject(Constants.RESULT).getAsJsonArray(Constants.TIME_LIST).get(i) as JsonObject)[Constants.ACTUAL].asString,
+                                (jsonobject.getAsJsonObject(Constants.RESULT).getAsJsonArray(Constants.TIME_LIST).get(i) as JsonObject)[Constants.DISPLAY].asString )
                     }
-                    delivery_time_slot.text=timeslot!![0]
+                    for (entries in time_list!!.entries ){
+                        // loop for one time to get first index name:
+                        delivery_time_slot.text= time_list!![entries.key].toString()
+                        break
+                    }
                     binding.isLoading=false
 
                 }else{
@@ -163,8 +195,6 @@ class DeliveryTimeslot : BaseFragment() {
     }
 
     fun onBackpress() {
-        val frag = (activity as EpayActivity).supportFragmentManager.findFragmentByTag(Address.TAG)
-        (frag as Address).setToolbarforThis()
         (activity as EpayActivity).popFragment()
 
     }

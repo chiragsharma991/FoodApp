@@ -95,7 +95,6 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
 
     override fun onFocusChange(v: View?, hasFocus: Boolean) {
 
-        loge(TAG, " focus is- " + hasFocus)
         if(!!hasFocus){
             validationFields()
         }

@@ -4,10 +4,12 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.LinearLayoutManager
 import android.transition.Slide
 import android.transition.Transition
@@ -16,6 +18,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -281,8 +284,13 @@ class CartActivity : BaseActivity() {
 
                 override fun <T> onSuccess(body: T?) {
                     val jsonObject = body as JsonObject
-                    if (jsonObject.get("status").asBoolean) {
+                    if (jsonObject.get(Constants.STATUS).asBoolean) {
 
+                        Toast.makeText(this@CartActivity,getString(R.string.item_has_been), Toast.LENGTH_SHORT).show()
+                        val intent = Intent(Constants.CARTCOUNT_BROADCAST)
+                        intent.putExtra(Constants.CARTCNT,if(jsonObject.get(Constants.CARTCNT).isJsonNull || jsonObject.get(Constants.CARTCNT).asString == "0") 0 else (jsonObject.get(Constants.CARTCNT).asString).toInt())
+                        intent.putExtra(Constants.CARTAMT,if(jsonObject.get(Constants.CARTAMT).isJsonNull || jsonObject.get(Constants.CARTAMT).asString =="0") "00.00" else jsonObject.get(Constants.CARTAMT).asString)
+                        LocalBroadcastManager.getInstance(this@CartActivity).sendBroadcast(intent)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                             finishAfterTransition()
                         else

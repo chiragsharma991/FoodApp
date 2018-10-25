@@ -5,11 +5,14 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.databinding.BindingAdapter
+import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
 import android.support.design.widget.TabLayout
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.LocalBroadcastManager
 import android.transition.*
 import android.view.LayoutInflater
 import android.view.View
@@ -18,8 +21,10 @@ import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.epay.fragment.AddCart
 import dk.eatmore.foodapp.activity.main.epay.fragment.DeliveryTimeslot
 import dk.eatmore.foodapp.activity.main.epay.fragment.Paymentmethod
+import dk.eatmore.foodapp.databinding.ActivityEpayBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.Address
 import dk.eatmore.foodapp.fragment.Dashboard.Home.AddressForm
+import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.model.epay.ViewcardModel
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
@@ -28,19 +33,36 @@ import kotlinx.android.synthetic.main.activity_epay.*
 import kotlinx.android.synthetic.main.dynamic_raw_item.view.*
 import kotlinx.android.synthetic.main.dynamic_raw_subitem.view.*
 import kotlinx.android.synthetic.main.toolbar.*
+import java.util.ArrayList
 
 class EpayActivity : BaseActivity() {
 
     var transition : Transition?=null
     private lateinit var addcart_fragment: AddCart
+    private lateinit var binding: ActivityEpayBinding
+
+
+
+    /**TODO : Payment flow
+     *  all information regarding payment has been added in this compainon object and PaymentAttributes data class.
+     *
+     *  Make sure if you add other parms and variable please be add in dataclass or may be in compainion so you can accesss all this into payment activity.
+     *
+     */
+
 
 
     companion object {
         val TAG="EpayActivity"
+        lateinit var paymentattributes: PaymentAttributes
+        lateinit var selected_op_id: ArrayList<String>
         var amIFinish :Boolean=true
         var accessOnetime :Boolean=true
         var moveonEpay:Boolean=false
         var ui_model: UIModel? = null
+        var isPickup:Boolean = false
+        var orderTotal : String =""
+        var first_time : String =""
         fun newInstance() : EpayActivity {
             return EpayActivity()
         }
@@ -49,6 +71,7 @@ class EpayActivity : BaseActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        binding=DataBindingUtil.setContentView(this,R.layout.activity_epay)
         setContentView(R.layout.activity_epay)
         amIFinish=true
         initView(savedInstanceState)
@@ -56,25 +79,23 @@ class EpayActivity : BaseActivity() {
     }
 
 
+
     private fun initView(savedInstanceState: Bundle?) {
         loge(TAG,"count is"+supportFragmentManager.backStackEntryCount)
         accessOnetime=true
+        empty_view.visibility=View.GONE
+        epay_container.visibility=View.GONE
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        menu_tabs.addTab(menu_tabs.newTab().setText("Delivery"))
-        menu_tabs.addTab(menu_tabs.newTab().setText("PickUp"))
-        menu_tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-                logd(TAG, menu_tabs.selectedTabPosition.toString())
-            }
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-            }
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-            }
-        })
+        tabfunction()
         setToolbarforThis()
         epay_continue_btn.text=if(PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS,false)) getString(R.string.continue_) else getString(R.string.login_to_continue)
         epay_continue_btn.setOnClickListener{
             if(epay_continue_btn.text == getString(R.string.continue_)){
+                //collect op_id to proceed in payment.
+                selected_op_id= ArrayList()
+                for (i in 0.until(ui_model!!.viewcard_list.value!!.result!!.size)){
+                    selected_op_id.add(ui_model!!.viewcard_list.value!!.result!!.get(i).op_id)
+                }
                 val fragment = Address.newInstance()
                 addFragment(R.id.epay_container,fragment, Address.TAG,true)
             }else{
@@ -89,8 +110,6 @@ class EpayActivity : BaseActivity() {
         } else {
 
         }
-
-
     }
 
     fun setToolbarforThis(){
@@ -123,10 +142,12 @@ class EpayActivity : BaseActivity() {
                 val viewcardmodel = body as ViewcardModel
                 if (viewcardmodel.status) {
                     ui_model!!.viewcard_list.value=viewcardmodel
+                    epay_container.visibility=View.VISIBLE
 
                 } else {
                     ui_model!!.viewcard_list.value=null
-                    showSnackBar(epay_container,"Sorry No data found.")
+                    empty_view.visibility=View.VISIBLE
+                  //  showSnackBar(epay_container,"Sorry No data found.")
                 }
             }
 
@@ -168,9 +189,11 @@ class EpayActivity : BaseActivity() {
 
             override fun <T> onSuccess(body: T?) {
                 val json = body as JsonObject
-                if(json.get("status").asBoolean){
+                    val intent = Intent(Constants.CARTCOUNT_BROADCAST)
+                    intent.putExtra(Constants.CARTCNT,if(json.get(Constants.CARTCNT).isJsonNull() || json.get(Constants.CARTCNT).toString() == "0") 0 else (json.get(Constants.CARTCNT).asString).toInt())
+                    intent.putExtra(Constants.CARTAMT,if(json.get(Constants.CARTAMT).isJsonNull() || json.get(Constants.CARTAMT).toString() == "0") "00.00" else json.get(Constants.CARTAMT).asString)
+                    LocalBroadcastManager.getInstance(this@EpayActivity).sendBroadcast(intent)
                     fetch_viewCardList()
-                }
             }
 
             override fun onFail(error: Int) {
@@ -207,16 +230,19 @@ class EpayActivity : BaseActivity() {
 
     }
 
-    private fun refresh_viewCard(){
-       // epay_total_txt.text=BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.order_total.toString()) ?: "null"
-       // epay_total_lbl.text=String.format(getString(R.string.total_goods),ui_model!!.viewcard_list.value!!.cartcnt)
-        if(ui_model!!.viewcard_list.value ==null){
 
+    private fun refresh_viewCard(){
+
+        if(ui_model!!.viewcard_list.value ==null){
+            // this condition will null if all item has been deleted : so just clear view and inflate empty view on screen.
             add_parentitem_view.removeAllViewsInLayout()
             add_parentitem_view.invalidate()
             return
         }
-
+        paymentattributes=PaymentAttributes()
+        epay_total_txt.text=BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.order_total.toString()) ?: "null"
+        epay_total_lbl.text=String.format(getString(R.string.total_goods),ui_model!!.viewcard_list.value!!.cartcnt)
+        orderTotal=ui_model!!.viewcard_list.value!!.order_total.toString()
         add_parentitem_view.removeAllViewsInLayout()
         for (i in 0 until ui_model!!.viewcard_list.value!!.result!!.size){
             var inflater= this.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -227,7 +253,7 @@ class EpayActivity : BaseActivity() {
                 if(accessOnetime){
                     DialogUtils.openDialog(this, getString(R.string.are_you_sure_to_delete), "",
                             getString(R.string.yes), getString(R.string.no), ContextCompat.getColor(this, R.color.black), object : DialogUtils.OnDialogClickListener {
-                        override fun onPositiveButtonClick(position: Int) {
+                        override fun onPositiveButtonClick(p: Int) {
                             deleteitemFromcart(ui_model!!.viewcard_list.value!!.result!![position].op_id)
                             accessOnetime=false
                         }
@@ -300,22 +326,7 @@ class EpayActivity : BaseActivity() {
                               Constants.PAYMENTSTATUS -> {finishActivity()}
                           }
                         }
-                        is DeliveryTimeslot -> fragment.onBackpress()
-
-                        is Address ->{
-                            // test this condition if fragment have child fragment then:
-                            if(fragment.childFragmentManager.backStackEntryCount > 0){
-
-                                val anychild_fragment =fragment.childFragmentManager.findFragmentByTag(fragment.childFragmentManager.getBackStackEntryAt(fragment.childFragmentManager.backStackEntryCount-1).name)
-
-                                if(anychild_fragment is AddressForm) anychild_fragment.onBackpress()
-
-                            }else{
-                                fragment.onBackpress()
-                            }
-
-                        }
-                        else -> finishActivity()
+                        else -> popFragment()
 
                   }
             }
@@ -323,6 +334,42 @@ class EpayActivity : BaseActivity() {
         else {
             finishActivity()
         }
+    }
+
+
+    fun tabfunction() {
+        if(!DetailsFragment.delivery_present && DetailsFragment.pickup_present){
+            menu_tabs.addTab(menu_tabs.newTab().setText(getString(R.string.pickup)))
+        } else if(DetailsFragment.delivery_present && !DetailsFragment.pickup_present){
+            menu_tabs.addTab(menu_tabs.newTab().setText((if(DetailsFragment.delivery_charge_title=="") getString(R.string.delivery) else getString(R.string.delivery)+" "+DetailsFragment.delivery_charge_title)+" "+BindDataUtils.convertCurrencyToDanish(DetailsFragment.delivery_charge)))
+        }else{
+            menu_tabs.addTab(menu_tabs.newTab().setText((if(DetailsFragment.delivery_charge_title=="") getString(R.string.delivery) else getString(R.string.delivery)+" "+DetailsFragment.delivery_charge_title)+" "+BindDataUtils.convertCurrencyToDanish(DetailsFragment.delivery_charge)))
+            menu_tabs.addTab(menu_tabs.newTab().setText(getString(R.string.pickup)))
+        }
+        menu_tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+            override fun onTabReselected(tab: TabLayout.Tab?) {
+            }
+            override fun onTabUnselected(tab: TabLayout.Tab?) {
+            }
+            override fun onTabSelected(tab: TabLayout.Tab?) {
+                logd(TAG, menu_tabs.selectedTabPosition.toString())
+                when(menu_tabs.selectedTabPosition){
+                    1->{
+                        isPickup=true
+                        DialogUtils.openDialogDefault(context = this@EpayActivity,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(this@EpayActivity,R.color.black),msg = getString(R.string.you_are_ordering_pickup),title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                            override fun onPositiveButtonClick(position: Int) {
+                            }
+                            override fun onNegativeButtonClick() {
+                            }
+                        })
+                    }
+                    0->{
+                        isPickup=false
+                    }
+                }
+
+            }
+        })
     }
 
 
@@ -350,5 +397,30 @@ class EpayActivity : BaseActivity() {
 
 
 
+    data class PaymentAttributes(
+            var first_name :String ="",
+            var address :String ="",
+            var telephone_no :String ="",
+            var postal_code :String ="",
+            var comments :String ="",
+            var expected_time :String ="",
+            var first_time :String ="",
+            var discount_id :String ="",
+            var discount_type :String ="",
+            var discount_amount :String ="",
+            var shipping_charge :String ="",
+            var upto_min_shipping :String ="",
+            var minimum_order_price :String ="",
+            var order_total :String ="",
+            var additional_charge :String ="",
+            var additional_charges_online :String ="",
+            var additional_charges_cash :String ="",
+            var distance :String =""
+
+
+    )
+
 
 }
+
+
