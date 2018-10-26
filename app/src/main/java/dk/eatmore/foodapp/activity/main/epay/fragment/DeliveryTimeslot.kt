@@ -90,8 +90,12 @@ class DeliveryTimeslot : BaseFragment() {
             }
             secure_payment_btn.setOnClickListener{
                 if(time_list?.size ?:0 > 0){
+                    for ( entries in time_list!!.entries){
+                        if(time_list!!.get(entries.key) == delivery_time_slot.text.trim().toString()){
+                            EpayActivity.paymentattributes.expected_time=entries.key
+                        }
+                    }
                     EpayActivity.paymentattributes.comments=comment_edt.text.trim().toString()
-                    EpayActivity.paymentattributes.expected_time=delivery_time_slot.text.trim().toString()
                     (activity as EpayActivity).addFragment(R.id.epay_container,Paymentmethod.newInstance(),Paymentmethod.TAG,true)
                 }
                 else {
@@ -131,6 +135,8 @@ class DeliveryTimeslot : BaseFragment() {
                         delivery_time_slot.text= time_list!![entries.key].toString()
                         break
                     }
+                    EpayActivity.paymentattributes.additional_charges_cash=jsonobject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString
+                    EpayActivity.paymentattributes.first_time=jsonobject.getAsJsonObject(Constants.RESULT).get(Constants.FIRST_TIME).asString
                     binding.isLoading=false
 
                 }else{

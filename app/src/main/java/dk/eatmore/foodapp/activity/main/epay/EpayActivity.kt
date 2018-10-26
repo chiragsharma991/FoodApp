@@ -48,11 +48,15 @@ class EpayActivity : BaseActivity() {
      *
      *  Make sure if you add other parms and variable please be add in dataclass or may be in compainion so you can accesss all this into payment activity.
      *
+     *
+     *
      */
 
 
 
     companion object {
+
+        // Make sure if you are assigning variable in this section then keep mind to assign null on destroy or set default values always time.
         val TAG="EpayActivity"
         lateinit var paymentattributes: PaymentAttributes
         lateinit var selected_op_id: ArrayList<String>
@@ -60,14 +64,13 @@ class EpayActivity : BaseActivity() {
         var accessOnetime :Boolean=true
         var moveonEpay:Boolean=false
         var ui_model: UIModel? = null
-        var isPickup:Boolean = false
+        var isPickup:Boolean = false  // just for check pickup/delivery selection on tabview.
         var orderTotal : String =""
         var first_time : String =""
         fun newInstance() : EpayActivity {
             return EpayActivity()
         }
     }
-
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -340,11 +343,14 @@ class EpayActivity : BaseActivity() {
     fun tabfunction() {
         if(!DetailsFragment.delivery_present && DetailsFragment.pickup_present){
             menu_tabs.addTab(menu_tabs.newTab().setText(getString(R.string.pickup)))
+            isPickup=true
         } else if(DetailsFragment.delivery_present && !DetailsFragment.pickup_present){
             menu_tabs.addTab(menu_tabs.newTab().setText((if(DetailsFragment.delivery_charge_title=="") getString(R.string.delivery) else getString(R.string.delivery)+" "+DetailsFragment.delivery_charge_title)+" "+BindDataUtils.convertCurrencyToDanish(DetailsFragment.delivery_charge)))
+            isPickup=false
         }else{
             menu_tabs.addTab(menu_tabs.newTab().setText((if(DetailsFragment.delivery_charge_title=="") getString(R.string.delivery) else getString(R.string.delivery)+" "+DetailsFragment.delivery_charge_title)+" "+BindDataUtils.convertCurrencyToDanish(DetailsFragment.delivery_charge)))
             menu_tabs.addTab(menu_tabs.newTab().setText(getString(R.string.pickup)))
+            isPickup=false
         }
         menu_tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabReselected(tab: TabLayout.Tab?) {

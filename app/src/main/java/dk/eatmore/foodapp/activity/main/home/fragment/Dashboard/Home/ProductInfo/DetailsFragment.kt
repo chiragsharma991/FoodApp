@@ -62,6 +62,7 @@ class DetailsFragment : BaseFragment() {
 
     companion object {
 
+        //delivery_present & pickup_present are two condition to show / hide .
         var delivery_present : Boolean=true
         var pickup_present : Boolean=true
         val TAG = "DetailsFragment"

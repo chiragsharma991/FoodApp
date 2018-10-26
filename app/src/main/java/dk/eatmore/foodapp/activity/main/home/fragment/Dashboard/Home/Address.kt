@@ -85,8 +85,17 @@ class Address : BaseFragment(), TextWatcher {
             proceed_view_nxt.setOnClickListener {
                 if (validationFields()) {
 
+                    /**TODO  API CALL LOGIC FROM ADDRESS SCREEN
+                     * DELIVERY: we are calling "deliveryDetails" api if delivery is select because : user can edit their address and info so we have to submit that information.
+                     * PICKUP: we are not calling api in this section because user just entered name and phone and it can be proceed.
+                     * DELIVERY TIME SLOT:
+                     * - if i use delivery api then i store time slot and pass another screen so i never call api in "delivery time slot" screen if i am coming from "delivery"
+                     * - if i call api in "delivery time slot" only on one condition to get time, if i am coming from "Pickup"
+                     */
 
                     if(EpayActivity.isPickup){
+                        EpayActivity.paymentattributes.first_name=name_edt.text.toString()
+                        EpayActivity.paymentattributes.telephone_no=telephone_number_edt.text.toString()
                         val fragment = DeliveryTimeslot.newInstance(null)
                         (activity as EpayActivity).addFragment(R.id.epay_container,fragment, DeliveryTimeslot.TAG,true)
                     }
@@ -101,17 +110,6 @@ class Address : BaseFragment(), TextWatcher {
         }
 
     }
-
-/*    override fun onFocusChange(v: View?, hasFocus: Boolean) {
-        loge(TAG, "--" + hasFocus+"--")
-        if (!hasFocus) {
-            if (postnumber_edt.text.trim().toString().length > 0) {
-                city_edt.setText(ui_model!!.user_infoList.value!!.postal_city.get(postnumber_edt.text.toString()))
-                loge(TAG, "--" + hasFocus+"--"+ui_model!!.user_infoList.value!!.postal_city.get(postnumber_edt.text.toString()))
-            }
-        }
-    }*/
-
     override fun afterTextChanged(s: Editable?) {
 
 
@@ -232,6 +230,7 @@ class Address : BaseFragment(), TextWatcher {
         street_edt.setText(ui_model!!.user_infoList.value!!.user_info.street)
         house_edt.setText(ui_model!!.user_infoList.value!!.user_info.house_no)
         floor_edt.setText(ui_model!!.user_infoList.value!!.user_info.floor_door)
+        postnumber_edt.setText(ui_model!!.user_infoList.value!!.user_info.postal_code)
     }
 
 
@@ -314,7 +313,8 @@ class Address : BaseFragment(), TextWatcher {
                     EpayActivity.paymentattributes.order_total=EpayActivity.orderTotal
                     EpayActivity.paymentattributes.first_name=name_edt.text.toString()
                     EpayActivity.paymentattributes.telephone_no=telephone_number_edt.text.toString()
-                    EpayActivity.paymentattributes.address=street_edt.text.toString()
+                    //                        finalCartJson.put("address", street + " " + houseNo + " " + floorDoorString + ", " + postal_code + " " + city);
+                    EpayActivity.paymentattributes.address=String.format(getString(R.string.fulladdress),street_edt.text.trim().toString(),house_edt.text.trim().toString(),floor_edt.text.trim().toString(),postnumber_edt.text.trim().toString(),city_edt.text.trim().toString())
                     EpayActivity.paymentattributes.postal_code=postnumber_edt.text.toString()
                  //   EpayActivity.paymentattributes.discount_type=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.DISCOUNT_TYPE].asString
                    // EpayActivity.paymentattributes.discount_amount=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.DISCOUNT_AMOUNT].asString
@@ -398,20 +398,6 @@ class Address : BaseFragment(), TextWatcher {
         logd(TAG, "on pause...")
 
     }
-
-/*
-    "status": true,
-    "user_info": {
-        "name": "chirag suthar",
-        "telephone_no": "47474717",
-        "street": "1",
-        "house_no": "1",
-        "floor_door": "",
-        "postal_code": "6400",
-        "city": "S\u00f8nderborg"
-    },
-*/
-
 
     data class UserInfoModel(
             val status: Boolean = false,

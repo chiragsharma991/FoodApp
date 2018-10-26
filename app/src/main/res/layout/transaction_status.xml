@@ -241,7 +241,6 @@
                                 app:borderWidth="0dp"
                                 android:layout_centerInParent="true"
                                 android:layout_gravity="center_horizontal"
-                                android:src="@drawable/back"
                                 android:elevation="0dp"
 
                                 />
@@ -265,19 +264,20 @@
                                 >
                                 <android.support.v7.widget.AppCompatTextView
                                     style="@style/TextViewMid"
+                                    android:id="@+id/totalamount"
                                     android:layout_gravity="center_horizontal"
-                                    android:text="\u20B9 1234.52"
+                                    android:text="@string/total_amount"
                                     android:textStyle="bold" />
 
 
                                 <android.support.v7.widget.AppCompatTextView
                                     style="@style/TextViewMid"
+                                    android:id="@+id/request_status"
                                     android:layout_gravity="center_horizontal"
                                     android:layout_marginTop="@dimen/_8sdp"
-                                    android:text="Request Successful" />
+                                    android:text="@string/request_successful" />
 
                                 <View
-                                    android:id="@+id/view"
                                     android:layout_width="match_parent"
                                     android:layout_height="1dp"
                                     android:layout_marginTop="@dimen/_8sdp"
@@ -287,10 +287,11 @@
 
                                 <android.support.v7.widget.AppCompatTextView
                                     style="@style/TextViewSmall"
+                                    android:id="@+id/status_msg"
                                     android:layout_gravity="center_horizontal"
                                     android:layout_marginTop="@dimen/_8sdp"
                                     android:gravity="center_horizontal"
-                                    android:text="Thank you for your order.\n  Your order will be processed as soon as possilbe." />
+                                    android:text="@string/thank_you_for_your_order_n_your_order_will_be_processed_as_soon_as_possilbe" />
 
 
                                 <View
@@ -310,23 +311,26 @@
                                     <android.support.v7.widget.AppCompatTextView
                                         style="@style/TextViewSmall"
                                         android:layout_marginTop="@dimen/_8sdp"
-                                        android:text="Requeted from"
+                                        android:text="@string/requeted_from"
 
                                         />
 
                                     <android.support.v7.widget.AppCompatTextView
                                         style="@style/TextViewSmall"
+                                        android:id="@+id/requested_user"
                                         android:text="Test@softtech360.in" />
 
                                     <android.support.v7.widget.AppCompatTextView
                                         style="@style/TextViewSmall"
-                                        android:text="UPI Reference ID: 8548459562"
+                                        android:id="@+id/order_number"
+                                        android:text="@string/order_number"
 
                                         />
 
                                     <android.support.v7.widget.AppCompatTextView
                                         style="@style/TextViewSmall"
-                                        android:text="3:30PM 11NOV2018"
+                                        android:text="@string/order_date"
+                                        android:id="@+id/order_time"
                                         android:textColor="@color/black_light" />
 
                                     <View
@@ -341,7 +345,7 @@
                                         style="@style/TextViewSmall"
                                         android:id="@+id/phone_txt"
                                         android:gravity="center_horizontal"
-                                        android:text="If you have any questions or enquiries please call us on: 88826543"
+                                        android:text="@string/if_you_have_any_questions_or_enquiries_please_call_us_on"
 
                                         />
 
@@ -362,7 +366,7 @@
                             android:layout_height="@dimen/_40sdp"
                             android:layout_marginBottom="@dimen/_8sdp"
                             android:layout_alignParentBottom="true"
-                            android:onClick="@{handlers::backToOrder}">
+                            >
 
                             <View
                                 android:layout_width="match_parent"
@@ -374,7 +378,7 @@
                                 android:id="@+id/sec_txt"
                                 style="@style/TextViewMid"
                                 android:layout_centerInParent="true"
-                                android:text="Continue Order"
+                                android:text="@string/continue_order"
                                 android:textColor="@color/theme_color" />
 
                         </RelativeLayout>

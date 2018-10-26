@@ -90,9 +90,13 @@ interface ApiInterface {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun pickupinfo(@Body jsonObject: JsonObject): Call<JsonObject>
 
-    @POST("Cart/cart/checkout")
+    @POST("Cart/cart/checkout-delivery")
     @Headers("Content-Type: application/x-www-form-urlencoded")
-    fun checkout(@Body jsonObject: JsonObject): Call<JsonObject>
+    fun checkout_delivery(@Body jsonObject: JsonObject): Call<JsonObject>
+
+    @POST("Cart/cart/checkout-pickup")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun checkout_pickup(@Body jsonObject: JsonObject): Call<JsonObject>
 
 
     @POST("Cart/cart/addtocart")

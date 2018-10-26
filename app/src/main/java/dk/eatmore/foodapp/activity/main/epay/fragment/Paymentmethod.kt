@@ -45,10 +45,12 @@ import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
+import dk.eatmore.foodapp.utils.BindDataUtils
 import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.deliverytimeslot.*
 import kotlinx.android.synthetic.main.paymentmethod.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
+import retrofit2.Call
 
 
 class Paymentmethod : BaseFragment() {
@@ -60,9 +62,8 @@ class Paymentmethod : BaseFragment() {
     private lateinit var mAdapter : PaymentmethodAdapter
     lateinit var currentView: String
 
-
-
-
+    // we have two different API so we are passing call in "checkout API" it may be from pickup/delivery :
+    private lateinit var checkout_api: Call<JsonObject>
 
 
     companion object {
@@ -91,7 +92,11 @@ class Paymentmethod : BaseFragment() {
             logd(TAG, "saveInstance NULL")
             currentView=Constants.PAYMENTMETHOD
             setToolbarforThis()
-            proceed_view.setOnClickListener{(activity as EpayActivity).finishActivity()}
+            proceed_view.setOnClickListener{
+                loge(TAG,"on click---")
+                (activity as EpayActivity).finishActivity()
+
+            }
             transaction_statusview.visibility=View.GONE
             processDialog.visibility=View.VISIBLE
           //  fetch_PickupTime()
@@ -122,98 +127,96 @@ class Paymentmethod : BaseFragment() {
         }
     }
 
-    private fun cashMethod() {
-
-     /*   {
-            "first_time" : "13:45",
-            "ip" : "ctHw0R6BMK4:APA91bEEAbCjcdjtYbUl14zj1NhY-EgWl4oH9NGNuBtjninBQvfsWeZWmDM-GbKzNUqPaQwrViDS0I4s2E_YrvtloMs3EOYdDQcrsQENftTVemXv5w8g9P2TpfV6DcJfNqvDUQetaYWX",
-            "postal_code" : "6400",
-            "language" : "en",
-            "discount_type" : "",
-            "shipping" : "pickup",
-            "discount_amount" : "0.00",
-            "telephone_no" : "9898653265",
-            "order_total" : "105.00",
-            "additional_charge" : "0.00",
-            "r_key" : "fcARlrbZFXYee1W6eYEIA0VRlw7MgV4o07042017114812",
-            "customer_id" : "12346",
-            "shipping_costs" : "10.00",
-            "minimum_order_price" : "100",
-            "accept_tc" : "1",
-            "paymethod" : "2",
-            "expected_time" : "13:45",
-            "cartproducts" : [
-            {
-                "op_id" : "462"
-            },
-            {
-                "op_id" : "463"
-            }
-            ],
-            "distance" : "12.6",
-            "shipping_remark" : "ok",
-            "discount_id" : "",
-            "comments" : "",
-            "r_token" : "w5oRqFiAXTBB3hwpixAORbg_BwUj0EMQ07042017114812",
-            "device_type" : "iOS",
-            "first_name" : "viral",
-            "address" : "",
-            "upto_min_shipping" : ""
-        }*/
-
+    private fun getallpaymentAttributes () : JsonObject? {
 
         val postParam = JsonObject()
-        postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
-        postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
-        postParam.addProperty(Constants.SHIPPING, if (EpayActivity.isPickup) getString(R.string.pickup) else getString(R.string.delivery))
+        try {
+            postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
+            postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
+            postParam.addProperty(Constants.FIRST_TIME, EpayActivity.paymentattributes.first_time)
+            postParam.addProperty(Constants.IP,PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,"") )
+            postParam.addProperty(Constants.POSTAL_CODE, EpayActivity.paymentattributes.postal_code)
+            postParam.addProperty(Constants.DISCOUNT_TYPE, EpayActivity.paymentattributes.discount_type)
+            postParam.addProperty(Constants.SHIPPING, if (EpayActivity.isPickup) getString(R.string.pickup) else getString(R.string.delivery))
+            postParam.addProperty(Constants.DISCOUNT_AMOUNT, EpayActivity.paymentattributes.discount_amount)
+            postParam.addProperty(Constants.TELEPHONE_NO,EpayActivity.paymentattributes.telephone_no)
+            postParam.addProperty(Constants.ORDER_TOTAL, EpayActivity.orderTotal)
+            postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
+            postParam.addProperty(Constants.ACCEPT_TC, "1")
+            postParam.addProperty(Constants.PAYMETHOD, "2")
+            postParam.addProperty(Constants.EXPECTED_TIME,EpayActivity.paymentattributes.expected_time)
+            postParam.addProperty(Constants.DISCOUNT_ID, "")
+            postParam.addProperty(Constants.COMMENTS, EpayActivity.paymentattributes.comments)
+            postParam.addProperty(Constants.DEVICE_TYPE,Constants.DEVICE_TYPE_VALUE)
+            postParam.addProperty(Constants.FIRST_NAME,EpayActivity.paymentattributes.first_name)
+            val jsonarray=JsonArray()
+            for (i in 0.until(EpayActivity.selected_op_id.size) ){
+                val jsonobject= JsonObject()
+                jsonobject.addProperty(Constants.OP_ID,EpayActivity.selected_op_id.get(i))
+                jsonarray.add(jsonobject)
+            }
+            postParam.add(Constants.CARTPRODUCTS,jsonarray )
 
-        postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
-        postParam.addProperty(Constants.FIRST_NAME,EpayActivity.paymentattributes.first_name)
-        postParam.addProperty(Constants.ADDRESS, EpayActivity.paymentattributes.address)
-        postParam.addProperty(Constants.DISTANCE,EpayActivity.paymentattributes.distance)
-        postParam.addProperty(Constants.TELEPHONE_NO,EpayActivity.paymentattributes.telephone_no)
-        postParam.addProperty(Constants.POSTAL_CODE, EpayActivity.paymentattributes.postal_code)
-        postParam.addProperty(Constants.MINIMUM_ORDER_PRICE, EpayActivity.paymentattributes.minimum_order_price)
-        postParam.addProperty(Constants.IP,PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,"") )
-        postParam.addProperty(Constants.COMMENTS, EpayActivity.paymentattributes.comments)
-        postParam.addProperty(Constants.EXPECTED_TIME, "14:45:00")
-        postParam.addProperty(Constants.FIRST_TIME, EpayActivity.paymentattributes.first_time)
-        postParam.addProperty(Constants.DISCOUNT_ID, "")
-        postParam.addProperty(Constants.DISCOUNT_TYPE, EpayActivity.paymentattributes.discount_type)
-        postParam.addProperty(Constants.DISCOUNT_AMOUNT, EpayActivity.paymentattributes.discount_amount)
-        postParam.addProperty(Constants.SHIPPING_COSTS, EpayActivity.paymentattributes.shipping_charge)
-        postParam.addProperty(Constants.UPTO_MIN_SHIPPING, EpayActivity.paymentattributes.upto_min_shipping)
-        postParam.addProperty(Constants.ACCEPT_TC, "1")
-        postParam.addProperty(Constants.PAYMETHOD, "2")
-        postParam.addProperty(Constants.SHIPPING_REMARK, "")
-        postParam.addProperty(Constants.ORDER_TOTAL, EpayActivity.orderTotal)
-        postParam.addProperty(Constants.DEVICE_TYPE,Constants.DEVICE_TYPE_VALUE)
-        postParam.addProperty(Constants.ADDITIONAL_CHARGE, EpayActivity.paymentattributes.additional_charges_online)
-        val jsonarray=JsonArray()
-        for (i in 0.until(EpayActivity.selected_op_id.size) ){
-            val jsonobject= JsonObject()
-            jsonobject.addProperty(Constants.OP_ID,EpayActivity.selected_op_id.get(i))
-            jsonarray.add(jsonobject)
+            if(EpayActivity.isPickup){
+                //pickup--
+                postParam.addProperty(Constants.ADDITIONAL_CHARGE, EpayActivity.paymentattributes.additional_charges_cash)
+                checkout_api=ApiCall.checkout_pickup(postParam)
+            }else{
+                // delivery--
+                postParam.addProperty(Constants.ADDITIONAL_CHARGE, EpayActivity.paymentattributes.additional_charges_online)
+                postParam.addProperty(Constants.ADDRESS, EpayActivity.paymentattributes.address)
+                postParam.addProperty(Constants.DISTANCE,EpayActivity.paymentattributes.distance)
+                postParam.addProperty(Constants.MINIMUM_ORDER_PRICE, EpayActivity.paymentattributes.minimum_order_price)
+                postParam.addProperty(Constants.SHIPPING_COSTS, EpayActivity.paymentattributes.shipping_charge)
+                postParam.addProperty(Constants.UPTO_MIN_SHIPPING, EpayActivity.paymentattributes.upto_min_shipping)
+                postParam.addProperty(Constants.SHIPPING_REMARK, "")
+                checkout_api=ApiCall.checkout_delivery(postParam)
+            }
+
+
+        }catch (error : Exception){
+            return null
         }
-        postParam.add(Constants.CARTPRODUCTS,jsonarray )
-        callAPI(ApiCall.checkout(
-                jsonObject = postParam
-        ), object : BaseFragment.OnApiCallInteraction {
+
+        return postParam
+
+    }
+
+    private fun cashMethod() {
+
+        callAPI(checkout_api, object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
                 val jsonobject = body as JsonObject
+                if(jsonobject.get(Constants.STATUS).asBoolean){
 
-                transaction_statusview.visibility=View.VISIBLE
-                processDialog.visibility=View.GONE
+                    transaction_statusview.visibility=View.VISIBLE
+                    processDialog.visibility=View.GONE
+                    lottie_transaction_status.visibility=View.VISIBLE
+                    lottie_transaction_status.scale=0.4f
+                    lottie_transaction_status.speed=0.5f
+                    status_view.visibility=View.INVISIBLE
+                    lottie_transaction_status.playAnimation()
+                    totalamount.text=String.format(getString(R.string.total_amount),BindDataUtils.convertCurrencyToDanish(EpayActivity.orderTotal))
+                    request_status.text= String.format(getString(R.string.request_successful),getString(R.string.successful))
+                    requested_user.text=PreferenceUtil.getString(PreferenceUtil.E_MAIL,"")
+                    status_msg.text=getString(R.string.thank_you_for_your_order_n_your_order_will_be_processed_as_soon_as_possilbe)
+                    order_number.text=String.format(getString(R.string.order_number),jsonobject.get(Constants.ORDER_TOTAL).asString)
+                }else{
+                    transaction_statusview.visibility=View.VISIBLE
+                    processDialog.visibility=View.GONE
+                    lottie_transaction_status.visibility=View.GONE
+                    lottie_transaction_status.scale=0.4f
+                    status_view.visibility=View.VISIBLE
+                    status_icon.setImageResource(R.drawable.animated_vector_cross)
+                    (status_icon.getDrawable() as Animatable).start()
+                    totalamount.text=String.format(getString(R.string.total_amount),BindDataUtils.convertCurrencyToDanish(EpayActivity.orderTotal))
+                    request_status.text= String.format(getString(R.string.request_successful),getString(R.string.failed))
+                    requested_user.text=PreferenceUtil.getString(PreferenceUtil.E_MAIL,"")
+                    status_msg.text=getString(R.string.sorry_for_your_order_n_your_order_will_not_be_processed)
+                    order_number.text=getString(R.string.na)
 
-                lottie_transaction_status.visibility=View.GONE
-                lottie_transaction_status.scale=0.4f
-                status_view.visibility=View.VISIBLE
-
-                status_icon.setImageResource(R.drawable.animated_vector_cross)
-                (status_icon.getDrawable() as Animatable).start()
-
-             //   lottie_transaction_status.playAnimation()
+                }
                 val v : Vibrator = context!!.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) v.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
                 else v.vibrate(200);
@@ -224,15 +227,28 @@ class Paymentmethod : BaseFragment() {
             override fun onFail(error: Int) {
                 when (error) {
                     404 -> {
-                        showSnackBar(address_container, getString(R.string.error_404))
+                        showSnackBar(constraint, getString(R.string.error_404))
                     }
                     100 -> {
-                        showSnackBar(address_container, getString(R.string.internet_not_available))
+                        showSnackBar(constraint, getString(R.string.internet_not_available))
 
                     }
+
+
                 }
                 //showProgressDialog()
-
+                transaction_statusview.visibility=View.VISIBLE
+                processDialog.visibility=View.GONE
+                lottie_transaction_status.visibility=View.GONE
+                lottie_transaction_status.scale=0.4f
+                status_view.visibility=View.VISIBLE
+                status_icon.setImageResource(R.drawable.animated_vector_cross)
+                (status_icon.getDrawable() as Animatable).start()
+                totalamount.text=String.format(getString(R.string.total_amount),BindDataUtils.convertCurrencyToDanish(EpayActivity.orderTotal))
+                request_status.text= String.format(getString(R.string.request_successful),getString(R.string.failed))
+                status_msg.text=getString(R.string.sorry_for_your_order_n_your_order_will_not_be_processed)
+                requested_user.text=PreferenceUtil.getString(PreferenceUtil.E_MAIL,"")
+                order_number.text=getString(R.string.na)
 
             }
         })
@@ -242,63 +258,20 @@ class Paymentmethod : BaseFragment() {
 
 
 
-
-
-    private fun fetch_PickupTime() {
-
-  /*      callAPI(ApiCall.getPickuptime(
-                r_token = Constants.R_TOKEN,
-                r_key = Constants.R_KEY,
-                shipping = "Pickup",
-                language = "en"
-        ), object : BaseFragment.OnApiCallInteraction {
-
-            override fun <T> onSuccess(body: T?) {
-                val jsonobject = body as JsonObject
-                if (jsonobject.get("status").asBoolean) {
-                    timeslot = ArrayList()
-                    for (i in 0 until jsonobject.getAsJsonArray("times").size()) {
-                        timeslot!!.add(jsonobject.getAsJsonArray("times")[i].asJsonObject.get("dt").asString)
-                    }
-                    delivery_time_slot.text=timeslot!![0]
-                    binding.isLoading=false
-
-                }else{
-                    showSnackBar(address_container, getString(R.string.error_404))
-                    binding.isLoading=false
-
-                }
-            }
-
-            override fun onFail(error: Int) {
-                when (error) {
-                    404 -> {
-                        showSnackBar(address_container, getString(R.string.error_404))
-                        binding.isLoading=false
-                    }
-                    100 -> {
-                        showSnackBar(address_container, getString(R.string.internet_not_available))
-                        binding.isLoading=false
-
-                    }
-                }
-                //showProgressDialog()
-
-
-            }
-        })*/
-
-
-    }
-
-
-
     private fun showComponents(){
+
+        if(!isInternetAvailable()){
+            showSnackBar(constraint, getString(R.string.internet_not_available))
+            return
+        }
+        if(getallpaymentAttributes() == null){
+            showSnackBar(constraint, getString(R.string.error_404))
+        }
+
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             Log.e("run","success---")
             val constraintSet = ConstraintSet()
             constraintSet.clone(activity, R.layout.transaction_status)
-
             val transition = ChangeBounds()
             transition.interpolator = AnticipateOvershootInterpolator(1.0f)
              transition.duration = 800

@@ -39,6 +39,7 @@ class Constants {
         val RESTAURANT="restaurant"
         val IP="ip"
         val STATUS="status"
+        val ORDER_NO="order_no"
         val TITLE="title"
         val PRODUCTLIST="ProductList"
         val MENULIST="menulist"

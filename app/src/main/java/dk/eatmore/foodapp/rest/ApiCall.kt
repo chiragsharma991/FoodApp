@@ -54,8 +54,12 @@ class ApiCall {
         fun pickupinfo(jsonObject: JsonObject) : Call<JsonObject> {
             return getApiInterface().pickupinfo(jsonObject)
         }
-        fun checkout(jsonObject: JsonObject) : Call<JsonObject> {
-            return getApiInterface().checkout(jsonObject)
+
+        fun checkout_delivery(jsonObject: JsonObject) : Call<JsonObject> {
+            return getApiInterface().checkout_delivery(jsonObject)
+        }
+        fun checkout_pickup(jsonObject: JsonObject) : Call<JsonObject> {
+            return getApiInterface().checkout_pickup(jsonObject)
         }
 
         fun addtocart(jsonObject: JsonObject) : Call<JsonObject> {
