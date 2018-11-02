@@ -8,7 +8,7 @@ class Constants {
         val DIRECT = "direct"
         val R_TOKEN = "w5oRqFiAXTBB3hwpixAORbg_BwUj0EMQ07042017114812"
         val R_KEY = "fcARlrbZFXYee1W6eYEIA0VRlw7MgV4o07042017114812"
-        val PAYMENTMETHOD="paymentmethod"
+        val PAYMENTMETHOD_ONLINE="paymentmethod_online"
         val PROGRESSDIALOG="progressdialog"
         val AUTH_KEY="auth_key"
         val AUTH_VALUE="1025180533"
@@ -81,8 +81,16 @@ class Constants {
         val ADDITIONAL_CHARGES_CASH="additional_charges_cash"
         val USER_DISTANCE="user_distance"
         val SHIPPING_REMARK="shipping_remark"
-
-
+        val GIFTCARD="Giftcard"
+        val COUPON="Coupon"
+        val OTHER="Other"
+        val MSG="msg"
+        val TXNFEE="txnfee"
+        val PAYMENTTYPE="paymenttype"
+        val TXNID="txnid"
+        val CARDNO="cardno"
+        val EPAY_MERCHANT="epay_merchant"
+        val EPAY_MERCHANT_TEST="8024206"
 
 
 

@@ -17,7 +17,6 @@
     <string name="my_profile">My Profile</string>
     <string name="menu">Menu</string>
     <string name="rating">Rating</string>
-    <string name="info">Info</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="large_text">
         "A material metaphor is the unifying theory of a rationalized space and a system of motion."
@@ -43,11 +42,11 @@
     <string name="signup">Signup</string>
     <string name="add_to_cart">ADD TO CART %1$s</string>
     <string name="minues">- %1$s</string>
-    <string name="total_goods">Total ( %1$s Goods )</string>
+    <string name="total_goods">Total ( %1$s Products )</string>
     <string name="plus">+ %1$s</string>
     <string name="restaurant_rating">(%1$s ratings)</string>
     <string name="add_new_address">Add new address</string>
-    <string name="address">Address</string>
+    <string name="address">Verify</string>
     <string name="ok">OK</string>
     <string name="go_to_payment">Go to payment</string>
     <string name="select_delivery_time">Select delivery time:</string>
@@ -85,6 +84,8 @@
     <string name="item_has_been">Item has been successfully added !</string>
     <string name="pickup">pickup</string>
     <string name="delivery">delivery</string>
+    <string name="pickup_caps">Pickup</string>
+    <string name="delivery_caps">Delivery</string>
     <string name="you_are_ordering_pickup">Du er ved at bestille din mad til afhentning!</string>
     <string name="enter_your_valid_name">Enter your valid name</string>
     <string name="enter_your_postal_number">Enter your postal number</string>
@@ -105,6 +106,18 @@
     <string name="total_amount">%1$s</string>
     <string name="na">N/A</string>
     <string name="fulladdress">%1$s %2$s %3$s %4$s %5$s</string>
+    <string name="apply_coupon">Apply Coupon</string>
+    <string name="online_payment">Online payment</string>
+    <string name="cash_payment">Cash payment</string>
+    <string name="how_do_you_want_to_pay">How do you want to pay?</string>
+    <string name="apply">Apply</string>
+    <string name="discount">- %1$s</string>
+    <string name="transaction_has_been_declined">Transaction has been declined</string>
+    <string name="confirm">Confirm</string>
+    <string name="pay">Pay</string>
+    <string name="basket">Cart</string>
+    <string name="info">Info</string>
+    <string name="payment">Payment</string>
 
 
 </resources>

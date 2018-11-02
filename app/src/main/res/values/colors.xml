@@ -44,6 +44,7 @@
     <color name="darkgray">#6D737B</color>
     <color name="light_gray">#E1E1E1</color>
     <color name="orange">#ff9800</color>
+    <color name="yello">#FFFAC2</color>
     <color name="border_gray">#5C5C5C</color>
     <color name="feed_item_bg">#ffffff</color>
     <color name="bg_color">#F0EFF5</color>

@@ -61,6 +61,8 @@ class HomeFragment : BaseFragment() {
             return HomeFragment()
         }
 
+
+
     }
 
 
@@ -73,6 +75,13 @@ class HomeFragment : BaseFragment() {
 
     override fun getLayout(): Int {
         return R.layout.fragment_home_fragment
+    }
+
+    fun clearrestaurant(){
+        loge(TAG,"clear bak stack---")
+        for (i in 0.until(childFragmentManager.backStackEntryCount)){
+            childFragmentManager.popBackStack()
+        }
     }
 
 

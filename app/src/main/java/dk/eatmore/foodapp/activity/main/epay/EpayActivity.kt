@@ -18,9 +18,7 @@ import android.view.LayoutInflater
 import android.view.View
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.epay.fragment.AddCart
-import dk.eatmore.foodapp.activity.main.epay.fragment.DeliveryTimeslot
-import dk.eatmore.foodapp.activity.main.epay.fragment.Paymentmethod
+import dk.eatmore.foodapp.activity.main.epay.fragment.*
 import dk.eatmore.foodapp.databinding.ActivityEpayBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.Address
 import dk.eatmore.foodapp.fragment.Dashboard.Home.AddressForm
@@ -65,7 +63,6 @@ class EpayActivity : BaseActivity() {
         var moveonEpay:Boolean=false
         var ui_model: UIModel? = null
         var isPickup:Boolean = false  // just for check pickup/delivery selection on tabview.
-        var orderTotal : String =""
         var first_time : String =""
         fun newInstance() : EpayActivity {
             return EpayActivity()
@@ -86,6 +83,7 @@ class EpayActivity : BaseActivity() {
     private fun initView(savedInstanceState: Bundle?) {
         loge(TAG,"count is"+supportFragmentManager.backStackEntryCount)
         accessOnetime=true
+        progresswheel(progresswheel,true)
         empty_view.visibility=View.GONE
         epay_container.visibility=View.GONE
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
@@ -117,9 +115,10 @@ class EpayActivity : BaseActivity() {
 
     fun setToolbarforThis(){
         img_toolbar_back.setImageResource(R.drawable.close)
-        txt_toolbar.text="Basket"
+        txt_toolbar.text=getString(R.string.basket)
         img_toolbar_back.setOnClickListener{
-            finishActivity()
+            loge(TAG,"eapay finishing...")
+            onBackPressed()
         }
     }
 
@@ -150,6 +149,7 @@ class EpayActivity : BaseActivity() {
                 } else {
                     ui_model!!.viewcard_list.value=null
                     empty_view.visibility=View.VISIBLE
+                    progresswheel(progresswheel,false)
                   //  showSnackBar(epay_container,"Sorry No data found.")
                 }
             }
@@ -164,6 +164,7 @@ class EpayActivity : BaseActivity() {
                         showSnackBar(epay_container, getString(R.string.internet_not_available))
                     }
                 }
+                progresswheel(progresswheel,false)
                 //showProgressDialog()
 
 
@@ -192,6 +193,7 @@ class EpayActivity : BaseActivity() {
 
             override fun <T> onSuccess(body: T?) {
                 val json = body as JsonObject
+                    progresswheel(progresswheel,false)
                     val intent = Intent(Constants.CARTCOUNT_BROADCAST)
                     intent.putExtra(Constants.CARTCNT,if(json.get(Constants.CARTCNT).isJsonNull() || json.get(Constants.CARTCNT).toString() == "0") 0 else (json.get(Constants.CARTCNT).asString).toInt())
                     intent.putExtra(Constants.CARTAMT,if(json.get(Constants.CARTAMT).isJsonNull() || json.get(Constants.CARTAMT).toString() == "0") "00.00" else json.get(Constants.CARTAMT).asString)
@@ -210,6 +212,7 @@ class EpayActivity : BaseActivity() {
                     }
                 }
                 //showProgressDialog()
+                progresswheel(progresswheel,false)
 
             }
         })
@@ -235,7 +238,7 @@ class EpayActivity : BaseActivity() {
 
 
     private fun refresh_viewCard(){
-
+        progresswheel(progresswheel,false)
         if(ui_model!!.viewcard_list.value ==null){
             // this condition will null if all item has been deleted : so just clear view and inflate empty view on screen.
             add_parentitem_view.removeAllViewsInLayout()
@@ -243,9 +246,9 @@ class EpayActivity : BaseActivity() {
             return
         }
         paymentattributes=PaymentAttributes()
+        paymentattributes.order_total=ui_model!!.viewcard_list.value!!.order_total.toString()
         epay_total_txt.text=BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.order_total.toString()) ?: "null"
         epay_total_lbl.text=String.format(getString(R.string.total_goods),ui_model!!.viewcard_list.value!!.cartcnt)
-        orderTotal=ui_model!!.viewcard_list.value!!.order_total.toString()
         add_parentitem_view.removeAllViewsInLayout()
         for (i in 0 until ui_model!!.viewcard_list.value!!.result!!.size){
             var inflater= this.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -257,6 +260,7 @@ class EpayActivity : BaseActivity() {
                     DialogUtils.openDialog(this, getString(R.string.are_you_sure_to_delete), "",
                             getString(R.string.yes), getString(R.string.no), ContextCompat.getColor(this, R.color.black), object : DialogUtils.OnDialogClickListener {
                         override fun onPositiveButtonClick(p: Int) {
+                            progresswheel(progresswheel,true)
                             deleteitemFromcart(ui_model!!.viewcard_list.value!!.result!![position].op_id)
                             accessOnetime=false
                         }
@@ -265,6 +269,7 @@ class EpayActivity : BaseActivity() {
                         }
                     })
                 }else{
+                    progresswheel(progresswheel,true)
                     deleteitemFromcart(ui_model!!.viewcard_list.value!!.result!![position].op_id)
                 }
             }
@@ -322,13 +327,37 @@ class EpayActivity : BaseActivity() {
             if(fragment !=null && fragment.isVisible){
                   when (fragment) {
 
-                        is Paymentmethod -> {
+                        is TransactionStatus -> {
+                          //  popFragment()
                           when(fragment.currentView){
-                              Constants.PAYMENTMETHOD -> {fragment.onBackpress() }
                               Constants.PROGRESSDIALOG ->{ }
-                              Constants.PAYMENTSTATUS -> {finishActivity()}
+                              Constants.PAYMENTSTATUS -> {
+                               fragment.onBackpress()
+                              }
                           }
                         }
+
+                      is Address ->{
+                          img_toolbar_back.setImageResource(R.drawable.close)
+                          txt_toolbar.text=getString(R.string.basket)
+                          popFragment()
+                      }
+                      is DeliveryTimeslot ->{
+                          txt_toolbar.text=getString(R.string.address)
+                          popFragment()
+                      }
+                      is Paymentmethod ->{
+                          txt_toolbar.text=getString(R.string.info)
+                          popFragment()
+                      }
+
+                      is BamboraWebfunction ->{
+                          popFragment()
+                          txt_toolbar.text=getString(R.string.payment)
+                          val fragment= supportFragmentManager.findFragmentByTag(Paymentmethod.TAG)
+                          (fragment as Paymentmethod).onlineTransactionFailed()
+
+                      }
                         else -> popFragment()
 
                   }
@@ -411,18 +440,24 @@ class EpayActivity : BaseActivity() {
             var comments :String ="",
             var expected_time :String ="",
             var first_time :String ="",
-            var discount_id :String ="",
+            var discount_id :Int =0,
             var discount_type :String ="",
-            var discount_amount :String ="",
-            var shipping_charge :String ="",
-            var upto_min_shipping :String ="",
-            var minimum_order_price :String ="",
-            var order_total :String ="",
-            var additional_charge :String ="",
-            var additional_charges_online :String ="",
-            var additional_charges_cash :String ="",
-            var distance :String =""
-
+            var discount_amount :Double =0.0,
+            var shipping_charge :String ="0",
+            var upto_min_shipping :String ="0",
+            var minimum_order_price :String ="0",
+            var order_total :String ="0", // this is same as subtotal + excluded Tax
+            var additional_charge :String ="0",
+            var additional_charges_online :String ="0",
+            var additional_charges_cash :String ="0",
+            var distance :String ="",
+            var cardno :String ="",
+            var txnid :String ="",
+            var epay_merchant :String ="",
+            var paymenttype :String ="",
+            var txnfee :String ="",
+            var order_no :Int =0,
+            var final_amount :Double =0.0  // this is final amount + included Tax
 
     )
 

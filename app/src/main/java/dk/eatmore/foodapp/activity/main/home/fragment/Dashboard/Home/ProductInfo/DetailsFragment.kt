@@ -33,6 +33,7 @@ import android.util.Log
 import android.view.animation.AlphaAnimation
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import dk.eatmore.foodapp.activity.main.epay.fragment.TransactionStatus
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Info
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Menu
@@ -195,6 +196,13 @@ class DetailsFragment : BaseFragment() {
         loge("onActivityResult Detail fragment---",""+resultCode+" "+requestCode)
         // request : send code with request
         // result :  get code from target activity.
+        if(TransactionStatus.clearallrestaurant){
+            TransactionStatus.clearallrestaurant=false
+            val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
+            (fragmentof as HomeContainerFragment).getHomeFragment().clearrestaurant()
+            return
+        }
+
         if(requestCode ==1 && resultCode == AppCompatActivity.RESULT_OK){
             ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2)
         }

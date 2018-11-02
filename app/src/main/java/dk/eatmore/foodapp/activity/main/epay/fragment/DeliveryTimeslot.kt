@@ -135,7 +135,8 @@ class DeliveryTimeslot : BaseFragment() {
                         delivery_time_slot.text= time_list!![entries.key].toString()
                         break
                     }
-                    EpayActivity.paymentattributes.additional_charges_cash=jsonobject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString
+                    EpayActivity.paymentattributes.additional_charges_cash=if(jsonobject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString=="") "0" else jsonobject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString
+                    EpayActivity.paymentattributes.additional_charges_online=if(jsonobject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString=="") "0" else jsonobject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString
                     EpayActivity.paymentattributes.first_time=jsonobject.getAsJsonObject(Constants.RESULT).get(Constants.FIRST_TIME).asString
                     binding.isLoading=false
 
@@ -196,8 +197,8 @@ class DeliveryTimeslot : BaseFragment() {
     // set common toolbar from this and set pre fragment toolbar from this.
 
     fun setToolbarforThis() {
-        (activity as EpayActivity).txt_toolbar.text = ""
-        (activity as EpayActivity).img_toolbar_back.setOnClickListener { onBackpress() }
+        (activity as EpayActivity).txt_toolbar.text = getString(R.string.info)
+      //  (activity as EpayActivity).img_toolbar_back.setOnClickListener { onBackpress() }
     }
 
     fun onBackpress() {

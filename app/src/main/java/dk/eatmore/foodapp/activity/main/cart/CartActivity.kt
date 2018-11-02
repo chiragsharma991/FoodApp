@@ -5,6 +5,7 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
@@ -30,6 +31,7 @@ import dk.eatmore.foodapp.R.id.addtocart_view
 import dk.eatmore.foodapp.activity.main.cart.fragment.Extratoppings
 import dk.eatmore.foodapp.activity.main.cart.fragment.OnlyExtratoppings
 import dk.eatmore.foodapp.adapter.cart.CartViewAdapter
+import dk.eatmore.foodapp.databinding.ActivityCartBinding
 import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.model.cart.Data
 import dk.eatmore.foodapp.model.cart.ProductAttributeListItem
@@ -53,6 +55,7 @@ class CartActivity : BaseActivity() {
     private var mAdapter: CartViewAdapter? = null
     private var tagadapter: TagAdapter<String>? = null
     private lateinit var productdetails: ProductDetails
+    private  lateinit var binding :ActivityCartBinding
 
 
     companion object {
@@ -70,7 +73,7 @@ class CartActivity : BaseActivity() {
         loge(TAG, "on create...")
         super.onCreate(savedInstanceState)
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        setContentView(R.layout.activity_cart)
+        binding= DataBindingUtil.setContentView(this,R.layout.activity_cart)
         initView(savedInstanceState)
     }
 
@@ -142,6 +145,7 @@ class CartActivity : BaseActivity() {
 
     private fun refreshIngredients() {
         val mVals = arrayOfNulls<String>(ui_model!!.product_ingredients.value!!.size)
+        if(mVals.size <= 0) binding.isIngradientsVisible=false else binding.isIngradientsVisible=true
         for (i in 0..ui_model!!.product_ingredients.value!!.size - 1) {
             mVals[i] = ui_model!!.product_ingredients.value!![i].i_name
         }
@@ -229,6 +233,7 @@ class CartActivity : BaseActivity() {
 
 
     private fun initView(savedInstanceState: Bundle?) {
+        binding.isIngradientsVisible=false
         val title = intent.extras.getString("TITLE", "")
         item_p_id = intent.extras.getString("PID", "")
         p_price = intent.extras.getString("p_price", "")

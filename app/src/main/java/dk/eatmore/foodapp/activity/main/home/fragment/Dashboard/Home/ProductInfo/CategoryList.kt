@@ -170,18 +170,18 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
 
                 } else {
                     showProgressDialog()
-                    showSnackBar(clayout_crt, getString(R.string.error_404))
+                    showSnackBar(category_list_container, getString(R.string.error_404))
                 }
             }
 
             override fun onFail(error: Int) {
                 when (error) {
                     404 -> {
-                        showSnackBar(clayout_crt, getString(R.string.error_404))
+                        showSnackBar(category_list_container, getString(R.string.error_404))
                     }
                     100 -> {
 
-                        showSnackBar(clayout_crt, getString(R.string.internet_not_available))
+                        showSnackBar(category_list_container, getString(R.string.internet_not_available))
                     }
                 }
                 showProgressDialog()

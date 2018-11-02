@@ -74,3 +74,5 @@ Notes :
    5. Add sticky notes.
 
    6. add toolbar in fragment and back button with hide and change another icon
+
+   7. user constraint set in nested layout and use view visible or gone.

@@ -1,19 +1,341 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android"
 
-    >
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:zhy="http://schemas.android.com/tools">
 
     <data>
 
+        <!-- <import type="android.view.View">
 
+         </import>
+
+         <variable
+             name="isPaymentonline"
+             type="Boolean">
+
+         </variable>
+ -->
     </data>
 
-<RelativeLayout
-    android:layout_width="match_parent"
-    android:layout_height="wrap_content"></RelativeLayout>
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:background="@color/background_light"
+        android:id="@+id/constraint"
+        >
 
+        <!--        <FrameLayout
+                    android:id="@+id/transaction_container"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fitsSystemWindows="true"
+                    android:focusable="true"
+                    android:clickable="true"
+                    android:visibility="@{isPaymentonline == true ? View.VISIBLE : View.GONE }"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/transactionstatus_view"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    >
+
+
+
+
+
+                </FrameLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/transactionstatus_view"
+                    android:layout_width="0dp"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    android:visibility="@{isPaymentonline == false ? View.VISIBLE : View.GONE }"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    >
+
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/address_card"
+                        style="@style/CardViewStyle"
+                        android:animateLayoutChanges="true"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_margin="@dimen/_8sdp">
+
+                        &lt;!&ndash;transaction progress dialog&ndash;&gt;
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/processDialog"
+                            android:background="@color/white"
+                            android:visibility="@{isPaymentonline == false ? View.VISIBLE : View.GONE }"
+                            >
+                            <FrameLayout
+                                android:id="@+id/signup_view"
+                                android:layout_width="fill_parent"
+                                android:layout_height="match_parent"
+                                android:layout_margin="@dimen/_8sdp"
+                                android:layout_marginTop="?attr/actionBarSize"
+                                android:orientation="vertical"
+                                android:visibility="visible">
+
+
+                                <ProgressBar
+                                    android:id="@+id/progress_bar"
+                                    style="?android:attr/progressBarStyleLarge"
+                                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                                    android:layout_width="match_parent"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_height="@dimen/_200sdp"
+                                    android:visibility="visible"
+                                    android:indeterminate="true" />
+
+
+                                <android.support.v7.widget.AppCompatTextView
+                                    style="@style/TextViewMid"
+                                    android:singleLine="true"
+                                    android:layout_centerInParent="true"
+                                    android:layout_gravity="center_vertical|center_horizontal"
+                                    android:textColor="@color/black_light"
+                                    android:text="Loading..." />
+
+
+                                <android.support.v7.widget.AppCompatTextView
+                                    style="@style/TextViewSmall"
+                                    android:singleLine="true"
+                                    android:layout_centerInParent="true"
+                                    android:layout_gravity="center_vertical|center_horizontal"
+                                    android:layout_marginTop="@dimen/_130sdp"
+                                    android:textColor="@color/black_light"
+                                    android:text="Please wait to complete the transaction" />
+
+
+
+
+                            </FrameLayout>
+
+
+                        </RelativeLayout>
+
+
+                        &lt;!&ndash;transaction status view&ndash;&gt;
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/transaction_processview"
+                            android:background="@color/white"
+                            android:visibility="@{isPaymentonline == false ? View.GONE : View.GONE }"
+                            >
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+
+                                <RelativeLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_150sdp"
+                                    android:id="@+id/status_view"
+
+                                    >
+                                    <android.support.design.widget.FloatingActionButton
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:id="@+id/status_icon"
+                                        app:rippleColor="@color/white"
+                                        android:backgroundTint="@color/red"
+                                        android:scaleType="fitXY"
+                                        app:borderWidth="0dp"
+                                        android:layout_centerInParent="true"
+                                        android:layout_gravity="center_horizontal"
+                                        android:elevation="0dp"
+
+                                        />
+
+                                </RelativeLayout>
+
+
+
+                                <android.support.v4.widget.NestedScrollView
+                                    android:id="@+id/scroll_view"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:layout_below="@+id/status_view"
+                                    android:layout_marginBottom="@dimen/_48sdp"
+                                    >
+
+                                    <LinearLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        >
+                                        <android.support.v7.widget.AppCompatTextView
+                                            style="@style/TextViewMid"
+                                            android:id="@+id/totalamount"
+                                            android:layout_gravity="center_horizontal"
+                                            android:text="@string/total_amount"
+                                            android:textStyle="bold" />
+
+
+                                        <android.support.v7.widget.AppCompatTextView
+                                            style="@style/TextViewMid"
+                                            android:id="@+id/request_status"
+                                            android:layout_gravity="center_horizontal"
+                                            android:layout_marginTop="@dimen/_8sdp"
+                                            android:text="@string/request_successful" />
+
+                                        <View
+                                            android:layout_width="match_parent"
+                                            android:layout_height="1dp"
+                                            android:layout_marginTop="@dimen/_8sdp"
+                                            android:alpha="0.2"
+                                            android:background="@color/divider_color" />
+
+
+                                        <android.support.v7.widget.AppCompatTextView
+                                            style="@style/TextViewSmall"
+                                            android:id="@+id/status_msg"
+                                            android:layout_gravity="center_horizontal"
+                                            android:layout_marginTop="@dimen/_8sdp"
+                                            android:gravity="center_horizontal"
+                                            android:text="@string/thank_you_for_your_order_n_your_order_will_be_processed_as_soon_as_possilbe" />
+
+
+                                        <View
+                                            android:layout_width="match_parent"
+                                            android:layout_height="1dp"
+                                            android:layout_marginTop="@dimen/_8sdp"
+                                            android:alpha="0.2"
+                                            android:background="@color/divider_color" />
+
+                                        <LinearLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="wrap_content"
+                                            android:layout_marginLeft="@dimen/_16sdp"
+                                            android:layout_marginRight="@dimen/_16sdp"
+                                            android:orientation="vertical">
+
+                                            <android.support.v7.widget.AppCompatTextView
+                                                style="@style/TextViewSmall"
+                                                android:layout_marginTop="@dimen/_8sdp"
+                                                android:text="@string/requeted_from"
+
+                                                />
+
+                                            <android.support.v7.widget.AppCompatTextView
+                                                style="@style/TextViewSmall"
+                                                android:id="@+id/requested_user"
+                                                android:text="Test@softtech360.in" />
+
+                                            <android.support.v7.widget.AppCompatTextView
+                                                style="@style/TextViewSmall"
+                                                android:id="@+id/order_number"
+                                                android:text="@string/order_number"
+
+                                                />
+
+                                            <android.support.v7.widget.AppCompatTextView
+                                                style="@style/TextViewSmall"
+                                                android:text="@string/order_date"
+                                                android:id="@+id/order_time"
+                                                android:textColor="@color/black_light" />
+
+                                            <View
+                                                android:layout_width="match_parent"
+                                                android:layout_height="1dp"
+                                                android:layout_marginBottom="@dimen/_8sdp"
+                                                android:layout_marginTop="@dimen/_8sdp"
+                                                android:alpha="0.1"
+                                                android:background="@color/divider_color" />
+
+                                            <android.support.v7.widget.AppCompatTextView
+                                                style="@style/TextViewSmall"
+                                                android:id="@+id/phone_txt"
+                                                android:gravity="center_horizontal"
+                                                android:text="@string/if_you_have_any_questions_or_enquiries_please_call_us_on"
+
+                                                />
+
+
+
+                                        </LinearLayout>
+
+                                    </LinearLayout>
+
+
+                                </android.support.v4.widget.NestedScrollView>
+
+
+
+                                <RelativeLayout
+                                    android:id="@+id/proceed_view"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="@dimen/_40sdp"
+                                    android:layout_marginBottom="@dimen/_8sdp"
+                                    android:layout_alignParentBottom="true"
+                                    >
+
+                                    <View
+                                        android:layout_width="match_parent"
+                                        android:layout_height="1dp"
+                                        android:alpha="0.2"
+                                        android:background="@color/divider_color" />
+
+                                    <android.support.v7.widget.AppCompatTextView
+                                        android:id="@+id/sec_txt"
+                                        style="@style/TextViewMid"
+                                        android:layout_centerInParent="true"
+                                        android:text="@string/continue_order"
+                                        android:textColor="@color/theme_color" />
+
+                                </RelativeLayout>
+
+
+                            </RelativeLayout>
+
+
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                >
+                                <com.airbnb.lottie.LottieAnimationView
+                                    android:id="@+id/lottie_transaction_status"
+                                    android:layout_width="180dp"
+                                    android:layout_height="150dp"
+                                    android:scaleType="centerCrop"
+                                    android:layout_gravity="center_horizontal"
+                                    app:lottie_autoPlay="false"
+                                    android:layout_centerHorizontal="true"
+                                    android:visibility="visible"
+                                    app:layout_constraintEnd_toEndOf="parent"
+                                    app:layout_constraintStart_toStartOf="parent"
+                                    app:layout_constraintTop_toBottomOf="parent"
+                                    app:lottie_fileName="checked_done_.json"
+                                    app:lottie_loop="false"
+                                    />
+
+                            </RelativeLayout>
+
+
+
+
+
+                        </RelativeLayout>
+
+
+
+                    </android.support.v7.widget.CardView>
+
+                </LinearLayout>-->
+
+    </android.support.constraint.ConstraintLayout>
 
 </layout>
-

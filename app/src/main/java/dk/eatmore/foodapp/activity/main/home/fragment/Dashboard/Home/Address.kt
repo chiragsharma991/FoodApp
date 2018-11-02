@@ -8,10 +8,13 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.TextView
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.epay.EpayActivity
@@ -75,6 +78,13 @@ class Address : BaseFragment(), TextWatcher {
             inputValidStates[street_edt] = false
             inputValidStates[house_edt] = false
             inputValidStates[city_edt] = false
+            postnumber_edt.imeOptions=EditorInfo.IME_ACTION_DONE
+            postnumber_edt.setOnKeyListener(object : View.OnKeyListener {
+                override fun onKey(v: View, actionId: Int, event: KeyEvent): Boolean {
+                    loge(TAG,"done button---")
+                    return false
+                }
+            })
 
             ui_model = createViewModel()
             if (ui_model!!.user_infoList.value == null) {
@@ -105,11 +115,18 @@ class Address : BaseFragment(), TextWatcher {
                 }
             }
 
+
+
+
         } else {
             logd(TAG, "saveInstance NOT NULL")
         }
 
     }
+
+
+
+
     override fun afterTextChanged(s: Editable?) {
 
 
@@ -293,7 +310,7 @@ class Address : BaseFragment(), TextWatcher {
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
-        postParam.addProperty(Constants.ORDER_TOTAL, EpayActivity.orderTotal)
+        postParam.addProperty(Constants.ORDER_TOTAL,EpayActivity.paymentattributes.order_total)
         postParam.addProperty(Constants.SHIPPING, if (EpayActivity.isPickup) getString(R.string.pickup) else getString(R.string.delivery))
         postParam.addProperty(Constants.STREET, street_edt.text.toString())
         postParam.addProperty(Constants.HOUSE_NO, house_edt.text.toString())
@@ -310,7 +327,6 @@ class Address : BaseFragment(), TextWatcher {
                 val jsonObject = body as JsonObject
                 if (jsonObject.get(Constants.STATUS).asBoolean) {
 
-                    EpayActivity.paymentattributes.order_total=EpayActivity.orderTotal
                     EpayActivity.paymentattributes.first_name=name_edt.text.toString()
                     EpayActivity.paymentattributes.telephone_no=telephone_number_edt.text.toString()
                     //                        finalCartJson.put("address", street + " " + houseNo + " " + floorDoorString + ", " + postal_code + " " + city);
@@ -318,13 +334,15 @@ class Address : BaseFragment(), TextWatcher {
                     EpayActivity.paymentattributes.postal_code=postnumber_edt.text.toString()
                  //   EpayActivity.paymentattributes.discount_type=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.DISCOUNT_TYPE].asString
                    // EpayActivity.paymentattributes.discount_amount=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.DISCOUNT_AMOUNT].asString
-                    EpayActivity.paymentattributes.shipping_charge=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString
-                    EpayActivity.paymentattributes.upto_min_shipping=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString
-                    EpayActivity.paymentattributes.minimum_order_price=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString
+                    EpayActivity.paymentattributes.shipping_charge=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString =="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString
+                    EpayActivity.paymentattributes.upto_min_shipping=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString =="")"0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString
+                    EpayActivity.paymentattributes.minimum_order_price=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString== "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString
                   //  EpayActivity.paymentattributes.additional_charges_cash=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_CASH].asString
-                    EpayActivity.paymentattributes.additional_charges_online=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString
-                    EpayActivity.paymentattributes.distance=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString
-                    EpayActivity.paymentattributes.first_time=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString
+                    EpayActivity.paymentattributes.additional_charges_online=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString=="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString
+                    EpayActivity.paymentattributes.additional_charges_cash=if(jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString=="") "0" else jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString
+
+                    EpayActivity.paymentattributes.distance=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString =="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString
+                    EpayActivity.paymentattributes.first_time=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString== "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString
 
 
 
@@ -368,16 +386,16 @@ class Address : BaseFragment(), TextWatcher {
 
         (activity as EpayActivity).txt_toolbar.text = getString(R.string.address)
         (activity as EpayActivity).img_toolbar_back.setImageResource(R.drawable.back)
-        (activity as EpayActivity).img_toolbar_back.setOnClickListener {
+      /*  (activity as EpayActivity).img_toolbar_back.setOnClickListener {
             onBackpress()
-        }
+        }*/
     }
 
-    fun onBackpress() {
-
+  /*  fun onBackpress() {
+        (activity as EpayActivity).txt_toolbar.text = getString(R.string.basket)
         (activity as EpayActivity).popFragment()
 
-    }
+    }*/
 
 
 
