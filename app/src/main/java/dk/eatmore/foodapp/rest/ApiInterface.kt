@@ -79,14 +79,50 @@ interface ApiInterface {
     ): Call<JsonObject>
 
     @FormUrlEncoded
-    @POST("Cart/cart/restpickupdeltime")
-    fun getPickuptime(
+    @POST("Cart/cart/apply-code")
+    fun applycode(
             @Field("r_token") r_token: String ,
             @Field("r_key") r_key: String,
+            @Field("customer_id") customer_id: String,
+            @Field("upto_min_shipping") upto_min_shipping: String,
             @Field("shipping") shipping: String,
-            @Field("language") language: String
+            @Field("code") code: String,
+            @Field("order_total") order_total: String,
+            @Field("additional_charge") additional_charge: String,
+            @Field("shipping_costs") shipping_costs: String
     ): Call<JsonObject>
 
+    @POST("Cart/cart/user-info")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun userInfo(@Body jsonObject: JsonObject): Call<JsonObject>
+
+    @POST("Cart/cart/delivery-details")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun deliveryDetails(@Body jsonObject: JsonObject): Call<JsonObject>
+
+    @POST("Cart/cart/pickup-info")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun pickupinfo(@Body jsonObject: JsonObject): Call<JsonObject>
+
+    @POST("Cart/cart/checkout-delivery")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun checkout_delivery(@Body jsonObject: JsonObject): Call<JsonObject>
+
+    @POST("Cart/cart/checkout-pickup")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun checkout_pickup(@Body jsonObject: JsonObject): Call<JsonObject>
+
+    @POST("Cart/cart/ordertransaction")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun ordertransaction(@Body jsonObject: JsonObject): Call<JsonObject>
+
+    @FormUrlEncoded
+    @POST("Cart/cart/cancelordertransaction")
+    fun cancelordertransaction(
+            @Field("r_token") r_token: String ,
+            @Field("r_key") r_key: String,
+            @Field("order_no") order_no: Int
+    ): Call<JsonObject>
 
     @POST("Cart/cart/addtocart")
     @Headers("Content-Type: application/x-www-form-urlencoded")

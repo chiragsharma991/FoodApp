@@ -6,6 +6,17 @@
 
     <data>
 
+
+        <import type="android.view.View">
+
+        </import>
+
+        <variable
+            name="status_is"
+            type="Boolean">
+
+        </variable>
+
         <variable
             name="user"
             type="dk.eatmore.foodapp.model.User">
@@ -19,154 +30,50 @@
 
         </variable>
 
+        <variable
+            name="transactionhandler"
+            type="dk.eatmore.foodapp.activity.main.epay.fragment.TransactionStatus.MyClickHandler">
+
+        </variable>
+
     </data>
 
     <android.support.constraint.ConstraintLayout
+        android:id="@+id/transaction_constraint"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
         android:background="@color/background_light"
-        android:id="@+id/constraint"
-        >
-
-        <FrameLayout
-            android:id="@+id/pamentmethod_view"
-            android:layout_width="0dp"
-            android:layout_height="match_parent"
-            android:fitsSystemWindows="true"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintEnd_toStartOf="@+id/transactionstatus_view"
-            app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            >
-
-            <android.support.design.widget.CoordinatorLayout
-                android:id="@+id/clayout_crt"
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:background="@color/white">
-
-                <android.support.design.widget.AppBarLayout
-                    android:id="@+id/appbar"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:background="?attr/colorPrimary"
-                    android:fitsSystemWindows="true"
-                    android:theme="@style/AppTheme.NoActionBar">
-
-                    <android.support.design.widget.CollapsingToolbarLayout
-                        android:id="@+id/collapse_toolbar"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:fitsSystemWindows="true"
-                        app:contentScrim="?attr/colorPrimary"
-                        app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-                        app:titleEnabled="false">
-
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical">
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_8sdp"
-                                android:orientation="vertical">
-
-                                <android.support.v7.widget.AppCompatTextView
-                                    style="@style/TextViewLarge"
-                                    android:singleLine="true"
-                                    android:text="Payment Method"
-                                    android:textColor="@color/black" />
-
-
-                            </LinearLayout>
-
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:alpha="0.2"
-                                android:background="@color/divider_color" />
-
-
-                        </LinearLayout>
-
-
-                    </android.support.design.widget.CollapsingToolbarLayout>
-
-
-                </android.support.design.widget.AppBarLayout>
-
-
-                <android.support.v4.widget.NestedScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    app:layout_behavior="@string/appbar_scrolling_view_behavior">
-
-                    <LinearLayout
-
-
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
-
-
-                        <FrameLayout
-                            android:id="@+id/cart_container"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
-
-                            <android.support.v7.widget.RecyclerView
-                                android:id="@+id/recycler_view"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:clipToPadding="false"
-                                android:nestedScrollingEnabled="false" />
-
-
-                        </FrameLayout>
-
-
-                    </LinearLayout>
-
-                </android.support.v4.widget.NestedScrollView>
-
-
-            </android.support.design.widget.CoordinatorLayout>
-
-
-        </FrameLayout>
-
+        android:fitsSystemWindows="true">
 
         <LinearLayout
             android:id="@+id/transactionstatus_view"
             android:layout_width="0dp"
             android:layout_height="match_parent"
             android:orientation="vertical"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
-            >
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
 
             <android.support.v7.widget.CardView
                 android:id="@+id/address_card"
                 style="@style/CardViewStyle"
-                android:animateLayoutChanges="true"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:layout_margin="@dimen/_8sdp">
+                android:layout_margin="@dimen/_8sdp"
+                android:animateLayoutChanges="true">
+
+                <!--transaction progress dialog-->
 
                 <RelativeLayout
+                    android:id="@+id/processDialog"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/processDialog"
-                    android:visibility="gone"
+                    android:background="@color/white"
+                    android:visibility="@{status_is == false ? View.VISIBLE : View.GONE}"
                     >
+
                     <FrameLayout
                         android:id="@+id/signup_view"
                         android:layout_width="fill_parent"
@@ -180,33 +87,31 @@
                         <ProgressBar
                             android:id="@+id/progress_bar"
                             style="?android:attr/progressBarStyleLarge"
-                            app:layout_behavior="@string/appbar_scrolling_view_behavior"
                             android:layout_width="match_parent"
-                            android:layout_gravity="center_vertical"
                             android:layout_height="@dimen/_200sdp"
+                            android:layout_gravity="center_vertical"
+                            android:indeterminate="true"
                             android:visibility="visible"
-                            android:indeterminate="true" />
+                            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
                         <android.support.v7.widget.AppCompatTextView
                             style="@style/TextViewMid"
-                            android:singleLine="true"
                             android:layout_centerInParent="true"
                             android:layout_gravity="center_vertical|center_horizontal"
-                            android:textColor="@color/black_light"
-                            android:text="Loading..." />
+                            android:singleLine="true"
+                            android:text="Loading..."
+                            android:textColor="@color/black_light" />
 
 
                         <android.support.v7.widget.AppCompatTextView
                             style="@style/TextViewSmall"
-                            android:singleLine="true"
                             android:layout_centerInParent="true"
                             android:layout_gravity="center_vertical|center_horizontal"
                             android:layout_marginTop="@dimen/_130sdp"
-                            android:textColor="@color/black_light"
-                            android:text="Please wait to complete the transaction" />
-
-
+                            android:singleLine="true"
+                            android:text="Please wait to complete the transaction"
+                            android:textColor="@color/black_light" />
 
 
                     </FrameLayout>
@@ -214,40 +119,44 @@
 
                 </RelativeLayout>
 
+
+                <!--transaction status view-->
+
                 <RelativeLayout
+                    android:id="@+id/transaction_statusview"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:id="@+id/transaction_statusview"
-                    android:visibility="visible"
+                    android:background="@color/white"
+                    android:visibility="@{status_is == true ? View.VISIBLE : View.GONE}"
                     >
+
                     <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
                         <RelativeLayout
+                            android:id="@+id/status_view"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_150sdp"
-                            android:id="@+id/status_view"
 
                             >
+
                             <android.support.design.widget.FloatingActionButton
+                                android:id="@+id/status_icon"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
-                                android:id="@+id/status_icon"
-                                app:rippleColor="@color/white"
-                                android:backgroundTint="@color/red"
-                                android:scaleType="center"
-                                app:borderWidth="0dp"
                                 android:layout_centerInParent="true"
                                 android:layout_gravity="center_horizontal"
-                                android:src="@drawable/animated_vector_check"
+                                android:backgroundTint="@color/red"
                                 android:elevation="0dp"
+                                android:scaleType="fitXY"
+                                app:borderWidth="0dp"
+                                app:rippleColor="@color/white"
 
                                 />
 
                         </RelativeLayout>
-
 
 
                         <android.support.v4.widget.NestedScrollView
@@ -255,42 +164,45 @@
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             android:layout_below="@+id/status_view"
-                            android:layout_marginBottom="@dimen/_48sdp"
-                            >
+                            android:layout_marginBottom="@dimen/_48sdp">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                >
+                                android:orientation="vertical">
+
                                 <android.support.v7.widget.AppCompatTextView
+                                    android:id="@+id/totalamount"
                                     style="@style/TextViewMid"
                                     android:layout_gravity="center_horizontal"
-                                    android:text="\u20B9 1234.52"
+                                    android:text="@string/total_amount"
+                                    android:visibility="gone"
                                     android:textStyle="bold" />
 
 
                                 <android.support.v7.widget.AppCompatTextView
+                                    android:id="@+id/request_status"
                                     style="@style/TextViewMid"
+                                    android:visibility="gone"
                                     android:layout_gravity="center_horizontal"
                                     android:layout_marginTop="@dimen/_8sdp"
-                                    android:text="Request Successful" />
+                                    android:text="@string/request_successful" />
 
                                 <View
-                                    android:id="@+id/view"
                                     android:layout_width="match_parent"
                                     android:layout_height="1dp"
+                                    android:visibility="gone"
                                     android:layout_marginTop="@dimen/_8sdp"
                                     android:alpha="0.2"
                                     android:background="@color/divider_color" />
 
 
                                 <android.support.v7.widget.AppCompatTextView
+                                    android:id="@+id/status_msg"
                                     style="@style/TextViewSmall"
                                     android:layout_gravity="center_horizontal"
-                                    android:layout_marginTop="@dimen/_8sdp"
                                     android:gravity="center_horizontal"
-                                    android:text="Thank you for your order.\n  Your order will be processed as soon as possilbe." />
+                                    android:text="@string/thank_you_for_your_order_n_your_order_will_be_processed_as_soon_as_possilbe" />
 
 
                                 <View
@@ -298,6 +210,8 @@
                                     android:layout_height="1dp"
                                     android:layout_marginTop="@dimen/_8sdp"
                                     android:alpha="0.2"
+                                    android:visibility="gone"
+                                    android:layout_marginBottom="@dimen/_8sdp"
                                     android:background="@color/divider_color" />
 
                                 <LinearLayout
@@ -305,46 +219,52 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginLeft="@dimen/_16sdp"
                                     android:layout_marginRight="@dimen/_16sdp"
+                                    android:layout_marginTop="@dimen/_8sdp"
+                                    android:gravity="center_horizontal"
                                     android:orientation="vertical">
 
                                     <android.support.v7.widget.AppCompatTextView
                                         style="@style/TextViewSmall"
-                                        android:layout_marginTop="@dimen/_8sdp"
-                                        android:text="Requeted from"
+                                        android:visibility="gone"
+                                        android:text="@string/requeted_from"
 
                                         />
 
                                     <android.support.v7.widget.AppCompatTextView
+                                        android:id="@+id/requested_user"
                                         style="@style/TextViewSmall"
+                                        android:visibility="gone"
                                         android:text="Test@softtech360.in" />
 
                                     <android.support.v7.widget.AppCompatTextView
+                                        android:id="@+id/order_number"
                                         style="@style/TextViewSmall"
-                                        android:text="UPI Reference ID: 8548459562"
+                                        android:textStyle=""
+                                        android:text="@string/order_number"
 
                                         />
 
                                     <android.support.v7.widget.AppCompatTextView
+                                        android:id="@+id/order_time"
                                         style="@style/TextViewSmall"
-                                        android:text="3:30PM 11NOV2018"
+                                        android:text="@string/order_date"
+                                        android:visibility="gone"
                                         android:textColor="@color/black_light" />
 
                                     <View
                                         android:layout_width="match_parent"
                                         android:layout_height="1dp"
-                                        android:layout_marginBottom="@dimen/_8sdp"
                                         android:layout_marginTop="@dimen/_8sdp"
+                                        android:layout_marginBottom="@dimen/_8sdp"
                                         android:alpha="0.1"
                                         android:background="@color/divider_color" />
 
                                     <android.support.v7.widget.AppCompatTextView
-                                        style="@style/TextViewSmall"
                                         android:id="@+id/phone_txt"
+                                        style="@style/TextViewSmall"
                                         android:gravity="center_horizontal"
-                                        android:text="If you have any questions or enquiries please call us on: 88826543"
-
+                                        android:text="@string/if_you_have_any_questions_or_enquiries_please_call_us_on"
                                         />
-
 
 
                                 </LinearLayout>
@@ -355,14 +275,13 @@
                         </android.support.v4.widget.NestedScrollView>
 
 
-
                         <RelativeLayout
                             android:id="@+id/proceed_view"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_40sdp"
-                            android:layout_marginBottom="@dimen/_8sdp"
+                            android:onClick="@{(v) -> transactionhandler.onClick(v,`0`)}"
                             android:layout_alignParentBottom="true"
-                            android:onClick="@{handlers::backToOrder}">
+                            android:layout_marginBottom="@dimen/_8sdp">
 
                             <View
                                 android:layout_width="match_parent"
@@ -374,7 +293,7 @@
                                 android:id="@+id/sec_txt"
                                 style="@style/TextViewMid"
                                 android:layout_centerInParent="true"
-                                android:text="Continue Order"
+                                android:text="@string/continue_order"
                                 android:textColor="@color/theme_color" />
 
                         </RelativeLayout>
@@ -383,35 +302,29 @@
                     </RelativeLayout>
 
 
-
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        >
+                        android:layout_height="match_parent">
+
                         <com.airbnb.lottie.LottieAnimationView
                             android:id="@+id/lottie_transaction_status"
                             android:layout_width="180dp"
                             android:layout_height="150dp"
-                            android:scaleType="centerCrop"
-                            android:layout_gravity="center_horizontal"
-                            app:lottie_autoPlay="false"
                             android:layout_centerHorizontal="true"
+                            android:layout_gravity="center_horizontal"
+                            android:scaleType="centerCrop"
                             android:visibility="visible"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="parent"
+                            app:lottie_autoPlay="false"
                             app:lottie_fileName="checked_done_.json"
-                            app:lottie_loop="false"
-                            />
+                            app:lottie_loop="false" />
 
                     </RelativeLayout>
 
 
-
-
-
                 </RelativeLayout>
-
 
 
             </android.support.v7.widget.CardView>

@@ -4,10 +4,13 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
+import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
 import android.support.annotation.RequiresApi
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.LinearLayoutManager
 import android.transition.Slide
 import android.transition.Transition
@@ -16,6 +19,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.widget.TextView
+import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
@@ -27,6 +31,7 @@ import dk.eatmore.foodapp.R.id.addtocart_view
 import dk.eatmore.foodapp.activity.main.cart.fragment.Extratoppings
 import dk.eatmore.foodapp.activity.main.cart.fragment.OnlyExtratoppings
 import dk.eatmore.foodapp.adapter.cart.CartViewAdapter
+import dk.eatmore.foodapp.databinding.ActivityCartBinding
 import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.model.cart.Data
 import dk.eatmore.foodapp.model.cart.ProductAttributeListItem
@@ -50,6 +55,7 @@ class CartActivity : BaseActivity() {
     private var mAdapter: CartViewAdapter? = null
     private var tagadapter: TagAdapter<String>? = null
     private lateinit var productdetails: ProductDetails
+    private  lateinit var binding :ActivityCartBinding
 
 
     companion object {
@@ -67,7 +73,7 @@ class CartActivity : BaseActivity() {
         loge(TAG, "on create...")
         super.onCreate(savedInstanceState)
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-        setContentView(R.layout.activity_cart)
+        binding= DataBindingUtil.setContentView(this,R.layout.activity_cart)
         initView(savedInstanceState)
     }
 
@@ -139,6 +145,7 @@ class CartActivity : BaseActivity() {
 
     private fun refreshIngredients() {
         val mVals = arrayOfNulls<String>(ui_model!!.product_ingredients.value!!.size)
+        if(mVals.size <= 0) binding.isIngradientsVisible=false else binding.isIngradientsVisible=true
         for (i in 0..ui_model!!.product_ingredients.value!!.size - 1) {
             mVals[i] = ui_model!!.product_ingredients.value!![i].i_name
         }
@@ -226,6 +233,7 @@ class CartActivity : BaseActivity() {
 
 
     private fun initView(savedInstanceState: Bundle?) {
+        binding.isIngradientsVisible=false
         val title = intent.extras.getString("TITLE", "")
         item_p_id = intent.extras.getString("PID", "")
         p_price = intent.extras.getString("p_price", "")
@@ -281,8 +289,13 @@ class CartActivity : BaseActivity() {
 
                 override fun <T> onSuccess(body: T?) {
                     val jsonObject = body as JsonObject
-                    if (jsonObject.get("status").asBoolean) {
+                    if (jsonObject.get(Constants.STATUS).asBoolean) {
 
+                        Toast.makeText(this@CartActivity,getString(R.string.item_has_been), Toast.LENGTH_SHORT).show()
+                        val intent = Intent(Constants.CARTCOUNT_BROADCAST)
+                        intent.putExtra(Constants.CARTCNT,if(jsonObject.get(Constants.CARTCNT).isJsonNull || jsonObject.get(Constants.CARTCNT).asString == "0") 0 else (jsonObject.get(Constants.CARTCNT).asString).toInt())
+                        intent.putExtra(Constants.CARTAMT,if(jsonObject.get(Constants.CARTAMT).isJsonNull || jsonObject.get(Constants.CARTAMT).asString =="0") "00.00" else jsonObject.get(Constants.CARTAMT).asString)
+                        LocalBroadcastManager.getInstance(this@CartActivity).sendBroadcast(intent)
                         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
                             finishAfterTransition()
                         else

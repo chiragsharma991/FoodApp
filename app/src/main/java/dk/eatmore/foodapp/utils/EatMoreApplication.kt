@@ -1,9 +1,10 @@
 package dk.eatmore.foodapp.utils
 
 import android.app.Application
+import android.support.multidex.MultiDexApplication
 import dk.eatmore.foodapp.storage.PreferenceUtil
 
-class EatMoreApplication : Application() , LifeCycleDelegate{
+class EatMoreApplication : MultiDexApplication() , LifeCycleDelegate{
 
 
     override fun onCreate() {

@@ -44,7 +44,7 @@
                 android:layout_weight="1"
                 android:layout_marginRight="@dimen/_5sdp"
                 android:text="@{data.c_name}"
-                android:textColor="@color/black_light" />
+                android:textColor="@color/black" />
 
 
             <android.support.v7.widget.AppCompatImageView

@@ -1,15 +1,22 @@
 package dk.eatmore.foodapp.utils
 
 import android.arch.lifecycle.MutableLiveData
+import android.content.Context
 import android.util.Log
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
+import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
+import dk.eatmore.foodapp.activity.main.epay.EpayActivity
+import dk.eatmore.foodapp.activity.main.epay.fragment.Paymentmethod
 import dk.eatmore.foodapp.model.cart.ProductAttributeListItem
 import dk.eatmore.foodapp.model.cart.ProductDetails
 import dk.eatmore.foodapp.model.cart.ProductIngredientsItem
+import dk.eatmore.foodapp.rest.ApiCall
+import dk.eatmore.foodapp.storage.PreferenceUtil
 import org.json.JSONException
 import org.json.JSONObject
+import retrofit2.Call
 
 object CartListFunction {
 
@@ -66,16 +73,18 @@ object CartListFunction {
 
     /**
      * @param list_is : what list you want to get.
+     *
      */
 
     fun getjsonparmsofAddtocart(p_id: String, product_ingredients: MutableLiveData<ArrayList<ProductIngredientsItem>>,
                                 product_attribute_list: MutableLiveData<ArrayList<ProductAttributeListItem>>, productDetails: ProductDetails, list_is: Int): JsonArray {
 
+// Note: in ingredients we are submiting those contain which are selected (GREEN colour) so end of the screen API give result of opposite like : -pizz -categhd (this is are removed contain)
         val ingredientArray = JsonArray()
         if (product_ingredients.value !=null && product_ingredients.value!!.size > 0) {
             for (i in 0..product_ingredients.value!!.size - 1) {
                 val jObject = JsonObject()
-                if (product_ingredients.value!![i].selected_ingredient) {
+                if (!product_ingredients.value!![i].selected_ingredient) {
                     jObject.addProperty("i_id", product_ingredients.value!![i].i_id)
                     jObject.addProperty("p_id", p_id)
                     ingredientArray.add(jObject)
@@ -150,6 +159,76 @@ object CartListFunction {
 
 
     }
+
+
+  /*  "status": true,
+         "is_user_deleted": false,
+    "is_restaurant_closed": false,
+    "paymethod": "Online Payment",
+    "order_total": 31.34,
+    "msg": "Checkout Successfully",
+    "epay_merchant": "6673007",
+    "order_no": 95,
+    "pre_order": true*/
+
+
+     fun getcartpaymentAttributes (context : Context) : Call<JsonObject>? {
+        val checkout_api : Call<JsonObject>
+
+        val postParam = JsonObject()
+        try {
+            postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
+            postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
+            postParam.addProperty(Constants.FIRST_TIME, EpayActivity.paymentattributes.first_time)
+            postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,"") )
+           // postParam.addProperty(Constants.POSTAL_CODE, EpayActivity.paymentattributes.postal_code)
+            postParam.addProperty(Constants.DISCOUNT_TYPE, EpayActivity.paymentattributes.discount_type)
+            postParam.addProperty(Constants.DISCOUNT_AMOUNT, EpayActivity.paymentattributes.discount_amount)
+            postParam.addProperty(Constants.DISCOUNT_ID,EpayActivity.paymentattributes.discount_id)
+            postParam.addProperty(Constants.SHIPPING, if (EpayActivity.isPickup) context.getString(R.string.pickup) else context.getString(R.string.delivery))
+            postParam.addProperty(Constants.TELEPHONE_NO, EpayActivity.paymentattributes.telephone_no)
+            postParam.addProperty(Constants.ORDER_TOTAL, EpayActivity.paymentattributes.order_total)
+            postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
+            postParam.addProperty(Constants.ACCEPT_TC, "1")
+            postParam.addProperty(Constants.PAYMETHOD, if(Paymentmethod.isPaymentonline) "1" else "2" )
+            postParam.addProperty(Constants.EXPECTED_TIME, EpayActivity.paymentattributes.expected_time)
+            postParam.addProperty(Constants.COMMENTS, EpayActivity.paymentattributes.comments)
+            postParam.addProperty(Constants.DEVICE_TYPE,Constants.DEVICE_TYPE_VALUE)
+            postParam.addProperty(Constants.FIRST_NAME, EpayActivity.paymentattributes.first_name)
+            postParam.addProperty(Constants.ADDITIONAL_CHARGE, if(Paymentmethod.isPaymentonline) EpayActivity.paymentattributes.additional_charges_online else EpayActivity.paymentattributes.additional_charges_cash)
+            val jsonarray=JsonArray()
+            for (i in 0.until(EpayActivity.selected_op_id.size) ){
+                val jsonobject= JsonObject()
+                jsonobject.addProperty(Constants.OP_ID, EpayActivity.selected_op_id.get(i))
+                jsonarray.add(jsonobject)
+            }
+            postParam.add(Constants.CARTPRODUCTS,jsonarray )
+
+            if(EpayActivity.isPickup){
+                //pickup--
+                checkout_api=ApiCall.checkout_pickup(postParam)
+            }else{
+                // delivery--
+                postParam.addProperty(Constants.ADDRESS, EpayActivity.paymentattributes.address)
+                postParam.addProperty(Constants.POSTAL_CODE, EpayActivity.paymentattributes.postal_code)
+                postParam.addProperty(Constants.DISTANCE, EpayActivity.paymentattributes.distance)
+                postParam.addProperty(Constants.MINIMUM_ORDER_PRICE, EpayActivity.paymentattributes.minimum_order_price)
+                postParam.addProperty(Constants.SHIPPING_COSTS, EpayActivity.paymentattributes.shipping_charge)
+                postParam.addProperty(Constants.UPTO_MIN_SHIPPING, EpayActivity.paymentattributes.upto_min_shipping)
+                postParam.addProperty(Constants.SHIPPING_REMARK, "")
+                checkout_api= ApiCall.checkout_delivery(postParam)
+            }
+
+
+        }catch (error : Exception){
+            return null
+        }
+
+        return checkout_api
+
+    }
+
+
 
 
 }

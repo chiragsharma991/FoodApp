@@ -1,11 +1,22 @@
 <?xml version="1.0" encoding="utf-8"?>
 
+<!--this layout has two views : empty and details so first you will have to gone and start run-->
+
 <layout xmlns:tools="http://schemas.android.com/tools"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
+    >
 
     <data>
+        <import type="dk.eatmore.foodapp.model.epay.ViewcardModel">
 
+        </import>
+        <variable
+            name="data"
+            type="android.arch.lifecycle.MutableLiveData&lt;ViewcardModel&gt;">
+
+        </variable>
 
     </data>
 
@@ -14,7 +25,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        android:background="@color/background_light"
+        android:background="@color/white"
         >
 
             <android.support.design.widget.AppBarLayout
@@ -22,7 +33,8 @@
                 android:layout_height="wrap_content"
                 android:id="@+id/app_bar"
                 >
-        <include layout="@layout/toolbar">
+        <include layout="@layout/toolbar"
+            >
 
         </include>
 
@@ -31,6 +43,7 @@
 
         <FrameLayout
             android:id="@+id/epay_container"
+            android:visibility="visible"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_below="@+id/app_bar"
@@ -39,9 +52,10 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="@color/white"
 
                 >
+
+
 
                 <android.support.v4.widget.NestedScrollView
                     android:layout_width="match_parent"
@@ -56,6 +70,33 @@
 
                         >
 
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/TextViewMid"
+                            android:layout_width="wrap_content"
+                            android:id="@+id/epay_total_lbl"
+                            android:layout_height="wrap_content"
+                            android:singleLine="true"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:text="Total (0 Products)"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/TextViewLarge"
+                            android:layout_alignParentRight="true"
+                            android:layout_weight="0.3"
+                            android:id="@+id/epay_total_txt"
+                            android:gravity="end"
+                            android:singleLine="true"
+                            android:text="00,00 Kr,"
+                            android:textColor="@color/theme_color_secondary_dark"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/epay_total_lbl"
+                            />
+
+
                         <RelativeLayout
                             android:id="@+id/tab_card"
                             android:layout_width="wrap_content"
@@ -64,10 +105,10 @@
                             android:layout_marginTop="8dp"
                             android:layout_marginEnd="8dp"
                             android:gravity="center_horizontal"
+                            app:layout_constraintTop_toBottomOf="@+id/epay_total_txt"
                             app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent">
+                            >
 
                             <android.support.v7.widget.CardView
                                 android:layout_width="wrap_content"
@@ -127,21 +168,6 @@
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toBottomOf="@+id/epay_total_lbl" />
         -->
-                        <android.support.v7.widget.AppCompatButton
-                            android:id="@+id/epay_continue_btn"
-                            style="@style/Button"
-                            android:layout_alignParentBottom="true"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginBottom="8dp"
-                            android:backgroundTint="@color/theme_color"
-                            android:text="@string/continue_"
-                            android:textColor="@color/white"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="parent" />
-
 
                         <LinearLayout
                             android:layout_width="match_parent"
@@ -149,62 +175,67 @@
                             android:layout_marginTop="8dp"
                             android:background="@color/white"
                             android:orientation="vertical"
+                            android:layout_marginBottom="@dimen/_100sdp"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
                             app:layout_constraintTop_toBottomOf="@+id/tab_card"
                             app:layout_constraintVertical_bias="0.0">
 
-
-                            <LinearLayout
-                                android:id="@+id/your_orderview"
+                            <View
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:background="@color/background_light"
-                                android:orientation="horizontal"
-                                android:padding="@dimen/_8sdp">
-
-                                <android.support.v7.widget.AppCompatTextView
-                                    style="@style/TextViewMid"
-                                    android:layout_width="0dp"
-                                    android:layout_height="wrap_content"
-                                    android:layout_weight="1.7"
-                                    android:gravity="start"
-                                    android:singleLine="true"
-                                    android:text="Your Order"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
-
-                                <android.support.v7.widget.AppCompatTextView
-                                    style="@style/TextViewMid"
-                                    android:layout_alignParentRight="true"
-                                    android:layout_weight="0.3"
-                                    android:gravity="end"
-                                    android:singleLine="true"
-                                    android:text="Right"
-                                    android:textColor="@color/theme_color"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent" />
+                                android:layout_height="1dp"
+                                android:alpha="0.2"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:background="@color/divider_color"
+                                />
 
 
-                            </LinearLayout>
 
+                            <!--
+                                                        <LinearLayout
+                                                            android:id="@+id/your_orderview"
+                                                            android:layout_width="match_parent"
+                                                            android:layout_height="wrap_content"
+                                                            android:background="@color/background_light"
+                                                            android:orientation="horizontal"
+                                                            android:padding="@dimen/_8sdp">
 
-                            <dk.eatmore.foodapp.utils.ZigzagView
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/_8sdp"
-                                app:zigzagBackgroundColor="@color/white"
-                                app:zigzagElevation="2dp"
-                                app:zigzagHeight="5dp"
-                                app:zigzagShadowAlpha="0.9"
-                                app:zigzagSides="bottom">
+                                                     &lt;!&ndash;       <android.support.v7.widget.AppCompatTextView
+                                                                style="@style/TextViewMid"
+                                                                android:layout_width="0dp"
+                                                                android:id="@+id/epay_total_lbl"
+                                                                android:layout_height="wrap_content"
+                                                                android:layout_weight="1.7"
+                                                                android:gravity="start"
+                                                                android:singleLine="true"
+                                                                android:text="Total (0 Goods)"
+                                                                app:layout_constraintEnd_toEndOf="parent"
+                                                                app:layout_constraintStart_toStartOf="parent"
+                                                                app:layout_constraintTop_toTopOf="parent" />
+
+                                                            <android.support.v7.widget.AppCompatTextView
+                                                                style="@style/TextViewMid"
+                                                                android:layout_alignParentRight="true"
+                                                                android:layout_weight="0.3"
+                                                                android:id="@+id/epay_total_txt"
+                                                                android:gravity="end"
+                                                                android:singleLine="true"
+                                                                android:text="00,00 Kr,"
+                                                                android:textColor="@color/theme_color_secondary_dark"
+                                                                app:layout_constraintEnd_toEndOf="parent"
+                                                                app:layout_constraintStart_toStartOf="parent"
+                                                                app:layout_constraintTop_toTopOf="parent" />
+                            &ndash;&gt;
+
+                                                        </LinearLayout>
+                            -->
+
 
                                 <RelativeLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                                    android:layout_height="wrap_content"
+                                    >
 
                                     <LinearLayout
                                         android:id="@+id/add_parentitem_view"
@@ -212,168 +243,200 @@
                                         android:layout_height="wrap_content"
                                         android:orientation="vertical">
 
+
+
                                     </LinearLayout>
 
-                                    <ImageView
-                                        android:layout_width="match_parent"
-                                        android:layout_height="2dp"
-                                        android:layout_below="@+id/add_parentitem_view"
-                                        android:layout_marginStart="@dimen/_8sdp"
-                                        android:layout_marginTop="@dimen/_8sdp"
-                                        android:layout_marginEnd="@dimen/_8sdp"
-                                        android:layerType="software"
-                                        android:src="@drawable/dashline" />
 
-                                    <LinearLayout
+
+
+                                    <RelativeLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
+                                        app:zigzagBackgroundColor="@color/white"
                                         android:layout_below="@+id/add_parentitem_view"
-                                        android:orientation="vertical">
+                                        app:zigzagElevation="2dp"
+                                        app:zigzagHeight="5dp"
+                                        android:visibility="gone"
+                                        android:layout_marginBottom="@dimen/_100sdp"
+                                        app:zigzagShadowAlpha="0.9"
+                                        app:zigzagSides="bottom"
+                                        >
 
                                         <LinearLayout
                                             android:layout_width="match_parent"
                                             android:layout_height="wrap_content"
-                                            android:layout_marginStart="@dimen/_8sdp"
-                                            android:layout_marginTop="@dimen/_16sdp"
-                                            android:layout_marginEnd="@dimen/_8sdp"
-                                            android:orientation="horizontal">
+                                            android:orientation="vertical">
 
-                                            <android.support.v7.widget.AppCompatTextView
-                                                style="@style/TextViewSmall"
-                                                android:layout_width="0dp"
-                                                android:layout_height="wrap_content"
+                                            <ImageView
+                                                android:layout_width="match_parent"
+                                                android:layout_height="2dp"
+                                                android:layout_below="@+id/add_parentitem_view"
+                                                android:layout_marginStart="@dimen/_8sdp"
+                                                android:layout_marginTop="@dimen/_8sdp"
                                                 android:layout_marginEnd="@dimen/_8sdp"
-                                                android:layout_weight="1.2"
-                                                android:gravity="start"
-                                                android:singleLine="true"
-                                                android:text="Subtotal"
-                                                android:textColor="@color/black_light"
-                                                android:textStyle="bold" />
+                                                android:layerType="software"
+                                                android:src="@drawable/dashline" />
 
-                                            <android.support.v7.widget.AppCompatTextView
-                                                android:id="@+id/subtotal"
-                                                style="@style/TextViewSmall"
-                                                android:layout_width="0dp"
+                                            <LinearLayout
+                                                android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:layout_alignParentEnd="true"
-                                                android:layout_weight="0.8"
-                                                android:gravity="end"
-                                                android:singleLine="true"
-                                                android:text="45,00kr"
-                                                android:textColor="@color/black_light"
-                                                android:textStyle="bold" />
+                                                android:layout_marginStart="@dimen/_8sdp"
+                                                android:layout_marginTop="@dimen/_8sdp"
+                                                android:layout_marginEnd="@dimen/_8sdp"
+                                                android:orientation="horizontal">
 
+                                                <android.support.v7.widget.AppCompatTextView
+                                                    style="@style/TextViewSmall"
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_marginEnd="@dimen/_8sdp"
+                                                    android:layout_weight="1.2"
+                                                    android:gravity="start"
+                                                    android:singleLine="true"
+                                                    android:text="Subtotal"
+                                                    android:textColor="@color/black_light"
+                                                    android:textStyle="bold" />
+
+                                                <android.support.v7.widget.AppCompatTextView
+                                                    android:id="@+id/subtotal"
+                                                    style="@style/TextViewSmall"
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_alignParentEnd="true"
+                                                    android:layout_weight="0.8"
+                                                    android:gravity="end"
+                                                    android:singleLine="true"
+                                                    android:text="45,00kr"
+                                                    android:textColor="@color/black_light"
+                                                    android:textStyle="bold" />
+
+
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginStart="@dimen/_8sdp"
+                                                android:visibility="gone"
+                                                android:layout_marginEnd="@dimen/_8sdp"
+                                                android:orientation="horizontal">
+
+                                                <android.support.v7.widget.AppCompatTextView
+                                                    style="@style/TextViewSmall"
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_marginEnd="@dimen/_8sdp"
+                                                    android:layout_weight="1.7"
+                                                    android:gravity="start"
+                                                    android:singleLine="true"
+                                                    android:text="Tax"
+                                                    android:textColor="@color/black_light" />
+
+                                                <android.support.v7.widget.AppCompatTextView
+                                                    style="@style/TextViewSmall"
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_alignParentEnd="true"
+                                                    android:layout_weight="0.3"
+                                                    android:gravity="end"
+                                                    android:singleLine="true"
+                                                    android:text="0,00 kr"
+                                                    android:textColor="@color/black_light" />
+
+
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginStart="@dimen/_8sdp"
+                                                android:layout_marginTop="@dimen/_8sdp"
+                                                android:layout_marginEnd="@dimen/_8sdp"
+                                                android:orientation="horizontal">
+
+                                                <android.support.v7.widget.AppCompatTextView
+                                                    style="@style/TextViewSmall"
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_marginEnd="@dimen/_8sdp"
+                                                    android:layout_weight="1.2"
+                                                    android:gravity="start"
+                                                    android:singleLine="true"
+                                                    android:text="Total"
+                                                    android:textColor="@color/black_light"
+                                                    android:textStyle="bold" />
+
+                                                <android.support.v7.widget.AppCompatTextView
+                                                    android:id="@+id/total"
+                                                    style="@style/TextViewSmall"
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_alignParentEnd="true"
+                                                    android:layout_weight="0.8"
+                                                    android:gravity="end"
+                                                    android:singleLine="true"
+                                                    android:text="145,00kr"
+                                                    android:textColor="@color/black_light"
+                                                    android:textStyle="bold" />
+
+
+                                            </LinearLayout>
+
+                                            <LinearLayout
+                                                android:layout_width="match_parent"
+                                                android:layout_height="wrap_content"
+                                                android:layout_marginStart="@dimen/_8sdp"
+                                                android:layout_marginEnd="@dimen/_8sdp"
+                                                android:layout_marginBottom="@dimen/_8sdp"
+                                                android:visibility="gone"
+                                                android:orientation="horizontal">
+
+                                                <android.support.v7.widget.AppCompatTextView
+                                                    style="@style/TextViewSmall"
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_marginEnd="@dimen/_8sdp"
+                                                    android:layout_weight="1.2"
+                                                    android:gravity="start"
+                                                    android:singleLine="true"
+                                                    android:text="Restaurant Address:"
+                                                    android:textColor="@color/black_light" />
+
+                                                <android.support.v7.widget.AppCompatTextView
+                                                    style="@style/TextViewSmall"
+                                                    android:layout_width="0dp"
+                                                    android:layout_height="wrap_content"
+                                                    android:layout_alignParentEnd="true"
+                                                    android:layout_weight="0.8"
+                                                    android:gravity="end"
+                                                    android:singleLine="true"
+                                                    android:text="5,00kr"
+                                                    android:textColor="@color/black_light"
+                                                    android:visibility="invisible" />
+
+
+                                            </LinearLayout>
+
+                                            <View
+                                                android:id="@+id/view"
+                                                android:layout_width="match_parent"
+                                                android:layout_height="1dp"
+                                                android:alpha="0.2"
+                                                android:layout_marginTop="@dimen/_8sdp"
+                                                android:visibility="visible"
+                                                android:background="@color/divider_color"
+                                                />
 
                                         </LinearLayout>
 
-                                        <LinearLayout
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginStart="@dimen/_8sdp"
-                                            android:layout_marginEnd="@dimen/_8sdp"
-                                            android:orientation="horizontal">
 
-                                            <android.support.v7.widget.AppCompatTextView
-                                                style="@style/TextViewSmall"
-                                                android:layout_width="0dp"
-                                                android:layout_height="wrap_content"
-                                                android:layout_marginEnd="@dimen/_8sdp"
-                                                android:layout_weight="1.7"
-                                                android:gravity="start"
-                                                android:singleLine="true"
-                                                android:text="Tax"
-                                                android:textColor="@color/black_light" />
-
-                                            <android.support.v7.widget.AppCompatTextView
-                                                style="@style/TextViewSmall"
-                                                android:layout_width="0dp"
-                                                android:layout_height="wrap_content"
-                                                android:layout_alignParentEnd="true"
-                                                android:layout_weight="0.3"
-                                                android:gravity="end"
-                                                android:singleLine="true"
-                                                android:text="0,00kr"
-                                                android:textColor="@color/black_light" />
+                                    </RelativeLayout>
 
 
-                                        </LinearLayout>
-
-                                        <LinearLayout
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginStart="@dimen/_8sdp"
-                                            android:layout_marginTop="@dimen/_8sdp"
-                                            android:layout_marginEnd="@dimen/_8sdp"
-                                            android:orientation="horizontal">
-
-                                            <android.support.v7.widget.AppCompatTextView
-                                                style="@style/TextViewSmall"
-                                                android:layout_width="0dp"
-                                                android:layout_height="wrap_content"
-                                                android:layout_marginEnd="@dimen/_8sdp"
-                                                android:layout_weight="1.2"
-                                                android:gravity="start"
-                                                android:singleLine="true"
-                                                android:text="Total"
-                                                android:textColor="@color/black_light"
-                                                android:textStyle="bold" />
-
-                                            <android.support.v7.widget.AppCompatTextView
-                                                android:id="@+id/total"
-                                                style="@style/TextViewSmall"
-                                                android:layout_width="0dp"
-                                                android:layout_height="wrap_content"
-                                                android:layout_alignParentEnd="true"
-                                                android:layout_weight="0.8"
-                                                android:gravity="end"
-                                                android:singleLine="true"
-                                                android:text="145,00kr"
-                                                android:textColor="@color/black_light"
-                                                android:textStyle="bold" />
-
-
-                                        </LinearLayout>
-
-                                        <LinearLayout
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginStart="@dimen/_8sdp"
-                                            android:layout_marginEnd="@dimen/_8sdp"
-                                            android:layout_marginBottom="@dimen/_8sdp"
-                                            android:orientation="horizontal">
-
-                                            <android.support.v7.widget.AppCompatTextView
-                                                style="@style/TextViewSmall"
-                                                android:layout_width="0dp"
-                                                android:layout_height="wrap_content"
-                                                android:layout_marginEnd="@dimen/_8sdp"
-                                                android:layout_weight="1.2"
-                                                android:gravity="start"
-                                                android:singleLine="true"
-                                                android:text="Restaurant Address:"
-                                                android:textColor="@color/black_light" />
-
-                                            <android.support.v7.widget.AppCompatTextView
-                                                style="@style/TextViewSmall"
-                                                android:layout_width="0dp"
-                                                android:layout_height="wrap_content"
-                                                android:layout_alignParentEnd="true"
-                                                android:layout_weight="0.8"
-                                                android:gravity="end"
-                                                android:singleLine="true"
-                                                android:text="5,00kr"
-                                                android:textColor="@color/black_light"
-                                                android:visibility="invisible" />
-
-
-                                        </LinearLayout>
-                                    </LinearLayout>
 
 
                                 </RelativeLayout>
-
-
-                            </dk.eatmore.foodapp.utils.ZigzagView>
 
 
                         </LinearLayout>
@@ -390,10 +453,87 @@
 
 
 
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/epay_continue_btn"
+                    style="@style/Button"
+                    android:layout_alignParentBottom="true"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    android:backgroundTint="@color/theme_color"
+                    android:text="@string/continue_"
+                    android:textColor="@color/white"
+                    />
+
+
             </RelativeLayout>
 
 
         </FrameLayout>
+
+
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            android:id="@+id/empty_view"
+            android:visibility="gone"
+            >
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="100dp"
+                android:layout_height="100dp"
+                android:id="@+id/imageview"
+                app:srcCompat="@mipmap/no_item_found"
+                android:layout_centerInParent="true"
+                />
+
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/error_txt"
+                style="@style/TextViewMid"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/imageview"
+                android:text="GOOD FOOD IS ALWAYS COOKING"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"
+                android:textColor="@color/black"
+
+                />
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/TextViewSmall"
+                android:layout_height="wrap_content"
+                android:layout_below="@+id/error_txt"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:text="Your cart is empty. Add something from the menu"
+                android:layout_centerHorizontal="true"
+                android:gravity="center_horizontal"
+                android:textColor="@color/black_default"
+
+                />
+
+
+
+
+
+        </RelativeLayout>
+
+        <dk.eatmore.foodapp.utils.ProgressWheel
+            android:id="@+id/progresswheel"
+            android:layout_width="80dp"
+            android:layout_height="80dp"
+            android:layout_centerInParent="true"
+            ProgressWheel:pwTextColor="@color/black_light"
+            ProgressWheel:pwTextSize="9sp"
+            android:visibility="gone"
+            ProgressWheel:pwRimColor="@color/gray"
+            ProgressWheel:pwBarLength="60dp"
+            ProgressWheel:pwBarColor ="@color/gray"
+            ProgressWheel:pwBarWidth="2dp"
+            ProgressWheel:pwRimWidth="1dp"
+            ProgressWheel:pwSpinSpeed="4dp"
+            />
+
 
 
     </RelativeLayout>

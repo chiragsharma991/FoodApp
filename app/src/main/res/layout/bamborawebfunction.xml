@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:zhy="http://schemas.android.com/tools"
+    xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
+
+    >
+
+    <data>
+
+
+
+
+    </data>
+
+
+
+        <FrameLayout
+            android:id="@+id/bambora_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:clickable="true"
+            android:fitsSystemWindows="true"
+            android:focusable="true"
+            >
+
+            <WebView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/webiview"
+                android:visibility="visible"
+                >
+
+            </WebView>
+
+            <dk.eatmore.foodapp.utils.ProgressWheel
+                android:id="@+id/progresswheel"
+                android:layout_width="80dp"
+                android:layout_height="80dp"
+                android:layout_gravity="center_vertical|center_horizontal"
+                ProgressWheel:pwTextColor="@color/black_light"
+                ProgressWheel:pwTextSize="9sp"
+                android:visibility="gone"
+                ProgressWheel:pwRimColor="@color/gray"
+                ProgressWheel:pwBarLength="60dp"
+                ProgressWheel:pwBarColor ="@color/gray"
+                ProgressWheel:pwBarWidth="2dp"
+                ProgressWheel:pwRimWidth="1dp"
+                ProgressWheel:pwSpinSpeed="4dp"
+                />
+
+
+
+
+
+
+        </FrameLayout>
+
+
+
+
+
+
+</layout>

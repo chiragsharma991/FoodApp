@@ -135,7 +135,6 @@
                 android:layout_gravity="center_vertical|center_horizontal"
                 ProgressWheel:pwTextColor="@color/black_light"
                 ProgressWheel:pwTextSize="9sp"
-                ProgressWheel:pwText="@string/loading"
                 android:visibility="gone"
                 ProgressWheel:pwRimColor="@color/gray"
                 ProgressWheel:pwBarLength="60dp"

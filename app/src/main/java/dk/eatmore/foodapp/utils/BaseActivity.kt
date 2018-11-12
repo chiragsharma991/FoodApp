@@ -224,5 +224,22 @@ abstract class BaseActivity : AppCompatActivity()
         return  animation
     }
 
+    fun progresswheel(progresswheel : ProgressWheel , isvisible : Boolean){
+        when (isvisible){
+            true ->{
+                progresswheel.startSpinning()
+                progresswheel.visibility=View.VISIBLE
+            }
+            false->{
+
+                progresswheel.stopSpinning()
+                progresswheel.visibility=View.GONE
+            }
+
+        }
+
+
+    }
+
 
 }

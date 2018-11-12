@@ -116,13 +116,14 @@ abstract class BaseFragment : Fragment() {
                      val bundle=arguments
                      appcompattextview.text=title
                      // appcompattextview.startAnimation(alpha)
-                     appcompattextview.visibility=View.VISIBLE
+                    // appcompattextview.visibility=View.VISIBLE
                      loge("TAG","range == 0"+title)
                      isShow = false
 
                  } else if (!isShow) {
                      if(scrollRange + verticalOffset > scrollRange-50){
-                         appcompattextview.visibility=View.GONE
+                         appcompattextview.text=""
+                         //   appcompattextview.visibility=View.GONE
                          loge("TAG","range not 0")
                          isShow = true
                      }
@@ -170,9 +171,9 @@ abstract class BaseFragment : Fragment() {
     fun popAllFragment() {
 
 
-        /*      for (i in 0 until childFragmentManager.backStackEntryCount) {
+              for (i in 0 until childFragmentManager.backStackEntryCount) {
                   childFragmentManager.popBackStack()
-              }*/
+              }
     }
 
     fun popWithTag(tag: String) {

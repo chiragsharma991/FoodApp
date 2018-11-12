@@ -35,7 +35,7 @@ object BindDataUtils {
         if (convertedAmount != null && convertedAmount.length > 2) {
             convertedAmount = convertedAmount.substring(0, convertedAmount.length - 2)
         }
-        return convertedAmount+"kr"
+        return convertedAmount+" kr"
         //  }
     }
     fun convertCurrencyToDanishWithoutLabel(amount: String): String? {

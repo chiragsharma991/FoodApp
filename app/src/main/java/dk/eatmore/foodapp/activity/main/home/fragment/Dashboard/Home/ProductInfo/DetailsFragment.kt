@@ -33,6 +33,7 @@ import android.util.Log
 import android.view.animation.AlphaAnimation
 import android.widget.TextView
 import com.bumptech.glide.Glide
+import dk.eatmore.foodapp.activity.main.epay.fragment.TransactionStatus
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Info
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Menu
@@ -42,6 +43,7 @@ import dk.eatmore.foodapp.databinding.InfoRestaurantBinding
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.storage.PreferenceUtil
+import dk.eatmore.foodapp.utils.BindDataUtils
 import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
@@ -53,15 +55,21 @@ class DetailsFragment : BaseFragment() {
     private var mAdapter: OrderListAdapter? = null
     var adapter: ViewPagerAdapter? = null
     private lateinit var binding: FragmentDetailBinding
-    private  var mYourBroadcastReceiver: BroadcastReceiver?=null
+    private lateinit var mYourBroadcastReceiver: BroadcastReceiver
     private lateinit var restaurant : Restaurant
 
 
 
     companion object {
 
+        //delivery_present & pickup_present are two condition to show / hide .
+        var delivery_present : Boolean=true
+        var pickup_present : Boolean=true
         val TAG = "DetailsFragment"
-        var totalcartcount :Int = 0
+        var total_cartcnt : Int = 0
+        var total_cartamt : String = ""
+        var delivery_charge_title : String = ""
+        var delivery_charge : String = ""
         fun newInstance(restaurant: Restaurant, status: String): DetailsFragment {
 
 
@@ -95,10 +103,13 @@ class DetailsFragment : BaseFragment() {
         if (savedInstanceState == null) {
             //   Glide.with(this).load(ContextCompat.getDrawable(context!!,R.drawable.food_slash)).into(details_back_img);
             restaurant = arguments?.getSerializable(Constants.RESTAURANT) as Restaurant
-            totalcartcount = if(restaurant.cartcnt ==null || restaurant.cartcnt =="0") 0 else restaurant.cartcnt!!.toInt()
-            broadcastEvent()
-            setnotifybatch(0)
-            loge(TAG,"card cnt is "+restaurant.cartcnt)
+            delivery_present=restaurant.delivery_present
+            pickup_present=restaurant.pickup_present
+            delivery_charge=restaurant.delivery_charge
+            delivery_charge_title=restaurant.delivery_charge_title
+            total_cartcnt =if(restaurant.cartcnt ==null || restaurant.cartcnt =="0") 0 else restaurant.cartcnt!!.toInt()
+            total_cartamt =if(restaurant.cartamt ==null || restaurant.cartamt =="0") "00.00" else restaurant.cartamt.toString()
+            updatebatchcount(0)
             val myclickhandler = MyClickHandler(this)
             binding.restaurant = restaurant
             binding.handler = myclickhandler
@@ -131,26 +142,8 @@ class DetailsFragment : BaseFragment() {
             tabs.setupWithViewPager(viewpager)
             //  setPalette()
             viewcart.setOnClickListener {
-                val animation = TranslateAnimation(0f, 0f, 0f, 5f)
-                animation.duration = 100
-                animation.fillAfter = false
-                animation.setAnimationListener(object : Animation.AnimationListener {
-                    override fun onAnimationRepeat(animation: Animation) {
-
-                    }
-
-                    override fun onAnimationStart(animation: Animation) {}
-                    override fun onAnimationEnd(animation: Animation) {
-                        val intent = Intent(activity, EpayActivity::class.java)
-                        val pairs: Array<Pair<View, String>> = TransitionHelper.createSafeTransitionParticipants(activity!!, true)
-                        val transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, *pairs)
-                   //     startActivity(intent, transitionActivityOptions.toBundle())
-                        startActivityForResult(intent,1)
-                    }
-                })
-                detail_fab_btn.startAnimation(animation)
-
-
+                val intent = Intent(activity, EpayActivity::class.java)
+                startActivityForResult(intent,1)
             }
 
         } else {
@@ -159,39 +152,38 @@ class DetailsFragment : BaseFragment() {
         }
     }
 
-    fun setnotifybatch(count:Int){
-        badge_notification_txt.text= (totalcartcount+count).toString()
-        badge_notification_txt.visibility = if(totalcartcount == 0) View.GONE else View.VISIBLE
-
-    }
-
-    override fun onStart() {
-        super.onStart()
-        loge(TAG,"on start---")
-        mYourBroadcastReceiver =  object  : BroadcastReceiver(){
-            override fun onReceive(p0: Context?, p1: Intent?) {
-                loge(TAG,"broad cast event fire")
-
+    private fun broadcastEvent(){
+         mYourBroadcastReceiver = object  : BroadcastReceiver(){
+            override fun onReceive(context: Context?, intent: Intent?) {
+                loge(TAG,"broadcast receive...")
+                if(intent!!.action == Constants.CARTCOUNT_BROADCAST){
+                    restaurant.cartcnt=intent.extras.getInt(Constants.CARTCNT).toString()
+                    restaurant.cartamt=intent.extras.getString(Constants.CARTAMT).toString()
+                    loge(TAG,"new model cartcnt is..."+restaurant.cartcnt)
+                    total_cartcnt = intent.extras.getInt(Constants.CARTCNT)
+                    total_cartamt = intent.extras.getString(Constants.CARTAMT)
+                    updatebatchcount(0)
+                    val homefragment : HomeFragment = ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment()
+                    val fragment =homefragment.childFragmentManager.findFragmentByTag(CategoryList.TAG)
+                    if(fragment !=null){
+                        (fragment as CategoryList).updatebatchcount(0)
+                    }
+                }
             }
 
         }
-
-        LocalBroadcastManager.getInstance(activity!!).registerReceiver(mYourBroadcastReceiver!!,
-                 IntentFilter("thisIsForMyFragment"));
-    }
-
-    override fun onStop() {
-        super.onStop()
-        loge(TAG,"on onStop---")
-        LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(mYourBroadcastReceiver!!);
+        LocalBroadcastManager.getInstance(activity!!).registerReceiver(mYourBroadcastReceiver, IntentFilter(Constants.CARTCOUNT_BROADCAST))
 
     }
 
-
-    private fun broadcastEvent() {
-
-
+    fun updatebatchcount(count : Int){
+        total_cartcnt= total_cartcnt + count
+        badge_notification_txt.visibility = if (total_cartcnt == 0) View.GONE else View.VISIBLE
+        badge_notification_txt.text= total_cartcnt.toString()
+        badge_countprice.text= BindDataUtils.convertCurrencyToDanish(total_cartamt)
     }
+
+
 
 
     fun onBackpress() {
@@ -203,13 +195,16 @@ class DetailsFragment : BaseFragment() {
         loge("onActivityResult Detail fragment---",""+resultCode+" "+requestCode)
         // request : send code with request
         // result :  get code from target activity.
-        if(requestCode ==1 && resultCode == AppCompatActivity.RESULT_OK){
+        if(requestCode ==1 && resultCode == AppCompatActivity.DEFAULT_KEYS_SHORTCUT && TransactionStatus.moveonsearch){
+            TransactionStatus.moveonsearch=false
+            val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
+            (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
+        }
+
+        else if(requestCode ==1 && resultCode == AppCompatActivity.RESULT_OK && EpayActivity.moveonEpay ){
             ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2)
         }
     }
-
-
-
 
 
     fun setPalette() {
@@ -243,16 +238,45 @@ class DetailsFragment : BaseFragment() {
     override fun onDestroy() {
         super.onDestroy()
         logd(TAG, "on destroy...")
+        LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(mYourBroadcastReceiver);
+
     }
 
     override fun onDetach() {
         super.onDetach()
         logd(TAG, "on detech...")
+
     }
+
 
     override fun onPause() {
         super.onPause()
         logd(TAG, "on pause...")
+
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        logd(TAG, "on create...")
+        broadcastEvent()
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        logd(TAG, "on start...")
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        logd(TAG, "on resume...")
+
+    }
+
+    override fun onStop() {
+        super.onStop()
+        logd(TAG, "on stop...")
     }
 
 

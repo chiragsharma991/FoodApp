@@ -37,6 +37,7 @@
             android:id="@+id/row_cat_cardview"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:onClick="@{()->handler.onClick(data)}"
             >
 
             <android.support.constraint.ConstraintLayout
@@ -131,7 +132,6 @@
                     android:layout_width="@dimen/_30sdp"
                     android:layout_height="@dimen/_30sdp"
                     android:layout_gravity="top"
-                    android:onClick="@{()->handler.onClick(data)}"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:background="@color/background_light"
@@ -140,6 +140,17 @@
                     app:layout_constraintStart_toStartOf="@+id/guidline_vertical_two"
                     app:layout_constraintTop_toTopOf="parent"
                     app:srcCompat="@drawable/add" />
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha="0.2"
+                    android:background="@color/divider_color"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent" />
+
 
 
             </android.support.constraint.ConstraintLayout>

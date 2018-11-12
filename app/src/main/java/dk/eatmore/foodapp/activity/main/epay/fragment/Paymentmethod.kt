@@ -15,9 +15,7 @@ import android.support.transition.TransitionManager
 import android.support.v4.content.ContextCompat
 import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.support.v7.widget.LinearLayoutManager
-import android.text.SpannableString
-import android.text.Spanned
-import android.text.TextPaint
+import android.text.*
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.transition.Transition
@@ -28,6 +26,7 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.animation.AnticipateOvershootInterpolator
 import android.widget.Toast
+import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
@@ -42,27 +41,33 @@ import dk.eatmore.foodapp.fragment.Dashboard.Home.Address
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.rest.ApiCall
+import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
+import dk.eatmore.foodapp.utils.BindDataUtils
 import dk.eatmore.foodapp.utils.Constants
+import dk.eatmore.foodapp.utils.DialogUtils
+import kotlinx.android.synthetic.main.deliverytimeslot.*
 import kotlinx.android.synthetic.main.paymentmethod.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
+import kotlinx.android.synthetic.main.transaction_status.*
+import retrofit2.Call
 
 
-class Paymentmethod : BaseFragment() {
+class Paymentmethod : BaseFragment(), TextWatcher {
 
     var transition: Transition? = null
     private lateinit var binding: PaymentmethodBinding
     private var timeslot: ArrayList<String>?=null
     private var selectedtimeslot_position : Int = 0
-    private lateinit var mAdapter : PaymentmethodAdapter
     lateinit var currentView: String
 
 
-
-
+    // we have two different API so we are passing call in "checkout API" it may be from pickup/delivery :
+    private lateinit var checkout_api: Call<JsonObject>
 
 
     companion object {
+        var isPaymentonline : Boolean =true
         val TAG = "Paymentmethod"
 
 
@@ -83,170 +88,363 @@ class Paymentmethod : BaseFragment() {
     }
 
 
-
-
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
-            currentView=Constants.PAYMENTMETHOD
+            isPaymentonline=true
+            val myclickhandler=MyClickHandler(this)
+            binding.handlers=myclickhandler
+            //setanim_toolbartitle(appbar,(activity as EpayActivity).txt_toolbar,getString(R.string.payment))
+            applyonlinegift_edt.addTextChangedListener(this)
+            applycashgift_edt.addTextChangedListener(this)
+            paymentmethod_visible_are()
             setToolbarforThis()
-            proceed_view.setOnClickListener{(activity as EpayActivity).finishActivity()}
-            transaction_statusview.visibility=View.GONE
-            processDialog.visibility=View.VISIBLE
-          //  fetch_PickupTime()
-            recycler_view.apply {
-                val list= arrayOfNulls<Int>(2)
-                mAdapter = PaymentmethodAdapter(context!!,list, object : PaymentmethodAdapter.AdapterListener {
-                    override fun itemClicked(parentView: Boolean, position: Int) {
-                        currentView=Constants.PROGRESSDIALOG
-                        (activity as EpayActivity).img_toolbar_back.setImageResource(R.drawable.close)
-                        (activity as EpayActivity).img_toolbar_back.setOnClickListener{
-                            if(currentView !=Constants.PROGRESSDIALOG)
-                            (activity as EpayActivity).finishActivity()
-                        }
-                        showComponents()
-                    }
-                })
-                layoutManager = LinearLayoutManager(context)
-                adapter = mAdapter
+            generateBillDetails(Constants.OTHER)
+        }
+    }
+
+    override fun afterTextChanged(s: Editable?) {
+
+        error_of_onlinegiftcard.visibility=View.GONE
+        error_of_cashgiftcard.visibility=View.GONE
+        generateBillDetails(Constants.OTHER)
+    }
+
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+    }
+
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+    }
+
+    private fun generateBillDetails(giftcardis : String){
+
+        var final_amount : Double = 0.0   // calculating final amount with included all tax.
+
+        if(EpayActivity.isPickup){
+            // pick up:
+
+            subtotal_layout.visibility=View.VISIBLE
+            restuptominimum_layout.visibility=if(EpayActivity.paymentattributes.upto_min_shipping == "0") View.GONE else View.VISIBLE  // product price - mincharge
+            shipping_layout.visibility=View.GONE
+            additional_charge_layout.visibility=if(EpayActivity.paymentattributes.additional_charges_cash == "0") View.GONE else View.VISIBLE    // online/cash tax
+            total_layout.visibility=View.VISIBLE
+            subtotal_txt.text= BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.order_total)
+            restuptominimum_txt.text= BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.upto_min_shipping)
+            additional_charge_txt.text=if(isPaymentonline) BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.additional_charges_online) else BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.additional_charges_cash)
+            discountcoupan_txt.text=String.format(getString(R.string.discount),BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.discount_amount.toString()))
+            discountgift_txt.text=String.format(getString(R.string.discount),BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.discount_amount.toString()))
+
+            if(giftcardis ==Constants.GIFTCARD ){
+                discountgift_layout.visibility=if(EpayActivity.paymentattributes.discount_amount <= 0 )View.GONE else View.VISIBLE
+                discountcoupan_layout.visibility=View.GONE
+                        final_amount = (
+                                 (EpayActivity.paymentattributes.order_total.toDouble()
+                                + EpayActivity.paymentattributes.upto_min_shipping.toDouble()
+                                + if(isPaymentonline) EpayActivity.paymentattributes.additional_charges_online.toDouble() else EpayActivity.paymentattributes.additional_charges_cash.toDouble())
+                        - EpayActivity.paymentattributes.discount_amount)
+
+            }else if(giftcardis ==Constants.COUPON){
+                discountcoupan_layout.visibility=if(EpayActivity.paymentattributes.discount_amount <= 0 )View.GONE else View.VISIBLE
+                discountgift_layout.visibility=View.GONE
+                final_amount = (
+                                 (EpayActivity.paymentattributes.order_total.toDouble() - EpayActivity.paymentattributes.discount_amount)
+                                + EpayActivity.paymentattributes.upto_min_shipping.toDouble()
+                                + if(isPaymentonline) EpayActivity.paymentattributes.additional_charges_online.toDouble() else EpayActivity.paymentattributes.additional_charges_cash.toDouble())
+
+            }else{
+                discountgift_layout.visibility=View.GONE
+                discountcoupan_layout.visibility=View.GONE
+                final_amount = (
+                                  EpayActivity.paymentattributes.order_total.toDouble()
+                                + EpayActivity.paymentattributes.upto_min_shipping.toDouble()
+                                + if(isPaymentonline) EpayActivity.paymentattributes.additional_charges_online.toDouble() else EpayActivity.paymentattributes.additional_charges_cash.toDouble())
+
             }
 
+            total_txt.text=BindDataUtils.convertCurrencyToDanishWithoutLabel(String.format("%.2f",final_amount))
+            online_btn.text = if(final_amount <= 0.0) getString(R.string.confirm) else getString(R.string.pay)
+
+        }
+
+        //--------------------------------------//---------------------------------------------//
 
 
+        else{
+            // delivery :
+            subtotal_layout.visibility=View.VISIBLE
+            restuptominimum_layout.visibility=if(EpayActivity.paymentattributes.upto_min_shipping == "0") View.GONE else View.VISIBLE
+            shipping_layout.visibility=if(EpayActivity.paymentattributes.shipping_charge == "0") View.GONE else View.VISIBLE
+            additional_charge_layout.visibility=if(EpayActivity.paymentattributes.additional_charges_online == "0") View.GONE else View.VISIBLE
+            total_layout.visibility=View.VISIBLE
+            subtotal_txt.text=BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.order_total)
+            restuptominimum_txt.text=BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.upto_min_shipping)
+            shipping_txt.text=BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.shipping_charge)
+            additional_charge_txt.text=if(isPaymentonline) BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.additional_charges_online) else BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.additional_charges_cash)
+            discountcoupan_txt.text=String.format(getString(R.string.discount),BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.discount_amount.toString()))
+            discountgift_txt.text=String.format(getString(R.string.discount),BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.discount_amount.toString()))
 
 
+            if(giftcardis ==Constants.GIFTCARD ){
+                discountgift_layout.visibility=if(EpayActivity.paymentattributes.discount_amount <= 0 )View.GONE else View.VISIBLE
+                discountcoupan_layout.visibility=View.GONE
+                final_amount = (
+                                 (EpayActivity.paymentattributes.order_total.toDouble()
+                                + EpayActivity.paymentattributes.upto_min_shipping.toDouble()
+                                + EpayActivity.paymentattributes.shipping_charge.toDouble()
+                                + if(isPaymentonline) EpayActivity.paymentattributes.additional_charges_online.toDouble() else EpayActivity.paymentattributes.additional_charges_cash.toDouble())
+                                - EpayActivity.paymentattributes.discount_amount)
 
-        }else{
-            (activity as EpayActivity).popWithTag(Paymentmethod.TAG)
+            }else if(giftcardis ==Constants.COUPON){
+                discountcoupan_layout.visibility=if(EpayActivity.paymentattributes.discount_amount <= 0 )View.GONE else View.VISIBLE
+                discountgift_layout.visibility=View.GONE
+                final_amount = (
+                                 (EpayActivity.paymentattributes.order_total.toDouble() - EpayActivity.paymentattributes.discount_amount)
+                                + EpayActivity.paymentattributes.upto_min_shipping.toDouble()
+                                + EpayActivity.paymentattributes.shipping_charge.toDouble()
+                                + if(isPaymentonline) EpayActivity.paymentattributes.additional_charges_online.toDouble() else EpayActivity.paymentattributes.additional_charges_cash.toDouble())
+            }else{
+                discountgift_layout.visibility=View.GONE
+                discountcoupan_layout.visibility=View.GONE
+                final_amount= (
+                                  EpayActivity.paymentattributes.order_total.toDouble()
+                                + EpayActivity.paymentattributes.upto_min_shipping.toDouble()
+                                + EpayActivity.paymentattributes.shipping_charge.toDouble()
+                                + if(isPaymentonline) EpayActivity.paymentattributes.additional_charges_online.toDouble() else EpayActivity.paymentattributes.additional_charges_cash.toDouble())
+            }
+
+            total_txt.text=BindDataUtils.convertCurrencyToDanishWithoutLabel(String.format("%.2f",final_amount))
+            online_btn.text = if(final_amount <= 0.0) getString(R.string.confirm) else getString(R.string.pay)
         }
     }
 
 
-    private fun fetch_PickupTime() {
 
-  /*      callAPI(ApiCall.getPickuptime(
-                r_token = Constants.R_TOKEN,
-                r_key = Constants.R_KEY,
-                shipping = "Pickup",
-                language = "en"
+    private fun paymentmethod_visible_are(){
+
+        if(isPaymentonline){
+            online_method.visibility=View.VISIBLE
+            cash_method.visibility=View.GONE
+            giftonline_view.visibility=View.GONE
+            giftcash_view.visibility=View.GONE
+            EpayActivity.paymentattributes.discount_amount=0.0
+            EpayActivity.paymentattributes.discount_id=0
+            EpayActivity.paymentattributes.discount_type=""
+            generateBillDetails(Constants.OTHER)
+            progress_applyonlinegift.visibility=View.GONE
+            progress_applycashgift.visibility=View.GONE
+            error_of_onlinegiftcard.visibility=View.GONE
+            error_of_cashgiftcard.visibility=View.GONE
+            applycash_txt.visibility=View.VISIBLE
+            applyonline_txt.visibility=View.VISIBLE
+
+        }else{
+            online_method.visibility=View.GONE
+            cash_method.visibility=View.VISIBLE
+            giftonline_view.visibility=View.GONE
+            giftcash_view.visibility=View.GONE
+            EpayActivity.paymentattributes.discount_amount=0.0
+            EpayActivity.paymentattributes.discount_id=0
+            EpayActivity.paymentattributes.discount_type=""
+            generateBillDetails(Constants.OTHER)
+            progress_applyonlinegift.visibility=View.GONE
+            progress_applycashgift.visibility=View.GONE
+            error_of_onlinegiftcard.visibility=View.GONE
+            error_of_cashgiftcard.visibility=View.GONE
+            applycash_txt.visibility=View.VISIBLE
+            applyonline_txt.visibility=View.VISIBLE
+
+        }
+    }
+
+
+    private fun showapplycoupanOnline(){
+        if(giftonline_view.visibility == View.VISIBLE)
+            giftonline_view.visibility=View.GONE
+        else
+            giftonline_view.visibility=View.VISIBLE
+    }
+
+    private fun showapplycoupanCash(){
+
+        if(giftcash_view.visibility == View.VISIBLE)
+            giftcash_view.visibility=View.GONE
+        else
+            giftcash_view.visibility=View.VISIBLE
+    }
+
+
+    private  fun press_applycoupanOnline(){
+        if(applyonlinegift_edt.text.trim().toString().length > 0)
+            applygiftcoupan()
+    }
+
+    private  fun press_applycoupanCash(){
+        if(applycashgift_edt.text.trim().toString().length > 0)
+            applygiftcoupan()
+    }
+
+    private  fun continuefromOnline(){
+
+        if(!isInternetAvailable()){
+            showSnackBar(pamentmethod_container, getString(R.string.internet_not_available))
+            return
+        }
+        if(checkpaymentAttributes() == false){
+            showSnackBar(pamentmethod_container, getString(R.string.error_404))
+            return
+        }
+        (activity as EpayActivity).addFragment(R.id.epay_container,BamboraWebfunction.newInstance(),BamboraWebfunction.TAG,true)
+
+    }
+
+    private  fun continuefromCash(){
+
+        if(!isInternetAvailable()){
+            showSnackBar(pamentmethod_container, getString(R.string.internet_not_available))
+            return
+        }
+        if(checkpaymentAttributes() == false){
+           showSnackBar(pamentmethod_container, getString(R.string.error_404))
+           return
+        }
+        (activity as EpayActivity).addFragment(R.id.epay_container,TransactionStatus.newInstance(),TransactionStatus.TAG,true)
+
+    }
+
+
+    // check all details are available or not.
+    private fun checkpaymentAttributes () : Boolean? {
+        var result = false
+        val postParam = JsonObject()
+        try {
+            postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
+            postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
+            postParam.addProperty(Constants.FIRST_TIME, EpayActivity.paymentattributes.first_time)
+            postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,"") )
+            // postParam.addProperty(Constants.POSTAL_CODE, EpayActivity.paymentattributes.postal_code)
+            postParam.addProperty(Constants.DISCOUNT_TYPE, EpayActivity.paymentattributes.discount_type)
+            postParam.addProperty(Constants.DISCOUNT_AMOUNT, EpayActivity.paymentattributes.discount_amount)
+            postParam.addProperty(Constants.DISCOUNT_ID,EpayActivity.paymentattributes.discount_id)
+            postParam.addProperty(Constants.SHIPPING, if (EpayActivity.isPickup) context!!.getString(R.string.pickup) else context!!.getString(R.string.delivery))
+            postParam.addProperty(Constants.TELEPHONE_NO, EpayActivity.paymentattributes.telephone_no)
+            postParam.addProperty(Constants.ORDER_TOTAL, EpayActivity.paymentattributes.order_total)
+            postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
+            postParam.addProperty(Constants.ACCEPT_TC, "1")
+            postParam.addProperty(Constants.PAYMETHOD, if(Paymentmethod.isPaymentonline) "1" else "2" )
+            postParam.addProperty(Constants.EXPECTED_TIME, EpayActivity.paymentattributes.expected_time)
+            postParam.addProperty(Constants.COMMENTS, EpayActivity.paymentattributes.comments)
+            postParam.addProperty(Constants.DEVICE_TYPE,Constants.DEVICE_TYPE_VALUE)
+            postParam.addProperty(Constants.FIRST_NAME, EpayActivity.paymentattributes.first_name)
+            postParam.addProperty(Constants.ADDITIONAL_CHARGE, if(Paymentmethod.isPaymentonline) EpayActivity.paymentattributes.additional_charges_online else EpayActivity.paymentattributes.additional_charges_cash)
+            val jsonarray=JsonArray()
+            for (i in 0.until(EpayActivity.selected_op_id.size) ){
+                val jsonobject= JsonObject()
+                jsonobject.addProperty(Constants.OP_ID, EpayActivity.selected_op_id.get(i))
+                jsonarray.add(jsonobject)
+            }
+            postParam.add(Constants.CARTPRODUCTS,jsonarray )
+
+            if(EpayActivity.isPickup){
+                //pickup--
+                checkout_api=ApiCall.checkout_pickup(postParam)
+                result=true
+
+            }else{
+                // delivery--
+                postParam.addProperty(Constants.ADDRESS, EpayActivity.paymentattributes.address)
+                postParam.addProperty(Constants.POSTAL_CODE, EpayActivity.paymentattributes.postal_code)
+                postParam.addProperty(Constants.DISTANCE, EpayActivity.paymentattributes.distance)
+                postParam.addProperty(Constants.MINIMUM_ORDER_PRICE, EpayActivity.paymentattributes.minimum_order_price)
+                postParam.addProperty(Constants.SHIPPING_COSTS, EpayActivity.paymentattributes.shipping_charge)
+                postParam.addProperty(Constants.UPTO_MIN_SHIPPING, EpayActivity.paymentattributes.upto_min_shipping)
+                postParam.addProperty(Constants.SHIPPING_REMARK, "")
+                checkout_api= ApiCall.checkout_delivery(postParam)
+                result=true
+            }
+
+
+
+        }catch (error : Exception){
+            return result
+        }
+
+        return result
+
+    }
+
+
+    private fun applygiftcoupan() {
+        progress_applyonlinegift.visibility=View.VISIBLE
+        progress_applycashgift.visibility=View.VISIBLE
+        applycash_txt.visibility=View.GONE
+        applyonline_txt.visibility=View.GONE
+
+        callAPI(ApiCall.applycode(
+                r_token = PreferenceUtil.getString(PreferenceUtil.R_TOKEN,"")!!,
+                order_total = EpayActivity.paymentattributes.order_total,
+                customer_id = PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,"")!!,
+                additional_charge = if(isPaymentonline) EpayActivity.paymentattributes.additional_charges_online else EpayActivity.paymentattributes.additional_charges_cash,
+                code = if(isPaymentonline)applyonlinegift_edt.text.trim().toString() else applycashgift_edt.text.trim().toString(),
+                r_key = PreferenceUtil.getString(PreferenceUtil.R_KEY,"")!!,
+                shipping =if(EpayActivity.isPickup) getString(R.string.pickup_caps) else getString(R.string.delivery_caps),
+                shipping_costs = EpayActivity.paymentattributes.shipping_charge,
+                upto_min_shipping = EpayActivity.paymentattributes.upto_min_shipping
+
+
+
         ), object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
                 val jsonobject = body as JsonObject
-                if (jsonobject.get("status").asBoolean) {
-                    timeslot = ArrayList()
-                    for (i in 0 until jsonobject.getAsJsonArray("times").size()) {
-                        timeslot!!.add(jsonobject.getAsJsonArray("times")[i].asJsonObject.get("dt").asString)
-                    }
-                    delivery_time_slot.text=timeslot!![0]
-                    binding.isLoading=false
+                if(jsonobject.get(Constants.STATUS).asBoolean){
+                    loge(TAG,"status is true")
+                    EpayActivity.paymentattributes.discount_type=jsonobject.get(Constants.DISCOUNT_TYPE).asString
+                    EpayActivity.paymentattributes.discount_amount=jsonobject.get(Constants.DISCOUNT_AMOUNT).asDouble
+                    EpayActivity.paymentattributes.discount_id=jsonobject.get(Constants.DISCOUNT_ID).asInt
+                    if(EpayActivity.paymentattributes.discount_type == Constants.GIFTCARD)
+                    generateBillDetails(Constants.GIFTCARD)
+                    else if(EpayActivity.paymentattributes.discount_type == Constants.COUPON)
+                    generateBillDetails(Constants.COUPON)
+                    error_of_cashgiftcard.setTextColor(ContextCompat.getColor(context!!,R.color.green))
+                    error_of_onlinegiftcard.setTextColor(ContextCompat.getColor(context!!,R.color.green))
+
 
                 }else{
-                    showSnackBar(address_container, getString(R.string.error_404))
-                    binding.isLoading=false
-
+                    loge(TAG,"status is false")
+                    EpayActivity.paymentattributes.discount_amount=0.0
+                    EpayActivity.paymentattributes.discount_id=0
+                    EpayActivity.paymentattributes.discount_type=""
+                    generateBillDetails(Constants.OTHER)
+                    error_of_cashgiftcard.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))
+                    error_of_onlinegiftcard.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))
                 }
+                // this is progress bar and error text to settext and visible
+                progress_applyonlinegift.visibility=View.GONE
+                progress_applycashgift.visibility=View.GONE
+                applycash_txt.visibility=View.VISIBLE
+                applyonline_txt.visibility=View.VISIBLE
+                error_of_onlinegiftcard.visibility=View.VISIBLE
+                error_of_cashgiftcard.visibility=View.VISIBLE
+                error_of_onlinegiftcard.text=jsonobject.get(Constants.MSG).asString
+                error_of_cashgiftcard.text=jsonobject.get(Constants.MSG).asString
             }
 
             override fun onFail(error: Int) {
+                progress_applyonlinegift.visibility=View.GONE
+                progress_applycashgift.visibility=View.GONE
+                applycash_txt.visibility=View.VISIBLE
+                applyonline_txt.visibility=View.VISIBLE
                 when (error) {
                     404 -> {
-                        showSnackBar(address_container, getString(R.string.error_404))
-                        binding.isLoading=false
+                        showSnackBar(pamentmethod_container, getString(R.string.error_404))
                     }
                     100 -> {
-                        showSnackBar(address_container, getString(R.string.internet_not_available))
-                        binding.isLoading=false
+                        showSnackBar(pamentmethod_container, getString(R.string.internet_not_available))
 
                     }
                 }
-                //showProgressDialog()
-
-
             }
-        })*/
-
-
-    }
-
-
-
-    private fun showComponents(){
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
-            Log.e("run","success---")
-            val constraintSet = ConstraintSet()
-            constraintSet.clone(activity, R.layout.transaction_status)
-
-            val transition = ChangeBounds()
-            transition.interpolator = AnticipateOvershootInterpolator(1.0f)
-             transition.duration = 800
-                transition.setInterpolator( FastOutSlowInInterpolator());
-
-
-            TransitionManager.beginDelayedTransition(constraint,transition)
-            constraintSet.applyTo(constraint) //here constraint is the name of view to which we are applying the constraintSet
-            Handler().postDelayed({
-                transaction_statusview.visibility=View.VISIBLE
-                processDialog.visibility=View.GONE
-
-                lottie_transaction_status.visibility=View.VISIBLE
-                lottie_transaction_status.scale=0.4f
-                status_view.visibility=View.INVISIBLE
-
-                status_icon.setImageResource(R.drawable.animated_vector_cross)
-                (status_icon.getDrawable() as Animatable).start()
-
-                lottie_transaction_status.playAnimation()
-                val v : Vibrator = context!!.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) v.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
-                else v.vibrate(200);
-                addspantext()
-                currentView=Constants.PAYMENTSTATUS
-
-
-            },4000)
-
-
-        }
-
-
-    }
-
-
-    fun addspantext(){
-        val span = SpannableString(getString(R.string.if_you_have_any_questions)+ " " + "88826543")
-        span.setSpan(clickableSpan, getString(R.string.if_you_have_any_questions).trim({ it <= ' ' }).length+1,
-                getString(R.string.if_you_have_any_questions).trim({ it <= ' ' }).length + 8 + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        phone_txt.text = span
-        phone_txt.movementMethod = LinkMovementMethod.getInstance()
-
-    }
-
-    val clickableSpan = object : ClickableSpan() {
-        var dialog: AlertDialog? = null
-        override fun onClick(textView: View) {
-            Log.e(TAG, "onClick:--- ")
-            dialog = AlertDialog.Builder(activity).setMessage("Do you want to call ${"88826543"}").setCancelable(true).setPositiveButton("yes") { dialogInterface, i ->
-                if (isPermissionGranted()) {
-                    val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "88826543"))
-                    startActivity(intent)
-                }
-            }.setNegativeButton("no") { dialogInterface, i -> dialog!!.dismiss() }.show()
-        }
-
-        override fun updateDrawState(ds: TextPaint) {
-            //
-            super.updateDrawState(ds)
-            ds.isUnderlineText = true
-            //                ds.setColor(getResources().getColor(R.color.orange));
-            try {
-                val colour = ContextCompat.getColor(context!!, R.color.dark_blue)
-                ds.color = colour
-            } catch (e: Exception) {
-                Log.e(TAG, "updateDrawState: error " + e.message)
-            }
-
-        }
+        })
     }
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
@@ -264,8 +462,6 @@ class Paymentmethod : BaseFragment() {
                 return
             }
         }
-
-
     }
 
 
@@ -275,18 +471,111 @@ class Paymentmethod : BaseFragment() {
     // set common toolbar from this and set pre fragment toolbar from this.
 
     fun setToolbarforThis() {
-        (activity as EpayActivity).txt_toolbar.text = ""
-        (activity as EpayActivity).img_toolbar_back.setOnClickListener { onBackpress() }
+        (activity as EpayActivity).txt_toolbar.text = getString(R.string.payment)
+     //   (activity as EpayActivity).img_toolbar_back.setOnClickListener { onBackpress() }
     }
 
     fun onBackpress() {
-        val frag = (activity as EpayActivity).supportFragmentManager.findFragmentByTag(DeliveryTimeslot.TAG)
-        (frag as DeliveryTimeslot).setToolbarforThis()
         (activity as EpayActivity).popFragment()
+    }
+
+    fun onlineTransactionFailed(){
+        // in case user do cancel from transction screen.
+        loge(TAG,"onlineTransactionFailed")
+
+        callAPI(ApiCall.cancelordertransaction(
+                r_key =PreferenceUtil.getString(PreferenceUtil.R_KEY, "")!!,
+                r_token = PreferenceUtil.getString(PreferenceUtil.R_TOKEN, "")!!,
+                order_no = EpayActivity.paymentattributes.order_no
+
+        ), object : BaseFragment.OnApiCallInteraction {
+
+            override fun <T> onSuccess(body: T?) {
+                val jsonobject = body as JsonObject
+                if (jsonobject.get(Constants.STATUS).asBoolean) {
+                    loge(TransactionStatus.TAG," ordertransaction is success ")
+                    DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!,R.color.black),msg = getString(R.string.transaction_has_been_declined),title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                        override fun onPositiveButtonClick(position: Int) {
+                        }
+                        override fun onNegativeButtonClick() {
+                        }
+                    })
+                }
+            }
+
+            override fun onFail(error: Int) {
+                when (error) {
+                    404 -> {
+                        showSnackBar(pamentmethod_container, getString(R.string.error_404))
+                    }
+                    100 -> {
+                        showSnackBar(pamentmethod_container, getString(R.string.internet_not_available))
+
+                    }
+                }
+            }
+        })
+
+
+
 
     }
 
+    class  MyClickHandler(val paymentmethod: Paymentmethod) {
 
+
+        fun onClick(view: View, value :String) {
+            when(value){
+                "11" ->{
+                    // online payment type selection
+                    if(!isPaymentonline && paymentmethod.progress_applycashgift.visibility == View.GONE ){
+                        isPaymentonline=true
+                        paymentmethod.paymentmethod_visible_are()
+                    }
+                }
+
+                "12" ->{
+                    // online gift apply text
+                    paymentmethod.showapplycoupanOnline()
+                }
+                "13" ->{
+                    // press apply gift button
+                    paymentmethod.press_applycoupanOnline()
+                }
+                "14" ->{
+                    // keep continue button from online
+                    paymentmethod.continuefromOnline()
+                }
+
+
+
+
+                "21" ->{
+                    // cash payment type selection
+                    if(isPaymentonline && paymentmethod.progress_applycashgift.visibility == View.GONE){
+                        isPaymentonline=false
+                        paymentmethod.paymentmethod_visible_are()
+                    }
+
+                }
+
+                "22" ->{
+                    // cash gift apply text
+                    paymentmethod.showapplycoupanCash()
+                }
+                "23" ->{
+                    // press apply gift button from cash
+                    paymentmethod.press_applycoupanCash()
+                }
+                "24" ->{
+                    // keep continue button from cash
+                    paymentmethod.continuefromCash()
+                }
+
+            }
+        }
+
+    }
 
     override fun onDestroy() {
         super.onDestroy()

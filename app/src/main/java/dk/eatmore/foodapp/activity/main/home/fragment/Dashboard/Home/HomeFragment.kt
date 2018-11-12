@@ -61,6 +61,8 @@ class HomeFragment : BaseFragment() {
             return HomeFragment()
         }
 
+
+
     }
 
 
@@ -74,6 +76,7 @@ class HomeFragment : BaseFragment() {
     override fun getLayout(): Int {
         return R.layout.fragment_home_fragment
     }
+
 
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {

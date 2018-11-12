@@ -97,8 +97,7 @@ class Profile : BaseFragment() {
         binding.uiOrder=ui_model!!.getUIModel().value
     })
     ui_model!!.init()*/
-
-    private fun createViewModel(): UIModel =
+     fun createViewModel(): UIModel =
             ViewModelProviders.of(this).get(UIModel::class.java).apply {
                 getUIModel().observe(this@Profile, Observer<UI_Profile> {
                     refreshUI()
@@ -122,6 +121,7 @@ class Profile : BaseFragment() {
                 PreferenceUtil.clearAll()
                 PreferenceUtil.save()
                 PreferenceUtil.putValue(PreferenceUtil.DEVICE_TOKEN, Settings.Secure.getString(context!!.getContentResolver(), Settings.Secure.ANDROID_ID))
+                PreferenceUtil.save()
                 (activity as HomeActivity).onBackPressed()
             }
 
@@ -178,7 +178,7 @@ class Profile : BaseFragment() {
     }
 
 
-    private class UIModel : ViewModel() {
+     class UIModel : ViewModel() {
 
 
         var uiData = MutableLiveData<UI_Profile>()

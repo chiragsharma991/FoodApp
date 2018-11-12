@@ -74,6 +74,7 @@
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="@dimen/_3sdp"
                                     android:layout_weight="1"
+                                    android:textColor="@color/black"
                                     android:layout_marginRight="@dimen/_5sdp"
                                     android:text="@{xml_profile.userName}"
                                     />
@@ -95,8 +96,8 @@
                                     android:layout_marginLeft="@dimen/_3sdp"
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
+                                    android:textColor="@color/black"
                                     android:text="@{xml_profile.email}"
-                                    android:textColor="@color/black_light"
                                     />
                           <!--      <android.support.v7.widget.AppCompatTextView
                                     style="@style/TextViewSmall"
@@ -145,7 +146,7 @@
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
                                     android:text="Profile Info"
-                                    android:textColor="@color/black_light"
+                                    android:textColor="@color/black"
                                     />
 
 
@@ -175,7 +176,7 @@
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
                                     android:text="GaveKort"
-                                    android:textColor="@color/black_light"
+                                    android:textColor="@color/black"
                                     />
 
 
@@ -207,7 +208,7 @@
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
                                     android:text="Health Report"
-                                    android:textColor="@color/black_light"
+                                    android:textColor="@color/black"
                                     />
 
 
@@ -237,7 +238,7 @@
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
                                     android:text="Terms of Services"
-                                    android:textColor="@color/black_light"
+                                    android:textColor="@color/black"
                                     />
 
 
@@ -269,7 +270,7 @@
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
                                     android:text="Opening Hours"
-                                    android:textColor="@color/black_light"
+                                    android:textColor="@color/black"
                                     />
 
 
@@ -301,6 +302,7 @@
                             android:layout_weight="1"
                             android:layout_marginRight="@dimen/_5sdp"
                             android:text="APP INFO"
+                            android:textColor="@color/black_light"
                             />
 
 
@@ -334,7 +336,7 @@
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
                                     android:text="Fjgi jrr"
-                                    android:textColor="@color/black_light"
+                                    android:textColor="@color/black"
                                     />
 
 
@@ -365,7 +367,7 @@
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
                                     android:text="Reset App"
-                                    android:textColor="@color/black_light"
+                                    android:textColor="@color/black"
                                     />
 
 
@@ -409,7 +411,7 @@
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
                                     android:text="Sign out"
-                                    android:textColor="@color/black_light"
+                                    android:textColor="@color/black"
                                     />
 
 

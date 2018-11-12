@@ -30,6 +30,7 @@
     <color name="white">#fff</color>
     <color name="white_light_grey">#f4f6f7</color>
     <color name="transparent_gray">#b8999896</color>
+    <color name="transparent_background">#99F0EFF5</color>
     <color name="green">#019E0F</color>
     <color name="red">#CF2A28</color>
     <color name="bottomtab_item_resting">#36000000</color>
@@ -43,6 +44,7 @@
     <color name="darkgray">#6D737B</color>
     <color name="light_gray">#E1E1E1</color>
     <color name="orange">#ff9800</color>
+    <color name="yello">#FFFAC2</color>
     <color name="border_gray">#5C5C5C</color>
     <color name="feed_item_bg">#ffffff</color>
     <color name="bg_color">#F0EFF5</color>

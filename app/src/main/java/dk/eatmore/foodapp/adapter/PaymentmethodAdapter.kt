@@ -28,6 +28,7 @@ class PaymentmethodAdapter(val c: Context,val list : Array<Int?> ,val callback: 
     lateinit var listner : AdapterListener
     private val context :Context?=null
     private val epay : EpayWebView? = null
+    private var expanditem : Int =999
     private val data = HashMap<String, String>()
 
 
@@ -48,19 +49,30 @@ class PaymentmethodAdapter(val c: Context,val list : Array<Int?> ,val callback: 
                 0 ->{
                     Log.e("epay--","Holder 0")
                     holder.binding.paymenttypeTxt.text="Online payment"
-                    holder.binding.webiview.visibility= View.VISIBLE
+                    holder.binding.webiview.visibility= if(expanditem ==0) View.VISIBLE else View.GONE
                     holder.binding.cashBtn.visibility= View.GONE
                     val paymentView = EpayWebView(this, holder.binding.webiview, false)
                     var webview= holder.binding.webiview
                     webview = paymentView.LoadPaymentWindow(getData())
+                    holder.binding.upDownArrow.setImageResource(if(expanditem ==0) R.drawable.up_arrow else R.drawable.down_arrow)
+                    holder.binding.paymentType.setOnClickListener{
+                        if(expanditem ==0) expanditem=999 else expanditem =0
+                        notifyDataSetChanged()
+                    }
 
                 }
                 1->{
                     Log.e("epay--","Holder 1")
                     holder.binding.paymenttypeTxt.text="Cash payment"
                     holder.binding.webiview.visibility= View.GONE
-                    holder.binding.cashBtn.visibility= View.VISIBLE
+                    holder.binding.cashBtn.visibility= if(expanditem ==1) View.VISIBLE else View.GONE
                     holder.binding.cashBtn.setOnClickListener{listner.itemClicked(false,position)}
+                    holder.binding.upDownArrow.setImageResource(if(expanditem ==1) R.drawable.up_arrow else R.drawable.down_arrow)
+                    holder.binding.paymentType.setOnClickListener{
+                        if(expanditem ==1) expanditem=999 else expanditem =1
+                        notifyDataSetChanged()
+                    }
+
                 }
 
             }

@@ -332,7 +332,7 @@ class AccountFragment : BaseFragment() {
                     override fun onSuccess(loginResult: LoginResult) {
                         // App code
                         loge(TAG, "---success---")
-                        handleFacebookAccessToken(loginResult.getAccessToken());
+                    //    handleFacebookAccessToken(loginResult.getAccessToken());
 
                         val request = GraphRequest.newMeRequest(
                                 loginResult.accessToken

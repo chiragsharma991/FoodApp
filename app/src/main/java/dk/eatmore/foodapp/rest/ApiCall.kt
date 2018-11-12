@@ -51,8 +51,21 @@ class ApiCall {
         }
 
 
-        fun getPickuptime(r_token : String , r_key : String, shipping : String, language : String ) : Call<JsonObject> {
-            return getApiInterface().getPickuptime(r_token, r_key, shipping,language)
+        fun pickupinfo(jsonObject: JsonObject) : Call<JsonObject> {
+            return getApiInterface().pickupinfo(jsonObject)
+        }
+
+        fun checkout_delivery(jsonObject: JsonObject) : Call<JsonObject> {
+            return getApiInterface().checkout_delivery(jsonObject)
+        }
+        fun checkout_pickup(jsonObject: JsonObject) : Call<JsonObject> {
+            return getApiInterface().checkout_pickup(jsonObject)
+        }
+        fun ordertransaction(jsonObject: JsonObject) : Call<JsonObject> {
+            return getApiInterface().ordertransaction(jsonObject)
+        }
+        fun cancelordertransaction(r_token : String , r_key : String, order_no : Int ) : Call<JsonObject> {
+            return getApiInterface().cancelordertransaction(r_token,r_key,order_no)
         }
 
         fun addtocart(jsonObject: JsonObject) : Call<JsonObject> {
@@ -75,6 +88,17 @@ class ApiCall {
             return getApiInterface().lastLogin(r_token, r_key,customer_id,device_type)
         }
 
+        fun applycode(r_token : String , r_key : String , customer_id : String , upto_min_shipping: String , shipping : String , code: String , order_total: String , additional_charge: String , shipping_costs: String ) : Call<JsonObject> {
+            return getApiInterface().applycode(r_token, r_key,customer_id , upto_min_shipping ,shipping , code, order_total , additional_charge , shipping_costs)
+        }
+
+        fun userInfo(jsonObject: JsonObject ) : Call<JsonObject> {
+            return getApiInterface().userInfo(jsonObject)
+        }
+
+        fun deliveryDetails(jsonObject: JsonObject ) : Call<JsonObject> {
+            return getApiInterface().deliveryDetails(jsonObject)
+        }
 
     }
 
