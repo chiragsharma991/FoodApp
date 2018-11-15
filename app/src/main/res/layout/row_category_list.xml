@@ -9,6 +9,10 @@
 
     <data>
 
+        <import type="android.view.View">
+
+        </import>
+
         <variable name="util" type="dk.eatmore.foodapp.utils.BindDataUtils"/>
 
         <variable
@@ -100,10 +104,10 @@
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/appCompatTextView3"
                     style="@style/TextViewSmall"
-                    android:layout_height="46dp"
+                    android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
-                    android:layout_marginTop="8dp"
                     android:layout_weight="1.05"
+                    android:visibility="@{data.p_desc.equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}"
                     android:text="@{data.p_desc}"
                     android:textColor="@color/black_light"
                     app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_two"
@@ -129,13 +133,15 @@
                     app:layout_constraintVertical_bias="0.0" />
 
                 <android.support.v7.widget.AppCompatImageView
-                    android:layout_width="@dimen/_30sdp"
-                    android:layout_height="@dimen/_30sdp"
+                    android:id="@+id/appCompatImageView"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="0dp"
                     android:layout_gravity="top"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:background="@color/background_light"
                     android:scaleType="fitXY"
+                    app:layout_constraintBottom_toBottomOf="@+id/appCompatTextView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guidline_vertical_two"
                     app:layout_constraintTop_toTopOf="parent"
@@ -145,11 +151,13 @@
                     android:id="@+id/view"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
+                    android:layout_marginTop="8dp"
                     android:alpha="0.2"
                     android:background="@color/divider_color"
-                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent" />
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/appCompatTextView2" />
 
 
 

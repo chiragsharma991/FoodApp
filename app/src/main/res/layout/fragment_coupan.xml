@@ -29,6 +29,19 @@
             >
 
 
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/appbar"
+                >
+                <include layout="@layout/toolbar"
+                    >
+
+                </include>
+
+            </android.support.design.widget.AppBarLayout>
+
+
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/epay_total_lbl"
                     style="@style/TextViewMid"

@@ -212,11 +212,13 @@ class CartActivity : BaseActivity() {
 
                         if (ui_model!!.product_attribute_list.value!![parentPosition].product_attribute_value!!.get(chilPosition).extra_topping_group_deatils.topping_subgroup_list.size > 0) {
                             val fragment = Extratoppings.newInstance(parentPosition, chilPosition, ui_model!!, ui_model!!.calculateAttribute.value!!.get(parentPosition).calculateExtratoppings)
+                            toolbar.setNavigationIcon(ContextCompat.getDrawable(context, R.drawable.back))
                             addFragment(R.id.cart_container, fragment, Extratoppings.TAG, false)
                         }
                     } else {
                         if (ui_model!!.product_attribute_list.value!![parentPosition].product_attribute_value!!.get(chilPosition).extra_topping_group_deatils.topping_subgroup_list.size > 0) {
                             val fragment = Extratoppings.newInstance(parentPosition, chilPosition, ui_model!!, ui_model!!.calculateAttribute.value!!.get(parentPosition).calculateExtratoppings)
+                            toolbar.setNavigationIcon(ContextCompat.getDrawable(context, R.drawable.back))
                             addFragment(R.id.cart_container, fragment, Extratoppings.TAG, false)
                         }
                     }
@@ -240,10 +242,7 @@ class CartActivity : BaseActivity() {
         txt_toolbar.text = title
         toolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.close))
         toolbar.setNavigationOnClickListener {
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                finishAfterTransition()
-            else
-                finish()
+            onBackPressed()
         }
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             transition = buildEnterTransition()
@@ -371,7 +370,9 @@ class CartActivity : BaseActivity() {
                     is Extratoppings -> {
                         supportFragmentManager.popBackStack()
                     }
+
                 }
+                toolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.close))
             }
         }else{
             finishThisActivity()

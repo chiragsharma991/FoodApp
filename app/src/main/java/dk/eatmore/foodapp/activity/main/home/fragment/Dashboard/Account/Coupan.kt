@@ -6,12 +6,14 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
+import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.databinding.FragmentCoupanBinding
 import dk.eatmore.foodapp.databinding.FragmentProfileBinding
 import dk.eatmore.foodapp.databinding.FragmentProfileEditBinding
 import dk.eatmore.foodapp.databinding.FragmentSignupBinding
 import dk.eatmore.foodapp.utils.BaseFragment
 import kotlinx.android.synthetic.main.fragment_signup.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 class Coupan : BaseFragment() {
 
@@ -43,6 +45,9 @@ class Coupan : BaseFragment() {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
+            txt_toolbar.text=getString(R.string.giftcard)
+            img_toolbar_back.setOnClickListener{(activity as HomeActivity).onBackPressed()}
+
 
 
         }else{

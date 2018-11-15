@@ -12,11 +12,13 @@ import android.widget.EditText
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.AccountFragment
 import dk.eatmore.foodapp.databinding.FragmentSignupBinding
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.fragment_signup.*
+import kotlinx.android.synthetic.main.toolbar.*
 import java.util.HashMap
 import java.util.regex.Pattern
 
@@ -52,9 +54,12 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
+            (parentFragment as AccountFragment).img_toolbar_back.visibility=View.VISIBLE
+            (parentFragment as AccountFragment).img_toolbar_back.setOnClickListener{(activity as HomeActivity).onBackPressed() }
             clickEvent = MyClickHandler(this)
             binding.handlers = clickEvent
             first_name.requestFocus()
+            input_name.requestFocus()
             acc_signup_btn.setEnabled(false)
             acc_signup_btn.text = getString(R.string.enter_valid_email_address)
 
@@ -76,10 +81,12 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
             logd(TAG, "saveInstance NULL")
             when (ID) {
                 1 -> {
+                    (parentFragment as AccountFragment).txt_toolbar.text=getString(R.string.signup)
                     signup_view.visibility = View.VISIBLE
                     forget_password_view.visibility = View.GONE
                 }
                 2 -> {
+                    (parentFragment as AccountFragment).txt_toolbar.text=getString(R.string.forgot_password)
                     signup_view.visibility = View.GONE
                     forget_password_view.visibility = View.VISIBLE
                 }
@@ -341,6 +348,12 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
         super.onPause()
         logd(TAG, "on pause...")
 
+    }
+
+    fun backpress(): Boolean {
+        (parentFragment as AccountFragment).img_toolbar_back.visibility=View.GONE
+        (parentFragment as AccountFragment).txt_toolbar.text=getString(R.string.my_profile)
+        return true
     }
 
 

@@ -30,9 +30,6 @@ class HomeContainerFragment : BaseFragment() {
         fun newInstance() : HomeContainerFragment {
             return HomeContainerFragment()
         }
-
-
-
     }
 
     override fun getLayout(): Int {
@@ -133,18 +130,18 @@ class HomeContainerFragment : BaseFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        logd(TAG,"on destroy...")
+        loge(TAG,"on destroy...")
     }
 
     override fun onDetach() {
         super.onDetach()
-        logd(TAG,"on detech...")
+        loge(TAG,"on detech...")
 
     }
 
     override fun onPause() {
         super.onPause()
-        logd(TAG,"on pause...")
+        loge(TAG,"on pause...")
 
     }
 

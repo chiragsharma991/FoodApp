@@ -15,6 +15,8 @@ import com.google.gson.JsonObject
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.AccountFragment
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.OpeningHours
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
+import dk.eatmore.foodapp.fragment.ProductInfo.CategoryList
+import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
@@ -55,7 +57,7 @@ class HomeActivity : BaseActivity() {
     private fun initView(savedInstanceState: Bundle?) {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         mHomeContainerFragment = HomeContainerFragment.newInstance()
-        supportFragmentManager.beginTransaction().replace(R.id.home_container, mHomeContainerFragment, HomeContainerFragment.TAG).commit()
+        supportFragmentManager.beginTransaction().replace(R.id.home_container, mHomeContainerFragment, HomeContainerFragment.TAG).addToBackStack(HomeContainerFragment.TAG).commit()
 
     }
 
@@ -90,8 +92,20 @@ class HomeActivity : BaseActivity() {
 
     override fun onBackPressed() {
         loge(TAG, "back pressed...")
-        var pop = mHomeContainerFragment.getContainerFragment().popFragment()
 
+        val fragment = supportFragmentManager.findFragmentById(R.id.home_container)
+        when(fragment){
+            is HomeContainerFragment ->{
+                loge(TAG,"Home container fragment---")
+                 mHomeContainerFragment.getContainerFragment().popFragment()
+            }
+
+            is DetailsFragment ->{
+                loge(TAG,"Detail container fragment---")
+                supportFragmentManager.popBackStack()
+            }
+
+        }
     }
 
 

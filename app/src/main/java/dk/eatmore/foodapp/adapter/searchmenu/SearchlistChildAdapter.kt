@@ -37,8 +37,6 @@ class SearchlistChildAdapter(val context: Context, val listner: SearchlistParent
         val binding: RowSearchlistCBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.row_searchlist_c, parent, false)
         // binding.util= BindDataUtils
         vh = MyViewHolder(binding)
-
-
         return vh
     }
 
@@ -46,7 +44,7 @@ class SearchlistChildAdapter(val context: Context, val listner: SearchlistParent
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is MyViewHolder) {
             //  holder.binding.util=BindDataUtils
-            // holder.binding.productlistItem= list_filtered[parentPosition].product_list!![position]
+            holder.binding.productlistItem= list_filtered[parentPosition].product_list!![position]
             holder.binding.catTitle.text = list_filtered[parentPosition].product_list!![position].p_name
             holder.binding.catDesc.text = list_filtered[parentPosition].product_list!![position].p_desc
             val size=if(list_filtered[parentPosition].product_list!![position].product_attribute==null ) 0 else list_filtered[parentPosition].product_list!![position].product_attribute.size
@@ -73,9 +71,8 @@ class SearchlistChildAdapter(val context: Context, val listner: SearchlistParent
                      holder.binding.catDesc.text=spanText
                  }
 
-            holder.binding.addtocartView.setOnClickListener {
+            holder.binding.rowChildItem.setOnClickListener {
                 listner.itemClicked(false, parentPosition, position)
-
             }
         }
     }

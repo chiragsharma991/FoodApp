@@ -1,11 +1,14 @@
 package dk.eatmore.foodapp.rest
 
 import com.google.gson.JsonObject
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.EditAddress
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.model.home.ProductListModel
 import dk.eatmore.foodapp.model.LastOrder
 import dk.eatmore.foodapp.model.cart.Data
 import dk.eatmore.foodapp.model.cart.ProductDetails
 import dk.eatmore.foodapp.model.epay.ViewcardModel
+import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.model.home.RestaurantListModel
 import retrofit2.Call
 import retrofit2.http.*
@@ -50,7 +53,13 @@ interface ApiInterface {
             @Field("customer_id") customer_id: String
     ): Call<ProductListModel>
 
-
+    @FormUrlEncoded
+    @POST("Category/category/menu")
+    fun restaurant_info(
+            @Field("r_token") r_token: String ,
+            @Field("r_key") r_key: String,
+            @Field("customer_id") customer_id: String
+    ): Call<OrderFragment.Testingclass>
 
     @FormUrlEncoded
     @POST("Product/productmaster/product-details")
@@ -95,6 +104,33 @@ interface ApiInterface {
     @POST("Cart/cart/user-info")
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun userInfo(@Body jsonObject: JsonObject): Call<JsonObject>
+
+    @POST("Enduser/enduser/shipping-address-list")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun shippingaddress_list(@Body jsonObject: JsonObject): Call<EditAddress.EditaddressListModel>
+
+    @POST("Enduser/enduser/my-orders")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun myorders(@Body jsonObject: JsonObject): Call<OrderFragment.Myorder_Model>
+
+    @POST("Enduser/enduser/delete-shipping-address")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun delete_shippingaddress(@Body jsonObject: JsonObject): Call<JsonObject>
+
+    @POST("Enduser/enduser/edit-shipping-address")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun edit_shippingaddress(@Body jsonObject: JsonObject): Call<JsonObject>
+
+    @FormUrlEncoded
+    @POST("Enduser/enduser/update_record")
+    fun update_record(
+            @Field("auth_key") auth_key: String ,
+            @Field("eatmore_app") eatmore_app: Boolean,
+            @Field("id") id: String,
+            @Field("first_name") first_name: String,
+            @Field("email") email: String,
+            @Field("telephone_no") telephone_no: String
+    ): Call<JsonObject>
 
     @POST("Cart/cart/delivery-details")
     @Headers("Content-Type: application/x-www-form-urlencoded")

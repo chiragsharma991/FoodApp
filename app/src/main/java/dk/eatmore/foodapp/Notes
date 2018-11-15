@@ -32,7 +32,7 @@ Notes :
 
 
      * activity : fragment activity when we add fragment.
-     * parent fragment:
+     * parent fragment: getparentframent() is work on nested fragment case02 not for case01 condition.
 
      CASE 01        CASE 02    -- Activity--
                                      |

@@ -81,7 +81,6 @@
                             android:layout_height="@dimen/_20sdp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/_5sdp"
-                            android:background="@color/background_light"
                             android:scaleType="fitXY"
                             app:srcCompat="@drawable/add_item" />
 

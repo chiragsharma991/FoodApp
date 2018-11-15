@@ -12,9 +12,11 @@
 
     <FrameLayout
         xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/profile_container"
+        android:id="@+id/userprofile_container"
         android:layout_width="match_parent"
-        android:background="@color/background_light"
+        android:background="@color/white"
+        android:focusable="true"
+        android:clickable="true"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         android:orientation="vertical">
@@ -23,204 +25,164 @@
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:visibility="visible"
-            android:background="@color/background_light"
             >
+
+
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/appbar"
+                >
+                <include layout="@layout/toolbar"
+                    >
+
+                </include>
+
+            </android.support.design.widget.AppBarLayout>
 
             <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-
+                android:layout_below="@+id/appbar"
                 >
 
-                <RelativeLayout
+                <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
+
                     >
 
-                    <LinearLayout
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/name_txt"
+                        style="@style/TextViewSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="Name"
+                        app:layout_constraintBottom_toTopOf="@+id/name_edt"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_chainStyle="spread_inside" />
+
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/name_edt"
+                        style="@style/EditText_Normal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_5sdp"
-                        android:orientation="vertical">
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:nextFocusDown="@id/email_txt"
+                        android:background="@drawable/rectangle_edittext"
+                        android:padding="@dimen/_8sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/black_light"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/name_txt">
 
-                        <android.support.v7.widget.CardView
-                            android:id="@+id/address_card"
-                            android:layout_margin="@dimen/_8sdp"
-                            style="@style/CardViewStyle">
-
-
-                            <LinearLayout
-                                android:id="@+id/signup_view"
-                                android:layout_width="fill_parent"
-                                android:layout_height="match_parent"
-                                android:layout_margin="@dimen/_8sdp"
-                                android:layout_marginTop="?attr/actionBarSize"
-                                android:orientation="vertical"
-                                android:visibility="visible">
+                    </android.support.v7.widget.AppCompatEditText>
 
 
-                                <android.support.design.widget.TextInputLayout
-                                    android:id="@+id/input_layout_email"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
-
-                                    <EditText
-                                        android:id="@+id/input_email"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:singleLine="true"
-                                        android:backgroundTint="@color/gray"
-                                        android:fontFamily="@font/hindvadodara_medium"
-                                        android:hint="Name"
-                                        android:textAppearance="?android:attr/textAppearanceSmall" />
-                                </android.support.design.widget.TextInputLayout>
-
-                                <android.support.design.widget.TextInputLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
-
-                                    <EditText
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:singleLine="true"
-                                        android:backgroundTint="@color/gray"
-                                        android:fontFamily="@font/hindvadodara_medium"
-                                        android:hint="Email"
-                                        android:inputType="textEmailAddress"
-                                        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                                </android.support.design.widget.TextInputLayout>
-
-                                <android.support.design.widget.TextInputLayout
-                                    android:id="@+id/input_layout_password"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
-
-                                    <EditText
-                                        android:id="@+id/input_password"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:backgroundTint="@color/gray"
-                                        android:singleLine="true"
-                                        android:fontFamily="@font/hindvadodara_medium"
-                                        android:hint="Phone"
-                                        android:inputType="number"
-                                        android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                                </android.support.design.widget.TextInputLayout>
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/email_txt"
+                        style="@style/TextViewSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/email"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/name_edt" />
 
 
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/email_edt"
+                        style="@style/EditText_Normal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:nextFocusDown="@id/telephone_txt"
+                        android:layout_weight="1.5"
+                        android:background="@drawable/rectangle_edittext"
+                        android:inputType="textEmailAddress"
+                        android:padding="@dimen/_8sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/black_light"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/email_txt" />
 
 
-                            </LinearLayout>
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/telephone_txt"
+                        style="@style/TextViewSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/telephone_number"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/email_edt" />
 
 
-                        </android.support.v7.widget.CardView>
-
-
-                        <android.support.v7.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:elevation="0dp"
-                            >
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                >
-
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="@dimen/_8sdp"
-                                    android:gravity="center_vertical"
-                                    android:orientation="horizontal">
-
-
-                                    <android.support.v7.widget.AppCompatTextView
-                                        style="@style/TextViewSmall"
-                                        android:layout_gravity="center_vertical"
-                                        android:layout_marginLeft="@dimen/_8sdp"
-                                        android:layout_weight="1"
-                                        android:layout_marginRight="@dimen/_5sdp"
-                                        android:text="This is simple text \n demo text"
-                                        android:textColor="@color/black_light"
-                                        />
-
-                                    <Switch
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginRight="@dimen/_8sdp"
-
-                                        />
-
-
-                                </LinearLayout>
-
-
-
-
-                            </LinearLayout>
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/telephone_edt"
+                        style="@style/EditText_Normal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1.5"
+                        android:background="@drawable/rectangle_edittext"
+                        android:inputType="number"
+                        android:padding="@dimen/_8sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/black_light"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/telephone_txt" />
 
 
 
 
 
-
-                        </android.support.v7.widget.CardView>
-
-
-                        <android.support.v7.widget.CardView
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            android:elevation="0dp"
-                            >
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical"
-                                >
-
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="@dimen/_8sdp"
-                                    android:gravity="center_vertical"
-                                    android:orientation="vertical">
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/update_view"
+                        style="@style/Button"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginStart="@dimen/_5sdp"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:layout_marginBottom="16dp"
+                        android:backgroundTint="@color/theme_color"
+                        android:text="@string/update"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/telephone_edt" />
 
 
-                                    <android.support.v7.widget.AppCompatTextView
-                                        style="@style/TextViewSmall"
-                                        android:id="@+id/profile_save_txt"
-                                        android:layout_width="wrap_content"
-                                        android:layout_gravity="center_vertical|center_horizontal"
-                                        android:layout_marginLeft="@dimen/_3sdp"
-                                        android:layout_marginRight="@dimen/_5sdp"
-                                        android:layout_weight="1"
-                                        android:text="Save"
-                                        android:textColor="@color/theme_color" />
+                </android.support.constraint.ConstraintLayout>
 
-
-                                </LinearLayout>
-
-
-                            </LinearLayout>
-
-
-
-
-
-                        </android.support.v7.widget.CardView>
-
-
-                    </LinearLayout>
-
-
-                </RelativeLayout>
 
 
             </android.support.v4.widget.NestedScrollView>

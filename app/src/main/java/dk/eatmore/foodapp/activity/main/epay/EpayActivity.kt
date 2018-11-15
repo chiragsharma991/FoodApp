@@ -32,6 +32,11 @@ import kotlinx.android.synthetic.main.dynamic_raw_item.view.*
 import kotlinx.android.synthetic.main.dynamic_raw_subitem.view.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.util.ArrayList
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.Animation
+import android.view.animation.TranslateAnimation
+
+
 
 class EpayActivity : BaseActivity() {
 
@@ -258,7 +263,7 @@ class EpayActivity : BaseActivity() {
                 val position  = v.tag as Int
                 if(accessOnetime){
                     DialogUtils.openDialog(this, getString(R.string.are_you_sure_to_delete), "",
-                            getString(R.string.yes), getString(R.string.no), ContextCompat.getColor(this, R.color.black), object : DialogUtils.OnDialogClickListener {
+                            getString(R.string.yes), getString(R.string.no), ContextCompat.getColor(this, R.color.theme_color), object : DialogUtils.OnDialogClickListener {
                         override fun onPositiveButtonClick(p: Int) {
                             progresswheel(progresswheel,true)
                             deleteitemFromcart(ui_model!!.viewcard_list.value!!.result!![position].op_id)
@@ -352,10 +357,11 @@ class EpayActivity : BaseActivity() {
                       }
 
                       is BamboraWebfunction ->{
-                          popFragment()
+                          fragment.onBackpress()
+                    /*      popFragment()
                           txt_toolbar.text=getString(R.string.payment)
                           val fragment= supportFragmentManager.findFragmentByTag(Paymentmethod.TAG)
-                          (fragment as Paymentmethod).onlineTransactionFailed()
+                          (fragment as Paymentmethod).onlineTransactionFailed()*/
 
                       }
                         else -> popFragment()
@@ -374,13 +380,14 @@ class EpayActivity : BaseActivity() {
             menu_tabs.addTab(menu_tabs.newTab().setText(getString(R.string.pickup)))
             isPickup=true
         } else if(DetailsFragment.delivery_present && !DetailsFragment.pickup_present){
-            menu_tabs.addTab(menu_tabs.newTab().setText((if(DetailsFragment.delivery_charge_title=="") getString(R.string.delivery) else getString(R.string.delivery)+" "+DetailsFragment.delivery_charge_title)+" "+BindDataUtils.convertCurrencyToDanish(DetailsFragment.delivery_charge)))
+            menu_tabs.addTab(menu_tabs.newTab().setText((if(DetailsFragment.delivery_charge_title=="") getString(R.string.delivery) else getString(R.string.delivery)+"\n"+DetailsFragment.delivery_charge_title)+" "+BindDataUtils.convertCurrencyToDanish(DetailsFragment.delivery_charge)))
             isPickup=false
         }else{
-            menu_tabs.addTab(menu_tabs.newTab().setText((if(DetailsFragment.delivery_charge_title=="") getString(R.string.delivery) else getString(R.string.delivery)+" "+DetailsFragment.delivery_charge_title)+" "+BindDataUtils.convertCurrencyToDanish(DetailsFragment.delivery_charge)))
+            menu_tabs.addTab(menu_tabs.newTab().setText((if(DetailsFragment.delivery_charge_title=="") getString(R.string.delivery) else getString(R.string.delivery)+"\n"+DetailsFragment.delivery_charge_title)+" "+BindDataUtils.convertCurrencyToDanish(DetailsFragment.delivery_charge)))
             menu_tabs.addTab(menu_tabs.newTab().setText(getString(R.string.pickup)))
             isPickup=false
         }
+
         menu_tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
@@ -406,6 +413,7 @@ class EpayActivity : BaseActivity() {
             }
         })
     }
+
 
 
     fun finishActivity(){

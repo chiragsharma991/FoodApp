@@ -1,11 +1,14 @@
 package dk.eatmore.foodapp.rest
 
 import com.google.gson.JsonObject
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.EditAddress
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.model.home.ProductListModel
 import dk.eatmore.foodapp.model.LastOrder
 import dk.eatmore.foodapp.model.cart.Data
 import dk.eatmore.foodapp.model.cart.ProductDetails
 import dk.eatmore.foodapp.model.epay.ViewcardModel
+import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.model.home.RestaurantListModel
 import retrofit2.Call
 
@@ -18,11 +21,6 @@ class ApiCall {
         private fun getApiInterface(): ApiInterface {
             return ApiClient.getClient()!!.create(ApiInterface::class.java)
         }
-        fun myOrder( r_key: String, r_token: String) : Call<LastOrder> {
-            return getApiInterface().myOrder(r_key,r_token)
-
-        }
-
 
         fun fBlogin(jsonObject: JsonObject ) : Call<JsonObject> {
             return getApiInterface().fBlogin(jsonObject)
@@ -41,6 +39,9 @@ class ApiCall {
             return getApiInterface().setProductList(r_token, r_key, customer_id)
         }
 
+        fun restaurant_info(r_token : String, r_key : String, customer_id : String ) : Call<OrderFragment.Testingclass> {
+            return getApiInterface().restaurant_info(r_token, r_key, customer_id)
+        }
 
         fun getProductDetails(r_token : String , r_key : String, p_id : String ) : Call<ProductDetails> {
             return getApiInterface().setProductDetails(r_token, r_key, p_id)
@@ -95,7 +96,21 @@ class ApiCall {
         fun userInfo(jsonObject: JsonObject ) : Call<JsonObject> {
             return getApiInterface().userInfo(jsonObject)
         }
-
+        fun shippingaddress_list(jsonObject: JsonObject ) : Call<EditAddress.EditaddressListModel> {
+            return getApiInterface().shippingaddress_list(jsonObject)
+        }
+        fun myorders(jsonObject: JsonObject ) : Call<OrderFragment.Myorder_Model> {
+            return getApiInterface().myorders(jsonObject)
+        }
+        fun delete_shippingaddress(jsonObject: JsonObject ) : Call<JsonObject> {
+            return getApiInterface().delete_shippingaddress(jsonObject)
+        }
+        fun edit_shippingaddress(jsonObject: JsonObject ) : Call<JsonObject> {
+            return getApiInterface().edit_shippingaddress(jsonObject)
+        }
+        fun update_record(auth_key : String, telephone_no : String, first_name : String, eatmore_app : Boolean, email : String, id : String) : Call<JsonObject> {
+            return getApiInterface().update_record(auth_key =auth_key, telephone_no = telephone_no, first_name = first_name, eatmore_app = eatmore_app, email = email, id = id )
+        }
         fun deliveryDetails(jsonObject: JsonObject ) : Call<JsonObject> {
             return getApiInterface().deliveryDetails(jsonObject)
         }

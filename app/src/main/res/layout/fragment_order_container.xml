@@ -60,6 +60,54 @@
             </RelativeLayout>
 
 
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="@color/white"
+                android:id="@+id/empty_view"
+                android:visibility="visible"
+                >
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="100dp"
+                    android:layout_height="100dp"
+                    android:id="@+id/imageview"
+                    app:srcCompat="@mipmap/no_order_found"
+                    android:layout_centerInParent="true"
+                    />
+
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TextViewSmall"
+                    android:id="@+id/error_txt"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@+id/imageview"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="Your cart is empty. Add something from the menu"
+                    android:layout_centerHorizontal="true"
+                    android:gravity="center_horizontal"
+                    android:textColor="@color/black_default"
+
+                    />
+
+
+
+
+
+            </RelativeLayout>
+
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                style="?android:attr/progress"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical|center_horizontal"
+                android:layout_centerInParent="true"
+                android:indeterminate="true" />
+
+
+
         </FrameLayout>
 
     </RelativeLayout>

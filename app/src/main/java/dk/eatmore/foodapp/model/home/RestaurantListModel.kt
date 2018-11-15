@@ -9,6 +9,7 @@ import java.io.Serializable
 data class RestaurantListModel(
                                val msg: String = "",
                                val restaurant_list: RestaurantList,
+                               val postal_city: ArrayList<Postalcity> = arrayListOf(),
                                val area_details: AreaDetails,
                                val status: Boolean = false):Serializable
 
@@ -55,6 +56,7 @@ data class Restaurant(
 ):Serializable
 
 
+data class Postalcity(val postal_code: String = "",val city_name : String = ""):Serializable
 data class Rating_details(val review: Int = 0, val review_count: Int = 0, val rate_per: Int = 0):Serializable
 data class Review_list(val order_date: String = "", val review_by: String = "", val review: String = "",val rating : String=""):Serializable
 data class Opening_hours(val today: Boolean = false, val opens: String = "", val day: String = "",val closes : String=""):Serializable

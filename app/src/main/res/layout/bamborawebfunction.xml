@@ -34,22 +34,22 @@
 
             </WebView>
 
+
             <dk.eatmore.foodapp.utils.ProgressWheel
                 android:id="@+id/progresswheel"
-                android:layout_width="80dp"
-                android:layout_height="80dp"
+                android:layout_width="50dp"
+                android:layout_height="50dp"
                 android:layout_gravity="center_vertical|center_horizontal"
-                ProgressWheel:pwTextColor="@color/black_light"
+                ProgressWheel:pwTextColor="@android:color/transparent"
                 ProgressWheel:pwTextSize="9sp"
                 android:visibility="gone"
-                ProgressWheel:pwRimColor="@color/gray"
-                ProgressWheel:pwBarLength="60dp"
-                ProgressWheel:pwBarColor ="@color/gray"
-                ProgressWheel:pwBarWidth="2dp"
+                ProgressWheel:pwRimColor="@android:color/transparent"
+                ProgressWheel:pwBarLength="80dp"
+                ProgressWheel:pwBarColor ="@color/theme_color"
+                ProgressWheel:pwBarWidth="4dp"
                 ProgressWheel:pwRimWidth="1dp"
                 ProgressWheel:pwSpinSpeed="4dp"
                 />
-
 
 
 

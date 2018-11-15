@@ -62,6 +62,7 @@ class HealthReport : BaseFragment() {
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
             img_toolbar_back.setImageResource(R.drawable.back)
+            txt_toolbar.text=getString(R.string.health_report)
             img_toolbar_back.setOnClickListener {
                 onBackpress()
             }

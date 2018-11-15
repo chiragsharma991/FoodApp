@@ -284,7 +284,7 @@ class Splash : BaseActivity() {
 
 
         DialogUtils.openDialog(this, "${getString(R.string.app_name)} $versionName", getString(R.string.new_update),
-                getString(R.string.go_on_playstore), getString(R.string.dismiss), ContextCompat.getColor(this, R.color.black), object : DialogUtils.OnDialogClickListener {
+                getString(R.string.go_on_playstore), getString(R.string.dismiss), ContextCompat.getColor(this, R.color.theme_color), object : DialogUtils.OnDialogClickListener {
             override fun onPositiveButtonClick(position: Int) {
                 //  startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(urlOfAppFromPlayStore)))
                 moveToLogin()

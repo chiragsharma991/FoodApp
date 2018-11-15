@@ -1,296 +1,311 @@
 <?xml version="1.0" encoding="utf-8"?>
-
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:zhy="http://schemas.android.com/tools">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
+    >
 
     <data>
+
+
+        <import type="android.view.View">
+
+        </import>
+
+        <variable
+            name="address"
+            type="dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.EditAddress.Messages">
+
+        </variable>
+
+
 
 
     </data>
 
 
-    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <FrameLayout
+        android:id="@+id/edit_address_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:fitsSystemWindows="true"
+        android:layout_marginTop="@dimen/_1sdp"
         android:background="@color/white"
-        android:layoutDirection="locale">
+        android:clickable="true"
+        android:fitsSystemWindows="true"
+        android:focusable="true">
 
-
-        <FrameLayout
-            android:id="@+id/home_account_container"
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clickable="true"
-            android:focusable="true"
-            android:layout_below="@+id/toolbar_layout"
-            android:fitsSystemWindows="true">
+            >
 
-            <RelativeLayout
+            <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:visibility="visible"
-                android:background="@color/background_light"
+                android:layout_height="wrap_content"
+                android:id="@+id/appbar"
                 >
-
-                <android.support.v4.widget.NestedScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-
+                <include layout="@layout/toolbar"
                     >
 
-                    <RelativeLayout
+                </include>
+
+            </android.support.design.widget.AppBarLayout>
+
+
+            <android.support.v4.widget.NestedScrollView
+                android:id="@+id/nested_scroll"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/appbar"
+                android:layout_above="@+id/btn_view">
+
+                <android.support.constraint.ConstraintLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/telephone_number_txt"
+                        style="@style/TextViewSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="@string/title"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent" />
+
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/address_title"
+                        style="@style/EditText_Normal"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_3sdp">
-
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginBottom="@dimen/_5sdp"
-                            android:orientation="vertical">
-
-                            <android.support.v7.widget.CardView
-                                android:id="@+id/address_card"
-                                style="@style/CardViewStyle">
-
-
-                                <LinearLayout
-                                    android:id="@+id/signup_view"
-                                    android:layout_width="fill_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_margin="@dimen/_8sdp"
-                                    android:layout_marginTop="?attr/actionBarSize"
-                                    android:orientation="vertical"
-                                    android:visibility="visible">
-
-                                    <android.support.design.widget.TextInputLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content">
-
-                                        <EditText
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:backgroundTint="@color/gray"
-                                            android:fontFamily="@font/hindvadodara_medium"
-                                            android:hint="Address"
-                                            android:textAppearance="?android:attr/textAppearanceSmall" />
-                                    </android.support.design.widget.TextInputLayout>
-
-                                    <android.support.design.widget.TextInputLayout
-                                        android:id="@+id/input_layout_email"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content">
-
-                                        <EditText
-                                            android:id="@+id/input_email"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:singleLine="true"
-                                            android:backgroundTint="@color/gray"
-                                            android:fontFamily="@font/hindvadodara_medium"
-                                            android:hint="Line2"
-                                            android:textAppearance="?android:attr/textAppearanceSmall" />
-                                    </android.support.design.widget.TextInputLayout>
-
-                                    <android.support.design.widget.TextInputLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content">
-
-                                        <EditText
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:singleLine="true"
-                                            android:backgroundTint="@color/gray"
-                                            android:fontFamily="@font/hindvadodara_medium"
-                                            android:hint="Line3"
-                                            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                                    </android.support.design.widget.TextInputLayout>
-
-                                    <android.support.design.widget.TextInputLayout
-                                        android:id="@+id/input_layout_password"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content">
-
-                                        <EditText
-                                            android:id="@+id/input_password"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:backgroundTint="@color/gray"
-                                            android:singleLine="true"
-                                            android:fontFamily="@font/hindvadodara_medium"
-                                            android:hint="Line4"
-                                            android:inputType="textPassword"
-                                            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                                    </android.support.design.widget.TextInputLayout>
-
-                                    <android.support.design.widget.TextInputLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content">
-
-                                        <EditText
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:backgroundTint="@color/gray"
-                                            android:singleLine="true"
-                                            android:fontFamily="@font/hindvadodara_medium"
-                                            android:hint="By"
-                                            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                                    </android.support.design.widget.TextInputLayout>
-
-                                    <android.support.design.widget.TextInputLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content">
-
-                                        <EditText
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:backgroundTint="@color/gray"
-                                            android:fontFamily="@font/hindvadodara_medium"
-                                            android:hint="Post number"
-                                            android:singleLine="true"
-                                            android:inputType="textPassword"
-                                            android:textAppearance="?android:attr/textAppearanceSmall" />
-
-                                    </android.support.design.widget.TextInputLayout>
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1.5"
+                        android:background="@drawable/rectangle_edittext"
+                        android:padding="@dimen/_8sdp"
+                        android:singleLine="true"
+                        android:text="@{address.address_title}"
+                        android:textColor="@color/black_light"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/telephone_number_txt" />
 
 
-                                </LinearLayout>
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/address_txt"
+                        style="@style/TextViewSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="Address"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/address_title" />
 
 
-                            </android.support.v7.widget.CardView>
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/street_edt"
+                        style="@style/EditText_Normal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:hint="@string/enter_your_street_number"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1.5"
+                        android:background="@drawable/rectangle_edittext"
+                        android:padding="@dimen/_8sdp"
+                        android:text="@{address.street}"
+                        android:singleLine="true"
+                        android:textColor="@color/black_light"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/address_txt" />
 
-                            <LinearLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_marginLeft="@dimen/_5sdp"
-                                android:layout_marginRight="@dimen/_5sdp"
-                                android:orientation="vertical">
-
-                                <LinearLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:layout_margin="@dimen/_8sdp"
-                                    android:gravity="center_vertical"
-                                    android:orientation="horizontal">
-
-
-                                    <android.support.v7.widget.AppCompatTextView
-                                        android:id="@+id/menu_raw_txt"
-                                        style="@style/TextViewSmall"
-                                        android:layout_gravity="center_vertical"
-                                        android:text="Name this address"
-                                        android:textColor="@color/black_light" />
-
-
-                                </LinearLayout>
-
-
-                            </LinearLayout>
-
-                            <android.support.v7.widget.CardView style="@style/CardViewStyle"
-                                >
-
-
-                                <LinearLayout
-                                    android:layout_width="fill_parent"
-                                    android:layout_height="match_parent"
-                                    android:layout_margin="@dimen/_8sdp"
-                                    android:layout_marginTop="?attr/actionBarSize"
-                                    android:orientation="vertical"
-                                    android:visibility="visible">
-
-                                    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:orientation="vertical">
-
-                                        <android.support.v7.widget.AppCompatTextView
-                                            style="@style/TextViewSmall"
-                                            android:layout_centerVertical="true"
-                                            android:text="Home"
-                                            android:textColor="@color/black_light" />
-
-                                        <RadioButton
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_alignParentEnd="true"
-                                            android:layout_centerVertical="true"
-
-                                            />
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/house_edt"
+                        style="@style/EditText_Normal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:hint="@string/enter_your_house_number"
+                        android:layout_weight="1.5"
+                        android:background="@drawable/rectangle_edittext"
+                        android:padding="@dimen/_8sdp"
+                        android:text="@{address.house_no}"
+                        android:singleLine="true"
+                        android:textColor="@color/black_light"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/street_edt" />
 
 
-                                    </RelativeLayout>
-                                    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_5sdp"
-                                        android:orientation="vertical">
-
-                                        <android.support.v7.widget.AppCompatTextView
-                                            style="@style/TextViewSmall"
-                                            android:layout_centerVertical="true"
-                                            android:text="Occupation"
-                                            android:textColor="@color/black_light" />
-
-                                        <RadioButton
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_alignParentEnd="true"
-                                            android:layout_centerVertical="true"
-
-                                            />
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/floor_edt"
+                        style="@style/EditText_Normal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:hint="@string/enter_your_floor_number"
+                        android:layout_weight="1.5"
+                        android:background="@drawable/rectangle_edittext"
+                        android:padding="@dimen/_8sdp"
+                        android:text="@{address.floor_door}"
+                        android:singleLine="true"
+                        android:textColor="@color/black_light"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/house_edt" />
 
 
-                                    </RelativeLayout>
-                                    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
-                                        android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_5sdp"
-                                        android:orientation="vertical">
-
-                                        <android.support.v7.widget.AppCompatTextView
-                                            style="@style/TextViewSmall"
-                                            android:layout_centerVertical="true"
-                                            android:text="Other"
-                                            android:textColor="@color/black_light" />
-
-                                        <RadioButton
-                                            android:layout_width="wrap_content"
-                                            android:layout_height="wrap_content"
-                                            android:layout_alignParentEnd="true"
-                                            android:layout_centerVertical="true"
-
-                                            />
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/postnumber_txt"
+                        style="@style/TextViewSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="Postnumber"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/floor_edt" />
 
 
-                                    </RelativeLayout>
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/postnumber_edt"
+                        style="@style/EditText_Normal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1.5"
+                        android:background="@drawable/rectangle_edittext"
+                        android:inputType="number"
+                        android:text="@{address.postal_code}"
+                        android:padding="@dimen/_8sdp"
+                        android:singleLine="true"
+                        android:textColor="@color/black_light"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/postnumber_txt" />
 
 
-                                </LinearLayout>
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/city_txt"
+                        style="@style/TextViewSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="22dp"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:text="By"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/postnumber_edt" />
 
 
-                            </android.support.v7.widget.CardView>
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/city_edt"
+                        style="@style/EditText_Normal"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="@dimen/_16sdp"
+                        android:layout_weight="1.5"
+                        android:background="@drawable/rectgreycurve_shape"
+                        android:enabled="false"
+                        android:padding="@dimen/_8sdp"
+                        android:singleLine="true"
+                        android:text="@{address.city}"
+                        android:textColor="@color/black_light"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/city_txt" />
 
 
-                        </LinearLayout>
+                    <!--<android.support.v7.widget.AppCompatButton
+                        android:id="@+id/proceed_view_nxt"
+                        style="@style/Button"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginStart="10dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="16dp"
+                        android:layout_marginBottom="16dp"
+                        android:backgroundTint="@color/theme_color"
+                        android:text="@string/continue_"
+                        android:textColor="@color/white"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/city_edt" />
+    -->
 
 
-                    </RelativeLayout>
+                </android.support.constraint.ConstraintLayout>
 
 
-                </android.support.v4.widget.NestedScrollView>
+            </android.support.v4.widget.NestedScrollView>
 
+
+            <RelativeLayout
+                android:id="@+id/btn_view"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_alignParentBottom="true"
+                android:background="@color/white">
+
+                <View
+                    android:id="@+id/view"
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha="0.2"
+                    android:background="@color/divider_color"
+                    android:visibility="visible" />
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/save"
+                    style="@style/Button"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="8dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:backgroundTint="@color/theme_color"
+                    android:text="@string/save"
+                    android:textColor="@color/white" />
 
             </RelativeLayout>
 
 
-        </FrameLayout>
+        </RelativeLayout>
 
 
-    </RelativeLayout>
+
+
+    </FrameLayout>
+
 
 </layout>
+

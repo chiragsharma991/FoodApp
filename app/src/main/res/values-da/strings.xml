@@ -14,7 +14,7 @@
     <string name="details">Details</string>
     <string name="order_now">Order now</string>
     <string name="orders">Orders</string>
-    <string name="my_profile">My Profile</string>
+    <string name="my_profile">Account</string>
     <string name="menu">Menu</string>
     <string name="rating">Rating</string>
     <string name="restaurant_rating">(%1$s ratings)</string>
@@ -47,7 +47,8 @@
     <string name="total_goods">Total (%1$s Goods)</string>
 
     <string name="add_new_address">Add new address</string>
-    <string name="address">Verify</string>
+    <string name="verify">Verify</string>
+    <string name="address">Address</string>
     <string name="ok">OK</string>
     <string name="go_to_payment">Go to payment</string>
     <string name="select_delivery_time">Select delivery time:</string>
@@ -63,6 +64,7 @@
     <string name="notavailable">Not available</string>
     <string name="user_have_reviewed">%1$s user have reviewed</string>
     <string name="samlet">samlet</string>
+    <string name="enter_your_floor_number">Enter your floor number</string>
     <string name="kvalitet">Kvalitet</string>
     <string name="kundeservice">Kundeservice</string>
     <string name="leveringstid">Leveringstid</string>
@@ -120,6 +122,22 @@
     <string name="info">Info</string>
     <string name="payment">Payment</string>
     <string name="confirm_delivery_time">Confirm delivery time</string>
-
-
+    <string name="payment_methods">Payment Methods</string>
+    <string name="addresses">Addresses</string>
+    <string name="customer_service">Customer service</string>
+    <string name="rate_the_app">Rate the App!</string>
+    <string name="streethousefloor">%1$s %2$s %3$s,</string>
+    <string name="giftcard">Giftcard</string>
+    <string name="postalcity">%1$s %2$s</string>
+    <string name="title">Title</string>
+    <string name="save">save</string>
+    <string name="help">Help</string>
+    <string name="health_report">Health Report</string>
+    <string name="profile_info">Profile Info</string>
+    <string name="terms_of_services">Terms of services</string>
+    <string name="edit_address">Edit Address</string>
+    <string name="telephone_number">Telephone number</string>
+    <string name="update">Update</string>
+    <string name="please_login_to_see">Please login to see your previous orders.</string>
+    <string name="no_order">No order(s) to display.</string>
 </resources>

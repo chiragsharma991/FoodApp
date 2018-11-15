@@ -22,6 +22,7 @@ import android.app.Activity
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.databinding.*
 import kotlinx.android.synthetic.main.termscondition.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 
 class TermsCondition : BaseFragment() {
@@ -55,6 +56,8 @@ class TermsCondition : BaseFragment() {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
+            txt_toolbar.text=getString(R.string.terms_of_services)
+            img_toolbar_back.setOnClickListener{(activity as HomeActivity).onBackPressed()}
             setwebview()
         }else{
             logd(TAG,"saveInstance NOT NULL")

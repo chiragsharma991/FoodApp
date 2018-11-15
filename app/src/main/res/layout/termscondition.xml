@@ -29,10 +29,23 @@
             android:background="@color/background_light"
             >
 
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/appbar"
+                >
+                <include layout="@layout/toolbar"
+                    >
+
+                </include>
+
+            </android.support.design.widget.AppBarLayout>
+
             <WebView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/webview"
+                android:layout_below="@+id/appbar"
                 >
 
             </WebView>

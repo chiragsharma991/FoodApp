@@ -44,6 +44,10 @@ class RestaurantList : BaseFragment() {
 
     companion object {
 
+        fun getuimodel() : UIModel? {
+            return ui_model
+        }
+
         val TAG = "RestaurantList"
         var ui_model: RestaurantList.UIModel? = null
         fun newInstance(postal_code : String): RestaurantList {
@@ -215,6 +219,7 @@ class RestaurantList : BaseFragment() {
     override fun onDestroy() {
         super.onDestroy()
         logd(TAG, "on destroy...")
+        ui_model=null
     }
 
     override fun onDetach() {

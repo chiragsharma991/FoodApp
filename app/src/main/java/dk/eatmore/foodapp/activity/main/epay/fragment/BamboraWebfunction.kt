@@ -118,16 +118,16 @@ import java.util.HashMap
      }
 
      fun onBackpress() {
+         if(progresswheel.isSpinning) return
+         (activity as EpayActivity).txt_toolbar.text=getString(R.string.payment)
          (activity as EpayActivity).popFragment()
          val fragment= (activity as EpayActivity).supportFragmentManager.findFragmentByTag(Paymentmethod.TAG)
          (fragment as Paymentmethod).onlineTransactionFailed()
-
      }
 
     interface AdapterListener {
         fun itemClicked(parentView : Boolean , position : Int)
     }
-
 
     override fun PaymentWindowLoaded() {
         Log.e("epay--","PaymentWindowLoaded")
@@ -154,7 +154,6 @@ import java.util.HashMap
 
     override fun Debug(p0: String?) {
         Log.e("epay--","Debug")
-
     }
 
     override fun ErrorOccurred(p0: Int, p1: String?, p2: String?) {
@@ -264,5 +263,6 @@ import java.util.HashMap
 
         return data
     }
+
 
 }

@@ -122,7 +122,6 @@ class DetailsFragment : BaseFragment() {
             img_toolbar_back.setOnClickListener {
                 onBackpress()
             }
-
             adapter = ViewPagerAdapter(childFragmentManager)
             when (arguments!!.getString(Constants.STATUS)) {
                 getString(R.string.closed) -> {
@@ -148,7 +147,6 @@ class DetailsFragment : BaseFragment() {
 
         } else {
             logd(DetailsFragment.TAG, "saveInstance NOT NULL")
-
         }
     }
 
@@ -182,8 +180,6 @@ class DetailsFragment : BaseFragment() {
         badge_notification_txt.text= total_cartcnt.toString()
         badge_countprice.text= BindDataUtils.convertCurrencyToDanish(total_cartamt)
     }
-
-
 
 
     fun onBackpress() {
@@ -237,27 +233,27 @@ class DetailsFragment : BaseFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
-        logd(TAG, "on destroy...")
+        loge(TAG, "on destroy...")
         LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(mYourBroadcastReceiver);
 
     }
 
     override fun onDetach() {
         super.onDetach()
-        logd(TAG, "on detech...")
+        loge(TAG, "on detech...")
 
     }
 
 
     override fun onPause() {
         super.onPause()
-        logd(TAG, "on pause...")
+        loge(TAG, "on pause...")
 
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        logd(TAG, "on create...")
+        loge(TAG, "on create...")
         broadcastEvent()
 
     }
@@ -270,13 +266,13 @@ class DetailsFragment : BaseFragment() {
 
     override fun onResume() {
         super.onResume()
-        logd(TAG, "on resume...")
+        loge(TAG, "on resume...")
 
     }
 
     override fun onStop() {
         super.onStop()
-        logd(TAG, "on stop...")
+        loge(TAG, "on stop...")
     }
 
 

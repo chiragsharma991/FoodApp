@@ -16,10 +16,9 @@ import android.support.v7.widget.LinearLayoutManager
 import android.transition.ChangeBounds
 import android.transition.Slide
 import android.util.Log
-import android.view.Gravity
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.view.*
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import android.widget.Toast
 import com.google.android.gms.tasks.Task;
 import com.facebook.*
@@ -85,7 +84,16 @@ class HomeFragment : BaseFragment() {
             logd(TAG,"saveInstance NULL")
             clickEvent =MyClickHandler(this)
             binding.handlers=clickEvent
-
+            find_rest_edt.imeOptions= EditorInfo.IME_ACTION_DONE
+            find_rest_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+                override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                    if(find_rest_edt.text.trim().toString().length >0 ){
+                        val restaurantlist=RestaurantList.newInstance(find_rest_edt.text.trim().toString())
+                        addFragment(R.id.home_fragment_container,restaurantlist,RestaurantList.TAG,true)
+                    }
+                    return true
+                }
+            })
 
 
 

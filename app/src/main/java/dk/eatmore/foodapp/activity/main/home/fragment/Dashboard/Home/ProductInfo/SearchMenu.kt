@@ -76,6 +76,7 @@ class SearchMenu : BaseFragment() {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
+            searchString=""
             productpricecalculation = ProductPriceCalculation(this)
             menu_list = arguments!!.getSerializable(Constants.MENULIST) as ArrayList<MenuListItem>
             menu_list_filtered= menu_list

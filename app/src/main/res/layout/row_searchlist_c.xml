@@ -7,6 +7,10 @@
 
     <data>
 
+        <import type="android.view.View">
+
+        </import>
+
         <variable name="util" type="dk.eatmore.foodapp.utils.BindDataUtils"/>
 
 
@@ -83,12 +87,12 @@
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/cat_desc"
                 style="@style/TextViewSmall"
-                android:layout_height="46dp"
+                android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginBottom="8dp"
                 android:layout_weight="1.05"
                 android:textColor="@color/black_light"
-                android:visibility="visible"
+                android:visibility="@{productlist_item.p_desc.equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_two"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -113,8 +117,8 @@
                 app:layout_constraintVertical_bias="0.0" />
 
             <android.support.v7.widget.AppCompatImageView
-                android:layout_width="@dimen/_30sdp"
-                android:layout_height="@dimen/_30sdp"
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="0dp"
                 android:layout_gravity="top"
                 android:layout_marginStart="8dp"
                 android:id="@+id/addtocart_view"
@@ -131,6 +135,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:alpha="0.2"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:background="@color/divider_color"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"

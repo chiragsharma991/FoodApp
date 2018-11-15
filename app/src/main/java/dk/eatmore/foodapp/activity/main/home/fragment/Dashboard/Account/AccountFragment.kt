@@ -24,6 +24,9 @@ import android.widget.Toast
 import android.support.annotation.NonNull
 import android.support.v4.content.ContextCompat
 import android.text.TextUtils
+import android.view.KeyEvent
+import android.view.inputmethod.EditorInfo
+import android.widget.TextView
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -36,6 +39,7 @@ import com.google.firebase.auth.*
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.activity.main.epay.EpayActivity
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
@@ -88,6 +92,21 @@ class AccountFragment : BaseFragment() {
             binding.handlers = clickEvent
             logd(TAG, "saveInstance NULL")
             txt_toolbar.text = getString(R.string.my_profile)
+            img_toolbar_back.visibility=View.GONE
+           /* acc_password_edt.imeOptions = EditorInfo.IME_ACTION_DONE
+            acc_password_edt.setOnEditorActionListener(object  : TextView.OnEditorActionListener{
+                override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                    if(actionId == EditorInfo.IME_ACTION_DONE){
+                        moveon_login()
+                        return true
+                    }else{
+                        return false
+                    }
+                }
+
+            })*/
+
+
             acc_forgot_txt.setOnClickListener {
                 val fragment = Signup.newInstance()
                 Signup.ID = 2
@@ -102,32 +121,35 @@ class AccountFragment : BaseFragment() {
                 addFragment(R.id.home_account_container, fragment, Signup.TAG, true)
             }
             acc_login_btn.setOnClickListener {
-
-
-                if (isValidate()) {
-
-                    val jsonobject = JsonObject()
-                    jsonobject.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
-                    jsonobject.addProperty(Constants.EATMORE_APP, true)
-                    jsonobject.addProperty(Constants.USERNAME, acc_email_edt.text.toString())
-                    jsonobject.addProperty(Constants.PASSWORD_HASH, acc_password_edt.text.toString())
-                    jsonobject.addProperty(Constants.DEVICE_TYPE, Constants.DEVICE_TYPE_VALUE)
-                    jsonobject.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
-                    val call = ApiCall.login(jsonobject)
-                    loginAttempt(call)
-
-                }
-
+                moveon_login()
             }
             // show Profle screen every time if user is already login.
             if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
                 val fragment = Profile.newInstance()
-                addFragment(R.id.home_account_container, fragment, Profile.TAG, true)
+                addFragment(R.id.home_account_container, fragment, Profile.TAG, false)
             }
 
 
         } else {
             logd(TAG, "saveInstance NOT NULL")
+        }
+    }
+
+    private fun moveon_login(){
+
+        if (isValidate()) {
+            acc_email_edt.clearFocus()
+            acc_password_edt.clearFocus()
+            val jsonobject = JsonObject()
+            jsonobject.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
+            jsonobject.addProperty(Constants.EATMORE_APP, true)
+            jsonobject.addProperty(Constants.USERNAME, acc_email_edt.text.toString())
+            jsonobject.addProperty(Constants.PASSWORD_HASH, acc_password_edt.text.toString())
+            jsonobject.addProperty(Constants.DEVICE_TYPE, Constants.DEVICE_TYPE_VALUE)
+            jsonobject.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
+            val call = ApiCall.login(jsonobject)
+            loginAttempt(call)
+
         }
     }
 
@@ -149,10 +171,11 @@ class AccountFragment : BaseFragment() {
                             // exsisting user (0):
                             loge(TAG, "exsisting user:")
                             moveOnProfileInfo(
-                                    userName = json.getAsJsonObject("user_details").get("username").asString,
-                                    email = json.getAsJsonObject("user_details").get("email").asString,
-                                    first_name = json.getAsJsonObject("user_details").get("first_name").asString,
-                                    customer_id = json.getAsJsonObject("user_details").get("id").asString,
+                                    userName = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.USERNAME).asString,
+                                    email = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.EMAIL).asString,
+                                    telephone_no = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.TELEPHONE_NO).asString,
+                                    first_name = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.FIRST_NAME).asString,
+                                    customer_id = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.ID).asString,
                                     login_from = Constants.FACEBOOK,
                                     language = "en"
                             )
@@ -169,10 +192,11 @@ class AccountFragment : BaseFragment() {
                         // case : if user direct login from login button
                         loge(TAG, "direct login:")
                         moveOnProfileInfo(
-                                userName = json.getAsJsonObject("user_details").get("username").asString,
-                                email = json.getAsJsonObject("user_details").get("email").asString,
-                                first_name = json.getAsJsonObject("user_details").get("first_name").asString,
-                                customer_id = json.getAsJsonObject("user_details").get("id").asString,
+                                userName = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.USERNAME).asString,
+                                email = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.EMAIL).asString,
+                                telephone_no = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.TELEPHONE_NO).asString,
+                                first_name = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.FIRST_NAME).asString,
+                                customer_id = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.ID).asString,
                                 login_from = Constants.DIRECT,
                                 language = "en"
                         )
@@ -263,6 +287,7 @@ class AccountFragment : BaseFragment() {
     fun moveOnProfileInfo(
             userName: String,
             email: String,
+            telephone_no : String,
             first_name: String,
             customer_id: String,
             login_from: String,
@@ -272,6 +297,7 @@ class AccountFragment : BaseFragment() {
 
         PreferenceUtil.putValue(PreferenceUtil.USER_NAME, userName)
         PreferenceUtil.putValue(PreferenceUtil.E_MAIL, email)
+        PreferenceUtil.putValue(PreferenceUtil.TELEPHONE_NO, telephone_no)
         PreferenceUtil.putValue(PreferenceUtil.LANGUAGE, language)
         PreferenceUtil.putValue(PreferenceUtil.LOGIN_FROM, login_from)
         PreferenceUtil.putValue(PreferenceUtil.FIRST_NAME, first_name)  // default wakeLock should be ON
@@ -280,7 +306,8 @@ class AccountFragment : BaseFragment() {
         PreferenceUtil.save()
         //showProgressDialog()
         val fragment = Profile.newInstance()
-        addFragment(R.id.home_account_container, fragment, Profile.TAG, true)
+        addFragment(R.id.home_account_container, fragment, Profile.TAG, false)
+       // OrderFragment.ui_model!!.reloadfragment.value=true  // no matter to pass true/false its just for triggering event to reload fragment.
         // When user is comming from cart to login then:
         if (EpayActivity.moveonEpay){
             loge(TAG,"moveonEpay"+EpayActivity.moveonEpay)
@@ -497,6 +524,7 @@ class AccountFragment : BaseFragment() {
                             userName = displayName.toString(),
                             first_name = phone.toString(),
                             customer_id = "",
+                            telephone_no = "",
                             email = email.toString(),
                             login_from = Constants.GOOGLE,
                             language = "en"

@@ -15,13 +15,16 @@ import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.databinding.FragmentProfileBinding
 import dk.eatmore.foodapp.databinding.FragmentSignupBinding
+import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.DialogUtils
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_signup.*
+import kotlinx.android.synthetic.main.toolbar.*
 
 class Profile : BaseFragment() {
 
@@ -29,6 +32,7 @@ class Profile : BaseFragment() {
     private var profileEdit_fragment: ProfileEdit? = null
     private var healthreport: HealthReport? = null
     private var termscondition: TermsCondition? = null
+    private var editaddress: EditAddress? = null
     private var coupan_fragment: Coupan? = null
     private lateinit var ui_model: UIModel
 
@@ -57,10 +61,12 @@ class Profile : BaseFragment() {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
+            txt_toolbar.text=getString(R.string.help)
+            img_toolbar_back.visibility=View.GONE
             ui_model = createViewModel()
             ui_model.init()
 
-
+/*
             health_report.setOnClickListener {
                 healthreport = HealthReport.newInstance()
                 addFragment(R.id.profile_container, healthreport!!, HealthReport.TAG, true)
@@ -80,7 +86,7 @@ class Profile : BaseFragment() {
             terms_of_services.setOnClickListener {
                 termscondition = TermsCondition.newInstance()
                 addFragment(R.id.profile_container, termscondition!!, TermsCondition.TAG, true)
-            }
+            }*/
 
         } else {
             logd(TAG, "saveInstance NOT NULL")
@@ -119,10 +125,14 @@ class Profile : BaseFragment() {
             override fun onPositiveButtonClick(position: Int) {
                 (parentFragment as AccountFragment).signOut()
                 PreferenceUtil.clearAll()
+                val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
+                (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
                 PreferenceUtil.save()
+                // clear all but add id again to collect non user item into cart.
                 PreferenceUtil.putValue(PreferenceUtil.DEVICE_TOKEN, Settings.Secure.getString(context!!.getContentResolver(), Settings.Secure.ANDROID_ID))
                 PreferenceUtil.save()
                 (activity as HomeActivity).onBackPressed()
+             //   OrderFragment.ui_model!!.reloadfragment.value=true
             }
 
             override fun onNegativeButtonClick() {
@@ -132,25 +142,32 @@ class Profile : BaseFragment() {
 
 
     fun backpress(): Boolean {
-        if (profileEdit_fragment != null && profileEdit_fragment!!.isVisible) {
-            childFragmentManager.popBackStack()
-            return true
-        } else if (coupan_fragment != null && coupan_fragment!!.isVisible) {
-            childFragmentManager.popBackStack()
-            return true
-        } else if (healthreport != null && healthreport!!.isVisible) {
-            childFragmentManager.popBackStack()
-            return true
-        } else if (termscondition != null && termscondition!!.isVisible) {
-            childFragmentManager.popBackStack()
-            return true
-        } else {
-            if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
+
+            if (profileEdit_fragment != null && profileEdit_fragment!!.isVisible) {
+                childFragmentManager.popBackStack()
                 return true
-            } else {
-                return false  // this return would work for logout.
+            } else if (coupan_fragment != null && coupan_fragment!!.isVisible) {
+                childFragmentManager.popBackStack()
+                return true
+            } else if (healthreport != null && healthreport!!.isVisible) {
+                childFragmentManager.popBackStack()
+                return true
             }
-        }
+            else if (termscondition != null && termscondition!!.isVisible) {
+                childFragmentManager.popBackStack()
+                return true
+            }
+            else if (editaddress != null && editaddress!!.isVisible) {
+                childFragmentManager.popBackStack()
+                return true
+            }
+            else {
+                if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
+                    return true
+                } else {
+                    return false  // this return would work for logout.
+                }
+            }
     }
 
     override fun onDestroy() {
@@ -175,6 +192,31 @@ class Profile : BaseFragment() {
         fun signout(view: View) {
             profile.logOut()
         }
+        fun healthreport(view: View){
+            profile.healthreport = HealthReport.newInstance()
+            profile.addFragment(R.id.profile_container, profile.healthreport!!, HealthReport.TAG, false)
+        }
+        fun profileInfo(view: View){
+            profile.profileEdit_fragment = ProfileEdit.newInstance()
+            profile.addFragment(R.id.profile_container, profile.profileEdit_fragment!!, ProfileEdit.TAG, false)
+        }
+        fun giftcart(view: View){
+            profile.coupan_fragment = Coupan.newInstance()
+            profile.addFragment(R.id.profile_container, profile.coupan_fragment!!, Coupan.TAG, false)
+        }
+        fun termsofservices(view: View){
+            profile.termscondition = TermsCondition.newInstance()
+            profile.addFragment(R.id.profile_container, profile.termscondition!!, TermsCondition.TAG, false)
+        }
+      /*  fun openinghours(view: View){
+            profile.openinghours = OpeningHours.newInstance()
+            profile.addFragment(R.id.profile_container, profile.openinghours!!, OpeningHours.TAG, true)
+        }*/
+        fun editaddress(view: View){
+            profile.editaddress = EditAddress.newInstance()
+            profile.addFragment(R.id.profile_container, profile.editaddress!!, EditAddress.TAG, false)
+        }
+
     }
 
 

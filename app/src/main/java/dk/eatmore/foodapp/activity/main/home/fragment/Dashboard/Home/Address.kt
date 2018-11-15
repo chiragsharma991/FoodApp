@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v7.widget.AppCompatEditText
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
@@ -79,13 +80,13 @@ class Address : BaseFragment(), TextWatcher {
             inputValidStates[house_edt] = false
             inputValidStates[city_edt] = false
             postnumber_edt.imeOptions=EditorInfo.IME_ACTION_DONE
-            postnumber_edt.setOnKeyListener(object : View.OnKeyListener {
-                override fun onKey(v: View, actionId: Int, event: KeyEvent): Boolean {
-                    loge(TAG,"done button---")
-                    return false
+            postnumber_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+                override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                    moveon_next()
+                    return true
                 }
-            })
 
+            })
             ui_model = createViewModel()
             if (ui_model!!.user_infoList.value == null) {
                 fetchuserInfo()
@@ -93,28 +94,10 @@ class Address : BaseFragment(), TextWatcher {
                 refreshview()
             }
             proceed_view_nxt.setOnClickListener {
-                if (validationFields()) {
-
-                    /**TODO  API CALL LOGIC FROM ADDRESS SCREEN
-                     * DELIVERY: we are calling "deliveryDetails" api if delivery is select because : user can edit their address and info so we have to submit that information.
-                     * PICKUP: we are not calling api in this section because user just entered name and phone and it can be proceed.
-                     * DELIVERY TIME SLOT:
-                     * - if i use delivery api then i store time slot and pass another screen so i never call api in "delivery time slot" screen if i am coming from "delivery"
-                     * - if i call api in "delivery time slot" only on one condition to get time, if i am coming from "Pickup"
-                     */
-
-                    if(EpayActivity.isPickup){
-                        EpayActivity.paymentattributes.first_name=name_edt.text.toString()
-                        EpayActivity.paymentattributes.telephone_no=telephone_number_edt.text.toString()
-                        val fragment = DeliveryTimeslot.newInstance(null)
-                        (activity as EpayActivity).addFragment(R.id.epay_container,fragment, DeliveryTimeslot.TAG,true)
-                    }
-                    else{
-                        proceed_view_nxt.isEnabled =false
-                        submitdelivery()
-                    }
-                }
+                moveon_next()
             }
+
+
 
 
 
@@ -123,6 +106,33 @@ class Address : BaseFragment(), TextWatcher {
             logd(TAG, "saveInstance NOT NULL")
         }
 
+    }
+
+    fun moveon_next(){
+
+        if (validationFields()) {
+
+            /**TODO  API CALL LOGIC FROM ADDRESS SCREEN
+             * DELIVERY: we are calling "deliveryDetails" api if delivery is select because : user can edit their address and info so we have to submit that information.
+             * PICKUP: we are not calling api in this section because user just entered name and phone and it can be proceed.
+             * DELIVERY TIME SLOT:
+             * - if i use delivery api then i store time slot and pass another screen so i never call api in "delivery time slot" screen if i am coming from "delivery"
+             * - if i call api in "delivery time slot" only on one condition to get time, if i am coming from "Pickup"
+             */
+
+            if(EpayActivity.isPickup){
+                EpayActivity.paymentattributes.first_name=name_edt.text.toString()
+                EpayActivity.paymentattributes.telephone_no=telephone_number_edt.text.toString()
+                EpayActivity.paymentattributes.upto_min_shipping="0"
+                val fragment = DeliveryTimeslot.newInstance(null)
+                (activity as EpayActivity).addFragment(R.id.epay_container,fragment, DeliveryTimeslot.TAG,true)
+            }
+            else{
+                if(proceed_view_nxt.isEnabled == false) return
+                proceed_view_nxt.isEnabled =false
+                submitdelivery()
+            }
+        }
     }
 
 
@@ -253,6 +263,7 @@ class Address : BaseFragment(), TextWatcher {
 
 
     private fun fetchuserInfo() {
+        progresswheel(progresswheel,true)
         val postParam = JsonObject()
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
@@ -287,6 +298,7 @@ class Address : BaseFragment(), TextWatcher {
 
                     ui_model!!.user_infoList.value = userinfo_model
                     loge(TAG, "data is---" + userinfo_model.user_info.telephone_no + " " + userinfo_model.user_info.name)
+                    progresswheel(progresswheel,false)
                     // ui_model!!.user_infoList.value!!.user_info.name
                 }
             }
@@ -301,12 +313,14 @@ class Address : BaseFragment(), TextWatcher {
                         showSnackBar(address_container, getString(R.string.internet_not_available))
                     }
                 }
+                progresswheel(progresswheel,false)
             }
         })
     }
 
 
     private fun submitdelivery() {
+        progresswheel(progresswheel,true)
         val postParam = JsonObject()
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
@@ -355,9 +369,10 @@ class Address : BaseFragment(), TextWatcher {
                      val fragment = DeliveryTimeslot.newInstance(time_list)
                      (activity as EpayActivity).addFragment(R.id.epay_container,fragment, DeliveryTimeslot.TAG,true)
                     proceed_view_nxt.isEnabled = true
-
+                    progresswheel(progresswheel,false)
 
                 } else {
+                    progresswheel(progresswheel,false)
                     showSnackBar(address_container, getString(R.string.error_404))
                     proceed_view_nxt.isEnabled = true
                 }
@@ -373,6 +388,7 @@ class Address : BaseFragment(), TextWatcher {
                     }
                 }
                 proceed_view_nxt.isEnabled = true
+                progresswheel(progresswheel,false)
 
             }
         })

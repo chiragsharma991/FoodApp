@@ -197,10 +197,10 @@ class Menu : BaseFragment(), RecyclerClickListner {
     override fun<T> onClick(model: T?) {
 
         val data= model as MenuListItem
-        (parentFragment as DetailsFragment).appbar.setExpanded(false,true)
+    /*    (parentFragment as DetailsFragment).appbar.setExpanded(false,true)
         (parentFragment as DetailsFragment).collapse_toolbar.setBackgroundColor(ContextCompat.getColor(context!!,R.color.white));
         (parentFragment as DetailsFragment).collapse_toolbar.setStatusBarScrimColor(ContextCompat.getColor(context!!,R.color.white))
-        (parentFragment as DetailsFragment).collapse_toolbar.setContentScrimColor(ContextCompat.getColor(context!!,R.color.white))
+        (parentFragment as DetailsFragment).collapse_toolbar.setContentScrimColor(ContextCompat.getColor(context!!,R.color.white))*/
 
 
         val fragment = CategoryList.newInstance()

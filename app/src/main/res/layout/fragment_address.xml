@@ -2,7 +2,7 @@
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-
+    xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
     >
 
     <data>
@@ -153,6 +153,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
+                        android:hint="@string/enter_your_street_number"
                         android:layout_weight="1.5"
                         android:background="@drawable/rectangle_edittext"
                         android:padding="@dimen/_8sdp"
@@ -171,6 +172,7 @@
                         android:layout_marginStart="8dp"
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
+                        android:hint="@string/enter_your_house_number"
                         android:layout_weight="1.5"
                         android:background="@drawable/rectangle_edittext"
                         android:padding="@dimen/_8sdp"
@@ -191,6 +193,7 @@
                         android:layout_marginTop="8dp"
                         android:layout_marginEnd="8dp"
                         android:layout_weight="1.5"
+                        android:hint="@string/enter_your_floor_number"
                         android:background="@drawable/rectangle_edittext"
                         android:padding="@dimen/_8sdp"
                         android:singleLine="true"
@@ -331,6 +334,24 @@
 
 
         </RelativeLayout>
+
+        <dk.eatmore.foodapp.utils.ProgressWheel
+            android:id="@+id/progresswheel"
+            android:layout_width="50dp"
+            android:layout_height="50dp"
+            android:layout_centerInParent="true"
+            android:layout_gravity="center_vertical|center_horizontal"
+            ProgressWheel:pwTextColor="@android:color/transparent"
+            ProgressWheel:pwTextSize="9sp"
+            android:visibility="gone"
+            ProgressWheel:pwRimColor="@android:color/transparent"
+            ProgressWheel:pwBarLength="80dp"
+            ProgressWheel:pwBarColor ="@color/theme_color"
+            ProgressWheel:pwBarWidth="4dp"
+            ProgressWheel:pwRimWidth="1dp"
+            ProgressWheel:pwSpinSpeed="4dp"
+            />
+
 
 
     </FrameLayout>
