@@ -1,6 +1,5 @@
 package dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order
 
-import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
@@ -10,9 +9,9 @@ import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
+import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.LinearLayoutManager
-import android.transition.ChangeBounds
 import android.transition.Slide
 import android.util.Log
 import android.view.Gravity
@@ -31,9 +30,7 @@ import dk.eatmore.foodapp.databinding.RowOrderedPizzaBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedRestaurant
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
-import dk.eatmore.foodapp.model.order.UI_OrderFragment
 import dk.eatmore.foodapp.model.User
-import dk.eatmore.foodapp.model.home.ProductListModel
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
@@ -46,11 +43,14 @@ import kotlinx.android.synthetic.main.toolbar.*
 import java.io.Serializable
 import java.util.ArrayList
 
-class OrderFragment : BaseFragment(), RecyclerClickInterface {
+class OrderFragment : BaseFragment(), RecyclerClickInterface, SwipeRefreshLayout.OnRefreshListener {
+
 
 
     private lateinit var binding: FragmentOrderContainerBinding
     private  val myclickhandler = MyClickHandler(this@OrderFragment)
+    private var mAdapter: UniversalAdapter<Orderresult, RowOrderedPizzaBinding>? = null
+
 
 
 
@@ -64,6 +64,12 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface {
         }
     }
 
+
+    override fun onRefresh() {
+        // swipe to refresh>>>
+        swipetorefresh_view.visibility=View.GONE
+        fetchmyOrder()
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding= DataBindingUtil.inflate(inflater,getLayout(),container,false)
@@ -79,9 +85,10 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface {
         loge(TAG,"saveInstance "+savedInstanceState)
         if(savedInstanceState == null){
             empty_view.visibility=View.GONE
-            progress_bar.visibility=View.GONE
+            //progress_bar.visibility=View.GONE
             txt_toolbar.text=getString(R.string.orders)
             img_toolbar_back.visibility=View.GONE
+            swipeRefresh.setOnRefreshListener(this)
             ui_model = createViewModel()
             if(!PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS,false)){
                 empty_view.visibility=View.VISIBLE
@@ -118,7 +125,9 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface {
                 reloadfragment.removeObservers(this@OrderFragment)
 
                 myorder_List.observe(this@OrderFragment, Observer<Myorder_Model> {
-                    refreshview()
+                   val list = ArrayList<Orderresult>()
+                    list.addAll(ui_model!!.myorder_List.value!!.orderresult)
+                    refreshview(list)
                 })
                 restaurant_info.observe(this@OrderFragment, Observer<Myorder_Model> {
                     loge(TAG,"move next refresh---")
@@ -135,10 +144,14 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface {
 
 
 
-     fun refreshview() {
+     fun refreshview(list: ArrayList<Orderresult>) {
         loge(TAG,"refresh view--")
+      /*   if(mAdapter !=null){
+             mAdapter!!.notifyDataSetChanged()
+             return
+         }*/
         recycler_view.apply {
-           val mAdapter = UniversalAdapter(context!!, ui_model!!.myorder_List.value!!.orderresult, R.layout.row_ordered_pizza, object : RecyclerCallback<RowOrderedPizzaBinding, Orderresult> {
+            mAdapter = UniversalAdapter(context!!, list, R.layout.row_ordered_pizza, object : RecyclerCallback<RowOrderedPizzaBinding, Orderresult> {
                 override fun bindData(binder: RowOrderedPizzaBinding, model: Orderresult) {
                     binder.orderresult=model
                     binder.util=BindDataUtils
@@ -178,7 +191,8 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface {
 
     fun fetchmyOrder() {
         empty_view.visibility=View.GONE
-        progress_bar.visibility=View.VISIBLE
+      //  progress_bar.visibility=View.VISIBLE
+        swipeRefresh.isRefreshing=true
         val postParam = JsonObject()
         postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
         postParam.addProperty(Constants.EATMORE_APP,true)
@@ -194,10 +208,15 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface {
                     loge(TAG,"status--"+myorder_Model.orderresult.size.toString())
                     ui_model!!.myorder_List.value=myorder_Model
                 }else{
+                  //  if(ui_model!!.myorder_List.value != null) ui_model!!.myorder_List.value!!.orderresult.clear()
+                    val list = ArrayList<Orderresult>()
+                    refreshview(list)
                     empty_view.visibility=View.VISIBLE
                     error_txt.text=getString(R.string.no_order)
                 }
-                progress_bar.visibility=View.GONE
+                //progress_bar.visibility=View.GONE
+                swipeRefresh.isRefreshing=false
+
 
             }
 
@@ -211,7 +230,8 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface {
                         showSnackBar(home_order_container, getString(R.string.internet_not_available))
                     }
                 }
-                progress_bar.visibility=View.GONE
+                swipeRefresh.isRefreshing=false
+                //progress_bar.visibility=View.GONE
             }
         })
     }
