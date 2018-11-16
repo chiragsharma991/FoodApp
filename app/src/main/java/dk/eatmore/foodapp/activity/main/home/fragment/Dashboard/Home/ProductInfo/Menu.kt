@@ -97,14 +97,14 @@ class Menu : BaseFragment(), RecyclerClickListner {
 
                     logd(TAG,"click---")
                     val fragment = SearchMenu.newInstance(ui_model!!.productList.value)
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                   /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-                        /*             // 2. Shared Elements Transition
+                        *//*             // 2. Shared Elements Transition
                                      val enterTransitionSet = TransitionSet()
                                      enterTransitionSet.addTransition(TransitionInflater.from(context).inflateTransition(android.R.transition.move))
                                      enterTransitionSet.duration = 1000
                                      enterTransitionSet.startDelay = 300
-                                     fragment.setSharedElementEnterTransition(enterTransitionSet)*/
+                                     fragment.setSharedElementEnterTransition(enterTransitionSet)*//*
 
                         // 3. Enter Transition for New Fragment
 //                        val enterFade = Fade()
@@ -119,7 +119,13 @@ class Menu : BaseFragment(), RecyclerClickListner {
                     }
                     else {
                         homeFragment.addFragment(R.id.home_fragment_container,fragment, SearchMenu.TAG,false)
-                    }
+                    }*/
+                if((activity as HomeActivity).is_reorderprocess())
+                (activity as HomeActivity).addFragment(R.id.home_container,fragment, SearchMenu.TAG,false)
+                else
+                homeFragment.addFragment(R.id.home_fragment_container,fragment, SearchMenu.TAG,false)
+
+
 
 
             }
@@ -218,6 +224,9 @@ class Menu : BaseFragment(), RecyclerClickListner {
             fragment.sharedElementEnterTransition=changeBoundsTransition
             fragment.enterTransition=enter
         }
+        if((activity as HomeActivity).is_reorderprocess())
+        (activity as HomeActivity).addFragment(R.id.home_container,fragment, CategoryList.TAG,false)
+        else
         homeFragment.addFragment(R.id.home_fragment_container,fragment,CategoryList.TAG,false)
 
     }

@@ -36,6 +36,7 @@
     <string name="login_val_pass">Username/Password cannot be blank</string>
     <string name="internet_not_available">Please check internet connection</string>
     <string name="error_404">Server not found... Try after sometime</string>
+    <string name="error_407">Server not responding\nPlease chenck the network connection.</string>
     <string name="please_wait">Please wait...</string>
     <string name="enter_valid_email_address">Enter valid email address</string>
     <string name="enter_unique_password">Enter unique password</string>
@@ -55,6 +56,7 @@
     <string name="if_you_have_any_questions">If you have any questions or enquiries please call us on:</string>
     <string name="permission_denied">Permission denied</string>
     <string name="first_name">First name</string>
+    <string name="we_are_sorry">We are Sorry.\nThis restaurant is closed.\nPlease check opening hours.</string>
     <string name="subscribe">Modtag nyhedsbrev fra EatMore. Bare rolig vi spammer dig selvfølgelig ikke. Du accepterer at vi må kontakte dig via e-mail, telefon, push notifikationer eller sms med gode tilbud og informationer omkring konkurrencer, produkter og tjenester. Du kan til enhver tid afmelde dig.</string>
     <string name="open_now">Open Now</string>
     <string name="pre_order">Pre Order</string>
@@ -140,4 +142,5 @@
     <string name="update">Update</string>
     <string name="please_login_to_see">Please login to see your previous orders.</string>
     <string name="no_order">No order(s) to display.</string>
+    <string name="try_again">Try again</string>
 </resources>

@@ -83,7 +83,9 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
 
             subtxt_toolbar.text = bundle?.getString(Constants.TITLE, "") ?: ""
             setanim_toolbartitle(appbar, txt_toolbar, bundle?.getString(Constants.TITLE, "") ?: "")
-            img_toolbar_back.setOnClickListener { (activity as HomeActivity).onBackPressed() }
+            img_toolbar_back.setOnClickListener {
+                (activity as HomeActivity).onBackPressed()
+            }
             // loge(TAG,"product_attribute --- "+menuListItem.product_list!!.get(0).product_attribute)
             mAdapter = UniversalAdapter(context!!, menuListItem.product_list, R.layout.row_category_list, object : RecyclerCallback<RowCategoryListBinding, ProductListItem> {
                 override fun bindData(binder: RowCategoryListBinding, model: ProductListItem) {
@@ -94,7 +96,7 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
             recycler_view_category.adapter = mAdapter
             viewcart.setOnClickListener {
                 val intent = Intent(activity, EpayActivity::class.java)
-                startActivityForResult(intent,1)
+                startActivityForResult(intent, 1)
             }
 
 
@@ -103,27 +105,42 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
         }
     }
 
-    fun updatebatchcount(count : Int){
+    fun updatebatchcount(count: Int) {
         badge_notification_txt.visibility = if (DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
-        badge_notification_txt.text= DetailsFragment.total_cartcnt.toString()
-        badge_countprice.text= BindDataUtils.convertCurrencyToDanish(DetailsFragment.total_cartamt)
+        badge_notification_txt.text = DetailsFragment.total_cartcnt.toString()
+        badge_countprice.text = BindDataUtils.convertCurrencyToDanish(DetailsFragment.total_cartamt)
     }
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        loge("onActivityResult categorylist---",""+resultCode+" "+requestCode)
+        loge("onActivityResult categorylist---", "" + resultCode + " " + requestCode)
         // request : send code with request
         // result :  get code from target activity
 
-        if(requestCode ==1 && resultCode == AppCompatActivity.DEFAULT_KEYS_SHORTCUT && TransactionStatus.moveonsearch){
-            TransactionStatus.moveonsearch=false
-            val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
-            (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
+        if ((activity as HomeActivity).is_reorderprocess()) {
+            // If user is coming from reorder>>>>
+            if (requestCode == 1 && resultCode == AppCompatActivity.DEFAULT_KEYS_SHORTCUT && TransactionStatus.moveonsearch) {
+                // back press from transaction success and continue.
+                TransactionStatus.moveonsearch = false
+                (activity as HomeActivity).popAllReorderFragment()
+                //  ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getContainerFragment().popAllFragment()
+            }
+        } else {
+            // If user is coming from Homecontainer >>>>
+            if (requestCode == 1 && resultCode == AppCompatActivity.DEFAULT_KEYS_SHORTCUT && TransactionStatus.moveonsearch) {
+                // back press from transaction success and continue.
+                TransactionStatus.moveonsearch = false
+                val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
+                (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
+
+                //  ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getContainerFragment().popAllFragment()
+            } else if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK && EpayActivity.moveonEpay) {
+                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2)
+            }
         }
 
-       else if(requestCode ==1 && resultCode == AppCompatActivity.RESULT_OK && EpayActivity.moveonEpay ){
-            ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2)
-        }
+
+
     }
 
 
@@ -170,10 +187,10 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
                 val jsonObject = body as JsonObject
                 if (jsonObject.get(Constants.STATUS).asBoolean) {
                     showProgressDialog()
-                    Toast.makeText(context,getString(R.string.item_has_been),Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, getString(R.string.item_has_been), Toast.LENGTH_SHORT).show()
                     val intent = Intent(Constants.CARTCOUNT_BROADCAST)
-                    intent.putExtra(Constants.CARTCNT,if(jsonObject.get(Constants.CARTCNT).isJsonNull  || jsonObject.get(Constants.CARTCNT).asString =="0") 0 else (jsonObject.get(Constants.CARTCNT).asString).toInt())
-                    intent.putExtra(Constants.CARTAMT,if(jsonObject.get(Constants.CARTAMT).isJsonNull || jsonObject.get(Constants.CARTAMT).asString =="0") "00.00" else jsonObject.get(Constants.CARTAMT).asString)
+                    intent.putExtra(Constants.CARTCNT, if (jsonObject.get(Constants.CARTCNT).isJsonNull || jsonObject.get(Constants.CARTCNT).asString == "0") 0 else (jsonObject.get(Constants.CARTCNT).asString).toInt())
+                    intent.putExtra(Constants.CARTAMT, if (jsonObject.get(Constants.CARTAMT).isJsonNull || jsonObject.get(Constants.CARTAMT).asString == "0") "00.00" else jsonObject.get(Constants.CARTAMT).asString)
                     LocalBroadcastManager.getInstance(context!!).sendBroadcast(intent)
 
                 } else {

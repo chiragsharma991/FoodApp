@@ -30,6 +30,7 @@ import java.util.regex.PatternSyntaxException
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
 import android.os.Build
+import android.preference.PreferenceGroup
 import android.provider.Settings
 import android.support.constraint.ConstraintSet
 import android.support.transition.ChangeBounds
@@ -40,6 +41,11 @@ import com.airbnb.lottie.LottieProperty
 import com.airbnb.lottie.TextDelegate
 import com.airbnb.lottie.model.KeyPath
 import com.facebook.shimmer.ShimmerFrameLayout
+import com.google.gson.JsonObject
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
+import dk.eatmore.foodapp.rest.ApiCall
+import dk.eatmore.foodapp.utils.BaseFragment
+import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.splash_activity.*
 
 
@@ -83,7 +89,6 @@ class Splash : BaseActivity() {
             systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
         }
         fullScreen()
-        PreferenceUtil.putValue(PreferenceUtil.DEVICE_TOKEN,Settings.Secure.getString(this.getContentResolver(), Settings.Secure.ANDROID_ID))
         PreferenceUtil.save()
         getCurrentVersion()
         screenPlay()
@@ -113,8 +118,8 @@ class Splash : BaseActivity() {
                 shimmerLayout.startAnimation(AnimationUtils.loadAnimation(this@Splash, R.anim.text_bottomto_top))
                 Handler().postDelayed({
                        // GetLatestVersion().execute()
-                         moveToLogin()
-                },6000)
+                    savedevice_token()
+                },4000)
 
             },100)
 
@@ -122,6 +127,54 @@ class Splash : BaseActivity() {
 
 
     }
+
+    private fun savedevice_token() {
+        lottie_loader.visibility=View.VISIBLE
+        callAPI(ApiCall.devicetoken(
+                token = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID),
+                user_id = PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,"")!!,
+                device_type = Constants.DEVICE_TYPE_VALUE,
+                eatmore_app = true,
+                auth_key = Constants.AUTH_VALUE
+        ), object : BaseFragment.OnApiCallInteraction {
+
+            override fun <T> onSuccess(body: T?) {
+                val jsonObject = body as JsonObject
+                if (jsonObject.get(Constants.STATUS).asBoolean) {
+                    PreferenceUtil.putValue(PreferenceUtil.DEVICE_TOKEN,Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))
+                    moveToLogin()
+                }else{
+                    lottie_loader.visibility=View.GONE
+                    DialogUtils.openDialogDefault(context = this@Splash,btnNegative = "",btnPositive = getString(R.string.try_again), color = ContextCompat.getColor(this@Splash,R.color.black),msg =getString(R.string.error_407),title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                        override fun onPositiveButtonClick(position: Int) {
+                            savedevice_token()
+                        }
+                        override fun onNegativeButtonClick() {}
+                    })
+                }
+            }
+
+            override fun onFail(error: Int) {
+                lottie_loader.visibility=View.GONE
+                when (error) {
+                    404 -> {
+                        DialogUtils.openDialogDefault(context = this@Splash,btnNegative = "",btnPositive = getString(R.string.ok), color = ContextCompat.getColor(this@Splash,R.color.black),msg =getString(R.string.error_404),title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                            override fun onPositiveButtonClick(position: Int) {finish()}
+                            override fun onNegativeButtonClick() {}
+                        })
+                    }
+                    100 -> {
+                        DialogUtils.openDialogDefault(context = this@Splash,btnNegative = "",btnPositive = getString(R.string.ok), color = ContextCompat.getColor(this@Splash,R.color.black),msg =getString(R.string.internet_not_available),title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                            override fun onPositiveButtonClick(position: Int) {finish()}
+                            override fun onNegativeButtonClick() {}
+                        })
+                    }
+                }
+            }
+        })
+    }
+
+
 
     private fun getCurrentVersion() {
 

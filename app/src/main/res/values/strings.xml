@@ -35,6 +35,7 @@
     <string name="login_val_pass">Username/Password cannot be blank</string>
     <string name="internet_not_available">Please check internet connection</string>
     <string name="error_404">Server not found... Try after sometime</string>
+    <string name="error_407">Server not responding\nPlease chenck the network connection.</string>
     <string name="please_wait">Please wait...</string>
     <string name="enter_valid_email_address">Enter valid email address</string>
     <string name="enter_unique_password">Enter unique password</string>
@@ -63,6 +64,7 @@
     <string name="notavailable">Not available</string>
     <string name="user_have_reviewed">%1$s user have reviewed</string>
     <string name="samlet">samlet</string>
+    <string name="we_are_sorry">We are Sorry.\nThis restaurant is closed.\nPlease check opening hours.</string>
     <string name="kvalitet">Kvalitet</string>
     <string name="kundeservice">Kundeservice</string>
     <string name="leveringstid">Leveringstid</string>
@@ -139,6 +141,7 @@
     <string name="update">Update</string>
     <string name="please_login_to_see">Please login to see your previous orders.</string>
     <string name="no_order">No order(s) to display.</string>
+    <string name="try_again">Try again</string>
 
 
 </resources>

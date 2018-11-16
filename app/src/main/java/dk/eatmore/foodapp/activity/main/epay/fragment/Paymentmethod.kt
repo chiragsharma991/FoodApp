@@ -496,6 +496,7 @@ class Paymentmethod : BaseFragment(), TextWatcher {
                     loge(TransactionStatus.TAG," ordertransaction is success ")
                     DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!,R.color.black),msg = getString(R.string.transaction_has_been_declined),title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
                         override fun onPositiveButtonClick(position: Int) {
+                            loge(TAG,"ok button---")
                         }
                         override fun onNegativeButtonClick() {
                         }

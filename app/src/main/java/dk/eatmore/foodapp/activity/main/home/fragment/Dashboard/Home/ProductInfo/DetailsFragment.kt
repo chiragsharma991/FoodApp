@@ -161,11 +161,23 @@ class DetailsFragment : BaseFragment() {
                     total_cartcnt = intent.extras.getInt(Constants.CARTCNT)
                     total_cartamt = intent.extras.getString(Constants.CARTAMT)
                     updatebatchcount(0)
-                    val homefragment : HomeFragment = ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment()
-                    val fragment =homefragment.childFragmentManager.findFragmentByTag(CategoryList.TAG)
-                    if(fragment !=null){
-                        (fragment as CategoryList).updatebatchcount(0)
+
+                    // check if category screen is present then update therir batch count as well as this screen.
+                    if((activity as HomeActivity).is_reorderprocess()){
+                        val fragment = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(CategoryList.TAG)
+                        if(fragment !=null){
+                            (fragment as CategoryList).updatebatchcount(0)
+                        }
+                    }else{
+                        val homefragment : HomeFragment = ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment()
+                        val fragment =homefragment.childFragmentManager.findFragmentByTag(CategoryList.TAG)
+                        if(fragment !=null){
+                            (fragment as CategoryList).updatebatchcount(0)
+                        }
                     }
+
+
+
                 }
             }
 
@@ -183,25 +195,35 @@ class DetailsFragment : BaseFragment() {
 
 
     fun onBackpress() {
-        parentFragment!!.childFragmentManager.popBackStack()
-
+       // parentFragment!!.childFragmentManager.popBackStack()
+        (activity as HomeActivity).onBackPressed()
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         loge("onActivityResult Detail fragment---",""+resultCode+" "+requestCode)
         // request : send code with request
         // result :  get code from target activity.
-        if(requestCode ==1 && resultCode == AppCompatActivity.DEFAULT_KEYS_SHORTCUT && TransactionStatus.moveonsearch){
-            TransactionStatus.moveonsearch=false
-            val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
-            (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
-        }
+        if((activity as HomeActivity).is_reorderprocess()){
+            // If user is coming from reorder>>>>
+            if(requestCode ==1 && resultCode == AppCompatActivity.DEFAULT_KEYS_SHORTCUT && TransactionStatus.moveonsearch){
+                // back press from transaction success and continue.
+                TransactionStatus.moveonsearch=false
+                (activity as HomeActivity).popAllReorderFragment()
+            }
+        }else{
+            // If user is coming from Homecontainer >>>>
+            if(requestCode ==1 && resultCode == AppCompatActivity.DEFAULT_KEYS_SHORTCUT && TransactionStatus.moveonsearch){
+                // back press from transaction success and continue.
+                TransactionStatus.moveonsearch=false
+                val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
+                (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
+            }
 
-        else if(requestCode ==1 && resultCode == AppCompatActivity.RESULT_OK && EpayActivity.moveonEpay ){
-            ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2)
+            else if(requestCode ==1 && resultCode == AppCompatActivity.RESULT_OK && EpayActivity.moveonEpay ){
+                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2)
+            }
         }
     }
-
 
     fun setPalette() {
 

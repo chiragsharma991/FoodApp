@@ -15,6 +15,7 @@ import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.AccountFragment
 import dk.eatmore.foodapp.databinding.FragmentSignupBinding
 import dk.eatmore.foodapp.rest.ApiCall
+import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.fragment_signup.*
@@ -325,6 +326,7 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
         jsonobject.addProperty(Constants.EATMORE_APP,eatmore_app)
         jsonobject.addProperty(Constants.FIRST_NAME,first_name)
         jsonobject.addProperty(Constants.EMAIL,email)
+        jsonobject.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
         jsonobject.addProperty(Constants.PASSWORD_HASH,password_hash)
         jsonobject.addProperty(Constants.SUBSCRIBE,subscribe)
 

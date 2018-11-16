@@ -194,7 +194,7 @@ class AccountFragment : BaseFragment() {
                         moveOnProfileInfo(
                                 userName = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.USERNAME).asString,
                                 email = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.EMAIL).asString,
-                                telephone_no = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.TELEPHONE_NO).asString,
+                                telephone_no = if(json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.TELEPHONE_NO).isJsonNull) "" else json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.TELEPHONE_NO).asString ,
                                 first_name = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.FIRST_NAME).asString,
                                 customer_id = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.ID).asString,
                                 login_from = Constants.DIRECT,
@@ -307,7 +307,8 @@ class AccountFragment : BaseFragment() {
         //showProgressDialog()
         val fragment = Profile.newInstance()
         addFragment(R.id.home_account_container, fragment, Profile.TAG, false)
-       // OrderFragment.ui_model!!.reloadfragment.value=true  // no matter to pass true/false its just for triggering event to reload fragment.
+        // no matter to pass true/false its just for triggering event to reload fragment.
+        if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true
         // When user is comming from cart to login then:
         if (EpayActivity.moveonEpay){
             loge(TAG,"moveonEpay"+EpayActivity.moveonEpay)
@@ -324,7 +325,6 @@ class AccountFragment : BaseFragment() {
         return when {
             TextUtils.isEmpty(acc_email_edt.text.trim().toString()) -> {
                 showSnackBar(acc_email_edt, getString(R.string.login_val_email))
-
                 false
             }
             !validMail(acc_email_edt.text.trim().toString()) -> {

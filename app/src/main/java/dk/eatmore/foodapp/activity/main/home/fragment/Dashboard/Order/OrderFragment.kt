@@ -9,6 +9,7 @@ import android.databinding.BindingAdapter
 import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.LinearLayoutManager
 import android.transition.ChangeBounds
@@ -39,6 +40,7 @@ import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.BindDataUtils
 import dk.eatmore.foodapp.utils.Constants
+import dk.eatmore.foodapp.utils.DialogUtils
 import kotlinx.android.synthetic.main.fragment_order_container.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.io.Serializable
@@ -74,30 +76,21 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface {
 
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
-
+        loge(TAG,"saveInstance "+savedInstanceState)
         if(savedInstanceState == null){
-            logd(TAG,"saveInstance NULL")
             empty_view.visibility=View.GONE
             progress_bar.visibility=View.GONE
             txt_toolbar.text=getString(R.string.orders)
             img_toolbar_back.visibility=View.GONE
+            ui_model = createViewModel()
             if(!PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS,false)){
                 empty_view.visibility=View.VISIBLE
                 error_txt.text=getString(R.string.please_login_to_see)
                 return
             }
-            if (ui_model == null){
-                loge(TAG,"ui model is null")
-                ui_model = createViewModel()
-                fetchmyOrder()
-            }else{
-                loge(TAG,"ui model is active")
-
-                // refreshview()
-            }
-        }else{
-            logd(TAG,"saveInstance NOT NULL")
+            fetchmyOrder()
         }
+
 /*
 
          ui_model = ViewModelProviders.of(this).get(UIModel::class.java)
@@ -112,7 +105,7 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface {
 
     class UIModel : ViewModel() {
         var myorder_List = MutableLiveData<Myorder_Model>()  // this is list to show pre order
-        var restaurant_info = MutableLiveData<Testingclass>() // this is list for fetch restaurant info
+        var restaurant_info = MutableLiveData<Myorder_Model>() // this is list for fetch restaurant info
         var reloadfragment = MutableLiveData<Boolean>()
 
     }
@@ -120,12 +113,16 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface {
      fun createViewModel(): OrderFragment.UIModel =
 
             ViewModelProviders.of(this).get(OrderFragment.UIModel::class.java).apply {
+                myorder_List.removeObservers(this@OrderFragment)
+                restaurant_info.removeObservers(this@OrderFragment)
+                reloadfragment.removeObservers(this@OrderFragment)
+
                 myorder_List.observe(this@OrderFragment, Observer<Myorder_Model> {
                     refreshview()
                 })
-                restaurant_info.observe(this@OrderFragment, Observer<Testingclass> {
+                restaurant_info.observe(this@OrderFragment, Observer<Myorder_Model> {
                     loge(TAG,"move next refresh---")
-                   // moveon_next()
+                    moveon_next()
                 })
                 reloadfragment.observe(this@OrderFragment, Observer<Boolean> {
                     // reload fragment from here.
@@ -155,7 +152,6 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface {
 
 
     private fun moveon_next(){
-        loge(TAG,"moveon_next--")
 
         val fragment = DetailsFragment.newInstance(
                 restaurant =  ui_model!!.restaurant_info.value!!.restaurant_info,
@@ -166,15 +162,12 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface {
             enter = Slide()
             enter.setDuration(300)
             enter.slideEdge = Gravity.BOTTOM
-//            val changeBoundsTransition : ChangeBounds = ChangeBounds()
-//            changeBoundsTransition.duration = 300
-//            //fragment!!.sharedElementEnterTransition=changeBoundsTransition
-//            fragment.sharedElementEnterTransition=changeBoundsTransition
-//            fragment.sharedElementReturnTransition=changeBoundsTransition
             fragment.enterTransition=enter
-
         }
-        (activity as HomeActivity).supportFragmentManager.beginTransaction().replace(R.id.home_container, fragment, DetailsFragment.TAG).addToBackStack(DetailsFragment.TAG).commit()
+        // pop all fragment on homecontainer to open reorder framgment.
+        val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
+        (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
+        (activity as HomeActivity).supportFragmentManager.beginTransaction().add(R.id.home_container, fragment, DetailsFragment.TAG).addToBackStack(DetailsFragment.TAG).commit()
 
     }
 
@@ -224,10 +217,10 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface {
     }
 
 
-    fun fetchRestaurant_info(model : Orderresult) {
 
-        empty_view.visibility=View.GONE
-        showProgressDialog()
+
+    fun fetchRestaurant_info(model : Orderresult , cartcnt : String, cartamt : String, show_msg : Boolean, msg : String) {
+
 
         callAPI(ApiCall.restaurant_info(
                 r_token = model.r_token,
@@ -236,15 +229,83 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface {
 
         ), object : BaseFragment.OnApiCallInteraction {
             override fun <T> onSuccess(body: T?) {
-                val myorder_Model= body as Testingclass
+                val myorder_Model= body as Myorder_Model
                 if (myorder_Model.status) {
                     PreferenceUtil.putValue(PreferenceUtil.R_KEY, model.r_key)
                     PreferenceUtil.putValue(PreferenceUtil.R_TOKEN,model.r_token)
+                    myorder_Model.restaurant_info.cartamt=cartamt
+                    myorder_Model.restaurant_info.cartcnt=cartcnt
                     PreferenceUtil.save()
-                    ui_model!!.restaurant_info.value = myorder_Model // move this response to another list to reorder perpose.
-                    moveon_next()
+                    // if restaurant is closed then block all next process.
+                    if(model.is_restaurant_closed){
+                        DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!,R.color.black),msg =getString(R.string.we_are_sorry),title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                            override fun onPositiveButtonClick(position: Int) {}
+                            override fun onNegativeButtonClick() {}
+                        })
+                    }else{
+                        // if restaurant wants to show some info about then.
+                        if(show_msg){
+                            DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!,R.color.black),msg =msg,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                                override fun onPositiveButtonClick(position: Int) {
+                                    ui_model!!.restaurant_info.value = myorder_Model // move this response to another list to reorder perpose.
+                                }
+                                override fun onNegativeButtonClick() {}
+                            })
+                        }else{
+                            ui_model!!.restaurant_info.value = myorder_Model // move this response to another list to reorder perpose.
+                        }
+
+                    }
+
+                }
+                loge(TAG,"ending----")
+                showProgressDialog()
+            }
+
+            override fun onFail(error: Int) {
+                when (error) {
+                    404 -> {
+                        showSnackBar(home_order_container, getString(R.string.error_404))
+                    }
+                    100 -> {
+
+                        showSnackBar(home_order_container, getString(R.string.internet_not_available))
+                    }
                 }
                 showProgressDialog()
+            }
+        })
+    }
+
+
+
+    fun fetchReorder_info(model : Orderresult) {
+
+        empty_view.visibility=View.GONE
+        showProgressDialog()
+        val postParam = JsonObject()
+        postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
+        postParam.addProperty(Constants.EATMORE_APP,true)
+        postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
+        postParam.addProperty(Constants.ORDER_NO,model.order_no )
+
+        callAPI(ApiCall.reorder(postParam), object : BaseFragment.OnApiCallInteraction {
+            override fun <T> onSuccess(body: T?) {
+                val jsonObject= body as JsonObject
+                if (jsonObject.get(Constants.STATUS).asBoolean) {
+                    fetchRestaurant_info(
+                            model=model,
+                            msg = jsonObject.get(Constants.MSG).asString,
+                            cartamt =jsonObject.get(Constants.CARTAMT).asString,
+                            cartcnt = jsonObject.get(Constants.CARTCNT).asString,
+                            show_msg = jsonObject.get(Constants.SHOW_MSG).asBoolean
+                    )
+
+                }else{
+                    showProgressDialog()
+                    showSnackBar(home_order_container, getString(R.string.error_404))
+
+                }
             }
 
             override fun onFail(error: Int) {
@@ -273,7 +334,7 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface {
     class MyClickHandler(val orderFragment: OrderFragment) {
 
         fun reOrder(view: View , model: Orderresult) {
-            orderFragment.fetchRestaurant_info(model)
+            orderFragment.fetchReorder_info(model)
         }
         fun onDetails(view: View, model: Orderresult) {
             orderFragment.onDetails(model)
@@ -302,6 +363,7 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface {
             var restaurant_name: String = "",
             var postal_code: String = "",
             var app_icon: String = "",
+            var is_restaurant_closed : Boolean = false ,
             var r_key: String = "",
             var r_token: String = ""
 
@@ -330,7 +392,7 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface {
     override fun onDestroyView() {
         super.onDestroyView()
         loge(TAG,"on destroyView...")
-        ui_model=null
+       // ui_model=null
     }
 
     override fun onDetach() {

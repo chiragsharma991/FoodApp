@@ -161,6 +161,13 @@ abstract class BaseActivity : AppCompatActivity()
             supportFragmentManager.popBackStack()
         }
     }
+
+    fun popAllReorderFragment() {
+        for (i in 0 until (supportFragmentManager.backStackEntryCount-1)) {
+            supportFragmentManager.popBackStack()
+        }
+    }
+
     fun popWithTag(tag : String) {
         supportFragmentManager.popBackStack(tag,FragmentManager.POP_BACK_STACK_INCLUSIVE)
 

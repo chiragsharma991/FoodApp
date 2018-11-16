@@ -10,6 +10,7 @@ import dk.eatmore.foodapp.model.cart.ProductDetails
 import dk.eatmore.foodapp.model.epay.ViewcardModel
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.model.home.RestaurantListModel
+import dk.eatmore.foodapp.utils.Constants
 import retrofit2.Call
 import retrofit2.http.*
 
@@ -59,7 +60,7 @@ interface ApiInterface {
             @Field("r_token") r_token: String ,
             @Field("r_key") r_key: String,
             @Field("customer_id") customer_id: String
-    ): Call<OrderFragment.Testingclass>
+    ): Call<OrderFragment.Myorder_Model>
 
     @FormUrlEncoded
     @POST("Product/productmaster/product-details")
@@ -75,6 +76,16 @@ interface ApiInterface {
     fun openingHours(
             @Field("r_token") r_token: String ,
             @Field("r_key") r_key: String
+    ): Call<JsonObject>
+
+    @FormUrlEncoded
+    @POST("Enduser/enduser/device-token")
+    fun devicetoken(
+            @Field("token") token: String,
+            @Field("device_type") device_type: String,
+            @Field("auth_key") auth_key: String,
+            @Field("eatmore_app") eatmore_app: Boolean,
+            @Field("user_id") user_id: String
     ): Call<JsonObject>
 
 
@@ -143,6 +154,10 @@ interface ApiInterface {
     @POST("Cart/cart/checkout-delivery")
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun checkout_delivery(@Body jsonObject: JsonObject): Call<JsonObject>
+
+    @POST("PosOrder/order/re-order")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun reorder(@Body jsonObject: JsonObject): Call<JsonObject>
 
     @POST("Cart/cart/checkout-pickup")
     @Headers("Content-Type: application/x-www-form-urlencoded")

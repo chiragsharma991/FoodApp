@@ -44,7 +44,9 @@ Notes :
 
       Parent is Activity && Parent is Fragment not Activity
 
-
+* IP and auth key:
+  IP is for your device code and firebase code (device token)
+  auth key: this is server auth
 
 * Dp:
    - whenever you start ui take reference of 8 dp and start.

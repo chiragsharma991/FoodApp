@@ -57,7 +57,7 @@ class HomeActivity : BaseActivity() {
     private fun initView(savedInstanceState: Bundle?) {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         mHomeContainerFragment = HomeContainerFragment.newInstance()
-        supportFragmentManager.beginTransaction().replace(R.id.home_container, mHomeContainerFragment, HomeContainerFragment.TAG).addToBackStack(HomeContainerFragment.TAG).commit()
+        supportFragmentManager.beginTransaction().add(R.id.home_container, mHomeContainerFragment, HomeContainerFragment.TAG).addToBackStack(HomeContainerFragment.TAG).commit()
 
     }
 
@@ -100,13 +100,26 @@ class HomeActivity : BaseActivity() {
                  mHomeContainerFragment.getContainerFragment().popFragment()
             }
 
-            is DetailsFragment ->{
+            else ->{
                 loge(TAG,"Detail container fragment---")
                 supportFragmentManager.popBackStack()
             }
 
         }
     }
+
+    fun is_reorderprocess() : Boolean{
+
+        // check which home screen is open?
+        val fragment = supportFragmentManager.findFragmentById(R.id.home_container)
+        when(fragment){
+            is HomeContainerFragment ->{
+                return false
+            }
+        }
+        return true
+    }
+
 
 
     override fun onDestroy() {

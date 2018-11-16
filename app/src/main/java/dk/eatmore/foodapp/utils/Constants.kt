@@ -48,6 +48,7 @@ class Constants {
         val OPEFTER="Opefter"
         val CARTCOUNT_BROADCAST="cartcount_broadcast"
         val CARTCNT="cartcnt"
+        val SHOW_MSG="show_msg"
         val CARTAMT="cartamt"
         val USER_INFO="user_info"
         val POSTAL_CITY="postal_city"

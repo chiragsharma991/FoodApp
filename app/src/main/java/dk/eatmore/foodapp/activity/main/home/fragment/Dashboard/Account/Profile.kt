@@ -132,7 +132,8 @@ class Profile : BaseFragment() {
                 PreferenceUtil.putValue(PreferenceUtil.DEVICE_TOKEN, Settings.Secure.getString(context!!.getContentResolver(), Settings.Secure.ANDROID_ID))
                 PreferenceUtil.save()
                 (activity as HomeActivity).onBackPressed()
-             //   OrderFragment.ui_model!!.reloadfragment.value=true
+                if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true
+
             }
 
             override fun onNegativeButtonClick() {

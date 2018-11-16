@@ -39,7 +39,7 @@ class ApiCall {
             return getApiInterface().setProductList(r_token, r_key, customer_id)
         }
 
-        fun restaurant_info(r_token : String, r_key : String, customer_id : String ) : Call<OrderFragment.Testingclass> {
+        fun restaurant_info(r_token : String, r_key : String, customer_id : String ) : Call<OrderFragment.Myorder_Model> {
             return getApiInterface().restaurant_info(r_token, r_key, customer_id)
         }
 
@@ -58,6 +58,9 @@ class ApiCall {
 
         fun checkout_delivery(jsonObject: JsonObject) : Call<JsonObject> {
             return getApiInterface().checkout_delivery(jsonObject)
+        }
+        fun reorder(jsonObject: JsonObject) : Call<JsonObject> {
+            return getApiInterface().reorder(jsonObject)
         }
         fun checkout_pickup(jsonObject: JsonObject) : Call<JsonObject> {
             return getApiInterface().checkout_pickup(jsonObject)
@@ -84,7 +87,9 @@ class ApiCall {
         fun openingHours(r_token : String , r_key : String) : Call<JsonObject> {
             return getApiInterface().openingHours(r_token, r_key)
         }
-
+        fun devicetoken (token : String , eatmore_app : Boolean, auth_key : String, device_type : String, user_id: String) : Call<JsonObject> {
+            return getApiInterface().devicetoken(token=token ,eatmore_app = eatmore_app, auth_key =auth_key, device_type = device_type, user_id = user_id )
+        }
         fun lastLogin(r_token : String , r_key : String , customer_id : String , device_type: String ) : Call<JsonObject> {
             return getApiInterface().lastLogin(r_token, r_key,customer_id,device_type)
         }
