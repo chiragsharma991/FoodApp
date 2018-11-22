@@ -39,13 +39,22 @@ class Constants {
         val R_KEY_N="r_key"
         val R_TOKEN_N="r_token"
         val RESTAURANT="restaurant"
+        val APP_ICON="app_icon"
         val IP="ip"
+        val QUALITY_OF_FOOD="quality_of_food"
+        val DELIVERY_TIME="delivery_time"
+        val CUSTOMER_SERVICE="customer_service"
+        val REVIEW="review"
         val STATUS="status"
         val ORDER_NO="order_no"
+        val ENABLE_RATING="enable_rating"
+        val ORDERRESULT="Orderresult"
+        val ORDER_DATE="order_date"
         val TITLE="title"
         val PRODUCTLIST="ProductList"
         val MENULIST="menulist"
         val OPEFTER="Opefter"
+        val REORDER="Reorder"
         val CARTCOUNT_BROADCAST="cartcount_broadcast"
         val CARTCNT="cartcnt"
         val SHOW_MSG="show_msg"
@@ -95,6 +104,10 @@ class Constants {
         val CARDNO="cardno"
         val EPAY_MERCHANT="epay_merchant"
         val EPAY_MERCHANT_TEST="8024206"
+
+
+
+        val BOTTOM_TO_TOP_ANIM =200
 
 
 

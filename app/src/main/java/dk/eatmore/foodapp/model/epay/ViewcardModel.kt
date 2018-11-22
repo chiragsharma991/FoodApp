@@ -18,7 +18,7 @@ data class ResultItem(
                       val ip: String = "",
                       val op_id: String = "",
                       val discount: String = "",
-                      val p_price: String = "",
+                      val p_price: String? = null,
                       val product_name: String = "",
                       val product_no: String = "",
                       val pDate: String = "",

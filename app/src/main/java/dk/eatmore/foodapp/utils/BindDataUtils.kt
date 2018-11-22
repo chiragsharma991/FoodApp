@@ -1,6 +1,7 @@
 package dk.eatmore.foodapp.utils
 
 import android.databinding.BindingAdapter
+import android.net.ParseException
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatTextView
 import android.util.Log
@@ -11,7 +12,7 @@ import dk.eatmore.foodapp.model.home.ProductListItem
 import java.text.NumberFormat
 import java.util.*
 import android.view.ViewGroup
-
+import java.text.SimpleDateFormat
 
 
 object BindDataUtils {
@@ -56,6 +57,25 @@ object BindDataUtils {
     fun calculateRatingline() : Float {
       return 70f
 
+    }
+
+    fun parseDateToddMMyyyy(time:String):String {
+        val inputPattern = "yyyy-MM-dd HH:mm:ss"
+        val outputPattern = "dd-MMM-yyyy HH:mm"
+     //   val outputPattern = "dd-MMM-yyyy h:mm a"
+        val inputFormat = SimpleDateFormat(inputPattern)
+        val outputFormat = SimpleDateFormat(outputPattern)
+        var date:Date? = null
+        var str:String? = null
+        try
+        {
+            date = inputFormat.parse(time)
+            str = outputFormat.format(date)
+        }
+        catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        return str!!
     }
 
 

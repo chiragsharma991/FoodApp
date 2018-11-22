@@ -36,6 +36,8 @@ import java.util.HashMap
 
      private lateinit var binding: BamborawebfunctionBinding
      private val data = HashMap<String, String>()
+     private var isprocess_on : Boolean = true  // some time payment accept method calls multiple times so we are managing using this variable.
+
 
      companion object {
          val TAG = "BamboraWebfunction"
@@ -136,12 +138,15 @@ import java.util.HashMap
 
     override fun PaymentAccepted(map: MutableMap<String, String>?) {
         Log.e("epay--","PaymentAccepted")
-        progresswheel(progresswheel,false)
-        EpayActivity.paymentattributes.cardno=map!!.get(Constants.CARDNO).toString()
-        EpayActivity.paymentattributes.txnid=map.get(Constants.TXNID).toString()
-        EpayActivity.paymentattributes.paymenttype=map.get(Constants.PAYMENTTYPE).toString()
-        EpayActivity.paymentattributes.txnfee=map.get(Constants.TXNFEE).toString()
-        (activity as EpayActivity).addFragment(R.id.epay_container,TransactionStatus.newInstance(),TransactionStatus.TAG,true)
+        if(isprocess_on == true){
+            progresswheel(progresswheel,false)
+            EpayActivity.paymentattributes.cardno=map!!.get(Constants.CARDNO).toString()
+            EpayActivity.paymentattributes.txnid=map.get(Constants.TXNID).toString()
+            EpayActivity.paymentattributes.paymenttype=map.get(Constants.PAYMENTTYPE).toString()
+            EpayActivity.paymentattributes.txnfee=map.get(Constants.TXNFEE).toString()
+            (activity as EpayActivity).addFragment(R.id.epay_container,TransactionStatus.newInstance(),TransactionStatus.TAG,true)
+            isprocess_on=false
+        }
 
     }
 

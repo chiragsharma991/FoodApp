@@ -3,6 +3,7 @@ package dk.eatmore.foodapp.rest
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.EditAddress
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
+import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedDetails
 import dk.eatmore.foodapp.model.home.ProductListModel
 import dk.eatmore.foodapp.model.LastOrder
 import dk.eatmore.foodapp.model.cart.Data
@@ -155,9 +156,17 @@ interface ApiInterface {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun checkout_delivery(@Body jsonObject: JsonObject): Call<JsonObject>
 
+    @POST("PosOrder/order/order-details")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun orderdetails(@Body jsonObject: JsonObject): Call<OrderedDetails>
+
     @POST("PosOrder/order/re-order")
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun reorder(@Body jsonObject: JsonObject): Call<JsonObject>
+
+    @POST("Enduser/enduser/rating")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun rating(@Body jsonObject: JsonObject): Call<JsonObject>
 
     @POST("Cart/cart/checkout-pickup")
     @Headers("Content-Type: application/x-www-form-urlencoded")

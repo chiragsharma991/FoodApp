@@ -12,6 +12,7 @@ import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.LinearLayoutManager
+import android.transition.ChangeBounds
 import android.transition.Slide
 import android.util.Log
 import android.view.Gravity
@@ -43,13 +44,13 @@ import kotlinx.android.synthetic.main.toolbar.*
 import java.io.Serializable
 import java.util.ArrayList
 
-class OrderFragment : BaseFragment(), RecyclerClickInterface, SwipeRefreshLayout.OnRefreshListener {
+class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
 
 
     private lateinit var binding: FragmentOrderContainerBinding
     private  val myclickhandler = MyClickHandler(this@OrderFragment)
-    private var mAdapter: UniversalAdapter<Orderresult, RowOrderedPizzaBinding>? = null
+    public var mAdapter: UniversalAdapter<Orderresult, RowOrderedPizzaBinding>? = null
 
 
 
@@ -125,7 +126,7 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface, SwipeRefreshLayout
                 reloadfragment.removeObservers(this@OrderFragment)
 
                 myorder_List.observe(this@OrderFragment, Observer<Myorder_Model> {
-                   val list = ArrayList<Orderresult>()
+                    val list = ArrayList<Orderresult>()
                     list.addAll(ui_model!!.myorder_List.value!!.orderresult)
                     refreshview(list)
                 })
@@ -145,11 +146,12 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface, SwipeRefreshLayout
 
 
      fun refreshview(list: ArrayList<Orderresult>) {
-        loge(TAG,"refresh view--")
-      /*   if(mAdapter !=null){
+         if(mAdapter !=null){
+             mAdapter!!.updatedata(list)
              mAdapter!!.notifyDataSetChanged()
              return
-         }*/
+         }
+        swipetorefresh_view.visibility= if(list.size > 3) View.GONE else (if(swipetorefresh_view.visibility == View.VISIBLE) View.VISIBLE else View.GONE)
         recycler_view.apply {
             mAdapter = UniversalAdapter(context!!, list, R.layout.row_ordered_pizza, object : RecyclerCallback<RowOrderedPizzaBinding, Orderresult> {
                 override fun bindData(binder: RowOrderedPizzaBinding, model: Orderresult) {
@@ -186,7 +188,27 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface, SwipeRefreshLayout
 
 
     private fun onDetails(model : Orderresult){
-        loge(TAG,"onDetails-")
+        val fragment = OrderedRestaurant.newInstance(restaurantname = model.restaurant_name,appicon = model.app_icon,orderdate = model.order_date,ordernumber = model.order_no,enable_rating = model.enable_rating, orderresult = model)
+        addFragment(R.id.home_order_container,fragment, OrderedRestaurant.TAG,true)
+
+    }
+
+    private fun onRate(model : Orderresult){
+
+        val fragment = RateOrder.newInstance(order_no = model.order_no, orderresult = model)
+        var enter : Slide?=null
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            enter = Slide()
+            enter.setDuration(Constants.BOTTOM_TO_TOP_ANIM.toLong())
+            enter.slideEdge = Gravity.BOTTOM
+            val changeBoundsTransition : ChangeBounds = ChangeBounds()
+            changeBoundsTransition.duration = Constants.BOTTOM_TO_TOP_ANIM.toLong()
+            //fragment!!.sharedElementEnterTransition=changeBoundsTransition
+            fragment.sharedElementEnterTransition=changeBoundsTransition
+            fragment.sharedElementReturnTransition=changeBoundsTransition
+            fragment.enterTransition=enter
+        }
+        addFragment(R.id.home_order_container,fragment, RateOrder.TAG,false)
     }
 
     fun fetchmyOrder() {
@@ -209,8 +231,12 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface, SwipeRefreshLayout
                     ui_model!!.myorder_List.value=myorder_Model
                 }else{
                   //  if(ui_model!!.myorder_List.value != null) ui_model!!.myorder_List.value!!.orderresult.clear()
-                    val list = ArrayList<Orderresult>()
-                    refreshview(list)
+                  //  val list = ArrayList<Orderresult>()
+                  //  refreshview(list)
+                    if(mAdapter !=null){
+                        mAdapter!!.getdata().clear()
+                        mAdapter!!.notifyDataSetChanged()
+                    }
                     empty_view.visibility=View.VISIBLE
                     error_txt.text=getString(R.string.no_order)
                 }
@@ -346,18 +372,26 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface, SwipeRefreshLayout
 
 
 
+/*
     override fun onClick(user: User) {
         val fragment = OrderedRestaurant.newInstance()
         addFragment(R.id.home_order_container,fragment, OrderedRestaurant.TAG,true)
     }
+*/
 
     class MyClickHandler(val orderFragment: OrderFragment) {
 
         fun reOrder(view: View , model: Orderresult) {
+            if(orderFragment.swipeRefresh.isRefreshing == false)
             orderFragment.fetchReorder_info(model)
         }
         fun onDetails(view: View, model: Orderresult) {
+            if(orderFragment.swipeRefresh.isRefreshing == false)
             orderFragment.onDetails(model)
+        }
+        fun onRate(view: View, model: Orderresult) {
+            if(orderFragment.swipeRefresh.isRefreshing == false)
+            orderFragment.onRate(model)
         }
 
     }
@@ -385,22 +419,10 @@ class OrderFragment : BaseFragment(), RecyclerClickInterface, SwipeRefreshLayout
             var app_icon: String = "",
             var is_restaurant_closed : Boolean = false ,
             var r_key: String = "",
-            var r_token: String = ""
+            var r_token: String = "",
+            var enable_rating: Boolean = false
 
     ) : Serializable
-
-    data class Testingclass(
-            val status: Boolean = false,
-            val restaurant_info : Restaurant
-    )
-
-
-
-
-
-
-
-
 
 
 

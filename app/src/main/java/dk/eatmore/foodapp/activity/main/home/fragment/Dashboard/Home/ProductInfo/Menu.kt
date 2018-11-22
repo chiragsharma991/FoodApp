@@ -83,6 +83,7 @@ class Menu : BaseFragment(), RecyclerClickListner {
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if(savedInstanceState == null){
+            progress_bar.visibility=View.GONE
             restaurant= arguments!!.getSerializable(Constants.RESTAURANT) as Restaurant
             binding.restaurant=restaurant
             if(ui_model == null)
@@ -169,7 +170,7 @@ class Menu : BaseFragment(), RecyclerClickListner {
 
 
     private fun fetch_ProductList() {
-
+        progress_bar.visibility=View.VISIBLE
         callAPI(ApiCall.getProductList(
                 r_token = PreferenceUtil.getString(PreferenceUtil.R_TOKEN,"")!!,
                 r_key = PreferenceUtil.getString(PreferenceUtil.R_KEY,"")!!,
@@ -182,6 +183,7 @@ class Menu : BaseFragment(), RecyclerClickListner {
                     loge(TAG," menu list size"+""+productlistmodel.menu!!.get(1).c_name+" "+productlistmodel.menu.get(1).product_list!!.size)
                     ui_model!!.productList.value=productlistmodel.menu
                 }
+                progress_bar.visibility=View.GONE
             }
             override fun onFail(error: Int) {
                 when (error) {
@@ -193,6 +195,7 @@ class Menu : BaseFragment(), RecyclerClickListner {
                         showSnackBar(clayout_menu, getString(R.string.internet_not_available))
                     }
                 }
+                progress_bar.visibility=View.GONE
                 //showProgressDialog()
             }
         })

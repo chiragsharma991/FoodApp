@@ -121,7 +121,7 @@ class AccountFragment : BaseFragment() {
                 addFragment(R.id.home_account_container, fragment, Signup.TAG, true)
             }
             acc_login_btn.setOnClickListener {
-                moveon_login()
+                moveon_login(username = acc_email_edt.text.toString(), password_hash = acc_password_edt.text.toString())
             }
             // show Profle screen every time if user is already login.
             if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
@@ -135,7 +135,7 @@ class AccountFragment : BaseFragment() {
         }
     }
 
-    private fun moveon_login(){
+     private fun moveon_login(username : String , password_hash : String){
 
         if (isValidate()) {
             acc_email_edt.clearFocus()
@@ -143,14 +143,21 @@ class AccountFragment : BaseFragment() {
             val jsonobject = JsonObject()
             jsonobject.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
             jsonobject.addProperty(Constants.EATMORE_APP, true)
-            jsonobject.addProperty(Constants.USERNAME, acc_email_edt.text.toString())
-            jsonobject.addProperty(Constants.PASSWORD_HASH, acc_password_edt.text.toString())
+            jsonobject.addProperty(Constants.USERNAME, username)
+            jsonobject.addProperty(Constants.PASSWORD_HASH, password_hash)
             jsonobject.addProperty(Constants.DEVICE_TYPE, Constants.DEVICE_TYPE_VALUE)
             jsonobject.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
             val call = ApiCall.login(jsonobject)
             loginAttempt(call)
 
         }
+    }
+
+    fun loginfrom_signup(username : String , password_hash : String){
+        acc_email_edt.setText(username)
+        acc_password_edt.setText(password_hash)
+        moveon_login(username,password_hash)
+
     }
 
     private fun <T> loginAttempt(call: Call<T>) {

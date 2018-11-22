@@ -8,8 +8,6 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="@dimen/_8sdp"
-        android:layout_marginStart="@dimen/_8sdp"
-        android:layout_marginEnd="@dimen/_8sdp"
         android:orientation="horizontal"
         >
 
@@ -30,6 +28,7 @@
             android:layout_width="0dp"
             android:layout_gravity="center_vertical"
             android:gravity="start"
+            android:textStyle="bold"
             android:id="@+id/item_name"
             android:layout_weight="1.2"
             android:layout_marginEnd="@dimen/_8sdp"

@@ -279,7 +279,7 @@ class EpayActivity : BaseActivity() {
                 }
             }
             view.item_name.text=ui_model!!.viewcard_list.value!!.result!![i].product_name
-            view.item_price.text=BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.result!![i].p_price) ?: "null"
+            view.item_price.text=if(ui_model!!.viewcard_list.value!!.result!![i].p_price !=null)BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.result!![i].p_price!!) else "null"
             view.add_subitem_view.removeAllViewsInLayout()
 
                 // fill first ingredients size if not null

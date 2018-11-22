@@ -13,7 +13,7 @@ import java.util.ArrayList
 /**
  *
  */
-class UniversalAdapter<T, VM : ViewDataBinding>(private val context: Context, private val items: ArrayList<T>?, private val layoutId: Int, private val bindingInterface: RecyclerCallback<VM, T>)
+class UniversalAdapter<T, VM : ViewDataBinding>(private val context: Context, private var items: ArrayList<T>?, private val layoutId: Int, private val bindingInterface: RecyclerCallback<VM, T>)
     : RecyclerView.Adapter<UniversalAdapter<T,VM>.RecyclerViewHolder>() {
 
     inner class RecyclerViewHolder(view: View) : RecyclerView.ViewHolder(view) {
@@ -43,6 +43,17 @@ class UniversalAdapter<T, VM : ViewDataBinding>(private val context: Context, pr
 
     override fun getItemCount(): Int {
         return items?.size ?: 0  // value or if you got null then 0
+    }
+
+    fun updatedata(items: ArrayList<T>){
+        this.items =items
+
+    }
+
+    fun getdata() : ArrayList<T>{
+
+        return this.items!!
+
     }
 
 }

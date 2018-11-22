@@ -3,6 +3,7 @@ package dk.eatmore.foodapp.rest
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.EditAddress
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
+import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedDetails
 import dk.eatmore.foodapp.model.home.ProductListModel
 import dk.eatmore.foodapp.model.LastOrder
 import dk.eatmore.foodapp.model.cart.Data
@@ -51,16 +52,20 @@ class ApiCall {
             return getApiInterface().restaurantList(jsonObject)
         }
 
-
         fun pickupinfo(jsonObject: JsonObject) : Call<JsonObject> {
             return getApiInterface().pickupinfo(jsonObject)
         }
-
         fun checkout_delivery(jsonObject: JsonObject) : Call<JsonObject> {
             return getApiInterface().checkout_delivery(jsonObject)
         }
+        fun orderdetails(jsonObject: JsonObject) : Call<OrderedDetails> {
+            return getApiInterface().orderdetails(jsonObject)
+        }
         fun reorder(jsonObject: JsonObject) : Call<JsonObject> {
             return getApiInterface().reorder(jsonObject)
+        }
+        fun rating(jsonObject: JsonObject) : Call<JsonObject> {
+            return getApiInterface().rating(jsonObject)
         }
         fun checkout_pickup(jsonObject: JsonObject) : Call<JsonObject> {
             return getApiInterface().checkout_pickup(jsonObject)

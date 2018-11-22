@@ -46,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.29" />
+                app:layout_constraintGuide_percent="0.24" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline6"
@@ -70,8 +70,8 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <android.support.v7.widget.CardView
-                    android:layout_width="@dimen/_80sdp"
-                    android:layout_height="@dimen/_80sdp"
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height="@dimen/_72sdp"
                     app:cardElevation="@dimen/_5sdp"
                     app:cardCornerRadius="@dimen/_5sdp"
                     >
@@ -199,7 +199,8 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/rating_view"
                         android:orientation="vertical">
 
                         <RatingBar
@@ -227,12 +228,12 @@
                     <android.support.v7.widget.AppCompatButton
                         android:id="@+id/order_now"
                         style="@style/Button"
+                        android:layout_marginTop="@dimen/_3sdp"
                         android:layout_height="@dimen/_32sdp"
                         android:visibility="@{(ordertype.equalsIgnoreCase(@string/notavailable)) ? View.INVISIBLE : View.VISIBLE }"
-                        android:layout_alignParentBottom="true"
-                        android:layout_marginTop="@dimen/_5sdp"
                         android:background="@color/background_light"
                         android:backgroundTint="@color/theme_color"
+                        android:layout_below="@+id/rating_view"
                         android:text="@{ordertype}"
                         android:textColor="@color/white" />
 

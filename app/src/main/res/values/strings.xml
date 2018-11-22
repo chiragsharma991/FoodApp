@@ -142,6 +142,15 @@
     <string name="please_login_to_see">Please login to see your previous orders.</string>
     <string name="no_order">No order(s) to display.</string>
     <string name="try_again">Try again</string>
+    <string name="delivered_at">Delivered at:</string>
+    <string name="picked_up_from">Picked up from:</string>
+    <string name="order_overview">Order overview:</string>
+    <string name="order_no">Order no.: %1$s</string>
+    <string name="rate">Rate</string>
+    <string name="rate_order">Rate Order</string>
+    <string name="enter_your_valid_information">Enter your valid information</string>
+    <string name="enter_your_full_name">Enter your full name</string>
+    <string name="confirm_password_should_be_match">Confirm password should be match with current password</string>
 
 
 </resources>

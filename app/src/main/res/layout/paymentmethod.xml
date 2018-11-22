@@ -160,7 +160,7 @@
                                         style="@style/TextViewMid"
                                         android:singleLine="true"
                                         android:text="@string/online_payment"
-                                        android:textColor="@color/black_light" />
+                                        />
 
                                     <android.support.v7.widget.AppCompatImageView
                                         android:layout_width="@dimen/_20sdp"
@@ -369,7 +369,7 @@
                                         style="@style/TextViewMid"
                                         android:singleLine="true"
                                         android:text="@string/cash_payment"
-                                        android:textColor="@color/black_light" />
+                                        />
 
                                     <android.support.v7.widget.AppCompatImageView
                                         android:layout_width="@dimen/_20sdp"
@@ -642,7 +642,6 @@
                                                     android:gravity="start"
                                                     android:singleLine="true"
                                                     android:text="Subtotal:"
-                                                    android:textColor="@color/black_light"
                                                     android:textStyle="bold" />
 
                                                 <android.support.v7.widget.AppCompatTextView
@@ -655,7 +654,6 @@
                                                     android:gravity="end"
                                                     android:singleLine="true"
                                                     android:text="45,00kr"
-                                                    android:textColor="@color/black_light"
                                                     android:textStyle="bold" />
 
 
@@ -679,7 +677,6 @@
                                                     android:gravity="start"
                                                     android:singleLine="true"
                                                     android:text="Discount:"
-                                                    android:textColor="@color/black_light"
                                                     android:textStyle="bold" />
 
                                                 <android.support.v7.widget.AppCompatTextView
@@ -692,7 +689,6 @@
                                                     android:gravity="end"
                                                     android:singleLine="true"
                                                     android:text="145,00kr"
-                                                    android:textColor="@color/black_light"
                                                     android:textStyle="bold" />
 
 
@@ -716,7 +712,6 @@
                                                     android:gravity="start"
                                                     android:singleLine="true"
                                                     android:text="Rest upto minimum:"
-                                                    android:textColor="@color/black_light"
                                                     android:textStyle="bold" />
 
                                                 <android.support.v7.widget.AppCompatTextView
@@ -729,7 +724,6 @@
                                                     android:gravity="end"
                                                     android:singleLine="true"
                                                     android:text="145,00kr"
-                                                    android:textColor="@color/black_light"
                                                     android:textStyle="bold" />
 
 
@@ -753,7 +747,6 @@
                                                     android:gravity="start"
                                                     android:singleLine="true"
                                                     android:text="Shipping Charges:"
-                                                    android:textColor="@color/black_light"
                                                     android:textStyle="bold" />
 
                                                 <android.support.v7.widget.AppCompatTextView
@@ -766,7 +759,6 @@
                                                     android:gravity="end"
                                                     android:singleLine="true"
                                                     android:text="145,00kr"
-                                                    android:textColor="@color/black_light"
                                                     android:textStyle="bold" />
 
 
@@ -790,7 +782,6 @@
                                                     android:gravity="start"
                                                     android:singleLine="true"
                                                     android:text="Additional Charges:"
-                                                    android:textColor="@color/black_light"
                                                     android:textStyle="bold" />
 
                                                 <android.support.v7.widget.AppCompatTextView
@@ -803,7 +794,6 @@
                                                     android:gravity="end"
                                                     android:singleLine="true"
                                                     android:text="145,00kr"
-                                                    android:textColor="@color/black_light"
                                                     android:textStyle="bold" />
 
 
@@ -827,7 +817,6 @@
                                                     android:gravity="start"
                                                     android:singleLine="true"
                                                     android:text="Discount:"
-                                                    android:textColor="@color/black_light"
                                                     android:textStyle="bold" />
 
                                                 <android.support.v7.widget.AppCompatTextView
@@ -840,7 +829,6 @@
                                                     android:gravity="end"
                                                     android:singleLine="true"
                                                     android:text="145,00kr"
-                                                    android:textColor="@color/black_light"
                                                     android:textStyle="bold" />
 
 
@@ -873,7 +861,6 @@
                                                     android:gravity="start"
                                                     android:singleLine="true"
                                                     android:text="Total:"
-                                                    android:textColor="@color/black_light"
                                                     android:textStyle="bold" />
 
                                                 <android.support.v7.widget.AppCompatTextView
@@ -886,7 +873,6 @@
                                                     android:gravity="end"
                                                     android:singleLine="true"
                                                     android:text="145,00kr"
-                                                    android:textColor="@color/black_light"
                                                     android:textStyle="bold" />
 
 

@@ -155,6 +155,17 @@
                 android:layout_below="@+id/search_view"
 
                 >
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    style="?android:attr/progress"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    android:layout_width="wrap_content"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:layout_height="wrap_content"
+                    android:indeterminate="true" />
+
+
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view_menu"
                     android:nestedScrollingEnabled="true"

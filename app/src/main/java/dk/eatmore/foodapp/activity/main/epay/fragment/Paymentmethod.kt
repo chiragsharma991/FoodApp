@@ -124,9 +124,9 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             // pick up:
 
             subtotal_layout.visibility=View.VISIBLE
-            restuptominimum_layout.visibility=if(EpayActivity.paymentattributes.upto_min_shipping == "0") View.GONE else View.VISIBLE  // product price - mincharge
+            restuptominimum_layout.visibility=if(EpayActivity.paymentattributes.upto_min_shipping.toDouble() <= 0.0) View.GONE else View.VISIBLE  // product price - mincharge
             shipping_layout.visibility=View.GONE
-            additional_charge_layout.visibility=if(EpayActivity.paymentattributes.additional_charges_cash == "0") View.GONE else View.VISIBLE    // online/cash tax
+            additional_charge_layout.visibility=if(EpayActivity.paymentattributes.additional_charges_cash.toDouble() <= 0.0) View.GONE else View.VISIBLE    // online/cash tax
             total_layout.visibility=View.VISIBLE
             subtotal_txt.text= BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.order_total)
             restuptominimum_txt.text= BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.upto_min_shipping)
@@ -172,9 +172,9 @@ class Paymentmethod : BaseFragment(), TextWatcher {
         else{
             // delivery :
             subtotal_layout.visibility=View.VISIBLE
-            restuptominimum_layout.visibility=if(EpayActivity.paymentattributes.upto_min_shipping == "0") View.GONE else View.VISIBLE
-            shipping_layout.visibility=if(EpayActivity.paymentattributes.shipping_charge == "0") View.GONE else View.VISIBLE
-            additional_charge_layout.visibility=if(EpayActivity.paymentattributes.additional_charges_online == "0") View.GONE else View.VISIBLE
+            restuptominimum_layout.visibility=if(EpayActivity.paymentattributes.upto_min_shipping.toDouble() <= 0.0) View.GONE else View.VISIBLE
+            shipping_layout.visibility=if(EpayActivity.paymentattributes.shipping_charge.toDouble() <= 0.0) View.GONE else View.VISIBLE
+            additional_charge_layout.visibility=if(EpayActivity.paymentattributes.additional_charges_online.toDouble() <= 0.0) View.GONE else View.VISIBLE
             total_layout.visibility=View.VISIBLE
             subtotal_txt.text=BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.order_total)
             restuptominimum_txt.text=BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.upto_min_shipping)

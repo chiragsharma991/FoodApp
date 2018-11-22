@@ -55,14 +55,11 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
-            (parentFragment as AccountFragment).img_toolbar_back.visibility=View.VISIBLE
-            (parentFragment as AccountFragment).img_toolbar_back.setOnClickListener{(activity as HomeActivity).onBackPressed() }
+            img_toolbar_back.setOnClickListener{(activity as HomeActivity).onBackPressed() }
             clickEvent = MyClickHandler(this)
             binding.handlers = clickEvent
-            first_name.requestFocus()
-            input_name.requestFocus()
             acc_signup_btn.setEnabled(false)
-            acc_signup_btn.text = getString(R.string.enter_valid_email_address)
+            acc_signup_btn.alpha = 0.5F
 
             first_name.addTextChangedListener(this)
             sign_up_email_edt.addTextChangedListener(this)
@@ -82,12 +79,14 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
             logd(TAG, "saveInstance NULL")
             when (ID) {
                 1 -> {
-                    (parentFragment as AccountFragment).txt_toolbar.text=getString(R.string.signup)
+                    first_name.requestFocus()
+                    txt_toolbar.text=getString(R.string.signup)
                     signup_view.visibility = View.VISIBLE
                     forget_password_view.visibility = View.GONE
                 }
                 2 -> {
-                    (parentFragment as AccountFragment).txt_toolbar.text=getString(R.string.forgot_password)
+                    input_name.requestFocus()
+                    txt_toolbar.text=getString(R.string.forgot_password)
                     signup_view.visibility = View.GONE
                     forget_password_view.visibility = View.VISIBLE
                 }
@@ -102,13 +101,60 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
     }
 
     override fun onFocusChange(v: View?, hasFocus: Boolean) {
+        when (v){
 
-        if(!!hasFocus){
-            validationFields()
+            first_name ->{
+                if(hasFocus){
+                    sign_up_firstname_inputlayout.isErrorEnabled=false
+
+                }else{
+                    if (!inputValidStates[first_name]!!) {
+                        sign_up_firstname_inputlayout.isErrorEnabled=true
+                        sign_up_firstname_inputlayout.error= getString(R.string.enter_your_full_name)
+                    }
+
+                }
+            }
+             sign_up_email_edt ->{
+                 if(hasFocus){
+                     sign_up_email_inputlayout.isErrorEnabled=false
+
+                 }else{
+                     if (!inputValidStates[sign_up_email_edt]!!) {
+                         sign_up_email_inputlayout.error = getString(R.string.enter_valid_email_address)
+                     }
+                 }
+             }
+
+
+            sign_up_password_edt ->{
+                if(hasFocus){
+                    sign_up_password_inputlayout.isErrorEnabled=false
+
+                }else{
+                    if (!inputValidStates[sign_up_password_edt]!!) {
+                        sign_up_password_inputlayout.error = getString(R.string.enter_unique_password)
+                    }
+                }
+            }
+
+            sign_up_cnf_password_edt ->{
+                if(hasFocus){
+                    sign_up_cnf_password_inputlayout.isErrorEnabled=false
+
+                }else{
+                    if (!inputValidStates[sign_up_cnf_password_edt]!!) {
+                        sign_up_cnf_password_inputlayout.error = getString(R.string.confirm_password_should_be_match)
+                    }
+                }
+            }
+
         }
     }
 
     override fun afterTextChanged(s: Editable?) {
+
+        loge(TAG,"afterTextChanged---")
 
         if (first_name.text.hashCode() == s!!.hashCode()) {
             if (first_name.text.trim().toString().length > 0) {
@@ -137,12 +183,13 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
         else if (sign_up_cnf_password_edt.text.hashCode() == s.hashCode()) {
            if(sign_up_cnf_password_edt.text.trim().toString().equals(sign_up_password_edt.text.trim().toString())){
                inputValidStates[sign_up_cnf_password_edt] = true
-               validationFields()
            }else{
                inputValidStates[sign_up_cnf_password_edt] = false
-               validationFields()
            }
+
+
         }
+        updateButtonState()
     }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -156,54 +203,28 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
     }
 
 
-    fun validationFields() {
-        updateButtonState()
+ /*   fun validationFields() {
 
         if (!inputValidStates[first_name]!!) {
-            acc_signup_btn.text = "Enter your full name"
-            sign_up_firstname_inputlayout.error= " "
-            sign_up_email_inputlayout.isErrorEnabled=false
-            sign_up_password_inputlayout.isErrorEnabled=false
-            sign_up_cnf_password_inputlayout.isErrorEnabled=false
+            sign_up_firstname_inputlayout.error= getString(R.string.enter_your_full_name)
             return
-        }else{
-            sign_up_firstname_inputlayout.isErrorEnabled=false
         }
         if (!inputValidStates[sign_up_email_edt]!!) {
             acc_signup_btn.text = getString(R.string.enter_valid_email_address)
-            sign_up_email_inputlayout.error= " "
-            sign_up_firstname_inputlayout.isErrorEnabled=false
-            sign_up_password_inputlayout.isErrorEnabled=false
-            sign_up_cnf_password_inputlayout.isErrorEnabled=false
             return
-        }else{
-            sign_up_email_inputlayout.isErrorEnabled=false
         }
         if (!inputValidStates[sign_up_password_edt]!!) {
             acc_signup_btn.text = getString(R.string.enter_unique_password)
-            sign_up_password_inputlayout.error=" "
-            sign_up_firstname_inputlayout.isErrorEnabled=false
-            sign_up_email_inputlayout.isErrorEnabled=false
-            sign_up_cnf_password_inputlayout.isErrorEnabled=false
             return
-        }else{
-            sign_up_password_inputlayout.isErrorEnabled=false
-
         }
         if (!inputValidStates[sign_up_cnf_password_edt]!!) {
-            loge(TAG,"invalid state false...")
-            acc_signup_btn.text = getString(R.string.enter_the_confirm_password)
-            sign_up_cnf_password_inputlayout.error=" "
-            sign_up_firstname_inputlayout.isErrorEnabled=false
-            sign_up_email_inputlayout.isErrorEnabled=false
-            sign_up_password_inputlayout.isErrorEnabled=false
+            acc_signup_btn.text = getString(R.string.confirm_password_should_be_match)
             return
-        }else{
-            acc_signup_btn.text = getString(R.string.signup)
-            sign_up_cnf_password_inputlayout.isErrorEnabled=false
         }
-    }
+            updateButtonState()
 
+    }
+*/
     private fun updateButtonState() {
         var enabled = true
         for (key in inputValidStates.keys) {
@@ -238,6 +259,7 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
                 if (json.get("status").asBoolean) {
                     showSnackBar(clayout, json.get("msg").asString)
                     Handler().postDelayed({
+                        (parentFragment as AccountFragment).loginfrom_signup(username = sign_up_email_edt.text.toString(), password_hash = sign_up_password_edt.text.toString())
                         (activity as HomeActivity).onBackPressed()
                     },800)
 
@@ -353,8 +375,8 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
     }
 
     fun backpress(): Boolean {
-        (parentFragment as AccountFragment).img_toolbar_back.visibility=View.GONE
-        (parentFragment as AccountFragment).txt_toolbar.text=getString(R.string.my_profile)
+      //  (parentFragment as AccountFragment).img_toolbar_back.visibility=View.GONE
+       // (parentFragment as AccountFragment).txt_toolbar.text=getString(R.string.my_profile)
         return true
     }
 

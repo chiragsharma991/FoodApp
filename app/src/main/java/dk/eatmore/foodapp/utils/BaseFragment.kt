@@ -19,6 +19,7 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.support.v4.app.ActivityCompat
 import android.content.pm.PackageManager
+import android.net.ParseException
 import android.os.Build
 import android.support.design.widget.AppBarLayout
 import android.support.v4.content.ContextCompat
@@ -156,10 +157,10 @@ abstract class BaseFragment : Fragment() {
                         is Profile -> {
                             if (!fragment.backpress()) childFragmentManager.popBackStack()
                         }
-                        is Signup -> {
+                     /*   is Signup -> {
                             fragment.backpress()
                             childFragmentManager.popBackStack()
-                        }
+                        }*/
                         else -> childFragmentManager.popBackStack()
 
 
@@ -323,6 +324,7 @@ abstract class BaseFragment : Fragment() {
         cal.add(Calendar.DAY_OF_YEAR, days)
         return s.format(Date(cal.timeInMillis))
     }
+
 
 
     // Transition

@@ -33,6 +33,7 @@
     <RelativeLayout
         android:id="@+id/rowChildItem"
         android:layout_width="match_parent"
+        android:onClick="@{(v)-> myclickhandler.onDetails(v,orderresult)}"
         android:layout_height="wrap_content">
 
 
@@ -47,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.29" />
+                app:layout_constraintGuide_percent="0.24" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline6"
@@ -71,8 +72,8 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <android.support.v7.widget.CardView
-                    android:layout_width="@dimen/_80sdp"
-                    android:layout_height="@dimen/_80sdp"
+                    android:layout_width="@dimen/_70sdp"
+                    android:layout_height= "@dimen/_72sdp"
                     app:cardElevation="@dimen/_5sdp"
                     app:cardCornerRadius="@dimen/_5sdp"
                     >
@@ -134,17 +135,17 @@
                 <android.support.v7.widget.AppCompatTextView
                     style="@style/TextViewSmall"
                     android:layout_gravity="center_vertical"
-                    android:text="@{orderresult.order_date}"
+                    android:text="@{util.parseDateToddMMyyyy(orderresult.order_date)}"
                     android:textColor="@color/black_light" />
 
 
                 <android.support.v7.widget.AppCompatTextView
                     style="@style/TextViewSmall"
                     android:text="Rate it!"
+                    android:visibility="@{orderresult.enable_rating ==true ? View.VISIBLE : View.GONE}"
                     android:textColor="@color/theme_color"
+                    android:onClick="@{(v)-> myclickhandler.onRate(v,orderresult)}"
                     />
-
-
 
 
             </LinearLayout>
@@ -152,7 +153,6 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="5dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:orientation="vertical"
@@ -172,6 +172,7 @@
                     android:backgroundTint="@color/theme_color"
                     android:onClick="@{(v)-> myclickhandler.reOrder(v,orderresult)}"
                     android:text="Reorder"
+                    android:clickable="true"
                     android:textColor="@color/white" />
 
 
@@ -182,10 +183,10 @@
                     android:layout_height="@dimen/_32sdp"
                     android:layout_alignParentBottom="true"
                     android:layout_marginTop="@dimen/_5sdp"
-                    android:onClick="@{(v)-> myclickhandler.onDetails(v,orderresult)}"
                     android:background="@color/background_light"
                     android:backgroundTint="@color/grey"
                     android:text="Details"
+                    android:clickable="false"
                     android:textColor="@color/black" />
 
 

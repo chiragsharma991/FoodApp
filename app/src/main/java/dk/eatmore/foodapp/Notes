@@ -78,3 +78,7 @@ Notes :
    6. add toolbar in fragment and back button with hide and change another icon
 
    7. user constraint set in nested layout and use view visible or gone.
+
+   8. View model error in replace, image transition error on fragment added
+
+   9. Notify data using viewmodel list
