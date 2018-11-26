@@ -141,6 +141,7 @@ class DetailsFragment : BaseFragment() {
             tabs.setupWithViewPager(viewpager)
             //  setPalette()
             viewcart.setOnClickListener {
+                if(total_cartcnt==0) return@setOnClickListener
                 val intent = Intent(activity, EpayActivity::class.java)
                 startActivityForResult(intent,1)
             }
@@ -187,8 +188,10 @@ class DetailsFragment : BaseFragment() {
     }
 
     fun updatebatchcount(count : Int){
+        // this is update method will call in both category and details.
         total_cartcnt= total_cartcnt + count
         badge_notification_txt.visibility = if (total_cartcnt == 0) View.GONE else View.VISIBLE
+        viewcart.alpha= if (total_cartcnt == 0) 0.3f else 0.9f
         badge_notification_txt.text= total_cartcnt.toString()
         badge_countprice.text= BindDataUtils.convertCurrencyToDanish(total_cartamt)
     }

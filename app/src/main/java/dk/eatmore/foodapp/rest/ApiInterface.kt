@@ -164,6 +164,10 @@ interface ApiInterface {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun reorder(@Body jsonObject: JsonObject): Call<JsonObject>
 
+    @POST("Cart/cart/last-order")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun lastorder(@Body jsonObject: JsonObject): Call<OrderFragment.Myorder_Model>
+
     @POST("Enduser/enduser/rating")
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun rating(@Body jsonObject: JsonObject): Call<JsonObject>

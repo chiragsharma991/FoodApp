@@ -31,7 +31,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
 
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         Log.e(TAG, "onMessageReceived: " + remoteMessage!!.notification!!.body.toString())
-        generateNotification(applicationContext,remoteMessage.notification!!.body.toString())
+      //  generateNotification(applicationContext,remoteMessage.notification!!.body.toString())
         //{vendor=vendor 1, offer_id=5a5f321bafcea80311f57699, type=offer, Title=TebeebBook, offer_title=Hospital, message=Added new offer, created_at=2018-01-11T04:03:55.311Z}
         //{id=5a8cfcd4148ee50ed0d470b6, body=HELLO ALL CITY ADMIN PUSH, type=message, title=Tabeeb Book}
         if (remoteMessage.data.isNotEmpty()) {

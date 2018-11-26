@@ -95,6 +95,7 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
             recycler_view_category.layoutManager = LinearLayoutManager(getActivityBase())
             recycler_view_category.adapter = mAdapter
             viewcart.setOnClickListener {
+                if(DetailsFragment.total_cartcnt == 0) return@setOnClickListener
                 val intent = Intent(activity, EpayActivity::class.java)
                 startActivityForResult(intent, 1)
             }
@@ -107,6 +108,7 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
 
     fun updatebatchcount(count: Int) {
         badge_notification_txt.visibility = if (DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
+        viewcart.alpha= if (DetailsFragment.total_cartcnt == 0) 0.3f else 0.9f
         badge_notification_txt.text = DetailsFragment.total_cartcnt.toString()
         badge_countprice.text = BindDataUtils.convertCurrencyToDanish(DetailsFragment.total_cartamt)
     }

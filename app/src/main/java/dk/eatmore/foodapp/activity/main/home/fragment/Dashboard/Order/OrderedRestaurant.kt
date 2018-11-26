@@ -48,14 +48,14 @@ class OrderedRestaurant : BaseFragment() {
         val TAG = "OrderedRestaurant"
         var ui_model: UIModel? = null
 
-        fun newInstance(restaurantname : String , appicon : String, orderdate : String , ordernumber : String, enable_rating : Boolean, orderresult : OrderFragment.Orderresult): OrderedRestaurant {
+        fun newInstance(orderresult : OrderFragment.Orderresult): OrderedRestaurant {
             val fragment = OrderedRestaurant()
             val bundle = Bundle()
-            bundle.putString(Constants.RESTAURANT, restaurantname)
-            bundle.putString(Constants.APP_ICON, appicon)
-            bundle.putString(Constants.ORDER_DATE, orderdate)
-            bundle.putString(Constants.ORDER_NO, ordernumber)
-            bundle.putBoolean(Constants.ENABLE_RATING, enable_rating)
+            bundle.putString(Constants.RESTAURANT, orderresult.restaurant_name)
+            bundle.putString(Constants.APP_ICON, orderresult.app_icon)
+            bundle.putString(Constants.ORDER_DATE, orderresult.order_date)
+            bundle.putString(Constants.ORDER_NO, orderresult.order_no)
+            bundle.putBoolean(Constants.ENABLE_RATING, orderresult.enable_rating)
             bundle.putSerializable(Constants.ORDERRESULT, orderresult)
             fragment.arguments=bundle
             return fragment
@@ -194,6 +194,7 @@ class OrderedRestaurant : BaseFragment() {
         binding.data= ui_model!!.ordered_details.value!!.data[0]
         binding.myclickhandler=myclickhandler
         binding.util=BindDataUtils
+        binding.orderStatus=model.order_status
         binding.enableRating=arguments!!.getBoolean(Constants.ENABLE_RATING)
         Glide.with(imageview.context).load(ui_model!!.ordered_details.value!!.data[0].app_icon).into(imageview);
         add_parentitem_view.removeAllViewsInLayout()
@@ -292,20 +293,22 @@ class OrderedRestaurant : BaseFragment() {
 
     private fun on_rating() {
        loge(TAG,"on rating...")
-        val fragment = RateOrder.newInstance(order_no = arguments!!.getString(Constants.ORDER_NO),orderresult = model)
-        var enter : Slide?=null
-        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-            enter = Slide()
-            enter.setDuration(Constants.BOTTOM_TO_TOP_ANIM.toLong())
-            enter.slideEdge = Gravity.BOTTOM
-            val changeBoundsTransition : ChangeBounds = ChangeBounds()
-            changeBoundsTransition.duration = Constants.BOTTOM_TO_TOP_ANIM.toLong()
-            //fragment!!.sharedElementEnterTransition=changeBoundsTransition
-            fragment.sharedElementEnterTransition=changeBoundsTransition
-            fragment.sharedElementReturnTransition=changeBoundsTransition
-            fragment.enterTransition=enter
+        if(model.order_status.toLowerCase() == Constants.ACCEPTED){
+            val fragment = RateOrder.newInstance(order_no = arguments!!.getString(Constants.ORDER_NO),orderresult = model)
+            var enter : Slide?=null
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                enter = Slide()
+                enter.setDuration(Constants.BOTTOM_TO_TOP_ANIM.toLong())
+                enter.slideEdge = Gravity.BOTTOM
+                val changeBoundsTransition : ChangeBounds = ChangeBounds()
+                changeBoundsTransition.duration = Constants.BOTTOM_TO_TOP_ANIM.toLong()
+                //fragment!!.sharedElementEnterTransition=changeBoundsTransition
+                fragment.sharedElementEnterTransition=changeBoundsTransition
+                fragment.sharedElementReturnTransition=changeBoundsTransition
+                fragment.enterTransition=enter
+            }
+            (parentFragment as OrderFragment).addFragment(R.id.home_order_container,fragment, RateOrder.TAG,false)
         }
-        (parentFragment as OrderFragment).addFragment(R.id.home_order_container,fragment, RateOrder.TAG,false)
     }
 
 
@@ -338,13 +341,13 @@ class OrderedRestaurant : BaseFragment() {
 
 }
 
-@BindingAdapter("android:layout_setImage")
+/*@BindingAdapter("android:layout_setImage")
 fun setImage(view : AppCompatImageView, model : String) {
     // i set 100 fixed dp in rating page thats why i am using 100
     Log.e("set image","----"+model)
 //    Glide.with(view.context).load(model.app_icon).into(view);
 
-}
+}*/
 
 //-----------Model class---------------//
 

@@ -46,7 +46,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.24" />
+                app:layout_constraintGuide_percent="0.29" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline6"
@@ -70,8 +70,8 @@
                 app:layout_constraintTop_toTopOf="parent">
 
                 <android.support.v7.widget.CardView
-                    android:layout_width="@dimen/_70sdp"
-                    android:layout_height="@dimen/_72sdp"
+                    android:layout_width="@dimen/_80sdp"
+                    android:layout_height="@dimen/_80sdp"
                     app:cardElevation="@dimen/_5sdp"
                     app:cardCornerRadius="@dimen/_5sdp"
                     >
@@ -89,6 +89,45 @@
                             android:background="@color/gray"
                             android:scaleType="fitXY"
                             />
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="@dimen/_20sdp"
+                            android:rotation="-40"
+                            android:translationX="-25dp"
+                            android:translationY="0dp"
+                            android:visibility="@{restaurant.is_new.equalsIgnoreCase(`1`) ? View.VISIBLE : View.GONE}"
+                            android:layout_marginBottom="@dimen/_10sdp"
+                            android:id="@+id/item_is_new"
+                            android:layout_alignParentBottom="false"
+                            >
+                            <dk.eatmore.foodapp.utils.ZigzagView
+                                android:id="@+id/zigzag_view"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                app:zigzagBackgroundColor="@color/green"
+                                app:zigzagHeight="1dp"
+                                app:zigzagShadowAlpha="0.9"
+                                app:zigzagSides="bottom">
+
+
+
+                            </dk.eatmore.foodapp.utils.ZigzagView>
+
+
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:textSize="@dimen/_10sdp"
+                                android:singleLine="true"
+                                android:layout_centerInParent="true"
+                                android:text="New"
+                                android:textColor="@color/white" />
+
+
+
+                        </RelativeLayout>
 
 
                     </RelativeLayout>
@@ -199,8 +238,7 @@
 
                     <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:id="@+id/rating_view"
+                        android:layout_height="match_parent"
                         android:orientation="vertical">
 
                         <RatingBar
@@ -228,12 +266,12 @@
                     <android.support.v7.widget.AppCompatButton
                         android:id="@+id/order_now"
                         style="@style/Button"
-                        android:layout_marginTop="@dimen/_3sdp"
                         android:layout_height="@dimen/_32sdp"
                         android:visibility="@{(ordertype.equalsIgnoreCase(@string/notavailable)) ? View.INVISIBLE : View.VISIBLE }"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="@dimen/_5sdp"
                         android:background="@color/background_light"
                         android:backgroundTint="@color/theme_color"
-                        android:layout_below="@+id/rating_view"
                         android:text="@{ordertype}"
                         android:textColor="@color/white" />
 

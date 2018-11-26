@@ -67,6 +67,9 @@ class ApiCall {
         fun rating(jsonObject: JsonObject) : Call<JsonObject> {
             return getApiInterface().rating(jsonObject)
         }
+        fun lastorder(jsonObject: JsonObject) : Call<OrderFragment.Myorder_Model> {
+            return getApiInterface().lastorder(jsonObject)
+        }
         fun checkout_pickup(jsonObject: JsonObject) : Call<JsonObject> {
             return getApiInterface().checkout_pickup(jsonObject)
         }

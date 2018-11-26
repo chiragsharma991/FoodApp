@@ -51,6 +51,7 @@ class Constants {
         val ORDERRESULT="Orderresult"
         val ORDER_DATE="order_date"
         val TITLE="title"
+        val ACCEPTED="accepted"
         val PRODUCTLIST="ProductList"
         val MENULIST="menulist"
         val OPEFTER="Opefter"

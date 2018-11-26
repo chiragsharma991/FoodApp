@@ -158,6 +158,7 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
                     binder.orderresult=model
                     binder.util=BindDataUtils
                     binder.myclickhandler=myclickhandler
+
                  //   binder.handler=this@OrderFragment
                 } })
             layoutManager = LinearLayoutManager(getActivityBase())
@@ -170,7 +171,7 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
         val fragment = DetailsFragment.newInstance(
                 restaurant =  ui_model!!.restaurant_info.value!!.restaurant_info,
-                status =     "test"
+                status =     ""
         )
         var enter : Slide?=null
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -188,7 +189,7 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
 
     private fun onDetails(model : Orderresult){
-        val fragment = OrderedRestaurant.newInstance(restaurantname = model.restaurant_name,appicon = model.app_icon,orderdate = model.order_date,ordernumber = model.order_no,enable_rating = model.enable_rating, orderresult = model)
+        val fragment = OrderedRestaurant.newInstance( model)
         addFragment(R.id.home_order_container,fragment, OrderedRestaurant.TAG,true)
 
     }
@@ -227,7 +228,7 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
             override fun <T> onSuccess(body: T?) {
                 val myorder_Model = body as Myorder_Model
                 if (myorder_Model.status) {
-                    loge(TAG,"status--"+myorder_Model.orderresult.size.toString())
+                    loge(TAG,"status--"+myorder_Model.orderresult.get(0).order_no)
                     ui_model!!.myorder_List.value=myorder_Model
                 }else{
                   //  if(ui_model!!.myorder_List.value != null) ui_model!!.myorder_List.value!!.orderresult.clear()
@@ -390,8 +391,10 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
             orderFragment.onDetails(model)
         }
         fun onRate(view: View, model: Orderresult) {
-            if(orderFragment.swipeRefresh.isRefreshing == false)
-            orderFragment.onRate(model)
+            if(model.order_status.toLowerCase() == Constants.ACCEPTED){
+                if(orderFragment.swipeRefresh.isRefreshing == false)
+                    orderFragment.onRate(model)
+            }
         }
 
     }
@@ -402,6 +405,7 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
             val status: Boolean = false,
             val msg: String ="",
             val orderresult: ArrayList<Orderresult> = arrayListOf(),
+            val last_order_details: Orderresult,
             val restaurant_info : Restaurant
 
     ) : Serializable
@@ -409,6 +413,7 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     data class Orderresult(
             var customer_id: String = "",
             var restaurant_id: String = "",
+            var order_status: String = "",
             var order_no: String = "",
             var expected_time: String = "",
             var total_to_pay: String = "",
@@ -422,7 +427,21 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
             var r_token: String = "",
             var enable_rating: Boolean = false
 
-    ) : Serializable
+    ) : Serializable {
+
+        init {
+
+
+        }
+    }
+
+
+
+
+
+
+
+
 
 
 
@@ -455,7 +474,7 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 @BindingAdapter("android:layout_setImage")
 fun setImage(view : AppCompatImageView, model : OrderFragment.Orderresult) {
     // i set 100 fixed dp in rating page thats why i am using 100
-  Log.e("set image","----"+model.toString())
+    Log.e("set image","----"+model.toString())
     Glide.with(view.context).load(model.app_icon).into(view);
 
 }

@@ -94,7 +94,6 @@
                                 android:layout_height="match_parent"
                                 android:id="@+id/imageview"
                                 android:background="@color/gray"
-                                android:layout_setImage="@{`hello`}"
                                 android:scaleType="fitXY"
                                 />
 

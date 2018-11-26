@@ -11,6 +11,21 @@ import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.RestaurantList
 import dk.eatmore.foodapp.databinding.RowRestaurantlistCBinding
 import java.util.ArrayList
+import android.R.attr.pivotY
+import android.R.attr.pivotX
+import android.graphics.Matrix
+import android.widget.ImageView.ScaleType
+import android.support.v4.view.ViewCompat.setTranslationY
+import android.support.v4.view.ViewCompat.setTranslationX
+import android.support.v4.view.ViewCompat.setRotation
+import android.opengl.ETC1.getHeight
+import android.opengl.ETC1.getWidth
+import android.view.View
+import android.widget.RelativeLayout
+
+
+
+
 
 
 class RestaurantListChildAdapter(val context: Context, val listner: RestaurantListParentAdapter.AdapterListener, val parentPosition: Int, val list : ArrayList<RestaurantList.StatusWiseRestaurant> ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -34,8 +49,16 @@ class RestaurantListChildAdapter(val context: Context, val listner: RestaurantLi
             Glide.with(context).load(list.get(parentPosition).restaurant.get(position).app_icon).into(holder.binding.imageview);
           //  ViewCompat.setTransitionName(holder.binding.imageview, position.toString() + "vnhvn")
 
-            holder.binding.restaurant=list.get(parentPosition).restaurant.get(position)
+    /*        val matrix = Matrix()
+            holder.binding.itemIsNew.setScaleType(ImageView.ScaleType.MATRIX)   //required
+            matrix.postRotate(angle as Float, pivotX, pivotY)
+            imageView.setImageMatrix(matrix)
+            imageView.getDrawable().getBounds().width()/2, imageView.getDrawable().getBounds().height()/2)*/
+
+
+            holder.binding.itemIsNew.visibility= View.GONE
             holder.binding.ordertype=list.get(parentPosition).ordertype
+            holder.binding.restaurant=list.get(parentPosition).restaurant.get(position)
             holder.binding.rowChildItem.setOnClickListener {
                 listner.itemClicked(false,parentPosition,position)
 

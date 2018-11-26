@@ -23,6 +23,13 @@
             type="Boolean">
 
         </variable>
+
+        <variable
+            name="order_status"
+            type="String">
+
+        </variable>
+
         <variable
             name="myclickhandler"
             type="dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedRestaurant.MyClickHandler"
@@ -93,7 +100,6 @@
                                 android:layout_height="match_parent"
                                 android:id="@+id/imageview"
                                 android:background="@color/gray"
-                                android:layout_setImage="@{`hello`}"
                                 android:scaleType="fitXY"
                                 />
 
@@ -118,7 +124,7 @@
 
                     <android.support.v7.widget.AppCompatTextView
                         style="@style/TextViewSmall"
-                        android:text="Rate it!"
+                        android:text="@{(enable_rating==true &amp;&amp; order_status.toLowerCase().equalsIgnoreCase(`accepted`)) ? @string/rate_it_exclaim : @string/ordre_under_behandling }"
                         android:visibility="@{enable_rating == true ? View.VISIBLE : View.GONE}"
                         android:textColor="@color/theme_color"
                         android:onClick="@{myclickhandler :: on_rating}"

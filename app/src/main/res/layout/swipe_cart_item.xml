@@ -1,0 +1,258 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <data>
+
+
+        <!--
+                <variable name="util" type="dk.eatmore.foodapp.utils.BindDataUtils"/>
+        -->
+
+
+        <import type="android.view.View"/>
+
+        <variable name="util" type="dk.eatmore.foodapp.utils.BindDataUtils"/>
+
+        <variable
+            name="orderresult"
+            type="dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment.Orderresult">
+
+        </variable>
+
+        <variable
+            name="myclickhandler"
+            type="dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment.MyClickHandler">
+
+        </variable>
+
+
+    </data>
+
+
+    <android.support.v7.widget.CardView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:cardElevation="@null"
+        app:cardBackgroundColor="@color/white"
+        >
+        <RelativeLayout
+            android:id="@+id/rowChildItem"
+            android:layout_width="match_parent"
+            android:layout_margin="@dimen/_5sdp"
+            android:layout_height="wrap_content">
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/header_view"
+                >
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="20dp"
+                    android:layout_height="20dp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    app:srcCompat="@drawable/close"
+                    android:id="@+id/close_btn"
+                    android:onClick="@{(v)-> myclickhandler.onClose(v,orderresult)}"
+                    android:layout_alignParentRight="true"
+
+                    />
+
+                <View
+                    android:layout_width="match_parent"
+                    android:layout_height="1dp"
+                    android:alpha="0.2"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_below="@+id/close_btn"
+                    android:background="@color/divider_color"
+                    />
+
+            </RelativeLayout>
+
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/row_contoller"
+                android:onClick="@{(v)-> myclickhandler.onDetails(v,orderresult)}"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_below="@+id/header_view"
+                >
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.29" />
+
+                <android.support.constraint.Guideline
+                    android:id="@+id/guideline6"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    app:layout_constraintGuide_percent="0.80" />
+
+                <LinearLayout
+                    android:id="@+id/linearLayout"
+                    android:layout_width="0dp"
+                    android:layout_height="80dp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_weight="0.7"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <android.support.v7.widget.CardView
+                        android:layout_width="@dimen/_80sdp"
+                        android:layout_height="@dimen/_80sdp"
+                        app:cardElevation="@dimen/_5sdp"
+                        app:cardCornerRadius="@dimen/_5sdp"
+                        >
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+
+                            >
+
+                            <android.support.v7.widget.AppCompatImageView
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:id="@+id/imageview"
+                                android:background="@color/gray"
+                                android:scaleType="fitXY"
+                                android:layout_setImage="@{orderresult}"
+                                />
+
+
+                        </RelativeLayout>
+
+
+                    </android.support.v7.widget.CardView>
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="0dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_marginBottom="8dp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_weight="1.3"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toStartOf="@+id/guideline6"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="@+id/guideline"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:layout_constraintVertical_bias="0.0">
+
+
+
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/TextViewMid"
+                        android:id="@+id/ordered_item_name"
+                        android:singleLine="true"
+                        android:text="@{orderresult.restaurant_name}"
+                        />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/TextViewSmall"
+                        android:id="@+id/item_price"
+                        android:text="@{util.convertCurrencyToDanish(orderresult.total_to_pay)}"
+                        />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/TextViewSmall"
+                        android:layout_gravity="center_vertical"
+                        android:id="@+id/item_date"
+                        android:text="@{util.parseDateToddMMyyyy(orderresult.order_date)}"
+                        android:textColor="@color/black_light" />
+
+
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/TextViewSmall"
+                        android:text="@{(orderresult.enable_rating==true &amp;&amp; orderresult.order_status.toLowerCase().equalsIgnoreCase(`accepted`)) ? @string/rate_it_exclaim : @string/ordre_under_behandling }"
+                        android:visibility="@{orderresult.enable_rating ==true ? View.VISIBLE : View.GONE}"
+                        android:textColor="@color/theme_color"
+                        android:onClick="@{(v)-> myclickhandler.onRate(v,orderresult)}"
+                        />
+
+
+
+
+                </LinearLayout>
+
+                <LinearLayout
+                    android:layout_width="0dp"
+                    android:layout_height="0dp"
+                    android:layout_marginTop="5dp"
+                    android:layout_marginEnd="8dp"
+                    android:layout_weight="1"
+                    android:orientation="vertical"
+                    app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="@+id/guideline6"
+                    app:layout_constraintTop_toTopOf="parent">
+
+
+
+                    <android.support.v7.widget.AppCompatButton
+                        style="@style/Button"
+                        android:layout_height="@dimen/_32sdp"
+                        android:layout_alignParentBottom="true"
+                        android:id="@+id/reorder_btn"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@color/background_light"
+                        android:onClick="@{(v)-> myclickhandler.reOrder(v,orderresult)}"
+                        android:backgroundTint="@color/theme_color"
+                        android:text="Reorder"
+                        android:clickable="true"
+                        android:textColor="@color/white" />
+
+
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/order_now"
+                        style="@style/Button"
+                        android:layout_height="@dimen/_32sdp"
+                        android:layout_alignParentBottom="true"
+                        android:layout_marginTop="@dimen/_5sdp"
+                        android:background="@color/background_light"
+                        android:backgroundTint="@color/grey"
+                        android:text="Details"
+                        android:clickable="false"
+                        android:textColor="@color/black" />
+
+
+
+                </LinearLayout>
+
+
+
+
+            </android.support.constraint.ConstraintLayout>
+
+
+
+        </RelativeLayout>
+
+    </android.support.v7.widget.CardView>
+
+</layout>
+
+
+

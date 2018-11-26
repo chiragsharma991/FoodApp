@@ -30,6 +30,7 @@ data class Restaurant(
         val restaurant_name: String = "",
         val address: String = "",
         val city: String = "",
+        val is_new: String = "",
         val cuisines: String = "",
         val total_rating: Float = 0.0f,
         val quality_of_food_ratiing: Float = 0.0f,
