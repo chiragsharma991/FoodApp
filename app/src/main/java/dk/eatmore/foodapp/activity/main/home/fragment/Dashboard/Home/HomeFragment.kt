@@ -33,6 +33,7 @@ import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import kotlinx.android.synthetic.main.fragment_home_fragment.*
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
+import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.*
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
@@ -59,6 +60,7 @@ class HomeFragment : CommanAPI() {
     private lateinit var mAuth: FirebaseAuth
     val callbackManager = CallbackManager.Factory.create()
     private lateinit var mGoogleSignInClient: GoogleSignInClient
+    private lateinit var firebaseAnalytics: FirebaseAnalytics
 
 
     companion object {
@@ -85,11 +87,12 @@ class HomeFragment : CommanAPI() {
     }
 
 
-
     override fun initView(view: View?, savedInstanceState: Bundle?) {
 
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
+            firebaseAnalytics = FirebaseAnalytics.getInstance(context!!);
+            checkFirebaseAnalytics()
             clickEvent = MyClickHandler(this)
             binding.handlers = clickEvent
             ui_model = createViewModel()
@@ -123,6 +126,17 @@ class HomeFragment : CommanAPI() {
 
     }
 
+    fun checkFirebaseAnalytics() {
+        val bundle = Bundle()
+        bundle.putString("ButtonId", "1234");
+     //   bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "test");
+     //   bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
+        firebaseAnalytics.logEvent("checkButtonTest", bundle);
+        //firebaseAnalytics.setAnalyticsCollectionEnabled(true);
+
+
+    }
+
 
     class UIModel : ViewModel() {
         var reloadfragment = MutableLiveData<Boolean>()
@@ -145,7 +159,7 @@ class HomeFragment : CommanAPI() {
          * 1. from splash screen. 2. login and logout.
          */
         swipe_recycler.layoutManager = LinearLayoutManager(activity)
-        swipeAdapter = SwipeAdapter(model,clickEvent)
+        swipeAdapter = SwipeAdapter(model, clickEvent)
         swipe_recycler.adapter = swipeAdapter
         // Swipe interface...
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
@@ -175,7 +189,7 @@ class HomeFragment : CommanAPI() {
 
                 val p = Paint()
                 p.color = ContextCompat.getColor(context!!, R.color.theme_color)
-                loge(TAG,"dx is "+dX)
+                loge(TAG, "dx is " + dX)
                 if (dX > 0) {
                     /* Set your color for positive displacement */
 
@@ -195,18 +209,18 @@ class HomeFragment : CommanAPI() {
         }
     }
 
-    inner class SwipeAdapter(val model: OrderFragment.Myorder_Model,val clickEvent: MyClickHandler) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    inner class SwipeAdapter(val model: OrderFragment.Myorder_Model, val clickEvent: MyClickHandler) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
-            val binding :SwipeCartItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.swipe_cart_item,parent,false)
+            val binding: SwipeCartItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.swipe_cart_item, parent, false)
             return MyViewHolder(binding)
         }
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             if (holder is MyViewHolder) {
                 holder.binding.orderresult = model.last_order_details
-                holder.binding.myclickhandler=clickEvent
-                holder.binding.util=BindDataUtils
+                holder.binding.myclickhandler = clickEvent
+                holder.binding.util = BindDataUtils
 
             }
 
@@ -217,8 +231,7 @@ class HomeFragment : CommanAPI() {
         }
 
 
-
-        private inner class MyViewHolder(val binding: SwipeCartItemBinding) : RecyclerView.ViewHolder(binding.root)  {
+        private inner class MyViewHolder(val binding: SwipeCartItemBinding) : RecyclerView.ViewHolder(binding.root) {
 
         }
     }
@@ -237,13 +250,13 @@ class HomeFragment : CommanAPI() {
                 if (model.status) {
                     loge(TAG, model.last_order_details.toString())
                     count = 1
-                    val animation =TranslateAnimation(0f,0f,200f,0f)
-                    animation.duration=1000
-                    animation.fillAfter=true
+                    val animation = TranslateAnimation(0f, 0f, 200f, 0f)
+                    animation.duration = 1000
+                    animation.fillAfter = true
                     swipe_recycler.startAnimation(animation)
                     swipeView(model)
 
-                }else{
+                } else {
                     count = 0
                     swipeAdapter!!.notifyDataSetChanged()
                 }
@@ -252,11 +265,11 @@ class HomeFragment : CommanAPI() {
             override fun onFail(error: Int) {
                 when (error) {
                     404 -> {
-                      //  showSnackBar(home_fragment_container, getString(R.string.error_404))
+                        //  showSnackBar(home_fragment_container, getString(R.string.error_404))
                     }
                     100 -> {
 
-                      //  showSnackBar(home_fragment_container, getString(R.string.internet_not_available))
+                        //  showSnackBar(home_fragment_container, getString(R.string.internet_not_available))
                     }
                 }
             }
@@ -264,12 +277,12 @@ class HomeFragment : CommanAPI() {
     }
 
     override fun comman_apisuccess(msg: String, model: OrderFragment.Myorder_Model) {
-        loge(TAG,"success..."+model.toString())
+        loge(TAG, "success..." + model.toString())
         moveon_reOrder(model)
     }
 
     override fun comman_apifailed(error: String) {
-        loge(TAG,"failed...")
+        loge(TAG, "failed...")
     }
 
     override fun onDestroy() {
@@ -303,15 +316,17 @@ class HomeFragment : CommanAPI() {
 
         }
 
-        fun reOrder(view: View , model: OrderFragment.Orderresult) {
-            loge(TAG,"reorder---")
-            fetchReorder_info(model,home_fragment_container)
+        fun reOrder(view: View, model: OrderFragment.Orderresult) {
+            loge(TAG, "reorder---")
+            fetchReorder_info(model, home_fragment_container)
 
         }
+
         fun onDetails(view: View, model: OrderFragment.Orderresult) {
-            val fragment = OrderedRestaurant.newInstance( model)
-            addFragment(R.id.home_fragment_container,fragment, OrderedRestaurant.TAG,true)
+            val fragment = OrderedRestaurant.newInstance(model)
+            addFragment(R.id.home_fragment_container, fragment, OrderedRestaurant.TAG, true)
         }
+
         fun onRate(view: View, model: OrderFragment.Orderresult) {
 
             val fragment = RateOrder.newInstance(order_no = model.order_no, orderresult = model)
@@ -331,15 +346,13 @@ class HomeFragment : CommanAPI() {
 
 
         }
-     /*   fun onClose(view: View, model: OrderFragment.Orderresult) {
-            count = 0
-            swipeAdapter!!.notifyDataSetChanged()
-        }*/
+        /*   fun onClose(view: View, model: OrderFragment.Orderresult) {
+               count = 0
+               swipeAdapter!!.notifyDataSetChanged()
+           }*/
 
 
     }
-
-
 
 
 }

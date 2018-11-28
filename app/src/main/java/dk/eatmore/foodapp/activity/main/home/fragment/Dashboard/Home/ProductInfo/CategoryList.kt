@@ -2,19 +2,15 @@ package dk.eatmore.foodapp.fragment.ProductInfo
 
 
 import android.content.Intent
-import android.os.Build
 import android.os.Bundle
-import android.support.design.widget.AppBarLayout
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.util.Pair
 import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AlphaAnimation
 import android.widget.Toast
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
@@ -27,15 +23,14 @@ import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerClickListner
 import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.FragmentAccountContainerBinding
 import dk.eatmore.foodapp.databinding.RowCategoryListBinding
-import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.model.home.MenuListItem
 import dk.eatmore.foodapp.model.home.ProductListItem
 import dk.eatmore.foodapp.model.User
+import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.*
-import kotlinx.android.synthetic.main.activity_cart.*
 import kotlinx.android.synthetic.main.category_list.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
 import java.util.*
@@ -47,15 +42,21 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
     private var mAdapter: UniversalAdapter<ProductListItem, RowCategoryListBinding>? = null
     private val userList = ArrayList<User>()
     private lateinit var productpricecalculation: ProductPriceCalculation
+    private lateinit var restaurant: Restaurant
 
 
     companion object {
 
         val TAG = "CategoryList"
-        fun newInstance(): CategoryList {
-            return CategoryList()
+        fun newInstance(restaurant: Restaurant,data: MenuListItem): CategoryList {
+            val fragment = CategoryList()
+            val bundle = Bundle()
+            bundle.putSerializable(Constants.RESTAURANT, restaurant)
+            bundle.putString(Constants.TITLE,data.c_name)
+            bundle.putSerializable(Constants.PRODUCTLIST, data)
+            fragment.arguments = bundle
+            return fragment
         }
-
     }
 
 
@@ -73,14 +74,15 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
     }
 
 
+
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
-            logd(TAG, "saveInstance NULL")
+            loge(TAG, "saveInstance NULL"+(arguments?.getSerializable(Constants.RESTAURANT) as Restaurant).toString())
             productpricecalculation = ProductPriceCalculation(this)
             updatebatchcount(0)
+            restaurant=arguments?.getSerializable(Constants.RESTAURANT) as Restaurant
             val menuListItem = arguments?.getSerializable(Constants.PRODUCTLIST) as MenuListItem
             val bundle = arguments
-
             subtxt_toolbar.text = bundle?.getString(Constants.TITLE, "") ?: ""
             setanim_toolbartitle(appbar, txt_toolbar, bundle?.getString(Constants.TITLE, "") ?: "")
             img_toolbar_back.setOnClickListener {
@@ -97,7 +99,11 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
             viewcart.setOnClickListener {
                 if(DetailsFragment.total_cartcnt == 0) return@setOnClickListener
                 val intent = Intent(activity, EpayActivity::class.java)
-                startActivityForResult(intent, 1)
+                val bundle= Bundle()
+                bundle.putSerializable(Constants.RESTAURANT,restaurant)
+                intent.putExtras(bundle)
+                startActivityForResult(intent,1)
+
             }
 
 

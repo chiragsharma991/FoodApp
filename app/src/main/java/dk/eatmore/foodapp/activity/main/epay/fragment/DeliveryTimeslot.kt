@@ -5,6 +5,7 @@ import android.content.DialogInterface
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.transition.Transition
+import android.transition.Visibility
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -197,7 +198,7 @@ class DeliveryTimeslot : BaseFragment() {
     // set common toolbar from this and set pre fragment toolbar from this.
 
     fun setToolbarforThis() {
-        (activity as EpayActivity).txt_toolbar_right_img.visibility= if(EpayActivity.isPickup) View.GONE else View.VISIBLE
+        (activity as EpayActivity).txt_toolbar_right_img.visibility=View.GONE
         (activity as EpayActivity).txt_toolbar.text = getString(R.string.confirm_delivery_time)
       //  (activity as EpayActivity).img_toolbar_back.setOnClickListener { onBackpress() }
     }

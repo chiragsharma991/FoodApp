@@ -353,7 +353,7 @@ class EpayActivity : BaseActivity() {
                       }
                       is DeliveryTimeslot ->{
                           txt_toolbar.text=getString(R.string.address)
-                          txt_toolbar_right_img.apply { visibility=View.VISIBLE ; setImageResource(R.drawable.info_outline) }
+                          txt_toolbar_right_img.apply { if(EpayActivity.isPickup) visibility=View.GONE else visibility=View.VISIBLE ; setImageResource(R.drawable.info_outline) }
                           popFragment()
                       }
                       is Paymentmethod ->{

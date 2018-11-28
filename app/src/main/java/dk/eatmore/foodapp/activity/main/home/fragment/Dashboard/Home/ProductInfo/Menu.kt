@@ -18,8 +18,6 @@ import android.transition.Slide
 import android.view.Gravity
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.model.User
-import android.support.transition.*
-import android.support.v4.content.ContextCompat
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerCallback
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerClickListner
@@ -28,12 +26,10 @@ import dk.eatmore.foodapp.databinding.MenuRestaurantBinding
 import dk.eatmore.foodapp.databinding.RowMenuRestaurantBinding
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.CategoryList
-import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.model.home.*
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.Constants
-import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.menu_restaurant.*
 import java.io.Serializable
 import java.util.ArrayList
@@ -212,12 +208,8 @@ class Menu : BaseFragment(), RecyclerClickListner {
         (parentFragment as DetailsFragment).collapse_toolbar.setContentScrimColor(ContextCompat.getColor(context!!,R.color.white))*/
 
 
-        val fragment = CategoryList.newInstance()
+        val fragment = CategoryList.newInstance(restaurant,data)
         var enter :Slide?=null
-        val bundle = Bundle()
-        bundle.putString(Constants.TITLE,data.c_name)
-        bundle.putSerializable(Constants.PRODUCTLIST, data)
-        fragment.arguments=bundle
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             enter = Slide()
             enter.setDuration(300)

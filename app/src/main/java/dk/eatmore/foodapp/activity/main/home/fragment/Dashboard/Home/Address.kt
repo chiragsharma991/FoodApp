@@ -152,6 +152,7 @@ class Address : BaseFragment(), TextWatcher {
     }
 
     fun onFragmentResult(model: EditAddress.Messages) {
+        // backpress from next fragment.
         loge(TAG,"on fragment result---"+model.address_title)
         street_edt.setText(model.street)
         house_edt.setText(model.house_no)
