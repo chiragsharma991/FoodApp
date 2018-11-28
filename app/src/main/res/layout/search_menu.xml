@@ -72,16 +72,30 @@
                         android:focusable="true"
                         android:layout_toEndOf="@+id/img_toolbar_back"
                         android:drawablePadding="@dimen/_8sdp"
-                        android:drawableRight="@drawable/cancel"
-                        android:drawableTint="@color/black_default"
+                        android:layout_toStartOf="@+id/cancel_button"
                         android:background="@android:color/transparent"
                         android:fontFamily="@font/hindvadodara_medium"
                         android:hint="@string/search_the_menu"
                         android:lines="1"
                         android:singleLine="true"
-                        android:layout_marginEnd="@dimen/_10sdp"
                         android:textAppearance="?android:textAppearanceSmall" />
 
+
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:layout_width="@dimen/_50sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:id="@+id/cancel_button"
+                        android:clickable="true"
+                        android:focusable="true"
+                        android:background="?attr/selectableItemBackgroundBorderless"
+                        android:padding="@dimen/_8sdp"
+                        android:layout_centerVertical="true"
+                        app:srcCompat="@drawable/cancel"
+                        android:tint="@color/black_default"
+                        android:visibility="visible"
+                        android:layout_alignParentRight="true"
+                        />
 
 
 

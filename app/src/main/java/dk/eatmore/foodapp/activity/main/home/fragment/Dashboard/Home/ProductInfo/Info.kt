@@ -377,7 +377,7 @@ class Info : BaseFragment() {
                 parent.layoutParams = parms
                 parent.orientation = LinearLayout.HORIZONTAL
 
-                val headerlist = arrayListOf("Fra (Pris)", "Til (Pris.)", "Pris (kr.)")
+                val headerlist = arrayListOf("Fra (Pris)", "Til (Pris)", "Pris (kr.)")
                 // Add header
                 for (i in 0..2) {
 

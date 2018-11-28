@@ -154,6 +154,8 @@
     <string name="confirm_password_should_be_match">Confirm password should be match with current password</string>
     <string name="rate_it_exclaim">Rate it!</string>
     <string name="ordre_under_behandling">Ordre under behandling</string>
+    <string name="no_entry_found_for_address">No entry found for address.</string>
+    <string name="change">Change</string>
 
 
 </resources>

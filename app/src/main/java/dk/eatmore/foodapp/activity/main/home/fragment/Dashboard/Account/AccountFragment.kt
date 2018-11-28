@@ -316,6 +316,7 @@ class AccountFragment : BaseFragment() {
         addFragment(R.id.home_account_container, fragment, Profile.TAG, false)
         // no matter to pass true/false its just for triggering event to reload fragment.
         if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true
+        if(HomeFragment.ui_model?.reloadfragment !=null) HomeFragment.ui_model!!.reloadfragment.value=true  // reload last order from homefragment.
         // When user is comming from cart to login then:
         if (EpayActivity.moveonEpay){
             loge(TAG,"moveonEpay"+EpayActivity.moveonEpay)

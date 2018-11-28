@@ -13,7 +13,9 @@ import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.databinding.FragmentOrderContainerBinding
 import dk.eatmore.foodapp.databinding.RateOrderBinding
+import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedRestaurant
+import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
@@ -102,13 +104,27 @@ class RateOrder : BaseFragment(), RatingBar.OnRatingBarChangeListener {
             override fun <T> onSuccess(body: T?) {
                 val jsonObject = body as JsonObject
                 if (jsonObject.get(Constants.STATUS).asBoolean) {
-                    val fragment = (parentFragment as OrderFragment).childFragmentManager.findFragmentByTag(OrderedRestaurant.TAG)
-                     model.enable_rating =false
-                    (parentFragment as OrderFragment).mAdapter!!.notifyDataSetChanged() // change in home order screen
-                    if((parentFragment as OrderFragment).childFragmentManager.backStackEntryCount > 1)  // detail screen is open
-                    (fragment as OrderedRestaurant).binding.enableRating=false  // change back screen status
+                    model.enable_rating =false
+                    val fragment=((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getContainerFragment()
+                    when(fragment){
+
+                        is HomeFragment ->{
+                            if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true  // reload last order from homefragment.
+                            fragment.swipeAdapter!!.notifyDataSetChanged()
+                            if(fragment.childFragmentManager.backStackEntryCount > 0 && parentFragment is OrderedRestaurant)  // detail screen is open
+                                (parentFragment as OrderedRestaurant).binding.enableRating=false  // change back screen status
+                        }
+                        is OrderFragment ->{
+                            if(HomeFragment.ui_model?.reloadfragment !=null && HomeFragment.count ==1) HomeFragment.ui_model!!.reloadfragment.value=true  // reload last order from homefragment.
+                            fragment.mAdapter!!.notifyDataSetChanged() // change in home order screen
+                            if(fragment.childFragmentManager.backStackEntryCount > 0 && parentFragment is OrderedRestaurant)  // detail screen is open
+                                (parentFragment as OrderedRestaurant).binding.enableRating=false  // change back screen status
+
+                        }
+                    }
                     Toast.makeText(context, jsonObject.get(Constants.MSG).asString, Toast.LENGTH_SHORT).show()
                     (activity as HomeActivity).onBackPressed()
+
                 } else {
                     showSnackBar(rate_container, jsonObject.get(Constants.MSG).asString)
                 }

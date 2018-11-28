@@ -100,8 +100,12 @@ class SearchMenu : BaseFragment() {
         img_toolbar_back.setOnClickListener{
             (activity as HomeActivity).onBackPressed()
         }
+        cancel_button.setOnClickListener{
+            search_edt.text.clear()
 
-        search_edt.setDrawableClickListener(object : DrawableClickListener {
+        }
+
+    /*    search_edt.setDrawableClickListener(object : DrawableClickListener {
             override fun onClick(target: DrawablePosition) {
                 when (target) {
                     DrawableClickListener.DrawablePosition.LEFT -> {
@@ -112,7 +116,7 @@ class SearchMenu : BaseFragment() {
                     }
                 }
             }
-        })
+        })*/
 
         search_edt.addTextChangedListener(object : TextWatcher {
             override fun afterTextChanged(arg0: Editable) {

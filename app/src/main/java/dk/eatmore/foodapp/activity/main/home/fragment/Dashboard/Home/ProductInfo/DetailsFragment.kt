@@ -143,6 +143,9 @@ class DetailsFragment : BaseFragment() {
             viewcart.setOnClickListener {
                 if(total_cartcnt==0) return@setOnClickListener
                 val intent = Intent(activity, EpayActivity::class.java)
+                val bundle= Bundle()
+                bundle.putSerializable(Constants.RESTAURANT,restaurant)
+                intent.putExtras(bundle)
                 startActivityForResult(intent,1)
             }
 

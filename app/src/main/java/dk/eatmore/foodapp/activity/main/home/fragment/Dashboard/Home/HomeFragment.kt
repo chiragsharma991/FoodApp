@@ -3,18 +3,25 @@ package dk.eatmore.foodapp.fragment.Dashboard.Home
 
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.v4.content.ContextCompat
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.support.v7.widget.RecyclerView
 import android.support.v7.widget.helper.ItemTouchHelper
+import android.transition.ChangeBounds
+import android.transition.Slide
 import android.view.*
+import android.view.animation.TranslateAnimation
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import com.facebook.*
@@ -28,30 +35,35 @@ import kotlinx.android.synthetic.main.fragment_home_fragment.*
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.auth.*
 import com.google.gson.JsonObject
+import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.RestaurantList
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.RateOrder
 import dk.eatmore.foodapp.databinding.SwipeCartItemBinding
+import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedRestaurant
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BindDataUtils
+import dk.eatmore.foodapp.utils.CommanAPI
 import dk.eatmore.foodapp.utils.Constants
+import java.util.ArrayList
 
 
-class HomeFragment : BaseFragment() {
+class HomeFragment : CommanAPI() {
 
     private lateinit var binding: FragmentHomeFragmentBinding
     lateinit var clickEvent: MyClickHandler
     private var mAdapter: OrderListAdapter? = null
     var fragment: DetailsFragment? = null
-    private var swipeAdapter: SwipeAdapter? = null
+    var swipeAdapter: SwipeAdapter? = null
     private lateinit var mAuth: FirebaseAuth
     val callbackManager = CallbackManager.Factory.create()
     private lateinit var mGoogleSignInClient: GoogleSignInClient
-    private var count: Int = 0
 
 
     companion object {
-
+        var count: Int = 0
+        var ui_model: UIModel? = null
         val TAG = "HomeFragment"
         fun newInstance(): HomeFragment {
             return HomeFragment()
@@ -73,12 +85,14 @@ class HomeFragment : BaseFragment() {
     }
 
 
+
     override fun initView(view: View?, savedInstanceState: Bundle?) {
 
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
             clickEvent = MyClickHandler(this)
             binding.handlers = clickEvent
+            ui_model = createViewModel()
             fetchLastOrder()
             find_rest_edt.imeOptions = EditorInfo.IME_ACTION_DONE
             find_rest_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
@@ -90,32 +104,6 @@ class HomeFragment : BaseFragment() {
                     return true
                 }
             })
-
-
-/*
-            recycler_view.apply {
-                mAdapter = OrderListAdapter(this@HomeFragment,object: OrderListAdapter.AdapterListener {
-                    override fun itemClicked(position: Int) {
-                        loge(TAG,"on click....")
-                        fragment = DetailsFragment.newInstance()
-                        var enter :Slide?=null
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            enter = Slide()
-                            enter.setDuration(300)
-                            enter.slideEdge = Gravity.BOTTOM
-                            val changeBoundsTransition :ChangeBounds = ChangeBounds()
-                            changeBoundsTransition.duration = 300
-                            //fragment!!.sharedElementEnterTransition=changeBoundsTransition
-                            fragment!!.sharedElementEnterTransition=changeBoundsTransition
-                            fragment!!.enterTransition=enter
-                        }
-                        addFragment(R.id.home_fragment_container,fragment!!,DetailsFragment.TAG,false)
-                    }
-                })
-                layoutManager = LinearLayoutManager(getActivityBase())
-                adapter = mAdapter
-            }
-*/
             // disable app bar scrolling.
             if (app_bar.getLayoutParams() != null) {
                 val layoutParams = app_bar.getLayoutParams() as CoordinatorLayout.LayoutParams
@@ -131,17 +119,34 @@ class HomeFragment : BaseFragment() {
 
         } else {
             logd(TAG, "saveInstance NOT NULL")
-
         }
 
     }
 
-    private fun swipeView(model: OrderFragment.Myorder_Model) {
 
+    class UIModel : ViewModel() {
+        var reloadfragment = MutableLiveData<Boolean>()
+
+    }
+
+    fun createViewModel(): UIModel =
+
+            ViewModelProviders.of(this).get(UIModel::class.java).apply {
+                reloadfragment.removeObservers(this@HomeFragment)
+                reloadfragment.observe(this@HomeFragment, Observer<Boolean> {
+                    // reload fragment from here.
+                    fetchLastOrder()
+                })
+            }
+
+
+    fun swipeView(model: OrderFragment.Myorder_Model) {
+        /**TODO: swipe view visible condition:
+         * 1. from splash screen. 2. login and logout.
+         */
         swipe_recycler.layoutManager = LinearLayoutManager(activity)
         swipeAdapter = SwipeAdapter(model,clickEvent)
         swipe_recycler.adapter = swipeAdapter
-
         // Swipe interface...
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
         itemTouchHelper.attachToRecyclerView(swipe_recycler)
@@ -170,6 +175,7 @@ class HomeFragment : BaseFragment() {
 
                 val p = Paint()
                 p.color = ContextCompat.getColor(context!!, R.color.theme_color)
+                loge(TAG,"dx is "+dX)
                 if (dX > 0) {
                     /* Set your color for positive displacement */
 
@@ -189,7 +195,7 @@ class HomeFragment : BaseFragment() {
         }
     }
 
-    private inner class SwipeAdapter(val model: OrderFragment.Myorder_Model,val clickEvent: MyClickHandler) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    inner class SwipeAdapter(val model: OrderFragment.Myorder_Model,val clickEvent: MyClickHandler) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             val binding :SwipeCartItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.swipe_cart_item,parent,false)
@@ -198,60 +204,19 @@ class HomeFragment : BaseFragment() {
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             if (holder is MyViewHolder) {
-
                 holder.binding.orderresult = model.last_order_details
                 holder.binding.myclickhandler=clickEvent
                 holder.binding.util=BindDataUtils
 
             }
 
-
-
-          /*  if (holder is SwipeHolder) {
-                val vh: SwipeHolder = holder
-                vh.ordered_item_name.text = jsonObject.getAsJsonObject("last_order_details").get("restaurant_name").asString
-                vh.item_price.text = BindDataUtils.convertCurrencyToDanish(jsonObject.getAsJsonObject("last_order_details").get("total_to_pay").asString)
-                vh.item_date.text = BindDataUtils.parseDateToddMMyyyy(jsonObject.getAsJsonObject("last_order_details").get("order_date").asString)
-                vh.item_status.text = if (jsonObject.getAsJsonObject("last_order_details").get("enable_rating").asBoolean && jsonObject.getAsJsonObject("last_order_details").get("order_status").asString.toLowerCase().equals("accepted")) getString(R.string.rate_it_exclaim) else getString(R.string.ordre_under_behandling)
-                vh.item_status.visibility = if (jsonObject.getAsJsonObject("last_order_details").get("enable_rating").asBoolean) View.VISIBLE else View.GONE
-                Glide.with(context!!).load(jsonObject.getAsJsonObject("last_order_details").get("app_icon").asString).into(vh.imageview);
-
-            }*/
         }
 
         override fun getItemCount(): Int {
             return count
         }
 
-/*
-        inner class SwipeHolder(override val containerView: View?) : RecyclerView.ViewHolder(containerView), LayoutContainer {
 
-
-
-            init {
-                  close_btn?.setOnClickListener { view ->
-                      count = 0
-                      swipeAdapter!!.notifyDataSetChanged()
-                  }
-
-                row_contoller.setOnClickListener{
-                    val model = OrderFragment.Orderresult()
-                    model.order_date
-                    val fragment = OrderedRestaurant.newInstance(find_rest_edt.text.trim().toString())
-                    addFragment(R.id.home_fragment_container, fragment, OrderedRestaurant.TAG, true)
-
-
-//                    val fragment = OrderedRestaurant.newInstance(restaurantname = model.restaurant_name,appicon = model.app_icon,orderdate = model.order_date,ordernumber = model.order_no,enable_rating = model.enable_rating, orderresult = model)
-//                    addFragment(R.id.home_order_container,fragment, OrderedRestaurant.TAG,true)
-                }
-                reorder_btn.setOnClickListener{
-
-                }
-
-
-            }
-        }
-*/
 
         private inner class MyViewHolder(val binding: SwipeCartItemBinding) : RecyclerView.ViewHolder(binding.root)  {
 
@@ -272,11 +237,16 @@ class HomeFragment : BaseFragment() {
                 if (model.status) {
                     loge(TAG, model.last_order_details.toString())
                     count = 1
+                    val animation =TranslateAnimation(0f,0f,200f,0f)
+                    animation.duration=1000
+                    animation.fillAfter=true
+                    swipe_recycler.startAnimation(animation)
                     swipeView(model)
 
+                }else{
+                    count = 0
+                    swipeAdapter!!.notifyDataSetChanged()
                 }
-
-
             }
 
             override fun onFail(error: Int) {
@@ -293,6 +263,14 @@ class HomeFragment : BaseFragment() {
         })
     }
 
+    override fun comman_apisuccess(msg: String, model: OrderFragment.Myorder_Model) {
+        loge(TAG,"success..."+model.toString())
+        moveon_reOrder(model)
+    }
+
+    override fun comman_apifailed(error: String) {
+        loge(TAG,"failed...")
+    }
 
     override fun onDestroy() {
         super.onDestroy()
@@ -327,42 +305,41 @@ class HomeFragment : BaseFragment() {
 
         fun reOrder(view: View , model: OrderFragment.Orderresult) {
             loge(TAG,"reorder---")
+            fetchReorder_info(model,home_fragment_container)
+
         }
         fun onDetails(view: View, model: OrderFragment.Orderresult) {
-
+            val fragment = OrderedRestaurant.newInstance( model)
+            addFragment(R.id.home_fragment_container,fragment, OrderedRestaurant.TAG,true)
         }
         fun onRate(view: View, model: OrderFragment.Orderresult) {
 
+            val fragment = RateOrder.newInstance(order_no = model.order_no, orderresult = model)
+            var enter: Slide? = null
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                enter = Slide()
+                enter.setDuration(Constants.BOTTOM_TO_TOP_ANIM.toLong())
+                enter.slideEdge = Gravity.BOTTOM
+                val changeBoundsTransition: ChangeBounds = ChangeBounds()
+                changeBoundsTransition.duration = Constants.BOTTOM_TO_TOP_ANIM.toLong()
+                //fragment!!.sharedElementEnterTransition=changeBoundsTransition
+                fragment.sharedElementEnterTransition = changeBoundsTransition
+                fragment.sharedElementReturnTransition = changeBoundsTransition
+                fragment.enterTransition = enter
+            }
+            addFragment(R.id.home_fragment_container, fragment, RateOrder.TAG, false)
+
+
         }
-        fun onClose(view: View, model: OrderFragment.Orderresult) {
+     /*   fun onClose(view: View, model: OrderFragment.Orderresult) {
             count = 0
             swipeAdapter!!.notifyDataSetChanged()
-        }
+        }*/
 
 
     }
 
 
-    inner private class UIModel : ViewModel() {
-
-        var uiData = MutableLiveData<UI_HomeFragment>()
-
-        fun init() {
-            val ui_homefragment = UI_HomeFragment("HomeFragment", false)
-            uiData.value = ui_homefragment
-        }
-
-        fun set(body: Any?) {
-            /* expensive operation, e.g. network request */
-            //uiData.value = (body as LastOrder)
-        }
-
-        fun getUIModel(): LiveData<UI_HomeFragment> {
-            return uiData
-        }
-
-
-    }
 
 
 }

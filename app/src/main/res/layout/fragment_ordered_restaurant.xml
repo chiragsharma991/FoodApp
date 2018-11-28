@@ -39,592 +39,599 @@
     </data>
 
 
-    <android.support.design.widget.CoordinatorLayout
-        android:id="@+id/orderedrestaurant_container"
-        android:fitsSystemWindows="true"
+    <FrameLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
         android:clickable="true"
         android:focusable="true"
         android:background="@color/background_light"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:id="@+id/orderedrestaurant_container"
         >
-
-        <android.support.design.widget.AppBarLayout
-            android:layout_width="match_parent"
-            android:id="@+id/appbar"
-            android:layout_height="wrap_content"
+        <android.support.design.widget.CoordinatorLayout
             android:fitsSystemWindows="true"
-            android:background="?attr/colorPrimary"
-            android:theme="@style/AppTheme.NoActionBar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             >
 
-            <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/collapse_toolbar"
+            <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
+                android:id="@+id/appbar"
                 android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
-                app:contentScrim="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-                app:titleEnabled="false">
+                android:background="?attr/colorPrimary"
+                android:theme="@style/AppTheme.NoActionBar"
+                >
 
-
-
-
-                <LinearLayout
+                <android.support.design.widget.CollapsingToolbarLayout
+                    android:id="@+id/collapse_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:paddingTop="@dimen/_58sdp"
-                    android:gravity="center_horizontal"
-                    android:clipToPadding="false"
-                    android:id="@+id/detail_item_info"
+                    android:fitsSystemWindows="true"
+                    app:contentScrim="?attr/colorPrimary"
+                    app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
+                    app:titleEnabled="false">
+
+
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:paddingTop="@dimen/_58sdp"
+                        android:gravity="center_horizontal"
+                        android:clipToPadding="false"
+                        android:id="@+id/detail_item_info"
+
+                        >
+
+
+                        <android.support.v7.widget.CardView
+                            android:layout_width="@dimen/_80sdp"
+                            android:layout_height="@dimen/_80sdp"
+                            app:cardElevation="@dimen/_5sdp"
+                            app:cardCornerRadius="@dimen/_5sdp"
+                            >
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+
+                                >
+
+                                <android.support.v7.widget.AppCompatImageView
+                                    android:layout_width="match_parent"
+                                    android:layout_height="match_parent"
+                                    android:id="@+id/imageview"
+                                    android:background="@color/gray"
+                                    android:scaleType="fitXY"
+                                    />
+
+
+                            </RelativeLayout>
+
+
+                        </android.support.v7.widget.CardView>
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/TextViewSmall"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:textColor="@color/black_light"
+                            android:text="Din bestilling fra:"
+                            />
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/TextViewSmall"
+                            android:text="@{data.restaurant_name}"
+                            android:textStyle="bold"
+                            />
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/TextViewSmall"
+                            android:text="@{(enable_rating==true &amp;&amp; order_status.toLowerCase().equalsIgnoreCase(`accepted`)) ? @string/rate_it_exclaim : @string/ordre_under_behandling }"
+                            android:visibility="@{enable_rating == true ? View.VISIBLE : View.GONE}"
+                            android:textColor="@color/theme_color"
+                            android:onClick="@{myclickhandler :: on_rating}"
+                            />
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/TextViewMid"
+                            android:singleLine="true"
+                            android:text="@{util.parseDateToddMMyyyy(data.order_date)}"
+                            />
+
+
+                    </LinearLayout>
+
+
+
+                    <include layout="@layout/toolbar"
+                        >
+
+                    </include>
+
+
+
+                    <!--    <include layout="@layout/toolbar_plusone"
+                            >
+
+                        </include>-->
+
+
+
+
+
+                </android.support.design.widget.CollapsingToolbarLayout>
+
+
+
+
+
+            </android.support.design.widget.AppBarLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/category_list_container"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/toolbar"
+                android:fitsSystemWindows="true"
+                android:background="@color/white"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                >
+
+                <android.support.v4.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
 
                     >
-
-
-                    <android.support.v7.widget.CardView
-                        android:layout_width="@dimen/_80sdp"
-                        android:layout_height="@dimen/_80sdp"
-                        app:cardElevation="@dimen/_5sdp"
-                        app:cardCornerRadius="@dimen/_5sdp"
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        android:layout_margin="@dimen/_8sdp"
+                        android:visibility="@{data.order_no.length() > 0 ? View.VISIBLE : View.GONE}"
+                        android:gravity="center_horizontal"
                         >
+
+
+                        <View
+                            android:id="@+id/view"
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:alpha="0.2"
+                            android:background="@color/divider_color"
+                            />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/TextViewSmall"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_gravity="center_horizontal"
+                            android:text="@{data.shipping.equalsIgnoreCase(`Delivery`) ? @string/delivered_at : @string/picked_up_from }"
+                            android:textColor="@color/black_light"
+
+                            />
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/TextViewSmall"
+                            android:text="@{data.address}"
+                            android:layout_gravity="center_horizontal"
+                            />
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginBottom="@dimen/_8sdp"
+                            android:alpha="0.2"
+                            android:background="@color/divider_color"
+                            />
+
 
                         <RelativeLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-
+                            android:layout_height="wrap_content"
                             >
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="@string/order_overview"
 
-                            <android.support.v7.widget.AppCompatImageView
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:id="@+id/imageview"
-                                android:background="@color/gray"
-                                android:scaleType="fitXY"
+                                />
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="60,00 Kr."
+                                android:visibility="invisible"
+                                android:layout_alignParentRight="true"
                                 />
 
+                        </RelativeLayout>
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="@{@string/order_no(String.valueOf(data.order_no))}"
+                                android:textColor="@color/black_light"
+
+                                />
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="55,00 Kr."
+                                android:visibility="invisible"
+                                android:textColor="@color/black_light"
+                                android:layout_alignParentRight="true"
+                                />
 
                         </RelativeLayout>
 
 
-                    </android.support.v7.widget.CardView>
-
-                    <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:textColor="@color/black_light"
-                        android:text="Din bestilling fra:"
-                        />
-                    <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
-                        android:text="@{data.restaurant_name}"
-                        android:textStyle="bold"
-                        />
-
-
-                    <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
-                        android:text="@{(enable_rating==true &amp;&amp; order_status.toLowerCase().equalsIgnoreCase(`accepted`)) ? @string/rate_it_exclaim : @string/ordre_under_behandling }"
-                        android:visibility="@{enable_rating == true ? View.VISIBLE : View.GONE}"
-                        android:textColor="@color/theme_color"
-                        android:onClick="@{myclickhandler :: on_rating}"
-                        />
-
-
-                    <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewMid"
-                        android:singleLine="true"
-                        android:text="@{util.parseDateToddMMyyyy(data.order_date)}"
-                        />
-
-
-                </LinearLayout>
-
-
-
-                <include layout="@layout/toolbar"
-                    >
-
-                </include>
-
-
-
-                <!--    <include layout="@layout/toolbar_plusone"
-                        >
-
-                    </include>-->
-
-
-
-
-
-            </android.support.design.widget.CollapsingToolbarLayout>
-
-
-
-
-
-        </android.support.design.widget.AppBarLayout>
-
-
-        <RelativeLayout
-            android:id="@+id/category_list_container"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar"
-            android:fitsSystemWindows="true"
-            android:background="@color/white"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            >
-
-            <android.support.v4.widget.NestedScrollView
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-
-                >
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    android:layout_margin="@dimen/_8sdp"
-                    android:visibility="@{data.order_no.length() > 0 ? View.VISIBLE : View.GONE}"
-                    android:gravity="center_horizontal"
-                    >
-
-
-                    <View
-                        android:id="@+id/view"
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:alpha="0.2"
-                        android:background="@color/divider_color"
-                        />
-
-                    <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:layout_gravity="center_horizontal"
-                        android:text="@{data.shipping.equalsIgnoreCase(`Delivery`) ? @string/delivered_at : @string/picked_up_from }"
-                        android:textColor="@color/black_light"
-
-                        />
-                    <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
-                        android:text="@{data.address}"
-                        android:layout_gravity="center_horizontal"
-                        />
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:layout_marginBottom="@dimen/_8sdp"
-                        android:alpha="0.2"
-                        android:background="@color/divider_color"
-                        />
-
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        >
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/TextViewSmall"
-                            android:text="@string/order_overview"
-
-                            />
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/TextViewSmall"
-                            android:text="60,00 Kr."
-                            android:visibility="invisible"
-                            android:layout_alignParentRight="true"
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginBottom="@dimen/_8sdp"
+                            android:alpha="0.2"
+                            android:background="@color/divider_color"
                             />
 
-                    </RelativeLayout>
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        >
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/TextViewSmall"
-                            android:text="@{@string/order_no(String.valueOf(data.order_no))}"
-                            android:textColor="@color/black_light"
-
-                            />
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/TextViewSmall"
-                            android:text="55,00 Kr."
-                            android:visibility="invisible"
-                            android:textColor="@color/black_light"
-                            android:layout_alignParentRight="true"
-                            />
-
-                    </RelativeLayout>
-
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:layout_marginBottom="@dimen/_8sdp"
-                        android:alpha="0.2"
-                        android:background="@color/divider_color"
-                        />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        >
-                        <LinearLayout
+                        <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:id="@+id/add_parentitem_view"
                             >
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:orientation="vertical"
+                                android:id="@+id/add_parentitem_view"
+                                >
 
 
 
+
+
+                            </LinearLayout>
+
+
+                            <!--      <android.support.v7.widget.AppCompatTextView
+                                      style="@style/TextViewSmall"
+                                      android:text="Subtotal"
+                                      android:textColor="@color/black_light"
+
+                                      />
+                                  <android.support.v7.widget.AppCompatTextView
+                                      style="@style/TextViewSmall"
+                                      android:text="115,00 Kr."
+                                      android:textColor="@color/black_light"
+                                      android:layout_alignParentRight="true"
+                                      />-->
+
+                        </RelativeLayout>
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginBottom="@dimen/_8sdp"
+                            android:alpha="0.2"
+                            android:background="@color/divider_color"
+                            />
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="Paid via:"
+                                />
+
+                        </RelativeLayout>
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            >
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:text="Kontant"
+                                android:textColor="@color/black_light"
+
+                                />
+
+                        </RelativeLayout>
+
+
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginBottom="@dimen/_8sdp"
+                            android:alpha="0.2"
+                            android:background="@color/divider_color"
+                            />
+
+
+                        <LinearLayout
+                            android:id="@+id/subtotal_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="horizontal">
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/_8sdp"
+                                android:layout_weight="1.2"
+                                android:gravity="start"
+                                android:singleLine="true"
+                                android:text="Subtotal:"
+                                android:textStyle="bold" />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/subtotal_txt"
+                                style="@style/TextViewSmall"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_weight="0.8"
+                                android:gravity="end"
+                                android:singleLine="true"
+                                android:text="45,00kr"
+                                android:textStyle="bold" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/discountcoupan_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:orientation="horizontal">
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/_8sdp"
+                                android:layout_weight="1.2"
+                                android:gravity="start"
+                                android:singleLine="true"
+                                android:text="Discount:"
+                                android:textStyle="bold" />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/discountcoupan_txt"
+                                style="@style/TextViewSmall"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_weight="0.8"
+                                android:gravity="end"
+                                android:singleLine="true"
+                                android:text="145,00kr"
+                                android:textStyle="bold" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/restuptominimum_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:orientation="horizontal">
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/_8sdp"
+                                android:layout_weight="1.2"
+                                android:gravity="start"
+                                android:singleLine="true"
+                                android:text="Rest upto minimum:"
+                                android:textStyle="bold" />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/restuptominimum_txt"
+                                style="@style/TextViewSmall"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_weight="0.8"
+                                android:gravity="end"
+                                android:singleLine="true"
+                                android:text="145,00kr"
+                                android:textStyle="bold" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/shipping_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:orientation="horizontal">
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/_8sdp"
+                                android:layout_weight="1.2"
+                                android:gravity="start"
+                                android:singleLine="true"
+                                android:text="Shipping Charges:"
+                                android:textStyle="bold" />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/shipping_txt"
+                                style="@style/TextViewSmall"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_weight="0.8"
+                                android:gravity="end"
+                                android:singleLine="true"
+                                android:text="145,00kr"
+                                android:textStyle="bold" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/additional_charge_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:orientation="horizontal">
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/_8sdp"
+                                android:layout_weight="1.2"
+                                android:gravity="start"
+                                android:singleLine="true"
+                                android:text="Additional Charges:"
+                                android:textStyle="bold" />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/additional_charge_txt"
+                                style="@style/TextViewSmall"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_weight="0.8"
+                                android:gravity="end"
+                                android:singleLine="true"
+                                android:text="145,00kr"
+                                android:textStyle="bold" />
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/discountgift_layout"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:orientation="horizontal">
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/_8sdp"
+                                android:layout_weight="1.2"
+                                android:gravity="start"
+                                android:singleLine="true"
+                                android:text="Discount:"
+                                android:textStyle="bold" />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/discountgift_txt"
+                                style="@style/TextViewSmall"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_weight="0.8"
+                                android:gravity="end"
+                                android:singleLine="true"
+                                android:text="145,00kr"
+                                android:textStyle="bold" />
 
 
                         </LinearLayout>
 
 
-                        <!--      <android.support.v7.widget.AppCompatTextView
-                                  style="@style/TextViewSmall"
-                                  android:text="Subtotal"
-                                  android:textColor="@color/black_light"
+                        <ImageView
+                            android:layout_width="match_parent"
+                            android:layout_height="2dp"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layerType="software"
+                            android:src="@drawable/dashline" />
 
-                                  />
-                              <android.support.v7.widget.AppCompatTextView
-                                  style="@style/TextViewSmall"
-                                  android:text="115,00 Kr."
-                                  android:textColor="@color/black_light"
-                                  android:layout_alignParentRight="true"
-                                  />-->
-
-                    </RelativeLayout>
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:layout_marginBottom="@dimen/_8sdp"
-                        android:alpha="0.2"
-                        android:background="@color/divider_color"
-                        />
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        >
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/TextViewSmall"
-                            android:text="Paid via:"
-                            />
-
-                    </RelativeLayout>
-
-                    <RelativeLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        >
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/TextViewSmall"
-                            android:text="Kontant"
-                            android:textColor="@color/black_light"
-
-                            />
-
-                    </RelativeLayout>
-
-
-
-                    <View
-                        android:layout_width="match_parent"
-                        android:layout_height="1dp"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:layout_marginBottom="@dimen/_8sdp"
-                        android:alpha="0.2"
-                        android:background="@color/divider_color"
-                        />
-
-
-                    <LinearLayout
-                        android:id="@+id/subtotal_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="horizontal">
-
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/TextViewSmall"
-                            android:layout_width="0dp"
+                        <LinearLayout
+                            android:id="@+id/total_layout"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            android:layout_weight="1.2"
-                            android:gravity="start"
-                            android:singleLine="true"
-                            android:text="Subtotal:"
-                            android:textStyle="bold" />
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_marginBottom="@dimen/_16sdp"
+                            android:orientation="horizontal">
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/subtotal_txt"
-                            style="@style/TextViewSmall"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_weight="0.8"
-                            android:gravity="end"
-                            android:singleLine="true"
-                            android:text="45,00kr"
-                            android:textStyle="bold" />
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/TextViewSmall"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_marginEnd="@dimen/_8sdp"
+                                android:layout_weight="1.2"
+                                android:gravity="start"
+                                android:singleLine="true"
+                                android:text="Total:"
+                                android:textStyle="bold" />
 
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/discountcoupan_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:orientation="horizontal">
-
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/TextViewSmall"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            android:layout_weight="1.2"
-                            android:gravity="start"
-                            android:singleLine="true"
-                            android:text="Discount:"
-                            android:textStyle="bold" />
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/discountcoupan_txt"
-                            style="@style/TextViewSmall"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_weight="0.8"
-                            android:gravity="end"
-                            android:singleLine="true"
-                            android:text="145,00kr"
-                            android:textStyle="bold" />
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/total_txt"
+                                style="@style/TextViewSmall"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentEnd="true"
+                                android:layout_weight="0.8"
+                                android:gravity="end"
+                                android:singleLine="true"
+                                android:text="145,00kr"
+                                android:textStyle="bold" />
 
 
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/restuptominimum_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:orientation="horizontal">
-
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/TextViewSmall"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            android:layout_weight="1.2"
-                            android:gravity="start"
-                            android:singleLine="true"
-                            android:text="Rest upto minimum:"
-                            android:textStyle="bold" />
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/restuptominimum_txt"
-                            style="@style/TextViewSmall"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_weight="0.8"
-                            android:gravity="end"
-                            android:singleLine="true"
-                            android:text="145,00kr"
-                            android:textStyle="bold" />
+                        </LinearLayout>
 
 
-                    </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/shipping_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:orientation="horizontal">
-
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/TextViewSmall"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            android:layout_weight="1.2"
-                            android:gravity="start"
-                            android:singleLine="true"
-                            android:text="Shipping Charges:"
-                            android:textStyle="bold" />
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/shipping_txt"
-                            style="@style/TextViewSmall"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_weight="0.8"
-                            android:gravity="end"
-                            android:singleLine="true"
-                            android:text="145,00kr"
-                            android:textStyle="bold" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/additional_charge_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:orientation="horizontal">
-
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/TextViewSmall"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            android:layout_weight="1.2"
-                            android:gravity="start"
-                            android:singleLine="true"
-                            android:text="Additional Charges:"
-                            android:textStyle="bold" />
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/additional_charge_txt"
-                            style="@style/TextViewSmall"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_weight="0.8"
-                            android:gravity="end"
-                            android:singleLine="true"
-                            android:text="145,00kr"
-                            android:textStyle="bold" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/discountgift_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:orientation="horizontal">
-
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/TextViewSmall"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            android:layout_weight="1.2"
-                            android:gravity="start"
-                            android:singleLine="true"
-                            android:text="Discount:"
-                            android:textStyle="bold" />
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/discountgift_txt"
-                            style="@style/TextViewSmall"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_weight="0.8"
-                            android:gravity="end"
-                            android:singleLine="true"
-                            android:text="145,00kr"
-                            android:textStyle="bold" />
 
 
                     </LinearLayout>
 
 
-                    <ImageView
-                        android:layout_width="match_parent"
-                        android:layout_height="2dp"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:layerType="software"
-                        android:src="@drawable/dashline" />
-
-                    <LinearLayout
-                        android:id="@+id/total_layout"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:layout_marginBottom="@dimen/_16sdp"
-                        android:orientation="horizontal">
-
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/TextViewSmall"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_marginEnd="@dimen/_8sdp"
-                            android:layout_weight="1.2"
-                            android:gravity="start"
-                            android:singleLine="true"
-                            android:text="Total:"
-                            android:textStyle="bold" />
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/total_txt"
-                            style="@style/TextViewSmall"
-                            android:layout_width="0dp"
-                            android:layout_height="wrap_content"
-                            android:layout_alignParentEnd="true"
-                            android:layout_weight="0.8"
-                            android:gravity="end"
-                            android:singleLine="true"
-                            android:text="145,00kr"
-                            android:textStyle="bold" />
-
-
-                    </LinearLayout>
+                </android.support.v4.widget.NestedScrollView>
 
 
 
-
-
-                </LinearLayout>
-
-
-            </android.support.v4.widget.NestedScrollView>
+            </RelativeLayout>
 
 
 
-        </RelativeLayout>
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                >
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    style="?android:attr/progress"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:visibility="@{data.order_no.length() > 0 ? View.GONE : View.VISIBLE}"
+                    android:indeterminate="true" />
+
+
+            </RelativeLayout>
 
 
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-
-            >
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                style="?android:attr/progress"
-                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:visibility="@{data.order_no.length() > 0 ? View.GONE : View.VISIBLE}"
-                android:indeterminate="true" />
+        </android.support.design.widget.CoordinatorLayout>
 
 
-        </RelativeLayout>
-
-
-
-    </android.support.design.widget.CoordinatorLayout>
+    </FrameLayout>
 
 </layout>
 

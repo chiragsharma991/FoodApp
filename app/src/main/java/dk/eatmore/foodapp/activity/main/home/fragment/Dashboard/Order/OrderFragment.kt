@@ -24,56 +24,51 @@ import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerCallback
-import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerClickInterface
 import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.FragmentOrderContainerBinding
 import dk.eatmore.foodapp.databinding.RowOrderedPizzaBinding
+import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedRestaurant
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
-import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
-import dk.eatmore.foodapp.utils.BaseFragment
-import dk.eatmore.foodapp.utils.BindDataUtils
-import dk.eatmore.foodapp.utils.Constants
-import dk.eatmore.foodapp.utils.DialogUtils
+import dk.eatmore.foodapp.utils.*
 import kotlinx.android.synthetic.main.fragment_order_container.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.io.Serializable
-import java.util.ArrayList
+import java.util.*
 
-class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
-
-
+class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
 
     private lateinit var binding: FragmentOrderContainerBinding
-    private  val myclickhandler = MyClickHandler(this@OrderFragment)
+    private val myclickhandler = MyClickHandler(this@OrderFragment)
     public var mAdapter: UniversalAdapter<Orderresult, RowOrderedPizzaBinding>? = null
 
 
-
-
-
     companion object {
-
-        val TAG= "OrderFragment"
+        val TAG = "OrderFragment"
         var ui_model: UIModel? = null
-        fun newInstance() : OrderFragment {
+        fun newInstance(): OrderFragment {
             return OrderFragment()
         }
     }
 
-
     override fun onRefresh() {
         // swipe to refresh>>>
-        swipetorefresh_view.visibility=View.GONE
+        swipetorefresh_view.visibility = View.GONE
         fetchmyOrder()
+        if(HomeFragment.ui_model?.reloadfragment !=null && HomeFragment.count ==1) HomeFragment.ui_model!!.reloadfragment.value=true  // reload last order from homefragment.
+    }
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        super.setUserVisibleHint(isVisibleToUser)
+        // Event when you change tab...
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding= DataBindingUtil.inflate(inflater,getLayout(),container,false)
+        binding = DataBindingUtil.inflate(inflater, getLayout(), container, false)
         return binding.root
     }
 
@@ -83,17 +78,18 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
-        loge(TAG,"saveInstance "+savedInstanceState)
-        if(savedInstanceState == null){
-            empty_view.visibility=View.GONE
+        loge(TAG, "saveInstance " + savedInstanceState)
+        if (savedInstanceState == null) {
+            loge(TAG,"check visible-"+getUserVisibleHint())
+            empty_view.visibility = View.GONE
             //progress_bar.visibility=View.GONE
-            txt_toolbar.text=getString(R.string.orders)
-            img_toolbar_back.visibility=View.GONE
+            txt_toolbar.text = getString(R.string.orders)
+            img_toolbar_back.visibility = View.GONE
             swipeRefresh.setOnRefreshListener(this)
             ui_model = createViewModel()
-            if(!PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS,false)){
-                empty_view.visibility=View.VISIBLE
-                error_txt.text=getString(R.string.please_login_to_see)
+            if (!PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
+                empty_view.visibility = View.VISIBLE
+                error_txt.text = getString(R.string.please_login_to_see)
                 return
             }
             fetchmyOrder()
@@ -118,7 +114,7 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     }
 
-     fun createViewModel(): OrderFragment.UIModel =
+    fun createViewModel(): OrderFragment.UIModel =
 
             ViewModelProviders.of(this).get(OrderFragment.UIModel::class.java).apply {
                 myorder_List.removeObservers(this@OrderFragment)
@@ -131,54 +127,53 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
                     refreshview(list)
                 })
                 restaurant_info.observe(this@OrderFragment, Observer<Myorder_Model> {
-                    loge(TAG,"move next refresh---")
+                    loge(TAG, "move next refresh---")
                     moveon_next()
                 })
                 reloadfragment.observe(this@OrderFragment, Observer<Boolean> {
                     // reload fragment from here.
-                    loge(TAG,"reload refresh---")
+                    loge(TAG, "reload refresh---")
                     fetchmyOrder()
-
 
                 })
             }
 
 
-
-     fun refreshview(list: ArrayList<Orderresult>) {
-         if(mAdapter !=null){
-             mAdapter!!.updatedata(list)
-             mAdapter!!.notifyDataSetChanged()
-             return
-         }
-        swipetorefresh_view.visibility= if(list.size > 3) View.GONE else (if(swipetorefresh_view.visibility == View.VISIBLE) View.VISIBLE else View.GONE)
+    fun refreshview(list: ArrayList<Orderresult>) {
+        if (mAdapter != null) {
+            mAdapter!!.updatedata(list)
+            mAdapter!!.notifyDataSetChanged()
+            return
+        }
+        swipetorefresh_view.visibility = if (list.size > 3) View.GONE else (if (swipetorefresh_view.visibility == View.VISIBLE) View.VISIBLE else View.GONE)
         recycler_view.apply {
             mAdapter = UniversalAdapter(context!!, list, R.layout.row_ordered_pizza, object : RecyclerCallback<RowOrderedPizzaBinding, Orderresult> {
                 override fun bindData(binder: RowOrderedPizzaBinding, model: Orderresult) {
-                    binder.orderresult=model
-                    binder.util=BindDataUtils
-                    binder.myclickhandler=myclickhandler
+                    binder.orderresult = model
+                    binder.util = BindDataUtils
+                    binder.myclickhandler = myclickhandler
 
-                 //   binder.handler=this@OrderFragment
-                } })
+                    //   binder.handler=this@OrderFragment
+                }
+            })
             layoutManager = LinearLayoutManager(getActivityBase())
             adapter = mAdapter
         }
     }
 
 
-    private fun moveon_next(){
+    private fun moveon_next() {
 
         val fragment = DetailsFragment.newInstance(
-                restaurant =  ui_model!!.restaurant_info.value!!.restaurant_info,
-                status =     ""
+                restaurant = ui_model!!.restaurant_info.value!!.restaurant_info,
+                status = ""
         )
-        var enter : Slide?=null
+        var enter: Slide? = null
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             enter = Slide()
             enter.setDuration(300)
             enter.slideEdge = Gravity.BOTTOM
-            fragment.enterTransition=enter
+            fragment.enterTransition = enter
         }
         // pop all fragment on homecontainer to open reorder framgment.
         val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
@@ -188,37 +183,37 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
 
-    private fun onDetails(model : Orderresult){
-        val fragment = OrderedRestaurant.newInstance( model)
-        addFragment(R.id.home_order_container,fragment, OrderedRestaurant.TAG,true)
+    private fun onDetails(model: Orderresult) {
+        val fragment = OrderedRestaurant.newInstance(model)
+        addFragment(R.id.home_order_container, fragment, OrderedRestaurant.TAG, true)
 
     }
 
-    private fun onRate(model : Orderresult){
+    private fun onRate(model: Orderresult) {
 
         val fragment = RateOrder.newInstance(order_no = model.order_no, orderresult = model)
-        var enter : Slide?=null
+        var enter: Slide? = null
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             enter = Slide()
             enter.setDuration(Constants.BOTTOM_TO_TOP_ANIM.toLong())
             enter.slideEdge = Gravity.BOTTOM
-            val changeBoundsTransition : ChangeBounds = ChangeBounds()
+            val changeBoundsTransition: ChangeBounds = ChangeBounds()
             changeBoundsTransition.duration = Constants.BOTTOM_TO_TOP_ANIM.toLong()
             //fragment!!.sharedElementEnterTransition=changeBoundsTransition
-            fragment.sharedElementEnterTransition=changeBoundsTransition
-            fragment.sharedElementReturnTransition=changeBoundsTransition
-            fragment.enterTransition=enter
+            fragment.sharedElementEnterTransition = changeBoundsTransition
+            fragment.sharedElementReturnTransition = changeBoundsTransition
+            fragment.enterTransition = enter
         }
-        addFragment(R.id.home_order_container,fragment, RateOrder.TAG,false)
+        addFragment(R.id.home_order_container, fragment, RateOrder.TAG, false)
     }
 
     fun fetchmyOrder() {
-        empty_view.visibility=View.GONE
-      //  progress_bar.visibility=View.VISIBLE
-        swipeRefresh.isRefreshing=true
+        empty_view.visibility = View.GONE
+        //  progress_bar.visibility=View.VISIBLE
+        swipeRefresh.isRefreshing = true
         val postParam = JsonObject()
         postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
-        postParam.addProperty(Constants.EATMORE_APP,true)
+        postParam.addProperty(Constants.EATMORE_APP, true)
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
 
         callAPI(ApiCall.myorders(
@@ -228,21 +223,21 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
             override fun <T> onSuccess(body: T?) {
                 val myorder_Model = body as Myorder_Model
                 if (myorder_Model.status) {
-                    loge(TAG,"status--"+myorder_Model.orderresult.get(0).order_no)
-                    ui_model!!.myorder_List.value=myorder_Model
-                }else{
-                  //  if(ui_model!!.myorder_List.value != null) ui_model!!.myorder_List.value!!.orderresult.clear()
-                  //  val list = ArrayList<Orderresult>()
-                  //  refreshview(list)
-                    if(mAdapter !=null){
+                    loge(TAG, "status--" + myorder_Model.orderresult.get(0).order_no)
+                    ui_model!!.myorder_List.value = myorder_Model
+                } else {
+                    //  if(ui_model!!.myorder_List.value != null) ui_model!!.myorder_List.value!!.orderresult.clear()
+                    //  val list = ArrayList<Orderresult>()
+                    //  refreshview(list)
+                    if (mAdapter != null) {
                         mAdapter!!.getdata().clear()
                         mAdapter!!.notifyDataSetChanged()
                     }
-                    empty_view.visibility=View.VISIBLE
-                    error_txt.text=getString(R.string.no_order)
+                    empty_view.visibility = View.VISIBLE
+                    error_txt.text = getString(R.string.no_order)
                 }
                 //progress_bar.visibility=View.GONE
-                swipeRefresh.isRefreshing=false
+                swipeRefresh.isRefreshing = false
 
 
             }
@@ -257,55 +252,55 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
                         showSnackBar(home_order_container, getString(R.string.internet_not_available))
                     }
                 }
-                swipeRefresh.isRefreshing=false
+                swipeRefresh.isRefreshing = false
                 //progress_bar.visibility=View.GONE
             }
         })
     }
 
 
-
-
-    fun fetchRestaurant_info(model : Orderresult , cartcnt : String, cartamt : String, show_msg : Boolean, msg : String) {
+/*
+    fun fetchRestaurant_info(model: Orderresult, cartcnt: String, cartamt: String, show_msg: Boolean, msg: String) {
 
 
         callAPI(ApiCall.restaurant_info(
                 r_token = model.r_token,
                 r_key = model.r_key,
-                customer_id = PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,"")!!
+                customer_id = PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, "")!!
 
         ), object : BaseFragment.OnApiCallInteraction {
             override fun <T> onSuccess(body: T?) {
-                val myorder_Model= body as Myorder_Model
+                val myorder_Model = body as Myorder_Model
                 if (myorder_Model.status) {
                     PreferenceUtil.putValue(PreferenceUtil.R_KEY, model.r_key)
-                    PreferenceUtil.putValue(PreferenceUtil.R_TOKEN,model.r_token)
-                    myorder_Model.restaurant_info.cartamt=cartamt
-                    myorder_Model.restaurant_info.cartcnt=cartcnt
+                    PreferenceUtil.putValue(PreferenceUtil.R_TOKEN, model.r_token)
+                    myorder_Model.restaurant_info.cartamt = cartamt
+                    myorder_Model.restaurant_info.cartcnt = cartcnt
                     PreferenceUtil.save()
                     // if restaurant is closed then block all next process.
-                    if(model.is_restaurant_closed){
-                        DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!,R.color.black),msg =getString(R.string.we_are_sorry),title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                    if (model.is_restaurant_closed) {
+                        DialogUtils.openDialogDefault(context = context!!, btnNegative = "", btnPositive = getString(R.string.ok), color = ContextCompat.getColor(context!!, R.color.black), msg = getString(R.string.we_are_sorry), title = "", onDialogClickListener = object : DialogUtils.OnDialogClickListener {
                             override fun onPositiveButtonClick(position: Int) {}
                             override fun onNegativeButtonClick() {}
                         })
-                    }else{
+                    } else {
                         // if restaurant wants to show some info about then.
-                        if(show_msg){
-                            DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!,R.color.black),msg =msg,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                        if (show_msg) {
+                            DialogUtils.openDialogDefault(context = context!!, btnNegative = "", btnPositive = getString(R.string.ok), color = ContextCompat.getColor(context!!, R.color.black), msg = msg, title = "", onDialogClickListener = object : DialogUtils.OnDialogClickListener {
                                 override fun onPositiveButtonClick(position: Int) {
                                     ui_model!!.restaurant_info.value = myorder_Model // move this response to another list to reorder perpose.
                                 }
+
                                 override fun onNegativeButtonClick() {}
                             })
-                        }else{
+                        } else {
                             ui_model!!.restaurant_info.value = myorder_Model // move this response to another list to reorder perpose.
                         }
 
                     }
 
                 }
-                loge(TAG,"ending----")
+                loge(TAG, "ending----")
                 showProgressDialog()
             }
 
@@ -323,32 +318,33 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
             }
         })
     }
+*/
 
 
+/*
+    fun fetchReorder_info(model: Orderresult) {
 
-    fun fetchReorder_info(model : Orderresult) {
-
-        empty_view.visibility=View.GONE
+        empty_view.visibility = View.GONE
         showProgressDialog()
         val postParam = JsonObject()
         postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
-        postParam.addProperty(Constants.EATMORE_APP,true)
+        postParam.addProperty(Constants.EATMORE_APP, true)
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
-        postParam.addProperty(Constants.ORDER_NO,model.order_no )
+        postParam.addProperty(Constants.ORDER_NO, model.order_no)
 
         callAPI(ApiCall.reorder(postParam), object : BaseFragment.OnApiCallInteraction {
             override fun <T> onSuccess(body: T?) {
-                val jsonObject= body as JsonObject
+                val jsonObject = body as JsonObject
                 if (jsonObject.get(Constants.STATUS).asBoolean) {
                     fetchRestaurant_info(
-                            model=model,
+                            model = model,
                             msg = jsonObject.get(Constants.MSG).asString,
-                            cartamt =jsonObject.get(Constants.CARTAMT).asString,
+                            cartamt = jsonObject.get(Constants.CARTAMT).asString,
                             cartcnt = jsonObject.get(Constants.CARTCNT).asString,
                             show_msg = jsonObject.get(Constants.SHOW_MSG).asBoolean
                     )
 
-                }else{
+                } else {
                     showProgressDialog()
                     showSnackBar(home_order_container, getString(R.string.error_404))
 
@@ -369,30 +365,42 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
             }
         })
     }
-
-
-
-
-/*
-    override fun onClick(user: User) {
-        val fragment = OrderedRestaurant.newInstance()
-        addFragment(R.id.home_order_container,fragment, OrderedRestaurant.TAG,true)
-    }
 */
+
+
+    /*
+        override fun onClick(user: User) {
+            val fragment = OrderedRestaurant.newInstance()
+            addFragment(R.id.home_order_container,fragment, OrderedRestaurant.TAG,true)
+        }
+
+    */
+    override fun comman_apisuccess(msg: String, model: Myorder_Model) {
+        moveon_reOrder(model)
+    }
+
+    override fun comman_apifailed(error: String) {
+    }
+
 
     class MyClickHandler(val orderFragment: OrderFragment) {
 
-        fun reOrder(view: View , model: Orderresult) {
-            if(orderFragment.swipeRefresh.isRefreshing == false)
-            orderFragment.fetchReorder_info(model)
+        fun reOrder(view: View, model: Orderresult) {
+            if (orderFragment.swipeRefresh.isRefreshing == false){
+                orderFragment.empty_view.visibility = View.GONE
+                // orderFragment.fetchReorder_info(model)
+                orderFragment.fetchReorder_info(model,orderFragment.home_order_container)
+            }
         }
+
         fun onDetails(view: View, model: Orderresult) {
-            if(orderFragment.swipeRefresh.isRefreshing == false)
-            orderFragment.onDetails(model)
+            if (orderFragment.swipeRefresh.isRefreshing == false)
+                orderFragment.onDetails(model)
         }
+
         fun onRate(view: View, model: Orderresult) {
-            if(model.order_status.toLowerCase() == Constants.ACCEPTED){
-                if(orderFragment.swipeRefresh.isRefreshing == false)
+            if (model.order_status.toLowerCase() == Constants.ACCEPTED) {
+                if (orderFragment.swipeRefresh.isRefreshing == false)
                     orderFragment.onRate(model)
             }
         }
@@ -403,10 +411,10 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
     data class Myorder_Model(
             val status: Boolean = false,
-            val msg: String ="",
+            val msg: String = "",
             val orderresult: ArrayList<Orderresult> = arrayListOf(),
             val last_order_details: Orderresult,
-            val restaurant_info : Restaurant
+            val restaurant_info: Restaurant
 
     ) : Serializable
 
@@ -422,7 +430,7 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
             var restaurant_name: String = "",
             var postal_code: String = "",
             var app_icon: String = "",
-            var is_restaurant_closed : Boolean = false ,
+            var is_restaurant_closed: Boolean = false,
             var r_key: String = "",
             var r_token: String = "",
             var enable_rating: Boolean = false
@@ -436,35 +444,26 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
     }
 
 
-
-
-
-
-
-
-
-
-
     override fun onDestroy() {
         super.onDestroy()
-        loge(TAG,"on destroy...")
+        loge(TAG, "on destroy...")
     }
 
     override fun onDestroyView() {
         super.onDestroyView()
-        loge(TAG,"on destroyView...")
-       // ui_model=null
+        loge(TAG, "on destroyView...")
+        // ui_model=null
     }
 
     override fun onDetach() {
         super.onDetach()
-        loge(TAG,"on detech...")
+        loge(TAG, "on detech...")
 
     }
 
     override fun onPause() {
         super.onPause()
-        loge(TAG,"on pause...")
+        loge(TAG, "on pause...")
 
     }
 
@@ -472,9 +471,9 @@ class OrderFragment : BaseFragment(), SwipeRefreshLayout.OnRefreshListener {
 
 
 @BindingAdapter("android:layout_setImage")
-fun setImage(view : AppCompatImageView, model : OrderFragment.Orderresult) {
+fun setImage(view: AppCompatImageView, model: OrderFragment.Orderresult) {
     // i set 100 fixed dp in rating page thats why i am using 100
-    Log.e("set image","----"+model.toString())
+    Log.e("set image", "----" + model.toString())
     Glide.with(view.context).load(model.app_icon).into(view);
 
 }

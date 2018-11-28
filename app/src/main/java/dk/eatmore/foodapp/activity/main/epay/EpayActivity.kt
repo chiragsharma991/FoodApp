@@ -5,7 +5,6 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
-import android.databinding.BindingAdapter
 import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
@@ -19,9 +18,9 @@ import android.view.View
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.epay.fragment.*
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.SelectAddress
 import dk.eatmore.foodapp.databinding.ActivityEpayBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.Address
-import dk.eatmore.foodapp.fragment.Dashboard.Home.AddressForm
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.model.epay.ViewcardModel
 import dk.eatmore.foodapp.rest.ApiCall
@@ -32,10 +31,7 @@ import kotlinx.android.synthetic.main.dynamic_raw_item.view.*
 import kotlinx.android.synthetic.main.dynamic_raw_subitem.view.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.util.ArrayList
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.Animation
-import android.view.animation.TranslateAnimation
-
+import dk.eatmore.foodapp.model.home.Restaurant
 
 
 class EpayActivity : BaseActivity() {
@@ -43,6 +39,8 @@ class EpayActivity : BaseActivity() {
     var transition : Transition?=null
     private lateinit var addcart_fragment: AddCart
     private lateinit var binding: ActivityEpayBinding
+    private lateinit var restaurant : Restaurant
+
 
 
 
@@ -88,6 +86,7 @@ class EpayActivity : BaseActivity() {
     private fun initView(savedInstanceState: Bundle?) {
         loge(TAG,"count is"+supportFragmentManager.backStackEntryCount)
         accessOnetime=true
+        restaurant=intent.extras.getSerializable(Constants.RESTAURANT) as Restaurant
         progresswheel(progresswheel,true)
         empty_view.visibility=View.GONE
         epay_container.visibility=View.GONE
@@ -102,7 +101,7 @@ class EpayActivity : BaseActivity() {
                 for (i in 0.until(ui_model!!.viewcard_list.value!!.result!!.size)){
                     selected_op_id.add(ui_model!!.viewcard_list.value!!.result!!.get(i).op_id)
                 }
-                val fragment = Address.newInstance()
+                val fragment = Address.newInstance(restaurant)
                 addFragment(R.id.epay_container,fragment, Address.TAG,true)
             }else{
                 moveonEpay=true
@@ -344,11 +343,17 @@ class EpayActivity : BaseActivity() {
 
                       is Address ->{
                           img_toolbar_back.setImageResource(R.drawable.close)
+                          txt_toolbar_right_img.visibility=View.GONE
                           txt_toolbar.text=getString(R.string.basket)
+                          popFragment()
+                      }
+                      is SelectAddress ->{
+                          txt_toolbar_right_img.apply { visibility=View.VISIBLE ; setImageResource(R.drawable.info_outline) }
                           popFragment()
                       }
                       is DeliveryTimeslot ->{
                           txt_toolbar.text=getString(R.string.address)
+                          txt_toolbar_right_img.apply { visibility=View.VISIBLE ; setImageResource(R.drawable.info_outline) }
                           popFragment()
                       }
                       is Paymentmethod ->{

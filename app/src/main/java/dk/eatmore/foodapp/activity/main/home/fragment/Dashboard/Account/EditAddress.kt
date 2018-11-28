@@ -52,7 +52,6 @@ class EditAddress : BaseFragment() {
 
     }
 
-
     override fun getLayout(): Int {
         return R.layout.editaddress
     }
@@ -60,11 +59,12 @@ class EditAddress : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding=DataBindingUtil.inflate(inflater,getLayout(),container,false)
         return binding.root
-
     }
+
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
+            error_txt.visibility=View.GONE
             txt_toolbar.text=getString(R.string.addresses)
             img_toolbar_back.setOnClickListener{(activity as HomeActivity).onBackPressed()}
             if(RestaurantList.ui_model == null) is_visible = false else is_visible= true
@@ -114,12 +114,18 @@ class EditAddress : BaseFragment() {
             override fun <T> onSuccess(body: T?) {
                 val editaddresslist = body as EditaddressListModel
                 if (editaddresslist.status) {
-                    loge(TAG,"status--"+editaddresslist.messages.size.toString())
-                    for (i in 0 until editaddresslist.messages.size){
-                        if(editaddresslist.messages[i].address_title == null || editaddresslist.messages[i].address_title =="")
-                           editaddresslist.messages[i].address_title="Address "+(i+1)
+                    if(editaddresslist.messages.size > 0){
+                        loge(TAG,"status--"+editaddresslist.messages.size.toString())
+                        for (i in 0 until editaddresslist.messages.size){
+                            if(editaddresslist.messages[i].address_title == null || editaddresslist.messages[i].address_title =="")
+                                editaddresslist.messages[i].address_title="Address "+(i+1)
+                        }
+                        ui_model!!.editaddressList.value=editaddresslist
+                    }else{
+                        error_txt.visibility=View.VISIBLE
                     }
-                    ui_model!!.editaddressList.value=editaddresslist
+
+
                     progress_bar.visibility=View.GONE
                 }
             }

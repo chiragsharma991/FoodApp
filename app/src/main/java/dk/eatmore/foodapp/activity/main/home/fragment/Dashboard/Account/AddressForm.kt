@@ -2,6 +2,7 @@ package dk.eatmore.foodapp.fragment.Dashboard.Home
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.text.Editable
@@ -89,15 +90,20 @@ class AddressForm : BaseFragment(), TextWatcher {
                 }
             }
             address= arguments!!.getSerializable(Constants.ADDRESS) as EditAddress.Messages
+            loge(TAG,"city is"+address.city)
             binding.address=address
-            city_edt.addTextChangedListener(this)
-            postnumber_edt.addTextChangedListener(this)
-            street_edt.addTextChangedListener(this)
-            house_edt.addTextChangedListener(this)
-            inputValidStates[postnumber_edt] = false
-            inputValidStates[street_edt] = false
-            inputValidStates[house_edt] = false
-            inputValidStates[city_edt] = false
+
+            Handler().postDelayed({
+                city_edt.addTextChangedListener(this)
+                postnumber_edt.addTextChangedListener(this)
+                street_edt.addTextChangedListener(this)
+                house_edt.addTextChangedListener(this)
+                inputValidStates[postnumber_edt] = true
+                inputValidStates[street_edt] = true
+                inputValidStates[house_edt] = true
+                inputValidStates[city_edt] = true
+            },200)
+
             postnumber_edt.imeOptions= EditorInfo.IME_ACTION_DONE
             postnumber_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
                 override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
@@ -153,6 +159,7 @@ class AddressForm : BaseFragment(), TextWatcher {
         if (postnumber_edt.text.hashCode() == s!!.hashCode()) {
             postnumber_edt.error = null
             if (postnumber_edt.text.trim().toString().length > 0) {
+                loge(TAG,"text changed postnumber...")
                 inputValidStates[postnumber_edt] = true
                 if(postalcity ==null)
                 city_edt.setText("")

@@ -28,6 +28,7 @@ import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.BindDataUtils
+import dk.eatmore.foodapp.utils.CommanAPI
 import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.dynamic_raw_item.view.*
 import kotlinx.android.synthetic.main.dynamic_raw_subitem.view.*
@@ -35,7 +36,8 @@ import kotlinx.android.synthetic.main.fragment_ordered_restaurant.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.util.*
 
-class OrderedRestaurant : BaseFragment() {
+class OrderedRestaurant : CommanAPI() {
+
 
     lateinit var binding: FragmentOrderedRestaurantBinding
     private lateinit var myclickhandler: MyClickHandler
@@ -85,8 +87,9 @@ class OrderedRestaurant : BaseFragment() {
         txt_toolbar_right.text=Constants.REORDER
         txt_toolbar_right.setOnClickListener{
             if(progress_bar.visibility == View.GONE){
-                (parentFragment as OrderFragment).fetchReorder_info(model)
-                (activity as HomeActivity).onBackPressed()
+              //  (parentFragment as OrderFragment).fetchReorder_info(model)
+              //  (activity as HomeActivity).onBackPressed()
+                fetchReorder_info(model,orderedrestaurant_container)
             }
         }
        img_toolbar_back.setOnClickListener { (activity as HomeActivity).onBackPressed()}
@@ -307,10 +310,25 @@ class OrderedRestaurant : BaseFragment() {
                 fragment.sharedElementReturnTransition=changeBoundsTransition
                 fragment.enterTransition=enter
             }
-            (parentFragment as OrderFragment).addFragment(R.id.home_order_container,fragment, RateOrder.TAG,false)
+            addFragment(R.id.orderedrestaurant_container,fragment, RateOrder.TAG,false)
         }
     }
 
+
+    override fun comman_apisuccess(msg: String, model: OrderFragment.Myorder_Model) {
+        moveon_reOrder(model)
+    }
+
+    override fun comman_apifailed(error: String) {
+    }
+
+    fun backpress(): Boolean {
+        if(childFragmentManager.backStackEntryCount > 0){
+            childFragmentManager.popBackStack()
+            return true
+        }
+        return false
+    }
 
     override fun onDestroy() {
         super.onDestroy()

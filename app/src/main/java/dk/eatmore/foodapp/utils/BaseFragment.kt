@@ -35,6 +35,7 @@ import dk.eatmore.foodapp.BuildConfig
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.Profile
 import dk.eatmore.foodapp.fragment.Dashboard.Account.Signup
+import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedRestaurant
 import dk.eatmore.foodapp.fragment.ProductInfo.CategoryList
 import dk.eatmore.foodapp.rest.ApiClient
 import dk.eatmore.foodapp.rest.ApiInterface
@@ -157,10 +158,9 @@ abstract class BaseFragment : Fragment() {
                         is Profile -> {
                             if (!fragment.backpress()) childFragmentManager.popBackStack()
                         }
-                     /*   is Signup -> {
-                            fragment.backpress()
-                            childFragmentManager.popBackStack()
-                        }*/
+                        is OrderedRestaurant -> {
+                            if(!fragment.backpress()) childFragmentManager.popBackStack()
+                        }
                         else -> childFragmentManager.popBackStack()
 
 

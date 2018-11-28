@@ -33,6 +33,7 @@ class HomeActivity : BaseActivity() {
 
     companion object {
         val TAG = "HomeActivity"
+
         fun newInstance(): HomeActivity {
             return HomeActivity()
         }

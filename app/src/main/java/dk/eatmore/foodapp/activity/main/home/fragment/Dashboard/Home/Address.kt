@@ -5,14 +5,12 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
+import android.os.Build
 import android.os.Bundle
-import android.support.v7.widget.AppCompatEditText
 import android.text.Editable
 import android.text.TextWatcher
-import android.view.KeyEvent
-import android.view.LayoutInflater
-import android.view.View
-import android.view.ViewGroup
+import android.transition.Slide
+import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
@@ -20,14 +18,18 @@ import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.epay.EpayActivity
 import dk.eatmore.foodapp.activity.main.epay.fragment.DeliveryTimeslot
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.EditAddress
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.SelectAddress
 import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.FragmentAddressBinding
 import dk.eatmore.foodapp.databinding.RowAddressBinding
 import dk.eatmore.foodapp.model.User
+import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
+import dk.eatmore.foodapp.utils.DialogUtils
 import kotlinx.android.synthetic.main.fragment_address.*
 import kotlinx.android.synthetic.main.toolbar.*
 
@@ -38,14 +40,20 @@ class Address : BaseFragment(), TextWatcher {
     private var mAdapter: UniversalAdapter<User, RowAddressBinding>? = null
     private lateinit var homeFragment: HomeFragment
     private val inputValidStates = java.util.HashMap<EditText, Boolean>()
+    private lateinit var restaurant : Restaurant
+
 
 
     companion object {
 
         val TAG = "Address"
         var ui_model: UIModel? = null
-        fun newInstance(): Address {
-            return Address()
+        fun newInstance(restaurant: Restaurant): Address {
+            val fragment= Address()
+            val bundle = Bundle()
+            bundle.putSerializable(Constants.RESTAURANT,restaurant)
+            fragment.arguments=bundle
+            return fragment
         }
 
     }
@@ -65,6 +73,7 @@ class Address : BaseFragment(), TextWatcher {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
+            restaurant=arguments!!.getSerializable(Constants.RESTAURANT) as Restaurant
             binding.isPickup = EpayActivity.isPickup
             setToolbarforThis()
             postnumber_edt.addTextChangedListener(this)
@@ -87,20 +96,26 @@ class Address : BaseFragment(), TextWatcher {
                 }
 
             })
+            proceed_view_nxt.setOnClickListener {
+                moveon_next()
+            }
+            change_txt.setOnClickListener{
+                val fragment = SelectAddress.newInstance()
+                var enter : Slide?=null
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    enter = Slide()
+                    enter.setDuration(300)
+                    enter.slideEdge = Gravity.BOTTOM
+                    fragment.enterTransition=enter
+                }
+                (activity as EpayActivity).addFragment(R.id.epay_container,fragment, SelectAddress.TAG,false)
+            }
             ui_model = createViewModel()
             if (ui_model!!.user_infoList.value == null) {
                 fetchuserInfo()
             } else {
                 refreshview()
             }
-            proceed_view_nxt.setOnClickListener {
-                moveon_next()
-            }
-
-
-
-
-
 
         } else {
             logd(TAG, "saveInstance NOT NULL")
@@ -132,14 +147,24 @@ class Address : BaseFragment(), TextWatcher {
                 proceed_view_nxt.isEnabled =false
                 submitdelivery()
             }
+
         }
+    }
+
+    fun onFragmentResult(model: EditAddress.Messages) {
+        loge(TAG,"on fragment result---"+model.address_title)
+        street_edt.setText(model.street)
+        house_edt.setText(model.house_no)
+        floor_edt.setText(model.floor_door)
+        postnumber_edt.setText(model.postal_code)
+
     }
 
 
 
 
     override fun afterTextChanged(s: Editable?) {
-
+        loge(TAG,"after text changed...")
 
         if (name_edt.text.hashCode() == s!!.hashCode()) {
             name_edt.error = null
@@ -407,10 +432,12 @@ class Address : BaseFragment(), TextWatcher {
     fun setToolbarforThis() {
 
         (activity as EpayActivity).txt_toolbar.text = getString(R.string.address)
+        (activity as EpayActivity).txt_toolbar_right_img.apply { visibility= if(EpayActivity.isPickup) View.GONE else View.VISIBLE  ; setImageResource(R.drawable.info_outline) }
         (activity as EpayActivity).img_toolbar_back.setImageResource(R.drawable.back)
-      /*  (activity as EpayActivity).img_toolbar_back.setOnClickListener {
-            onBackpress()
-        }*/
+
+        (activity as EpayActivity).txt_toolbar_right_img.setOnClickListener {
+            DialogUtils.showDialog(context = context!! ,restaurant = restaurant)
+        }
     }
 
   /*  fun onBackpress() {

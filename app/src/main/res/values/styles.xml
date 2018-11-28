@@ -42,6 +42,8 @@
 
     </style>
 
+    <!--alert bar style-->
+
     <style name="AppCompatAlertDialogDefaultStyle" parent="Theme.AppCompat.Light.Dialog.Alert">
         <item name="colorAccent">@color/black</item>
         <item name="android:textColorPrimary">@color/black</item>

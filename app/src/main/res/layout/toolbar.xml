@@ -94,6 +94,21 @@
                 android:textAppearance="?android:textAppearanceMedium"
                 />
 
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="@dimen/_20sdp"
+                android:layout_height="@dimen/_20sdp"
+                android:layout_gravity="top"
+                android:visibility="gone"
+                android:id="@+id/txt_toolbar_right_img"
+                android:layout_alignParentEnd="true"
+                android:layout_centerVertical="true"
+                android:layout_marginStart="@dimen/_10sdp"
+                android:layout_marginEnd="@dimen/_10sdp"
+                android:layout_marginTop="@dimen/_4sdp"
+                android:scaleType="fitXY"
+                />
+
+
 
 
 

@@ -98,14 +98,13 @@ class HealthReport : BaseFragment() {
     }
 
     fun onBackpress(){
-
-        if (webview != null && webview.canGoBack()) {
-            webview.goBack();
-        } else {
-            val homefragment : HomeFragment = ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment()
-            homefragment.popFragment()
-        }
-
+        (activity as HomeActivity).onBackPressed()
+        /*    if (webview != null && webview.canGoBack()) {
+                webview.goBack();
+            } else {
+                val homefragment : HomeFragment = ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment()
+                homefragment.popFragment()
+            }*/
     }
 
 
