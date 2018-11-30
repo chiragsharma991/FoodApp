@@ -2,9 +2,11 @@ package dk.eatmore.foodapp.utils
 
 import android.Manifest
 import android.content.Context
+import android.content.Intent
 import android.content.pm.PackageManager
 import android.net.ConnectivityManager
 import android.os.Build
+import android.os.Bundle
 import android.support.design.widget.Snackbar
 import android.support.v4.app.ActivityCompat
 import android.support.v4.app.ActivityOptionsCompat
@@ -19,8 +21,11 @@ import android.view.animation.AnimationUtils
 import android.view.animation.TranslateAnimation
 import android.view.inputmethod.InputMethodManager
 import android.widget.Toast
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import dk.eatmore.foodapp.BuildConfig
 import dk.eatmore.foodapp.R
+import dk.eatmore.foodapp.activity.main.RestaurantClosed
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -104,9 +109,37 @@ abstract class BaseActivity : AppCompatActivity()
                 override fun onResponse(call: Call<T>, response: Response<T>) {
                     try {
                         if (response.isSuccessful) {
-                            onAliCallInteraction.onSuccess(response.body())
+                            loge("response.body----",response.body().toString())
+                            val gson= Gson()
+                            val json=gson.toJson(response.body()) // convert body to normal json
+                            var convertedObject = gson.fromJson(json, JsonObject::class.java) // convert into Jsonobject
+                            loge("response.convertedObject----",convertedObject.toString())
+
+                            if(convertedObject.has(Constants.WHOLE_SYSTEM)){
+                                if(convertedObject.get(Constants.WHOLE_SYSTEM).isJsonNull){
+                                    onAliCallInteraction.onSuccess(response.body())
+                                }else{
+                                    if((convertedObject.get(Constants.WHOLE_SYSTEM).asBoolean== true) || (convertedObject.get(Constants.RESTAURANT_FOOD_ANDROID).asBoolean== true) ){
+                                        onAliCallInteraction.onFail(0)
+                                        val intent = Intent(this@BaseActivity, RestaurantClosed::class.java)
+                                        val bundle = Bundle()
+                                        bundle.putString(Constants.MESSAGE_TITLE,convertedObject.get(Constants.MESSAGE_TITLE).asString)
+                                        bundle.putString(Constants.MESSAGE_DETAILS,convertedObject.get(Constants.MESSAGE_DETAILS).asString)
+                                        intent.putExtras(bundle)
+                                        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+                                        startActivity(intent)
+                                    }else{
+                                        onAliCallInteraction.onSuccess(response.body())
+                                    }
+                                }
+                            }else{
+                                onAliCallInteraction.onSuccess(response.body())
+                            }
+
+
                         } else {
-                           // var mErrorBody: String = response.errorBody()!!.string()
+                            // var mErrorBody: String = response.errorBody()!!.string()
+                            onAliCallInteraction.onFail(404)
                         }
                     } catch (e: Exception) {
                         loge("error of catch ",e.toString())

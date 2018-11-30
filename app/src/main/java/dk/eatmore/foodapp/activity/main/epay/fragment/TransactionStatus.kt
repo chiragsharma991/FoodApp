@@ -210,6 +210,7 @@ class TransactionStatus : BaseFragment() {
         postParam.addProperty(Constants.TXNFEE, EpayActivity.paymentattributes.txnfee)
         postParam.addProperty(Constants.PAYMENTTYPE, EpayActivity.paymentattributes.paymenttype)
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
         val jsonarray = JsonArray()
 
         for (i in 0.until(EpayActivity.selected_op_id.size)) {

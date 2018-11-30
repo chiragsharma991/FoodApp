@@ -196,6 +196,7 @@ object CartListFunction {
             postParam.addProperty(Constants.DEVICE_TYPE,Constants.DEVICE_TYPE_VALUE)
             postParam.addProperty(Constants.FIRST_NAME, EpayActivity.paymentattributes.first_name)
             postParam.addProperty(Constants.ADDITIONAL_CHARGE, if(Paymentmethod.isPaymentonline) EpayActivity.paymentattributes.additional_charges_online else EpayActivity.paymentattributes.additional_charges_cash)
+            postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
             val jsonarray=JsonArray()
             for (i in 0.until(EpayActivity.selected_op_id.size) ){
                 val jsonobject= JsonObject()
@@ -216,6 +217,7 @@ object CartListFunction {
                 postParam.addProperty(Constants.SHIPPING_COSTS, EpayActivity.paymentattributes.shipping_charge)
                 postParam.addProperty(Constants.UPTO_MIN_SHIPPING, EpayActivity.paymentattributes.upto_min_shipping)
                 postParam.addProperty(Constants.SHIPPING_REMARK, "")
+                postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
                 checkout_api= ApiCall.checkout_delivery(postParam)
             }
 

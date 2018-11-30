@@ -1,6 +1,7 @@
 package dk.eatmore.foodapp.model.epay
 
 import com.google.gson.annotations.SerializedName
+import dk.eatmore.foodapp.model.ModelUtility
 
 data class ViewcardModel(
         val msg: String = "",
@@ -8,7 +9,7 @@ data class ViewcardModel(
         val order_total: Double = 0.0,
         val status: Boolean = false,
         val result: ArrayList<ResultItem>?
-)
+) : ModelUtility()
 
 data class ResultItem(
                       val order_no: String = "",

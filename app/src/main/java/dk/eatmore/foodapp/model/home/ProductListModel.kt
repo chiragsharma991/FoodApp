@@ -1,5 +1,6 @@
 package dk.eatmore.foodapp.model.home
 
+import dk.eatmore.foodapp.model.ModelUtility
 import java.io.Serializable
 
 data class ProductListModel(val msg: String = "",
@@ -9,7 +10,7 @@ data class ProductListModel(val msg: String = "",
                             val product_image_thumbnail_path: String = "",
                             val time: String = "",
                             val menu: ArrayList<MenuListItem>? = null,
-                            val status: Boolean = false) : Serializable
+                            val status: Boolean = false) : ModelUtility(),Serializable
 
 data class MenuListItem(val c_desc: String = "",
                     val c_order: String = "",

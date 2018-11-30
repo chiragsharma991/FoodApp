@@ -70,22 +70,25 @@ class HomeActivity : BaseActivity() {
 
     override fun onResume() {
         super.onResume()
+        // Responce are comming as a empty data so you always get response from error method.
         if(Splash.can_i_use_lastLogin  && PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS,false)){
             loge(TAG,"Last login Api calling... ")
             callAPI(ApiCall.lastLogin(
-                    r_token = Constants.R_TOKEN,
-                    r_key = Constants.R_KEY,
-                    device_type = "Android",
-                    customer_id = "1713"
+                    customer_id = PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,"")!!,
+                    device_type = Constants.DEVICE_TYPE_VALUE,
+                    eatmore_app = true,
+                    auth_key = Constants.AUTH_VALUE
             ), object : BaseFragment.OnApiCallInteraction {
 
                 override fun <T> onSuccess(body: T?) {
-                    loge(TAG,"Last login success ")
+                    loge(TAG,"Last login success -----")
                     Splash.can_i_use_lastLogin=false
 
                 }
                 override fun onFail(error: Int) {
-                    loge(TAG,"Last login error "+error)
+                    loge(TAG,"Last login error---- "+error)
+                    Splash.can_i_use_lastLogin=false
+
                 }
             })
         }

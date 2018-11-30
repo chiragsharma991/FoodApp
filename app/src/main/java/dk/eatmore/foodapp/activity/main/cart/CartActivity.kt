@@ -281,6 +281,7 @@ class CartActivity : BaseActivity() {
             postParam.add(Constants.INGREDIENTS, getjsonparmsofAddtocart(item_p_id, ui_model!!.product_ingredients, ui_model!!.product_attribute_list, productdetails, 0))
             postParam.add(Constants.ATTRUBUTES, getjsonparmsofAddtocart(item_p_id, ui_model!!.product_ingredients, ui_model!!.product_attribute_list, productdetails, 1))
             postParam.add(Constants.EXTRATOPPINGS, getjsonparmsofAddtocart(item_p_id, ui_model!!.product_ingredients, ui_model!!.product_attribute_list, productdetails, 2))
+            postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
 
             callAPI(ApiCall.addtocart(
                     jsonObject = postParam

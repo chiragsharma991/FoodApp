@@ -23,6 +23,7 @@ import dk.eatmore.foodapp.adapter.restaurantList.RestaurantListParentAdapter
 import dk.eatmore.foodapp.databinding.RestaurantlistBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
+import dk.eatmore.foodapp.model.ModelUtility
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.model.home.RestaurantListModel
 import dk.eatmore.foodapp.rest.ApiCall
@@ -112,6 +113,7 @@ class RestaurantList : BaseFragment() {
             jsonobject.addProperty(Constants.IS_LOGIN, "0")
         }
         jsonobject.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
+        jsonobject.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
 
         callAPI(ApiCall.restaurantList(jsonobject), object : BaseFragment.OnApiCallInteraction {
 
@@ -245,7 +247,7 @@ class RestaurantList : BaseFragment() {
             val status: String = "",
             val ordertype: String = "",
             val restaurant: ArrayList<Restaurant>
-    )
+    ) : ModelUtility()
 
 
     class MyClickHandler(val restaurantlist: RestaurantList) {

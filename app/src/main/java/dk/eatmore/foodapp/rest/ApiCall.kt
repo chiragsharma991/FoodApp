@@ -11,6 +11,7 @@ import dk.eatmore.foodapp.model.cart.ProductDetails
 import dk.eatmore.foodapp.model.epay.ViewcardModel
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.model.home.RestaurantListModel
+import dk.eatmore.foodapp.utils.Constants
 import retrofit2.Call
 
 
@@ -37,15 +38,15 @@ class ApiCall {
 
 
         fun getProductList(r_token : String, r_key : String, customer_id : String ) : Call<ProductListModel> {
-            return getApiInterface().setProductList(r_token, r_key, customer_id)
+            return getApiInterface().setProductList(r_token, r_key, customer_id,Constants.RESTAURANT_FOOD_ANDROID)
         }
 
         fun restaurant_info(r_token : String, r_key : String, customer_id : String ) : Call<OrderFragment.Myorder_Model> {
-            return getApiInterface().restaurant_info(r_token, r_key, customer_id)
+            return getApiInterface().restaurant_info(r_token, r_key, customer_id,Constants.RESTAURANT_FOOD_ANDROID)
         }
 
         fun getProductDetails(r_token : String , r_key : String, p_id : String ) : Call<ProductDetails> {
-            return getApiInterface().setProductDetails(r_token, r_key, p_id)
+            return getApiInterface().setProductDetails(r_token, r_key, p_id,Constants.RESTAURANT_FOOD_ANDROID)
         }
 
         fun restaurantList(jsonObject: JsonObject ) : Call<RestaurantListModel> {
@@ -77,7 +78,7 @@ class ApiCall {
             return getApiInterface().ordertransaction(jsonObject)
         }
         fun cancelordertransaction(r_token : String , r_key : String, order_no : Int ) : Call<JsonObject> {
-            return getApiInterface().cancelordertransaction(r_token,r_key,order_no)
+            return getApiInterface().cancelordertransaction(r_token,r_key,order_no,Constants.RESTAURANT_FOOD_ANDROID)
         }
 
         fun addtocart(jsonObject: JsonObject) : Call<JsonObject> {
@@ -93,17 +94,19 @@ class ApiCall {
         }
 
         fun openingHours(r_token : String , r_key : String) : Call<JsonObject> {
-            return getApiInterface().openingHours(r_token, r_key)
+            return getApiInterface().openingHours(r_token, r_key,Constants.RESTAURANT_FOOD_ANDROID)
         }
         fun devicetoken (token : String , eatmore_app : Boolean, auth_key : String, device_type : String, user_id: String) : Call<JsonObject> {
-            return getApiInterface().devicetoken(token=token ,eatmore_app = eatmore_app, auth_key =auth_key, device_type = device_type, user_id = user_id )
+            return getApiInterface().devicetoken(token=token ,eatmore_app = eatmore_app, auth_key =auth_key, device_type = device_type, user_id = user_id,app = Constants.RESTAURANT_FOOD_ANDROID )
         }
-        fun lastLogin(r_token : String , r_key : String , customer_id : String , device_type: String ) : Call<JsonObject> {
-            return getApiInterface().lastLogin(r_token, r_key,customer_id,device_type)
+        fun clearcart (eatmore_app : Boolean, auth_key : String, customer_id : String) : Call<JsonObject> {
+            return getApiInterface().clearcart(eatmore_app = eatmore_app, auth_key =auth_key, customer_id = customer_id,app = Constants.RESTAURANT_FOOD_ANDROID )
         }
-
+        fun lastLogin(auth_key : String  , customer_id : String , device_type: String,eatmore_app : Boolean ) : Call<JsonObject> {
+            return getApiInterface().lastLogin(auth_key = auth_key, eatmore_app =eatmore_app, device_type = device_type, customer_id = customer_id)
+        }
         fun applycode(r_token : String , r_key : String , customer_id : String , upto_min_shipping: String , shipping : String , code: String , order_total: String , additional_charge: String , shipping_costs: String ) : Call<JsonObject> {
-            return getApiInterface().applycode(r_token, r_key,customer_id , upto_min_shipping ,shipping , code, order_total , additional_charge , shipping_costs)
+            return getApiInterface().applycode(r_token, r_key,customer_id , upto_min_shipping ,shipping , code, order_total , additional_charge , shipping_costs,Constants.RESTAURANT_FOOD_ANDROID)
         }
 
         fun userInfo(jsonObject: JsonObject ) : Call<JsonObject> {
@@ -122,7 +125,7 @@ class ApiCall {
             return getApiInterface().edit_shippingaddress(jsonObject)
         }
         fun update_record(auth_key : String, telephone_no : String, first_name : String, eatmore_app : Boolean, email : String, id : String) : Call<JsonObject> {
-            return getApiInterface().update_record(auth_key =auth_key, telephone_no = telephone_no, first_name = first_name, eatmore_app = eatmore_app, email = email, id = id )
+            return getApiInterface().update_record(auth_key =auth_key, telephone_no = telephone_no, first_name = first_name, eatmore_app = eatmore_app, email = email, id = id,app = Constants.RESTAURANT_FOOD_ANDROID )
         }
         fun deliveryDetails(jsonObject: JsonObject ) : Call<JsonObject> {
             return getApiInterface().deliveryDetails(jsonObject)

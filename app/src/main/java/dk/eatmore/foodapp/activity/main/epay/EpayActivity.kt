@@ -22,6 +22,7 @@ import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.SelectAd
 import dk.eatmore.foodapp.databinding.ActivityEpayBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.Address
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
+import dk.eatmore.foodapp.model.ModelUtility
 import dk.eatmore.foodapp.model.epay.ViewcardModel
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
@@ -139,6 +140,7 @@ class EpayActivity : BaseActivity() {
             postParam.addProperty(Constants.IS_LOGIN, "0")
         }
         postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
 
         callAPI(ApiCall.viewcart(
                 jsonObject = postParam
@@ -190,6 +192,7 @@ class EpayActivity : BaseActivity() {
         }
         postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
         postParam.addProperty(Constants.OP_ID, op_id)
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
 
         callAPI(ApiCall.deleteitemFromcart(
                 jsonObject = postParam

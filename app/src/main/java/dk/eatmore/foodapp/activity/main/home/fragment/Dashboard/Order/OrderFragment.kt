@@ -31,6 +31,7 @@ import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedRestaurant
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
+import dk.eatmore.foodapp.model.ModelUtility
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
@@ -59,7 +60,7 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
         // swipe to refresh>>>
         swipetorefresh_view.visibility = View.GONE
         fetchmyOrder()
-        if(HomeFragment.ui_model?.reloadfragment !=null && HomeFragment.count ==1) HomeFragment.ui_model!!.reloadfragment.value=true  // reload last order from homefragment.
+        if (HomeFragment.ui_model?.reloadfragment != null && HomeFragment.count == 1) HomeFragment.ui_model!!.reloadfragment.value = true  // reload last order from homefragment.
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
@@ -80,7 +81,7 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         loge(TAG, "saveInstance " + savedInstanceState)
         if (savedInstanceState == null) {
-            loge(TAG,"check visible-"+getUserVisibleHint())
+            loge(TAG, "check visible-" + getUserVisibleHint())
             empty_view.visibility = View.GONE
             //progress_bar.visibility=View.GONE
             txt_toolbar.text = getString(R.string.orders)
@@ -215,6 +216,7 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
         postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
         postParam.addProperty(Constants.EATMORE_APP, true)
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
 
         callAPI(ApiCall.myorders(
                 jsonObject = postParam
@@ -252,6 +254,8 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
                         showSnackBar(home_order_container, getString(R.string.internet_not_available))
                     }
                 }
+                empty_view.visibility = View.VISIBLE
+                error_txt.text = getString(R.string.no_order)
                 swipeRefresh.isRefreshing = false
                 //progress_bar.visibility=View.GONE
             }
@@ -386,10 +390,10 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
     class MyClickHandler(val orderFragment: OrderFragment) {
 
         fun reOrder(view: View, model: Orderresult) {
-            if (orderFragment.swipeRefresh.isRefreshing == false){
+            if (orderFragment.swipeRefresh.isRefreshing == false) {
                 orderFragment.empty_view.visibility = View.GONE
                 // orderFragment.fetchReorder_info(model)
-                orderFragment.fetchReorder_info(model,orderFragment.home_order_container)
+                orderFragment.fetchReorder_info(model, orderFragment.home_order_container)
             }
         }
 
@@ -409,14 +413,19 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
 
     // we set one model for all API call.
 
-    data class Myorder_Model(
+  /*   "restaurant_food_android": 1,*/
+  /*      "whole_system": 0,*/
+  /*      "message_title": "System is Under Maintenance!",*/
+  /*      "message_details": "Our Website is currently under maintenance."*/
+
+    data class Myorder_Model  (
             val status: Boolean = false,
             val msg: String = "",
             val orderresult: ArrayList<Orderresult> = arrayListOf(),
             val last_order_details: Orderresult,
             val restaurant_info: Restaurant
 
-    ) : Serializable
+    ) : ModelUtility(), Serializable
 
     data class Orderresult(
             var customer_id: String = "",
@@ -464,6 +473,28 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
     override fun onPause() {
         super.onPause()
         loge(TAG, "on pause...")
+
+    }
+
+    override fun onResume() {
+        super.onResume()
+        loge(TAG, " onResume...")
+    }
+
+    override fun onStop() {
+        super.onStop()
+        loge(TAG, " onStop...")
+
+    }
+
+    override fun onStart() {
+        super.onStart()
+        loge(TAG, " onStart...")
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        loge(TAG, " onCreate...")
 
     }
 

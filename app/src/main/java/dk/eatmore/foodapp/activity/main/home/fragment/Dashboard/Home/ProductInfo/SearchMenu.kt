@@ -259,6 +259,7 @@ class SearchMenu : BaseFragment() {
         postParam.addProperty(Constants.P_ID, data.p_id)
         postParam.addProperty(Constants.P_PRICE, data.p_price)
         postParam.addProperty(Constants.P_QUANTITY, "1")
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
 
         callAPI(ApiCall.addtocart(
                 jsonObject = postParam

@@ -117,6 +117,7 @@ class DeliveryTimeslot : BaseFragment() {
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
         postParam.addProperty(Constants.SHIPPING, if (EpayActivity.isPickup) getString(R.string.pickup) else getString(R.string.delivery))
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
 
         callAPI(ApiCall.pickupinfo(
                 jsonObject = postParam
@@ -152,14 +153,16 @@ class DeliveryTimeslot : BaseFragment() {
                 when (error) {
                     404 -> {
                         showSnackBar(address_container, getString(R.string.error_404))
-                        binding.isLoading=false
+                      //  binding.isLoading=false
                     }
                     100 -> {
                         showSnackBar(address_container, getString(R.string.internet_not_available))
-                        binding.isLoading=false
+                      //  binding.isLoading=false
 
                     }
                 }
+                binding.isLoading=false
+
                 //showProgressDialog()
 
 

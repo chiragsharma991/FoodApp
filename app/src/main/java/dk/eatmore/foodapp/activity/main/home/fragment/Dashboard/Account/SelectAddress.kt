@@ -101,6 +101,7 @@ class SelectAddress : BaseFragment() {
         postParam.addProperty(Constants.EATMORE_APP,true)
         postParam.addProperty(Constants.IS_LOGIN, "1")
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
 
         callAPI(ApiCall.shippingaddress_list(
                 jsonObject = postParam

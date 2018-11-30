@@ -23,7 +23,8 @@ interface ApiInterface {
     @POST("http://eatmoredev.dk/restapi/v2/OrderRejectTemplate/order-reject-template/all_record")
     fun myOrder(
             @Field("r_key") r_key: String,
-            @Field("r_token") r_token : String
+            @Field("r_token") r_token : String,
+            @Field("app") app : String
 
     ): Call<LastOrder>
 
@@ -52,7 +53,8 @@ interface ApiInterface {
     fun setProductList(
             @Field("r_token") r_token: String ,
             @Field("r_key") r_key: String,
-            @Field("customer_id") customer_id: String
+            @Field("customer_id") customer_id: String,
+            @Field("app") app : String
     ): Call<ProductListModel>
 
     @FormUrlEncoded
@@ -60,7 +62,8 @@ interface ApiInterface {
     fun restaurant_info(
             @Field("r_token") r_token: String ,
             @Field("r_key") r_key: String,
-            @Field("customer_id") customer_id: String
+            @Field("customer_id") customer_id: String,
+            @Field("app") app : String
     ): Call<OrderFragment.Myorder_Model>
 
     @FormUrlEncoded
@@ -68,7 +71,8 @@ interface ApiInterface {
     fun setProductDetails(
             @Field("r_token") r_token: String ,
             @Field("r_key") r_key: String,
-            @Field("p_id") p_id: String
+            @Field("p_id") p_id: String,
+            @Field("app") app : String
     ): Call<ProductDetails>
 
 
@@ -76,7 +80,8 @@ interface ApiInterface {
     @POST("Openinghours/openinghours/all_record")
     fun openingHours(
             @Field("r_token") r_token: String ,
-            @Field("r_key") r_key: String
+            @Field("r_key") r_key: String,
+            @Field("app") app : String
     ): Call<JsonObject>
 
     @FormUrlEncoded
@@ -86,17 +91,27 @@ interface ApiInterface {
             @Field("device_type") device_type: String,
             @Field("auth_key") auth_key: String,
             @Field("eatmore_app") eatmore_app: Boolean,
-            @Field("user_id") user_id: String
+            @Field("user_id") user_id: String,
+            @Field("app") app : String
+    ): Call<JsonObject>
+
+    @FormUrlEncoded
+    @POST("Cart/cart/clearcart")
+    fun clearcart(
+            @Field(Constants.AUTH_KEY) auth_key: String,
+            @Field(Constants.EATMORE_APP) eatmore_app: Boolean,
+            @Field(Constants.CUSTOMER_ID) customer_id: String,
+            @Field(Constants.APP) app : String
     ): Call<JsonObject>
 
 
     @FormUrlEncoded
     @POST("Enduser/enduser/last-login")
     fun lastLogin(
-            @Field("r_token") r_token: String ,
-            @Field("r_key") r_key: String,
-            @Field("customer_id") customer_id: String,
-            @Field("device_type") device_type: String
+            @Field(Constants.AUTH_KEY) auth_key: String ,
+            @Field(Constants.CUSTOMER_ID) customer_id: String,
+            @Field(Constants.DEVICE_TYPE) device_type: String,
+            @Field(Constants.EATMORE_APP) eatmore_app: Boolean
     ): Call<JsonObject>
 
     @FormUrlEncoded
@@ -110,7 +125,9 @@ interface ApiInterface {
             @Field("code") code: String,
             @Field("order_total") order_total: String,
             @Field("additional_charge") additional_charge: String,
-            @Field("shipping_costs") shipping_costs: String
+            @Field("shipping_costs") shipping_costs: String,
+            @Field("app") app : String
+
     ): Call<JsonObject>
 
     @POST("Cart/cart/user-info")
@@ -141,7 +158,8 @@ interface ApiInterface {
             @Field("id") id: String,
             @Field("first_name") first_name: String,
             @Field("email") email: String,
-            @Field("telephone_no") telephone_no: String
+            @Field("telephone_no") telephone_no: String,
+            @Field("app") app : String
     ): Call<JsonObject>
 
     @POST("Cart/cart/delivery-details")
@@ -185,7 +203,8 @@ interface ApiInterface {
     fun cancelordertransaction(
             @Field("r_token") r_token: String ,
             @Field("r_key") r_key: String,
-            @Field("order_no") order_no: Int
+            @Field("order_no") order_no: Int,
+            @Field("app") app : String
     ): Call<JsonObject>
 
     @POST("Cart/cart/addtocart")

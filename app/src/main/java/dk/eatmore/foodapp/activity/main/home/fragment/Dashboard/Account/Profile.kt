@@ -13,6 +13,8 @@ import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
+import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
@@ -20,8 +22,10 @@ import dk.eatmore.foodapp.databinding.FragmentProfileBinding
 import dk.eatmore.foodapp.databinding.FragmentSignupBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
+import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
+import dk.eatmore.foodapp.utils.Constants
 import dk.eatmore.foodapp.utils.DialogUtils
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_signup.*
@@ -124,19 +128,41 @@ class Profile : BaseFragment() {
         DialogUtils.openDialog(context!!, getString(R.string.are_you_sure_would), "",
                 getString(R.string.logout), getString(R.string.cancel), ContextCompat.getColor(context!!, R.color.theme_color), object : DialogUtils.OnDialogClickListener {
             override fun onPositiveButtonClick(position: Int) {
-                (parentFragment as AccountFragment).signOut()
-                PreferenceUtil.clearAll()
-                val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
-                (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
-                PreferenceUtil.save()
-                // clear all but add id again to collect non user item into cart.
-                PreferenceUtil.putValue(PreferenceUtil.DEVICE_TOKEN, Settings.Secure.getString(context!!.getContentResolver(), Settings.Secure.ANDROID_ID))
-                PreferenceUtil.save()
-                (activity as HomeActivity).onBackPressed()
-                if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true
-                if(HomeFragment.ui_model?.reloadfragment !=null) HomeFragment.ui_model!!.reloadfragment.value=true  // reload last order from homefragment.
+                showProgressDialog()
+                callAPI(ApiCall.clearcart(
+                        auth_key = Constants.AUTH_VALUE,
+                        customer_id = PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,"")!!,
+                        eatmore_app = true
+                ), object : BaseFragment.OnApiCallInteraction {
 
+                    override fun <T> onSuccess(body: T?) {
+                        val jsonObject = body as JsonObject
+                        (parentFragment as AccountFragment).signOut()
+                        PreferenceUtil.clearAll()
+                        val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
+                        (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
+                        PreferenceUtil.save()
+                        // clear all but add id again to collect non user item into cart.
+                        PreferenceUtil.putValue(PreferenceUtil.DEVICE_TOKEN, Settings.Secure.getString(context!!.getContentResolver(), Settings.Secure.ANDROID_ID))
+                        PreferenceUtil.save()
+                        (activity as HomeActivity).onBackPressed()
+                        if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true
+                        if(HomeFragment.ui_model?.reloadfragment !=null) HomeFragment.ui_model!!.reloadfragment.value=true  // reload last order from homefragment.
+                        showProgressDialog()
+                    }
 
+                    override fun onFail(error: Int) {
+                        when (error) {
+                            404 -> {
+                                showSnackBar(profile_container, getString(R.string.error_404))
+                            }
+                            100 -> {
+                                showSnackBar(profile_container, getString(R.string.internet_not_available))
+                            }
+                        }
+                        showProgressDialog()
+                    }
+                })
             }
 
             override fun onNegativeButtonClick() {

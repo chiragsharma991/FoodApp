@@ -194,7 +194,8 @@ class DetailsFragment : BaseFragment() {
         // this is update method will call in both category and details.
         total_cartcnt= total_cartcnt + count
         badge_notification_txt.visibility = if (total_cartcnt == 0) View.GONE else View.VISIBLE
-        viewcart.alpha= if (total_cartcnt == 0) 0.3f else 0.9f
+      //  viewcart.alpha= if (total_cartcnt == 0) 0.3f else 0.9f
+        viewcart.visibility=if (total_cartcnt == 0) View.GONE else View.VISIBLE
         badge_notification_txt.text= total_cartcnt.toString()
         badge_countprice.text= BindDataUtils.convertCurrencyToDanish(total_cartamt)
     }

@@ -114,7 +114,8 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
 
     fun updatebatchcount(count: Int) {
         badge_notification_txt.visibility = if (DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
-        viewcart.alpha= if (DetailsFragment.total_cartcnt == 0) 0.3f else 0.9f
+      //  viewcart.alpha= if (DetailsFragment.total_cartcnt == 0) 0.3f else 0.9f
+        viewcart.visibility= if(DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
         badge_notification_txt.text = DetailsFragment.total_cartcnt.toString()
         badge_countprice.text = BindDataUtils.convertCurrencyToDanish(DetailsFragment.total_cartamt)
     }
@@ -186,6 +187,7 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
         postParam.addProperty(Constants.P_ID, data.p_id)
         postParam.addProperty(Constants.P_PRICE, data.p_price)
         postParam.addProperty(Constants.P_QUANTITY, "1")
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
 
         callAPI(ApiCall.addtocart(
                 jsonObject = postParam

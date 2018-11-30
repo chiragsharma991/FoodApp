@@ -1,7 +1,7 @@
 <resources>
     <string name="facebook_app_id">262163201052137</string>
     <string name="app_name">EatMore</string>
-    <string name="cancel">cancel</string>
+    <string name="cancel">afbestille</string>
     <string name="delicious_food_for_every_mood">DELICIOUS FOOD FOR EVERY MOOD</string>
     <string name="order_from_food_over_200_restaurants">Order from food over 200 restaurants</string>
     <string name="order_your_take_away_food_online">Order your take away food online</string>
@@ -81,8 +81,8 @@
     <string name="restaurants">Restaurants</string>
     <string name="loading">Loading...</string>
     <string name="login_to_continue">Login to continue</string>
-    <string name="are_you_sure_would">Are you sure you would logout?</string>
-    <string name="logout">Logout</string>
+    <string name="are_you_sure_would">Vil du gerne logge ud?</string>
+    <string name="logout">Log ud</string>
     <string name="no">NO</string>
     <string name="yes">YES</string>
     <string name="are_you_sure_to_delete">Are you sure to delete ?</string>

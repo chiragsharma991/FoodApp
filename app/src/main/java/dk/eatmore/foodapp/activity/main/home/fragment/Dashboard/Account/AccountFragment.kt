@@ -146,6 +146,7 @@ class AccountFragment : BaseFragment() {
             jsonobject.addProperty(Constants.USERNAME, username)
             jsonobject.addProperty(Constants.PASSWORD_HASH, password_hash)
             jsonobject.addProperty(Constants.DEVICE_TYPE, Constants.DEVICE_TYPE_VALUE)
+            jsonobject.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
             jsonobject.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
             val call = ApiCall.login(jsonobject)
             loginAttempt(call)
@@ -261,6 +262,7 @@ class AccountFragment : BaseFragment() {
                     jsonobject.addProperty(Constants.FB_EMAIL, facebookemail)
                     jsonobject.addProperty(Constants.IS_FACEBOOK, "1")
                     jsonobject.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
+                    jsonobject.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
                     showProgressDialog()
                     val call = ApiCall.fBlogin(jsonobject)
                     loginAttempt(call)
@@ -432,6 +434,7 @@ class AccountFragment : BaseFragment() {
                                     jsonobject.addProperty(Constants.FB_EMAIL, facebookemail)
                                     jsonobject.addProperty(Constants.IS_FACEBOOK, "1")
                                     jsonobject.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
+                                    jsonobject.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
                                     val call = ApiCall.fBlogin(jsonobject)
                                     loginAttempt(call)
 
@@ -477,6 +480,7 @@ class AccountFragment : BaseFragment() {
         jsonobject.addProperty(Constants.FB_EMAIL, facebookemail)
         jsonobject.addProperty(Constants.IS_FACEBOOK, "1")
         jsonobject.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
+        jsonobject.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
         val call = ApiCall.fBlogin(jsonobject)
         loginAttempt(call)
 

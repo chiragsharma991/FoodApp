@@ -26,6 +26,7 @@ import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerCallback
 import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.*
 import dk.eatmore.foodapp.fragment.Dashboard.Home.AddressForm
+import dk.eatmore.foodapp.model.ModelUtility
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
@@ -106,8 +107,9 @@ class EditAddress : BaseFragment() {
         postParam.addProperty(Constants.EATMORE_APP,true)
         postParam.addProperty(Constants.IS_LOGIN, "1")
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
 
-        callAPI(ApiCall.shippingaddress_list(
+         callAPI(ApiCall.shippingaddress_list(
                 jsonObject = postParam
         ), object : BaseFragment.OnApiCallInteraction {
 
@@ -154,6 +156,7 @@ class EditAddress : BaseFragment() {
         postParam.addProperty(Constants.ID, id)
         postParam.addProperty(Constants.IS_LOGIN, "1")
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
 
         callAPI(ApiCall.delete_shippingaddress(
                 jsonObject = postParam
@@ -260,7 +263,7 @@ class EditAddress : BaseFragment() {
             val msg: String ="",
             val messages: ArrayList<Messages>
 
-    ) : Serializable
+    ) : ModelUtility(), Serializable
 
     data class Messages(
             var id: String = "",

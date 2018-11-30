@@ -358,6 +358,7 @@ class Paymentmethod : BaseFragment(), TextWatcher {
                 postParam.addProperty(Constants.SHIPPING_COSTS, EpayActivity.paymentattributes.shipping_charge)
                 postParam.addProperty(Constants.UPTO_MIN_SHIPPING, EpayActivity.paymentattributes.upto_min_shipping)
                 postParam.addProperty(Constants.SHIPPING_REMARK, "")
+                postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
                 checkout_api= ApiCall.checkout_delivery(postParam)
                 result=true
             }

@@ -1,18 +1,25 @@
 package dk.eatmore.foodapp.fragment.Dashboard.Home
 
+import android.app.Dialog
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.databinding.DataBindingUtil
+import android.graphics.Typeface
 import android.os.Build
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
+import android.support.v7.widget.AppCompatTextView
 import android.text.Editable
 import android.text.TextWatcher
 import android.transition.Slide
+import android.util.Log
 import android.view.*
 import android.view.inputmethod.EditorInfo
 import android.widget.EditText
+import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
@@ -23,15 +30,19 @@ import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.SelectAd
 import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.FragmentAddressBinding
 import dk.eatmore.foodapp.databinding.RowAddressBinding
+import dk.eatmore.foodapp.model.ModelUtility
 import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
+import dk.eatmore.foodapp.utils.BindDataUtils
 import dk.eatmore.foodapp.utils.Constants
 import dk.eatmore.foodapp.utils.DialogUtils
 import kotlinx.android.synthetic.main.fragment_address.*
+import kotlinx.android.synthetic.main.infodialog.*
 import kotlinx.android.synthetic.main.toolbar.*
+import java.io.Serializable
 
 
 class Address : BaseFragment(), TextWatcher {
@@ -299,6 +310,7 @@ class Address : BaseFragment(), TextWatcher {
         } else {
             postParam.addProperty(Constants.IS_LOGIN, "0")
         }
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
 
         callAPI(ApiCall.userInfo(
                 jsonObject = postParam
@@ -358,6 +370,7 @@ class Address : BaseFragment(), TextWatcher {
         postParam.addProperty(Constants.FLOOR_DOOR, floor_edt.text.toString())
         postParam.addProperty(Constants.POSTAL_CODE, postnumber_edt.text.toString())
         postParam.addProperty(Constants.CITY, city_edt.text.toString())
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
 
 
         callAPI(ApiCall.deliveryDetails(
@@ -437,7 +450,7 @@ class Address : BaseFragment(), TextWatcher {
         (activity as EpayActivity).img_toolbar_back.setImageResource(R.drawable.back)
 
         (activity as EpayActivity).txt_toolbar_right_img.setOnClickListener {
-            DialogUtils.showDialog(context = context!! ,restaurant = restaurant)
+            showDialog(context = context!! ,restaurant = restaurant)
         }
     }
 
@@ -446,6 +459,399 @@ class Address : BaseFragment(), TextWatcher {
         (activity as EpayActivity).popFragment()
 
     }*/
+
+    fun showDialog(restaurant: Restaurant,context: Context) {
+        val dialog = Dialog(context,R.style.AppCompatAlertDialogStyle_Transparent)
+        dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
+        dialog.setCancelable(true)
+        dialog.setContentView(R.layout.infodialog)
+
+        val shippinginfo_container = dialog.shippinginfo_container as LinearLayout
+
+        try {
+
+            if (!(restaurant.shipping_charges.size > 0)) {
+                // show empty
+                return
+            }
+            shippinginfo_container.removeAllViewsInLayout()
+            if (restaurant.shipping_type == "by_distance") {
+
+                var parent = LinearLayout(context)
+                val parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                parms.topMargin = 8
+                parent.layoutParams = parms
+                parent.orientation = LinearLayout.HORIZONTAL
+
+                val headerlist = arrayListOf("Fra (km)", "Til (km)", "Pris (kr.)")
+                // Add header
+                for (i in 0..2) {
+
+                    // Add textview 1
+                    val textView1 = AppCompatTextView(context)
+                    val parms = LinearLayout.LayoutParams(0,
+                            LinearLayout.LayoutParams.WRAP_CONTENT)
+                    parms.weight = 1f
+                    if (i == 0)
+                        parms.rightMargin = 8
+                    else if (i == 1)
+                        parms.rightMargin = 8
+                    else if (i == 2)
+                        parms.rightMargin = 0
+                    textView1.layoutParams = parms
+
+
+                    textView1.text = headerlist[i]
+                    if (i == 0)
+                        textView1.gravity = Gravity.START
+                    else if (i == 1)
+                        textView1.gravity = Gravity.START
+                    else if (i == 2)
+                        textView1.gravity = Gravity.START
+                    textView1.setSingleLine(true)
+                    textView1.setTextAppearance(context, R.style.TextViewSmall)
+                    textView1.typeface= Typeface.DEFAULT_BOLD
+                    textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+
+                    parent.addView(textView1)
+
+                }
+
+                shippinginfo_container.addView(parent)
+                val view= View(context)
+                val vparms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2)
+                vparms.topMargin=8
+                view.alpha=0.3f
+                view.background= ContextCompat.getDrawable(context!!,R.color.divider_color)
+                view.layoutParams=vparms
+                shippinginfo_container.addView(view)
+
+
+                // Add values
+                for (i in 0 until restaurant.shipping_charges.size) {
+                    parent = LinearLayout(context)
+                    val parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                    parms.topMargin = 8
+                    parent.layoutParams = parms
+                    parent.orientation = LinearLayout.HORIZONTAL
+
+                    // add row
+                    for (j in 0..2) {
+                        // add column
+                        // Add textview 1
+                        val textView1 = AppCompatTextView(context)
+                        val parms = LinearLayout.LayoutParams(0,
+                                LinearLayout.LayoutParams.WRAP_CONTENT)
+                        parms.weight = 1f
+                        if (j == 0)
+                            parms.rightMargin = 8
+                        else if (j == 1)
+                            parms.rightMargin = 8
+                        else if (j == 2)
+                            parms.rightMargin = 0
+                        textView1.layoutParams = parms
+
+                        if (j == 0)
+                            textView1.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].from_pd)
+                        else if (j == 1)
+                            textView1.text = if(restaurant.shipping_charges[i].to_pd ==null ) Constants.OPEFTER else BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].to_pd!!)
+                        else if (j == 2)
+                            textView1.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].price)
+
+                        if (j == 0)
+                            textView1.gravity = Gravity.START
+                        else if (j == 1)
+                            textView1.gravity = Gravity.START
+                        else if (j == 2)
+                            textView1.gravity = Gravity.START
+                        textView1.setSingleLine(true)
+                        textView1.setTextAppearance(context, R.style.TextViewSmall)
+                        textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+
+                        parent.addView(textView1)
+
+                    }
+                    shippinginfo_container.addView(parent)
+                    val view= View(context)
+                    val vparms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2)
+                    vparms.topMargin=8
+                    view.alpha=0.3f
+                    view.background= ContextCompat.getDrawable(context!!,R.color.divider_color)
+                    view.layoutParams=vparms
+                    shippinginfo_container.addView(view)
+
+
+
+                }
+
+
+            } else if (restaurant.shipping_type == "by_postal") {
+
+                var parent = LinearLayout(context)
+                val parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                parms.topMargin = 8
+                parent.layoutParams = parms
+                parent.orientation = LinearLayout.HORIZONTAL
+
+                val headerlist = arrayListOf("Postnr.", "Min. (kr.)", "Pris (kr.)")
+                // Add header
+                for (i in 0..2) {
+
+                    // Add textview 1
+                    val textView1 = AppCompatTextView(context)
+                    val parms = LinearLayout.LayoutParams(0,
+                            LinearLayout.LayoutParams.WRAP_CONTENT)
+                    parms.weight = 1f
+                    if (i == 0)
+                        parms.rightMargin = 8
+                    else if (i == 1)
+                        parms.rightMargin = 8
+                    else if (i == 2)
+                        parms.rightMargin = 0
+                    textView1.layoutParams = parms
+
+
+                    textView1.text = headerlist[i]
+                    if (i == 0)
+                        textView1.gravity = Gravity.START
+                    else if (i == 1)
+                        textView1.gravity = Gravity.START
+                    else if (i == 2)
+                        textView1.gravity = Gravity.START
+                    textView1.setSingleLine(true)
+                    textView1.setTextAppearance(context, R.style.TextViewSmall)
+                    textView1.typeface= Typeface.DEFAULT_BOLD
+                    textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+
+                    parent.addView(textView1)
+
+                }
+
+                shippinginfo_container.addView(parent)
+                val view= View(context)
+                val vparms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2)
+                vparms.topMargin=8
+                view.alpha=0.3f
+                view.background= ContextCompat.getDrawable(context!!,R.color.divider_color)
+                view.layoutParams=vparms
+                shippinginfo_container.addView(view)
+
+
+                // Add values
+                for (i in 0 until restaurant.shipping_charges.size) {
+                    parent = LinearLayout(context)
+                    var parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                    parms.topMargin = 8
+                    parent.layoutParams = parms
+                    parent.orientation = LinearLayout.HORIZONTAL
+
+                    // add row
+                    for (j in 0..2) {
+                        // add column
+                        // Add textview 1
+                        val textView1 = AppCompatTextView(context)
+                        parms = LinearLayout.LayoutParams(0,
+                                LinearLayout.LayoutParams.WRAP_CONTENT)
+                        parms.weight = 1f
+                        if (j == 0)
+                            parms.rightMargin = 8
+                        else if (j == 1)
+                            parms.rightMargin = 8
+                        else if (j == 2)
+                            parms.rightMargin = 0
+                        textView1.layoutParams = parms
+
+                        if (j == 0)
+                            textView1.text = restaurant.shipping_charges[i].postal_code
+                        else if (j == 1)
+                            textView1.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].minimum_order_price)
+                        else if (j == 2)
+                            textView1.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].price)
+
+                        if (j == 0)
+                            textView1.gravity = Gravity.START
+                        else if (j == 1)
+                            textView1.gravity = Gravity.START
+                        else if (j == 2)
+                            textView1.gravity = Gravity.START
+                        textView1.setSingleLine(true)
+                        textView1.setTextAppearance(context, R.style.TextViewSmall)
+                        textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+
+                        parent.addView(textView1)
+
+                    }
+                    shippinginfo_container.addView(parent)
+                    val view= View(context)
+                    val vparms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2)
+                    vparms.topMargin=8
+                    view.alpha=0.3f
+                    view.background= ContextCompat.getDrawable(context!!,R.color.divider_color)
+                    view.layoutParams=vparms
+                    shippinginfo_container.addView(view)
+
+
+
+                }
+
+
+            } else if (restaurant.shipping_type == "by_order_price") {
+
+                var parent = LinearLayout(context)
+                val parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                parms.topMargin = 8
+                parent.layoutParams = parms
+                parent.orientation = LinearLayout.HORIZONTAL
+
+                val headerlist = arrayListOf("Fra (Pris)", "Til (Pris.)", "Pris (kr.)")
+                // Add header
+                for (i in 0..2) {
+
+                    // Add textview 1
+                    val textView1 = AppCompatTextView(context)
+                    val parms = LinearLayout.LayoutParams(0,
+                            LinearLayout.LayoutParams.WRAP_CONTENT)
+                    parms.weight = 1f
+                    if (i == 0)
+                        parms.rightMargin = 8
+                    else if (i == 1)
+                        parms.rightMargin = 8
+                    else if (i == 2)
+                        parms.rightMargin = 0
+                    textView1.layoutParams = parms
+
+
+                    textView1.text = headerlist[i]
+                    if (i == 0)
+                        textView1.gravity = Gravity.START
+                    else if (i == 1)
+                        textView1.gravity = Gravity.START
+                    else if (i == 2)
+                        textView1.gravity = Gravity.START
+                    textView1.setSingleLine(true)
+                    textView1.setTextAppearance(context, R.style.TextViewSmall)
+                    textView1.typeface= Typeface.DEFAULT_BOLD
+                    textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+
+                    parent.addView(textView1)
+
+                }
+
+                shippinginfo_container.addView(parent)
+                val view= View(context)
+                val vparms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2)
+                vparms.topMargin=8
+                view.alpha=0.3f
+                view.background= ContextCompat.getDrawable(context!!,R.color.divider_color)
+                view.layoutParams=vparms
+                shippinginfo_container.addView(view)
+
+
+                // Add values
+                for (i in 0 until restaurant.shipping_charges.size) {
+                    parent = LinearLayout(context)
+                    var parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                    parms.topMargin = 8
+                    parent.layoutParams = parms
+                    parent.orientation = LinearLayout.HORIZONTAL
+
+                    // add row
+                    for (j in 0..2) {
+                        // add column
+                        // Add textview 1
+                        val textView1 = AppCompatTextView(context)
+                        parms = LinearLayout.LayoutParams(0,
+                                LinearLayout.LayoutParams.WRAP_CONTENT)
+                        parms.weight = 1f
+                        if (j == 0)
+                            parms.rightMargin = 8
+                        else if (j == 1)
+                            parms.rightMargin = 8
+                        else if (j == 2)
+                            parms.rightMargin = 0
+                        textView1.layoutParams = parms
+
+                        if (j == 0)
+                            textView1.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].from_pd)
+                        else if (j == 1)
+                            textView1.text = if(restaurant.shipping_charges[i].to_pd ==null) Constants.OPEFTER else BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].to_pd!!)
+                        else if (j == 2)
+                            textView1.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].price)
+
+                        if (j == 0)
+                            textView1.gravity = Gravity.START
+                        else if (j == 1)
+                            textView1.gravity = Gravity.START
+                        else if (j == 2)
+                            textView1.gravity = Gravity.START
+                        textView1.setSingleLine(true)
+                        textView1.setTextAppearance(context, R.style.TextViewSmall)
+                        textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+
+                        parent.addView(textView1)
+
+                    }
+                    shippinginfo_container.addView(parent)
+                    val view= View(context)
+                    val vparms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2)
+                    vparms.topMargin=8
+                    view.alpha=0.3f
+                    view.background= ContextCompat.getDrawable(context!!,R.color.divider_color)
+                    view.layoutParams=vparms
+                    shippinginfo_container.addView(view)
+
+
+
+                }
+
+
+            } else if (restaurant.shipping_type == "flat_rate") {
+
+                val parent = LinearLayout(context)
+                val parms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT)
+                parms.topMargin = 8
+                parent.layoutParams = parms
+                parent.orientation = LinearLayout.HORIZONTAL
+                val headerlist = arrayListOf("Pris (Kr.)", BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges.get(0).price))
+                // Add header
+                for (i in 0..1) {
+
+                    // Add textview 1
+                    val textView1 = AppCompatTextView(context)
+                    val parms = LinearLayout.LayoutParams(0,
+                            LinearLayout.LayoutParams.WRAP_CONTENT)
+                    parms.weight = 1f
+                    if (i == 0)
+                        parms.rightMargin = 8
+                    else if (i == 1)
+                        parms.rightMargin = 0
+                    textView1.layoutParams = parms
+                    textView1.text = headerlist[i]
+                    textView1.typeface= Typeface.DEFAULT_BOLD
+                    if (i == 0)
+                        textView1.gravity = Gravity.START
+                    else if (i == 1)
+                        textView1.gravity = Gravity.START
+                    textView1.setSingleLine(true)
+                    textView1.setTextAppearance(context, R.style.TextViewSmall)
+                    textView1.typeface= Typeface.DEFAULT_BOLD
+                    textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                    parent.addView(textView1)
+                }
+
+                shippinginfo_container.addView(parent)
+
+
+            }
+
+
+        } catch (e: Exception) {
+            Log.e("exception",e.message.toString())
+        }
+
+        dialog.show()
+
+    }
 
 
 
@@ -472,7 +878,7 @@ class Address : BaseFragment(), TextWatcher {
             val user_info: User_Info,
             val postal_city: Map<String, String>
 
-    )
+    ) : ModelUtility()
 
     data class User_Info(
             var name: String = "",

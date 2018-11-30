@@ -3,6 +3,7 @@ package dk.eatmore.foodapp.model.home
 import android.databinding.BindingAdapter
 import android.view.View
 import com.google.gson.annotations.SerializedName
+import dk.eatmore.foodapp.model.ModelUtility
 import dk.eatmore.foodapp.utils.Constants
 import java.io.Serializable
 
@@ -11,7 +12,7 @@ data class RestaurantListModel(
                                val restaurant_list: RestaurantList,
                                val postal_city: ArrayList<Postalcity> = arrayListOf(),
                                val area_details: AreaDetails,
-                               val status: Boolean = false):Serializable
+                               val status: Boolean = false): ModelUtility(),Serializable
 
 data class RestaurantList(
         val open_now: ArrayList<Restaurant> = arrayListOf(),

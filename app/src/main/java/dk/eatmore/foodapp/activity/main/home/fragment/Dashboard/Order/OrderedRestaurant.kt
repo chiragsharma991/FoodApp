@@ -24,6 +24,7 @@ import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.RateOrder
 import dk.eatmore.foodapp.databinding.FragmentOrderedRestaurantBinding
+import dk.eatmore.foodapp.model.ModelUtility
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
@@ -265,6 +266,7 @@ class OrderedRestaurant : CommanAPI() {
         postParam.addProperty(Constants.EATMORE_APP,true)
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
         postParam.addProperty(Constants.ORDER_NO,arguments!!.getString(Constants.ORDER_NO))
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
 
         callAPI(ApiCall.orderdetails(postParam), object : BaseFragment.OnApiCallInteraction {
             override fun <T> onSuccess(body: T?) {
@@ -373,7 +375,7 @@ data class OrderedDetails(
         val msg: String = "",
         val status: Boolean = false,
         val data: ArrayList<Data> // you can always fetch this, using get(0)
-)
+): ModelUtility()
 
 data class Data(
         val order_no : String ="",

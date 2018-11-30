@@ -7,6 +7,7 @@ import android.util.Log
 import bolts.Bolts
 import com.google.gson.annotations.SerializedName
 import dk.eatmore.foodapp.R
+import dk.eatmore.foodapp.model.ModelUtility
 import java.io.Serializable
 
 
@@ -15,7 +16,7 @@ data class ProductDetails(
         val data: Data,
         val productImagePath: String = "",
         val productImageThumbnailPath: String = "",
-        val status: Boolean = false) : Serializable
+        val status: Boolean = false) : ModelUtility(),Serializable
 
 
 data class Data(

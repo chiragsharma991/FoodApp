@@ -351,7 +351,7 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
         jsonobject.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
         jsonobject.addProperty(Constants.PASSWORD_HASH,password_hash)
         jsonobject.addProperty(Constants.SUBSCRIBE,subscribe)
-
+        jsonobject.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
         return jsonobject
 
     }
