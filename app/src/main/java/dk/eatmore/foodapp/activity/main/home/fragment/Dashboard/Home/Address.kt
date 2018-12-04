@@ -23,14 +23,14 @@ import android.widget.LinearLayout
 import android.widget.TextView
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.epay.EpayActivity
+import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.epay.fragment.DeliveryTimeslot
+import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.EditAddress
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.SelectAddress
 import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.FragmentAddressBinding
 import dk.eatmore.foodapp.databinding.RowAddressBinding
-import dk.eatmore.foodapp.model.ModelUtility
 import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.rest.ApiCall
@@ -42,7 +42,6 @@ import dk.eatmore.foodapp.utils.DialogUtils
 import kotlinx.android.synthetic.main.fragment_address.*
 import kotlinx.android.synthetic.main.infodialog.*
 import kotlinx.android.synthetic.main.toolbar.*
-import java.io.Serializable
 
 
 class Address : BaseFragment(), TextWatcher {
@@ -85,7 +84,7 @@ class Address : BaseFragment(), TextWatcher {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
             restaurant=arguments!!.getSerializable(Constants.RESTAURANT) as Restaurant
-            binding.isPickup = EpayActivity.isPickup
+            binding.isPickup = EpayFragment.isPickup
             setToolbarforThis()
             postnumber_edt.addTextChangedListener(this)
             name_edt.addTextChangedListener(this)
@@ -119,7 +118,7 @@ class Address : BaseFragment(), TextWatcher {
                     enter.slideEdge = Gravity.BOTTOM
                     fragment.enterTransition=enter
                 }
-                (activity as EpayActivity).addFragment(R.id.epay_container,fragment, SelectAddress.TAG,false)
+                (parentFragment as EpayFragment).addFragment(R.id.epay_container,fragment, SelectAddress.TAG,false)
             }
             ui_model = createViewModel()
             if (ui_model!!.user_infoList.value == null) {
@@ -146,12 +145,12 @@ class Address : BaseFragment(), TextWatcher {
              * - if i call api in "delivery time slot" only on one condition to get time, if i am coming from "Pickup"
              */
 
-            if(EpayActivity.isPickup){
-                EpayActivity.paymentattributes.first_name=name_edt.text.toString()
-                EpayActivity.paymentattributes.telephone_no=telephone_number_edt.text.toString()
-                EpayActivity.paymentattributes.upto_min_shipping="0"
+            if(EpayFragment.isPickup){
+                EpayFragment.paymentattributes.first_name=name_edt.text.toString()
+                EpayFragment.paymentattributes.telephone_no=telephone_number_edt.text.toString()
+                EpayFragment.paymentattributes.upto_min_shipping="0"
                 val fragment = DeliveryTimeslot.newInstance(null)
-                (activity as EpayActivity).addFragment(R.id.epay_container,fragment, DeliveryTimeslot.TAG,true)
+                (parentFragment as EpayFragment).addFragment(R.id.epay_container,fragment, DeliveryTimeslot.TAG,true)
             }
             else{
                 if(proceed_view_nxt.isEnabled == false) return
@@ -227,7 +226,7 @@ class Address : BaseFragment(), TextWatcher {
     fun validationFields(): Boolean {
         var isvalidate: Boolean = true
         // Test validtion between pickup/delivery
-        if (EpayActivity.isPickup) {
+        if (EpayFragment.isPickup) {
 
             if (!inputValidStates[name_edt]!!) {
                 name_edt.error = getString(R.string.enter_your_valid_name)
@@ -310,7 +309,6 @@ class Address : BaseFragment(), TextWatcher {
         } else {
             postParam.addProperty(Constants.IS_LOGIN, "0")
         }
-        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
 
         callAPI(ApiCall.userInfo(
                 jsonObject = postParam
@@ -363,14 +361,13 @@ class Address : BaseFragment(), TextWatcher {
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
-        postParam.addProperty(Constants.ORDER_TOTAL,EpayActivity.paymentattributes.order_total)
-        postParam.addProperty(Constants.SHIPPING, if (EpayActivity.isPickup) getString(R.string.pickup) else getString(R.string.delivery))
+        postParam.addProperty(Constants.ORDER_TOTAL,EpayFragment.paymentattributes.order_total)
+        postParam.addProperty(Constants.SHIPPING, if (EpayFragment.isPickup) getString(R.string.pickup) else getString(R.string.delivery))
         postParam.addProperty(Constants.STREET, street_edt.text.toString())
         postParam.addProperty(Constants.HOUSE_NO, house_edt.text.toString())
         postParam.addProperty(Constants.FLOOR_DOOR, floor_edt.text.toString())
         postParam.addProperty(Constants.POSTAL_CODE, postnumber_edt.text.toString())
         postParam.addProperty(Constants.CITY, city_edt.text.toString())
-        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
 
 
         callAPI(ApiCall.deliveryDetails(
@@ -381,22 +378,22 @@ class Address : BaseFragment(), TextWatcher {
                 val jsonObject = body as JsonObject
                 if (jsonObject.get(Constants.STATUS).asBoolean) {
 
-                    EpayActivity.paymentattributes.first_name=name_edt.text.toString()
-                    EpayActivity.paymentattributes.telephone_no=telephone_number_edt.text.toString()
+                    EpayFragment.paymentattributes.first_name=name_edt.text.toString()
+                    EpayFragment.paymentattributes.telephone_no=telephone_number_edt.text.toString()
                     //                        finalCartJson.put("address", street + " " + houseNo + " " + floorDoorString + ", " + postal_code + " " + city);
-                    EpayActivity.paymentattributes.address=String.format(getString(R.string.fulladdress),street_edt.text.trim().toString(),house_edt.text.trim().toString(),floor_edt.text.trim().toString(),postnumber_edt.text.trim().toString(),city_edt.text.trim().toString())
-                    EpayActivity.paymentattributes.postal_code=postnumber_edt.text.toString()
-                 //   EpayActivity.paymentattributes.discount_type=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.DISCOUNT_TYPE].asString
-                   // EpayActivity.paymentattributes.discount_amount=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.DISCOUNT_AMOUNT].asString
-                    EpayActivity.paymentattributes.shipping_charge=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString =="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString
-                    EpayActivity.paymentattributes.upto_min_shipping=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString =="")"0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString
-                    EpayActivity.paymentattributes.minimum_order_price=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString== "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString
-                  //  EpayActivity.paymentattributes.additional_charges_cash=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_CASH].asString
-                    EpayActivity.paymentattributes.additional_charges_online=if(!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_CASH)) || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString=="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString
-                    EpayActivity.paymentattributes.additional_charges_cash=if(!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_CASH)) || jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString=="") "0" else jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString
+                    EpayFragment.paymentattributes.address=String.format(getString(R.string.fulladdress),street_edt.text.trim().toString(),house_edt.text.trim().toString(),floor_edt.text.trim().toString(),postnumber_edt.text.trim().toString(),city_edt.text.trim().toString())
+                    EpayFragment.paymentattributes.postal_code=postnumber_edt.text.toString()
+                    //   EpayActivity.paymentattributes.discount_type=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.DISCOUNT_TYPE].asString
+                    // EpayActivity.paymentattributes.discount_amount=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.DISCOUNT_AMOUNT].asString
+                    EpayFragment.paymentattributes.shipping_charge=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString =="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString
+                    EpayFragment.paymentattributes.upto_min_shipping=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString =="")"0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString
+                    EpayFragment.paymentattributes.minimum_order_price=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString== "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString
+                    //  EpayActivity.paymentattributes.additional_charges_cash=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_CASH].asString
+                    EpayFragment.paymentattributes.additional_charges_online=if(!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_CASH)) || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString=="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString
+                    EpayFragment.paymentattributes.additional_charges_cash=if(!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_CASH)) || jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString=="") "0" else jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString
 
-                    EpayActivity.paymentattributes.distance=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString =="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString
-                    EpayActivity.paymentattributes.first_time=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString== "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString
+                    EpayFragment.paymentattributes.distance=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString =="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString
+                    EpayFragment.paymentattributes.first_time=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString== "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString
 
 
 
@@ -405,8 +402,8 @@ class Address : BaseFragment(), TextWatcher {
                         time_list.put((jsonObject.getAsJsonObject(Constants.RESULT).getAsJsonArray(Constants.TIME_LIST).get(i) as JsonObject)[Constants.ACTUAL].asString,
                                 (jsonObject.getAsJsonObject(Constants.RESULT).getAsJsonArray(Constants.TIME_LIST).get(i) as JsonObject)[Constants.DISPLAY].asString )
                     }
-                     val fragment = DeliveryTimeslot.newInstance(time_list)
-                     (activity as EpayActivity).addFragment(R.id.epay_container,fragment, DeliveryTimeslot.TAG,true)
+                    val fragment = DeliveryTimeslot.newInstance(time_list)
+                    (parentFragment as EpayFragment).addFragment(R.id.epay_container,fragment, DeliveryTimeslot.TAG,true)
                     proceed_view_nxt.isEnabled = true
                     progresswheel(progresswheel,false)
 
@@ -445,20 +442,20 @@ class Address : BaseFragment(), TextWatcher {
 
     fun setToolbarforThis() {
 
-        (activity as EpayActivity).txt_toolbar.text = getString(R.string.address)
-        (activity as EpayActivity).txt_toolbar_right_img.apply { visibility= if(EpayActivity.isPickup) View.GONE else View.VISIBLE  ; setImageResource(R.drawable.info_outline) }
-        (activity as EpayActivity).img_toolbar_back.setImageResource(R.drawable.back)
-
-        (activity as EpayActivity).txt_toolbar_right_img.setOnClickListener {
+        txt_toolbar.text = getString(R.string.address)
+        txt_toolbar_right_img.apply { visibility= if(EpayFragment.isPickup) View.GONE else View.VISIBLE  ; setImageResource(R.drawable.info_outline) }
+        img_toolbar_back.setImageResource(R.drawable.back)
+        img_toolbar_back.setOnClickListener{(activity as HomeActivity).onBackPressed()}
+        txt_toolbar_right_img.setOnClickListener {
             showDialog(context = context!! ,restaurant = restaurant)
         }
     }
 
-  /*  fun onBackpress() {
-        (activity as EpayActivity).txt_toolbar.text = getString(R.string.basket)
-        (activity as EpayActivity).popFragment()
+    /*  fun onBackpress() {
+          (activity as EpayActivity).txt_toolbar.text = getString(R.string.basket)
+          (activity as EpayActivity).popFragment()
 
-    }*/
+      }*/
 
     fun showDialog(restaurant: Restaurant,context: Context) {
         val dialog = Dialog(context,R.style.AppCompatAlertDialogStyle_Transparent)
@@ -878,7 +875,7 @@ class Address : BaseFragment(), TextWatcher {
             val user_info: User_Info,
             val postal_city: Map<String, String>
 
-    ) : ModelUtility()
+    )
 
     data class User_Info(
             var name: String = "",

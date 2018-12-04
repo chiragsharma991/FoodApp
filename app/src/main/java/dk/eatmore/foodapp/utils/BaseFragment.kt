@@ -40,13 +40,18 @@ import dk.eatmore.foodapp.BuildConfig
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.RestaurantClosed
 import dk.eatmore.foodapp.activity.main.epay.EpayActivity
+import dk.eatmore.foodapp.activity.main.epay.EpayFragment
+import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.Profile
 import dk.eatmore.foodapp.fragment.Dashboard.Account.Signup
 import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedRestaurant
+import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.CategoryList
+import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.rest.ApiClient
 import dk.eatmore.foodapp.rest.ApiInterface
 import kotlinx.android.synthetic.main.category_list.*
+import kotlinx.android.synthetic.main.fragment_home_container.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
 import org.json.JSONObject
 
@@ -69,6 +74,11 @@ abstract class BaseFragment : Fragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         retainInstance = true
+    }
+
+    fun showTabBar(show : Boolean){
+        if(show) ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).bottom_menu.visibility =View.VISIBLE
+        else ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).bottom_menu.visibility =View.GONE
     }
 
 
@@ -163,10 +173,17 @@ abstract class BaseFragment : Fragment() {
                             fragment.backpress()
                             childFragmentManager.popBackStack()
                         }
+                        is DetailsFragment ->{
+                            showTabBar(true)
+                            childFragmentManager.popBackStack()
+                        }
                         is Profile -> {
                             if (!fragment.backpress()) childFragmentManager.popBackStack()
                         }
                         is OrderedRestaurant -> {
+                            if(!fragment.backpress()) childFragmentManager.popBackStack()
+                        }
+                        is EpayFragment ->{
                             if(!fragment.backpress()) childFragmentManager.popBackStack()
                         }
                         else -> childFragmentManager.popBackStack()

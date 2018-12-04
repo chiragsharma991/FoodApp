@@ -34,7 +34,7 @@ import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
 import dk.eatmore.foodapp.activity.main.cart.fragment.Extratoppings
-import dk.eatmore.foodapp.activity.main.epay.EpayActivity
+import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Menu
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.adapter.PaymentmethodAdapter
@@ -119,15 +119,15 @@ class TransactionStatus : BaseFragment() {
 
                 val jsonobject = body as JsonObject
                 if (jsonobject.get(Constants.STATUS).asBoolean) {
-                    EpayActivity.paymentattributes.order_no = jsonobject.get(Constants.ORDER_NO).asInt
+                    EpayFragment.paymentattributes.order_no = jsonobject.get(Constants.ORDER_NO).asInt
                     lottie_transaction_status.visibility = View.VISIBLE
                     lottie_transaction_status.scale = 0.4f
                     status_view.visibility = View.INVISIBLE
                     lottie_transaction_status.playAnimation()
-                    totalamount.text = String.format(getString(R.string.total_amount), BindDataUtils.convertCurrencyToDanish(EpayActivity.paymentattributes.final_amount.toString()))
+                    totalamount.text = String.format(getString(R.string.total_amount), BindDataUtils.convertCurrencyToDanish(EpayFragment.paymentattributes.final_amount.toString()))
                     request_status.text = String.format(getString(R.string.request_successful), getString(R.string.successful))
                     requested_user.text = PreferenceUtil.getString(PreferenceUtil.E_MAIL, "")
-                    order_number.text = String.format(getString(R.string.order_number), EpayActivity.paymentattributes.order_no)
+                    order_number.text = String.format(getString(R.string.order_number), EpayFragment.paymentattributes.order_no)
                     val intent = Intent(Constants.CARTCOUNT_BROADCAST)
                     intent.putExtra(Constants.CARTCNT, 0)
                     intent.putExtra(Constants.CARTAMT, "00.00")
@@ -139,7 +139,7 @@ class TransactionStatus : BaseFragment() {
                     status_view.visibility = View.VISIBLE
                     status_icon.setImageResource(R.drawable.animated_vector_cross)
                     (status_icon.getDrawable() as Animatable).start()
-                    totalamount.text = String.format(getString(R.string.total_amount), BindDataUtils.convertCurrencyToDanish(EpayActivity.paymentattributes.final_amount.toString()))
+                    totalamount.text = String.format(getString(R.string.total_amount), BindDataUtils.convertCurrencyToDanish(EpayFragment.paymentattributes.final_amount.toString()))
                     request_status.text = String.format(getString(R.string.request_successful), getString(R.string.failed))
                     requested_user.text = PreferenceUtil.getString(PreferenceUtil.E_MAIL, "")
                     order_number.text = getString(R.string.na)
@@ -168,7 +168,7 @@ class TransactionStatus : BaseFragment() {
                 status_view.visibility = View.VISIBLE
                 status_icon.setImageResource(R.drawable.animated_vector_cross)
                 (status_icon.getDrawable() as Animatable).start()
-                totalamount.text = String.format(getString(R.string.total_amount), BindDataUtils.convertCurrencyToDanish(EpayActivity.paymentattributes.final_amount.toString()))
+                totalamount.text = String.format(getString(R.string.total_amount), BindDataUtils.convertCurrencyToDanish(EpayFragment.paymentattributes.final_amount.toString()))
                 request_status.text = String.format(getString(R.string.request_successful), getString(R.string.failed))
                 requested_user.text = PreferenceUtil.getString(PreferenceUtil.E_MAIL, "")
                 order_number.text = getString(R.string.na)
@@ -181,7 +181,7 @@ class TransactionStatus : BaseFragment() {
 
     private fun ordertransaction() {
 
-        if (EpayActivity.paymentattributes.final_amount <= 0.0) {
+        if (EpayFragment.paymentattributes.final_amount <= 0.0) {
             // if final amout is less then 0 so epay is not procees and direct get success.
             currentView = Constants.PAYMENTSTATUS
             binding.statusIs = true
@@ -189,10 +189,10 @@ class TransactionStatus : BaseFragment() {
             lottie_transaction_status.scale = 0.4f
             status_view.visibility = View.INVISIBLE
             lottie_transaction_status.playAnimation()
-            totalamount.text = String.format(getString(R.string.total_amount), BindDataUtils.convertCurrencyToDanish(EpayActivity.paymentattributes.final_amount.toString()))
+            totalamount.text = String.format(getString(R.string.total_amount), BindDataUtils.convertCurrencyToDanish(EpayFragment.paymentattributes.final_amount.toString()))
             request_status.text = String.format(getString(R.string.request_successful), getString(R.string.successful))
             requested_user.text = PreferenceUtil.getString(PreferenceUtil.E_MAIL, "")
-            order_number.text = String.format(getString(R.string.order_number), EpayActivity.paymentattributes.order_no)
+            order_number.text = String.format(getString(R.string.order_number), EpayFragment.paymentattributes.order_no)
             val intent = Intent(Constants.CARTCOUNT_BROADCAST)
             intent.putExtra(Constants.CARTCNT, 0)
             intent.putExtra(Constants.CARTAMT, "00.00")
@@ -204,18 +204,17 @@ class TransactionStatus : BaseFragment() {
         val postParam = JsonObject()
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
-        postParam.addProperty(Constants.ORDER_NO, EpayActivity.paymentattributes.order_no)
-        postParam.addProperty(Constants.CARDNO, EpayActivity.paymentattributes.cardno)
-        postParam.addProperty(Constants.TXNID, EpayActivity.paymentattributes.txnid)
-        postParam.addProperty(Constants.TXNFEE, EpayActivity.paymentattributes.txnfee)
-        postParam.addProperty(Constants.PAYMENTTYPE, EpayActivity.paymentattributes.paymenttype)
+        postParam.addProperty(Constants.ORDER_NO, EpayFragment.paymentattributes.order_no)
+        postParam.addProperty(Constants.CARDNO, EpayFragment.paymentattributes.cardno)
+        postParam.addProperty(Constants.TXNID, EpayFragment.paymentattributes.txnid)
+        postParam.addProperty(Constants.TXNFEE, EpayFragment.paymentattributes.txnfee)
+        postParam.addProperty(Constants.PAYMENTTYPE, EpayFragment.paymentattributes.paymenttype)
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
-        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
         val jsonarray = JsonArray()
 
-        for (i in 0.until(EpayActivity.selected_op_id.size)) {
+        for (i in 0.until(EpayFragment.selected_op_id.size)) {
             val jsonobject = JsonObject()
-            jsonobject.addProperty(Constants.OP_ID, EpayActivity.selected_op_id.get(i))
+            jsonobject.addProperty(Constants.OP_ID, EpayFragment.selected_op_id.get(i))
             jsonarray.add(jsonobject)
         }
         postParam.add(Constants.CARTPRODUCTS, jsonarray)
@@ -234,10 +233,10 @@ class TransactionStatus : BaseFragment() {
                     lottie_transaction_status.scale = 0.4f
                     status_view.visibility = View.INVISIBLE
                     lottie_transaction_status.playAnimation()
-                    totalamount.text = String.format(getString(R.string.total_amount), BindDataUtils.convertCurrencyToDanish(EpayActivity.paymentattributes.final_amount.toString()))
+                    totalamount.text = String.format(getString(R.string.total_amount), BindDataUtils.convertCurrencyToDanish(EpayFragment.paymentattributes.final_amount.toString()))
                     request_status.text = String.format(getString(R.string.request_successful), getString(R.string.successful))
                     requested_user.text = PreferenceUtil.getString(PreferenceUtil.E_MAIL, "")
-                    order_number.text = String.format(getString(R.string.order_number), EpayActivity.paymentattributes.order_no)
+                    order_number.text = String.format(getString(R.string.order_number), EpayFragment.paymentattributes.order_no)
                     val intent = Intent(Constants.CARTCOUNT_BROADCAST)
                     intent.putExtra(Constants.CARTCNT, 0)
                     intent.putExtra(Constants.CARTAMT, "00.00")
@@ -249,7 +248,7 @@ class TransactionStatus : BaseFragment() {
                     status_view.visibility = View.VISIBLE
                     status_icon.setImageResource(R.drawable.animated_vector_cross)
                     (status_icon.getDrawable() as Animatable).start()
-                    totalamount.text = String.format(getString(R.string.total_amount), BindDataUtils.convertCurrencyToDanish(EpayActivity.paymentattributes.final_amount.toString()))
+                    totalamount.text = String.format(getString(R.string.total_amount), BindDataUtils.convertCurrencyToDanish(EpayFragment.paymentattributes.final_amount.toString()))
                     request_status.text = String.format(getString(R.string.request_successful), getString(R.string.failed))
                     requested_user.text = PreferenceUtil.getString(PreferenceUtil.E_MAIL, "")
                     order_number.text = getString(R.string.na)
@@ -278,7 +277,7 @@ class TransactionStatus : BaseFragment() {
                 status_view.visibility = View.VISIBLE
                 status_icon.setImageResource(R.drawable.animated_vector_cross)
                 (status_icon.getDrawable() as Animatable).start()
-                totalamount.text = String.format(getString(R.string.total_amount), BindDataUtils.convertCurrencyToDanish(EpayActivity.paymentattributes.final_amount.toString()))
+                totalamount.text = String.format(getString(R.string.total_amount), BindDataUtils.convertCurrencyToDanish(EpayFragment.paymentattributes.final_amount.toString()))
                 request_status.text = String.format(getString(R.string.request_successful), getString(R.string.failed))
                 requested_user.text = PreferenceUtil.getString(PreferenceUtil.E_MAIL, "")
                 order_number.text = getString(R.string.na)
@@ -345,18 +344,30 @@ class TransactionStatus : BaseFragment() {
     // set common toolbar from this and set pre fragment toolbar from this.
     fun setToolbarforThis() {
         // if you finish all payment process then:
-        (activity as EpayActivity).img_toolbar_back.setImageResource(R.drawable.close)
-     /*   (activity as EpayActivity).img_toolbar_back.setOnClickListener {
-            if (currentView != Constants.PROGRESSDIALOG)
-                (activity as EpayActivity).finishActivity()
-        }*/
+        showTabBar(false)
+        img_toolbar_back.setImageResource(R.drawable.close)
+        img_toolbar_back.setOnClickListener {
+            when(currentView){
+                Constants.PROGRESSDIALOG ->{ }
+                Constants.PAYMENTSTATUS -> {
+                    onBackpress()
+                }
+            }
+        }
     }
 
     fun onBackpress() {
         //(activity as EpayActivity).popFragment()
         moveonsearch=true
-        (activity as EpayActivity).setResult(AppCompatActivity.DEFAULT_KEYS_SHORTCUT)
-        (activity as EpayActivity).finishActivity()
+        val fragment = (parentFragment as EpayFragment).parentFragment
+        if(fragment is HomeFragment){
+            fragment.popAllFragment()
+        }else{
+            // order fragment : Reorder
+            (fragment as OrderFragment).popAllFragment()
+        }
+        showTabBar(true)
+
 
     }
 
@@ -367,7 +378,7 @@ class TransactionStatus : BaseFragment() {
             when (value) {
                 "0" -> {
                     transactionstatus.onBackpress()
-                    }
+                }
             }
 
         }

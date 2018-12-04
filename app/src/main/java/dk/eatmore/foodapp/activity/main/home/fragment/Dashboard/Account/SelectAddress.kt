@@ -12,7 +12,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.epay.EpayActivity
+import dk.eatmore.foodapp.activity.main.epay.EpayFragment
+import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerCallback
 import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.RowSelectAddressBinding
@@ -52,7 +53,8 @@ class SelectAddress : BaseFragment() {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
-            (activity as EpayActivity).txt_toolbar_right_img.apply { visibility= if(EpayActivity.isPickup) View.GONE else View.GONE  ; setImageResource(R.drawable.info_outline) }
+            txt_toolbar.text = getString(R.string.address)
+            img_toolbar_back.setOnClickListener{(activity as HomeActivity).onBackPressed()}
             error_txt.visibility=View.GONE
             progress_bar.visibility=View.GONE
             ui_model = createViewModel()
@@ -71,9 +73,9 @@ class SelectAddress : BaseFragment() {
             override fun bindData(binder: RowSelectAddressBinding, model: EditAddress.Messages) {
                 binder.editaddressListModel=model
                 binder.rowContain.setOnClickListener{
-                    val fragment=(activity as EpayActivity).supportFragmentManager.findFragmentByTag(Address.TAG)
+                    val fragment=(parentFragment as EpayFragment).childFragmentManager.findFragmentByTag(Address.TAG)
                     (fragment as Address).onFragmentResult(model)
-                    (activity as EpayActivity).onBackPressed()
+                    (activity as HomeActivity).onBackPressed()
                 }
             }
         })
@@ -86,9 +88,9 @@ class SelectAddress : BaseFragment() {
     }
 
     private fun createViewModel(): SelectAddress.UIModel =
-    ViewModelProviders.of(this).get(SelectAddress.UIModel::class.java).apply {
-        addressList.removeObservers(this@SelectAddress)
-        addressList.observe(this@SelectAddress, Observer<EditAddress.EditaddressListModel> {
+            ViewModelProviders.of(this).get(SelectAddress.UIModel::class.java).apply {
+                addressList.removeObservers(this@SelectAddress)
+                addressList.observe(this@SelectAddress, Observer<EditAddress.EditaddressListModel> {
                     refreshview()
                 })
             }
@@ -101,7 +103,6 @@ class SelectAddress : BaseFragment() {
         postParam.addProperty(Constants.EATMORE_APP,true)
         postParam.addProperty(Constants.IS_LOGIN, "1")
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
-        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
 
         callAPI(ApiCall.shippingaddress_list(
                 jsonObject = postParam

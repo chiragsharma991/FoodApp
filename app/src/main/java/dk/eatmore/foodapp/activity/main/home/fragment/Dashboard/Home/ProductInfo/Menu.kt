@@ -19,6 +19,7 @@ import android.view.Gravity
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerCallback
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerClickListner
 import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
@@ -68,7 +69,7 @@ class Menu : BaseFragment(), RecyclerClickListner {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-       // return inflater.inflate(getLayout(), container, false)
+        // return inflater.inflate(getLayout(), container, false)
 
         binding= DataBindingUtil.inflate(inflater,getLayout(),container,false)
         return binding.root
@@ -83,20 +84,20 @@ class Menu : BaseFragment(), RecyclerClickListner {
             restaurant= arguments!!.getSerializable(Constants.RESTAURANT) as Restaurant
             binding.restaurant=restaurant
             if(ui_model == null)
-            ui_model=createViewModel()
+                ui_model=createViewModel()
             logd(TAG,"saveInstance NULL")
             val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
             homeFragment=(fragmentof as HomeContainerFragment).getHomeFragment()
-           // free_txt.visibility =if(restaurant.free_text =="") View.GONE else View.VISIBLE
-           // free_txt.text=restaurant.free_text.replace("\n","").replace("\r","")
+            // free_txt.visibility =if(restaurant.free_text =="") View.GONE else View.VISIBLE
+            // free_txt.text=restaurant.free_text.replace("\n","").replace("\r","")
             menu_search.setOnClickListener{
 
 
-                    logd(TAG,"click---")
-                    val fragment = SearchMenu.newInstance(ui_model!!.productList.value)
-                   /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                logd(TAG,"click---")
+                val fragment = SearchMenu.newInstance(ui_model!!.productList.value)
+                /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
-                        *//*             // 2. Shared Elements Transition
+                     *//*             // 2. Shared Elements Transition
                                      val enterTransitionSet = TransitionSet()
                                      enterTransitionSet.addTransition(TransitionInflater.from(context).inflateTransition(android.R.transition.move))
                                      enterTransitionSet.duration = 1000
@@ -117,10 +118,10 @@ class Menu : BaseFragment(), RecyclerClickListner {
                     else {
                         homeFragment.addFragment(R.id.home_fragment_container,fragment, SearchMenu.TAG,false)
                     }*/
-                if((activity as HomeActivity).is_reorderprocess())
-                (activity as HomeActivity).addFragment(R.id.home_container,fragment, SearchMenu.TAG,false)
+                if((activity as HomeActivity).fragmentTab_is() == 1)
+                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment().addFragment(R.id.home_order_container,fragment, SearchMenu.TAG,false)
                 else
-                homeFragment.addFragment(R.id.home_fragment_container,fragment, SearchMenu.TAG,false)
+                    homeFragment.addFragment(R.id.home_fragment_container,fragment, SearchMenu.TAG,false)
 
 
 
@@ -176,7 +177,7 @@ class Menu : BaseFragment(), RecyclerClickListner {
             override fun <T> onSuccess(body: T?) {
                 val productlistmodel= body as ProductListModel
                 if (productlistmodel.status) {
-                    loge(TAG," menu list size"+""+productlistmodel.menu!!.get(1).c_name+" "+productlistmodel.menu.get(1).product_list!!.size)
+                loge(TAG," menu list size"+""+productlistmodel.menu!!.get(1).c_name+" "+productlistmodel.menu.get(1).product_list!!.size)
                     ui_model!!.productList.value=productlistmodel.menu
                 }
                 progress_bar.visibility=View.GONE
@@ -202,10 +203,10 @@ class Menu : BaseFragment(), RecyclerClickListner {
     override fun<T> onClick(model: T?) {
 
         val data= model as MenuListItem
-    /*    (parentFragment as DetailsFragment).appbar.setExpanded(false,true)
-        (parentFragment as DetailsFragment).collapse_toolbar.setBackgroundColor(ContextCompat.getColor(context!!,R.color.white));
-        (parentFragment as DetailsFragment).collapse_toolbar.setStatusBarScrimColor(ContextCompat.getColor(context!!,R.color.white))
-        (parentFragment as DetailsFragment).collapse_toolbar.setContentScrimColor(ContextCompat.getColor(context!!,R.color.white))*/
+        /*    (parentFragment as DetailsFragment).appbar.setExpanded(false,true)
+            (parentFragment as DetailsFragment).collapse_toolbar.setBackgroundColor(ContextCompat.getColor(context!!,R.color.white));
+            (parentFragment as DetailsFragment).collapse_toolbar.setStatusBarScrimColor(ContextCompat.getColor(context!!,R.color.white))
+            (parentFragment as DetailsFragment).collapse_toolbar.setContentScrimColor(ContextCompat.getColor(context!!,R.color.white))*/
 
 
         val fragment = CategoryList.newInstance(restaurant,data)
@@ -219,10 +220,10 @@ class Menu : BaseFragment(), RecyclerClickListner {
             fragment.sharedElementEnterTransition=changeBoundsTransition
             fragment.enterTransition=enter
         }
-        if((activity as HomeActivity).is_reorderprocess())
-        (activity as HomeActivity).addFragment(R.id.home_container,fragment, CategoryList.TAG,false)
+        if((activity as HomeActivity).fragmentTab_is() == 1)
+            ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment().addFragment(R.id.home_order_container,fragment, CategoryList.TAG,false)
         else
-        homeFragment.addFragment(R.id.home_fragment_container,fragment,CategoryList.TAG,false)
+            homeFragment.addFragment(R.id.home_fragment_container,fragment,CategoryList.TAG,false)
 
     }
 
@@ -251,7 +252,7 @@ class Menu : BaseFragment(), RecyclerClickListner {
 
     }
 
-     class UIModel : ViewModel() {
+    class UIModel : ViewModel() {
 
         var productList = MutableLiveData<ArrayList<MenuListItem>>()
 
@@ -261,14 +262,14 @@ class Menu : BaseFragment(), RecyclerClickListner {
 
 
     data class FilterCategoryList(
-                            val c_name: String = "",
-                            val product_list: ArrayList<ProductListItem> = arrayListOf()) : Serializable
+            val c_name: String = "",
+            val product_list: ArrayList<ProductListItem> = arrayListOf()) : Serializable
 
 
     data class ProductListItem(
-                               val p_desc: String = "",
-                               val p_price: String = "",
-                               val p_name: String = "") :Serializable
+            val p_desc: String = "",
+            val p_price: String = "",
+            val p_name: String = "") :Serializable
 
 }
 

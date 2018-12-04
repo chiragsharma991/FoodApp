@@ -31,7 +31,8 @@ import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
 import dk.eatmore.foodapp.activity.main.cart.fragment.Extratoppings
-import dk.eatmore.foodapp.activity.main.epay.EpayActivity
+import dk.eatmore.foodapp.activity.main.epay.EpayFragment
+import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Menu
 import dk.eatmore.foodapp.adapter.PaymentmethodAdapter
 import dk.eatmore.foodapp.adapter.cart.CartViewAdapter
@@ -120,44 +121,44 @@ class Paymentmethod : BaseFragment(), TextWatcher {
 
         var final_amount : Double = 0.0   // calculating final amount with included all tax.
 
-        if(EpayActivity.isPickup){
+        if(EpayFragment.isPickup){
             // pick up:
 
             subtotal_layout.visibility=View.VISIBLE
-            restuptominimum_layout.visibility=if(EpayActivity.paymentattributes.upto_min_shipping.toDouble() <= 0.0) View.GONE else View.VISIBLE  // product price - mincharge
+            restuptominimum_layout.visibility=if(EpayFragment.paymentattributes.upto_min_shipping.toDouble() <= 0.0) View.GONE else View.VISIBLE  // product price - mincharge
             shipping_layout.visibility=View.GONE
-            additional_charge_layout.visibility=if(EpayActivity.paymentattributes.additional_charges_cash.toDouble() <= 0.0) View.GONE else View.VISIBLE    // online/cash tax
+            additional_charge_layout.visibility=if(EpayFragment.paymentattributes.additional_charges_cash.toDouble() <= 0.0) View.GONE else View.VISIBLE    // online/cash tax
             total_layout.visibility=View.VISIBLE
-            subtotal_txt.text= BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.order_total)
-            restuptominimum_txt.text= BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.upto_min_shipping)
-            additional_charge_txt.text=if(isPaymentonline) BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.additional_charges_online) else BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.additional_charges_cash)
-            discountcoupan_txt.text=String.format(getString(R.string.discount),BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.discount_amount.toString()))
-            discountgift_txt.text=String.format(getString(R.string.discount),BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.discount_amount.toString()))
+            subtotal_txt.text= BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.order_total)
+            restuptominimum_txt.text= BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.upto_min_shipping)
+            additional_charge_txt.text=if(isPaymentonline) BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.additional_charges_online) else BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.additional_charges_cash)
+            discountcoupan_txt.text=String.format(getString(R.string.discount),BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.discount_amount.toString()))
+            discountgift_txt.text=String.format(getString(R.string.discount),BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.discount_amount.toString()))
 
             if(giftcardis ==Constants.GIFTCARD ){
-                discountgift_layout.visibility=if(EpayActivity.paymentattributes.discount_amount <= 0 )View.GONE else View.VISIBLE
+                discountgift_layout.visibility=if(EpayFragment.paymentattributes.discount_amount <= 0 )View.GONE else View.VISIBLE
                 discountcoupan_layout.visibility=View.GONE
-                        final_amount = (
-                                 (EpayActivity.paymentattributes.order_total.toDouble()
-                                + EpayActivity.paymentattributes.upto_min_shipping.toDouble()
-                                + if(isPaymentonline) EpayActivity.paymentattributes.additional_charges_online.toDouble() else EpayActivity.paymentattributes.additional_charges_cash.toDouble())
-                        - EpayActivity.paymentattributes.discount_amount)
+                final_amount = (
+                        (EpayFragment.paymentattributes.order_total.toDouble()
+                                + EpayFragment.paymentattributes.upto_min_shipping.toDouble()
+                                + if(isPaymentonline) EpayFragment.paymentattributes.additional_charges_online.toDouble() else EpayFragment.paymentattributes.additional_charges_cash.toDouble())
+                                - EpayFragment.paymentattributes.discount_amount)
 
             }else if(giftcardis ==Constants.COUPON){
-                discountcoupan_layout.visibility=if(EpayActivity.paymentattributes.discount_amount <= 0 )View.GONE else View.VISIBLE
+                discountcoupan_layout.visibility=if(EpayFragment.paymentattributes.discount_amount <= 0 )View.GONE else View.VISIBLE
                 discountgift_layout.visibility=View.GONE
                 final_amount = (
-                                 (EpayActivity.paymentattributes.order_total.toDouble() - EpayActivity.paymentattributes.discount_amount)
-                                + EpayActivity.paymentattributes.upto_min_shipping.toDouble()
-                                + if(isPaymentonline) EpayActivity.paymentattributes.additional_charges_online.toDouble() else EpayActivity.paymentattributes.additional_charges_cash.toDouble())
+                        (EpayFragment.paymentattributes.order_total.toDouble() - EpayFragment.paymentattributes.discount_amount)
+                                + EpayFragment.paymentattributes.upto_min_shipping.toDouble()
+                                + if(isPaymentonline) EpayFragment.paymentattributes.additional_charges_online.toDouble() else EpayFragment.paymentattributes.additional_charges_cash.toDouble())
 
             }else{
                 discountgift_layout.visibility=View.GONE
                 discountcoupan_layout.visibility=View.GONE
                 final_amount = (
-                                  EpayActivity.paymentattributes.order_total.toDouble()
-                                + EpayActivity.paymentattributes.upto_min_shipping.toDouble()
-                                + if(isPaymentonline) EpayActivity.paymentattributes.additional_charges_online.toDouble() else EpayActivity.paymentattributes.additional_charges_cash.toDouble())
+                        EpayFragment.paymentattributes.order_total.toDouble()
+                                + EpayFragment.paymentattributes.upto_min_shipping.toDouble()
+                                + if(isPaymentonline) EpayFragment.paymentattributes.additional_charges_online.toDouble() else EpayFragment.paymentattributes.additional_charges_cash.toDouble())
 
             }
 
@@ -172,44 +173,44 @@ class Paymentmethod : BaseFragment(), TextWatcher {
         else{
             // delivery :
             subtotal_layout.visibility=View.VISIBLE
-            restuptominimum_layout.visibility=if(EpayActivity.paymentattributes.upto_min_shipping.toDouble() <= 0.0) View.GONE else View.VISIBLE
-            shipping_layout.visibility=if(EpayActivity.paymentattributes.shipping_charge.toDouble() <= 0.0) View.GONE else View.VISIBLE
-            additional_charge_layout.visibility=if(EpayActivity.paymentattributes.additional_charges_online.toDouble() <= 0.0) View.GONE else View.VISIBLE
+            restuptominimum_layout.visibility=if(EpayFragment.paymentattributes.upto_min_shipping.toDouble() <= 0.0) View.GONE else View.VISIBLE
+            shipping_layout.visibility=if(EpayFragment.paymentattributes.shipping_charge.toDouble() <= 0.0) View.GONE else View.VISIBLE
+            additional_charge_layout.visibility=if(EpayFragment.paymentattributes.additional_charges_online.toDouble() <= 0.0) View.GONE else View.VISIBLE
             total_layout.visibility=View.VISIBLE
-            subtotal_txt.text=BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.order_total)
-            restuptominimum_txt.text=BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.upto_min_shipping)
-            shipping_txt.text=BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.shipping_charge)
-            additional_charge_txt.text=if(isPaymentonline) BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.additional_charges_online) else BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.additional_charges_cash)
-            discountcoupan_txt.text=String.format(getString(R.string.discount),BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.discount_amount.toString()))
-            discountgift_txt.text=String.format(getString(R.string.discount),BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayActivity.paymentattributes.discount_amount.toString()))
+            subtotal_txt.text=BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.order_total)
+            restuptominimum_txt.text=BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.upto_min_shipping)
+            shipping_txt.text=BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.shipping_charge)
+            additional_charge_txt.text=if(isPaymentonline) BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.additional_charges_online) else BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.additional_charges_cash)
+            discountcoupan_txt.text=String.format(getString(R.string.discount),BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.discount_amount.toString()))
+            discountgift_txt.text=String.format(getString(R.string.discount),BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.discount_amount.toString()))
 
 
             if(giftcardis ==Constants.GIFTCARD ){
-                discountgift_layout.visibility=if(EpayActivity.paymentattributes.discount_amount <= 0 )View.GONE else View.VISIBLE
+                discountgift_layout.visibility=if(EpayFragment.paymentattributes.discount_amount <= 0 )View.GONE else View.VISIBLE
                 discountcoupan_layout.visibility=View.GONE
                 final_amount = (
-                                 (EpayActivity.paymentattributes.order_total.toDouble()
-                                + EpayActivity.paymentattributes.upto_min_shipping.toDouble()
-                                + EpayActivity.paymentattributes.shipping_charge.toDouble()
-                                + if(isPaymentonline) EpayActivity.paymentattributes.additional_charges_online.toDouble() else EpayActivity.paymentattributes.additional_charges_cash.toDouble())
-                                - EpayActivity.paymentattributes.discount_amount)
+                        (EpayFragment.paymentattributes.order_total.toDouble()
+                                + EpayFragment.paymentattributes.upto_min_shipping.toDouble()
+                                + EpayFragment.paymentattributes.shipping_charge.toDouble()
+                                + if(isPaymentonline) EpayFragment.paymentattributes.additional_charges_online.toDouble() else EpayFragment.paymentattributes.additional_charges_cash.toDouble())
+                                - EpayFragment.paymentattributes.discount_amount)
 
             }else if(giftcardis ==Constants.COUPON){
-                discountcoupan_layout.visibility=if(EpayActivity.paymentattributes.discount_amount <= 0 )View.GONE else View.VISIBLE
+                discountcoupan_layout.visibility=if(EpayFragment.paymentattributes.discount_amount <= 0 )View.GONE else View.VISIBLE
                 discountgift_layout.visibility=View.GONE
                 final_amount = (
-                                 (EpayActivity.paymentattributes.order_total.toDouble() - EpayActivity.paymentattributes.discount_amount)
-                                + EpayActivity.paymentattributes.upto_min_shipping.toDouble()
-                                + EpayActivity.paymentattributes.shipping_charge.toDouble()
-                                + if(isPaymentonline) EpayActivity.paymentattributes.additional_charges_online.toDouble() else EpayActivity.paymentattributes.additional_charges_cash.toDouble())
+                        (EpayFragment.paymentattributes.order_total.toDouble() - EpayFragment.paymentattributes.discount_amount)
+                                + EpayFragment.paymentattributes.upto_min_shipping.toDouble()
+                                + EpayFragment.paymentattributes.shipping_charge.toDouble()
+                                + if(isPaymentonline) EpayFragment.paymentattributes.additional_charges_online.toDouble() else EpayFragment.paymentattributes.additional_charges_cash.toDouble())
             }else{
                 discountgift_layout.visibility=View.GONE
                 discountcoupan_layout.visibility=View.GONE
                 final_amount= (
-                                  EpayActivity.paymentattributes.order_total.toDouble()
-                                + EpayActivity.paymentattributes.upto_min_shipping.toDouble()
-                                + EpayActivity.paymentattributes.shipping_charge.toDouble()
-                                + if(isPaymentonline) EpayActivity.paymentattributes.additional_charges_online.toDouble() else EpayActivity.paymentattributes.additional_charges_cash.toDouble())
+                        EpayFragment.paymentattributes.order_total.toDouble()
+                                + EpayFragment.paymentattributes.upto_min_shipping.toDouble()
+                                + EpayFragment.paymentattributes.shipping_charge.toDouble()
+                                + if(isPaymentonline) EpayFragment.paymentattributes.additional_charges_online.toDouble() else EpayFragment.paymentattributes.additional_charges_cash.toDouble())
             }
 
             total_txt.text=BindDataUtils.convertCurrencyToDanishWithoutLabel(String.format("%.2f",final_amount))
@@ -226,9 +227,9 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             cash_method.visibility=View.GONE
             giftonline_view.visibility=View.GONE
             giftcash_view.visibility=View.GONE
-            EpayActivity.paymentattributes.discount_amount=0.0
-            EpayActivity.paymentattributes.discount_id=0
-            EpayActivity.paymentattributes.discount_type=""
+            EpayFragment.paymentattributes.discount_amount=0.0
+            EpayFragment.paymentattributes.discount_id=0
+            EpayFragment.paymentattributes.discount_type=""
             generateBillDetails(Constants.OTHER)
             progress_applyonlinegift.visibility=View.GONE
             progress_applycashgift.visibility=View.GONE
@@ -242,9 +243,9 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             cash_method.visibility=View.VISIBLE
             giftonline_view.visibility=View.GONE
             giftcash_view.visibility=View.GONE
-            EpayActivity.paymentattributes.discount_amount=0.0
-            EpayActivity.paymentattributes.discount_id=0
-            EpayActivity.paymentattributes.discount_type=""
+            EpayFragment.paymentattributes.discount_amount=0.0
+            EpayFragment.paymentattributes.discount_id=0
+            EpayFragment.paymentattributes.discount_type=""
             generateBillDetails(Constants.OTHER)
             progress_applyonlinegift.visibility=View.GONE
             progress_applycashgift.visibility=View.GONE
@@ -293,7 +294,7 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             showSnackBar(pamentmethod_container, getString(R.string.error_404))
             return
         }
-        (activity as EpayActivity).addFragment(R.id.epay_container,BamboraWebfunction.newInstance(),BamboraWebfunction.TAG,true)
+        (parentFragment as EpayFragment).addFragment(R.id.epay_container,BamboraWebfunction.newInstance(),BamboraWebfunction.TAG,true)
 
     }
 
@@ -304,10 +305,10 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             return
         }
         if(checkpaymentAttributes() == false){
-           showSnackBar(pamentmethod_container, getString(R.string.error_404))
-           return
+            showSnackBar(pamentmethod_container, getString(R.string.error_404))
+            return
         }
-        (activity as EpayActivity).addFragment(R.id.epay_container,TransactionStatus.newInstance(),TransactionStatus.TAG,true)
+        (parentFragment as EpayFragment).addFragment(R.id.epay_container,TransactionStatus.newInstance(),TransactionStatus.TAG,true)
 
     }
 
@@ -319,46 +320,45 @@ class Paymentmethod : BaseFragment(), TextWatcher {
         try {
             postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
             postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
-            postParam.addProperty(Constants.FIRST_TIME, EpayActivity.paymentattributes.first_time)
+            postParam.addProperty(Constants.FIRST_TIME, EpayFragment.paymentattributes.first_time)
             postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,"") )
-            // postParam.addProperty(Constants.POSTAL_CODE, EpayActivity.paymentattributes.postal_code)
-            postParam.addProperty(Constants.DISCOUNT_TYPE, EpayActivity.paymentattributes.discount_type)
-            postParam.addProperty(Constants.DISCOUNT_AMOUNT, EpayActivity.paymentattributes.discount_amount)
-            postParam.addProperty(Constants.DISCOUNT_ID,EpayActivity.paymentattributes.discount_id)
-            postParam.addProperty(Constants.SHIPPING, if (EpayActivity.isPickup) context!!.getString(R.string.pickup) else context!!.getString(R.string.delivery))
-            postParam.addProperty(Constants.TELEPHONE_NO, EpayActivity.paymentattributes.telephone_no)
-            postParam.addProperty(Constants.ORDER_TOTAL, EpayActivity.paymentattributes.order_total)
+            // postParam.addProperty(Constants.POSTAL_CODE, EpayFragment.paymentattributes.postal_code)
+            postParam.addProperty(Constants.DISCOUNT_TYPE, EpayFragment.paymentattributes.discount_type)
+            postParam.addProperty(Constants.DISCOUNT_AMOUNT, EpayFragment.paymentattributes.discount_amount)
+            postParam.addProperty(Constants.DISCOUNT_ID,EpayFragment.paymentattributes.discount_id)
+            postParam.addProperty(Constants.SHIPPING, if (EpayFragment.isPickup) context!!.getString(R.string.pickup) else context!!.getString(R.string.delivery))
+            postParam.addProperty(Constants.TELEPHONE_NO, EpayFragment.paymentattributes.telephone_no)
+            postParam.addProperty(Constants.ORDER_TOTAL, EpayFragment.paymentattributes.order_total)
             postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
             postParam.addProperty(Constants.ACCEPT_TC, "1")
             postParam.addProperty(Constants.PAYMETHOD, if(Paymentmethod.isPaymentonline) "1" else "2" )
-            postParam.addProperty(Constants.EXPECTED_TIME, EpayActivity.paymentattributes.expected_time)
-            postParam.addProperty(Constants.COMMENTS, EpayActivity.paymentattributes.comments)
+            postParam.addProperty(Constants.EXPECTED_TIME, EpayFragment.paymentattributes.expected_time)
+            postParam.addProperty(Constants.COMMENTS, EpayFragment.paymentattributes.comments)
             postParam.addProperty(Constants.DEVICE_TYPE,Constants.DEVICE_TYPE_VALUE)
-            postParam.addProperty(Constants.FIRST_NAME, EpayActivity.paymentattributes.first_name)
-            postParam.addProperty(Constants.ADDITIONAL_CHARGE, if(Paymentmethod.isPaymentonline) EpayActivity.paymentattributes.additional_charges_online else EpayActivity.paymentattributes.additional_charges_cash)
+            postParam.addProperty(Constants.FIRST_NAME, EpayFragment.paymentattributes.first_name)
+            postParam.addProperty(Constants.ADDITIONAL_CHARGE, if(Paymentmethod.isPaymentonline) EpayFragment.paymentattributes.additional_charges_online else EpayFragment.paymentattributes.additional_charges_cash)
             val jsonarray=JsonArray()
-            for (i in 0.until(EpayActivity.selected_op_id.size) ){
+            for (i in 0.until(EpayFragment.selected_op_id.size) ){
                 val jsonobject= JsonObject()
-                jsonobject.addProperty(Constants.OP_ID, EpayActivity.selected_op_id.get(i))
+                jsonobject.addProperty(Constants.OP_ID, EpayFragment.selected_op_id.get(i))
                 jsonarray.add(jsonobject)
             }
             postParam.add(Constants.CARTPRODUCTS,jsonarray )
 
-            if(EpayActivity.isPickup){
+            if(EpayFragment.isPickup){
                 //pickup--
                 checkout_api=ApiCall.checkout_pickup(postParam)
                 result=true
 
             }else{
                 // delivery--
-                postParam.addProperty(Constants.ADDRESS, EpayActivity.paymentattributes.address)
-                postParam.addProperty(Constants.POSTAL_CODE, EpayActivity.paymentattributes.postal_code)
-                postParam.addProperty(Constants.DISTANCE, EpayActivity.paymentattributes.distance)
-                postParam.addProperty(Constants.MINIMUM_ORDER_PRICE, EpayActivity.paymentattributes.minimum_order_price)
-                postParam.addProperty(Constants.SHIPPING_COSTS, EpayActivity.paymentattributes.shipping_charge)
-                postParam.addProperty(Constants.UPTO_MIN_SHIPPING, EpayActivity.paymentattributes.upto_min_shipping)
+                postParam.addProperty(Constants.ADDRESS, EpayFragment.paymentattributes.address)
+                postParam.addProperty(Constants.POSTAL_CODE, EpayFragment.paymentattributes.postal_code)
+                postParam.addProperty(Constants.DISTANCE, EpayFragment.paymentattributes.distance)
+                postParam.addProperty(Constants.MINIMUM_ORDER_PRICE, EpayFragment.paymentattributes.minimum_order_price)
+                postParam.addProperty(Constants.SHIPPING_COSTS, EpayFragment.paymentattributes.shipping_charge)
+                postParam.addProperty(Constants.UPTO_MIN_SHIPPING, EpayFragment.paymentattributes.upto_min_shipping)
                 postParam.addProperty(Constants.SHIPPING_REMARK, "")
-                postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
                 checkout_api= ApiCall.checkout_delivery(postParam)
                 result=true
             }
@@ -382,14 +382,14 @@ class Paymentmethod : BaseFragment(), TextWatcher {
 
         callAPI(ApiCall.applycode(
                 r_token = PreferenceUtil.getString(PreferenceUtil.R_TOKEN,"")!!,
-                order_total = EpayActivity.paymentattributes.order_total,
+                order_total = EpayFragment.paymentattributes.order_total,
                 customer_id = PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,"")!!,
-                additional_charge = if(isPaymentonline) EpayActivity.paymentattributes.additional_charges_online else EpayActivity.paymentattributes.additional_charges_cash,
+                additional_charge = if(isPaymentonline) EpayFragment.paymentattributes.additional_charges_online else EpayFragment.paymentattributes.additional_charges_cash,
                 code = if(isPaymentonline)applyonlinegift_edt.text.trim().toString() else applycashgift_edt.text.trim().toString(),
                 r_key = PreferenceUtil.getString(PreferenceUtil.R_KEY,"")!!,
-                shipping =if(EpayActivity.isPickup) getString(R.string.pickup_caps) else getString(R.string.delivery_caps),
-                shipping_costs = EpayActivity.paymentattributes.shipping_charge,
-                upto_min_shipping = EpayActivity.paymentattributes.upto_min_shipping
+                shipping =if(EpayFragment.isPickup) getString(R.string.pickup_caps) else getString(R.string.delivery_caps),
+                shipping_costs = EpayFragment.paymentattributes.shipping_charge,
+                upto_min_shipping = EpayFragment.paymentattributes.upto_min_shipping
 
 
 
@@ -399,22 +399,22 @@ class Paymentmethod : BaseFragment(), TextWatcher {
                 val jsonobject = body as JsonObject
                 if(jsonobject.get(Constants.STATUS).asBoolean){
                     loge(TAG,"status is true")
-                    EpayActivity.paymentattributes.discount_type=jsonobject.get(Constants.DISCOUNT_TYPE).asString
-                    EpayActivity.paymentattributes.discount_amount=jsonobject.get(Constants.DISCOUNT_AMOUNT).asDouble
-                    EpayActivity.paymentattributes.discount_id=jsonobject.get(Constants.DISCOUNT_ID).asInt
-                    if(EpayActivity.paymentattributes.discount_type == Constants.GIFTCARD)
-                    generateBillDetails(Constants.GIFTCARD)
-                    else if(EpayActivity.paymentattributes.discount_type == Constants.COUPON)
-                    generateBillDetails(Constants.COUPON)
+                    EpayFragment.paymentattributes.discount_type=jsonobject.get(Constants.DISCOUNT_TYPE).asString
+                    EpayFragment.paymentattributes.discount_amount=jsonobject.get(Constants.DISCOUNT_AMOUNT).asDouble
+                    EpayFragment.paymentattributes.discount_id=jsonobject.get(Constants.DISCOUNT_ID).asInt
+                    if(EpayFragment.paymentattributes.discount_type == Constants.GIFTCARD)
+                        generateBillDetails(Constants.GIFTCARD)
+                    else if(EpayFragment.paymentattributes.discount_type == Constants.COUPON)
+                        generateBillDetails(Constants.COUPON)
                     error_of_cashgiftcard.setTextColor(ContextCompat.getColor(context!!,R.color.green))
                     error_of_onlinegiftcard.setTextColor(ContextCompat.getColor(context!!,R.color.green))
 
 
                 }else{
                     loge(TAG,"status is false")
-                    EpayActivity.paymentattributes.discount_amount=0.0
-                    EpayActivity.paymentattributes.discount_id=0
-                    EpayActivity.paymentattributes.discount_type=""
+                    EpayFragment.paymentattributes.discount_amount=0.0
+                    EpayFragment.paymentattributes.discount_id=0
+                    EpayFragment.paymentattributes.discount_type=""
                     generateBillDetails(Constants.OTHER)
                     error_of_cashgiftcard.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))
                     error_of_onlinegiftcard.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))
@@ -472,13 +472,10 @@ class Paymentmethod : BaseFragment(), TextWatcher {
     // set common toolbar from this and set pre fragment toolbar from this.
 
     fun setToolbarforThis() {
-        (activity as EpayActivity).txt_toolbar.text = getString(R.string.payment)
-     //   (activity as EpayActivity).img_toolbar_back.setOnClickListener { onBackpress() }
+        txt_toolbar.text = getString(R.string.payment)
+        img_toolbar_back.setOnClickListener { (activity as HomeActivity).onBackPressed() }
     }
 
-    fun onBackpress() {
-        (activity as EpayActivity).popFragment()
-    }
 
     fun onlineTransactionFailed(){
         // in case user do cancel from transction screen.
@@ -487,7 +484,7 @@ class Paymentmethod : BaseFragment(), TextWatcher {
         callAPI(ApiCall.cancelordertransaction(
                 r_key =PreferenceUtil.getString(PreferenceUtil.R_KEY, "")!!,
                 r_token = PreferenceUtil.getString(PreferenceUtil.R_TOKEN, "")!!,
-                order_no = EpayActivity.paymentattributes.order_no
+                order_no = EpayFragment.paymentattributes.order_no
 
         ), object : BaseFragment.OnApiCallInteraction {
 

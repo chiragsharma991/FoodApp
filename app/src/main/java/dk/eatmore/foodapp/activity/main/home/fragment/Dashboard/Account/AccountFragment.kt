@@ -38,6 +38,7 @@ import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.activity.main.epay.EpayActivity
+import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
@@ -45,6 +46,7 @@ import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.Constants
 import dk.eatmore.foodapp.utils.DialogUtils
+import kotlinx.android.synthetic.main.activity_epay.*
 import retrofit2.Call
 import java.util.regex.Pattern
 
@@ -93,18 +95,18 @@ class AccountFragment : BaseFragment() {
             logd(TAG, "saveInstance NULL")
             txt_toolbar.text = getString(R.string.my_profile)
             img_toolbar_back.visibility=View.GONE
-           /* acc_password_edt.imeOptions = EditorInfo.IME_ACTION_DONE
-            acc_password_edt.setOnEditorActionListener(object  : TextView.OnEditorActionListener{
-                override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                    if(actionId == EditorInfo.IME_ACTION_DONE){
-                        moveon_login()
-                        return true
-                    }else{
-                        return false
-                    }
-                }
+            /* acc_password_edt.imeOptions = EditorInfo.IME_ACTION_DONE
+             acc_password_edt.setOnEditorActionListener(object  : TextView.OnEditorActionListener{
+                 override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                     if(actionId == EditorInfo.IME_ACTION_DONE){
+                         moveon_login()
+                         return true
+                     }else{
+                         return false
+                     }
+                 }
 
-            })*/
+             })*/
 
 
             acc_forgot_txt.setOnClickListener {
@@ -135,7 +137,7 @@ class AccountFragment : BaseFragment() {
         }
     }
 
-     private fun moveon_login(username : String , password_hash : String){
+    private fun moveon_login(username : String , password_hash : String){
 
         if (isValidate()) {
             acc_email_edt.clearFocus()
@@ -146,7 +148,6 @@ class AccountFragment : BaseFragment() {
             jsonobject.addProperty(Constants.USERNAME, username)
             jsonobject.addProperty(Constants.PASSWORD_HASH, password_hash)
             jsonobject.addProperty(Constants.DEVICE_TYPE, Constants.DEVICE_TYPE_VALUE)
-            jsonobject.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
             jsonobject.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
             val call = ApiCall.login(jsonobject)
             loginAttempt(call)
@@ -262,7 +263,6 @@ class AccountFragment : BaseFragment() {
                     jsonobject.addProperty(Constants.FB_EMAIL, facebookemail)
                     jsonobject.addProperty(Constants.IS_FACEBOOK, "1")
                     jsonobject.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
-                    jsonobject.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
                     showProgressDialog()
                     val call = ApiCall.fBlogin(jsonobject)
                     loginAttempt(call)
@@ -320,10 +320,12 @@ class AccountFragment : BaseFragment() {
         if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true
         if(HomeFragment.ui_model?.reloadfragment !=null) HomeFragment.ui_model!!.reloadfragment.value=true  // reload last order from homefragment.
         // When user is comming from cart to login then:
-        if (EpayActivity.moveonEpay){
-            loge(TAG,"moveonEpay"+EpayActivity.moveonEpay)
+        if (EpayFragment.moveonEpay){
+            loge(TAG,"Moveonepay"+EpayFragment.moveonEpay)
+            val epayFragment=((activity as HomeActivity).getHomeContainerFragment()as HomeContainerFragment).getHomeFragment().childFragmentManager.findFragmentByTag(EpayFragment.TAG)
+            if(epayFragment !=null) epayFragment.epay_continue_btn.text=getString(R.string.continue_)
             ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0)
-            EpayActivity.moveonEpay=false
+            EpayFragment.moveonEpay=false
         }
 
 
@@ -369,7 +371,7 @@ class AccountFragment : BaseFragment() {
                     override fun onSuccess(loginResult: LoginResult) {
                         // App code
                         loge(TAG, "---success---")
-                    //    handleFacebookAccessToken(loginResult.getAccessToken());
+                        //    handleFacebookAccessToken(loginResult.getAccessToken());
 
                         val request = GraphRequest.newMeRequest(
                                 loginResult.accessToken
@@ -434,7 +436,6 @@ class AccountFragment : BaseFragment() {
                                     jsonobject.addProperty(Constants.FB_EMAIL, facebookemail)
                                     jsonobject.addProperty(Constants.IS_FACEBOOK, "1")
                                     jsonobject.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
-                                    jsonobject.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
                                     val call = ApiCall.fBlogin(jsonobject)
                                     loginAttempt(call)
 
@@ -480,7 +481,6 @@ class AccountFragment : BaseFragment() {
         jsonobject.addProperty(Constants.FB_EMAIL, facebookemail)
         jsonobject.addProperty(Constants.IS_FACEBOOK, "1")
         jsonobject.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
-        jsonobject.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
         val call = ApiCall.fBlogin(jsonobject)
         loginAttempt(call)
 

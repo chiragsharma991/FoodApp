@@ -14,6 +14,7 @@ import com.facebook.AccessToken
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.AccountFragment
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.OpeningHours
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.CategoryList
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
@@ -96,32 +97,39 @@ class HomeActivity : BaseActivity() {
 
     override fun onBackPressed() {
         loge(TAG, "back pressed...")
+        mHomeContainerFragment.getContainerFragment().popFragment()
 
-        val fragment = supportFragmentManager.findFragmentById(R.id.home_container)
-        when(fragment){
-            is HomeContainerFragment ->{
-                loge(TAG,"Home container fragment---")
-                 mHomeContainerFragment.getContainerFragment().popFragment()
-            }
+        /*     val fragment = supportFragmentManager.findFragmentById(R.id.home_container)
+             when(fragment){
+                 is HomeContainerFragment ->{
+                     loge(TAG,"Home container fragment---")
+                      mHomeContainerFragment.getContainerFragment().popFragment()
+                 }
 
-            else ->{
-                loge(TAG,"Detail container fragment---")
-                supportFragmentManager.popBackStack()
-            }
+                 else ->{
+                     loge(TAG,"Detail container fragment---")
+                     supportFragmentManager.popBackStack()
+                 }
 
-        }
+             }*/
     }
 
-    fun is_reorderprocess() : Boolean{
+    fun fragmentTab_is() : Int{
 
-        // check which home screen is open?
-        val fragment = supportFragmentManager.findFragmentById(R.id.home_container)
-        when(fragment){
-            is HomeContainerFragment ->{
-                return false
+        // check which screen is open?
+        var result : Int = 0
+        when(mHomeContainerFragment.getContainerFragment()){
+            is HomeFragment ->{
+                result= 0
+            }
+            is OrderFragment ->{
+                result= 1
+            }
+            is AccountFragment ->{
+                result= 2
             }
         }
-        return true
+        return result
     }
 
 

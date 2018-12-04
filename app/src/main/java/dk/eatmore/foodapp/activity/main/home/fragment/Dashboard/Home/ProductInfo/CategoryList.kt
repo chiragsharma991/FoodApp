@@ -2,12 +2,16 @@ package dk.eatmore.foodapp.fragment.ProductInfo
 
 
 import android.content.Intent
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.util.Pair
 import android.support.v7.app.AppCompatActivity
 import android.support.v7.widget.LinearLayoutManager
+import android.transition.ChangeBounds
+import android.transition.Slide
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -16,6 +20,7 @@ import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
 import dk.eatmore.foodapp.activity.main.epay.EpayActivity
+import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.epay.fragment.TransactionStatus
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerCallback
@@ -98,12 +103,30 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
             recycler_view_category.adapter = mAdapter
             viewcart.setOnClickListener {
                 if(DetailsFragment.total_cartcnt == 0) return@setOnClickListener
-                val intent = Intent(activity, EpayActivity::class.java)
-                val bundle= Bundle()
-                bundle.putSerializable(Constants.RESTAURANT,restaurant)
-                intent.putExtras(bundle)
-                startActivityForResult(intent,1)
 
+                val fragment = EpayFragment.newInstance(restaurant)
+                var enter : Slide?=null
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    enter = Slide()
+                    enter.setDuration(300)
+                    enter.slideEdge = Gravity.BOTTOM
+                    val changeBoundsTransition : ChangeBounds = ChangeBounds()
+                    changeBoundsTransition.duration = 300
+                    fragment.sharedElementEnterTransition=changeBoundsTransition
+                    fragment.enterTransition=enter
+                }
+                if((activity as HomeActivity).fragmentTab_is() == 1)
+                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment().addFragment(R.id.home_order_container,fragment,EpayFragment.TAG,false)
+                else
+                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().addFragment(R.id.home_fragment_container,fragment, EpayFragment.TAG,false)
+
+
+                /*   val intent = Intent(activity, EpayActivity::class.java)
+                   val bundle= Bundle()
+                   bundle.putSerializable(Constants.RESTAURANT,restaurant)
+                   intent.putExtras(bundle)
+                   startActivityForResult(intent,1)
+   */
             }
 
 
@@ -114,43 +137,42 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
 
     fun updatebatchcount(count: Int) {
         badge_notification_txt.visibility = if (DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
-      //  viewcart.alpha= if (DetailsFragment.total_cartcnt == 0) 0.3f else 0.9f
-        viewcart.visibility= if(DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
+        viewcart.alpha= if (DetailsFragment.total_cartcnt == 0) 0.3f else 0.9f
         badge_notification_txt.text = DetailsFragment.total_cartcnt.toString()
         badge_countprice.text = BindDataUtils.convertCurrencyToDanish(DetailsFragment.total_cartamt)
     }
 
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        loge("onActivityResult categorylist---", "" + resultCode + " " + requestCode)
-        // request : send code with request
-        // result :  get code from target activity
+    /* override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+         loge("onActivityResult categorylist---", "" + resultCode + " " + requestCode)
+         // request : send code with request
+         // result :  get code from target activity
 
-        if ((activity as HomeActivity).is_reorderprocess()) {
-            // If user is coming from reorder>>>>
-            if (requestCode == 1 && resultCode == AppCompatActivity.DEFAULT_KEYS_SHORTCUT && TransactionStatus.moveonsearch) {
-                // back press from transaction success and continue.
-                TransactionStatus.moveonsearch = false
-                (activity as HomeActivity).popAllReorderFragment()
-                //  ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getContainerFragment().popAllFragment()
-            }
-        } else {
-            // If user is coming from Homecontainer >>>>
-            if (requestCode == 1 && resultCode == AppCompatActivity.DEFAULT_KEYS_SHORTCUT && TransactionStatus.moveonsearch) {
-                // back press from transaction success and continue.
-                TransactionStatus.moveonsearch = false
-                val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
-                (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
+         if ((activity as HomeActivity).is_reorderprocess()) {
+             // If user is coming from reorder>>>>
+             if (requestCode == 1 && resultCode == AppCompatActivity.DEFAULT_KEYS_SHORTCUT && TransactionStatus.moveonsearch) {
+                 // back press from transaction success and continue.
+                 TransactionStatus.moveonsearch = false
+                 (activity as HomeActivity).popAllReorderFragment()
+                 //  ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getContainerFragment().popAllFragment()
+             }
+         } else {
+             // If user is coming from Homecontainer >>>>
+             if (requestCode == 1 && resultCode == AppCompatActivity.DEFAULT_KEYS_SHORTCUT && TransactionStatus.moveonsearch) {
+                 // back press from transaction success and continue.
+                 TransactionStatus.moveonsearch = false
+                 val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
+                 (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
 
-                //  ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getContainerFragment().popAllFragment()
-            } else if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK && EpayActivity.moveonEpay) {
-                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2)
-            }
-        }
+                 //  ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getContainerFragment().popAllFragment()
+             } else if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK && EpayActivity.moveonEpay) {
+                 ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2)
+             }
+         }
 
 
 
-    }
+     }*/
 
 
     override fun <T> onClick(model: T?) {
@@ -187,7 +209,6 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
         postParam.addProperty(Constants.P_ID, data.p_id)
         postParam.addProperty(Constants.P_PRICE, data.p_price)
         postParam.addProperty(Constants.P_QUANTITY, "1")
-        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
 
         callAPI(ApiCall.addtocart(
                 jsonObject = postParam

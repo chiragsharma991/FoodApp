@@ -1,48 +1,39 @@
 package dk.eatmore.foodapp.fragment.ProductInfo
 
-import android.app.Activity.RESULT_OK
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.databinding.DataBindingUtil
+import android.graphics.BitmapFactory
+import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
+import android.support.v4.content.ContextCompat
+import android.support.v4.content.LocalBroadcastManager
+import android.support.v7.graphics.Palette
+import android.transition.ChangeBounds
+import android.transition.Slide
+import android.util.Log
+import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import dk.eatmore.foodapp.adapter.OrderListAdapter
-import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
-import dk.eatmore.foodapp.utils.BaseFragment
-import android.support.v4.content.ContextCompat
-import android.graphics.BitmapFactory
-import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.util.Pair
-import android.support.v7.graphics.Palette
-import android.view.animation.Animation
-import android.view.animation.TranslateAnimation
-import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.epay.EpayActivity
-import dk.eatmore.foodapp.utils.TransitionHelper
-import android.support.design.widget.AppBarLayout
-import android.support.v4.content.LocalBroadcastManager
-import android.support.v7.app.AppCompatActivity
-import android.util.Log
-import android.view.animation.AlphaAnimation
-import android.widget.TextView
 import com.bumptech.glide.Glide
-import dk.eatmore.foodapp.activity.main.epay.fragment.TransactionStatus
+import dk.eatmore.foodapp.R
+import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Info
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Menu
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Rating
+import dk.eatmore.foodapp.adapter.OrderListAdapter
 import dk.eatmore.foodapp.databinding.FragmentDetailBinding
-import dk.eatmore.foodapp.databinding.InfoRestaurantBinding
+import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.model.home.Restaurant
-import dk.eatmore.foodapp.storage.PreferenceUtil
+import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.BindDataUtils
 import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.fragment_detail.*
@@ -85,7 +76,7 @@ class DetailsFragment : BaseFragment() {
 
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-       //  return inflater.inflate(getLayout(), container, false)
+        //  return inflater.inflate(getLayout(), container, false)
 
         binding = DataBindingUtil.inflate(inflater, getLayout(), container, false)
         return binding.root
@@ -125,7 +116,7 @@ class DetailsFragment : BaseFragment() {
             adapter = ViewPagerAdapter(childFragmentManager)
             when (arguments!!.getString(Constants.STATUS)) {
                 getString(R.string.closed) -> {
-                   // adapter!!.addFragment(Menu.newInstance(restaurant), getString(R.string.menu))
+                    // adapter!!.addFragment(Menu.newInstance(restaurant), getString(R.string.menu))
                     adapter!!.addFragment(Rating.newInstance(restaurant), getString(R.string.rating))
                     adapter!!.addFragment(Info.newInstance(restaurant), getString(R.string.info))
                     viewpager.offscreenPageLimit = 2
@@ -142,11 +133,30 @@ class DetailsFragment : BaseFragment() {
             //  setPalette()
             viewcart.setOnClickListener {
                 if(total_cartcnt==0) return@setOnClickListener
-                val intent = Intent(activity, EpayActivity::class.java)
-                val bundle= Bundle()
-                bundle.putSerializable(Constants.RESTAURANT,restaurant)
-                intent.putExtras(bundle)
-                startActivityForResult(intent,1)
+
+                val fragment = EpayFragment.newInstance(restaurant)
+                var enter : Slide?=null
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    enter = Slide()
+                    enter.setDuration(300)
+                    enter.slideEdge = Gravity.BOTTOM
+                    val changeBoundsTransition : ChangeBounds = ChangeBounds()
+                    changeBoundsTransition.duration = 300
+                    fragment.sharedElementEnterTransition=changeBoundsTransition
+                    fragment.enterTransition=enter
+                }
+
+                if((activity as HomeActivity).fragmentTab_is() == 1)
+                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment().addFragment(R.id.home_order_container,fragment,EpayFragment.TAG,false)
+                else
+                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().addFragment(R.id.home_fragment_container,fragment,EpayFragment.TAG,false)
+
+
+                /*    val intent = Intent(activity, EpayActivity::class.java)
+                    val bundle= Bundle()
+                    bundle.putSerializable(Constants.RESTAURANT,restaurant)
+                    intent.putExtras(bundle)
+                    startActivityForResult(intent,1)*/
             }
 
         } else {
@@ -155,7 +165,7 @@ class DetailsFragment : BaseFragment() {
     }
 
     private fun broadcastEvent(){
-         mYourBroadcastReceiver = object  : BroadcastReceiver(){
+        mYourBroadcastReceiver = object  : BroadcastReceiver(){
             override fun onReceive(context: Context?, intent: Intent?) {
                 loge(TAG,"broadcast receive...")
                 if(intent!!.action == Constants.CARTCOUNT_BROADCAST){
@@ -167,8 +177,8 @@ class DetailsFragment : BaseFragment() {
                     updatebatchcount(0)
 
                     // check if category screen is present then update therir batch count as well as this screen.
-                    if((activity as HomeActivity).is_reorderprocess()){
-                        val fragment = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(CategoryList.TAG)
+                    if((activity as HomeActivity).fragmentTab_is() == 1){
+                        val fragment = ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment().childFragmentManager.findFragmentByTag(CategoryList.TAG)
                         if(fragment !=null){
                             (fragment as CategoryList).updatebatchcount(0)
                         }
@@ -194,43 +204,43 @@ class DetailsFragment : BaseFragment() {
         // this is update method will call in both category and details.
         total_cartcnt= total_cartcnt + count
         badge_notification_txt.visibility = if (total_cartcnt == 0) View.GONE else View.VISIBLE
-      //  viewcart.alpha= if (total_cartcnt == 0) 0.3f else 0.9f
-        viewcart.visibility=if (total_cartcnt == 0) View.GONE else View.VISIBLE
+        viewcart.alpha= if (total_cartcnt == 0) 0.3f else 0.9f
         badge_notification_txt.text= total_cartcnt.toString()
         badge_countprice.text= BindDataUtils.convertCurrencyToDanish(total_cartamt)
     }
 
 
     fun onBackpress() {
-       // parentFragment!!.childFragmentManager.popBackStack()
+        // parentFragment!!.childFragmentManager.popBackStack()
         (activity as HomeActivity).onBackPressed()
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        loge("onActivityResult Detail fragment---",""+resultCode+" "+requestCode)
-        // request : send code with request
-        // result :  get code from target activity.
-        if((activity as HomeActivity).is_reorderprocess()){
-            // If user is coming from reorder>>>>
-            if(requestCode ==1 && resultCode == AppCompatActivity.DEFAULT_KEYS_SHORTCUT && TransactionStatus.moveonsearch){
-                // back press from transaction success and continue.
-                TransactionStatus.moveonsearch=false
-                (activity as HomeActivity).popAllReorderFragment()
-            }
-        }else{
-            // If user is coming from Homecontainer >>>>
-            if(requestCode ==1 && resultCode == AppCompatActivity.DEFAULT_KEYS_SHORTCUT && TransactionStatus.moveonsearch){
-                // back press from transaction success and continue.
-                TransactionStatus.moveonsearch=false
-                val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
-                (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
-            }
+    /*   fun onFragmentResult(requestCode: Int, resultCode: Int) {
+          loge("onActivityResult Detail fragment---",""+resultCode+" "+requestCode)
+          // request : send code with request
+          // result :  get code from target activity.
+          val fragment= ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getContainerFragment()
+          if(fragment is OrderFragment){
+              // If user is coming from reorder>>>>
+              if(requestCode ==1 && resultCode == 1 && TransactionStatus.moveonsearch){
+                  // back press from transaction success and continue.
+                  TransactionStatus.moveonsearch=false
+                  fragment.popAllFragment()
+              }
+          }else{
+              // If user is coming from Homecontainer >>>>
+              if(requestCode ==1 && resultCode == 1 && TransactionStatus.moveonsearch){
+                  // back press from transaction success and continue.
+                  TransactionStatus.moveonsearch=false
+                  val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
+                  (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
+              }
 
-            else if(requestCode ==1 && resultCode == AppCompatActivity.RESULT_OK && EpayActivity.moveonEpay ){
-                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2)
-            }
-        }
-    }
+              else if(requestCode ==1 && resultCode == 2 && EpayFragment.moveonEpay ){
+                  ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2)
+              }
+          }
+      }*/
 
     fun setPalette() {
 

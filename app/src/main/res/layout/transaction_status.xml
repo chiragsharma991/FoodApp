@@ -55,6 +55,18 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
 
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/app_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include layout="@layout/toolbar">
+
+                </include>
+
+
+            </android.support.design.widget.AppBarLayout>
+
 
             <android.support.v7.widget.CardView
                 android:id="@+id/address_card"

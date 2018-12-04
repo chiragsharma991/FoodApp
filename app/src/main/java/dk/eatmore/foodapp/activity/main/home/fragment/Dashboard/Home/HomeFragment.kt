@@ -129,10 +129,12 @@ class HomeFragment : CommanAPI() {
     fun checkFirebaseAnalytics() {
         val bundle = Bundle()
         bundle.putString("ButtonId", "1234");
-     //   bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "test");
-     //   bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
+        //   bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "test");
+        //   bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
         firebaseAnalytics.logEvent("checkButtonTest", bundle);
         //firebaseAnalytics.setAnalyticsCollectionEnabled(true);
+
+
     }
 
 
@@ -241,7 +243,6 @@ class HomeFragment : CommanAPI() {
         postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
         postParam.addProperty(Constants.EATMORE_APP, true)
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
-        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
 
         callAPI(ApiCall.lastorder(postParam), object : BaseFragment.OnApiCallInteraction {
             override fun <T> onSuccess(body: T?) {
@@ -257,7 +258,7 @@ class HomeFragment : CommanAPI() {
 
                 } else {
                     count = 0
-                    if (swipeAdapter != null) swipeAdapter!!.notifyDataSetChanged()
+                    swipeAdapter!!.notifyDataSetChanged()
                 }
             }
 

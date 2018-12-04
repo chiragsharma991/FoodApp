@@ -24,7 +24,6 @@ import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.RateOrder
 import dk.eatmore.foodapp.databinding.FragmentOrderedRestaurantBinding
-import dk.eatmore.foodapp.model.ModelUtility
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
@@ -82,21 +81,21 @@ class OrderedRestaurant : CommanAPI() {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         loge(TAG,"saveInstance "+savedInstanceState)
         if(savedInstanceState == null){
-        model = arguments!!.getSerializable(Constants.ORDERRESULT) as OrderFragment.Orderresult
-        myclickhandler=  MyClickHandler(this)
-        //txt_toolbar.text=getString(R.string.orders)
-        txt_toolbar_right.text=Constants.REORDER
-        txt_toolbar_right.setOnClickListener{
-            if(progress_bar.visibility == View.GONE){
-              //  (parentFragment as OrderFragment).fetchReorder_info(model)
-              //  (activity as HomeActivity).onBackPressed()
-                fetchReorder_info(model,orderedrestaurant_container)
+            model = arguments!!.getSerializable(Constants.ORDERRESULT) as OrderFragment.Orderresult
+            myclickhandler=  MyClickHandler(this)
+            //txt_toolbar.text=getString(R.string.orders)
+            txt_toolbar_right.text=Constants.REORDER
+            txt_toolbar_right.setOnClickListener{
+                if(progress_bar.visibility == View.GONE){
+                    //  (parentFragment as OrderFragment).fetchReorder_info(model)
+                    //  (activity as HomeActivity).onBackPressed()
+                    fetchReorder_info(model,orderedrestaurant_container)
+                }
             }
-        }
-       img_toolbar_back.setOnClickListener { (activity as HomeActivity).onBackPressed()}
-       setanim_toolbartitle(appbar, txt_toolbar, getString(R.string.orders))
-         ui_model = createViewModel()
-        fetchRestaurant_info()
+            img_toolbar_back.setOnClickListener { (activity as HomeActivity).onBackPressed()}
+            setanim_toolbartitle(appbar, txt_toolbar, getString(R.string.orders))
+            ui_model = createViewModel()
+            fetchRestaurant_info()
         }
     }
 
@@ -252,8 +251,8 @@ class OrderedRestaurant : CommanAPI() {
                 }
             }
             add_parentitem_view.addView(view)
-         //   subtotal.text= BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.order_total.toString()) ?: "null"
-         //   total.text= BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.order_total.toString()) ?: "null"
+            //   subtotal.text= BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.order_total.toString()) ?: "null"
+            //   total.text= BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.order_total.toString()) ?: "null"
         }
         generateBillDetails()
     }
@@ -266,7 +265,6 @@ class OrderedRestaurant : CommanAPI() {
         postParam.addProperty(Constants.EATMORE_APP,true)
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
         postParam.addProperty(Constants.ORDER_NO,arguments!!.getString(Constants.ORDER_NO))
-        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
 
         callAPI(ApiCall.orderdetails(postParam), object : BaseFragment.OnApiCallInteraction {
             override fun <T> onSuccess(body: T?) {
@@ -282,7 +280,7 @@ class OrderedRestaurant : CommanAPI() {
             override fun onFail(error: Int) {
                 when (error) {
                     404 -> {
-                       showSnackBar(orderedrestaurant_container, getString(R.string.error_404))
+                        showSnackBar(orderedrestaurant_container, getString(R.string.error_404))
                     }
                     100 -> {
 
@@ -297,7 +295,7 @@ class OrderedRestaurant : CommanAPI() {
 
 
     private fun on_rating() {
-       loge(TAG,"on rating...")
+        loge(TAG,"on rating...")
         if(model.order_status.toLowerCase() == Constants.ACCEPTED){
             val fragment = RateOrder.newInstance(order_no = arguments!!.getString(Constants.ORDER_NO),orderresult = model)
             var enter : Slide?=null
@@ -375,7 +373,7 @@ data class OrderedDetails(
         val msg: String = "",
         val status: Boolean = false,
         val data: ArrayList<Data> // you can always fetch this, using get(0)
-): ModelUtility()
+)
 
 data class Data(
         val order_no : String ="",
@@ -401,7 +399,7 @@ data class Orderproducts_Details(
         val removed_ingredients : ArrayList<RemovedIngredientsItem>,
         val ordered_product_attributes : ArrayList<OrderedProductAttributesItem>?=null,
         val order_product_extra_topping_group : ArrayList<OrderProductExtraToppingGroupItem>?=null
-        )
+)
 
 data class Products(
         val is_attributes : String? =null,

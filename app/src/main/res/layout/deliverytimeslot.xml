@@ -26,26 +26,43 @@
         android:background="@color/white"
         >
 
-
         <RelativeLayout
-            android:id="@+id/home_account_container"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:visibility="visible"
-            android:fitsSystemWindows="true"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:layout_marginEnd="@dimen/_8sdp"
-            android:layout_marginTop="@dimen/_8sdp"
-            android:layout_marginBottom="@dimen/_8sdp"
-            android:layout_below="@+id/toolbar_layout"
 
             >
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/app_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
 
-            <android.support.v4.widget.NestedScrollView
-                android:id="@+id/scroll_view"
+                <include layout="@layout/toolbar">
+
+                </include>
+
+
+            </android.support.design.widget.AppBarLayout>
+
+
+            <RelativeLayout
+                android:id="@+id/home_account_container"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fillViewport="true">
+                android:visibility="visible"
+                android:fitsSystemWindows="true"
+                android:layout_marginStart="@dimen/_8sdp"
+                android:layout_marginEnd="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginBottom="@dimen/_8sdp"
+                android:layout_below="@+id/app_bar"
+
+                >
+
+                <android.support.v4.widget.NestedScrollView
+                    android:id="@+id/scroll_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:fillViewport="true">
 
                     <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
@@ -189,7 +206,7 @@
                     </android.support.constraint.ConstraintLayout>
 
 
-            </android.support.v4.widget.NestedScrollView>
+                </android.support.v4.widget.NestedScrollView>
 
 
 
@@ -197,9 +214,13 @@
 
 
 
+
+
+            </RelativeLayout>
 
 
         </RelativeLayout>
+
 
 
 

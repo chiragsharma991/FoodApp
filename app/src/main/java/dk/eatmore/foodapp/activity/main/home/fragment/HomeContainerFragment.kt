@@ -48,6 +48,9 @@ class HomeContainerFragment : BaseFragment() {
     fun getHomeFragment(): HomeFragment {
         return mAdapter.getHomeFragment()
     }
+    fun getOrderFragment(): OrderFragment {
+        return mAdapter.getOrderFragment()
+    }
 
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {

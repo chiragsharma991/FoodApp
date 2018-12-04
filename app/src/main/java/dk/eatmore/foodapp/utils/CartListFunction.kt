@@ -7,7 +7,7 @@ import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
-import dk.eatmore.foodapp.activity.main.epay.EpayActivity
+import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.epay.fragment.Paymentmethod
 import dk.eatmore.foodapp.model.cart.ProductAttributeListItem
 import dk.eatmore.foodapp.model.cart.ProductDetails
@@ -161,63 +161,61 @@ object CartListFunction {
     }
 
 
-  /*  "status": true,
-         "is_user_deleted": false,
-    "is_restaurant_closed": false,
-    "paymethod": "Online Payment",
-    "order_total": 31.34,
-    "msg": "Checkout Successfully",
-    "epay_merchant": "6673007",
-    "order_no": 95,
-    "pre_order": true*/
+    /*  "status": true,
+           "is_user_deleted": false,
+      "is_restaurant_closed": false,
+      "paymethod": "Online Payment",
+      "order_total": 31.34,
+      "msg": "Checkout Successfully",
+      "epay_merchant": "6673007",
+      "order_no": 95,
+      "pre_order": true*/
 
 
-     fun getcartpaymentAttributes (context : Context) : Call<JsonObject>? {
+    fun getcartpaymentAttributes (context : Context) : Call<JsonObject>? {
         val checkout_api : Call<JsonObject>
 
         val postParam = JsonObject()
         try {
             postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
             postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
-            postParam.addProperty(Constants.FIRST_TIME, EpayActivity.paymentattributes.first_time)
+            postParam.addProperty(Constants.FIRST_TIME, EpayFragment.paymentattributes.first_time)
             postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,"") )
-           // postParam.addProperty(Constants.POSTAL_CODE, EpayActivity.paymentattributes.postal_code)
-            postParam.addProperty(Constants.DISCOUNT_TYPE, EpayActivity.paymentattributes.discount_type)
-            postParam.addProperty(Constants.DISCOUNT_AMOUNT, EpayActivity.paymentattributes.discount_amount)
-            postParam.addProperty(Constants.DISCOUNT_ID,EpayActivity.paymentattributes.discount_id)
-            postParam.addProperty(Constants.SHIPPING, if (EpayActivity.isPickup) context.getString(R.string.pickup) else context.getString(R.string.delivery))
-            postParam.addProperty(Constants.TELEPHONE_NO, EpayActivity.paymentattributes.telephone_no)
-            postParam.addProperty(Constants.ORDER_TOTAL, EpayActivity.paymentattributes.order_total)
+            // postParam.addProperty(Constants.POSTAL_CODE, EpayFragment.paymentattributes.postal_code)
+            postParam.addProperty(Constants.DISCOUNT_TYPE, EpayFragment.paymentattributes.discount_type)
+            postParam.addProperty(Constants.DISCOUNT_AMOUNT, EpayFragment.paymentattributes.discount_amount)
+            postParam.addProperty(Constants.DISCOUNT_ID,EpayFragment.paymentattributes.discount_id)
+            postParam.addProperty(Constants.SHIPPING, if (EpayFragment.isPickup) context.getString(R.string.pickup) else context.getString(R.string.delivery))
+            postParam.addProperty(Constants.TELEPHONE_NO, EpayFragment.paymentattributes.telephone_no)
+            postParam.addProperty(Constants.ORDER_TOTAL, EpayFragment.paymentattributes.order_total)
             postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
             postParam.addProperty(Constants.ACCEPT_TC, "1")
             postParam.addProperty(Constants.PAYMETHOD, if(Paymentmethod.isPaymentonline) "1" else "2" )
-            postParam.addProperty(Constants.EXPECTED_TIME, EpayActivity.paymentattributes.expected_time)
-            postParam.addProperty(Constants.COMMENTS, EpayActivity.paymentattributes.comments)
+            postParam.addProperty(Constants.EXPECTED_TIME, EpayFragment.paymentattributes.expected_time)
+            postParam.addProperty(Constants.COMMENTS, EpayFragment.paymentattributes.comments)
             postParam.addProperty(Constants.DEVICE_TYPE,Constants.DEVICE_TYPE_VALUE)
-            postParam.addProperty(Constants.FIRST_NAME, EpayActivity.paymentattributes.first_name)
-            postParam.addProperty(Constants.ADDITIONAL_CHARGE, if(Paymentmethod.isPaymentonline) EpayActivity.paymentattributes.additional_charges_online else EpayActivity.paymentattributes.additional_charges_cash)
-            postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+            postParam.addProperty(Constants.FIRST_NAME, EpayFragment.paymentattributes.first_name)
+            postParam.addProperty(Constants.ADDITIONAL_CHARGE, if(Paymentmethod.isPaymentonline) EpayFragment.paymentattributes.additional_charges_online else EpayFragment.paymentattributes.additional_charges_cash)
             val jsonarray=JsonArray()
-            for (i in 0.until(EpayActivity.selected_op_id.size) ){
+            for (i in 0.until(EpayFragment.selected_op_id.size) ){
                 val jsonobject= JsonObject()
-                jsonobject.addProperty(Constants.OP_ID, EpayActivity.selected_op_id.get(i))
+                jsonobject.addProperty(Constants.OP_ID, EpayFragment.selected_op_id.get(i))
                 jsonarray.add(jsonobject)
             }
             postParam.add(Constants.CARTPRODUCTS,jsonarray )
 
-            if(EpayActivity.isPickup){
+            if(EpayFragment.isPickup){
                 //pickup--
                 checkout_api=ApiCall.checkout_pickup(postParam)
             }else{
                 // delivery--
-                postParam.addProperty(Constants.ADDRESS, EpayActivity.paymentattributes.address)
-                postParam.addProperty(Constants.POSTAL_CODE, EpayActivity.paymentattributes.postal_code)
-                postParam.addProperty(Constants.DISTANCE, EpayActivity.paymentattributes.distance)
-                postParam.addProperty(Constants.MINIMUM_ORDER_PRICE, EpayActivity.paymentattributes.minimum_order_price)
-                postParam.addProperty(Constants.SHIPPING_COSTS, EpayActivity.paymentattributes.shipping_charge)
-                postParam.addProperty(Constants.UPTO_MIN_SHIPPING, EpayActivity.paymentattributes.upto_min_shipping)
+                postParam.addProperty(Constants.ADDRESS, EpayFragment.paymentattributes.address)
+                postParam.addProperty(Constants.POSTAL_CODE, EpayFragment.paymentattributes.postal_code)
+                postParam.addProperty(Constants.DISTANCE, EpayFragment.paymentattributes.distance)
+                postParam.addProperty(Constants.MINIMUM_ORDER_PRICE, EpayFragment.paymentattributes.minimum_order_price)
+                postParam.addProperty(Constants.SHIPPING_COSTS, EpayFragment.paymentattributes.shipping_charge)
+                postParam.addProperty(Constants.UPTO_MIN_SHIPPING, EpayFragment.paymentattributes.upto_min_shipping)
                 postParam.addProperty(Constants.SHIPPING_REMARK, "")
-                postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
                 checkout_api= ApiCall.checkout_delivery(postParam)
             }
 

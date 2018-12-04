@@ -11,7 +11,8 @@ import android.view.View
 import android.view.ViewGroup
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.epay.EpayActivity
+import dk.eatmore.foodapp.activity.main.epay.EpayFragment
+import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.adapter.cart.CartViewAdapter
 import dk.eatmore.foodapp.databinding.DeliverytimeslotBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
@@ -93,11 +94,11 @@ class DeliveryTimeslot : BaseFragment() {
                 if(time_list?.size ?:0 > 0){
                     for ( entries in time_list!!.entries){
                         if(time_list!!.get(entries.key) == delivery_time_slot.text.trim().toString()){
-                            EpayActivity.paymentattributes.expected_time=entries.key
+                            EpayFragment.paymentattributes.expected_time=entries.key
                         }
                     }
-                    EpayActivity.paymentattributes.comments=comment_edt.text.trim().toString()
-                    (activity as EpayActivity).addFragment(R.id.epay_container,Paymentmethod.newInstance(),Paymentmethod.TAG,true)
+                    EpayFragment.paymentattributes.comments=comment_edt.text.trim().toString()
+                    (parentFragment as EpayFragment).addFragment(R.id.epay_container,Paymentmethod.newInstance(),Paymentmethod.TAG,true)
                 }
                 else {
                     seterror(address_container)
@@ -105,7 +106,7 @@ class DeliveryTimeslot : BaseFragment() {
             }
 
         }else{
-            (activity as EpayActivity).popWithTag(DeliveryTimeslot.TAG)
+            //  (parentFragment as EpayFragment).popWithTag(DeliveryTimeslot.TAG)
         }
     }
 
@@ -116,8 +117,7 @@ class DeliveryTimeslot : BaseFragment() {
         val postParam = JsonObject()
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
-        postParam.addProperty(Constants.SHIPPING, if (EpayActivity.isPickup) getString(R.string.pickup) else getString(R.string.delivery))
-        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+        postParam.addProperty(Constants.SHIPPING, if (EpayFragment.isPickup) getString(R.string.pickup) else getString(R.string.delivery))
 
         callAPI(ApiCall.pickupinfo(
                 jsonObject = postParam
@@ -137,9 +137,9 @@ class DeliveryTimeslot : BaseFragment() {
                         delivery_time_slot.text= time_list!![entries.key].toString()
                         break
                     }
-                    EpayActivity.paymentattributes.additional_charges_cash=if(jsonobject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString=="") "0" else jsonobject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString
-                    EpayActivity.paymentattributes.additional_charges_online=if(jsonobject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString=="") "0" else jsonobject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString
-                    EpayActivity.paymentattributes.first_time=jsonobject.getAsJsonObject(Constants.RESULT).get(Constants.FIRST_TIME).asString
+                    EpayFragment.paymentattributes.additional_charges_cash=if(jsonobject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString=="") "0" else jsonobject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString
+                    EpayFragment.paymentattributes.additional_charges_online=if(jsonobject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString=="") "0" else jsonobject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString
+                    EpayFragment.paymentattributes.first_time=jsonobject.getAsJsonObject(Constants.RESULT).get(Constants.FIRST_TIME).asString
                     binding.isLoading=false
 
                 }else{
@@ -153,16 +153,14 @@ class DeliveryTimeslot : BaseFragment() {
                 when (error) {
                     404 -> {
                         showSnackBar(address_container, getString(R.string.error_404))
-                      //  binding.isLoading=false
+                        binding.isLoading=false
                     }
                     100 -> {
                         showSnackBar(address_container, getString(R.string.internet_not_available))
-                      //  binding.isLoading=false
+                        binding.isLoading=false
 
                     }
                 }
-                binding.isLoading=false
-
                 //showProgressDialog()
 
 
@@ -201,15 +199,11 @@ class DeliveryTimeslot : BaseFragment() {
     // set common toolbar from this and set pre fragment toolbar from this.
 
     fun setToolbarforThis() {
-        (activity as EpayActivity).txt_toolbar_right_img.visibility=View.GONE
-        (activity as EpayActivity).txt_toolbar.text = getString(R.string.confirm_delivery_time)
-      //  (activity as EpayActivity).img_toolbar_back.setOnClickListener { onBackpress() }
+        txt_toolbar.text = getString(R.string.confirm_delivery_time)
+        img_toolbar_back.setOnClickListener { (activity as HomeActivity).onBackPressed() }
     }
 
-    fun onBackpress() {
-        (activity as EpayActivity).popFragment()
 
-    }
 
 
 }

@@ -16,46 +16,75 @@
 
 
 
-        <FrameLayout
-            android:id="@+id/bambora_container"
+    <FrameLayout
+        android:id="@+id/bambora_container"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:fitsSystemWindows="true"
+        android:focusable="true"
+        >
+
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:clickable="true"
-            android:fitsSystemWindows="true"
-            android:focusable="true"
             >
 
-            <WebView
+            <android.support.design.widget.AppBarLayout
+                android:id="@+id/app_bar"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <include layout="@layout/toolbar">
+
+                </include>
+
+
+            </android.support.design.widget.AppBarLayout>
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:id="@+id/webiview"
-                android:visibility="visible"
+                android:layout_below="@+id/app_bar"
                 >
 
-            </WebView>
+                <WebView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:id="@+id/webiview"
+                    android:visibility="visible"
+                    >
+
+                </WebView>
 
 
-            <dk.eatmore.foodapp.utils.ProgressWheel
-                android:id="@+id/progresswheel"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical|center_horizontal"
-                ProgressWheel:pwTextColor="@android:color/transparent"
-                ProgressWheel:pwTextSize="9sp"
-                android:visibility="gone"
-                ProgressWheel:pwRimColor="@android:color/transparent"
-                ProgressWheel:pwBarLength="80dp"
-                ProgressWheel:pwBarColor ="@color/theme_color"
-                ProgressWheel:pwBarWidth="4dp"
-                ProgressWheel:pwRimWidth="1dp"
-                ProgressWheel:pwSpinSpeed="4dp"
-                />
+                <dk.eatmore.foodapp.utils.ProgressWheel
+                    android:id="@+id/progresswheel"
+                    android:layout_width="50dp"
+                    android:layout_height="50dp"
+                    android:layout_centerInParent="true"
+                    ProgressWheel:pwTextColor="@android:color/transparent"
+                    ProgressWheel:pwTextSize="9sp"
+                    android:visibility="visible"
+                    ProgressWheel:pwRimColor="@android:color/transparent"
+                    ProgressWheel:pwBarLength="80dp"
+                    ProgressWheel:pwBarColor ="@color/theme_color"
+                    ProgressWheel:pwBarWidth="4dp"
+                    ProgressWheel:pwRimWidth="1dp"
+                    ProgressWheel:pwSpinSpeed="4dp"
+                    />
 
 
 
 
+            </RelativeLayout>
 
-        </FrameLayout>
+
+        </RelativeLayout>
+
+
+
+    </FrameLayout>
 
 
 
