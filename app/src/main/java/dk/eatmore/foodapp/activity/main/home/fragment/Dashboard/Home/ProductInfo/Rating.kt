@@ -65,7 +65,6 @@ class Rating : BaseFragment(), RecyclerClickListner {
         //return inflater.inflate(getLayout(), container, false)
            binding= DataBindingUtil.inflate(inflater,getLayout(),container,false)
            return binding.root
-
     }
 
 

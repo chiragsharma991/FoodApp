@@ -6,6 +6,7 @@ import dk.eatmore.foodapp.model.ModelUtility
 data class ViewcardModel(
         val msg: String = "",
         val cartcnt: String = "",
+        val is_restaurant_closed: Boolean? = null,
         val order_total: Double = 0.0,
         val status: Boolean = false,
         val result: ArrayList<ResultItem>?

@@ -215,6 +215,7 @@ abstract class BaseFragment : Fragment() {
         childFragmentManager.popBackStack()
     }
 
+
     fun isInternetAvailable(): Boolean {
         val connectivityManager = activity?.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
         val activeNetworkInfo = connectivityManager.activeNetworkInfo

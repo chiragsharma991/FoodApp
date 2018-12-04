@@ -160,8 +160,41 @@ class EpayFragment : BaseFragment() {
             override fun <T> onSuccess(body: T?) {
                 val viewcardmodel = body as ViewcardModel
                 if (viewcardmodel.status) {
-                    ui_model!!.viewcard_list.value=viewcardmodel
-                    view_container.visibility= View.VISIBLE
+                    if(viewcardmodel.is_restaurant_closed !=null && viewcardmodel.is_restaurant_closed == true){
+                        // Test if restaurant is closed.
+                        val msg = viewcardmodel.msg
+                        DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!, R.color.black),msg = msg,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                            override fun onPositiveButtonClick(position: Int) {
+                                if(parentFragment is HomeFragment){
+                                    loop@ for(i in 0.until((parentFragment as HomeFragment).childFragmentManager.backStackEntryCount) ){
+                                        val homefragment = parentFragment as HomeFragment
+                                        loge("test--fragment--- ",homefragment.childFragmentManager.backStackEntryCount.toString())
+                                        val fragment = homefragment.childFragmentManager.findFragmentByTag(homefragment.childFragmentManager.getBackStackEntryAt(homefragment.childFragmentManager.backStackEntryCount - 1).name)
+                                        if (fragment != null && fragment.isVisible) {
+                                            when (fragment) {
+                                                is DetailsFragment -> {
+                                                    break@loop
+                                                } else->{
+                                                homefragment.childFragmentManager.popBackStack()
+                                            }
+                                            }
+                                        }
+                                    }
+
+                                }else{
+
+                                }
+                            }
+                            override fun onNegativeButtonClick() {
+                            }
+                        })
+                        progresswheel(progresswheel,false)
+
+                    }else{
+                        ui_model!!.viewcard_list.value=viewcardmodel
+                        view_container.visibility= View.VISIBLE
+                        progresswheel(progresswheel,false)
+                    }
 
                 } else {
                     ui_model!!.viewcard_list.value=null
@@ -277,7 +310,6 @@ class EpayFragment : BaseFragment() {
 
 
     private fun refresh_viewCard(){
-        progresswheel(progresswheel,false)
         if(ui_model!!.viewcard_list.value ==null){
             // this condition will null if all item has been deleted : so just clear view and inflate empty view on screen.
             add_parentitem_view.removeAllViewsInLayout()

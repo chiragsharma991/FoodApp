@@ -59,6 +59,15 @@ interface ApiInterface {
 
     @FormUrlEncoded
     @POST("Category/category/menu")
+    fun category_menu(
+            @Field("r_token") r_token: String ,
+            @Field("r_key") r_key: String,
+            @Field("customer_id") customer_id: String,
+            @Field("app") app : String
+    ): Call<JsonObject>
+
+    @FormUrlEncoded
+    @POST("Category/category/menu")
     fun restaurant_info(
             @Field("r_token") r_token: String ,
             @Field("r_key") r_key: String,
@@ -215,10 +224,13 @@ interface ApiInterface {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun viewcart(@Body jsonObject: JsonObject): Call<ViewcardModel>
 
-
     @POST("Cart/cart/deletefromcart")
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun deleteitemFromcart(@Body jsonObject: JsonObject): Call<JsonObject>
+
+    @POST("Enduser/enduser/restaurant-closed")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun restaurant_closed(@Body jsonObject: JsonObject): Call<JsonObject>
 
 
 }

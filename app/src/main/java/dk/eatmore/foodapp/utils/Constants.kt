@@ -42,6 +42,8 @@ class Constants {
     const  val R_KEY_N="r_key"
     const  val R_TOKEN_N="r_token"
     const  val RESTAURANT="restaurant"
+    const  val MENULISTITEM="menulistitem"
+    const  val RESTAURANT_INFOMODEL="RestaurantInfoModel"
     const  val APP_ICON="app_icon"
     const  val IP="ip"
     const  val QUALITY_OF_FOOD="quality_of_food"

@@ -41,6 +41,10 @@ class ApiCall {
             return getApiInterface().setProductList(r_token, r_key, customer_id,Constants.RESTAURANT_FOOD_ANDROID)
         }
 
+        fun category_menu (r_token : String, r_key : String, customer_id : String ) : Call<JsonObject> {
+            return getApiInterface().category_menu(r_token, r_key, customer_id,Constants.RESTAURANT_FOOD_ANDROID)
+        }
+
         fun restaurant_info(r_token : String, r_key : String, customer_id : String ) : Call<OrderFragment.Myorder_Model> {
             return getApiInterface().restaurant_info(r_token, r_key, customer_id,Constants.RESTAURANT_FOOD_ANDROID)
         }
@@ -91,6 +95,10 @@ class ApiCall {
 
         fun deleteitemFromcart(jsonObject: JsonObject) : Call<JsonObject> {
             return getApiInterface().deleteitemFromcart(jsonObject)
+        }
+
+        fun restaurant_closed(jsonObject: JsonObject) : Call<JsonObject> {
+            return getApiInterface().restaurant_closed(jsonObject)
         }
 
         fun openingHours(r_token : String , r_key : String) : Call<JsonObject> {

@@ -1,5 +1,9 @@
 package dk.eatmore.foodapp.fragment.ProductInfo
 
+import android.arch.lifecycle.MutableLiveData
+import android.arch.lifecycle.Observer
+import android.arch.lifecycle.ViewModel
+import android.arch.lifecycle.ViewModelProviders
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
@@ -22,6 +26,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.google.gson.GsonBuilder
+import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
@@ -32,12 +38,19 @@ import dk.eatmore.foodapp.adapter.OrderListAdapter
 import dk.eatmore.foodapp.databinding.FragmentDetailBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
+import dk.eatmore.foodapp.model.ModelUtility
+import dk.eatmore.foodapp.model.home.MenuListItem
 import dk.eatmore.foodapp.model.home.Restaurant
+import dk.eatmore.foodapp.rest.ApiCall
+import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.BindDataUtils
 import dk.eatmore.foodapp.utils.Constants
+import dk.eatmore.foodapp.utils.DialogUtils
 import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
+import retrofit2.Call
+import java.io.Serializable
 
 
 class DetailsFragment : BaseFragment() {
@@ -47,7 +60,9 @@ class DetailsFragment : BaseFragment() {
     var adapter: ViewPagerAdapter? = null
     private lateinit var binding: FragmentDetailBinding
     private lateinit var mYourBroadcastReceiver: BroadcastReceiver
-    private lateinit var restaurant : Restaurant
+   // private lateinit var restaurant : Restaurant
+    private var call_category_menu  : Call<JsonObject>? =null
+
 
 
 
@@ -61,8 +76,8 @@ class DetailsFragment : BaseFragment() {
         var total_cartamt : String = ""
         var delivery_charge_title : String = ""
         var delivery_charge : String = ""
+        var ui_model: UIModel? = null
         fun newInstance(restaurant: Restaurant, status: String): DetailsFragment {
-
 
             val fragment = DetailsFragment()
             val bundle = Bundle()
@@ -92,49 +107,92 @@ class DetailsFragment : BaseFragment() {
 
 
         if (savedInstanceState == null) {
-            //   Glide.with(this).load(ContextCompat.getDrawable(context!!,R.drawable.food_slash)).into(details_back_img);
-            restaurant = arguments?.getSerializable(Constants.RESTAURANT) as Restaurant
-            delivery_present=restaurant.delivery_present
-            pickup_present=restaurant.pickup_present
-            delivery_charge=restaurant.delivery_charge
-            delivery_charge_title=restaurant.delivery_charge_title
-            total_cartcnt =if(restaurant.cartcnt ==null || restaurant.cartcnt =="0") 0 else restaurant.cartcnt!!.toInt()
-            total_cartamt =if(restaurant.cartamt ==null || restaurant.cartamt =="0") "00.00" else restaurant.cartamt.toString()
-            updatebatchcount(0)
-            val myclickhandler = MyClickHandler(this)
-            binding.restaurant = restaurant
-            binding.handler = myclickhandler
-            //detail_fab_btn.startAnimation(translateAnim(800f, 0f, 0f, 0f, 700, true))
-            //detail_item_info.startAnimation(translateAnim(-800f, 0f, 0f, 0f, 700, true))
-            // DrawableCompat.setTint(ContextCompat.getDrawable(context!!,R.drawable.close)!!, ContextCompat.getColor(context!!, R.color.white));
+
+          //  restaurant = arguments?.getSerializable(Constants.RESTAURANT) as Restaurant
             logd(DetailsFragment.TAG, "saveInstance NULL")
-            Glide.with(context!!).load(restaurant.app_icon).into(imageview);
             img_toolbar_back.setImageResource(R.drawable.close)
             img_toolbar_back.setOnClickListener {
                 onBackpress()
             }
-            adapter = ViewPagerAdapter(childFragmentManager)
-            when (arguments!!.getString(Constants.STATUS)) {
-                getString(R.string.closed) -> {
-                    // adapter!!.addFragment(Menu.newInstance(restaurant), getString(R.string.menu))
-                    adapter!!.addFragment(Rating.newInstance(restaurant), getString(R.string.rating))
-                    adapter!!.addFragment(Info.newInstance(restaurant), getString(R.string.info))
-                    viewpager.offscreenPageLimit = 2
-                }
-                else -> {
-                    adapter!!.addFragment(Menu.newInstance(restaurant), getString(R.string.menu))
-                    adapter!!.addFragment(Rating.newInstance(restaurant), getString(R.string.rating))
-                    adapter!!.addFragment(Info.newInstance(restaurant), getString(R.string.info))
-                    viewpager.offscreenPageLimit = 3
-                }
+            ui_model = createViewModel()
+            fetch_category_menu()
+
+        } else {
+            logd(DetailsFragment.TAG, "saveInstance NOT NULL")
+        }
+    }
+
+
+
+    class UIModel : ViewModel() {
+        var category_menulist = MutableLiveData<RestaurantInfoModel>()  // this is list to show pre order
+    }
+
+
+    fun createViewModel(): DetailsFragment.UIModel =
+
+            ViewModelProviders.of(this).get(DetailsFragment.UIModel::class.java).apply {
+                category_menulist.removeObservers(this@DetailsFragment)
+
+                category_menulist.observe(this@DetailsFragment, Observer<RestaurantInfoModel> {
+                    refreshview(category_menulist.value!!.restaurant_info!!)
+
+                })
             }
+
+
+    private fun refreshview(restaurant_info: Restaurant) {
+
+        loge(TAG,"refresh---")
+        broadcastEvent(restaurant_info)
+        delivery_present=restaurant_info.delivery_present
+        pickup_present=restaurant_info.pickup_present
+        delivery_charge=restaurant_info.delivery_charge
+        delivery_charge_title=restaurant_info.delivery_charge_title
+        total_cartcnt =if(restaurant_info.cartcnt ==null || restaurant_info.cartcnt =="0") 0 else restaurant_info.cartcnt!!.toInt()
+        total_cartamt =if(restaurant_info.cartamt ==null || restaurant_info.cartamt =="0") "00.00" else restaurant_info.cartamt.toString()
+        updatebatchcount(0)
+        val myclickhandler = MyClickHandler(this)
+        binding.restaurant = restaurant_info
+        binding.handler = myclickhandler
+
+        Glide.with(context!!).load(restaurant_info.app_icon).into(imageview);
+            adapter = ViewPagerAdapter(childFragmentManager)
+
+        if(ui_model!!.category_menulist.value!!.is_restaurant_closed !=null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true ){
+            // closed restaurant---
+
+            if(arguments!!.getString(Constants.STATUS) == getString(R.string.open_now)){
+                // if user is coming from open restaurant and then restaurent suddenly closed then:
+                val msg =ui_model!!.category_menulist.value!!.msg ?: ""
+                DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!, R.color.black),msg = msg,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                    override fun onPositiveButtonClick(position: Int) {
+                    }
+                    override fun onNegativeButtonClick() {
+                    }
+                })
+            }
+
+            adapter!!.addFragment(Rating.newInstance(restaurant_info), getString(R.string.rating))
+            adapter!!.addFragment(Info.newInstance(restaurant_info), getString(R.string.info))
+            viewpager.offscreenPageLimit = 2
+            viewpager.setCurrentItem(1,true)
+
+        }else{
+            // open and preorder Restaurant---
+            adapter!!.addFragment(Menu.newInstance(ui_model!!.category_menulist.value!!.menu!!,restaurant_info), getString(R.string.menu))
+            adapter!!.addFragment(Rating.newInstance(restaurant_info), getString(R.string.rating))
+            adapter!!.addFragment(Info.newInstance(restaurant_info), getString(R.string.info))
+            viewpager.offscreenPageLimit = 3
+        }
+
             viewpager.setAdapter(adapter)
             tabs.setupWithViewPager(viewpager)
             //  setPalette()
             viewcart.setOnClickListener {
                 if(total_cartcnt==0) return@setOnClickListener
 
-                val fragment = EpayFragment.newInstance(restaurant)
+                val fragment = EpayFragment.newInstance(restaurant_info)
                 var enter : Slide?=null
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     enter = Slide()
@@ -150,28 +208,57 @@ class DetailsFragment : BaseFragment() {
                     ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment().addFragment(R.id.home_order_container,fragment,EpayFragment.TAG,false)
                 else
                     ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().addFragment(R.id.home_fragment_container,fragment,EpayFragment.TAG,false)
-
-
-                /*    val intent = Intent(activity, EpayActivity::class.java)
-                    val bundle= Bundle()
-                    bundle.putSerializable(Constants.RESTAURANT,restaurant)
-                    intent.putExtras(bundle)
-                    startActivityForResult(intent,1)*/
             }
 
-        } else {
-            logd(DetailsFragment.TAG, "saveInstance NOT NULL")
-        }
     }
 
-    private fun broadcastEvent(){
+
+    private fun fetch_category_menu() {
+
+        call_category_menu=ApiCall.category_menu(
+                r_token = PreferenceUtil.getString(PreferenceUtil.R_TOKEN,"")!!,
+                r_key = PreferenceUtil.getString(PreferenceUtil.R_KEY,"")!!,
+                customer_id = PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,"")!!
+        )
+        callAPI(call_category_menu!!, object : BaseFragment.OnApiCallInteraction {
+
+            override fun <T> onSuccess(body: T?) {
+                val response= body as JsonObject
+                val restaurantInfoModel = GsonBuilder().create().fromJson(response.toString(), RestaurantInfoModel::class.java)
+                if (restaurantInfoModel.status) {
+                    ui_model!!.category_menulist.value=restaurantInfoModel
+                }
+            }
+            override fun onFail(error: Int) {
+
+                if(call_category_menu!!.isCanceled){
+                    return
+                }
+
+                when (error) {
+                    404 -> {
+                        showSnackBar(viewpager, getString(R.string.error_404))
+                    }
+                    100 -> {
+
+                        showSnackBar(viewpager, getString(R.string.internet_not_available))
+                    }
+                }
+            }
+        })
+
+
+    }
+
+
+    private fun broadcastEvent(restaurant_info: Restaurant) {
         mYourBroadcastReceiver = object  : BroadcastReceiver(){
             override fun onReceive(context: Context?, intent: Intent?) {
                 loge(TAG,"broadcast receive...")
                 if(intent!!.action == Constants.CARTCOUNT_BROADCAST){
-                    restaurant.cartcnt=intent.extras.getInt(Constants.CARTCNT).toString()
-                    restaurant.cartamt=intent.extras.getString(Constants.CARTAMT).toString()
-                    loge(TAG,"new model cartcnt is..."+restaurant.cartcnt)
+                    restaurant_info.cartcnt=intent.extras.getInt(Constants.CARTCNT).toString()
+                    restaurant_info.cartamt=intent.extras.getString(Constants.CARTAMT).toString()
+                    loge(TAG,"new model cartcnt is..."+restaurant_info.cartcnt)
                     total_cartcnt = intent.extras.getInt(Constants.CARTCNT)
                     total_cartamt = intent.extras.getString(Constants.CARTAMT)
                     updatebatchcount(0)
@@ -272,8 +359,20 @@ class DetailsFragment : BaseFragment() {
 
     override fun onDestroy() {
         super.onDestroy()
+
         loge(TAG, "on destroy...")
-        LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(mYourBroadcastReceiver);
+
+        ui_model?.let {
+            ViewModelProviders.of(this).get(DetailsFragment.UIModel::class.java).category_menulist.removeObservers(this@DetailsFragment)
+        }
+
+        call_category_menu?.let {
+            it.cancel()
+        }
+
+        if(::mYourBroadcastReceiver.isInitialized){
+            LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(mYourBroadcastReceiver);
+        }
 
     }
 
@@ -293,7 +392,7 @@ class DetailsFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loge(TAG, "on create...")
-        broadcastEvent()
+      //  broadcastEvent()
 
     }
 
@@ -313,6 +412,17 @@ class DetailsFragment : BaseFragment() {
         super.onStop()
         loge(TAG, "on stop...")
     }
+
+    data class RestaurantInfoModel (val msg: String? = null,
+                                    val cartcnt: String = "",
+                                    val is_user_deleted: Boolean = false,
+                                    val is_restaurant_closed: Boolean? = null,
+                                    val image_path: String = "",
+                                    val product_image_thumbnail_path: String = "",
+                                    val time: String = "",
+                                    val menu: ArrayList<MenuListItem>? = null,
+                                    val restaurant_info: Restaurant? =null ,
+                                    val status: Boolean = false) : ModelUtility(), Serializable
 
 
     inner class ViewPagerAdapter(manager: FragmentManager) : FragmentPagerAdapter(manager) {
@@ -351,16 +461,16 @@ class DetailsFragment : BaseFragment() {
     }
 
     private fun tapOnRating() {
-        when (arguments!!.getString(Constants.STATUS)) {
-            getString(R.string.closed) -> {
-                viewpager.setCurrentItem(0,true)
-            }
-            else -> {
-                viewpager.setCurrentItem(1,true)
-            }
+
+        if(ui_model!!.category_menulist.value!!.is_restaurant_closed !=null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true ){
+            viewpager.setCurrentItem(0,true)
+        }else{
+            viewpager.setCurrentItem(1,true)
         }
 
     }
+
+
 
 
 }

@@ -43,8 +43,9 @@ class Menu : BaseFragment(), RecyclerClickListner {
     private var mAdapter: UniversalAdapter<MenuListItem, RowMenuRestaurantBinding>? = null
     private lateinit var homeFragment: HomeFragment
     private val list = ArrayList<User>()
-    private  var ui_model: UIModel?=null
+   // private  var ui_model: UIModel?=null
     private lateinit var restaurant : Restaurant
+    private lateinit var menuListItem : ArrayList<MenuListItem>
 
 
 
@@ -54,9 +55,10 @@ class Menu : BaseFragment(), RecyclerClickListner {
 
         val TAG = "Menu"
 
-        fun newInstance(restaurant : Restaurant): Menu {
+        fun newInstance(menulistitem : ArrayList<MenuListItem>,restaurant : Restaurant): Menu {
             val fragment = Menu()
             val bundle = Bundle()
+            bundle.putSerializable(Constants.MENULISTITEM,menulistitem)
             bundle.putSerializable(Constants.RESTAURANT,restaurant)
             fragment.arguments = bundle
             return fragment
@@ -82,9 +84,10 @@ class Menu : BaseFragment(), RecyclerClickListner {
         if(savedInstanceState == null){
             progress_bar.visibility=View.GONE
             restaurant= arguments!!.getSerializable(Constants.RESTAURANT) as Restaurant
+            menuListItem= arguments!!.getSerializable(Constants.MENULISTITEM) as ArrayList<MenuListItem>
             binding.restaurant=restaurant
-            if(ui_model == null)
-                ui_model=createViewModel()
+           // if(ui_model == null)
+            //    ui_model=createViewModel()
             logd(TAG,"saveInstance NULL")
             val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
             homeFragment=(fragmentof as HomeContainerFragment).getHomeFragment()
@@ -94,7 +97,7 @@ class Menu : BaseFragment(), RecyclerClickListner {
 
 
                 logd(TAG,"click---")
-                val fragment = SearchMenu.newInstance(ui_model!!.productList.value)
+                val fragment = SearchMenu.newInstance(menuListItem)
                 /* if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
 
                      *//*             // 2. Shared Elements Transition
@@ -127,7 +130,8 @@ class Menu : BaseFragment(), RecyclerClickListner {
 
 
             }
-            fetch_ProductList()
+         //   fetch_ProductList()
+            refreshUI()
 
         }else{
             logd(TAG,"saveInstance NOT NULL")
@@ -136,12 +140,12 @@ class Menu : BaseFragment(), RecyclerClickListner {
 
     }
 
-    private fun createViewModel(): UIModel =
+/*    private fun createViewModel(): UIModel =
             ViewModelProviders.of(this).get(UIModel::class.java).apply {
                 productList.observe(this@Menu, Observer<ArrayList<MenuListItem>> {
                     refreshUI()
                 })
-            }
+            }*/
 
 
 
@@ -153,7 +157,7 @@ class Menu : BaseFragment(), RecyclerClickListner {
 
 
 
-        mAdapter = UniversalAdapter(context!!, ui_model!!.productList.value, R.layout.row_menu_restaurant, object : RecyclerCallback<RowMenuRestaurantBinding, MenuListItem> {
+        mAdapter = UniversalAdapter(context!!, menuListItem, R.layout.row_menu_restaurant, object : RecyclerCallback<RowMenuRestaurantBinding, MenuListItem> {
             override fun bindData(binder: RowMenuRestaurantBinding, model: MenuListItem) {
                 setRecyclerData(binder, model)
             }
@@ -166,7 +170,7 @@ class Menu : BaseFragment(), RecyclerClickListner {
 
 
 
-    private fun fetch_ProductList() {
+    /*private fun fetch_ProductList() {
         progress_bar.visibility=View.VISIBLE
         callAPI(ApiCall.getProductList(
                 r_token = PreferenceUtil.getString(PreferenceUtil.R_TOKEN,"")!!,
@@ -198,7 +202,7 @@ class Menu : BaseFragment(), RecyclerClickListner {
         })
 
 
-    }
+    }*/
 
     override fun<T> onClick(model: T?) {
 
@@ -252,12 +256,12 @@ class Menu : BaseFragment(), RecyclerClickListner {
 
     }
 
-    class UIModel : ViewModel() {
+  /*  class UIModel : ViewModel() {
 
         var productList = MutableLiveData<ArrayList<MenuListItem>>()
 
 
-    }
+    }*/
 
 
 
