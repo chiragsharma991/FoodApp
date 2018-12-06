@@ -208,6 +208,7 @@ class AddressForm : BaseFragment(), TextWatcher {
         postParam.addProperty(Constants.CITY, city_edt.text.trim().toString())
         postParam.addProperty(Constants.ADDRESS_TITLE, address_title.text.trim().toString())
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
 
         callAPI(ApiCall.edit_shippingaddress(
                 jsonObject = postParam

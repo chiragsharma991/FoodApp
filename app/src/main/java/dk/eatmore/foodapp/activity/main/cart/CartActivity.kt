@@ -1,5 +1,7 @@
 package dk.eatmore.foodapp.activity.main.cart
 
+import android.app.Activity
+import android.app.Instrumentation
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.Observer
@@ -291,15 +293,41 @@ class CartActivity : BaseActivity() {
                     val jsonObject = body as JsonObject
                     if (jsonObject.get(Constants.STATUS).asBoolean) {
 
-                        Toast.makeText(this@CartActivity,getString(R.string.item_has_been), Toast.LENGTH_SHORT).show()
-                        val intent = Intent(Constants.CARTCOUNT_BROADCAST)
-                        intent.putExtra(Constants.CARTCNT,if(jsonObject.get(Constants.CARTCNT).isJsonNull || jsonObject.get(Constants.CARTCNT).asString == "0") 0 else (jsonObject.get(Constants.CARTCNT).asString).toInt())
-                        intent.putExtra(Constants.CARTAMT,if(jsonObject.get(Constants.CARTAMT).isJsonNull || jsonObject.get(Constants.CARTAMT).asString =="0") "00.00" else jsonObject.get(Constants.CARTAMT).asString)
-                        LocalBroadcastManager.getInstance(this@CartActivity).sendBroadcast(intent)
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
-                            finishAfterTransition()
-                        else
-                            finish()
+
+                 /*       2018-12-05 18:16:16.495 25542-26139/dk.eatmore.foodapp D/OkHttp:     "status": true,
+                        2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "is_user_deleted": false,
+                        2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "is_restaurant_closed": false,
+                        2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "order_total": 65,
+                        2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "msg": "all records.",
+                        2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "cartcnt": "1",
+                        2018-12-05 18:31:59.001 26334-26386/dk.eatmore.foodapp D/OkHttp:     "pre_order": true
+                        2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "cartamt": "65.00"*/
+                        if((jsonObject.has(Constants.IS_RESTAURANT_CLOSED) && jsonObject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean == true) &&
+                           (jsonObject.has(Constants.PRE_ORDER) && jsonObject.get(Constants.PRE_ORDER).asBoolean == false) ){
+                            // restaurant is closed / preorder
+                            val msg= if(jsonObject.has(Constants.MSG))jsonObject.get(Constants.MSG).asString else getString(R.string.sorry_restaurant_has_been_closed)
+                            val intent= Intent()
+                            intent.putExtra(Constants.IS_RESTAURANT_CLOSED,jsonObject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean)
+                            intent.putExtra(Constants.PRE_ORDER,jsonObject.get(Constants.PRE_ORDER).asBoolean)
+                            intent.putExtra(Constants.MSG,msg)
+                            setResult(Activity.RESULT_OK,intent)
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                                finishAfterTransition()
+                            else
+                                finish()
+                        }else{
+                            val intent = Intent(Constants.CARTCOUNT_BROADCAST)
+                            intent.putExtra(Constants.CARTCNT,if(jsonObject.get(Constants.CARTCNT).isJsonNull || jsonObject.get(Constants.CARTCNT).asString == "0") 0 else (jsonObject.get(Constants.CARTCNT).asString).toInt())
+                            intent.putExtra(Constants.CARTAMT,if(jsonObject.get(Constants.CARTAMT).isJsonNull || jsonObject.get(Constants.CARTAMT).asString =="0") "00.00" else jsonObject.get(Constants.CARTAMT).asString)
+                            LocalBroadcastManager.getInstance(this@CartActivity).sendBroadcast(intent)
+                            Toast.makeText(this@CartActivity,getString(R.string.item_has_been), Toast.LENGTH_SHORT).show()
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP)
+                                finishAfterTransition()
+                            else
+                                finish()
+                        }
+
+
                         //  showSnackBar(clayout_crt, jsonObject.get("msg").asString)
                     } else {
                         showSnackBar(clayout_crt, getString(R.string.error_404))
@@ -328,6 +356,27 @@ class CartActivity : BaseActivity() {
 
         //  fillData()
 
+
+    }
+
+
+    fun any_preorder_closedRestaurant(is_restaurant_closed : Boolean?, pre_order : Boolean?,msg : String?) : Boolean{
+
+        if((is_restaurant_closed !=null && is_restaurant_closed == true) &&
+                (pre_order !=null && pre_order == false) ){
+            // Test if restaurant is closed.
+            val status= msg?:"Sorry Restaurant has been closed."
+            DialogUtils.openDialogDefault(context = this,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(this, R.color.black),msg = status,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                override fun onPositiveButtonClick(position: Int) {
+
+                }
+                override fun onNegativeButtonClick() {
+                }
+            })
+            return true
+        }else{
+            return false
+        }
 
     }
 

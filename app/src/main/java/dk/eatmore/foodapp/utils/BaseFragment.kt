@@ -43,7 +43,9 @@ import dk.eatmore.foodapp.activity.main.epay.EpayActivity
 import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.Profile
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.fragment.Dashboard.Account.Signup
+import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedRestaurant
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.CategoryList
@@ -162,6 +164,7 @@ abstract class BaseFragment : Fragment() {
                 /**
                  * Check Filter Fragment Appear or not, Filter Type Fragment Also
                  */
+                loge("test--fragment--- ",childFragmentManager.backStackEntryCount.toString())
                 hideKeyboard()
                 loge("backStackCount", childFragmentManager.backStackEntryCount.toString())
                 val fragment = childFragmentManager.findFragmentByTag(childFragmentManager.getBackStackEntryAt(childFragmentManager.backStackEntryCount - 1).name)
@@ -174,8 +177,7 @@ abstract class BaseFragment : Fragment() {
                             childFragmentManager.popBackStack()
                         }
                         is DetailsFragment ->{
-                            showTabBar(true)
-                            childFragmentManager.popBackStack()
+                            fragment.onBackpress()
                         }
                         is Profile -> {
                             if (!fragment.backpress()) childFragmentManager.popBackStack()
@@ -213,6 +215,75 @@ abstract class BaseFragment : Fragment() {
 
     fun pop() {
         childFragmentManager.popBackStack()
+    }
+
+
+
+
+
+    inline fun <reified T> popfrom_to( targetfragment: T){
+
+        loop@ for(i in 0 until(childFragmentManager.backStackEntryCount) ){
+            childFragmentManager.executePendingTransactions()
+            val fragment = childFragmentManager.findFragmentByTag(childFragmentManager.getBackStackEntryAt(childFragmentManager.backStackEntryCount - 1).name)
+            if (fragment != null && fragment.isVisible) {
+
+              //  targetfragment is DetailsFragment
+                when (fragment) {
+                    is  DetailsFragment-> {
+                        break@loop
+                    } else->{
+                    childFragmentManager.popBackStack()
+                }
+                }
+            }
+        }
+    }
+
+
+    fun any_preorder_closedRestaurant(is_restaurant_closed : Boolean?, pre_order : Boolean?,msg : String?) : Boolean{
+
+        if((is_restaurant_closed !=null && is_restaurant_closed == true) &&
+                (pre_order !=null && pre_order == false) ){
+            // Test if restaurant is closed.
+            val status= msg?:getString(R.string.sorry_restaurant_has_been_closed)
+            DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!, R.color.black),msg = status,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                override fun onPositiveButtonClick(position: Int) {
+                    if(parentFragment is HomeFragment){
+                        val homeFragment =(parentFragment as HomeFragment)
+                        homeFragment.popfrom_to(DetailsFragment)
+                        val detailsFragment=homeFragment.childFragmentManager.findFragmentByTag(DetailsFragment.TAG)
+                        (detailsFragment as DetailsFragment).fetch_category_menu()
+
+                    }else if(parentFragment is OrderFragment){
+                        showTabBar(true)
+                        val orderFragment =(parentFragment as OrderFragment)
+                        orderFragment.popAllFragment()
+                    }
+
+                    /*TODO: this condition is happen when you are comming from reorder 2 tab*/
+                    else if(parentFragment is EpayFragment){
+                        val epayFragment= parentFragment as EpayFragment
+                        if(epayFragment.parentFragment is HomeFragment){
+                            val homeFragment = epayFragment.parentFragment as HomeFragment
+                            homeFragment.popfrom_to(DetailsFragment)
+                            val detailsFragment=homeFragment.childFragmentManager.findFragmentByTag(DetailsFragment.TAG)
+                            (detailsFragment as DetailsFragment).fetch_category_menu()
+                        }else{
+                            showTabBar(true)
+                            val orderFragment =epayFragment.parentFragment as OrderFragment
+                            orderFragment.popAllFragment()
+                        }
+                    }
+                }
+                override fun onNegativeButtonClick() {
+                }
+            })
+            return true
+        }else{
+            return false
+        }
+
     }
 
 

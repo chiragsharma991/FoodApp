@@ -13,6 +13,7 @@ import android.support.constraint.ConstraintSet
 import android.support.transition.ChangeBounds
 import android.support.transition.TransitionManager
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.view.animation.FastOutSlowInInterpolator
 import android.support.v7.widget.LinearLayoutManager
 import android.text.*
@@ -43,10 +44,7 @@ import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
-import dk.eatmore.foodapp.utils.BaseFragment
-import dk.eatmore.foodapp.utils.BindDataUtils
-import dk.eatmore.foodapp.utils.Constants
-import dk.eatmore.foodapp.utils.DialogUtils
+import dk.eatmore.foodapp.utils.*
 import kotlinx.android.synthetic.main.deliverytimeslot.*
 import kotlinx.android.synthetic.main.paymentmethod.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
@@ -294,7 +292,7 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             showSnackBar(pamentmethod_container, getString(R.string.error_404))
             return
         }
-        (parentFragment as EpayFragment).addFragment(R.id.epay_container,BamboraWebfunction.newInstance(),BamboraWebfunction.TAG,true)
+        checkout_delivery()
 
     }
 
@@ -308,8 +306,97 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             showSnackBar(pamentmethod_container, getString(R.string.error_404))
             return
         }
-        (parentFragment as EpayFragment).addFragment(R.id.epay_container,TransactionStatus.newInstance(),TransactionStatus.TAG,true)
+        checkout_pickup()
+    }
 
+
+    private fun checkout_pickup() {
+        showProgressDialog()
+        callAPI(CartListFunction.getcartpaymentAttributes(context!!)!!, object : BaseFragment.OnApiCallInteraction {
+
+            override fun <T> onSuccess(body: T?) {
+                showProgressDialog()
+                val jsonobject = body as JsonObject
+                if (jsonobject.get(Constants.STATUS).asBoolean) {
+                    if((jsonobject.has(Constants.IS_RESTAURANT_CLOSED) && jsonobject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean == true) &&
+                            (jsonobject.has(Constants.PRE_ORDER) && jsonobject.get(Constants.PRE_ORDER).asBoolean == false) ){
+                        val msg= if(jsonobject.has(Constants.MSG))jsonobject.get(Constants.MSG).asString else getString(R.string.sorry_restaurant_has_been_closed)
+                        any_preorder_closedRestaurant(jsonobject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean ,jsonobject.get(Constants.PRE_ORDER).asBoolean ,msg )
+                    }else{
+                        EpayFragment.paymentattributes.order_no = jsonobject.get(Constants.ORDER_NO).asInt
+                        (parentFragment as EpayFragment).addFragment(R.id.epay_container,TransactionStatus.newInstance(),TransactionStatus.TAG,true)
+                    }
+
+                } else {
+                    showSnackBar(pamentmethod_container, getString(R.string.error_404))
+                }
+            }
+
+            override fun onFail(error: Int) {
+                showProgressDialog()
+                when (error) {
+                    404 -> {
+                        showSnackBar(pamentmethod_container, getString(R.string.error_404))
+                    }
+                    100 -> {
+                        showSnackBar(pamentmethod_container, getString(R.string.internet_not_available))
+
+                    }
+                }
+
+
+            }
+        })
+
+
+    }
+
+
+    private fun checkout_delivery() {
+        showProgressDialog()
+        callAPI(CartListFunction.getcartpaymentAttributes(context!!)!!, object : BaseFragment.OnApiCallInteraction {
+
+            override fun <T> onSuccess(body: T?) {
+                showProgressDialog()
+                val jsonobject = body as JsonObject
+                if(jsonobject.get(Constants.STATUS).asBoolean){
+
+
+                    if((jsonobject.has(Constants.IS_RESTAURANT_CLOSED) && jsonobject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean == true) &&
+                            (jsonobject.has(Constants.PRE_ORDER) && jsonobject.get(Constants.PRE_ORDER).asBoolean == false) ){
+                        val msg= if(jsonobject.has(Constants.MSG))jsonobject.get(Constants.MSG).asString else "Sorry Restaurant has been closed."
+                        any_preorder_closedRestaurant(jsonobject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean ,jsonobject.get(Constants.PRE_ORDER).asBoolean ,msg )
+                    }else{
+                        EpayFragment.paymentattributes.order_no=jsonobject.get(Constants.ORDER_NO).asInt
+                        if(jsonobject.has(Constants.EPAY_MERCHANT)) EpayFragment.paymentattributes.epay_merchant=jsonobject.get(Constants.EPAY_MERCHANT).asString
+                        EpayFragment.paymentattributes.final_amount=jsonobject.get(Constants.ORDER_TOTAL).asDouble
+                        if(EpayFragment.paymentattributes.final_amount <= 0.0){
+                            (parentFragment as EpayFragment).addFragment(R.id.epay_container,TransactionStatus.newInstance(),TransactionStatus.TAG,true)
+                        }else{
+                            (parentFragment as EpayFragment).addFragment(R.id.epay_container,BamboraWebfunction.newInstance(),BamboraWebfunction.TAG,true)
+                        }
+                    }
+                }else
+                {
+                    showSnackBar(pamentmethod_container, getString(R.string.error_404))
+
+                }
+            }
+
+            override fun onFail(error: Int) {
+                showProgressDialog()
+                when (error) {
+                    404 -> {
+                        showSnackBar(pamentmethod_container, getString(R.string.error_404))
+                    }
+                    100 -> {
+                        showSnackBar(pamentmethod_container, getString(R.string.internet_not_available))
+
+                    }
+                }
+
+            }
+        })
     }
 
 
@@ -337,6 +424,8 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             postParam.addProperty(Constants.DEVICE_TYPE,Constants.DEVICE_TYPE_VALUE)
             postParam.addProperty(Constants.FIRST_NAME, EpayFragment.paymentattributes.first_name)
             postParam.addProperty(Constants.ADDITIONAL_CHARGE, if(Paymentmethod.isPaymentonline) EpayFragment.paymentattributes.additional_charges_online else EpayFragment.paymentattributes.additional_charges_cash)
+            postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+            postParam.addProperty(Constants.LANGUAGE, Constants.EN)
             val jsonarray=JsonArray()
             for (i in 0.until(EpayFragment.selected_op_id.size) ){
                 val jsonobject= JsonObject()

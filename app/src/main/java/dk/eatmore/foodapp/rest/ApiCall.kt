@@ -37,17 +37,17 @@ class ApiCall {
         }
 
 
-        fun getProductList(r_token : String, r_key : String, customer_id : String ) : Call<ProductListModel> {
+      /*  fun getProductList(r_token : String, r_key : String, customer_id : String ) : Call<ProductListModel> {
             return getApiInterface().setProductList(r_token, r_key, customer_id,Constants.RESTAURANT_FOOD_ANDROID)
+        }*/
+
+        fun category_menu (jsonObject: JsonObject ) : Call<JsonObject> {
+            return getApiInterface().category_menu(jsonObject)
         }
 
-        fun category_menu (r_token : String, r_key : String, customer_id : String ) : Call<JsonObject> {
-            return getApiInterface().category_menu(r_token, r_key, customer_id,Constants.RESTAURANT_FOOD_ANDROID)
-        }
-
-        fun restaurant_info(r_token : String, r_key : String, customer_id : String ) : Call<OrderFragment.Myorder_Model> {
+     /*   fun restaurant_info(r_token : String, r_key : String, customer_id : String ) : Call<OrderFragment.Myorder_Model> {
             return getApiInterface().restaurant_info(r_token, r_key, customer_id,Constants.RESTAURANT_FOOD_ANDROID)
-        }
+        }*/
 
         fun getProductDetails(r_token : String , r_key : String, p_id : String ) : Call<ProductDetails> {
             return getApiInterface().setProductDetails(r_token, r_key, p_id,Constants.RESTAURANT_FOOD_ANDROID)

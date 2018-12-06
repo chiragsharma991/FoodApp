@@ -187,6 +187,7 @@
                                             android:layout_marginTop="@dimen/_4sdp"
                                             android:layout_marginEnd="8dp"
                                             android:scaleType="fitXY"
+                                            android:visibility="invisible"
                                             app:srcCompat="@drawable/down_arrow" />
 
 
@@ -393,6 +394,7 @@
                                             android:layout_height="@dimen/_20sdp"
                                             android:layout_alignParentEnd="true"
                                             android:layout_centerVertical="true"
+                                            android:visibility="invisible"
                                             android:layout_marginTop="@dimen/_4sdp"
                                             android:layout_marginEnd="8dp"
                                             android:scaleType="fitXY"

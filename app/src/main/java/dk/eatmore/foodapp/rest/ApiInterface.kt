@@ -57,14 +57,6 @@ interface ApiInterface {
             @Field("app") app : String
     ): Call<ProductListModel>
 
-    @FormUrlEncoded
-    @POST("Category/category/menu")
-    fun category_menu(
-            @Field("r_token") r_token: String ,
-            @Field("r_key") r_key: String,
-            @Field("customer_id") customer_id: String,
-            @Field("app") app : String
-    ): Call<JsonObject>
 
     @FormUrlEncoded
     @POST("Category/category/menu")
@@ -142,6 +134,10 @@ interface ApiInterface {
     @POST("Cart/cart/user-info")
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun userInfo(@Body jsonObject: JsonObject): Call<JsonObject>
+
+    @POST("Category/category/menu")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun category_menu(@Body jsonObject: JsonObject): Call<JsonObject>
 
     @POST("Enduser/enduser/shipping-address-list")
     @Headers("Content-Type: application/x-www-form-urlencoded")

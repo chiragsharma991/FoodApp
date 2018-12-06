@@ -4,9 +4,10 @@ import com.google.gson.annotations.SerializedName
 import dk.eatmore.foodapp.model.ModelUtility
 
 data class ViewcardModel(
-        val msg: String = "",
+        val msg: String? = null,
         val cartcnt: String = "",
         val is_restaurant_closed: Boolean? = null,
+        val pre_order: Boolean? = null,
         val order_total: Double = 0.0,
         val status: Boolean = false,
         val result: ArrayList<ResultItem>?

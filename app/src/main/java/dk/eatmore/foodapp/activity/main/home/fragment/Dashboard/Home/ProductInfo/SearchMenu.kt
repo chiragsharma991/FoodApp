@@ -1,5 +1,6 @@
 package dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo
 
+import android.app.Activity
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.AsyncTask
@@ -21,6 +22,7 @@ import kotlinx.android.synthetic.main.search_menu.*
 import java.util.ArrayList
 import android.text.Editable
 import android.text.TextWatcher
+import android.widget.Toast
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
 import dk.eatmore.foodapp.model.home.DefaultAttributeValue
@@ -231,7 +233,7 @@ class SearchMenu : BaseFragment() {
                         intent.putExtra("p_price", if (data.product_attribute == null) BindDataUtils.convertCurrencyToDanish(data.p_price ?: "0") else productpricecalculation.getprice(data))
                         val pairs: Array<Pair<View, String>> = TransitionHelper.createSafeTransitionParticipants(activity!!, true)
                         val transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, *pairs)
-                        startActivity(intent, transitionActivityOptions.toBundle())
+                        startActivityForResult(intent,Constants.REQ_SEA_RESAURANT_CLOSED, transitionActivityOptions.toBundle())
                     }
 
                 }
@@ -241,6 +243,15 @@ class SearchMenu : BaseFragment() {
             adapter = mAdapter
         }
 
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        loge("onActivityResult searchmenu---","---")
+        if(requestCode == Constants.REQ_SEA_RESAURANT_CLOSED){
+            if(resultCode == Activity.RESULT_OK){
+                any_preorder_closedRestaurant(data!!.extras.get(Constants.IS_RESTAURANT_CLOSED) as Boolean,data.extras.get(Constants.PRE_ORDER) as Boolean,data.extras.get(Constants.MSG) as String )
+            }
+        }
     }
 
     private fun addToCard(data: ProductListItem) {
@@ -260,6 +271,7 @@ class SearchMenu : BaseFragment() {
         postParam.addProperty(Constants.P_PRICE, data.p_price)
         postParam.addProperty(Constants.P_QUANTITY, "1")
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
 
         callAPI(ApiCall.addtocart(
                 jsonObject = postParam
@@ -269,10 +281,17 @@ class SearchMenu : BaseFragment() {
                 val jsonObject = body as JsonObject
                 if (jsonObject.get("status").asBoolean) {
                     showProgressDialog()
-                    val intent = Intent(Constants.CARTCOUNT_BROADCAST)
-                    intent.putExtra(Constants.CARTCNT,if(jsonObject.get(Constants.CARTCNT).isJsonNull  || jsonObject.get(Constants.CARTCNT).asString =="0") 0 else (jsonObject.get(Constants.CARTCNT).asString).toInt())
-                    intent.putExtra(Constants.CARTAMT,if(jsonObject.get(Constants.CARTAMT).isJsonNull || jsonObject.get(Constants.CARTAMT).asString =="0") "00.00" else jsonObject.get(Constants.CARTAMT).asString)
-                    LocalBroadcastManager.getInstance(context!!).sendBroadcast(intent)
+                    if((jsonObject.has(Constants.IS_RESTAURANT_CLOSED) && jsonObject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean == true) &&
+                            (jsonObject.has(Constants.PRE_ORDER) && jsonObject.get(Constants.PRE_ORDER).asBoolean == false) ){
+                        val msg= if(jsonObject.has(Constants.MSG))jsonObject.get(Constants.MSG).asString else getString(R.string.sorry_restaurant_has_been_closed)
+                        any_preorder_closedRestaurant(jsonObject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean ,jsonObject.get(Constants.PRE_ORDER).asBoolean ,msg )
+                    }else{
+                        val intent = Intent(Constants.CARTCOUNT_BROADCAST)
+                        intent.putExtra(Constants.CARTCNT,if(jsonObject.get(Constants.CARTCNT).isJsonNull  || jsonObject.get(Constants.CARTCNT).asString =="0") 0 else (jsonObject.get(Constants.CARTCNT).asString).toInt())
+                        intent.putExtra(Constants.CARTAMT,if(jsonObject.get(Constants.CARTAMT).isJsonNull || jsonObject.get(Constants.CARTAMT).asString =="0") "00.00" else jsonObject.get(Constants.CARTAMT).asString)
+                        LocalBroadcastManager.getInstance(context!!).sendBroadcast(intent)
+                        Toast.makeText(context, getString(R.string.item_has_been), Toast.LENGTH_SHORT).show()
+                    }
                 } else {
                     showProgressDialog()
                     showSnackBar(clayout_crt, getString(R.string.error_404))

@@ -117,6 +117,18 @@
 
                         </LinearLayout>
 
+                        <ProgressBar
+                            android:id="@+id/progress_bar"
+                            style="?android:attr/progress"
+                            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                            android:layout_width="wrap_content"
+                            android:layout_centerHorizontal="true"
+                            android:layout_centerInParent="true"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:layout_height="wrap_content"
+                            android:indeterminate="true" />
+
+
 
                     </RelativeLayout>
 
@@ -128,21 +140,7 @@
 
             </android.support.design.widget.CoordinatorLayout>
 
-            <dk.eatmore.foodapp.utils.ProgressWheel
-                android:id="@+id/progresswheel"
-                android:layout_width="50dp"
-                android:layout_height="50dp"
-                android:layout_gravity="center_vertical|center_horizontal"
-                ProgressWheel:pwTextColor="@android:color/transparent"
-                ProgressWheel:pwTextSize="9sp"
-                android:visibility="gone"
-                ProgressWheel:pwRimColor="@android:color/transparent"
-                ProgressWheel:pwBarLength="80dp"
-                ProgressWheel:pwBarColor ="@color/theme_color"
-                ProgressWheel:pwBarWidth="4dp"
-                ProgressWheel:pwRimWidth="1dp"
-                ProgressWheel:pwSpinSpeed="4dp"
-                />
+
 
 
         </FrameLayout>

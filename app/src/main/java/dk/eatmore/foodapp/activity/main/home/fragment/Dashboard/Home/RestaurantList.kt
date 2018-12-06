@@ -74,7 +74,6 @@ class RestaurantList : BaseFragment() {
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
-            progresswheel(progresswheel,true)
             setToolbarforThis()
             search_again_btn.setOnClickListener{ onBackpress() }
             ui_model = createViewModel()
@@ -91,6 +90,7 @@ class RestaurantList : BaseFragment() {
     }
 
     fun setToolbarforThis(){
+        progress_bar.visibility=View.GONE
         txt_toolbar.text=getString(R.string.restaurants)
         img_toolbar_back.setImageResource(R.drawable.back)
         img_toolbar_back.setOnClickListener{
@@ -99,9 +99,9 @@ class RestaurantList : BaseFragment() {
     }
 
 
-    private fun fetch_ProductDetailList() {
-        val bundle=arguments
-
+     fun fetch_ProductDetailList() {
+         progress_bar.visibility=View.VISIBLE
+         val bundle=arguments
         val jsonobject= JsonObject()
         jsonobject.addProperty(Constants.AUTH_KEY,Constants.AUTH_VALUE)
         jsonobject.addProperty(Constants.EATMORE_APP,true)
@@ -135,7 +135,8 @@ class RestaurantList : BaseFragment() {
                         showSnackBar(clayout_crt, getString(R.string.internet_not_available))
                     }
                 }
-                progresswheel(progresswheel,false)
+                progress_bar.visibility=View.GONE
+
             }
         })
 
@@ -162,37 +163,42 @@ class RestaurantList : BaseFragment() {
             error_view.visibility=View.VISIBLE
         }
 
+
         recycler_view_parent.apply {
 
-            mAdapter = RestaurantListParentAdapter(context!!,list, object : RestaurantListParentAdapter.AdapterListener {
-                override fun itemClicked(parentView: Boolean, parentPosition: Int, chilPosition: Int) {
-                    loge(TAG,"clicked---")
-                    val fragment = DetailsFragment.newInstance(
-                            restaurant = list.get(parentPosition).restaurant.get(chilPosition),
-                            status =     list.get(parentPosition).status
-                    )
-                    var enter : Slide?=null
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        enter = Slide()
-                        enter.setDuration(300)
-                        enter.slideEdge = Gravity.BOTTOM
-                        val changeBoundsTransition : ChangeBounds = ChangeBounds()
-                        changeBoundsTransition.duration = 300
-                        //fragment!!.sharedElementEnterTransition=changeBoundsTransition
-                        fragment.sharedElementEnterTransition=changeBoundsTransition
-                        fragment.sharedElementReturnTransition=changeBoundsTransition
-                        fragment.enterTransition=enter
+                mAdapter = RestaurantListParentAdapter(context!!,list, object : RestaurantListParentAdapter.AdapterListener {
+                    override fun itemClicked(parentView: Boolean, parentPosition: Int, chilPosition: Int) {
+                        loge(TAG,"clicked---")
+                        if(progress_bar.visibility == View.VISIBLE) return
+                        val fragment = DetailsFragment.newInstance(
+                            //    restaurant = list.get(parentPosition).restaurant.get(chilPosition),
+                                status =     list.get(parentPosition).status
+                        )
+                        var enter : Slide?=null
+                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                            enter = Slide()
+                            enter.setDuration(300)
+                            enter.slideEdge = Gravity.BOTTOM
+                            val changeBoundsTransition : ChangeBounds = ChangeBounds()
+                            changeBoundsTransition.duration = 300
+                            //fragment!!.sharedElementEnterTransition=changeBoundsTransition
+                            fragment.sharedElementEnterTransition=changeBoundsTransition
+                            fragment.sharedElementReturnTransition=changeBoundsTransition
+                            fragment.enterTransition=enter
+                        }
+                        PreferenceUtil.putValue(PreferenceUtil.R_KEY,list.get(parentPosition).restaurant.get(chilPosition).r_key)
+                        PreferenceUtil.putValue(PreferenceUtil.R_TOKEN,list.get(parentPosition).restaurant.get(chilPosition).r_token)
+                        PreferenceUtil.save()
+                        (parentFragment as HomeFragment).addFragment(R.id.home_fragment_container,fragment, DetailsFragment.TAG,false)
                     }
-                    PreferenceUtil.putValue(PreferenceUtil.R_KEY,list.get(parentPosition).restaurant.get(chilPosition).r_key)
-                    PreferenceUtil.putValue(PreferenceUtil.R_TOKEN,list.get(parentPosition).restaurant.get(chilPosition).r_token)
-                    PreferenceUtil.save()
-                    (parentFragment as HomeFragment).addFragment(R.id.home_fragment_container,fragment, DetailsFragment.TAG,false)
-                }
-            })
-            layoutManager = LinearLayoutManager(context)
-            adapter = mAdapter
-        }
-        progresswheel(progresswheel,false)
+                })
+                layoutManager = LinearLayoutManager(context)
+                adapter = mAdapter
+            }
+
+
+        progress_bar.visibility=View.GONE
+
 
     }
 

@@ -196,6 +196,7 @@ object CartListFunction {
             postParam.addProperty(Constants.DEVICE_TYPE,Constants.DEVICE_TYPE_VALUE)
             postParam.addProperty(Constants.FIRST_NAME, EpayFragment.paymentattributes.first_name)
             postParam.addProperty(Constants.ADDITIONAL_CHARGE, if(Paymentmethod.isPaymentonline) EpayFragment.paymentattributes.additional_charges_online else EpayFragment.paymentattributes.additional_charges_cash)
+            postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
             val jsonarray=JsonArray()
             for (i in 0.until(EpayFragment.selected_op_id.size) ){
                 val jsonobject= JsonObject()

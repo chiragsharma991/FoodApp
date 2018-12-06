@@ -88,7 +88,7 @@ class EpayActivity : BaseActivity() {
         loge(TAG,"count is"+supportFragmentManager.backStackEntryCount)
         accessOnetime=true
         restaurant=intent.extras.getSerializable(Constants.RESTAURANT) as Restaurant
-        progresswheel(progresswheel,true)
+    //    progresswheel(progresswheel,true)
         empty_view.visibility=View.GONE
         epay_container.visibility=View.GONE
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
@@ -141,6 +141,7 @@ class EpayActivity : BaseActivity() {
         }
         postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
 
         callAPI(ApiCall.viewcart(
                 jsonObject = postParam
@@ -155,7 +156,7 @@ class EpayActivity : BaseActivity() {
                 } else {
                     ui_model!!.viewcard_list.value=null
                     empty_view.visibility=View.VISIBLE
-                    progresswheel(progresswheel,false)
+                 //   progresswheel(progresswheel,false)
                   //  showSnackBar(epay_container,"Sorry No data found.")
                 }
             }
@@ -170,7 +171,7 @@ class EpayActivity : BaseActivity() {
                         showSnackBar(epay_container, getString(R.string.internet_not_available))
                     }
                 }
-                progresswheel(progresswheel,false)
+              //  progresswheel(progresswheel,false)
                 //showProgressDialog()
 
 
@@ -200,7 +201,7 @@ class EpayActivity : BaseActivity() {
 
             override fun <T> onSuccess(body: T?) {
                 val json = body as JsonObject
-                    progresswheel(progresswheel,false)
+                  //  progresswheel(progresswheel,false)
                     val intent = Intent(Constants.CARTCOUNT_BROADCAST)
                     intent.putExtra(Constants.CARTCNT,if(json.get(Constants.CARTCNT).isJsonNull() || json.get(Constants.CARTCNT).toString() == "0") 0 else (json.get(Constants.CARTCNT).asString).toInt())
                     intent.putExtra(Constants.CARTAMT,if(json.get(Constants.CARTAMT).isJsonNull() || json.get(Constants.CARTAMT).toString() == "0") "00.00" else json.get(Constants.CARTAMT).asString)
@@ -219,7 +220,7 @@ class EpayActivity : BaseActivity() {
                     }
                 }
                 //showProgressDialog()
-                progresswheel(progresswheel,false)
+              //  progresswheel(progresswheel,false)
 
             }
         })
@@ -245,7 +246,7 @@ class EpayActivity : BaseActivity() {
 
 
     private fun refresh_viewCard(){
-        progresswheel(progresswheel,false)
+       // progresswheel(progresswheel,false)
         if(ui_model!!.viewcard_list.value ==null){
             // this condition will null if all item has been deleted : so just clear view and inflate empty view on screen.
             add_parentitem_view.removeAllViewsInLayout()
@@ -267,7 +268,7 @@ class EpayActivity : BaseActivity() {
                     DialogUtils.openDialog(this, getString(R.string.are_you_sure_to_delete), "",
                             getString(R.string.yes), getString(R.string.no), ContextCompat.getColor(this, R.color.theme_color), object : DialogUtils.OnDialogClickListener {
                         override fun onPositiveButtonClick(p: Int) {
-                            progresswheel(progresswheel,true)
+                          //  progresswheel(progresswheel,true)
                             deleteitemFromcart(ui_model!!.viewcard_list.value!!.result!![position].op_id)
                             accessOnetime=false
                         }
@@ -276,7 +277,7 @@ class EpayActivity : BaseActivity() {
                         }
                     })
                 }else{
-                    progresswheel(progresswheel,true)
+                  //  progresswheel(progresswheel,true)
                     deleteitemFromcart(ui_model!!.viewcard_list.value!!.result!![position].op_id)
                 }
             }

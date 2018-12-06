@@ -99,16 +99,48 @@ class TransactionStatus : BaseFragment() {
             binding.transactionhandler=myclickhandler
             setToolbarforThis()
             currentView = Constants.PROGRESSDIALOG
-            if (Paymentmethod.isPaymentonline) {
-                ordertransaction()
-            } else {
-                checkout_pickup()
-            }
+            Handler().postDelayed({
+                if (Paymentmethod.isPaymentonline) {
+                    // if amount is lees then 0 -> direct status page
+                    // if amount is greater -> call transaction api
+                    statusfrom_online()
+                } else {
+                    //  checkout api already called so direct move on -> status page.
+                    statusfrom_cash()
+                }
+            },800)
 
         }
     }
 
+    private fun statusfrom_cash(){
 
+            currentView = Constants.PAYMENTSTATUS
+            binding.statusIs = true
+            lottie_transaction_status.visibility = View.VISIBLE
+            lottie_transaction_status.scale = 0.4f
+            status_view.visibility = View.INVISIBLE
+            lottie_transaction_status.playAnimation()
+
+            totalamount.text = String.format(getString(R.string.total_amount), BindDataUtils.convertCurrencyToDanish(EpayFragment.paymentattributes.final_amount.toString()))
+            request_status.text = String.format(getString(R.string.request_successful), getString(R.string.successful))
+            requested_user.text = PreferenceUtil.getString(PreferenceUtil.E_MAIL, "")
+            order_number.text = String.format(getString(R.string.order_number), EpayFragment.paymentattributes.order_no)
+
+            val intent = Intent(Constants.CARTCOUNT_BROADCAST)
+            intent.putExtra(Constants.CARTCNT, 0)
+            intent.putExtra(Constants.CARTAMT, "00.00")
+            LocalBroadcastManager.getInstance(context!!).sendBroadcast(intent)
+
+            val v: Vibrator = context!!.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) v.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
+            else v.vibrate(200);
+            addspantext()
+
+    }
+
+
+/*
     private fun checkout_pickup() {
 
         callAPI(CartListFunction.getcartpaymentAttributes(context!!)!!, object : BaseFragment.OnApiCallInteraction {
@@ -178,8 +210,9 @@ class TransactionStatus : BaseFragment() {
 
 
     }
+*/
 
-    private fun ordertransaction() {
+    private fun statusfrom_online() {
 
         if (EpayFragment.paymentattributes.final_amount <= 0.0) {
             // if final amout is less then 0 so epay is not procees and direct get success.
@@ -210,6 +243,8 @@ class TransactionStatus : BaseFragment() {
         postParam.addProperty(Constants.TXNFEE, EpayFragment.paymentattributes.txnfee)
         postParam.addProperty(Constants.PAYMENTTYPE, EpayFragment.paymentattributes.paymenttype)
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
         val jsonarray = JsonArray()
 
         for (i in 0.until(EpayFragment.selected_op_id.size)) {

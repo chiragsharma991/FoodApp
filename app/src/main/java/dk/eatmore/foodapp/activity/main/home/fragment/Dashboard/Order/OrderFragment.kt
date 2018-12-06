@@ -165,7 +165,7 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
     private fun moveon_next() {
 
         val fragment = DetailsFragment.newInstance(
-                restaurant = ui_model!!.restaurant_info.value!!.restaurant_info,
+               // restaurant = ui_model!!.restaurant_info.value!!.restaurant_info,
                 status = ""
         )
         var enter: Slide? = null
@@ -215,6 +215,8 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
         postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
         postParam.addProperty(Constants.EATMORE_APP, true)
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
 
         callAPI(ApiCall.myorders(
                 jsonObject = postParam
@@ -375,8 +377,8 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
         }
 
     */
-    override fun comman_apisuccess(msg: String, model: Myorder_Model) {
-        moveon_reOrder(model)
+    override fun comman_apisuccess(status : String) {
+        moveon_reOrder(status)
     }
 
     override fun comman_apifailed(error: String) {

@@ -100,6 +100,7 @@ class RateOrder : BaseFragment(), RatingBar.OnRatingBarChangeListener {
         postParam.addProperty(Constants.CUSTOMER_SERVICE, customer_service_rating.rating.toDouble())
         postParam.addProperty(Constants.REVIEW, comment_edt.text.toString())
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
 
         callAPI(ApiCall.rating(postParam), object : BaseFragment.OnApiCallInteraction {
             override fun <T> onSuccess(body: T?) {

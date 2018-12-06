@@ -67,10 +67,12 @@ class BamboraWebfunction : BaseFragment(), PaymentResultListener {
             logd(TAG, "saveInstance NULL")
             setToolbarforThis()
             progresswheel(progresswheel,true)
-            checkout_delivery()
-
+            val paymentView = EpayWebView(this@BamboraWebfunction, webiview, false)
+            paymentView.LoadPaymentWindow(getData())
+          //  checkout_delivery()
         }
     }
+/*
     private fun checkout_delivery() {
 
         callAPI(CartListFunction.getcartpaymentAttributes(context!!)!!, object : BaseFragment.OnApiCallInteraction {
@@ -84,7 +86,8 @@ class BamboraWebfunction : BaseFragment(), PaymentResultListener {
                     loge(TAG,"final amount is "+EpayFragment.paymentattributes.final_amount)
                     if(EpayFragment.paymentattributes.final_amount <= 0.0){
                         progresswheel(progresswheel,false)
-                        //*  (activity as EpayActivity).addFragment(R.id.epay_container,TransactionStatus.newInstance(),TransactionStatus.TAG,true)
+                        (parentFragment as EpayFragment).addFragment(R.id.epay_container,TransactionStatus.newInstance(),TransactionStatus.TAG,true)
+
                     }else{
                         val paymentView = EpayWebView(this@BamboraWebfunction, webiview, false)
                         paymentView.LoadPaymentWindow(getData())                     }
@@ -112,6 +115,7 @@ class BamboraWebfunction : BaseFragment(), PaymentResultListener {
             }
         })
     }
+*/
 
 
 

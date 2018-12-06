@@ -21,6 +21,7 @@ import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.epay.fragment.*
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.databinding.ActivityEpayBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.Address
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
@@ -30,12 +31,12 @@ import dk.eatmore.foodapp.model.epay.ViewcardModel
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.*
-import kotlinx.android.synthetic.main.activity_epay.*
 import kotlinx.android.synthetic.main.dynamic_raw_item.view.*
 import kotlinx.android.synthetic.main.dynamic_raw_subitem.view.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.util.ArrayList
 import dk.eatmore.foodapp.model.home.Restaurant
+import kotlinx.android.synthetic.main.activity_epay.*
 
 
 class EpayFragment : BaseFragment() {
@@ -97,7 +98,7 @@ class EpayFragment : BaseFragment() {
         amIFinish=true
         accessOnetime=true
         restaurant=arguments!!.getSerializable(Constants.RESTAURANT) as Restaurant
-        progresswheel(progresswheel,true)
+        progress_bar.visibility=View.VISIBLE
         empty_view.visibility= View.GONE
         view_container.visibility= View.GONE
         tabfunction()
@@ -152,6 +153,8 @@ class EpayFragment : BaseFragment() {
             postParam.addProperty(Constants.IS_LOGIN, "0")
         }
         postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
 
         callAPI(ApiCall.viewcart(
                 jsonObject = postParam
@@ -160,48 +163,25 @@ class EpayFragment : BaseFragment() {
             override fun <T> onSuccess(body: T?) {
                 val viewcardmodel = body as ViewcardModel
                 if (viewcardmodel.status) {
-                    if(viewcardmodel.is_restaurant_closed !=null && viewcardmodel.is_restaurant_closed == true){
-                        // Test if restaurant is closed.
-                        val msg = viewcardmodel.msg
-                        DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!, R.color.black),msg = msg,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
-                            override fun onPositiveButtonClick(position: Int) {
-                                if(parentFragment is HomeFragment){
-                                    loop@ for(i in 0.until((parentFragment as HomeFragment).childFragmentManager.backStackEntryCount) ){
-                                        val homefragment = parentFragment as HomeFragment
-                                        loge("test--fragment--- ",homefragment.childFragmentManager.backStackEntryCount.toString())
-                                        val fragment = homefragment.childFragmentManager.findFragmentByTag(homefragment.childFragmentManager.getBackStackEntryAt(homefragment.childFragmentManager.backStackEntryCount - 1).name)
-                                        if (fragment != null && fragment.isVisible) {
-                                            when (fragment) {
-                                                is DetailsFragment -> {
-                                                    break@loop
-                                                } else->{
-                                                homefragment.childFragmentManager.popBackStack()
-                                            }
-                                            }
-                                        }
-                                    }
 
-                                }else{
-
-                                }
-                            }
-                            override fun onNegativeButtonClick() {
-                            }
-                        })
-                        progresswheel(progresswheel,false)
-
-                    }else{
+                    if(!any_preorder_closedRestaurant(viewcardmodel.is_restaurant_closed,viewcardmodel.pre_order,viewcardmodel.msg)){
+                        // restaurant is not closed then:
                         ui_model!!.viewcard_list.value=viewcardmodel
                         view_container.visibility= View.VISIBLE
-                        progresswheel(progresswheel,false)
                     }
+                    progress_bar.visibility=View.GONE
+
 
                 } else {
-                    ui_model!!.viewcard_list.value=null
-                    empty_view.visibility= View.VISIBLE
-                    view_container.visibility= View.GONE
-                    progresswheel(progresswheel,false)
-                    //  showSnackBar(epay_container,"Sorry No data found.")
+
+                    if(!any_preorder_closedRestaurant(viewcardmodel.is_restaurant_closed,viewcardmodel.pre_order,viewcardmodel.msg)){
+                        // restaurant is not closed then:
+                        ui_model!!.viewcard_list.value=null
+                        empty_view.visibility= View.VISIBLE
+                        view_container.visibility= View.GONE
+                    }
+                    progress_bar.visibility=View.GONE
+
                 }
             }
 
@@ -215,7 +195,7 @@ class EpayFragment : BaseFragment() {
                         showSnackBar(epay_container, getString(R.string.internet_not_available))
                     }
                 }
-                progresswheel(progresswheel,false)
+                progress_bar.visibility=View.GONE
                 //showProgressDialog()
 
 
@@ -237,6 +217,8 @@ class EpayFragment : BaseFragment() {
         }
         postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
         postParam.addProperty(Constants.OP_ID, op_id)
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
 
         callAPI(ApiCall.deleteitemFromcart(
                 jsonObject = postParam
@@ -244,7 +226,7 @@ class EpayFragment : BaseFragment() {
 
             override fun <T> onSuccess(body: T?) {
                 val json = body as JsonObject
-                progresswheel(progresswheel,false)
+                progress_bar.visibility=View.GONE
                 val intent = Intent(Constants.CARTCOUNT_BROADCAST)
                 intent.putExtra(Constants.CARTCNT,if(json.get(Constants.CARTCNT).isJsonNull() || json.get(Constants.CARTCNT).toString() == "0") 0 else (json.get(Constants.CARTCNT).asString).toInt())
                 intent.putExtra(Constants.CARTAMT,if(json.get(Constants.CARTAMT).isJsonNull() || json.get(Constants.CARTAMT).toString() == "0") "00.00" else json.get(Constants.CARTAMT).asString)
@@ -263,7 +245,7 @@ class EpayFragment : BaseFragment() {
                     }
                 }
                 //showProgressDialog()
-                progresswheel(progresswheel,false)
+                progress_bar.visibility=View.GONE
 
             }
         })
@@ -331,7 +313,7 @@ class EpayFragment : BaseFragment() {
                     DialogUtils.openDialog(context!!, getString(R.string.are_you_sure_to_delete), "",
                             getString(R.string.yes), getString(R.string.no), ContextCompat.getColor(context!!, R.color.theme_color), object : DialogUtils.OnDialogClickListener {
                         override fun onPositiveButtonClick(p: Int) {
-                            progresswheel(progresswheel,true)
+                            progress_bar.visibility=View.VISIBLE
                             deleteitemFromcart(ui_model!!.viewcard_list.value!!.result!![position].op_id)
                             accessOnetime=false
                         }
@@ -340,7 +322,7 @@ class EpayFragment : BaseFragment() {
                         }
                     })
                 }else{
-                    progresswheel(progresswheel,true)
+                    progress_bar.visibility=View.VISIBLE
                     deleteitemFromcart(ui_model!!.viewcard_list.value!!.result!![position].op_id)
                 }
             }

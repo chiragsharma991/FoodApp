@@ -156,6 +156,7 @@
     <string name="ordre_under_behandling">Ordre under behandling</string>
     <string name="no_entry_found_for_address">No entry found for address.</string>
     <string name="change">Change</string>
+    <string name="sorry_restaurant_has_been_closed">Sorry Restaurant has been closed.</string>
 
 
 </resources>

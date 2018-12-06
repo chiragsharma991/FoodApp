@@ -243,6 +243,8 @@ class HomeFragment : CommanAPI() {
         postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
         postParam.addProperty(Constants.EATMORE_APP, true)
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
 
         callAPI(ApiCall.lastorder(postParam), object : BaseFragment.OnApiCallInteraction {
             override fun <T> onSuccess(body: T?) {
@@ -276,9 +278,9 @@ class HomeFragment : CommanAPI() {
         })
     }
 
-    override fun comman_apisuccess(msg: String, model: OrderFragment.Myorder_Model) {
-        loge(TAG, "success..." + model.toString())
-        moveon_reOrder(model)
+    override fun comman_apisuccess(status: String) {
+        loge(TAG, "success..."+"-")
+        moveon_reOrder("")
     }
 
     override fun comman_apifailed(error: String) {
@@ -319,7 +321,6 @@ class HomeFragment : CommanAPI() {
         fun reOrder(view: View, model: OrderFragment.Orderresult) {
             loge(TAG, "reorder---")
             fetchReorder_info(model, home_fragment_container)
-
         }
 
         fun onDetails(view: View, model: OrderFragment.Orderresult) {

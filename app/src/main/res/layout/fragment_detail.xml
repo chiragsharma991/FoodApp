@@ -4,6 +4,11 @@
 <layout
     >
     <data>
+
+        <import type="android.view.View">
+
+        </import>
+
         <variable
             name="restaurant"
             type="dk.eatmore.foodapp.model.home.Restaurant">
@@ -14,6 +19,12 @@
             name="handler"
             type="dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment.MyClickHandler"
             >
+
+        </variable>
+
+        <variable
+            name="is_uiprogress"
+            type="Boolean">
 
         </variable>
 
@@ -105,34 +116,88 @@
                         android:layout_marginLeft="@dimen/_10sdp"
                         >
 
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/nondummy_layout"
+                            android:orientation="vertical"
+                            android:visibility="@{is_uiprogress ? View.GONE : View.VISIBLE}"
+                            >
 
-                        <TextView
-                            style="@style/TextViewMid"
-                            android:textColor="@color/black"
-                            android:singleLine="true"
-                            android:text="@{restaurant.restaurant_name}" />
+                            <TextView
+                                style="@style/TextViewMid"
+                                android:textColor="@color/black"
+                                android:singleLine="true"
+                                android:text="@{restaurant.restaurant_name}" />
 
-                        <RatingBar
-                            style="?android:attr/ratingBarStyleSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:isIndicator="true"
-                            android:numStars="6"
-                            android:onClick="@{handler :: tapOnRating}"
-                            android:rating="@{restaurant.total_rating}"
-                            android:stepSize="1" />
+                            <RatingBar
+                                style="?android:attr/ratingBarStyleSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:isIndicator="true"
+                                android:numStars="6"
+                                android:onClick="@{handler :: tapOnRating}"
+                                android:rating="@{restaurant.total_rating}"
+                                android:stepSize="1" />
 
-                        <TextView
-                            style="@style/TextViewSmall"
-                            android:textColor="@color/dark_blue"
-                            android:onClick="@{handler::tapOnRating}"
-                            android:text="@{@string/restaurant_rating(restaurant.total_review_count)}" />
+                            <TextView
+                                style="@style/TextViewSmall"
+                                android:textColor="@color/dark_blue"
+                                android:visibility="@{is_uiprogress ? View.GONE : View.VISIBLE}"
+                                android:onClick="@{handler::tapOnRating}"
+                                android:text="@{@string/restaurant_rating(restaurant.total_review_count)}" />
 
-                        <TextView
-                            style="@style/TextViewSmall"
-                            android:singleLine="true"
-                            android:textColor="@color/theme_color"
-                            android:text="@{restaurant.cuisines}" />
+                            <TextView
+                                style="@style/TextViewSmall"
+                                android:singleLine="true"
+                                android:textColor="@color/theme_color"
+                                android:text="@{restaurant.cuisines}" />
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:id="@+id/dummy_view"
+                            android:visibility="@{is_uiprogress ? View.VISIBLE : View.GONE}"
+                            >
+                            <TextView
+                                style="@style/TextViewMid"
+                                android:textColor="@color/black"
+                                android:singleLine="true"
+                                android:layout_width="match_parent"
+                                android:background="@color/gray"
+                                android:text="@{restaurant.restaurant_name}" />
+
+                            <RatingBar
+                                style="?android:attr/ratingBarStyleSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:isIndicator="true"
+                                android:numStars="6"
+                                android:visibility="invisible"
+                                android:onClick="@{handler :: tapOnRating}"
+                                android:rating="@{restaurant.total_rating}"
+                                android:stepSize="1" />
+
+                            <TextView
+                                style="@style/TextViewSmall"
+                                android:textColor="@color/dark_blue"
+                                android:layout_width="match_parent"
+                                android:onClick="@{handler::tapOnRating}"
+                                android:background="@color/gray"
+                                />
+
+                            <TextView
+                                style="@style/TextViewSmall"
+                                android:singleLine="true"
+                                android:visibility="invisible"
+                                android:textColor="@color/theme_color"
+                                android:text="@{restaurant.cuisines}" />
+
+                        </LinearLayout>
+
+
 
                     </LinearLayout>
 
@@ -182,31 +247,62 @@
 
         </android.support.design.widget.AppBarLayout>
 
-        <android.support.v4.view.ViewPager
-            android:id="@+id/viewpager"
+
+        <RelativeLayout
             android:layout_width="match_parent"
-            android:background="@color/white"
-            android:fitsSystemWindows="true"
             android:layout_height="match_parent"
             app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            />
+
+            >
 
 
-        <android.support.design.widget.FloatingActionButton
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:id="@+id/detail_fab_btn"
-            app:rippleColor="@color/white"
-            android:visibility="gone"
-            android:backgroundTint="@color/theme_color_secondary"
-            app:srcCompat="@drawable/shopping_cart"
-            android:scaleType="center"
-            app:borderWidth="0dp"
-            android:layout_gravity="right|bottom"
-            android:layout_marginBottom="@dimen/_25sdp"
-            android:layout_marginRight="@dimen/_28sdp"
-            android:elevation="@dimen/_4sdp"
-            />
+            <android.support.v4.view.ViewPager
+                android:id="@+id/viewpager"
+                android:layout_width="match_parent"
+                android:background="@color/white"
+                android:fitsSystemWindows="true"
+                android:layout_height="match_parent"
+                />
+
+
+            <android.support.design.widget.FloatingActionButton
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/detail_fab_btn"
+                app:rippleColor="@color/white"
+                android:visibility="gone"
+                android:backgroundTint="@color/theme_color_secondary"
+                app:srcCompat="@drawable/shopping_cart"
+                android:scaleType="center"
+                app:borderWidth="0dp"
+                android:layout_gravity="right|bottom"
+                android:layout_marginBottom="@dimen/_25sdp"
+                android:layout_marginRight="@dimen/_28sdp"
+                android:elevation="@dimen/_4sdp"
+                />
+
+
+
+        </RelativeLayout>
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/progress_bar_layout"
+            android:visibility="@{is_uiprogress ? View.VISIBLE : View.GONE}"
+            >
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                style="?android:attr/progress"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:indeterminate="true" />
+
+
+        </RelativeLayout>
+
+
 
 
     </android.support.design.widget.CoordinatorLayout>

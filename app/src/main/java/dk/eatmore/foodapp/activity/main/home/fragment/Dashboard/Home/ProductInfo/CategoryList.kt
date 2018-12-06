@@ -1,6 +1,7 @@
 package dk.eatmore.foodapp.fragment.ProductInfo
 
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Build
 import android.os.Bundle
@@ -137,42 +138,23 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
 
     fun updatebatchcount(count: Int) {
         badge_notification_txt.visibility = if (DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
-        viewcart.alpha= if (DetailsFragment.total_cartcnt == 0) 0.3f else 0.9f
+        toolbar_badge_view.visibility= if(DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
+        //viewcart.alpha= if(DetailsFragment.total_cartcnt == 0) 0.3f else 0.9f
         badge_notification_txt.text = DetailsFragment.total_cartcnt.toString()
         badge_countprice.text = BindDataUtils.convertCurrencyToDanish(DetailsFragment.total_cartamt)
     }
 
 
-    /* override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-         loge("onActivityResult categorylist---", "" + resultCode + " " + requestCode)
+     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+         loge("onActivityResult categorylist---","---")
          // request : send code with request
          // result :  get code from target activity
-
-         if ((activity as HomeActivity).is_reorderprocess()) {
-             // If user is coming from reorder>>>>
-             if (requestCode == 1 && resultCode == AppCompatActivity.DEFAULT_KEYS_SHORTCUT && TransactionStatus.moveonsearch) {
-                 // back press from transaction success and continue.
-                 TransactionStatus.moveonsearch = false
-                 (activity as HomeActivity).popAllReorderFragment()
-                 //  ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getContainerFragment().popAllFragment()
-             }
-         } else {
-             // If user is coming from Homecontainer >>>>
-             if (requestCode == 1 && resultCode == AppCompatActivity.DEFAULT_KEYS_SHORTCUT && TransactionStatus.moveonsearch) {
-                 // back press from transaction success and continue.
-                 TransactionStatus.moveonsearch = false
-                 val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
-                 (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
-
-                 //  ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getContainerFragment().popAllFragment()
-             } else if (requestCode == 1 && resultCode == AppCompatActivity.RESULT_OK && EpayActivity.moveonEpay) {
-                 ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2)
+         if(requestCode == Constants.REQ_CAT_RESAURANT_CLOSED){
+             if(resultCode == Activity.RESULT_OK){
+                 any_preorder_closedRestaurant(data!!.extras.get(Constants.IS_RESTAURANT_CLOSED) as Boolean,data.extras.get(Constants.PRE_ORDER) as Boolean,data.extras.get(Constants.MSG) as String )
              }
          }
-
-
-
-     }*/
+     }
 
 
     override fun <T> onClick(model: T?) {
@@ -189,7 +171,7 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
                     ?: "0") else productpricecalculation.getprice(data))
             val pairs: Array<Pair<View, String>> = TransitionHelper.createSafeTransitionParticipants(activity!!, true)
             val transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, *pairs)
-            startActivity(intent, transitionActivityOptions.toBundle())
+            startActivityForResult(intent,Constants.REQ_CAT_RESAURANT_CLOSED,transitionActivityOptions.toBundle())
         }
 
     }
@@ -209,6 +191,8 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
         postParam.addProperty(Constants.P_ID, data.p_id)
         postParam.addProperty(Constants.P_PRICE, data.p_price)
         postParam.addProperty(Constants.P_QUANTITY, "1")
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
 
         callAPI(ApiCall.addtocart(
                 jsonObject = postParam
@@ -218,11 +202,19 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
                 val jsonObject = body as JsonObject
                 if (jsonObject.get(Constants.STATUS).asBoolean) {
                     showProgressDialog()
-                    Toast.makeText(context, getString(R.string.item_has_been), Toast.LENGTH_SHORT).show()
-                    val intent = Intent(Constants.CARTCOUNT_BROADCAST)
-                    intent.putExtra(Constants.CARTCNT, if (jsonObject.get(Constants.CARTCNT).isJsonNull || jsonObject.get(Constants.CARTCNT).asString == "0") 0 else (jsonObject.get(Constants.CARTCNT).asString).toInt())
-                    intent.putExtra(Constants.CARTAMT, if (jsonObject.get(Constants.CARTAMT).isJsonNull || jsonObject.get(Constants.CARTAMT).asString == "0") "00.00" else jsonObject.get(Constants.CARTAMT).asString)
-                    LocalBroadcastManager.getInstance(context!!).sendBroadcast(intent)
+
+                    if((jsonObject.has(Constants.IS_RESTAURANT_CLOSED) && jsonObject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean == true) &&
+                            (jsonObject.has(Constants.PRE_ORDER) && jsonObject.get(Constants.PRE_ORDER).asBoolean == false) ){
+                        val msg= if(jsonObject.has(Constants.MSG))jsonObject.get(Constants.MSG).asString else getString(R.string.sorry_restaurant_has_been_closed)
+                        any_preorder_closedRestaurant(jsonObject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean ,jsonObject.get(Constants.PRE_ORDER).asBoolean ,msg )
+
+                    }else{
+                        val intent = Intent(Constants.CARTCOUNT_BROADCAST)
+                        intent.putExtra(Constants.CARTCNT, if (jsonObject.get(Constants.CARTCNT).isJsonNull || jsonObject.get(Constants.CARTCNT).asString == "0") 0 else (jsonObject.get(Constants.CARTCNT).asString).toInt())
+                        intent.putExtra(Constants.CARTAMT, if (jsonObject.get(Constants.CARTAMT).isJsonNull || jsonObject.get(Constants.CARTAMT).asString == "0") "00.00" else jsonObject.get(Constants.CARTAMT).asString)
+                        LocalBroadcastManager.getInstance(context!!).sendBroadcast(intent)
+                        Toast.makeText(context, getString(R.string.item_has_been), Toast.LENGTH_SHORT).show()
+                    }
 
                 } else {
                     showProgressDialog()

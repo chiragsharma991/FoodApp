@@ -108,6 +108,7 @@ class EditAddress : BaseFragment() {
         postParam.addProperty(Constants.IS_LOGIN, "1")
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+         postParam.addProperty(Constants.LANGUAGE, Constants.EN)
 
          callAPI(ApiCall.shippingaddress_list(
                 jsonObject = postParam
@@ -157,6 +158,7 @@ class EditAddress : BaseFragment() {
         postParam.addProperty(Constants.IS_LOGIN, "1")
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
 
         callAPI(ApiCall.delete_shippingaddress(
                 jsonObject = postParam

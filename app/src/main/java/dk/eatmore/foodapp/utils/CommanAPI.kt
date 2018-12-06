@@ -18,7 +18,7 @@ import kotlinx.android.synthetic.main.fragment_order_container.*
 
 abstract class CommanAPI : BaseFragment(){
 
-    abstract fun comman_apisuccess(msg : String, model: OrderFragment.Myorder_Model)
+    abstract fun comman_apisuccess(status : String)
     abstract fun comman_apifailed(error : String)
 
 
@@ -30,19 +30,52 @@ abstract class CommanAPI : BaseFragment(){
         postParam.addProperty(Constants.EATMORE_APP,true)
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
         postParam.addProperty(Constants.ORDER_NO,model.order_no )
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
 
         callAPI(ApiCall.reorder(postParam), object : BaseFragment.OnApiCallInteraction {
             override fun <T> onSuccess(body: T?) {
+                showProgressDialog()
                 val jsonObject= body as JsonObject
                 if (jsonObject.get(Constants.STATUS).asBoolean) {
-                    fetchRestaurant_info(
+                    // if restaurant is closed then block all next process.
+                    if((jsonObject.has(Constants.IS_RESTAURANT_CLOSED) && jsonObject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean == true) &&
+                            (jsonObject.has(Constants.PRE_ORDER) && jsonObject.get(Constants.PRE_ORDER).asBoolean == false) ){
+                        val msg= if(jsonObject.has(Constants.MSG))jsonObject.get(Constants.MSG).asString else getString(R.string.sorry_restaurant_has_been_closed)
+                        any_preorder_closedRestaurant(jsonObject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean ,jsonObject.get(Constants.PRE_ORDER).asBoolean ,msg )
+                    } else{
+                        // if restaurant wants to show some info only about then.
+                        if(jsonObject.get(Constants.SHOW_MSG).asBoolean){
+                            val msg= if(jsonObject.has(Constants.MSG))jsonObject.get(Constants.MSG).asString else getString(R.string.sorry_restaurant_has_been_closed)
+                            DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!,R.color.black),msg =msg,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                                override fun onPositiveButtonClick(position: Int) {
+                                    //  OrderFragment.ui_model!!.restaurant_info.value = myorder_Model // move this response to another list to reorder perpose.
+                                    PreferenceUtil.putValue(PreferenceUtil.R_KEY, model.r_key)
+                                    PreferenceUtil.putValue(PreferenceUtil.R_TOKEN,model.r_token)
+                                    PreferenceUtil.save()
+                                    comman_apisuccess("")
+                                }
+                                override fun onNegativeButtonClick() {}
+                            })
+                        }else{
+                            PreferenceUtil.putValue(PreferenceUtil.R_KEY, model.r_key)
+                            PreferenceUtil.putValue(PreferenceUtil.R_TOKEN,model.r_token)
+                            PreferenceUtil.save()
+                            comman_apisuccess("")
+
+                            //   OrderFragment.ui_model!!.restaurant_info.value = myorder_Model // move this response to another list to reorder perpose.
+                        }
+
+                    }
+
+               /*     fetchRestaurant_info(
                             model=model,
                             msg = jsonObject.get(Constants.MSG).asString,
                             cartamt =jsonObject.get(Constants.CARTAMT).asString,
                             cartcnt = jsonObject.get(Constants.CARTCNT).asString,
                             show_msg = jsonObject.get(Constants.SHOW_MSG).asBoolean,
                             containerview = containerview
-                    )
+                    )*/
 
                 }else{
                     showProgressDialog()
@@ -69,6 +102,7 @@ abstract class CommanAPI : BaseFragment(){
 
 
 
+/*
     fun fetchRestaurant_info(model : OrderFragment.Orderresult, cartcnt : String, cartamt : String, show_msg : Boolean, msg : String, containerview : View) {
 
 
@@ -98,12 +132,12 @@ abstract class CommanAPI : BaseFragment(){
                             DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!,R.color.black),msg =msg,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
                                 override fun onPositiveButtonClick(position: Int) {
                                     //  OrderFragment.ui_model!!.restaurant_info.value = myorder_Model // move this response to another list to reorder perpose.
-                                    comman_apisuccess(myorder_Model.msg,myorder_Model)
+                                    comman_apisuccess(msg)
                                 }
                                 override fun onNegativeButtonClick() {}
                             })
                         }else{
-                            comman_apisuccess(myorder_Model.msg,myorder_Model)
+                            comman_apisuccess(msg)
 
                             //   OrderFragment.ui_model!!.restaurant_info.value = myorder_Model // move this response to another list to reorder perpose.
                         }
@@ -131,12 +165,13 @@ abstract class CommanAPI : BaseFragment(){
             }
         })
     }
+*/
 
 
-    protected fun moveon_reOrder(model : OrderFragment.Myorder_Model){
+    protected fun moveon_reOrder(status : String){
 
         val fragment = DetailsFragment.newInstance(
-                restaurant =  model.restaurant_info,
+               // restaurant =  model.restaurant_info,
                 status =     ""
         )
         var enter : Slide?=null

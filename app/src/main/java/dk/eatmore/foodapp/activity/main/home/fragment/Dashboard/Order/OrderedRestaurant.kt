@@ -265,6 +265,8 @@ class OrderedRestaurant : CommanAPI() {
         postParam.addProperty(Constants.EATMORE_APP,true)
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
         postParam.addProperty(Constants.ORDER_NO,arguments!!.getString(Constants.ORDER_NO))
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
 
         callAPI(ApiCall.orderdetails(postParam), object : BaseFragment.OnApiCallInteraction {
             override fun <T> onSuccess(body: T?) {
@@ -315,8 +317,8 @@ class OrderedRestaurant : CommanAPI() {
     }
 
 
-    override fun comman_apisuccess(msg: String, model: OrderFragment.Myorder_Model) {
-        moveon_reOrder(model)
+    override fun comman_apisuccess(status: String) {
+        moveon_reOrder("")
     }
 
     override fun comman_apifailed(error: String) {

@@ -18,6 +18,8 @@ class Constants {
     const  val POSTAL_CODE="postal_code"
     const  val PASSWORD_HASH="password_hash"
     const  val FIRST_NAME="first_name"
+    const  val IS_RESTAURANT_CLOSED="is_restaurant_closed"
+    const  val PRE_ORDER="pre_order"
     const  val EMAIL="email"
     const  val SUBSCRIBE="subscribe"
     const  val PAYMENTSTATUS="paymentstatus"
@@ -77,6 +79,8 @@ class Constants {
     const  val RESULT="result"
     const  val ACTUAL="actual"
     const  val DISPLAY="display"
+    const  val LANGUAGE="language"
+    const  val EN="en"
     const  val ADDRESS="address"
     const  val ADDRESS_TITLE="address_title"
     const  val DISTANCE="distance"
@@ -114,6 +118,8 @@ class Constants {
     const  val EPAY_MERCHANT="epay_merchant"
     const  val EPAY_MERCHANT_TEST="8024206"
     const  val BOTTOM_TO_TOP_ANIM =200
+    const  val REQ_CAT_RESAURANT_CLOSED = 1
+    const  val REQ_SEA_RESAURANT_CLOSED = 2
 
 
 
