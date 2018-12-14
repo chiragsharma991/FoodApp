@@ -157,6 +157,8 @@
     <string name="no_entry_found_for_address">No entry found for address.</string>
     <string name="change">Change</string>
     <string name="sorry_restaurant_has_been_closed">Sorry Restaurant has been closed.</string>
+    <string name="order_eat_amp_njoy"><![CDATA[Order, Eat & Njoy!]]></string>
+    <string name="bestil_din_take_away_mad_online">Bestil din take away mad online</string>
 
 
 </resources>

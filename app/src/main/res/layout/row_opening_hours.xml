@@ -34,21 +34,21 @@
 
 
             <android.support.v7.widget.AppCompatTextView
-                style="@style/TextViewSmall"
+                style="@style/Subtitle_TextViewSmall"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="1.05"
-                android:textColor="@{opening_hours.today ? @color/theme_color : @color/black_light}"
+                android:textColor="@{opening_hours.today ? @color/theme_color : @color/black_txt_light}"
                 android:text="@{opening_hours.day}"
                 />
 
 
             <android.support.v7.widget.AppCompatTextView
-                style="@style/TextViewSmall"
+                style="@style/Subtitle_TextViewSmall"
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.5"
                 android:gravity="right"
                 android:text="@{opening_hours.opens.equalsIgnoreCase(opening_hours.closes) ? @string/closed : @string/openandclose(opening_hours.opens,opening_hours.closes)}"
-                android:textColor="@{opening_hours.today ? @color/theme_color : @color/black_light }"
+                android:textColor="@{opening_hours.today ? @color/theme_color : @color/black_txt_light }"
 
                 />
 

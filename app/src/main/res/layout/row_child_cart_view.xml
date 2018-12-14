@@ -46,7 +46,7 @@
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/item_rcc_txt"
-                        style="@style/TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:layout_width="0dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginRight="@dimen/_5sdp"
@@ -64,7 +64,7 @@
 
 
                         <android.support.v7.widget.AppCompatTextView
-                            style="@style/TextViewSmall"
+                            style="@style/Subtitle_TextViewSmall"
                             android:id="@+id/price_rcc_txt"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/_3sdp"
@@ -72,17 +72,30 @@
                             android:gravity="right"
                             android:singleLine="true"
                             android:text="@{util.convertCurrencyToDanish(data.a_price)}"
-                            android:textColor="@color/black_light" />
+                            />
 
 
-                        <android.support.v7.widget.AppCompatImageView
+                   <!--     <android.support.v7.widget.AppCompatImageView
                             android:id="@+id/row_child_cart_add_btn"
                             android:layout_width="@dimen/_20sdp"
                             android:layout_height="@dimen/_20sdp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/_5sdp"
                             android:scaleType="fitXY"
-                            app:srcCompat="@drawable/add_item" />
+                            app:srcCompat="@drawable/add_item" />-->
+
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/row_child_cart_add_btn"
+                            android:layout_width="@dimen/_16sdp"
+                            android:layout_height="@dimen/_16sdp"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/_5sdp"
+                            android:background="@color/theme_color"
+                            android:scaleType="fitXY"
+                            app:srcCompat="@drawable/add"
+
+
+                            />
 
 
                     </LinearLayout>

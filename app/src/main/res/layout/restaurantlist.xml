@@ -48,7 +48,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/clayout_crt"
-                android:background="@color/white"
+                android:background="@color/background_light"
                 >
 
 
@@ -67,6 +67,7 @@
                                 android:id="@+id/recycler_view_parent"
                                 android:nestedScrollingEnabled="false"
                                 android:clipToPadding="false"
+                                android:paddingTop="@dimen/_8sdp"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"/>
 

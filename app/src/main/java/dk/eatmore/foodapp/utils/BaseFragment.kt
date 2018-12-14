@@ -249,10 +249,13 @@ abstract class BaseFragment : Fragment() {
             val status= msg?:getString(R.string.sorry_restaurant_has_been_closed)
             DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!, R.color.black),msg = status,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
                 override fun onPositiveButtonClick(position: Int) {
+
+                    /*TODO: this condition is happen when you are comming from reorder/Home before epayfragment*/
                     if(parentFragment is HomeFragment){
                         val homeFragment =(parentFragment as HomeFragment)
                         homeFragment.popfrom_to(DetailsFragment)
                         val detailsFragment=homeFragment.childFragmentManager.findFragmentByTag(DetailsFragment.TAG)
+                        if(detailsFragment !=null)
                         (detailsFragment as DetailsFragment).fetch_category_menu()
 
                     }else if(parentFragment is OrderFragment){
@@ -261,13 +264,14 @@ abstract class BaseFragment : Fragment() {
                         orderFragment.popAllFragment()
                     }
 
-                    /*TODO: this condition is happen when you are comming from reorder 2 tab*/
+                    /*TODO: this condition is happen when you are comming from reorder 2 tab after epayfragment*/
                     else if(parentFragment is EpayFragment){
                         val epayFragment= parentFragment as EpayFragment
                         if(epayFragment.parentFragment is HomeFragment){
                             val homeFragment = epayFragment.parentFragment as HomeFragment
                             homeFragment.popfrom_to(DetailsFragment)
                             val detailsFragment=homeFragment.childFragmentManager.findFragmentByTag(DetailsFragment.TAG)
+                            if(detailsFragment !=null)
                             (detailsFragment as DetailsFragment).fetch_category_menu()
                         }else{
                             showTabBar(true)
@@ -323,6 +327,12 @@ abstract class BaseFragment : Fragment() {
         }
 
 
+    }
+    fun clearProgressDialog() {
+        if(dialog !=null){
+            dialog!!.dismiss()
+            dialog=null
+        }
     }
 
 

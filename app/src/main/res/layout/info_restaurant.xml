@@ -66,26 +66,26 @@
                     android:padding="@dimen/_8sdp"
                     >
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewMid"
+                        style="@style/TitleMidiumlight_TextViewMid"
                         android:layout_gravity="center_vertical"
                         android:layout_width="match_parent"
                         android:text="@{restaurant.restaurant_name}"
-                        android:textColor="@color/black_light" />
+                        />
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:layout_gravity="center_vertical"
                         android:layout_width="match_parent"
                         android:text="@{restaurant.address}"
-                        android:textColor="@color/black_light" />
+                        />
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:layout_gravity="center_vertical"
                         android:layout_width="match_parent"
                         android:text="@string/food_administration"
                         android:onClick="@{handler::tapOnHealthReport}"
-                        android:textColor="@color/dark_blue" />
+                        android:textColor="@color/theme_color" />
 
 
 
@@ -97,18 +97,16 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_16sdp"
-                    android:background="@color/gray"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:padding="@dimen/_8sdp"
                     android:orientation="horizontal">
 
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewMid"
+                        style="@style/TitleMidiumlight_TextViewMid"
                         android:layout_gravity="center_vertical"
                         android:layout_weight="1.05"
                         android:text="Opening hours"
-                        android:textColor="@color/black_light"
                         />
 
 
@@ -123,6 +121,7 @@
                     android:layout_height="wrap_content"
                     android:nestedScrollingEnabled="false"
                     android:id="@+id/recycler_view"
+
                     >
 
                 </android.support.v7.widget.RecyclerView>
@@ -137,17 +136,15 @@
                     android:layout_height="wrap_content"
                     android:layout_marginTop="@dimen/_8sdp"
                     android:layout_marginBottom="@dimen/_8sdp"
-                    android:background="@color/gray"
                     android:padding="@dimen/_8sdp"
                     android:orientation="horizontal">
 
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewMid"
+                        style="@style/TitleMidiumlight_TextViewMid"
                         android:layout_width="match_parent"
                         android:layout_gravity="center_vertical"
                         android:text="@string/deliveryinformation"
-                        android:textColor="@color/black_light"
                         android:visibility="@{restaurant.shipping_charges.size()> 0 ?  View.VISIBLE : View.GONE }"
                         />
 

@@ -97,7 +97,7 @@
 
 
             <android.support.v7.widget.AppCompatTextView
-                style="@style/TextViewSmall"
+                style="@style/Subtitle_TextViewSmall"
                 android:id="@+id/free_txt"
                 android:visibility="@{restaurant.free_text.equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}"
                 android:text="@{restaurant.free_text.replace(`\n`,``).replace(`\r`,``)}"
@@ -128,7 +128,7 @@
                         android:padding="@dimen/_10sdp"
                         android:focusableInTouchMode="false"
                         android:focusable="false"
-                        android:fontFamily="@font/hindvadodara_medium"
+                        android:fontFamily="@font/hindvadodara_light"
                         android:lines="1"
                         android:hint="@string/search_the_menu"
                         android:drawableLeft="@drawable/search"
@@ -170,6 +170,7 @@
                     android:id="@+id/recycler_view_menu"
                     android:nestedScrollingEnabled="true"
                     android:clipToPadding="false"
+                    android:paddingTop="@dimen/_3sdp"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 

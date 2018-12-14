@@ -8,7 +8,7 @@
     android:id="@+id/ingredient_name"
     android:padding="@dimen/_5sdp"
     android:textAppearance="?android:textAppearanceSmall"
-    android:fontFamily="@font/hindvadodara_medium"
+    android:fontFamily="@font/hindvadodara_regular"
     android:gravity="center"
     android:textColor="#fff">
 

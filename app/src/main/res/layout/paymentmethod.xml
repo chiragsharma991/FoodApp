@@ -174,7 +174,7 @@
 
 
                                         <android.support.v7.widget.AppCompatTextView
-                                            style="@style/TextViewMid"
+                                            style="@style/TitleMidiumlight_TextViewMid"
                                             android:singleLine="true"
                                             android:text="@string/online_payment"
                                             />
@@ -234,7 +234,7 @@
 
                                     <android.support.v7.widget.AppCompatTextView
                                         android:id="@+id/apply_giftcard_txt"
-                                        style="@style/TextViewSmall"
+                                        style="@style/Subtitle_TextViewSmall"
                                         android:layout_height="22dp"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="8dp"
@@ -276,7 +276,7 @@
                                                 android:layout_width="match_parent"
                                                 android:layout_height="@dimen/_40sdp"
                                                 android:layout_weight="0.8"
-                                                android:background="@color/yello"
+                                                android:background="@drawable/rectangle_edittext"
                                                 android:hint="Enter your postal code"
                                                 android:inputType="textCapCharacters"
                                                 android:lines="1"
@@ -299,6 +299,7 @@
                                                 <android.support.v7.widget.AppCompatTextView
                                                     android:id="@+id/applyonline_txt"
                                                     style="@style/TextViewSmall"
+                                                    android:fontFamily="@font/ubuntu_l"
                                                     android:layout_centerInParent="true"
                                                     android:text="@string/apply"
 
@@ -320,7 +321,7 @@
 
                                         <android.support.v7.widget.AppCompatTextView
                                             android:id="@+id/error_of_onlinegiftcard"
-                                            style="@style/TextViewSmall"
+                                            style="@style/Subtitle_TextViewSmall"
                                             android:layout_height="22dp"
                                             android:layout_below="@+id/view_of_onlinecoupan"
                                             android:layout_marginStart="@dimen/_8sdp"
@@ -384,7 +385,7 @@
                                         app:layout_constraintTop_toBottomOf="@+id/online_btn">
 
                                         <android.support.v7.widget.AppCompatTextView
-                                            style="@style/TextViewMid"
+                                            style="@style/TitleMidiumlight_TextViewMid"
                                             android:singleLine="true"
                                             android:text="@string/cash_payment"
                                             />
@@ -442,7 +443,7 @@
 
                                     <android.support.v7.widget.AppCompatTextView
                                         android:id="@+id/apply_cash_giftcard_txt"
-                                        style="@style/TextViewSmall"
+                                        style="@style/Subtitle_TextViewSmall"
                                         android:layout_height="18dp"
                                         android:layout_gravity="center_vertical"
                                         android:layout_marginStart="8dp"
@@ -484,7 +485,7 @@
                                                 android:layout_width="match_parent"
                                                 android:layout_height="@dimen/_40sdp"
                                                 android:layout_weight="0.8"
-                                                android:background="@color/yello"
+                                                android:background="@drawable/rectangle_edittext"
                                                 android:hint="Enter your postal code"
                                                 android:inputType="textCapCharacters"
                                                 android:lines="1"
@@ -507,6 +508,7 @@
                                                 <android.support.v7.widget.AppCompatTextView
                                                     android:id="@+id/applycash_txt"
                                                     style="@style/TextViewSmall"
+                                                    android:fontFamily="@font/ubuntu_l"
                                                     android:layout_centerInParent="true"
                                                     android:text="@string/apply"
 
@@ -528,7 +530,7 @@
 
                                         <android.support.v7.widget.AppCompatTextView
                                             android:id="@+id/error_of_cashgiftcard"
-                                            style="@style/TextViewSmall"
+                                            style="@style/Subtitle_TextViewSmall"
                                             android:layout_height="22dp"
                                             android:layout_below="@+id/view_of_cashcoupan"
                                             android:layout_marginStart="@dimen/_8sdp"
@@ -616,7 +618,7 @@
 
 
                                                     <android.support.v7.widget.AppCompatTextView
-                                                        style="@style/TextViewSmall"
+                                                        style="@style/Subtitle_TextViewSmall"
                                                         android:layout_width="wrap_content"
                                                         android:layout_height="wrap_content"
                                                         android:layout_centerInParent="true"
@@ -624,7 +626,7 @@
                                                         android:layout_marginBottom="@dimen/_8sdp"
                                                         android:singleLine="true"
                                                         android:text="Bill Details"
-                                                        android:textColor="@color/black" />
+                                                        />
 
 
                                                 </RelativeLayout>
@@ -653,7 +655,7 @@
                                                     android:orientation="horizontal">
 
                                                     <android.support.v7.widget.AppCompatTextView
-                                                        style="@style/TextViewSmall"
+                                                        style="@style/SubtitleMidium_TextViewSmall"
                                                         android:layout_width="0dp"
                                                         android:layout_height="wrap_content"
                                                         android:layout_marginEnd="@dimen/_8sdp"
@@ -661,11 +663,11 @@
                                                         android:gravity="start"
                                                         android:singleLine="true"
                                                         android:text="Subtotal:"
-                                                        android:textStyle="bold" />
+                                                        />
 
                                                     <android.support.v7.widget.AppCompatTextView
                                                         android:id="@+id/subtotal_txt"
-                                                        style="@style/TextViewSmall"
+                                                        style="@style/SubtitleMidium_TextViewSmall"
                                                         android:layout_width="0dp"
                                                         android:layout_height="wrap_content"
                                                         android:layout_alignParentEnd="true"
@@ -673,7 +675,7 @@
                                                         android:gravity="end"
                                                         android:singleLine="true"
                                                         android:text="45,00kr"
-                                                        android:textStyle="bold" />
+                                                        />
 
 
                                                 </LinearLayout>
@@ -688,7 +690,7 @@
                                                     android:orientation="horizontal">
 
                                                     <android.support.v7.widget.AppCompatTextView
-                                                        style="@style/TextViewSmall"
+                                                        style="@style/SubtitleMidium_TextViewSmall"
                                                         android:layout_width="0dp"
                                                         android:layout_height="wrap_content"
                                                         android:layout_marginEnd="@dimen/_8sdp"
@@ -696,11 +698,11 @@
                                                         android:gravity="start"
                                                         android:singleLine="true"
                                                         android:text="Discount:"
-                                                        android:textStyle="bold" />
+                                                        />
 
                                                     <android.support.v7.widget.AppCompatTextView
                                                         android:id="@+id/discountcoupan_txt"
-                                                        style="@style/TextViewSmall"
+                                                        style="@style/SubtitleMidium_TextViewSmall"
                                                         android:layout_width="0dp"
                                                         android:layout_height="wrap_content"
                                                         android:layout_alignParentEnd="true"
@@ -708,7 +710,7 @@
                                                         android:gravity="end"
                                                         android:singleLine="true"
                                                         android:text="145,00kr"
-                                                        android:textStyle="bold" />
+                                                        />
 
 
                                                 </LinearLayout>
@@ -723,7 +725,7 @@
                                                     android:orientation="horizontal">
 
                                                     <android.support.v7.widget.AppCompatTextView
-                                                        style="@style/TextViewSmall"
+                                                        style="@style/SubtitleMidium_TextViewSmall"
                                                         android:layout_width="0dp"
                                                         android:layout_height="wrap_content"
                                                         android:layout_marginEnd="@dimen/_8sdp"
@@ -731,11 +733,11 @@
                                                         android:gravity="start"
                                                         android:singleLine="true"
                                                         android:text="Rest upto minimum:"
-                                                        android:textStyle="bold" />
+                                                        />
 
                                                     <android.support.v7.widget.AppCompatTextView
                                                         android:id="@+id/restuptominimum_txt"
-                                                        style="@style/TextViewSmall"
+                                                        style="@style/SubtitleMidium_TextViewSmall"
                                                         android:layout_width="0dp"
                                                         android:layout_height="wrap_content"
                                                         android:layout_alignParentEnd="true"
@@ -743,7 +745,7 @@
                                                         android:gravity="end"
                                                         android:singleLine="true"
                                                         android:text="145,00kr"
-                                                        android:textStyle="bold" />
+                                                        />
 
 
                                                 </LinearLayout>
@@ -758,7 +760,7 @@
                                                     android:orientation="horizontal">
 
                                                     <android.support.v7.widget.AppCompatTextView
-                                                        style="@style/TextViewSmall"
+                                                        style="@style/SubtitleMidium_TextViewSmall"
                                                         android:layout_width="0dp"
                                                         android:layout_height="wrap_content"
                                                         android:layout_marginEnd="@dimen/_8sdp"
@@ -766,11 +768,11 @@
                                                         android:gravity="start"
                                                         android:singleLine="true"
                                                         android:text="Shipping Charges:"
-                                                        android:textStyle="bold" />
+                                                        />
 
                                                     <android.support.v7.widget.AppCompatTextView
                                                         android:id="@+id/shipping_txt"
-                                                        style="@style/TextViewSmall"
+                                                        style="@style/SubtitleMidium_TextViewSmall"
                                                         android:layout_width="0dp"
                                                         android:layout_height="wrap_content"
                                                         android:layout_alignParentEnd="true"
@@ -778,7 +780,7 @@
                                                         android:gravity="end"
                                                         android:singleLine="true"
                                                         android:text="145,00kr"
-                                                        android:textStyle="bold" />
+                                                        />
 
 
                                                 </LinearLayout>
@@ -793,7 +795,7 @@
                                                     android:orientation="horizontal">
 
                                                     <android.support.v7.widget.AppCompatTextView
-                                                        style="@style/TextViewSmall"
+                                                        style="@style/SubtitleMidium_TextViewSmall"
                                                         android:layout_width="0dp"
                                                         android:layout_height="wrap_content"
                                                         android:layout_marginEnd="@dimen/_8sdp"
@@ -801,11 +803,11 @@
                                                         android:gravity="start"
                                                         android:singleLine="true"
                                                         android:text="Additional Charges:"
-                                                        android:textStyle="bold" />
+                                                        />
 
                                                     <android.support.v7.widget.AppCompatTextView
                                                         android:id="@+id/additional_charge_txt"
-                                                        style="@style/TextViewSmall"
+                                                        style="@style/SubtitleMidium_TextViewSmall"
                                                         android:layout_width="0dp"
                                                         android:layout_height="wrap_content"
                                                         android:layout_alignParentEnd="true"
@@ -813,7 +815,7 @@
                                                         android:gravity="end"
                                                         android:singleLine="true"
                                                         android:text="145,00kr"
-                                                        android:textStyle="bold" />
+                                                        />
 
 
                                                 </LinearLayout>
@@ -828,7 +830,7 @@
                                                     android:orientation="horizontal">
 
                                                     <android.support.v7.widget.AppCompatTextView
-                                                        style="@style/TextViewSmall"
+                                                        style="@style/SubtitleMidium_TextViewSmall"
                                                         android:layout_width="0dp"
                                                         android:layout_height="wrap_content"
                                                         android:layout_marginEnd="@dimen/_8sdp"
@@ -836,11 +838,11 @@
                                                         android:gravity="start"
                                                         android:singleLine="true"
                                                         android:text="Discount:"
-                                                        android:textStyle="bold" />
+                                                        />
 
                                                     <android.support.v7.widget.AppCompatTextView
                                                         android:id="@+id/discountgift_txt"
-                                                        style="@style/TextViewSmall"
+                                                        style="@style/SubtitleMidium_TextViewSmall"
                                                         android:layout_width="0dp"
                                                         android:layout_height="wrap_content"
                                                         android:layout_alignParentEnd="true"
@@ -848,7 +850,7 @@
                                                         android:gravity="end"
                                                         android:singleLine="true"
                                                         android:text="145,00kr"
-                                                        android:textStyle="bold" />
+                                                        />
 
 
                                                 </LinearLayout>
@@ -872,7 +874,7 @@
                                                     android:orientation="horizontal">
 
                                                     <android.support.v7.widget.AppCompatTextView
-                                                        style="@style/TextViewSmall"
+                                                        style="@style/SubtitleMidium_TextViewSmall"
                                                         android:layout_width="0dp"
                                                         android:layout_height="wrap_content"
                                                         android:layout_marginEnd="@dimen/_8sdp"
@@ -880,11 +882,11 @@
                                                         android:gravity="start"
                                                         android:singleLine="true"
                                                         android:text="Total:"
-                                                        android:textStyle="bold" />
+                                                        />
 
                                                     <android.support.v7.widget.AppCompatTextView
                                                         android:id="@+id/total_txt"
-                                                        style="@style/TextViewSmall"
+                                                        style="@style/SubtitleMidium_TextViewSmall"
                                                         android:layout_width="0dp"
                                                         android:layout_height="wrap_content"
                                                         android:layout_alignParentEnd="true"
@@ -892,7 +894,7 @@
                                                         android:gravity="end"
                                                         android:singleLine="true"
                                                         android:text="145,00kr"
-                                                        android:textStyle="bold" />
+                                                        />
 
 
                                                 </LinearLayout>

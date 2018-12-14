@@ -38,9 +38,10 @@
 
 
                 <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextViewSmall"
+                    style="@style/TitleMidiumlight_TextViewMid"
                     android:id="@+id/row_cart_txt"
                     android:layout_margin="@dimen/_8sdp"
+                    android:textAppearance="?android:attr/textAppearanceMedium"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     />

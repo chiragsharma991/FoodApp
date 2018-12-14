@@ -74,7 +74,7 @@
                         android:drawablePadding="@dimen/_8sdp"
                         android:layout_toStartOf="@+id/cancel_button"
                         android:background="@android:color/transparent"
-                        android:fontFamily="@font/hindvadodara_medium"
+                        android:fontFamily="@font/hindvadodara_light"
                         android:hint="@string/search_the_menu"
                         android:lines="1"
                         android:singleLine="true"

@@ -125,8 +125,7 @@
                             >
 
                             <TextView
-                                style="@style/TextViewMid"
-                                android:textColor="@color/black"
+                                style="@style/TitleMidiumlight_TextViewMid"
                                 android:singleLine="true"
                                 android:text="@{restaurant.restaurant_name}" />
 
@@ -134,6 +133,7 @@
                                 style="?android:attr/ratingBarStyleSmall"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_5sdp"
                                 android:isIndicator="true"
                                 android:numStars="6"
                                 android:onClick="@{handler :: tapOnRating}"
@@ -141,14 +141,14 @@
                                 android:stepSize="1" />
 
                             <TextView
-                                style="@style/TextViewSmall"
-                                android:textColor="@color/dark_blue"
+                                style="@style/Subtitle_TextViewSmall"
                                 android:visibility="@{is_uiprogress ? View.GONE : View.VISIBLE}"
                                 android:onClick="@{handler::tapOnRating}"
+                                android:textColor="@color/dark_blue"
                                 android:text="@{@string/restaurant_rating(restaurant.total_review_count)}" />
 
                             <TextView
-                                style="@style/TextViewSmall"
+                                style="@style/Subtitle_TextViewSmall"
                                 android:singleLine="true"
                                 android:textColor="@color/theme_color"
                                 android:text="@{restaurant.cuisines}" />
@@ -226,9 +226,10 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="bottom"
                     app:layout_collapseMode="pin"
+                    app:tabTextAppearance="@style/tab_text"
                     app:tabIndicatorColor="@color/theme_color"
-                    app:tabSelectedTextColor="@color/black"
-                    app:tabTextColor="@color/black_default"/>
+                    app:tabSelectedTextColor="@color/theme_color"
+                    app:tabTextColor="@color/black_txt_regular"/>
 
 
 

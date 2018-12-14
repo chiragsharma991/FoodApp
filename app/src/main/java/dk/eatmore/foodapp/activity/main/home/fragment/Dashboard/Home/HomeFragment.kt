@@ -24,6 +24,7 @@ import android.view.*
 import android.view.animation.TranslateAnimation
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import com.bumptech.glide.Glide
 import com.facebook.*
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.adapter.OrderListAdapter
@@ -47,6 +48,7 @@ import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BindDataUtils
 import dk.eatmore.foodapp.utils.CommanAPI
 import dk.eatmore.foodapp.utils.Constants
+import kotlinx.android.synthetic.main.toolbar.*
 import java.util.ArrayList
 
 
@@ -91,6 +93,9 @@ class HomeFragment : CommanAPI() {
 
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
+            Glide.with(context!!).load(ContextCompat.getDrawable(context!!,R.mipmap.banner)).into(imageview);
+            restaurant_logo.visibility=View.VISIBLE
+            img_toolbar_back.visibility=View.GONE
             firebaseAnalytics = FirebaseAnalytics.getInstance(context!!);
             checkFirebaseAnalytics()
             clickEvent = MyClickHandler(this)

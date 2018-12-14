@@ -58,6 +58,7 @@
 
 
 
+
     <!--Text view -->
     
     <style name="TextViewLarge" parent="@android:style/Widget.Holo.Light.TextView">
@@ -89,13 +90,101 @@
     </style>
 
 
+    <!--project Text style  (Mid > Regular > light)-->
+
+   <style name="TitleMidium_TextViewMid" parent="@android:style/Widget.Holo.Light.TextView">
+        <item name="android:textColor">@color/black_txt_dark</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ubuntu_m</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
+
+   <style name="TitleMidiumlight_TextViewMid" parent="@android:style/Widget.Holo.Light.TextView">
+        <item name="android:textColor">@color/black_txt_dark</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ubuntu_r</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+    </style>
+
+
+
+
+    <style name="TitleMidium_TextViewSmall" parent="@android:style/Widget.Holo.Light.TextView">
+        <item name="android:textColor">@color/black_txt_dark</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ubuntu_m</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+
+    </style>
+    <style name="TitleRegular_TextViewSmall" parent="@android:style/Widget.Holo.Light.TextView">
+        <item name="android:textColor">@color/black_txt_dark</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ubuntu_r</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+
+    </style>
+
+    <style name="Titlelight_TextViewSmall" parent="@android:style/Widget.Holo.Light.TextView">
+        <item name="android:textColor">@color/black_txt_regular</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/ubuntu_l</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+
+    </style>
+
+
+    <style name="SubtitleMidium_TextViewSmall" parent="@android:style/Widget.Holo.Light.TextView">
+        <item name="android:textColor">@color/black_txt_light</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/hindvadodara_medium</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+
+    </style>
+
+    <style name="SubtitleRegular_TextViewSmall" parent="@android:style/Widget.Holo.Light.TextView">
+        <item name="android:textColor">@color/black_txt_light</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/hindvadodara_regular</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+
+    </style>
+
+
+    <style name="Subtitle_TextViewSmall" parent="@android:style/Widget.Holo.Light.TextView">
+        <item name="android:textColor">@color/black_txt_light</item>
+        <item name="android:layout_width">wrap_content</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/hindvadodara_light</item>
+        <item name="android:includeFontPadding">false</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
+
+    </style>
+
+
     <!--Button-->
 
     <style name="Button" parent="Widget.AppCompat.Button">
         <item name="android:textColor">@color/white</item>
         <item name="android:layout_width">match_parent</item>
-        <item name="android:layout_height">@dimen/_40sdp</item>
-        <item name="android:fontFamily">@font/ubuntu_l</item>
+        <item name="android:layout_height">wrap_content</item>
+        <item name="android:fontFamily">@font/hindvadodara_medium</item>
         <item name="android:textAllCaps">false</item>
         <item name="android:backgroundTint" tools:targetApi="lollipop">@color/theme_color</item>
         <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
@@ -115,7 +204,7 @@
         <item name="android:singleLine">true</item>
         <item name="android:paddingLeft">@dimen/_8sdp</item>
         <item name="android:background">@drawable/round_corner</item>
-        <item name="android:fontFamily">@font/hindvadodara_medium</item>
+        <item name="android:fontFamily">@font/hindvadodara_light</item>
         <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
     </style>
 
@@ -123,7 +212,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/_40sdp</item>
         <item name="android:paddingLeft">@dimen/_8sdp</item>
-        <item name="android:fontFamily">@font/hindvadodara_medium</item>
+        <item name="android:fontFamily">@font/hindvadodara_light</item>
         <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
     </style>
 
@@ -148,7 +237,8 @@
 
 
     <style name="tab_text" parent="@android:style/TextAppearance.Widget.TabWidget">
-        <item name="android:fontFamily">@font/hindvadodara_medium</item>
+        <item name="android:fontFamily">@font/ubuntu_r</item>
+
     </style>
 
 

@@ -32,6 +32,7 @@ import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.restaurantlist.*
 import kotlinx.android.synthetic.main.toolbar.*
+import retrofit2.Call
 
 
 class RestaurantList : BaseFragment() {
@@ -41,6 +42,8 @@ class RestaurantList : BaseFragment() {
     private lateinit var clickEvent: MyClickHandler
     private lateinit  var list : ArrayList<StatusWiseRestaurant>
     private lateinit var mAdapter: RestaurantListParentAdapter
+    private var call_restaurantlist  : Call<RestaurantListModel>? =null
+
 
 
     companion object {
@@ -114,8 +117,8 @@ class RestaurantList : BaseFragment() {
         }
         jsonobject.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
         jsonobject.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
-
-        callAPI(ApiCall.restaurantList(jsonobject), object : BaseFragment.OnApiCallInteraction {
+         call_restaurantlist=ApiCall.restaurantList(jsonobject)
+        callAPI(call_restaurantlist!!, object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
                 val restaurantlistmodel = body as RestaurantListModel
@@ -126,6 +129,13 @@ class RestaurantList : BaseFragment() {
             }
 
             override fun onFail(error: Int) {
+
+
+
+                if(call_restaurantlist!!.isCanceled ){
+                    return
+                }
+
                 when (error) {
                     404 -> {
                         showSnackBar(clayout_crt, getString(R.string.error_404))
@@ -210,6 +220,7 @@ class RestaurantList : BaseFragment() {
     private fun createViewModel(): UIModel =
 
             ViewModelProviders.of(this).get(RestaurantList.UIModel::class.java).apply {
+                restaurantList.removeObservers(this@RestaurantList)
                 restaurantList.observe(this@RestaurantList,Observer<RestaurantListModel>{
                     refreshview()
                 })
@@ -223,12 +234,25 @@ class RestaurantList : BaseFragment() {
 
     }
 
+    override fun onDestroyView() {
 
-    override fun onDestroy() {
-        super.onDestroy()
-        logd(TAG, "on destroy...")
-        ui_model=null
+        logd(TAG, "onDestroyView...")
+
+        ui_model?.let {
+            ViewModelProviders.of(this).get(UIModel::class.java).restaurantList.removeObservers(this@RestaurantList)
+        }
+
+        call_restaurantlist?.let {
+            progress_bar.visibility=View.GONE
+            it.cancel()
+        }
+
+        super.onDestroyView()
+
     }
+
+
+
 
     override fun onDetach() {
         super.onDetach()

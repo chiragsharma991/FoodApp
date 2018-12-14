@@ -61,6 +61,7 @@ class DetailsFragment : BaseFragment() {
     private var mAdapter: OrderListAdapter? = null
     var adapter: ViewPagerAdapter? = null
     private lateinit var binding: FragmentDetailBinding
+    private var canIrefreshpre_Function : Boolean =false
     private lateinit var mYourBroadcastReceiver: BroadcastReceiver
    // private lateinit var restaurant : Restaurant
     private var call_category_menu  : Call<JsonObject>? =null
@@ -186,6 +187,7 @@ class DetailsFragment : BaseFragment() {
                 DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!, R.color.black),msg = msg,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
                     override fun onPositiveButtonClick(position: Int) {
                        // viewpager.setCurrentItem(1,true)
+                        canIrefreshpre_Function=true
                     }
                     override fun onNegativeButtonClick() {
                     }
@@ -249,7 +251,7 @@ class DetailsFragment : BaseFragment() {
          postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
          postParam.addProperty(Constants.LANGUAGE, Constants.EN)
 
-         progress_bar_layout.visibility=View.VISIBLE
+       //  progress_bar_layout.visibility=View.VISIBLE
          call_category_menu=ApiCall.category_menu(postParam)
         callAPI(call_category_menu!!, object : BaseFragment.OnApiCallInteraction {
 
@@ -262,6 +264,7 @@ class DetailsFragment : BaseFragment() {
             }
             override fun onFail(error: Int) {
                 binding.isUiprogress=false
+
                 if(call_category_menu!!.isCanceled){
                     return
                 }
@@ -320,17 +323,22 @@ class DetailsFragment : BaseFragment() {
 
     fun updatebatchcount(count : Int){
         // this is update method will call in both category and details.
-        total_cartcnt= total_cartcnt + count
-        badge_notification_txt.visibility = if (total_cartcnt == 0) View.GONE else View.VISIBLE
-        if((ui_model!!.category_menulist.value!!.is_restaurant_closed !=null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) &&
-                (ui_model!!.category_menulist.value!!.pre_order !=null && ui_model!!.category_menulist.value!!.pre_order == false)){
-            toolbar_badge_view.visibility= View.GONE
+        try{
+            total_cartcnt= total_cartcnt + count
+            badge_notification_txt.visibility = if (total_cartcnt == 0) View.GONE else View.VISIBLE
+            if((ui_model!!.category_menulist.value!!.is_restaurant_closed !=null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) &&
+                    (ui_model!!.category_menulist.value!!.pre_order !=null && ui_model!!.category_menulist.value!!.pre_order == false)){
+                toolbar_badge_view.visibility= View.GONE
 
-        }else{
-            toolbar_badge_view.visibility= if (total_cartcnt == 0) View.GONE else View.VISIBLE
+            }else{
+                toolbar_badge_view.visibility= if (total_cartcnt == 0) View.GONE else View.VISIBLE
+            }
+            badge_notification_txt.text= total_cartcnt.toString()
+            badge_countprice.text= BindDataUtils.convertCurrencyToDanish(total_cartamt)
+        }catch (e : Exception){
+            loge(TAG,"exception: - "+e.message)
         }
-        badge_notification_txt.text= total_cartcnt.toString()
-        badge_countprice.text= BindDataUtils.convertCurrencyToDanish(total_cartamt)
+
     }
 
 
@@ -338,8 +346,9 @@ class DetailsFragment : BaseFragment() {
         // parentFragment!!.childFragmentManager.popBackStack()
         showTabBar(true)
         if(parentFragment is HomeFragment){
-           val restaurantList= (parentFragment as HomeFragment).childFragmentManager.findFragmentByTag(RestaurantList.TAG)
-            (restaurantList as RestaurantList).fetch_ProductDetailList()
+            val restaurantList= (parentFragment as HomeFragment).childFragmentManager.findFragmentByTag(RestaurantList.TAG)
+            if(restaurantList !=null && canIrefreshpre_Function) (restaurantList as RestaurantList).fetch_ProductDetailList()
+            canIrefreshpre_Function=false
             (parentFragment as HomeFragment).childFragmentManager.popBackStack()
         }else{
             (parentFragment as OrderFragment).childFragmentManager.popBackStack()
@@ -406,6 +415,19 @@ class DetailsFragment : BaseFragment() {
 
         loge(TAG, "on destroy...")
 
+
+
+    }
+
+    override fun onDetach() {
+        super.onDetach()
+        loge(TAG, "on detech...")
+
+    }
+
+    override fun onDestroyView() {
+        loge(TAG, "onDestroyView...")
+
         ui_model?.let {
             ViewModelProviders.of(this).get(DetailsFragment.UIModel::class.java).category_menulist.removeObservers(this@DetailsFragment)
         }
@@ -418,17 +440,7 @@ class DetailsFragment : BaseFragment() {
             LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(mYourBroadcastReceiver);
         }
 
-    }
-
-    override fun onDetach() {
-        super.onDetach()
-        loge(TAG, "on detech...")
-
-    }
-
-    override fun onDestroyView() {
         super.onDestroyView()
-        loge(TAG, "onDestroyView...")
 
     }
 

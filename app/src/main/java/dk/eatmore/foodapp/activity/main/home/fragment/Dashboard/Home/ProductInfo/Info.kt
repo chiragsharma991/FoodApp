@@ -183,9 +183,9 @@ class Info : BaseFragment() {
                     else if (i == 2)
                         textView1.gravity = Gravity.START
                     textView1.setSingleLine(true)
-                    textView1.setTextAppearance(context, R.style.TextViewSmall)
-                    textView1.typeface= Typeface.DEFAULT_BOLD
-                    textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                    textView1.setTextAppearance(context, R.style.SubtitleMidium_TextViewSmall)
+                    //textView1.typeface= Typeface.DEFAULT_BOLD
+                   // textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
 
                     parent.addView(textView1)
 
@@ -239,8 +239,8 @@ class Info : BaseFragment() {
                         else if (j == 2)
                             textView1.gravity = Gravity.START
                         textView1.setSingleLine(true)
-                        textView1.setTextAppearance(context, R.style.TextViewSmall)
-                        textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                        textView1.setTextAppearance(context, R.style.Subtitle_TextViewSmall)
+                     //   textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
 
                         parent.addView(textView1)
 
@@ -293,9 +293,9 @@ class Info : BaseFragment() {
                     else if (i == 2)
                         textView1.gravity = Gravity.START
                     textView1.setSingleLine(true)
-                    textView1.setTextAppearance(context, R.style.TextViewSmall)
-                    textView1.typeface= Typeface.DEFAULT_BOLD
-                    textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                    textView1.setTextAppearance(context, R.style.SubtitleMidium_TextViewSmall)
+                //    textView1.typeface= Typeface.DEFAULT_BOLD
+                  //  textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
 
                     parent.addView(textView1)
 
@@ -349,8 +349,8 @@ class Info : BaseFragment() {
                         else if (j == 2)
                             textView1.gravity = Gravity.START
                         textView1.setSingleLine(true)
-                        textView1.setTextAppearance(context, R.style.TextViewSmall)
-                        textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                        textView1.setTextAppearance(context, R.style.Subtitle_TextViewSmall)
+                       // textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
 
                         parent.addView(textView1)
 
@@ -403,9 +403,9 @@ class Info : BaseFragment() {
                     else if (i == 2)
                         textView1.gravity = Gravity.START
                     textView1.setSingleLine(true)
-                    textView1.setTextAppearance(context, R.style.TextViewSmall)
-                    textView1.typeface= Typeface.DEFAULT_BOLD
-                    textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                    textView1.setTextAppearance(context, R.style.SubtitleMidium_TextViewSmall)
+                  //  textView1.typeface= Typeface.DEFAULT_BOLD
+                  //  textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
 
                     parent.addView(textView1)
 
@@ -459,8 +459,8 @@ class Info : BaseFragment() {
                         else if (j == 2)
                             textView1.gravity = Gravity.START
                         textView1.setSingleLine(true)
-                        textView1.setTextAppearance(context, R.style.TextViewSmall)
-                        textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                        textView1.setTextAppearance(context, R.style.Subtitle_TextViewSmall)
+                        //textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
 
                         parent.addView(textView1)
 
@@ -507,9 +507,9 @@ class Info : BaseFragment() {
                     else if (i == 1)
                         textView1.gravity = Gravity.START
                     textView1.setSingleLine(true)
-                    textView1.setTextAppearance(context, R.style.TextViewSmall)
-                    textView1.typeface= Typeface.DEFAULT_BOLD
-                    textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                    textView1.setTextAppearance(context, R.style.SubtitleMidium_TextViewSmall)
+                 //   textView1.typeface= Typeface.DEFAULT_BOLD
+                   // textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
                     parent.addView(textView1)
                 }
 

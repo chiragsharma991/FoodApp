@@ -1,6 +1,7 @@
 package dk.eatmore.foodapp.utils
 
 import android.Manifest
+import android.app.ProgressDialog
 import android.content.Context
 import android.content.Intent
 import android.content.pm.PackageManager
@@ -44,6 +45,9 @@ abstract class BaseActivity : AppCompatActivity()
 
 
     }*/
+
+    private  var dialog: ProgressDialog? = null
+
 
     fun isInternetAvailable(): Boolean {
         val connectivityManager = getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
@@ -102,6 +106,28 @@ abstract class BaseActivity : AppCompatActivity()
             return true
         }
     }
+
+    fun showProgressDialog() {
+        if(dialog ==null){
+            dialog = ProgressDialog(this);
+            dialog!!.setMessage(getString(R.string.please_wait))
+            dialog!!.setCancelable(false)
+            dialog!!.setCanceledOnTouchOutside(false)
+            dialog!!.show()
+        }else{
+            dialog!!.dismiss()
+            dialog=null
+        }
+
+
+    }
+    fun clearProgressDialog() {
+        if(dialog !=null){
+            dialog!!.dismiss()
+            dialog=null
+        }
+    }
+
 
     fun <T>  callAPI(call: Call<T>, onAliCallInteraction: BaseFragment.OnApiCallInteraction) {
         if (isInternetAvailable()) {

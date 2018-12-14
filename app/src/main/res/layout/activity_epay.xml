@@ -75,7 +75,7 @@
 
                             <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/epay_total_lbl"
-                                style="@style/TextViewMid"
+                                style="@style/TitleMidiumlight_TextViewMid"
                                 android:layout_width="wrap_content"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_8sdp"
@@ -87,10 +87,11 @@
 
                             <android.support.v7.widget.AppCompatTextView
                                 android:id="@+id/epay_total_txt"
-                                style="@style/TextViewLarge"
+                                style="@style/TitleMidiumlight_TextViewMid"
                                 android:layout_alignParentRight="true"
                                 android:layout_weight="0.3"
                                 android:gravity="end"
+                                android:layout_marginTop="@dimen/_8sdp"
                                 android:singleLine="true"
                                 android:text="00,00 Kr,"
                                 android:textColor="@color/theme_color_secondary_dark"
@@ -281,20 +282,20 @@
                                                 android:orientation="horizontal">
 
                                                 <android.support.v7.widget.AppCompatTextView
-                                                    style="@style/TextViewSmall"
+                                                    style="@style/SubtitleMidium_TextViewSmall"
                                                     android:layout_width="0dp"
+                                                    android:fontFamily="@font/hindvadodara_medium"
                                                     android:layout_height="wrap_content"
                                                     android:layout_marginEnd="@dimen/_8sdp"
                                                     android:layout_weight="1.2"
                                                     android:gravity="start"
                                                     android:singleLine="true"
                                                     android:text="Subtotal"
-                                                    android:textColor="@color/black_light"
-                                                    android:textStyle="bold" />
+                                                    />
 
                                                 <android.support.v7.widget.AppCompatTextView
                                                     android:id="@+id/subtotal"
-                                                    style="@style/TextViewSmall"
+                                                    style="@style/SubtitleMidium_TextViewSmall"
                                                     android:layout_width="0dp"
                                                     android:layout_height="wrap_content"
                                                     android:layout_alignParentEnd="true"
@@ -302,8 +303,7 @@
                                                     android:gravity="end"
                                                     android:singleLine="true"
                                                     android:text="45,00kr"
-                                                    android:textColor="@color/black_light"
-                                                    android:textStyle="bold" />
+                                                    />
 
 
                                             </LinearLayout>
@@ -317,7 +317,7 @@
                                                 android:visibility="gone">
 
                                                 <android.support.v7.widget.AppCompatTextView
-                                                    style="@style/TextViewSmall"
+                                                    style="@style/SubtitleMidium_TextViewSmall"
                                                     android:layout_width="0dp"
                                                     android:layout_height="wrap_content"
                                                     android:layout_marginEnd="@dimen/_8sdp"
@@ -325,10 +325,10 @@
                                                     android:gravity="start"
                                                     android:singleLine="true"
                                                     android:text="Tax"
-                                                    android:textColor="@color/black_light" />
+                                                    />
 
                                                 <android.support.v7.widget.AppCompatTextView
-                                                    style="@style/TextViewSmall"
+                                                    style="@style/SubtitleMidium_TextViewSmall"
                                                     android:layout_width="0dp"
                                                     android:layout_height="wrap_content"
                                                     android:layout_alignParentEnd="true"
@@ -336,7 +336,7 @@
                                                     android:gravity="end"
                                                     android:singleLine="true"
                                                     android:text="0,00 kr"
-                                                    android:textColor="@color/black_light" />
+                                                    />
 
 
                                             </LinearLayout>
@@ -350,7 +350,7 @@
                                                 android:orientation="horizontal">
 
                                                 <android.support.v7.widget.AppCompatTextView
-                                                    style="@style/TextViewSmall"
+                                                    style="@style/SubtitleMidium_TextViewSmall"
                                                     android:layout_width="0dp"
                                                     android:layout_height="wrap_content"
                                                     android:layout_marginEnd="@dimen/_8sdp"
@@ -358,12 +358,11 @@
                                                     android:gravity="start"
                                                     android:singleLine="true"
                                                     android:text="Total"
-                                                    android:textColor="@color/black_light"
-                                                    android:textStyle="bold" />
+                                                    />
 
                                                 <android.support.v7.widget.AppCompatTextView
                                                     android:id="@+id/total"
-                                                    style="@style/TextViewSmall"
+                                                    style="@style/SubtitleMidium_TextViewSmall"
                                                     android:layout_width="0dp"
                                                     android:layout_height="wrap_content"
                                                     android:layout_alignParentEnd="true"
@@ -371,8 +370,7 @@
                                                     android:gravity="end"
                                                     android:singleLine="true"
                                                     android:text="145,00kr"
-                                                    android:textColor="@color/black_light"
-                                                    android:textStyle="bold" />
+                                                    />
 
 
                                             </LinearLayout>

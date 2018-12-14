@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <layout  xmlns:android="http://schemas.android.com/apk/res/android"
-
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     >
 
     <data>
@@ -24,8 +25,7 @@
             android:fitsSystemWindows="true"
             android:clickable="true"
             android:focusable="true"
-            xmlns:app="http://schemas.android.com/apk/res-auto"
-            xmlns:tools="http://schemas.android.com/tools"
+
             >
 
 
@@ -43,8 +43,21 @@
 
                     >
 
+                    <android.support.design.widget.AppBarLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/appbar"
+                        >
+                        <include layout="@layout/toolbar"
+                            >
 
-                    <android.support.design.widget.CollapsingToolbarLayout
+                        </include>
+
+
+
+                    </android.support.design.widget.AppBarLayout>
+
+                    <RelativeLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         app:contentScrim="?attr/colorPrimary"
@@ -60,15 +73,15 @@
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-
                                 >
 
                                 <android.support.v7.widget.AppCompatImageView
                                     android:layout_width="match_parent"
                                     android:layout_height="match_parent"
+                                    android:id="@+id/imageview"
                                     android:fitsSystemWindows="true"
                                     android:scaleType="centerCrop"
-                                    android:src="@mipmap/banner" />
+                                    />
 
                                 <View
                                     android:id="@+id/fadeBackgroudView"
@@ -91,7 +104,7 @@
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
                                         android:id="@+id/center_layout"
-                                        android:layout_centerVertical="true"
+                                        android:layout_marginTop="@dimen/_50sdp"
                                         >
 
                                     <LinearLayout
@@ -109,23 +122,24 @@
                                               android:src="@mipmap/logo" />-->
 
                                         <TextView
-                                            style="@style/TextViewMid"
-                                            android:layout_marginTop="@dimen/_16sdp"
-                                            android:alpha="0.7"
-                                            android:fontFamily="@font/ubuntu_m"
-                                            android:text="@string/delicious_food_for_every_mood"
+                                            style="@style/TextViewLarge"
+                                            android:fontFamily="@font/josefinsans_regular"
+                                            android:text="@string/order_eat_amp_njoy"
                                             android:textColor="@color/theme_color" />
 
                                         <TextView
                                             style="@style/TextViewMid"
-                                            android:text="@string/order_from_food_over_200_restaurants" />
+                                            android:fontFamily="@font/ubuntu_r"
+                                            android:textColor="@color/black_txt_grey"
+                                            android:layout_marginTop="@dimen/_60sdp"
+                                            android:text="@string/bestil_din_take_away_mad_online" />
 
                                         <android.support.v7.widget.CardView
                                             android:layout_width="wrap_content"
                                             android:layout_height="wrap_content"
                                             android:layout_marginLeft="@dimen/_32sdp"
                                             android:layout_marginRight="@dimen/_32sdp"
-                                            android:layout_marginTop="@dimen/_32sdp"
+                                            android:layout_marginTop="@dimen/_16sdp"
                                             app:cardElevation="@dimen/_5sdp"
                                             app:layout_anchor="@id/app_bar"
                                             app:cardCornerRadius="@dimen/_5sdp"
@@ -169,6 +183,7 @@
                                         <TextView
                                             style="@style/TextViewMid"
                                             android:layout_marginTop="@dimen/_32sdp"
+                                            android:visibility="invisible"
                                             android:text="@string/order_your_take_away_food_online" />
 
 
@@ -176,17 +191,6 @@
 
                                 </RelativeLayout>
 
-                                <android.support.v7.widget.AppCompatImageView
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    app:srcCompat="@mipmap/eatmore_logo"
-                                    android:tint="@color/theme_color"
-                                    android:layout_above="@+id/center_layout"
-                                    android:elevation="@dimen/_8sdp"
-                                    android:alpha="0.9"
-                                    android:layout_centerHorizontal="true"
-                                    android:layout_marginBottom="@dimen/_48sdp"
-                                    />
 
                                 <RelativeLayout
                                     android:id="@+id/swipe_card"
@@ -230,7 +234,7 @@
 
 
 
-                    </android.support.design.widget.CollapsingToolbarLayout>
+                    </RelativeLayout>
 
 
                 </android.support.design.widget.AppBarLayout>

@@ -37,6 +37,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 import java.util.ArrayList
 import dk.eatmore.foodapp.model.home.Restaurant
 import kotlinx.android.synthetic.main.activity_epay.*
+import retrofit2.Call
 
 
 class EpayFragment : BaseFragment() {
@@ -45,6 +46,9 @@ class EpayFragment : BaseFragment() {
     private lateinit var addcart_fragment: AddCart
     private lateinit var binding: ActivityEpayBinding
     private lateinit var restaurant : Restaurant
+    private var call_viewcartlist  : Call<ViewcardModel>? =null
+    private var call_deleteitem  : Call<JsonObject>? =null
+
 
 
 
@@ -155,10 +159,8 @@ class EpayFragment : BaseFragment() {
         postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
         postParam.addProperty(Constants.LANGUAGE, Constants.EN)
-
-        callAPI(ApiCall.viewcart(
-                jsonObject = postParam
-        ), object : BaseFragment.OnApiCallInteraction {
+        call_viewcartlist=ApiCall.viewcart(jsonObject = postParam)
+        callAPI(call_viewcartlist!!, object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
                 val viewcardmodel = body as ViewcardModel
@@ -186,6 +188,10 @@ class EpayFragment : BaseFragment() {
             }
 
             override fun onFail(error: Int) {
+
+                if( call_viewcartlist!!.isCanceled){
+                    return
+                }
                 when (error) {
                     404 -> {
                         showSnackBar(epay_container, getString(R.string.error_404))
@@ -196,9 +202,6 @@ class EpayFragment : BaseFragment() {
                     }
                 }
                 progress_bar.visibility=View.GONE
-                //showProgressDialog()
-
-
             }
         })
 
@@ -219,10 +222,8 @@ class EpayFragment : BaseFragment() {
         postParam.addProperty(Constants.OP_ID, op_id)
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
         postParam.addProperty(Constants.LANGUAGE, Constants.EN)
-
-        callAPI(ApiCall.deleteitemFromcart(
-                jsonObject = postParam
-        ), object : BaseFragment.OnApiCallInteraction {
+        call_deleteitem=ApiCall.deleteitemFromcart(jsonObject = postParam)
+        callAPI(call_deleteitem!!, object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
                 val json = body as JsonObject
@@ -235,6 +236,11 @@ class EpayFragment : BaseFragment() {
             }
 
             override fun onFail(error: Int) {
+
+                if(call_deleteitem!!.isCanceled){
+                    return
+                }
+
                 when (error) {
                     404 -> {
                         showSnackBar(epay_container, getString(R.string.error_404))
@@ -278,6 +284,8 @@ class EpayFragment : BaseFragment() {
 
     private fun createViewModel(): UIModel =
             ViewModelProviders.of(this).get(UIModel::class.java).apply {
+
+                viewcard_list.removeObservers(this@EpayFragment)
                 viewcard_list.observe(this@EpayFragment, Observer<ViewcardModel> {
                     refresh_viewCard()
                 })
@@ -482,6 +490,29 @@ class EpayFragment : BaseFragment() {
               finish()
       }*/
 
+    override fun onDestroy() {
+        super.onDestroy()
+        logd(TAG, "on destroy...")
+    }
+
+    override fun onDestroyView() {
+        logd(TAG, "onDestroyView...")
+
+        ui_model?.let {
+            ViewModelProviders.of(this).get(UIModel::class.java).viewcard_list.removeObservers(this@EpayFragment)
+        }
+
+        call_deleteitem?.let {
+            progress_bar.visibility=View.GONE
+            it.cancel()
+        }
+        call_viewcartlist?.let {
+            progress_bar.visibility=View.GONE
+            it.cancel()
+        }
+
+        super.onDestroyView()
+    }
 
     @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
     private fun buildEnterTransition(): Transition {

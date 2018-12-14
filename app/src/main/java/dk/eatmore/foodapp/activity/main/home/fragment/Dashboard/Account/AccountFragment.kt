@@ -126,6 +126,7 @@ class AccountFragment : BaseFragment() {
                 moveon_login(username = acc_email_edt.text.toString(), password_hash = acc_password_edt.text.toString())
             }
             // show Profle screen every time if user is already login.
+            loge(TAG,"kstatus is-"+PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)+"--"+PreferenceUtil.getString(PreferenceUtil.E_MAIL, ""))
             if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
                 val fragment = Profile.newInstance()
                 addFragment(R.id.home_account_container, fragment, Profile.TAG, false)

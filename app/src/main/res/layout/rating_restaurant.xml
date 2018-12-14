@@ -65,11 +65,10 @@
 
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewMid"
+                        style="@style/TitleMidiumlight_TextViewMid"
                         android:layout_gravity="center_vertical"
                         android:layout_width="0dp"
                         android:layout_weight="1"
-                        android:textColor="@color/black_light"
                         android:text="@{@string/user_have_reviewed(restaurant.total_review_count)}"
                         />
 
@@ -79,18 +78,17 @@
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
                     android:orientation="horizontal">
 
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Titlelight_TextViewSmall"
                         android:layout_gravity="center_vertical"
                         android:layout_width="match_parent"
                         android:layout_weight="1"
                         android:text="@string/samlet"
-                        android:textStyle="bold"
-                        android:textColor="@color/black_light" />
+                        />
 
 
                     <RatingBar
@@ -122,12 +120,12 @@
 
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:layout_gravity="center_vertical"
                         android:layout_width="match_parent"
                         android:layout_weight="1"
                         android:text="@string/kvalitet"
-                        android:textColor="@color/black_light" />
+                        />
 
 
                     <RatingBar
@@ -149,12 +147,12 @@
 
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:layout_gravity="center_vertical"
                         android:layout_width="match_parent"
                         android:layout_weight="1"
                         android:text="@string/kundeservice"
-                        android:textColor="@color/black_light" />
+                        />
 
 
                     <RatingBar
@@ -176,12 +174,12 @@
 
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:layout_gravity="center_vertical"
                         android:layout_width="match_parent"
                         android:layout_weight="1"
                         android:text="@string/leveringstid"
-                        android:textColor="@color/black_light" />
+                        />
 
 
                     <RatingBar
@@ -205,14 +203,14 @@
 
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:gravity="center_horizontal|center_vertical"
                         android:layout_width="@dimen/_10sdp"
                         android:layout_weight="1"
                         android:layout_marginEnd="@dimen/_8sdp"
                         android:text="6"
                         android:layout_marginBottom="@dimen/_1sdp"
-                        android:textColor="@color/black_light" />
+                        />
 
 
                     <RelativeLayout
@@ -260,13 +258,13 @@
                         android:stepSize="0.0" />
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:gravity="center_horizontal"
                         android:layout_marginStart="@dimen/_5sdp"
                         android:layout_marginBottom="@dimen/_1sdp"
                         android:layout_weight="1"
                         android:text="@{@string/percent(String.valueOf(restaurant.rating_details.get(0).rate_per))}"
-                        android:textColor="@color/black_light" />
+                        />
 
 
                 </LinearLayout>
@@ -281,14 +279,14 @@
 
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:gravity="center_horizontal"
                         android:layout_width="@dimen/_10sdp"
                         android:layout_weight="1"
                         android:layout_marginBottom="@dimen/_1sdp"
                         android:text="5"
                         android:layout_marginEnd="@dimen/_8sdp"
-                        android:textColor="@color/black_light" />
+                        />
 
                     <RelativeLayout
                         android:layout_width="@dimen/_100sdp"
@@ -331,13 +329,13 @@
                         android:stepSize="0.0" />
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:gravity="center_horizontal"
                         android:layout_marginStart="@dimen/_5sdp"
                         android:layout_weight="1"
                         android:layout_marginBottom="@dimen/_1sdp"
                         android:text="@{@string/percent(String.valueOf(restaurant.rating_details.get(1).rate_per))}"
-                        android:textColor="@color/black_light" />
+                        />
 
 
 
@@ -351,14 +349,14 @@
 
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:gravity="center_horizontal"
                         android:layout_width="@dimen/_10sdp"
                         android:layout_weight="1"
                         android:text="4"
                         android:layout_marginBottom="@dimen/_1sdp"
                         android:layout_marginEnd="@dimen/_8sdp"
-                        android:textColor="@color/black_light" />
+                        />
 
                     <RelativeLayout
                         android:layout_width="@dimen/_100sdp"
@@ -401,13 +399,13 @@
                         android:stepSize="0.0" />
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:gravity="center_horizontal"
                         android:layout_marginBottom="@dimen/_1sdp"
                         android:layout_marginStart="@dimen/_5sdp"
                         android:layout_weight="1"
                         android:text="@{@string/percent(String.valueOf(restaurant.rating_details.get(2).rate_per))}"
-                        android:textColor="@color/black_light" />
+                        />
 
 
 
@@ -421,14 +419,14 @@
 
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:gravity="center_horizontal"
                         android:layout_width="@dimen/_10sdp"
                         android:layout_weight="1"
                         android:text="3"
                         android:layout_marginBottom="@dimen/_1sdp"
                         android:layout_marginEnd="@dimen/_8sdp"
-                        android:textColor="@color/black_light" />
+                        />
 
                     <RelativeLayout
                         android:layout_width="@dimen/_100sdp"
@@ -472,13 +470,13 @@
                         android:stepSize="0.0" />
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:gravity="center_horizontal"
                         android:layout_marginStart="@dimen/_5sdp"
                         android:layout_marginBottom="@dimen/_1sdp"
                         android:layout_weight="1"
                         android:text="@{@string/percent(String.valueOf(restaurant.rating_details.get(3).rate_per))}"
-                        android:textColor="@color/black_light" />
+                        />
 
 
 
@@ -492,14 +490,14 @@
 
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:gravity="center_horizontal"
                         android:layout_width="@dimen/_10sdp"
                         android:layout_weight="1"
                         android:layout_marginBottom="@dimen/_1sdp"
                         android:text="2"
                         android:layout_marginEnd="@dimen/_8sdp"
-                        android:textColor="@color/black_light" />
+                        />
 
                     <RelativeLayout
                         android:layout_width="@dimen/_100sdp"
@@ -542,13 +540,13 @@
                         android:stepSize="0.0" />
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:gravity="center_horizontal"
                         android:layout_marginBottom="@dimen/_1sdp"
                         android:layout_marginStart="@dimen/_5sdp"
                         android:layout_weight="1"
                         android:text="@{@string/percent(String.valueOf(restaurant.rating_details.get(4).rate_per))}"
-                        android:textColor="@color/black_light" />
+                        />
 
 
 
@@ -562,7 +560,7 @@
 
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:gravity="center_horizontal"
                         android:layout_width="@dimen/_10sdp"
                         android:layout_weight="1"
@@ -612,13 +610,13 @@
                         android:stepSize="0.0" />
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:gravity="center_horizontal"
                         android:layout_marginBottom="@dimen/_1sdp"
                         android:layout_marginStart="@dimen/_5sdp"
                         android:layout_weight="1"
                         android:text="@{@string/percent(String.valueOf(restaurant.rating_details.get(5).rate_per))}"
-                        android:textColor="@color/black_light" />
+                        />
 
 
 

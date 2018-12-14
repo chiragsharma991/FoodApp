@@ -10,7 +10,7 @@ import java.util.concurrent.TimeUnit
 
 internal object ApiClient{
 
-    //val BASE_URL = "https://eatmoredev.dk/restapi/v3/"
+   // val BASE_URL = "https://eatmoredev.dk/restapi/v3/"
     val BASE_URL = "https://eatmore.dk/restapi/v3/"
 
     private var retrofit: Retrofit? = null

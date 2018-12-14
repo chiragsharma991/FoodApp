@@ -38,13 +38,12 @@
 
 
                 <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextViewSmall"
+                    style="@style/SubtitleMidium_TextViewSmall"
                     android:id="@+id/row_onlyextratop_txt"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1"
                     android:text="@{data.tsg_name}"
-                    android:textStyle="bold"
-                    android:textColor="@color/black_light" />
+                    />
 
             </LinearLayout>
 

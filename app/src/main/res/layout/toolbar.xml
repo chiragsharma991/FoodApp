@@ -31,6 +31,7 @@
 
 
 
+
             <android.support.v7.widget.AppCompatImageView
                 android:id="@+id/img_toolbar_back"
                 android:layout_width="@dimen/_50sdp"
@@ -71,7 +72,20 @@
                  style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
                  android:textColor="@color/black"
                  />
+
+
 -->
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="@dimen/_100sdp"
+                android:layout_height="@dimen/_40sdp"
+                app:srcCompat="@mipmap/eatmore_logo"
+                android:tint="@color/theme_color"
+                android:id="@+id/restaurant_logo"
+                android:visibility="gone"
+                android:layout_centerInParent="true"
+                />
+
 
 
 

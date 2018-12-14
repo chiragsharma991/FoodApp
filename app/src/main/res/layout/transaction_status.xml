@@ -185,7 +185,7 @@
 
                                 <android.support.v7.widget.AppCompatTextView
                                     android:id="@+id/totalamount"
-                                    style="@style/TextViewMid"
+                                    style="@style/SubtitleRegular_TextViewSmall"
                                     android:layout_gravity="center_horizontal"
                                     android:text="@string/total_amount"
                                     android:visibility="gone"
@@ -194,7 +194,7 @@
 
                                 <android.support.v7.widget.AppCompatTextView
                                     android:id="@+id/request_status"
-                                    style="@style/TextViewMid"
+                                    style="@style/SubtitleRegular_TextViewSmall"
                                     android:visibility="gone"
                                     android:layout_gravity="center_horizontal"
                                     android:layout_marginTop="@dimen/_8sdp"
@@ -211,7 +211,7 @@
 
                                 <android.support.v7.widget.AppCompatTextView
                                     android:id="@+id/status_msg"
-                                    style="@style/TextViewSmall"
+                                    style="@style/SubtitleRegular_TextViewSmall"
                                     android:layout_gravity="center_horizontal"
                                     android:gravity="center_horizontal"
                                     android:text="@string/thank_you_for_your_order_n_your_order_will_be_processed_as_soon_as_possilbe" />
@@ -236,7 +236,7 @@
                                     android:orientation="vertical">
 
                                     <android.support.v7.widget.AppCompatTextView
-                                        style="@style/TextViewSmall"
+                                        style="@style/SubtitleRegular_TextViewSmall"
                                         android:visibility="gone"
                                         android:text="@string/requeted_from"
 
@@ -244,24 +244,23 @@
 
                                     <android.support.v7.widget.AppCompatTextView
                                         android:id="@+id/requested_user"
-                                        style="@style/TextViewSmall"
+                                        style="@style/SubtitleRegular_TextViewSmall"
                                         android:visibility="gone"
                                         android:text="Test@softtech360.in" />
 
                                     <android.support.v7.widget.AppCompatTextView
                                         android:id="@+id/order_number"
-                                        style="@style/TextViewSmall"
-                                        android:textStyle=""
+                                        style="@style/SubtitleRegular_TextViewSmall"
                                         android:text="@string/order_number"
 
                                         />
 
                                     <android.support.v7.widget.AppCompatTextView
                                         android:id="@+id/order_time"
-                                        style="@style/TextViewSmall"
+                                        style="@style/SubtitleRegular_TextViewSmall"
                                         android:text="@string/order_date"
                                         android:visibility="gone"
-                                        android:textColor="@color/black_light" />
+                                        />
 
                                     <View
                                         android:layout_width="match_parent"
@@ -273,7 +272,7 @@
 
                                     <android.support.v7.widget.AppCompatTextView
                                         android:id="@+id/phone_txt"
-                                        style="@style/TextViewSmall"
+                                        style="@style/Subtitle_TextViewSmall"
                                         android:gravity="center_horizontal"
                                         android:text="@string/if_you_have_any_questions_or_enquiries_please_call_us_on"
                                         />

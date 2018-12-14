@@ -59,6 +59,7 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
             val bundle = Bundle()
             bundle.putSerializable(Constants.RESTAURANT, restaurant)
             bundle.putString(Constants.TITLE,data.c_name)
+            bundle.putString(Constants.C_DESC,data.c_desc)
             bundle.putSerializable(Constants.PRODUCTLIST, data)
             fragment.arguments = bundle
             return fragment
@@ -90,6 +91,8 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
             val menuListItem = arguments?.getSerializable(Constants.PRODUCTLIST) as MenuListItem
             val bundle = arguments
             subtxt_toolbar.text = bundle?.getString(Constants.TITLE, "") ?: ""
+            subtxt_desc.text=bundle?.getString(Constants.C_DESC, "") ?: ""
+            subtxt_desc.visibility = if(subtxt_desc.text.toString().trim().length > 0) View.VISIBLE else View.GONE
             setanim_toolbartitle(appbar, txt_toolbar, bundle?.getString(Constants.TITLE, "") ?: "")
             img_toolbar_back.setOnClickListener {
                 (activity as HomeActivity).onBackPressed()
@@ -137,11 +140,16 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
     }
 
     fun updatebatchcount(count: Int) {
-        badge_notification_txt.visibility = if (DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
-        toolbar_badge_view.visibility= if(DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
-        //viewcart.alpha= if(DetailsFragment.total_cartcnt == 0) 0.3f else 0.9f
-        badge_notification_txt.text = DetailsFragment.total_cartcnt.toString()
-        badge_countprice.text = BindDataUtils.convertCurrencyToDanish(DetailsFragment.total_cartamt)
+
+        try{
+            badge_notification_txt.visibility = if (DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
+            toolbar_badge_view.visibility= if(DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
+            //viewcart.alpha= if(DetailsFragment.total_cartcnt == 0) 0.3f else 0.9f
+            badge_notification_txt.text = DetailsFragment.total_cartcnt.toString()
+            badge_countprice.text = BindDataUtils.convertCurrencyToDanish(DetailsFragment.total_cartamt)
+        }catch (e : Exception){
+            loge(TAG,"exception: - "+e.message)
+        }
     }
 
 
@@ -243,6 +251,7 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
         binder.productpricecalculation = productpricecalculation
         binder.util = BindDataUtils
         binder.handler = this
+        binder.executePendingBindings()
     }
 
     override fun onDestroy() {

@@ -112,7 +112,8 @@ interface ApiInterface {
             @Field(Constants.AUTH_KEY) auth_key: String ,
             @Field(Constants.CUSTOMER_ID) customer_id: String,
             @Field(Constants.DEVICE_TYPE) device_type: String,
-            @Field(Constants.EATMORE_APP) eatmore_app: Boolean
+            @Field(Constants.EATMORE_APP) eatmore_app: Boolean,
+            @Field(Constants.APP) app : String
     ): Call<JsonObject>
 
     @FormUrlEncoded

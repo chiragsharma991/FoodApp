@@ -69,15 +69,13 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/cat_title"
-                    style="@style/TextViewSmall"
+                    style="@style/Titlelight_TextViewSmall"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="8dp"
                     android:layout_weight="1.05"
                     android:text="@{data.p_name}"
-                    android:textColor="@color/black_light"
-                    android:textStyle="bold"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_one"
                     app:layout_constraintHorizontal_bias="0.0"
@@ -87,15 +85,14 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/appCompatTextView"
-                    style="@style/TextViewSmall"
+                    style="@style/TitleRegular_TextViewSmall"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="8dp"
                     android:gravity="right"
-                    android:text="@{data.product_attribute == null ? util.convertCurrencyToDanish(data.p_price) : productpricecalculation.getprice(data)}"
-                    android:textColor="@color/black_light"
-                    android:textStyle="bold"
+                    android:maxLength="12"
+                    android:text="@{data.product_attribute == null ? `fra: `+util.convertCurrencyToDanish(data.p_price) : `fra: `+productpricecalculation.getprice(data)}"
                     app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_two"
                     app:layout_constraintHorizontal_bias="1.0"
                     app:layout_constraintStart_toEndOf="@+id/guidline_vertical_one"
@@ -103,49 +100,47 @@
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/appCompatTextView3"
-                    style="@style/TextViewSmall"
+                    style="@style/Subtitle_TextViewSmall"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_weight="1.05"
-                    android:visibility="@{data.p_desc.equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}"
                     android:text="@{data.p_desc}"
-                    android:textColor="@color/black_light"
-                    app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_two"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    android:visibility="@{data.p_desc.equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}"
+                    app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_one"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/cat_title" />
 
                 <android.support.v7.widget.AppCompatTextView
                     android:id="@+id/appCompatTextView2"
-                    style="@style/TextViewSmall"
-                    android:layout_width="wrap_content"
+                    style="@style/Subtitle_TextViewSmall"
+                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center_vertical"
                     android:layout_marginTop="8dp"
                     android:layout_weight="1.05"
                     android:visibility="gone"
-                    android:textColor="@color/black_light"
                     app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintEnd_toEndOf="@+id/appCompatTextView3"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/appCompatTextView3"
                     app:layout_constraintVertical_bias="0.0" />
 
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/appCompatImageView"
-                    android:layout_width="@dimen/_20sdp"
+                    android:layout_width="@dimen/_16sdp"
                     android:layout_height="0dp"
                     android:layout_gravity="top"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
-                    android:background="@color/background_light"
+                    android:background="@color/theme_color"
                     android:scaleType="fitXY"
                     app:layout_constraintBottom_toBottomOf="@+id/appCompatTextView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guidline_vertical_two"
                     app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/add" />
+                    app:srcCompat="@drawable/add"
+                    />
 
                 <View
                     android:id="@+id/view"

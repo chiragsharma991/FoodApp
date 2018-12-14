@@ -111,7 +111,7 @@ class ApiCall {
             return getApiInterface().clearcart(eatmore_app = eatmore_app, auth_key =auth_key, customer_id = customer_id,app = Constants.RESTAURANT_FOOD_ANDROID )
         }
         fun lastLogin(auth_key : String  , customer_id : String , device_type: String,eatmore_app : Boolean ) : Call<JsonObject> {
-            return getApiInterface().lastLogin(auth_key = auth_key, eatmore_app =eatmore_app, device_type = device_type, customer_id = customer_id)
+            return getApiInterface().lastLogin(auth_key = auth_key, eatmore_app =eatmore_app, device_type = device_type, customer_id = customer_id,app = Constants.RESTAURANT_FOOD_ANDROID)
         }
         fun applycode(r_token : String , r_key : String , customer_id : String , upto_min_shipping: String , shipping : String , code: String , order_total: String , additional_charge: String , shipping_costs: String ) : Call<JsonObject> {
             return getApiInterface().applycode(r_token, r_key,customer_id , upto_min_shipping ,shipping , code, order_total , additional_charge , shipping_costs,Constants.RESTAURANT_FOOD_ANDROID)

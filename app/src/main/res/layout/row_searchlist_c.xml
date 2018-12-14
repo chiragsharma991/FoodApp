@@ -42,7 +42,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.75" />
+                app:layout_constraintGuide_percent="0.6" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guidline_vertical_two"
@@ -54,15 +54,13 @@
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/cat_title"
-                style="@style/TextViewSmall"
+                style="@style/Titlelight_TextViewSmall"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginEnd="8dp"
                 android:layout_marginBottom="8dp"
                 android:layout_weight="1.05"
-                android:textColor="@color/black_light"
-                android:textStyle="bold"
                 app:layout_constraintBottom_toTopOf="@+id/cat_desc"
                 app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_one"
                 app:layout_constraintHorizontal_bias="0.0"
@@ -72,11 +70,12 @@
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/cat_price"
-                style="@style/TextViewSmall"
+                style="@style/TitleRegular_TextViewSmall"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:textStyle="bold"
+                android:maxLength="12"
                 android:gravity="right"
                 android:textColor="@color/black_light"
                 app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_two"
@@ -86,43 +85,43 @@
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/cat_desc"
-                style="@style/TextViewSmall"
+                style="@style/Subtitle_TextViewSmall"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginBottom="8dp"
                 android:layout_weight="1.05"
-                android:textColor="@color/black_light"
                 android:visibility="@{productlist_item.p_desc.equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_two"
+                app:layout_constraintEnd_toStartOf="@+id/cat_price"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cat_title" />
 
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/appCompatTextView2"
-                style="@style/TextViewSmall"
-                android:layout_width="wrap_content"
+                style="@style/Subtitle_TextViewSmall"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:layout_marginTop="8dp"
+                android:layout_marginEnd="8dp"
                 android:layout_weight="1.05"
                 android:visibility="gone"
-                android:textColor="@color/black_light"
                 app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintEnd_toStartOf="@+id/cat_price"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/cat_desc"
                 app:layout_constraintVertical_bias="0.0" />
 
             <android.support.v7.widget.AppCompatImageView
-                android:layout_width="@dimen/_20sdp"
+                android:layout_width="@dimen/_16sdp"
                 android:layout_height="0dp"
                 android:layout_gravity="top"
                 android:layout_marginStart="8dp"
                 android:id="@+id/addtocart_view"
-                android:background="@color/background_light"
+                android:background="@color/theme_color"
                 android:scaleType="fitXY"
                 app:layout_constraintBottom_toBottomOf="@+id/cat_price"
                 app:layout_constraintEnd_toEndOf="parent"

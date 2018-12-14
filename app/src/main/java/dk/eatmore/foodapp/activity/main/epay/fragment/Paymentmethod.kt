@@ -59,6 +59,10 @@ class Paymentmethod : BaseFragment(), TextWatcher {
     private var timeslot: ArrayList<String>?=null
     private var selectedtimeslot_position : Int = 0
     lateinit var currentView: String
+    private var call_checkout  : Call<JsonObject>? =null
+    private var call_applycode  : Call<JsonObject>? =null
+    private var call_cancelorder  : Call<JsonObject>? =null
+
 
 
     // we have two different API so we are passing call in "checkout API" it may be from pickup/delivery :
@@ -68,7 +72,6 @@ class Paymentmethod : BaseFragment(), TextWatcher {
     companion object {
         var isPaymentonline : Boolean =true
         val TAG = "Paymentmethod"
-
 
 
         fun newInstance(): Paymentmethod {
@@ -93,6 +96,7 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             isPaymentonline=true
             val myclickhandler=MyClickHandler(this)
             binding.handlers=myclickhandler
+            binding.executePendingBindings()
             //setanim_toolbartitle(appbar,(activity as EpayActivity).txt_toolbar,getString(R.string.payment))
             applyonlinegift_edt.addTextChangedListener(this)
             applycashgift_edt.addTextChangedListener(this)
@@ -312,7 +316,8 @@ class Paymentmethod : BaseFragment(), TextWatcher {
 
     private fun checkout_pickup() {
         showProgressDialog()
-        callAPI(CartListFunction.getcartpaymentAttributes(context!!)!!, object : BaseFragment.OnApiCallInteraction {
+        call_checkout=CartListFunction.getcartpaymentAttributes(context!!)!!
+        callAPI(call_checkout!!, object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
                 showProgressDialog()
@@ -333,7 +338,10 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             }
 
             override fun onFail(error: Int) {
-                showProgressDialog()
+
+                if(call_checkout!!.isCanceled){
+                    return
+                }
                 when (error) {
                     404 -> {
                         showSnackBar(pamentmethod_container, getString(R.string.error_404))
@@ -343,7 +351,7 @@ class Paymentmethod : BaseFragment(), TextWatcher {
 
                     }
                 }
-
+                showProgressDialog()
 
             }
         })
@@ -354,7 +362,9 @@ class Paymentmethod : BaseFragment(), TextWatcher {
 
     private fun checkout_delivery() {
         showProgressDialog()
-        callAPI(CartListFunction.getcartpaymentAttributes(context!!)!!, object : BaseFragment.OnApiCallInteraction {
+
+        call_checkout=CartListFunction.getcartpaymentAttributes(context!!)!!
+        callAPI(call_checkout!!, object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
                 showProgressDialog()
@@ -384,7 +394,10 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             }
 
             override fun onFail(error: Int) {
-                showProgressDialog()
+
+                if(call_checkout!!.isCanceled){
+                    return
+                }
                 when (error) {
                     404 -> {
                         showSnackBar(pamentmethod_container, getString(R.string.error_404))
@@ -394,7 +407,7 @@ class Paymentmethod : BaseFragment(), TextWatcher {
 
                     }
                 }
-
+                showProgressDialog()
             }
         })
     }
@@ -468,8 +481,7 @@ class Paymentmethod : BaseFragment(), TextWatcher {
         progress_applycashgift.visibility=View.VISIBLE
         applycash_txt.visibility=View.GONE
         applyonline_txt.visibility=View.GONE
-
-        callAPI(ApiCall.applycode(
+        call_applycode= ApiCall.applycode(
                 r_token = PreferenceUtil.getString(PreferenceUtil.R_TOKEN,"")!!,
                 order_total = EpayFragment.paymentattributes.order_total,
                 customer_id = PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,"")!!,
@@ -479,10 +491,8 @@ class Paymentmethod : BaseFragment(), TextWatcher {
                 shipping =if(EpayFragment.isPickup) getString(R.string.pickup_caps) else getString(R.string.delivery_caps),
                 shipping_costs = EpayFragment.paymentattributes.shipping_charge,
                 upto_min_shipping = EpayFragment.paymentattributes.upto_min_shipping
-
-
-
-        ), object : BaseFragment.OnApiCallInteraction {
+        )
+        callAPI(call_applycode!!, object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
                 val jsonobject = body as JsonObject
@@ -520,10 +530,10 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             }
 
             override fun onFail(error: Int) {
-                progress_applyonlinegift.visibility=View.GONE
-                progress_applycashgift.visibility=View.GONE
-                applycash_txt.visibility=View.VISIBLE
-                applyonline_txt.visibility=View.VISIBLE
+
+                if(call_applycode!!.isCanceled){
+                    return
+                }
                 when (error) {
                     404 -> {
                         showSnackBar(pamentmethod_container, getString(R.string.error_404))
@@ -533,6 +543,10 @@ class Paymentmethod : BaseFragment(), TextWatcher {
 
                     }
                 }
+                progress_applyonlinegift.visibility=View.GONE
+                progress_applycashgift.visibility=View.GONE
+                applycash_txt.visibility=View.VISIBLE
+                applyonline_txt.visibility=View.VISIBLE
             }
         })
     }
@@ -569,13 +583,12 @@ class Paymentmethod : BaseFragment(), TextWatcher {
     fun onlineTransactionFailed(){
         // in case user do cancel from transction screen.
         loge(TAG,"onlineTransactionFailed")
-
-        callAPI(ApiCall.cancelordertransaction(
+        call_cancelorder=ApiCall.cancelordertransaction(
                 r_key =PreferenceUtil.getString(PreferenceUtil.R_KEY, "")!!,
                 r_token = PreferenceUtil.getString(PreferenceUtil.R_TOKEN, "")!!,
                 order_no = EpayFragment.paymentattributes.order_no
-
-        ), object : BaseFragment.OnApiCallInteraction {
+        )
+        callAPI(call_cancelorder!!, object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
                 val jsonobject = body as JsonObject
@@ -592,6 +605,11 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             }
 
             override fun onFail(error: Int) {
+
+                if(call_cancelorder!!.isCanceled){
+                    return
+                }
+
                 when (error) {
                     404 -> {
                         showSnackBar(pamentmethod_container, getString(R.string.error_404))
@@ -669,6 +687,30 @@ class Paymentmethod : BaseFragment(), TextWatcher {
         super.onDestroy()
         logd(Menu.TAG, "on destroy...")
     }
+
+
+    override fun onDestroyView() {
+
+        logd(TAG, "onDestroyView...")
+
+        call_checkout?.let {
+            clearProgressDialog()
+            it.cancel()
+        }
+        call_applycode?.let {
+            progress_applyonlinegift.visibility=View.GONE
+            progress_applycashgift.visibility=View.GONE
+            applycash_txt.visibility=View.VISIBLE
+            applyonline_txt.visibility=View.VISIBLE
+            it.cancel()
+        }
+        call_cancelorder?.let {
+            it.cancel()
+        }
+
+        super.onDestroyView()
+    }
+
 
     override fun onDetach() {
         super.onDetach()

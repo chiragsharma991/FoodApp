@@ -81,7 +81,7 @@ class CartActivity : BaseActivity() {
 
 
     private fun fetch_ProductDetailList() {
-
+        progress_bar.visibility=View.VISIBLE
         callAPI(ApiCall.getProductDetails(
                 r_token = PreferenceUtil.getString(PreferenceUtil.R_TOKEN,"")!!,
                 r_key = PreferenceUtil.getString(PreferenceUtil.R_KEY,"")!!,
@@ -89,6 +89,7 @@ class CartActivity : BaseActivity() {
         ), object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
+                progress_bar.visibility=View.GONE
                 productdetails = body as ProductDetails
                 if (productdetails.status) {
                     // if you get only extratoppings then condition will true anotherwise false:
@@ -108,6 +109,7 @@ class CartActivity : BaseActivity() {
             }
 
             override fun onFail(error: Int) {
+                progress_bar.visibility=View.GONE
                 when (error) {
                     404 -> {
                         showSnackBar(clayout_crt, getString(R.string.error_404))
@@ -238,6 +240,7 @@ class CartActivity : BaseActivity() {
 
     private fun initView(savedInstanceState: Bundle?) {
         binding.isIngradientsVisible=false
+        progress_bar.visibility=View.GONE
         val title = intent.extras.getString("TITLE", "")
         item_p_id = intent.extras.getString("PID", "")
         p_price = intent.extras.getString("p_price", "")
@@ -266,6 +269,10 @@ class CartActivity : BaseActivity() {
 
 
         addtocart_view.setOnClickListener {
+            if(progress_bar.visibility == View.VISIBLE){
+                return@setOnClickListener
+            }
+            showProgressDialog()
             val postParam = JsonObject()
             postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN,""))
             postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY,""))
@@ -284,24 +291,25 @@ class CartActivity : BaseActivity() {
             postParam.add(Constants.ATTRUBUTES, getjsonparmsofAddtocart(item_p_id, ui_model!!.product_ingredients, ui_model!!.product_attribute_list, productdetails, 1))
             postParam.add(Constants.EXTRATOPPINGS, getjsonparmsofAddtocart(item_p_id, ui_model!!.product_ingredients, ui_model!!.product_attribute_list, productdetails, 2))
             postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
-
+            postParam.addProperty(Constants.LANGUAGE, Constants.EN)
             callAPI(ApiCall.addtocart(
                     jsonObject = postParam
             ), object : BaseFragment.OnApiCallInteraction {
 
                 override fun <T> onSuccess(body: T?) {
+                    showProgressDialog()
                     val jsonObject = body as JsonObject
                     if (jsonObject.get(Constants.STATUS).asBoolean) {
 
 
-                 /*       2018-12-05 18:16:16.495 25542-26139/dk.eatmore.foodapp D/OkHttp:     "status": true,
-                        2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "is_user_deleted": false,
-                        2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "is_restaurant_closed": false,
-                        2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "order_total": 65,
-                        2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "msg": "all records.",
-                        2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "cartcnt": "1",
-                        2018-12-05 18:31:59.001 26334-26386/dk.eatmore.foodapp D/OkHttp:     "pre_order": true
-                        2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "cartamt": "65.00"*/
+                        /*       2018-12-05 18:16:16.495 25542-26139/dk.eatmore.foodapp D/OkHttp:     "status": true,
+                               2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "is_user_deleted": false,
+                               2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "is_restaurant_closed": false,
+                               2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "order_total": 65,
+                               2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "msg": "all records.",
+                               2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "cartcnt": "1",
+                               2018-12-05 18:31:59.001 26334-26386/dk.eatmore.foodapp D/OkHttp:     "pre_order": true
+                               2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "cartamt": "65.00"*/
                         if((jsonObject.has(Constants.IS_RESTAURANT_CLOSED) && jsonObject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean == true) &&
                            (jsonObject.has(Constants.PRE_ORDER) && jsonObject.get(Constants.PRE_ORDER).asBoolean == false) ){
                             // restaurant is closed / preorder
@@ -335,6 +343,7 @@ class CartActivity : BaseActivity() {
                 }
 
                 override fun onFail(error: Int) {
+                    showProgressDialog()
                     when (error) {
                         404 -> {
                             showSnackBar(clayout_crt, getString(R.string.error_404))

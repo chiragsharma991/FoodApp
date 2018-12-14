@@ -95,6 +95,7 @@
                     style="@style/TextViewSmall"
                     android:id="@+id/badge_countprice"
                     android:layout_toEndOf="@+id/addtocart_bascket"
+                    android:fontFamily="@font/hindvadodara_regular"
                     android:layout_marginLeft="@dimen/_3sdp"
                     android:layout_centerVertical="true"
                     android:text="00.00 kr"

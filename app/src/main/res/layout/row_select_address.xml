@@ -36,30 +36,27 @@
                 >
 
                 <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextViewSmall"
+                    style="@style/SubtitleMidium_TextViewSmall"
                     android:id="@+id/fst_txt"
                     android:layout_gravity="center_vertical"
-                    android:textColor="@color/black"
                     android:text="@{editaddressListModel.address_title}"
                     android:singleLine="true"
                     />
                 <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextViewSmall"
+                    style="@style/Subtitle_TextViewSmall"
                     android:id="@+id/sec_txt"
                     android:layout_below="@+id/fst_txt"
                     android:layout_gravity="center_vertical"
                     android:text="@{@string/streethousefloor(editaddressListModel.street,editaddressListModel.house_no,editaddressListModel.floor_door)}"
                     android:singleLine="true"
-                    android:textColor="@color/black_light"
                     />
                 <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextViewSmall"
+                    style="@style/Subtitle_TextViewSmall"
                     android:id="@+id/third_txt"
                     android:layout_below="@+id/sec_txt"
                     android:layout_gravity="center_vertical"
                     android:text="@{@string/postalcity(editaddressListModel.postal_code,editaddressListModel.city)}"
                     android:singleLine="true"
-                    android:textColor="@color/black_light"
                     />
 
 

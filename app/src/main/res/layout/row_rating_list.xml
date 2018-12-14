@@ -49,24 +49,24 @@
 
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Titlelight_TextViewSmall"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/_3sdp"
+                        android:fontFamily="@font/ubuntu_m"
                         android:layout_weight="1.05"
                         android:text="@{review_list.review_by}"
-                        android:textStyle="bold"
-                        android:textColor="@color/black_light" />
+                        />
 
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/_3sdp"
                         android:layout_weight="0.5"
                         android:id="@+id/date"
                         android:gravity="right"
                         android:text="@{review_list.order_date}"
-                        android:textColor="@color/black_light" />
+                        />
 
 
                 </LinearLayout>
@@ -95,11 +95,11 @@
 
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/_3sdp"
                         android:text="@{review_list.review}"
-                        android:textColor="@color/black_light" />
+                        />
 
 
 

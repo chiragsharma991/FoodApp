@@ -2,6 +2,7 @@ package dk.eatmore.foodapp.activity.main
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.view.View
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.epay.EpayActivity
 import dk.eatmore.foodapp.databinding.ActivityEpayBinding
@@ -32,13 +33,14 @@ class RestaurantClosed : BaseActivity(){
 
     private fun initView(savedInstanceState: Bundle?) {
         loge(TAG,""+intent.extras.get(Constants.MESSAGE_TITLE)+" -- "+intent.extras.get(Constants.MESSAGE_DETAILS))
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         msg_title.text=intent.extras.get(Constants.MESSAGE_TITLE).toString()
         msg_detail.text=intent.extras.get(Constants.MESSAGE_DETAILS).toString()
 
     }
 
     override fun onBackPressed() {
-        super.onBackPressed()
+      //  super.onBackPressed()
       //  finish()
     }
 

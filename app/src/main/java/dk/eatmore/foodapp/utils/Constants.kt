@@ -58,6 +58,7 @@ class Constants {
     const  val ORDERRESULT="Orderresult"
     const  val ORDER_DATE="order_date"
     const  val TITLE="title"
+    const  val C_DESC="c_desc"
     const  val ACCEPTED="accepted"
     const  val PRODUCTLIST="ProductList"
     const  val MENULIST="menulist"

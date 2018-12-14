@@ -23,6 +23,7 @@ import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.deliverytimeslot.*
 import kotlinx.android.synthetic.main.toolbar.*
+import retrofit2.Call
 import kotlin.collections.ArrayList
 
 class DeliveryTimeslot : BaseFragment() {
@@ -35,6 +36,8 @@ class DeliveryTimeslot : BaseFragment() {
     private var timeslot: ArrayList<String>?=null
     private var selectedtimeslot_position : Int = 0
     private  var time_list: LinkedHashMap<String,String>?=null
+    private var call_pickupinfo  : Call<JsonObject>? =null
+
 
 
     companion object {
@@ -120,10 +123,8 @@ class DeliveryTimeslot : BaseFragment() {
         postParam.addProperty(Constants.SHIPPING, if (EpayFragment.isPickup) getString(R.string.pickup) else getString(R.string.delivery))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
         postParam.addProperty(Constants.LANGUAGE, Constants.EN)
-
-        callAPI(ApiCall.pickupinfo(
-                jsonObject = postParam
-        ), object : BaseFragment.OnApiCallInteraction {
+        call_pickupinfo=ApiCall.pickupinfo(jsonObject = postParam)
+        callAPI(call_pickupinfo!!, object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
                 val jsonobject = body as JsonObject
@@ -139,8 +140,9 @@ class DeliveryTimeslot : BaseFragment() {
                         delivery_time_slot.text= time_list!![entries.key].toString()
                         break
                     }
-                    EpayFragment.paymentattributes.additional_charges_cash=if(jsonobject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString=="") "0" else jsonobject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString
-                    EpayFragment.paymentattributes.additional_charges_online=if(jsonobject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString=="") "0" else jsonobject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString
+                    //                    EpayFragment.paymentattributes.additional_charges_online=if(!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_ONLINE)) || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString=="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString
+                    EpayFragment.paymentattributes.additional_charges_cash=if(!(jsonobject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_CASH)) || jsonobject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_CASH].asString=="") "0" else jsonobject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString
+                    EpayFragment.paymentattributes.additional_charges_online=if(!(jsonobject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_ONLINE)) || jsonobject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString=="") "0" else jsonobject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString
                     EpayFragment.paymentattributes.first_time=jsonobject.getAsJsonObject(Constants.RESULT).get(Constants.FIRST_TIME).asString
                     binding.isLoading=false
 
@@ -152,14 +154,17 @@ class DeliveryTimeslot : BaseFragment() {
             }
 
             override fun onFail(error: Int) {
+                binding.isLoading=false
+
+                if(call_pickupinfo!!.isCanceled ){
+                    return
+                }
                 when (error) {
                     404 -> {
                         showSnackBar(address_container, getString(R.string.error_404))
-                        binding.isLoading=false
                     }
                     100 -> {
                         showSnackBar(address_container, getString(R.string.internet_not_available))
-                        binding.isLoading=false
 
                     }
                 }
@@ -204,6 +209,20 @@ class DeliveryTimeslot : BaseFragment() {
         txt_toolbar.text = getString(R.string.confirm_delivery_time)
         img_toolbar_back.setOnClickListener { (activity as HomeActivity).onBackPressed() }
     }
+
+
+    override fun onDestroyView() {
+
+        logd(TAG, "onDestroyView...")
+
+
+        call_pickupinfo?.let {
+            it.cancel()
+        }
+
+        super.onDestroyView()
+    }
+
 
 
 

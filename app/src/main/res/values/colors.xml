@@ -50,7 +50,17 @@
     <color name="bg_color">#F0EFF5</color>
     <color name="default_bg_color">#FAFAFA</color>
     <color name="grey">#dddddd</color>
+
+    <!--Text color of project-->
+
     <color name="colorDarkTransparent">#CC000000</color>
+    <color name="black_txt_dark">#212529</color>
+    <color name="black_txt_regular">#3a3a3a</color>
+    <color name="black_txt_light">#404040</color>
+    <color name="black_txt_grey">#525252</color>
+
+
+
 
     <!--
         <color name="actionbar_color">#DCDCDC</color>

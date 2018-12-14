@@ -42,6 +42,7 @@ import dk.eatmore.foodapp.utils.DialogUtils
 import kotlinx.android.synthetic.main.fragment_address.*
 import kotlinx.android.synthetic.main.infodialog.*
 import kotlinx.android.synthetic.main.toolbar.*
+import retrofit2.Call
 
 
 class Address : BaseFragment(), TextWatcher {
@@ -51,6 +52,9 @@ class Address : BaseFragment(), TextWatcher {
     private lateinit var homeFragment: HomeFragment
     private val inputValidStates = java.util.HashMap<EditText, Boolean>()
     private lateinit var restaurant : Restaurant
+    private var call_userinfo  : Call<JsonObject>? =null
+    private var call_deliveryDetails  : Call<JsonObject>? =null
+
 
 
 
@@ -85,6 +89,7 @@ class Address : BaseFragment(), TextWatcher {
             logd(TAG, "saveInstance NULL")
             restaurant=arguments!!.getSerializable(Constants.RESTAURANT) as Restaurant
             binding.isPickup = EpayFragment.isPickup
+            binding.executePendingBindings()
             setToolbarforThis()
             postnumber_edt.addTextChangedListener(this)
             name_edt.addTextChangedListener(this)
@@ -281,6 +286,7 @@ class Address : BaseFragment(), TextWatcher {
     private fun createViewModel(): Address.UIModel =
 
             ViewModelProviders.of(this).get(Address.UIModel::class.java).apply {
+                user_infoList.removeObservers(this@Address)
                 user_infoList.observe(this@Address, Observer<UserInfoModel> {
                     refreshview()
                 })
@@ -289,6 +295,7 @@ class Address : BaseFragment(), TextWatcher {
     private fun refreshview() {
 
         binding.userInfo = ui_model!!.user_infoList.value!!.user_info
+        binding.executePendingBindings()
         name_edt.setText(ui_model!!.user_infoList.value!!.user_info.name)
         telephone_number_edt.setText(ui_model!!.user_infoList.value!!.user_info.telephone_no)
         street_edt.setText(ui_model!!.user_infoList.value!!.user_info.street)
@@ -311,10 +318,8 @@ class Address : BaseFragment(), TextWatcher {
         } else {
             postParam.addProperty(Constants.IS_LOGIN, "0")
         }
-
-        callAPI(ApiCall.userInfo(
-                jsonObject = postParam
-        ), object : BaseFragment.OnApiCallInteraction {
+        call_userinfo=ApiCall.userInfo(jsonObject = postParam)
+        callAPI(call_userinfo!!, object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
                 val jsonObject = body as JsonObject
@@ -342,6 +347,11 @@ class Address : BaseFragment(), TextWatcher {
             }
 
             override fun onFail(error: Int) {
+
+                if(call_userinfo!!.isCanceled){
+                    return
+                }
+
                 when (error) {
                     404 -> {
                         showSnackBar(address_container, getString(R.string.error_404))
@@ -373,10 +383,8 @@ class Address : BaseFragment(), TextWatcher {
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
         postParam.addProperty(Constants.LANGUAGE, Constants.EN)
 
-
-        callAPI(ApiCall.deliveryDetails(
-                jsonObject = postParam
-        ), object : BaseFragment.OnApiCallInteraction {
+        call_deliveryDetails=ApiCall.deliveryDetails(jsonObject = postParam)
+        callAPI(call_deliveryDetails!!, object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
                 val jsonObject = body as JsonObject
@@ -393,7 +401,7 @@ class Address : BaseFragment(), TextWatcher {
                     EpayFragment.paymentattributes.upto_min_shipping=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString =="")"0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString
                     EpayFragment.paymentattributes.minimum_order_price=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString== "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString
                     //  EpayActivity.paymentattributes.additional_charges_cash=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_CASH].asString
-                    EpayFragment.paymentattributes.additional_charges_online=if(!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_CASH)) || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString=="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString
+                    EpayFragment.paymentattributes.additional_charges_online=if(!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_ONLINE)) || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString=="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString
                     EpayFragment.paymentattributes.additional_charges_cash=if(!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_CASH)) || jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString=="") "0" else jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString
 
                     EpayFragment.paymentattributes.distance=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString =="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString
@@ -418,6 +426,11 @@ class Address : BaseFragment(), TextWatcher {
                 }
             }
             override fun onFail(error: Int) {
+
+                if(call_deliveryDetails!!.isCanceled ){
+                    return
+                }
+
                 when (error) {
                     404 -> {
                         showSnackBar(address_container, getString(R.string.error_404))
@@ -427,9 +440,9 @@ class Address : BaseFragment(), TextWatcher {
                         showSnackBar(address_container, getString(R.string.internet_not_available))
                     }
                 }
+
                 proceed_view_nxt.isEnabled = true
                 progresswheel(progresswheel,false)
-
             }
         })
     }
@@ -510,9 +523,9 @@ class Address : BaseFragment(), TextWatcher {
                     else if (i == 2)
                         textView1.gravity = Gravity.START
                     textView1.setSingleLine(true)
-                    textView1.setTextAppearance(context, R.style.TextViewSmall)
-                    textView1.typeface= Typeface.DEFAULT_BOLD
-                    textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                    textView1.setTextAppearance(context, R.style.SubtitleMidium_TextViewSmall)
+                  //  textView1.typeface= Typeface.DEFAULT_BOLD
+                  //  textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
 
                     parent.addView(textView1)
 
@@ -566,8 +579,8 @@ class Address : BaseFragment(), TextWatcher {
                         else if (j == 2)
                             textView1.gravity = Gravity.START
                         textView1.setSingleLine(true)
-                        textView1.setTextAppearance(context, R.style.TextViewSmall)
-                        textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                        textView1.setTextAppearance(context, R.style.Subtitle_TextViewSmall)
+                       // textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
 
                         parent.addView(textView1)
 
@@ -620,9 +633,9 @@ class Address : BaseFragment(), TextWatcher {
                     else if (i == 2)
                         textView1.gravity = Gravity.START
                     textView1.setSingleLine(true)
-                    textView1.setTextAppearance(context, R.style.TextViewSmall)
-                    textView1.typeface= Typeface.DEFAULT_BOLD
-                    textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                    textView1.setTextAppearance(context, R.style.SubtitleMidium_TextViewSmall)
+                  //  textView1.typeface= Typeface.DEFAULT_BOLD
+                  //  textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
 
                     parent.addView(textView1)
 
@@ -676,8 +689,8 @@ class Address : BaseFragment(), TextWatcher {
                         else if (j == 2)
                             textView1.gravity = Gravity.START
                         textView1.setSingleLine(true)
-                        textView1.setTextAppearance(context, R.style.TextViewSmall)
-                        textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                        textView1.setTextAppearance(context, R.style.Subtitle_TextViewSmall)
+                       // textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
 
                         parent.addView(textView1)
 
@@ -730,9 +743,9 @@ class Address : BaseFragment(), TextWatcher {
                     else if (i == 2)
                         textView1.gravity = Gravity.START
                     textView1.setSingleLine(true)
-                    textView1.setTextAppearance(context, R.style.TextViewSmall)
-                    textView1.typeface= Typeface.DEFAULT_BOLD
-                    textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                    textView1.setTextAppearance(context, R.style.SubtitleMidium_TextViewSmall)
+                  //  textView1.typeface= Typeface.DEFAULT_BOLD
+                  //  textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
 
                     parent.addView(textView1)
 
@@ -786,8 +799,8 @@ class Address : BaseFragment(), TextWatcher {
                         else if (j == 2)
                             textView1.gravity = Gravity.START
                         textView1.setSingleLine(true)
-                        textView1.setTextAppearance(context, R.style.TextViewSmall)
-                        textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                        textView1.setTextAppearance(context, R.style.Subtitle_TextViewSmall)
+                       // textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
 
                         parent.addView(textView1)
 
@@ -834,9 +847,9 @@ class Address : BaseFragment(), TextWatcher {
                     else if (i == 1)
                         textView1.gravity = Gravity.START
                     textView1.setSingleLine(true)
-                    textView1.setTextAppearance(context, R.style.TextViewSmall)
-                    textView1.typeface= Typeface.DEFAULT_BOLD
-                    textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                    textView1.setTextAppearance(context, R.style.SubtitleMidium_TextViewSmall)
+                   // textView1.typeface= Typeface.DEFAULT_BOLD
+                   // textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
                     parent.addView(textView1)
                 }
 
@@ -855,6 +868,26 @@ class Address : BaseFragment(), TextWatcher {
     }
 
 
+    override fun onDestroyView() {
+
+        logd(TAG, "onDestroyView...")
+        ui_model?.let {
+            ViewModelProviders.of(this).get(UIModel::class.java).user_infoList.removeObservers(this@Address)
+        }
+
+        call_deliveryDetails?.let {
+            proceed_view_nxt.isEnabled = true
+            progresswheel(progresswheel,false)
+            it.cancel()
+        }
+
+        call_userinfo?.let {
+            progresswheel(progresswheel,false)
+            it.cancel()
+        }
+
+        super.onDestroyView()
+    }
 
 
     override fun onDestroy() {

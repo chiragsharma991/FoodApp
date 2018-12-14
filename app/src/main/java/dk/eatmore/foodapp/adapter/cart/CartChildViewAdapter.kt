@@ -40,15 +40,15 @@ class CartChildViewAdapter(val context: Context, val listner: CartViewAdapter.Ad
             holder.binding.data=list_child[position]
 
             if (list_child[position].is_itemselected){
-                holder.binding.itemRccTxt.setTextColor(ContextCompat.getColor(context, R.color.theme_color_secondary_dark))
-                holder.binding.priceRccTxt.setTextColor(ContextCompat.getColor(context, R.color.theme_color_secondary_dark))
+                holder.binding.itemRccTxt.setTextColor(ContextCompat.getColor(context, R.color.theme_color))
+                holder.binding.priceRccTxt.setTextColor(ContextCompat.getColor(context, R.color.theme_color))
            //     val model=CalculateAttribute(p_id,list_child[position].pad_id,list_child[position].a_price)
                 calculateAttribute.get(parentPosition).p_id = p_id
                 calculateAttribute.get(parentPosition).pad_id = list_child[position].pad_id
                 calculateAttribute.get(parentPosition).a_price = list_child[position].a_price
             }else{
-                holder.binding.itemRccTxt.setTextColor(ContextCompat.getColor(context, R.color.black_light))
-                holder.binding.priceRccTxt.setTextColor(ContextCompat.getColor(context, R.color.black_light))
+                holder.binding.itemRccTxt.setTextColor(ContextCompat.getColor(context, R.color.black_txt_light))
+                holder.binding.priceRccTxt.setTextColor(ContextCompat.getColor(context, R.color.black_txt_light))
             }
 
             holder.binding.rowChildCartItemlayout.setOnClickListener {

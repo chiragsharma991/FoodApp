@@ -44,7 +44,7 @@
 
 
                 <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextViewSmall"
+                    style="@style/TitleRegular_TextViewSmall"
                     android:id="@+id/row_cart_txt"
                     android:layout_margin="@dimen/_8sdp"
                     android:layout_gravity="center_vertical"
@@ -60,6 +60,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="1dp"
                 android:alpha="0.2"
+                android:visibility="invisible"
                 android:background="@color/divider_color"
                 />
 
@@ -74,7 +75,6 @@
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view_child"
-                    android:paddingTop="@dimen/_3sdp"
                     android:clipToPadding="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>

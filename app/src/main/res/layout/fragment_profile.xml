@@ -68,18 +68,18 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_8sdp"
+                        android:layout_margin="@dimen/_16sdp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
 
                         <android.support.v7.widget.AppCompatTextView
-                            style="@style/TextViewSmall"
+                            style="@style/SubtitleMidium_TextViewSmall"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/_3sdp"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
-                            android:textColor="@color/black"
+                            android:textStyle="normal"
                             android:layout_marginRight="@dimen/_5sdp"
                             android:text="@{xml_profile.userName}"
                             />
@@ -90,19 +90,20 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/_8sdp"
-                        android:layout_marginBottom="@dimen/_8sdp"
+                        android:layout_marginStart="@dimen/_16sdp"
+                        android:layout_marginEnd="@dimen/_16sdp"
+                        android:layout_marginBottom="@dimen/_16sdp"
                         android:orientation="horizontal">
 
                         <android.support.v7.widget.AppCompatTextView
-                            style="@style/TextViewSmall"
+                            style="@style/SubtitleMidium_TextViewSmall"
                             android:layout_width="match_parent"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/_3sdp"
                             android:layout_weight="1"
                             android:gravity="center_horizontal"
+                            android:textStyle="normal"
                             android:layout_marginRight="@dimen/_5sdp"
-                            android:textColor="@color/black"
                             android:text="@{xml_profile.email}"
                             />
                         <!--      <android.support.v7.widget.AppCompatTextView
@@ -151,21 +152,21 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_8sdp"
+                                android:layout_margin="@dimen/_16sdp"
                                 android:gravity="center_vertical"
                                 android:onClick="@{handlers::profileInfo}"
                                 android:orientation="horizontal">
 
 
                                 <android.support.v7.widget.AppCompatTextView
-                                    style="@style/TextViewSmall"
+                                    style="@style/SubtitleMidium_TextViewSmall"
                                     android:id="@+id/profile_info_txt"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="@dimen/_3sdp"
                                     android:layout_weight="1"
+                                    android:textStyle="normal"
                                     android:layout_marginRight="@dimen/_5sdp"
                                     android:text="Profile Info"
-                                    android:textColor="@color/black"
                                     />
 
 
@@ -182,21 +183,21 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_8sdp"
+                                android:layout_margin="@dimen/_16sdp"
                                 android:gravity="center_vertical"
                                 android:onClick="@{handlers::giftcart}"
                                 android:orientation="horizontal">
 
 
                                 <android.support.v7.widget.AppCompatTextView
-                                    style="@style/TextViewSmall"
+                                    style="@style/SubtitleMidium_TextViewSmall"
                                     android:id="@+id/gift_card_txt"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="@dimen/_3sdp"
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
+                                    android:textStyle="normal"
                                     android:text="@string/giftcard"
-                                    android:textColor="@color/black"
                                     />
 
 
@@ -215,7 +216,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_8sdp"
+                                android:layout_margin="@dimen/_16sdp"
                                 android:id="@+id/health_report"
                                 android:gravity="center_vertical"
                                 android:onClick="@{handlers::healthreport}"
@@ -223,13 +224,13 @@
 
 
                                 <android.support.v7.widget.AppCompatTextView
-                                    style="@style/TextViewSmall"
+                                    style="@style/SubtitleMidium_TextViewSmall"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="@dimen/_3sdp"
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
+                                    android:textStyle="normal"
                                     android:text="Health Report"
-                                    android:textColor="@color/black"
                                     />
 
 
@@ -246,7 +247,7 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_8sdp"
+                                android:layout_margin="@dimen/_16sdp"
                                 android:id="@+id/terms_of_services"
                                 android:gravity="center_vertical"
                                 android:onClick="@{handlers::termsofservices}"
@@ -254,13 +255,13 @@
 
 
                                 <android.support.v7.widget.AppCompatTextView
-                                    style="@style/TextViewSmall"
+                                    style="@style/TitleRegular_TextViewSmall"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="@dimen/_3sdp"
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
+                                    android:textStyle="normal"
                                     android:text="Terms of Services"
-                                    android:textColor="@color/black"
                                     />
 
 
@@ -279,20 +280,20 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_8sdp"
+                                android:layout_margin="@dimen/_16sdp"
                                 android:id="@+id/Opening_hours"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
 
                                 <android.support.v7.widget.AppCompatTextView
-                                    style="@style/TextViewSmall"
+                                    style="@style/SubtitleMidium_TextViewSmall"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="@dimen/_3sdp"
                                     android:layout_weight="1"
+                                    android:textStyle="normal"
                                     android:layout_marginRight="@dimen/_5sdp"
                                     android:text="@string/payment_methods"
-                                    android:textColor="@color/black"
                                     />
 
 
@@ -309,20 +310,20 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_8sdp"
+                                android:layout_margin="@dimen/_16sdp"
                                 android:gravity="center_vertical"
                                 android:onClick="@{handlers::editaddress}"
                                 android:orientation="horizontal">
 
 
                                 <android.support.v7.widget.AppCompatTextView
-                                    style="@style/TextViewSmall"
+                                    style="@style/SubtitleMidium_TextViewSmall"
+                                    android:textStyle="normal"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="@dimen/_3sdp"
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
                                     android:text="@string/addresses"
-                                    android:textColor="@color/black"
                                     />
 
 
@@ -338,19 +339,19 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_8sdp"
+                                android:layout_margin="@dimen/_16sdp"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
 
                                 <android.support.v7.widget.AppCompatTextView
-                                    style="@style/TextViewSmall"
+                                    style="@style/SubtitleMidium_TextViewSmall"
                                     android:layout_gravity="center_vertical"
+                                    android:textStyle="normal"
                                     android:layout_marginLeft="@dimen/_3sdp"
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
                                     android:text="@string/customer_service"
-                                    android:textColor="@color/black"
                                     />
 
 
@@ -370,19 +371,19 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_8sdp"
+                        android:layout_margin="@dimen/_16sdp"
                         android:gravity="center_vertical"
                         android:orientation="horizontal">
 
 
                         <android.support.v7.widget.AppCompatTextView
-                            style="@style/TextViewSmall"
+                            style="@style/TitleRegular_TextViewSmall"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/_3sdp"
                             android:layout_weight="1"
                             android:layout_marginRight="@dimen/_5sdp"
+                            android:textStyle="normal"
                             android:text="APP INFO"
-                            android:textColor="@color/black_light"
                             />
 
 
@@ -404,19 +405,19 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_8sdp"
+                                android:layout_margin="@dimen/_16sdp"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
 
                                 <android.support.v7.widget.AppCompatTextView
-                                    style="@style/TextViewSmall"
+                                    style="@style/SubtitleMidium_TextViewSmall"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="@dimen/_3sdp"
+                                    android:textStyle="normal"
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
                                     android:text="@string/rate_the_app"
-                                    android:textColor="@color/black"
                                     />
 
 
@@ -435,19 +436,19 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_8sdp"
+                                android:layout_margin="@dimen/_16sdp"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
 
                                 <android.support.v7.widget.AppCompatTextView
-                                    style="@style/TextViewSmall"
+                                    style="@style/SubtitleMidium_TextViewSmall"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="@dimen/_3sdp"
                                     android:layout_weight="1"
+                                    android:textStyle="normal"
                                     android:layout_marginRight="@dimen/_5sdp"
                                     android:text="Reset App"
-                                    android:textColor="@color/black"
                                     />
 
 
@@ -479,19 +480,19 @@
                             <LinearLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_8sdp"
+                                android:layout_margin="@dimen/_16sdp"
                                 android:gravity="center_vertical"
                                 android:orientation="horizontal">
 
 
                                 <android.support.v7.widget.AppCompatTextView
-                                    style="@style/TextViewSmall"
+                                    style="@style/SubtitleMidium_TextViewSmall"
                                     android:layout_gravity="center_vertical"
+                                    android:textStyle="normal"
                                     android:layout_marginLeft="@dimen/_3sdp"
                                     android:layout_weight="1"
                                     android:layout_marginRight="@dimen/_5sdp"
                                     android:text="Sign out"
-                                    android:textColor="@color/black"
                                     />
 
 
@@ -510,18 +511,18 @@
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_8sdp"
+                        android:layout_margin="@dimen/_16sdp"
                         android:gravity="center"
                         android:orientation="vertical">
 
 
                         <android.support.v7.widget.AppCompatTextView
-                            style="@style/TextViewSmall"
+                            style="@style/TitleRegular_TextViewSmall"
                             android:layout_marginLeft="@dimen/_3sdp"
                             android:layout_weight="1"
                             android:layout_marginRight="@dimen/_5sdp"
                             android:text="App version 2018.07.13.release"
-                            android:textColor="@color/black_light"
+                            android:textStyle="normal"
                             />
 
 

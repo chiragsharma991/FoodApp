@@ -34,12 +34,16 @@
         android:id="@+id/rowChildItem"
         android:layout_width="match_parent"
         android:onClick="@{(v)-> myclickhandler.onDetails(v,orderresult)}"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        >
 
 
         <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_4sdp"
 
             >
 
@@ -48,7 +52,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical"
-                app:layout_constraintGuide_percent="0.29" />
+                app:layout_constraintGuide_percent="0.20" />
 
             <android.support.constraint.Guideline
                 android:id="@+id/guideline6"
@@ -62,21 +66,21 @@
                 android:layout_width="0dp"
                 android:layout_height="80dp"
                 android:layout_marginStart="8dp"
-                android:layout_marginTop="5dp"
-                android:layout_marginBottom="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_marginBottom="4dp"
                 android:layout_weight="0.7"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
 
                 <android.support.v7.widget.CardView
-                    android:layout_width="@dimen/_80sdp"
-                    android:layout_height="@dimen/_80sdp"
-                    app:cardElevation="@dimen/_5sdp"
+                    android:layout_width="@dimen/_60sdp"
+                    android:layout_height="@dimen/_60sdp"
                     app:cardCornerRadius="@dimen/_5sdp"
-                    >
+                    app:cardElevation="@dimen/_5sdp">
 
                     <RelativeLayout
                         android:layout_width="match_parent"
@@ -85,13 +89,12 @@
                         >
 
                         <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/imageview"
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-                            android:id="@+id/imageview"
-                            android:background="@color/gray"
-                            android:scaleType="fitXY"
                             android:layout_setImage="@{orderresult}"
-                            />
+                            android:background="@color/gray"
+                            android:scaleType="fitXY" />
 
 
                     </RelativeLayout>
@@ -105,51 +108,42 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="0dp"
+                android:layout_marginStart="8dp"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:layout_marginEnd="8dp"
-                android:layout_marginBottom="8dp"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginBottom="4dp"
                 android:layout_weight="1.3"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toStartOf="@+id/guideline6"
-                app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="@+id/guideline"
                 app:layout_constraintTop_toTopOf="parent"
                 app:layout_constraintVertical_bias="0.0">
 
 
-
                 <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextViewSmall"
                     android:id="@+id/ordered_item_name"
+                    style="@style/Titlelight_TextViewSmall"
                     android:singleLine="true"
-                    android:textStyle="bold"
-                    android:textColor="@color/black_light"
-                    android:text="@{orderresult.restaurant_name}"
-                    />
+                    android:text="@{orderresult.restaurant_name}" />
 
                 <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextViewSmall"
-                    android:text="@{util.convertCurrencyToDanish(orderresult.total_to_pay)}"
-                    />
+                    style="@style/TitleRegular_TextViewSmall"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:text="@{util.convertCurrencyToDanish(orderresult.total_to_pay)}" />
 
                 <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextViewSmall"
+                    style="@style/Subtitle_TextViewSmall"
                     android:layout_gravity="center_vertical"
-                    android:text="@{util.parseDateToddMMyyyy(orderresult.order_date)}"
-                    android:textColor="@color/black_light" />
+                    android:text="@{util.parseDateToddMMyyyy(orderresult.order_date)}" />
 
 
                 <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextViewSmall"
-                    android:text="@{(orderresult.enable_rating==true &amp;&amp; orderresult.order_status.toLowerCase().equalsIgnoreCase(`accepted`)) ? @string/rate_it_exclaim : @string/ordre_under_behandling }"
-                    android:visibility="@{orderresult.enable_rating ==true ? View.VISIBLE : View.GONE}"
-                    android:textColor="@color/theme_color"
+                    style="@style/Subtitle_TextViewSmall"
                     android:onClick="@{(v)-> myclickhandler.onRate(v,orderresult)}"
-                    />
-
-
+                    android:text="@{(orderresult.enable_rating==true &amp;&amp; orderresult.order_status.toLowerCase().equalsIgnoreCase(`accepted`)) ? @string/rate_it_exclaim : @string/ordre_under_behandling }"
+                    android:textColor="@color/theme_color"
+                    android:visibility="@{orderresult.enable_rating ==true ? View.VISIBLE : View.GONE}" />
 
 
             </LinearLayout>
@@ -157,46 +151,58 @@
             <LinearLayout
                 android:layout_width="0dp"
                 android:layout_height="0dp"
-                android:layout_marginTop="5dp"
+                android:layout_marginTop="8dp"
                 android:layout_marginEnd="8dp"
                 android:layout_weight="1"
                 android:orientation="vertical"
                 app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/guideline6"
-                app:layout_constraintTop_toTopOf="parent">
-
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_bias="0.0">
 
 
                 <android.support.v7.widget.AppCompatButton
                     style="@style/Button"
-                    android:layout_height="@dimen/_32sdp"
+                    android:layout_height="@dimen/_25sdp"
                     android:layout_alignParentBottom="true"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_2sdp"
                     android:background="@color/background_light"
                     android:backgroundTint="@color/theme_color"
+                    android:clickable="true"
+                    android:gravity="center"
                     android:onClick="@{(v)-> myclickhandler.reOrder(v,orderresult)}"
                     android:text="Reorder"
-                    android:clickable="true"
                     android:textColor="@color/white" />
-
 
 
                 <android.support.v7.widget.AppCompatButton
                     android:id="@+id/order_now"
                     style="@style/Button"
-                    android:layout_height="@dimen/_32sdp"
+                    android:layout_height="@dimen/_25sdp"
                     android:layout_alignParentBottom="true"
                     android:layout_marginTop="@dimen/_5sdp"
                     android:background="@color/background_light"
                     android:backgroundTint="@color/grey"
-                    android:text="Details"
                     android:clickable="false"
+                    android:gravity="center"
+                    android:text="Details"
                     android:textColor="@color/black" />
 
 
-
             </LinearLayout>
+
+
+            <View
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:alpha="0.2"
+                android:layout_marginStart="@dimen/_24sdp"
+                android:layout_marginEnd="@dimen/_24sdp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                android:background="@color/divider_color" />
 
 
 
