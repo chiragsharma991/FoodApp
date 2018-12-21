@@ -14,6 +14,7 @@
     <string name="details">Details</string>
     <string name="order_now">Order now</string>
     <string name="orders">Orders</string>
+    <string name="your_orders">Dine ordre</string>
     <string name="my_profile">Account</string>
     <string name="menu">Menu</string>
     <string name="rating">Rating</string>
@@ -38,8 +39,9 @@
     <string name="error_407">Server not responding\nPlease chenck the network connection.</string>
     <string name="please_wait">Please wait...</string>
     <string name="enter_valid_email_address">Enter valid email address</string>
-    <string name="enter_unique_password">Enter unique password</string>
-    <string name="enter_the_confirm_password">Enter the confirm password</string>
+    <string name="password_must_consist">Password must consist of minimum 8 characters.</string>
+    <string name="enter_your_unique_password">Enter your unique password</string>
+    <string name="enter_your_confirm_password">Enter your confirm password</string>
     <string name="signup">Signup</string>
     <string name="add_to_cart">ADD TO CART %1$s</string>
     <string name="minues">- %1$s</string>
@@ -139,7 +141,7 @@
     <string name="edit_address">Edit Address</string>
     <string name="telephone_number">Telephone number</string>
     <string name="update">Update</string>
-    <string name="please_login_to_see">Please login to see your previous orders.</string>
+    <string name="please_login_to_see">Log ind for at se dine ordre.</string>
     <string name="no_order">No order(s) to display.</string>
     <string name="try_again">Try again</string>
     <string name="delivered_at">Delivered at:</string>
@@ -150,7 +152,7 @@
     <string name="rate_order">Rate Order</string>
     <string name="enter_your_valid_information">Enter your valid information</string>
     <string name="enter_your_full_name">Enter your full name</string>
-    <string name="confirm_password_should_be_match">Confirm password should be match with current password</string>
+    <string name="your_password_and_confirm_password_do_not_match">Your password and confirm password do not match.</string>
     <string name="rate_it_exclaim">Rate it!</string>
     <string name="ordre_under_behandling">Ordre under process</string>
     <string name="no_entry_found_for_address">No entry found for address.</string>
@@ -158,6 +160,7 @@
     <string name="sorry_restaurant_has_been_closed">Sorry Restaurant has been closed.</string>
     <string name="order_eat_amp_njoy"><![CDATA[Order, Eat & Njoy!]]></string>
     <string name="bestil_din_take_away_mad_online">Bestil din take away mad online</string>
+    <string name="cokkie_policy">Cokkie policy</string>
 
 
 </resources>

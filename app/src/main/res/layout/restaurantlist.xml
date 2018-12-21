@@ -91,7 +91,7 @@
                                 >
                                 <android.support.v7.widget.AppCompatTextView
                                     android:id="@+id/error_txt"
-                                    style="@style/TextViewSmall"
+                                    style="@style/SubtitleMidium_TextViewSmall"
                                     android:layout_height="wrap_content"
                                     android:text="@string/unfortunately_error"
                                     android:gravity="center_horizontal"

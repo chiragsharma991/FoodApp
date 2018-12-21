@@ -126,7 +126,7 @@
 
                             <TextView
                                 style="@style/TitleMidiumlight_TextViewMid"
-                                android:singleLine="true"
+                                android:singleLine="false"
                                 android:text="@{restaurant.restaurant_name}" />
 
                             <RatingBar

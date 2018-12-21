@@ -323,7 +323,7 @@ class EpayFragment : BaseFragment() {
                         override fun onPositiveButtonClick(p: Int) {
                             progress_bar.visibility=View.VISIBLE
                             deleteitemFromcart(ui_model!!.viewcard_list.value!!.result!![position].op_id)
-                            accessOnetime=false
+                            accessOnetime=true  // if you want to allowed only one time then pass: false
                         }
 
                         override fun onNegativeButtonClick() {

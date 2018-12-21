@@ -66,7 +66,7 @@
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/telephone_number_txt"
-                        style="@style/TextViewSmall"
+                        style="@style/SubtitleMidium_TextViewSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -100,7 +100,7 @@
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/address_txt"
-                        style="@style/TextViewSmall"
+                        style="@style/SubtitleMidium_TextViewSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -174,7 +174,7 @@
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/postnumber_txt"
-                        style="@style/TextViewSmall"
+                        style="@style/SubtitleMidium_TextViewSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="8dp"
@@ -210,7 +210,7 @@
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/city_txt"
-                        style="@style/TextViewSmall"
+                        style="@style/SubtitleMidium_TextViewSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="22dp"
                         android:layout_marginStart="8dp"

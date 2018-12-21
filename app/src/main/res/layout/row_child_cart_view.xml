@@ -86,16 +86,19 @@
 
                         <android.support.v7.widget.AppCompatImageView
                             android:id="@+id/row_child_cart_add_btn"
-                            android:layout_width="@dimen/_16sdp"
-                            android:layout_height="@dimen/_16sdp"
+                            android:layout_width="@dimen/_23sdp"
+                            android:layout_height="@dimen/_23sdp"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/_5sdp"
+                            android:paddingTop="@dimen/_3sdp"
+                            android:paddingStart="@dimen/_3sdp"
+                            android:paddingEnd="@dimen/_3sdp"
+                            android:paddingBottom="@dimen/_3sdp"
                             android:background="@color/theme_color"
                             android:scaleType="fitXY"
                             app:srcCompat="@drawable/add"
-
-
                             />
+
 
 
                     </LinearLayout>

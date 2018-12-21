@@ -27,6 +27,7 @@ import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import com.facebook.internal.Utility
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount
@@ -507,7 +508,7 @@ class AccountFragment : BaseFragment() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         loge(TAG, "---Activity Result account fragment---" + requestCode)
         super.onActivityResult(requestCode, resultCode, data)
-        /*  if (requestCode == 9001) {
+          if (requestCode == 9001) {
               val task: Task<GoogleSignInAccount> = GoogleSignIn.getSignedInAccountFromIntent(data);
 
               try {
@@ -519,7 +520,7 @@ class AccountFragment : BaseFragment() {
               }
           } else if (requestCode == 64206) {
               callbackManager.onActivityResult(requestCode, resultCode, data);
-          }*/
+          }
     }
 
     private fun handleGoogleAccessToken(googleSignInAccount: GoogleSignInAccount) {

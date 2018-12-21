@@ -1,5 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:android="http://schemas.android.com/apk/res/android"
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android"
     >
 
     <data>
@@ -19,8 +21,6 @@
         android:layout_height="match_parent"
         android:id="@+id/clayout"
         android:fitsSystemWindows="true"
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        xmlns:tools="http://schemas.android.com/tools"
         >
 
         <RelativeLayout
@@ -139,7 +139,7 @@
 
                                 <android.support.v7.widget.AppCompatTextView
                                     android:id="@+id/acc_forgot_txt"
-                                    style="@style/TextViewSmall"
+                                    style="@style/Subtitle_TextViewSmall"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginTop="16dp"
                                     android:text="@string/forgot_password"
@@ -196,15 +196,17 @@
 
                                 <android.support.v7.widget.AppCompatTextView
                                     android:id="@+id/acc_signup_txt"
-                                    style="@style/TextViewSmall"
+                                    style="@style/Subtitle_TextViewSmall"
                                     android:layout_gravity="center_vertical"
-                                    android:layout_marginTop="220dp"
+                                    android:layout_marginTop="@dimen/_32sdp"
+                                    android:layout_marginBottom="@dimen/_32sdp"
                                     android:text="@string/new_to_eatmore_sign_up"
                                     android:textColor="@color/black_light"
+                                    app:layout_constraintBottom_toBottomOf="parent"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintHorizontal_bias="0.501"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/view" />
+                                    app:layout_constraintTop_toBottomOf="@+id/acc_fb_btn" />
 
 
                             </android.support.constraint.ConstraintLayout>

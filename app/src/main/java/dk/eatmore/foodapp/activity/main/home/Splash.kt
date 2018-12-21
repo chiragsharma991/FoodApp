@@ -142,6 +142,7 @@ class Splash : BaseActivity() {
                 val jsonObject = body as JsonObject
                 if (jsonObject.get(Constants.STATUS).asBoolean) {
                     PreferenceUtil.putValue(PreferenceUtil.DEVICE_TOKEN,Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))
+                    PreferenceUtil.save()
                     moveToLogin()
                 }else{
                     lottie_loader.visibility=View.GONE

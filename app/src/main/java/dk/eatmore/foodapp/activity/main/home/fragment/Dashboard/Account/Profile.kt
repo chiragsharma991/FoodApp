@@ -141,6 +141,7 @@ class Profile : BaseFragment() {
                         PreferenceUtil.clearAll()
                         val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
                         (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
+                        fragmentof.getOrderFragment().popAllFragment()
                         PreferenceUtil.save()
                         // clear all but add id again to collect non user item into cart.
                         PreferenceUtil.putValue(PreferenceUtil.DEVICE_TOKEN, Settings.Secure.getString(context!!.getContentResolver(), Settings.Secure.ANDROID_ID))
@@ -191,8 +192,13 @@ class Profile : BaseFragment() {
                 childFragmentManager.popBackStack()
                 return true
             }
+            else if (coupan_fragment != null && coupan_fragment!!.isVisible) {
+                childFragmentManager.popBackStack()
+                return true
+            }
             else {
                 if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
+                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0) // if user is login and press only back then move->Home
                     return true
                 } else {
                     return false  // this return would work for logout.
@@ -235,7 +241,11 @@ class Profile : BaseFragment() {
             profile.addFragment(R.id.profile_container, profile.coupan_fragment!!, Coupan.TAG, false)
         }
         fun termsofservices(view: View){
-            profile.termscondition = TermsCondition.newInstance()
+            profile.termscondition = TermsCondition.newInstance(0)
+            profile.addFragment(R.id.profile_container, profile.termscondition!!, TermsCondition.TAG, false)
+        }
+        fun cokkie_policy(view: View){
+            profile.termscondition = TermsCondition.newInstance(1)
             profile.addFragment(R.id.profile_container, profile.termscondition!!, TermsCondition.TAG, false)
         }
       /*  fun openinghours(view: View){

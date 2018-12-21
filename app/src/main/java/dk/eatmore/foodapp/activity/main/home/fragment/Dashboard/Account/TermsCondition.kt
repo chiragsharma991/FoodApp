@@ -19,8 +19,10 @@ import android.annotation.TargetApi
 import android.widget.Toast
 import android.webkit.WebViewClient
 import android.app.Activity
+import android.util.Log
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.databinding.*
+import dk.eatmore.foodapp.rest.ApiClient
 import kotlinx.android.synthetic.main.termscondition.*
 import kotlinx.android.synthetic.main.toolbar.*
 
@@ -31,11 +33,12 @@ class TermsCondition : BaseFragment() {
     private lateinit var binding: TermsconditionBinding
 
 
-
     companion object {
-
+        // id =0 (termsofservices) || id =1 (cokkie_policy)
+        var fragment_id= 0
         val TAG = "TermsCondition"
-        fun newInstance(): TermsCondition {
+        fun newInstance(fragment_id : Int): TermsCondition {
+            this.fragment_id = fragment_id
             return TermsCondition()
         }
 
@@ -56,9 +59,17 @@ class TermsCondition : BaseFragment() {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
-            txt_toolbar.text=getString(R.string.terms_of_services)
             img_toolbar_back.setOnClickListener{(activity as HomeActivity).onBackPressed()}
-            setwebview()
+            if(fragment_id==0){
+                //termsofservices
+                txt_toolbar.text=getString(R.string.terms_of_services)
+                setwebview()
+            }else{
+                //cokkie_policy
+                txt_toolbar.text=getString(R.string.cokkie_policy)
+                setwebview()
+            }
+
         }else{
             logd(TAG,"saveInstance NOT NULL")
             // (activity as HomeActivity).popWithTag(HealthReport.TAG)
@@ -69,7 +80,8 @@ class TermsCondition : BaseFragment() {
 
 
         webview.getSettings().setJavaScriptEnabled(true) // enable javascript
-        webview.loadUrl("https://eatmore.dk/web-view/t-o-s")
+        webview.loadUrl(if(id ==0) ApiClient.TERMS_CONDITION else ApiClient.COOKIES_POLICY)
+        //http://eatmore.dk/web-view/t-o-s
         webview.setWebViewClient(WebViewController())
     }
 

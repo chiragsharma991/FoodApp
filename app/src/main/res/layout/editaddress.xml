@@ -52,7 +52,7 @@
 
 
         <android.support.v7.widget.AppCompatTextView
-            style="@style/TextViewSmall"
+            style="@style/SubtitleMidium_TextViewSmall"
             android:id="@+id/error_txt"
             android:layout_height="wrap_content"
             android:text="@string/no_entry_found_for_address"

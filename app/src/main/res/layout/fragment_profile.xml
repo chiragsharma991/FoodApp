@@ -414,10 +414,12 @@
                                     style="@style/SubtitleMidium_TextViewSmall"
                                     android:layout_gravity="center_vertical"
                                     android:layout_marginLeft="@dimen/_3sdp"
+                                    android:id="@+id/cokkie_policy"
                                     android:textStyle="normal"
                                     android:layout_weight="1"
+                                    android:onClick="@{handlers::cokkie_policy}"
                                     android:layout_marginRight="@dimen/_5sdp"
-                                    android:text="@string/rate_the_app"
+                                    android:text="@string/cokkie_policy"
                                     />
 
 

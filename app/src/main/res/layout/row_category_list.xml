@@ -126,15 +126,21 @@
                     app:layout_constraintTop_toBottomOf="@+id/appCompatTextView3"
                     app:layout_constraintVertical_bias="0.0" />
 
+
+
                 <android.support.v7.widget.AppCompatImageView
                     android:id="@+id/appCompatImageView"
-                    android:layout_width="@dimen/_16sdp"
-                    android:layout_height="0dp"
+                    android:layout_width="@dimen/_23sdp"
+                    android:layout_height="@dimen/_25sdp"
                     android:layout_gravity="top"
                     android:layout_marginStart="8dp"
                     android:layout_marginEnd="8dp"
                     android:background="@color/theme_color"
                     android:scaleType="fitXY"
+                    android:paddingTop="@dimen/_6sdp"
+                    android:paddingStart="@dimen/_3sdp"
+                    android:paddingEnd="@dimen/_3sdp"
+                    android:paddingBottom="@dimen/_3sdp"
                     app:layout_constraintBottom_toBottomOf="@+id/appCompatTextView"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="@+id/guidline_vertical_two"

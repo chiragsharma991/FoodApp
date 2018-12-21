@@ -265,7 +265,7 @@ class HomeFragment : CommanAPI() {
 
                 } else {
                     count = 0
-                    swipeAdapter!!.notifyDataSetChanged()
+                    swipeAdapter?.notifyDataSetChanged()
                 }
             }
 

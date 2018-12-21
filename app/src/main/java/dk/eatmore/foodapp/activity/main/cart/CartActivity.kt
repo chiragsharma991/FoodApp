@@ -213,16 +213,20 @@ class CartActivity : BaseActivity() {
                                 ui_model!!.product_attribute_list.value!![parentPosition].product_attribute_value!!.get(chilPosition).extra_topping_group_deatils.topping_subgroup_list.get(i).topping_subgroup_details.get(j).is_et_itemselected = false
                             }
                         }
-
+                        // if user click to open extratopping from attributest then open fragment.
                         if (ui_model!!.product_attribute_list.value!![parentPosition].product_attribute_value!!.get(chilPosition).extra_topping_group_deatils.topping_subgroup_list.size > 0) {
                             val fragment = Extratoppings.newInstance(parentPosition, chilPosition, ui_model!!, ui_model!!.calculateAttribute.value!!.get(parentPosition).calculateExtratoppings)
                             toolbar.setNavigationIcon(ContextCompat.getDrawable(context, R.drawable.back))
+                            continue_btn.visibility=View.VISIBLE
+                            addtocart_txt.visibility=View.GONE
                             addFragment(R.id.cart_container, fragment, Extratoppings.TAG, false)
                         }
                     } else {
                         if (ui_model!!.product_attribute_list.value!![parentPosition].product_attribute_value!!.get(chilPosition).extra_topping_group_deatils.topping_subgroup_list.size > 0) {
                             val fragment = Extratoppings.newInstance(parentPosition, chilPosition, ui_model!!, ui_model!!.calculateAttribute.value!!.get(parentPosition).calculateExtratoppings)
                             toolbar.setNavigationIcon(ContextCompat.getDrawable(context, R.drawable.back))
+                            continue_btn.visibility=View.VISIBLE
+                            addtocart_txt.visibility=View.GONE
                             addFragment(R.id.cart_container, fragment, Extratoppings.TAG, false)
                         }
                     }
@@ -241,6 +245,8 @@ class CartActivity : BaseActivity() {
     private fun initView(savedInstanceState: Bundle?) {
         binding.isIngradientsVisible=false
         progress_bar.visibility=View.GONE
+        addtocart_txt.visibility=View.VISIBLE
+        continue_btn.visibility=View.GONE
         val title = intent.extras.getString("TITLE", "")
         item_p_id = intent.extras.getString("PID", "")
         p_price = intent.extras.getString("p_price", "")
@@ -270,6 +276,10 @@ class CartActivity : BaseActivity() {
 
         addtocart_view.setOnClickListener {
             if(progress_bar.visibility == View.VISIBLE){
+                return@setOnClickListener
+            }
+            if(continue_btn.visibility ==View.VISIBLE){
+                onBackPressed()
                 return@setOnClickListener
             }
             showProgressDialog()
@@ -427,6 +437,8 @@ class CartActivity : BaseActivity() {
                         finishThisActivity()
                     }
                     is Extratoppings -> {
+                        continue_btn.visibility=View.GONE
+                        addtocart_txt.visibility=View.VISIBLE
                         supportFragmentManager.popBackStack()
                     }
 

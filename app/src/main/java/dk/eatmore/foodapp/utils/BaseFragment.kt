@@ -42,6 +42,7 @@ import dk.eatmore.foodapp.activity.main.RestaurantClosed
 import dk.eatmore.foodapp.activity.main.epay.EpayActivity
 import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.AccountFragment
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.Profile
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.fragment.Dashboard.Account.Signup
@@ -164,7 +165,6 @@ abstract class BaseFragment : Fragment() {
                 /**
                  * Check Filter Fragment Appear or not, Filter Type Fragment Also
                  */
-                loge("test--fragment--- ",childFragmentManager.backStackEntryCount.toString())
                 hideKeyboard()
                 loge("backStackCount", childFragmentManager.backStackEntryCount.toString())
                 val fragment = childFragmentManager.findFragmentByTag(childFragmentManager.getBackStackEntryAt(childFragmentManager.backStackEntryCount - 1).name)
@@ -195,7 +195,24 @@ abstract class BaseFragment : Fragment() {
                  //   DrawableCompat.setTint(ContextCompat.getDrawable(activity!!, R.drawable.close)!!, ContextCompat.getColor(activity!!, R.color.white));
 
                 }
+            }else{
+                loge("Backpress", "--Move on finish--")
+                val fragment=((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getContainerFragment()
+                when(fragment){
+
+                    is OrderFragment ->{
+                        ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0)
+                    }
+                    is AccountFragment ->{
+                        ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0)
+                    }
+                    is HomeFragment ->{
+                        (activity as HomeActivity).finish()
+                    }
+
+                }
             }
+
         } catch (e: Exception) {
             e.printStackTrace()
         }

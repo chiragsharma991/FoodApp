@@ -401,6 +401,8 @@ class TransactionStatus : BaseFragment() {
             // order fragment : Reorder
             (fragment as OrderFragment).popAllFragment()
         }
+        if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true
+        if(HomeFragment.ui_model?.reloadfragment !=null) HomeFragment.ui_model!!.reloadfragment.value=true  // reload last order from homefragment.
         showTabBar(true)
 
 

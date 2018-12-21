@@ -20,6 +20,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.facebook.internal.Utility
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
@@ -57,9 +58,11 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onRefresh() {
         // swipe to refresh>>>
-        swipetorefresh_view.visibility = View.GONE
-        fetchmyOrder()
-        if(HomeFragment.ui_model?.reloadfragment !=null && HomeFragment.count ==1) HomeFragment.ui_model!!.reloadfragment.value=true  // reload last order from homefragment.
+        if(PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS,false)){
+            swipetorefresh_view.visibility = View.GONE
+            fetchmyOrder()
+            if(HomeFragment.ui_model?.reloadfragment !=null && HomeFragment.count ==1) HomeFragment.ui_model!!.reloadfragment.value=true  // reload last order from homefragment.
+        }else{  swipeRefresh.isRefreshing = false }
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
@@ -83,13 +86,13 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
             loge(TAG,"check visible-"+getUserVisibleHint())
             empty_view.visibility = View.GONE
             //progress_bar.visibility=View.GONE
-            txt_toolbar.text = getString(R.string.orders)
+            txt_toolbar.text = getString(R.string.your_orders)
             img_toolbar_back.visibility = View.GONE
             swipeRefresh.setOnRefreshListener(this)
             ui_model = createViewModel()
+            error_btn.setOnClickListener{((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2) }
             if (!PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
-                empty_view.visibility = View.VISIBLE
-                error_txt.text = getString(R.string.please_login_to_see)
+                show_ui_error(1)
                 return
             }
             fetchmyOrder()
@@ -104,6 +107,23 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
         })
         ui_model!!.init()
 */
+    }
+
+    fun show_ui_error(viewid : Int){
+        if(viewid ==1){
+            // Please login
+           // swipetorefresh_view.visibility=View.GONE
+            empty_view.visibility = View.VISIBLE
+            error_image.visibility=View.GONE
+            error_btn.visibility=View.VISIBLE
+            error_txt.text = getString(R.string.please_login_to_see)
+        }else{
+            empty_view.visibility = View.VISIBLE
+            error_image.visibility=View.VISIBLE
+            error_btn.visibility=View.GONE
+            error_txt.text = getString(R.string.no_order)
+        }
+
     }
 
 
@@ -133,6 +153,7 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
                 reloadfragment.observe(this@OrderFragment, Observer<Boolean> {
                     // reload fragment from here.
                     loge(TAG, "reload refresh---")
+                 //   swipetorefresh_view.visibility=View.VISIBLE
                     fetchmyOrder()
 
                 })
@@ -235,13 +256,16 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
                         mAdapter!!.getdata().clear()
                         mAdapter!!.notifyDataSetChanged()
                     }
-                    empty_view.visibility = View.VISIBLE
-                    error_txt.text = getString(R.string.no_order)
+                    //empty_view.visibility = View.VISIBLE
+                    //error_txt.text = getString(R.string.no_order)
+                    if(PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS,false)){
+                        show_ui_error(2)
+                    }else{
+                        show_ui_error(1)
+                    }
                 }
                 //progress_bar.visibility=View.GONE
                 swipeRefresh.isRefreshing = false
-
-
             }
 
             override fun onFail(error: Int) {
@@ -389,7 +413,7 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
 
         fun reOrder(view: View, model: Orderresult) {
             if (orderFragment.swipeRefresh.isRefreshing == false){
-                orderFragment.empty_view.visibility = View.GONE
+              //  orderFragment.empty_view.visibility = View.GONE
                 // orderFragment.fetchReorder_info(model)
                 orderFragment.fetchReorder_info(model,orderFragment.home_order_container)
             }

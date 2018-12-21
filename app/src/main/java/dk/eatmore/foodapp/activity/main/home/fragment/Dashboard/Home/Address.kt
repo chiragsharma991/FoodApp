@@ -87,6 +87,7 @@ class Address : BaseFragment(), TextWatcher {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
+            progress_bar.visibility=View.GONE
             restaurant=arguments!!.getSerializable(Constants.RESTAURANT) as Restaurant
             binding.isPickup = EpayFragment.isPickup
             binding.executePendingBindings()
@@ -306,7 +307,8 @@ class Address : BaseFragment(), TextWatcher {
 
 
     private fun fetchuserInfo() {
-        progresswheel(progresswheel,true)
+       // progresswheel(progresswheel,true)
+        progress_bar.visibility=View.VISIBLE
         val postParam = JsonObject()
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
@@ -341,7 +343,8 @@ class Address : BaseFragment(), TextWatcher {
 
                     ui_model!!.user_infoList.value = userinfo_model
                     loge(TAG, "data is---" + userinfo_model.user_info.telephone_no + " " + userinfo_model.user_info.name)
-                    progresswheel(progresswheel,false)
+                  //  progresswheel(progresswheel,false)
+                    progress_bar.visibility=View.GONE
                     // ui_model!!.user_infoList.value!!.user_info.name
                 }
             }
@@ -361,14 +364,17 @@ class Address : BaseFragment(), TextWatcher {
                         showSnackBar(address_container, getString(R.string.internet_not_available))
                     }
                 }
-                progresswheel(progresswheel,false)
+                //progresswheel(progresswheel,false)
+                progress_bar.visibility=View.GONE
+
             }
         })
     }
 
 
     private fun submitdelivery() {
-        progresswheel(progresswheel,true)
+        //progresswheel(progresswheel,true)
+        progress_bar.visibility=View.VISIBLE
         val postParam = JsonObject()
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
@@ -417,10 +423,12 @@ class Address : BaseFragment(), TextWatcher {
                     val fragment = DeliveryTimeslot.newInstance(time_list)
                     (parentFragment as EpayFragment).addFragment(R.id.epay_container,fragment, DeliveryTimeslot.TAG,true)
                     proceed_view_nxt.isEnabled = true
-                    progresswheel(progresswheel,false)
+                    //progresswheel(progresswheel,false)
+                    progress_bar.visibility=View.GONE
 
                 } else {
-                    progresswheel(progresswheel,false)
+                    //progresswheel(progresswheel,false)
+                    progress_bar.visibility=View.GONE
                     showSnackBar(address_container, getString(R.string.error_404))
                     proceed_view_nxt.isEnabled = true
                 }
@@ -442,7 +450,8 @@ class Address : BaseFragment(), TextWatcher {
                 }
 
                 proceed_view_nxt.isEnabled = true
-                progresswheel(progresswheel,false)
+                //progresswheel(progresswheel,false)
+                progress_bar.visibility=View.GONE
             }
         })
     }
@@ -877,12 +886,14 @@ class Address : BaseFragment(), TextWatcher {
 
         call_deliveryDetails?.let {
             proceed_view_nxt.isEnabled = true
-            progresswheel(progresswheel,false)
+            //progresswheel(progresswheel,false)
+            progress_bar.visibility=View.GONE
             it.cancel()
         }
 
         call_userinfo?.let {
-            progresswheel(progresswheel,false)
+            progress_bar.visibility=View.GONE
+            //progresswheel(progresswheel,false)
             it.cancel()
         }
 

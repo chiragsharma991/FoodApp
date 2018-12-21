@@ -49,7 +49,11 @@ object DialogUtils {
             })
         }
         val alert = builder.create()
+      /*  val textView = alert.findViewById<TextView>(android.R.id.message) as TextView
+        val face = Typeface.createFromAsset(context.getAssets(), "fonts/FONT")
+        textView.typeface = face*/
         alert.show()
+
 
         alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(color)
         alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(color)

@@ -63,8 +63,9 @@
                             android:layout_width="wrap_content"
                             android:includeFontPadding="false"
                             android:layout_height="wrap_content"
-                            android:fontFamily="@font/hindvadodara_medium"
+                            android:fontFamily="@font/ubuntu_r"
                             android:layout_marginEnd="@dimen/_14sdp"
+                            android:layout_marginTop="@dimen/_3sdp"
                             android:layout_marginStart="@dimen/_16sdp"
                             android:text="Havordan var din oplevelse?"
                             style="@style/TextAppearance.AppCompat.Widget.ActionBar.Title"
@@ -132,11 +133,10 @@
 
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewMid"
+                        style="@style/Titlelight_TextViewSmall"
                         android:id="@+id/ordered_item_name"
                         android:singleLine="true"
                         android:text="Kavalitet"
-                        android:textColor="@color/black_light"
                         />
 
                     <RatingBar
@@ -151,11 +151,10 @@
                         android:stepSize="1" />
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewMid"
+                        style="@style/Titlelight_TextViewSmall"
                         android:singleLine="true"
                         android:layout_marginTop="@dimen/_8sdp"
                         android:text="Kundeservice"
-                        android:textColor="@color/black_light"
                         />
 
                     <RatingBar
@@ -170,11 +169,10 @@
                         android:stepSize="1" />
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewMid"
+                        style="@style/Titlelight_TextViewSmall"
                         android:singleLine="true"
                         android:layout_marginTop="@dimen/_8sdp"
                         android:text="Leveringstid"
-                        android:textColor="@color/black_light"
                         />
 
                     <RatingBar
@@ -189,11 +187,10 @@
                         android:stepSize="1" />
 
                     <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewMid"
+                        style="@style/Titlelight_TextViewSmall"
                         android:singleLine="true"
                         android:text="Leveringstid"
                         android:layout_marginTop="@dimen/_8sdp"
-                        android:textColor="@color/black_light"
                         />
 
 

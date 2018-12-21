@@ -58,8 +58,8 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
             img_toolbar_back.setOnClickListener{(activity as HomeActivity).onBackPressed() }
             clickEvent = MyClickHandler(this)
             binding.handlers = clickEvent
-            acc_signup_btn.setEnabled(false)
-            acc_signup_btn.alpha = 0.5F
+           // acc_signup_btn.setEnabled(false)
+          //  acc_signup_btn.alpha = 0.5F
 
             first_name.addTextChangedListener(this)
             sign_up_email_edt.addTextChangedListener(this)
@@ -101,95 +101,83 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
     }
 
     override fun onFocusChange(v: View?, hasFocus: Boolean) {
-        when (v){
 
-            first_name ->{
-                if(hasFocus){
-                    sign_up_firstname_inputlayout.isErrorEnabled=false
-
-                }else{
-                    if (!inputValidStates[first_name]!!) {
-                        sign_up_firstname_inputlayout.isErrorEnabled=true
-                        sign_up_firstname_inputlayout.error= getString(R.string.enter_your_full_name)
-                    }
-
-                }
-            }
-             sign_up_email_edt ->{
-                 if(hasFocus){
-                     sign_up_email_inputlayout.isErrorEnabled=false
-
-                 }else{
-                     if (!inputValidStates[sign_up_email_edt]!!) {
-                         sign_up_email_inputlayout.error = getString(R.string.enter_valid_email_address)
-                     }
-                 }
-             }
-
-
-            sign_up_password_edt ->{
-                if(hasFocus){
-                    sign_up_password_inputlayout.isErrorEnabled=false
-
-                }else{
-                    if (!inputValidStates[sign_up_password_edt]!!) {
-                        sign_up_password_inputlayout.error = getString(R.string.enter_unique_password)
-                    }
-                }
-            }
-
-            sign_up_cnf_password_edt ->{
-                if(hasFocus){
-                    sign_up_cnf_password_inputlayout.isErrorEnabled=false
-
-                }else{
-                    if (!inputValidStates[sign_up_cnf_password_edt]!!) {
-                        sign_up_cnf_password_inputlayout.error = getString(R.string.confirm_password_should_be_match)
-                    }
-                }
-            }
-
-        }
     }
 
     override fun afterTextChanged(s: Editable?) {
 
         loge(TAG,"afterTextChanged---")
-
         if (first_name.text.hashCode() == s!!.hashCode()) {
+            sign_up_firstname_inputlayout.isErrorEnabled=false
+        }
+        else if (sign_up_email_edt.text.hashCode() == s.hashCode()) {
+            sign_up_email_inputlayout.isErrorEnabled=false
+            // validationFields()
+        } else if (sign_up_password_edt.text.hashCode() == s.hashCode()) {
+            sign_up_password_inputlayout.isErrorEnabled=false
+            // validationFields()
+        }
+        else if (sign_up_cnf_password_edt.text.hashCode() == s.hashCode()) {
+            sign_up_cnf_password_inputlayout.isErrorEnabled=false
+        }
+    }
+
+    fun signup_validation(): Boolean{
+        var result =true
+
             if (first_name.text.trim().toString().length > 0) {
                 inputValidStates[first_name] = true
             } else {
                 inputValidStates[first_name] = false
             }
-        }
-        else if (sign_up_email_edt.text.hashCode() == s.hashCode()) {
             if (validMail(sign_up_email_edt.text.toString())) {
                 inputValidStates[sign_up_email_edt] = true
             } else {
                 inputValidStates[sign_up_email_edt] = false
             }
-           // validationFields()
-        } else if (sign_up_password_edt.text.hashCode() == s.hashCode()) {
-           if(sign_up_password_edt.text.trim().toString().length >= 7){
-               inputValidStates[sign_up_password_edt] = true
+            // validationFields()
+            if(sign_up_password_edt.text.trim().toString().length >= 8){
+                inputValidStates[sign_up_password_edt] = true
+            }else{
+                inputValidStates[sign_up_password_edt] = false
+            }
+            // validationFields()
+            if(sign_up_cnf_password_edt.text.trim().length <= 0){
+                inputValidStates[sign_up_cnf_password_edt] = false
+            }else if(sign_up_cnf_password_edt.text.trim().toString().equals(sign_up_password_edt.text.trim().toString())){
+                inputValidStates[sign_up_cnf_password_edt] = true
+            }else{
+                inputValidStates[sign_up_cnf_password_edt] = false
+            }
 
-           }else{
-               inputValidStates[sign_up_password_edt] = false
 
-           }
-           // validationFields()
+        if (!inputValidStates[first_name]!!) {
+            sign_up_firstname_inputlayout.isErrorEnabled=true
+            sign_up_firstname_inputlayout.error= getString(R.string.enter_your_full_name)
+            result=false
         }
-        else if (sign_up_cnf_password_edt.text.hashCode() == s.hashCode()) {
-           if(sign_up_cnf_password_edt.text.trim().toString().equals(sign_up_password_edt.text.trim().toString())){
-               inputValidStates[sign_up_cnf_password_edt] = true
-           }else{
-               inputValidStates[sign_up_cnf_password_edt] = false
-           }
-
-
+        if (!inputValidStates[sign_up_email_edt]!!) {
+            sign_up_email_inputlayout.error = getString(R.string.enter_valid_email_address)
+            result=false
         }
-        updateButtonState()
+        if (!inputValidStates[sign_up_password_edt]!!) {
+            if(sign_up_password_edt.text.trim().length <= 0){
+                sign_up_password_inputlayout.error = getString(R.string.enter_your_unique_password)
+            }else{
+                sign_up_password_inputlayout.error = getString(R.string.password_must_consist)
+            }
+            result=false
+        }
+        if (!inputValidStates[sign_up_cnf_password_edt]!!) {
+            if(sign_up_cnf_password_edt.text.trim().length <= 0){
+                sign_up_cnf_password_inputlayout.error = getString(R.string.enter_your_confirm_password)
+            }else{
+                sign_up_cnf_password_inputlayout.error = getString(R.string.your_password_and_confirm_password_do_not_match)
+            }
+            result=false
+        }
+
+        return result
     }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -202,29 +190,6 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
 
     }
 
-
- /*   fun validationFields() {
-
-        if (!inputValidStates[first_name]!!) {
-            sign_up_firstname_inputlayout.error= getString(R.string.enter_your_full_name)
-            return
-        }
-        if (!inputValidStates[sign_up_email_edt]!!) {
-            acc_signup_btn.text = getString(R.string.enter_valid_email_address)
-            return
-        }
-        if (!inputValidStates[sign_up_password_edt]!!) {
-            acc_signup_btn.text = getString(R.string.enter_unique_password)
-            return
-        }
-        if (!inputValidStates[sign_up_cnf_password_edt]!!) {
-            acc_signup_btn.text = getString(R.string.confirm_password_should_be_match)
-            return
-        }
-            updateButtonState()
-
-    }
-*/
     private fun updateButtonState() {
         var enabled = true
         for (key in inputValidStates.keys) {
@@ -241,6 +206,7 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
 
 
     private fun signupFunction() {
+        if(!signup_validation())return
         loge(TAG, "signup...")
         showProgressDialog()
         callAPI(ApiCall.signup(
