@@ -1,10 +1,12 @@
 package dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home
 
 
+import android.app.Activity
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
@@ -12,16 +14,23 @@ import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.LinearLayoutManager
 import android.transition.ChangeBounds
 import android.transition.Slide
+import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.view.animation.AccelerateInterpolator
+import android.view.animation.DecelerateInterpolator
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
+import dk.eatmore.foodapp.activity.main.filter.KokkenType
+import dk.eatmore.foodapp.activity.main.filter.Tilpas
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Rating
 import dk.eatmore.foodapp.adapter.restaurantList.RestaurantListParentAdapter
 import dk.eatmore.foodapp.databinding.RestaurantlistBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
+import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.model.ModelUtility
 import dk.eatmore.foodapp.model.home.Restaurant
@@ -30,9 +39,16 @@ import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
+import dk.eatmore.foodapp.utils.HidingScrollListener
+import kotlinx.android.synthetic.main.fragment_home_container.*
 import kotlinx.android.synthetic.main.restaurantlist.*
 import kotlinx.android.synthetic.main.toolbar.*
 import retrofit2.Call
+import java.io.Serializable
+import java.util.*
+import java.util.Arrays.asList
+import kotlin.collections.ArrayList
+import kotlin.collections.HashMap
 
 
 class RestaurantList : BaseFragment() {
@@ -40,25 +56,28 @@ class RestaurantList : BaseFragment() {
 
     private lateinit var binding: RestaurantlistBinding
     private lateinit var clickEvent: MyClickHandler
-    private lateinit  var list : ArrayList<StatusWiseRestaurant>
+    private lateinit var list: ArrayList<StatusWiseRestaurant>
     private lateinit var mAdapter: RestaurantListParentAdapter
-    private var call_restaurantlist  : Call<RestaurantListModel>? =null
-
+    private var call_restaurantlist: Call<RestaurantListModel>? = null
+    private val overall_cuisines_list: ArrayList<String> = ArrayList()
+    private  var restaurantlistmodel: RestaurantListModel? =null
+    private  var filterable_restaurantlistmodel: RestaurantListModel?=null
+    private val kokkenType_map: HashMap<String, Int> = HashMap()
 
 
     companion object {
 
-        fun getuimodel() : UIModel? {
+        fun getuimodel(): UIModel? {
             return ui_model
         }
 
         val TAG = "RestaurantList"
         var ui_model: RestaurantList.UIModel? = null
-        fun newInstance(postal_code : String): RestaurantList {
+        fun newInstance(postal_code: String): RestaurantList {
             val fragment = RestaurantList()
             val bundle = Bundle()
-            bundle.putString(Constants.POSTAL_CODE ,postal_code)
-            fragment.arguments=bundle
+            bundle.putString(Constants.POSTAL_CODE, postal_code)
+            fragment.arguments = bundle
             return fragment
         }
     }
@@ -77,8 +96,10 @@ class RestaurantList : BaseFragment() {
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
+            clickEvent = MyClickHandler(this)
+            binding.handler = clickEvent
             setToolbarforThis()
-            search_again_btn.setOnClickListener{ onBackpress() }
+            search_again_btn.setOnClickListener { onBackpress() }
             ui_model = createViewModel()
             if (ui_model!!.restaurantList.value == null) {
                 fetch_ProductDetailList()
@@ -92,38 +113,133 @@ class RestaurantList : BaseFragment() {
 
     }
 
-    fun setToolbarforThis(){
-        progress_bar.visibility=View.GONE
-        txt_toolbar.text=getString(R.string.restaurants)
+    fun setToolbarforThis() {
+        progress_bar.visibility = View.GONE
+        txt_toolbar.text = getString(R.string.restaurants)
         img_toolbar_back.setImageResource(R.drawable.back)
-        img_toolbar_back.setOnClickListener{
+        img_toolbar_back.setOnClickListener {
             onBackpress()
         }
     }
 
 
-     fun fetch_ProductDetailList() {
-         progress_bar.visibility=View.VISIBLE
-         val bundle=arguments
-        val jsonobject= JsonObject()
-        jsonobject.addProperty(Constants.AUTH_KEY,Constants.AUTH_VALUE)
-        jsonobject.addProperty(Constants.EATMORE_APP,true)
-        jsonobject.addProperty(Constants.POSTAL_CODE,bundle!!.getString(Constants.POSTAL_CODE,"0"))
-        if(PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS,false)){
+    fun fetch_ProductDetailList() {
+        progress_bar.visibility = View.VISIBLE
+        val bundle = arguments
+        val jsonobject = JsonObject()
+        jsonobject.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
+        jsonobject.addProperty(Constants.EATMORE_APP, true)
+        jsonobject.addProperty(Constants.POSTAL_CODE, bundle!!.getString(Constants.POSTAL_CODE, "0"))
+        if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
             jsonobject.addProperty(Constants.IS_LOGIN, "1")
-            jsonobject.addProperty(Constants.CUSTOMER_ID,PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,""))
-        }else{
+            jsonobject.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
+        } else {
             jsonobject.addProperty(Constants.IS_LOGIN, "0")
         }
-        jsonobject.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
+        jsonobject.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN, ""))
         jsonobject.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
-         call_restaurantlist=ApiCall.restaurantList(jsonobject)
+        call_restaurantlist = ApiCall.restaurantList(jsonobject)
         callAPI(call_restaurantlist!!, object : BaseFragment.OnApiCallInteraction {
 
+            //private var items: MutableList<List<String>>? =null
+
             override fun <T> onSuccess(body: T?) {
-                val restaurantlistmodel = body as RestaurantListModel
-                if (restaurantlistmodel.status) {
-                    ui_model!!.restaurantList.value=restaurantlistmodel
+                restaurantlistmodel = body as RestaurantListModel
+                if (restaurantlistmodel!!.status) {
+
+                    /*Todo Kokken Type login
+                    *   first we are passing cuisines list in all 3 list (open/close/pre) using split function to arraylist and calculating overall cuisines list
+                    *   After this we pass all list in map to add count and remove dublication and prepair orderlist.
+                    *   Crete one view model to communication between fragment to activity
+                    *   first i added view model and pass to another activity and filter using our condition.
+                    * */
+
+
+                    for (i in 0 until 3) {
+                        when (i) {
+                            0 -> {
+                                for (j in 0 until restaurantlistmodel!!.restaurant_list.open_now.size) {
+                                    if (restaurantlistmodel!!.restaurant_list.open_now[j].cuisines.length > 0) {
+                                        val items: Array<String> = restaurantlistmodel!!.restaurant_list.open_now[j].cuisines.split((",").toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
+                                        for (item: String in items) {
+                                            restaurantlistmodel!!.restaurant_list.open_now.get(j).cuisines_list.add(item.trim())
+                                            overall_cuisines_list.add(item)
+                                        }
+                                    }
+
+                                }
+                            }
+                            1 -> {
+                                for (k in 0 until restaurantlistmodel!!.restaurant_list.pre_order.size) {
+                                    if (restaurantlistmodel!!.restaurant_list.pre_order[k].cuisines.length > 0) {
+                                        val items: Array<String> = restaurantlistmodel!!.restaurant_list.pre_order[k].cuisines.split((",").toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
+                                        for (item: String in items) {
+                                            restaurantlistmodel!!.restaurant_list.pre_order.get(k).cuisines_list.add(item.trim())
+                                            overall_cuisines_list.add(item)
+                                        }
+                                    }
+                                }
+                            }
+                            2 -> {
+                                for (l in 0 until restaurantlistmodel!!.restaurant_list.closed.size) {
+                                    if (restaurantlistmodel!!.restaurant_list.closed[l].cuisines.length > 0) {
+                                        val items: Array<String> = restaurantlistmodel!!.restaurant_list.closed[l].cuisines.split((",").toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
+                                        for (item: String in items) {
+                                            restaurantlistmodel!!.restaurant_list.closed.get(l).cuisines_list.add(item.trim())
+                                            overall_cuisines_list.add(item)
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+
+                    }
+
+
+                    val overall_restaurentlist: Int = restaurantlistmodel!!.restaurant_list.open_now.size + restaurantlistmodel!!.restaurant_list.pre_order.size + restaurantlistmodel!!.restaurant_list.closed.size
+                    for (j in 0 until overall_cuisines_list.size) {
+                        val value = overall_cuisines_list.get(j).trim()
+                        var count = 0
+                        for (x in 0 until overall_cuisines_list.size) {
+                            if (overall_cuisines_list.get(x).trim() == value) {
+                                count++
+                                kokkenType_map.put(value, count)
+                            }
+                        }
+
+                    }
+                    kokkenType_map.put(getString(R.string.all), overall_restaurentlist)
+                    for (key in kokkenType_map.keys) {
+                        val value = kokkenType_map.get(key)!!.toInt()
+                        ui_model!!.kokkenType_list.add(kokken_Model(itemcount = value, itemtype = key))
+                    }
+                    Collections.sort(ui_model!!.kokkenType_list, object : Comparator<kokken_Model> {
+                        override fun compare(lhs: kokken_Model, rhs: kokken_Model): Int {
+                            return lhs.itemtype.compareTo(rhs.itemtype)
+                        }
+                    })
+                    for (i in 0 until ui_model!!.kokkenType_list.size) {
+                        if (ui_model!!.kokkenType_list.get(i).itemtype.trim() == getString(R.string.all).trim())
+                            ui_model!!.kokkenType_list.get(i).is_itemselected = true
+                    }
+
+                    // Added Tilpas sort list:
+                    ui_model!!.tilpassort_list.add(kokken_Model(itemtype = "Gratis Levering"))
+                    ui_model!!.tilpassort_list.add(kokken_Model(itemtype = "5+ Stjerner"))
+                    ui_model!!.tilpassort_list.add(kokken_Model(itemtype = "Abent Nu"))
+                    ui_model!!.tilpassort_list.add(kokken_Model(itemtype = "Hent Selv"))
+                    ui_model!!.tilpassort_list.add(kokken_Model(itemtype = "Ny"))
+
+                    // Added easy sort list
+                    ui_model!!.easysort_list.add(kokken_Model(itemtype = "Papularitet"))
+                    ui_model!!.easysort_list.add(kokken_Model(itemtype = "Leveringsgebyr"))
+                    ui_model!!.easysort_list.add(kokken_Model(itemtype = "Minimum ordre"))
+                    ui_model!!.easysort_list.add(kokken_Model(itemtype = "Nyeste forst"))
+                    ui_model!!.easysort_list.add(kokken_Model(itemtype = "Navn"))
+
+
+                    ui_model!!.restaurantList.value = restaurantlistmodel!!
 
                 }
             }
@@ -131,8 +247,7 @@ class RestaurantList : BaseFragment() {
             override fun onFail(error: Int) {
 
 
-
-                if(call_restaurantlist!!.isCanceled ){
+                if (call_restaurantlist!!.isCanceled) {
                     return
                 }
 
@@ -145,7 +260,7 @@ class RestaurantList : BaseFragment() {
                         showSnackBar(clayout_crt, getString(R.string.internet_not_available))
                     }
                 }
-                progress_bar.visibility=View.GONE
+                progress_bar.visibility = View.GONE
 
             }
         })
@@ -154,74 +269,113 @@ class RestaurantList : BaseFragment() {
     }
 
 
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        loge("onActivityResult Restaurantlist---", "---")
+        if (requestCode == Constants.REQ_FILTER_RESAURANT_LIST) {
+            if (resultCode == Activity.RESULT_OK) {
+                filterable_restaurantlistmodel = data!!.getBundleExtra(Constants.BUNDLE).getSerializable(Constants.FILTER_RESTAURANTLISTMODEL) as RestaurantListModel
+                ui_model!!.restaurantList.value = filterable_restaurantlistmodel
+
+            }
+        }else if(requestCode == Constants.REQ_SORT_RESAURANT_LIST){
+            if (resultCode == Activity.RESULT_OK) {
+                filterable_restaurantlistmodel = data!!.getBundleExtra(Constants.BUNDLE).getSerializable(Constants.FILTER_RESTAURANTLISTMODEL) as RestaurantListModel
+                ui_model!!.restaurantList.value = filterable_restaurantlistmodel
+                loge(TAG,"on activity -- sort---"+filterable_restaurantlistmodel!!.restaurant_list.open_now.size.toString())
+            }
+        }
+    }
+
+
     private fun refreshview() {
+        loge(TAG, "refresh---")
         var statuswiserestaurant: StatusWiseRestaurant
-        list= ArrayList()
-        if(ui_model!!.restaurantList.value!!.restaurant_list.open_now.size > 0){
-            statuswiserestaurant= StatusWiseRestaurant(getString(R.string.open_now),getString(R.string.ordernow),ui_model!!.restaurantList.value!!.restaurant_list.open_now)
+        list = ArrayList()
+        if (ui_model!!.restaurantList.value!!.restaurant_list.open_now.size > 0) {
+            statuswiserestaurant = StatusWiseRestaurant(getString(R.string.open_now), getString(R.string.ordernow), ui_model!!.restaurantList.value!!.restaurant_list.open_now)
             list.add(statuswiserestaurant)
         }
-        if(ui_model!!.restaurantList.value!!.restaurant_list.pre_order.size > 0){
-            statuswiserestaurant= StatusWiseRestaurant(getString(R.string.pre_order),getString(R.string.preorder),ui_model!!.restaurantList.value!!.restaurant_list.pre_order)
+        if (ui_model!!.restaurantList.value!!.restaurant_list.pre_order.size > 0) {
+            statuswiserestaurant = StatusWiseRestaurant(getString(R.string.pre_order), getString(R.string.preorder), ui_model!!.restaurantList.value!!.restaurant_list.pre_order)
             list.add(statuswiserestaurant)
         }
-        if(ui_model!!.restaurantList.value!!.restaurant_list.closed.size > 0){
-            statuswiserestaurant= StatusWiseRestaurant(getString(R.string.closed),getString(R.string.notavailable),ui_model!!.restaurantList.value!!.restaurant_list.closed)
+        if (ui_model!!.restaurantList.value!!.restaurant_list.closed.size > 0) {
+            statuswiserestaurant = StatusWiseRestaurant(getString(R.string.closed), getString(R.string.notavailable), ui_model!!.restaurantList.value!!.restaurant_list.closed)
             list.add(statuswiserestaurant)
         }
-        if(list.size <= 0 ){
-            error_view.visibility=View.VISIBLE
+        if (list.size <= 0) {
+            error_view.visibility = View.VISIBLE
+        } else {
+            error_view.visibility = View.GONE
         }
 
 
         recycler_view_parent.apply {
 
-                mAdapter = RestaurantListParentAdapter(context!!,list, object : RestaurantListParentAdapter.AdapterListener {
-                    override fun itemClicked(parentView: Boolean, parentPosition: Int, chilPosition: Int) {
-                        loge(TAG,"clicked---")
-                        if(progress_bar.visibility == View.VISIBLE) return
-                        val fragment = DetailsFragment.newInstance(
-                            //    restaurant = list.get(parentPosition).restaurant.get(chilPosition),
-                                status =     list.get(parentPosition).status
-                        )
-                        var enter : Slide?=null
-                        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                            enter = Slide()
-                            enter.setDuration(300)
-                            enter.slideEdge = Gravity.BOTTOM
-                            val changeBoundsTransition : ChangeBounds = ChangeBounds()
-                            changeBoundsTransition.duration = 300
-                            //fragment!!.sharedElementEnterTransition=changeBoundsTransition
-                            fragment.sharedElementEnterTransition=changeBoundsTransition
-                            fragment.sharedElementReturnTransition=changeBoundsTransition
-                            fragment.enterTransition=enter
-                        }
-                        PreferenceUtil.putValue(PreferenceUtil.R_KEY,list.get(parentPosition).restaurant.get(chilPosition).r_key)
-                        PreferenceUtil.putValue(PreferenceUtil.R_TOKEN,list.get(parentPosition).restaurant.get(chilPosition).r_token)
-                        PreferenceUtil.save()
-                        (parentFragment as HomeFragment).addFragment(R.id.home_fragment_container,fragment, DetailsFragment.TAG,false)
-                    }
-                })
-                layoutManager = LinearLayoutManager(context)
-                adapter = mAdapter
+          /*  recycler_view_parent.addOnScrollListener(object : HidingScrollListener() {
+                override fun onHide() {
+                    Log.e(TAG,"-"+"Hide----")
+                    toolbar.visibility=View.GONE
+                    toolbar.animate().translationY((-toolbar.getHeight()).toFloat()).setInterpolator(AccelerateInterpolator(2f))
+                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).bottom_menu.animate()
+                            .translationY((-((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).bottom_menu.getHeight()).toFloat()).setInterpolator(AccelerateInterpolator(2f))
+
+
+                }
+
+                override fun onShow() {
+                    Log.e(TAG,"-"+"Show----")
+                 //   toolbar.visibility=View.VISIBLE
+
+                              toolbar.animate().translationY(0f).setInterpolator(DecelerateInterpolator(2f))
+                              ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).bottom_menu.animate().translationY(0f).setInterpolator(DecelerateInterpolator(2f))
+
+                }
             }
+            )*/
+
+            mAdapter = RestaurantListParentAdapter(context!!, list, object : RestaurantListParentAdapter.AdapterListener {
+                override fun itemClicked(parentView: Boolean, parentPosition: Int, chilPosition: Int) {
+                    loge(TAG, "clicked---")
+                    if (progress_bar.visibility == View.VISIBLE) return
+                    val fragment = DetailsFragment.newInstance(
+                            //    restaurant = list.get(parentPosition).restaurant.get(chilPosition),
+                            status = list.get(parentPosition).status
+                    )
+                    var enter: Slide? = null
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        enter = Slide()
+                        enter.setDuration(300)
+                        enter.slideEdge = Gravity.BOTTOM
+                        val changeBoundsTransition: ChangeBounds = ChangeBounds()
+                        changeBoundsTransition.duration = 300
+                        //fragment!!.sharedElementEnterTransition=changeBoundsTransition
+                        fragment.sharedElementEnterTransition = changeBoundsTransition
+                        fragment.sharedElementReturnTransition = changeBoundsTransition
+                        fragment.enterTransition = enter
+                    }
+                    PreferenceUtil.putValue(PreferenceUtil.R_KEY, list.get(parentPosition).restaurant.get(chilPosition).r_key)
+                    PreferenceUtil.putValue(PreferenceUtil.R_TOKEN, list.get(parentPosition).restaurant.get(chilPosition).r_token)
+                    PreferenceUtil.save()
+                    (parentFragment as HomeFragment).addFragment(R.id.home_fragment_container, fragment, DetailsFragment.TAG, false)
+                }
+            })
+            layoutManager = LinearLayoutManager(context)
+            adapter = mAdapter
+        }
 
 
-        progress_bar.visibility=View.GONE
+        progress_bar.visibility = View.GONE
 
 
     }
-
-
-
-
 
 
     private fun createViewModel(): UIModel =
 
             ViewModelProviders.of(this).get(RestaurantList.UIModel::class.java).apply {
                 restaurantList.removeObservers(this@RestaurantList)
-                restaurantList.observe(this@RestaurantList,Observer<RestaurantListModel>{
+                restaurantList.observe(this@RestaurantList, Observer<RestaurantListModel> {
                     refreshview()
                 })
             }
@@ -230,6 +384,9 @@ class RestaurantList : BaseFragment() {
     class UIModel : ViewModel() {
 
         var restaurantList = MutableLiveData<RestaurantListModel>()
+        var kokkenType_list = ArrayList<kokken_Model>()
+        var tilpassort_list = ArrayList<kokken_Model>()
+        var easysort_list = ArrayList<kokken_Model>()
 
 
     }
@@ -243,15 +400,13 @@ class RestaurantList : BaseFragment() {
         }
 
         call_restaurantlist?.let {
-            progress_bar.visibility=View.GONE
+            progress_bar.visibility = View.GONE
             it.cancel()
         }
 
         super.onDestroyView()
 
     }
-
-
 
 
     override fun onDetach() {
@@ -266,9 +421,12 @@ class RestaurantList : BaseFragment() {
 
     }
 
-    fun onBackpress(){
+    fun onBackpress() {
         (activity as HomeActivity).onBackPressed()
     }
+
+    data class kokken_Model(val itemtype: String, val itemcount: Int =0 , var is_itemselected: Boolean = false) : Serializable
+
 
     data class StatusWiseRestaurant(
             // status : order type like : pre order, new order
@@ -283,7 +441,35 @@ class RestaurantList : BaseFragment() {
     class MyClickHandler(val restaurantlist: RestaurantList) {
 
 
-        fun signupFunction(view: View) {
+        fun kokkenType(view: View) {
+            val intent = Intent(restaurantlist.context, KokkenType::class.java)
+            val bundle = Bundle()
+            if(restaurantlist.restaurantlistmodel !=null){
+                // move : actual list
+                bundle.putSerializable(Constants.KOKKEN_RESTAURANTLISTMODEL, restaurantlist.restaurantlistmodel)
+                intent.putExtra(Constants.BUNDLE, bundle)
+                restaurantlist.startActivityForResult(intent, Constants.REQ_FILTER_RESAURANT_LIST)
+            }
+        }
+
+        fun tilpas(view: View) {
+            val intent = Intent(restaurantlist.context, Tilpas::class.java)
+            val bundle = Bundle()
+            if(restaurantlist.filterable_restaurantlistmodel == null){
+                if(restaurantlist.restaurantlistmodel !=null){
+                    //move : actual list
+                    bundle.putSerializable(Constants.TILPAS_RESTAURANTLISTMODEL, restaurantlist.restaurantlistmodel)
+                    Log.e("TAG","btn actual--"+restaurantlist.restaurantlistmodel!!.restaurant_list.open_now.size.toString())
+                    intent.putExtra(Constants.BUNDLE, bundle)
+                    restaurantlist.startActivityForResult(intent, Constants.REQ_SORT_RESAURANT_LIST)
+                }
+            }else{
+                // move : filter list
+                bundle.putSerializable(Constants.TILPAS_RESTAURANTLISTMODEL, restaurantlist.filterable_restaurantlistmodel)
+                intent.putExtra(Constants.BUNDLE, bundle)
+                Log.e("TAG","btn filterlist--"+restaurantlist.filterable_restaurantlistmodel!!.restaurant_list.open_now.size.toString())
+                restaurantlist.startActivityForResult(intent, Constants.REQ_SORT_RESAURANT_LIST)
+            }
 
         }
 

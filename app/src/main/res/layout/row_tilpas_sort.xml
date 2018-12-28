@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <data>
+
+        <import type="android.view.View"/>
+
+
+        <variable
+            name="kokken_Model"
+            type="dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.RestaurantList.kokken_Model"
+            >
+
+        </variable>
+
+        <variable
+            name="handler"
+            type="dk.eatmore.foodapp.activity.main.filter.Tilpas.MyClickHandler">
+
+        </variable>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_vertical"
+            android:id="@+id/tilpas_row_item"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:onClick="@{(v)-> handler.tilpas_row_item(v,kokken_Model)}"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:layout_weight="2"
+            android:orientation="horizontal">
+
+
+            <android.support.v7.widget.AppCompatCheckBox
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:id="@+id/checkbox"
+                android:clickable="false"
+                android:checked="@{kokken_Model.is_itemselected}"
+                android:buttonTint="@color/theme_color"
+                />
+
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/Subtitle_TextViewSmall"
+                android:layout_width="0dp"
+                android:layout_gravity="center_vertical"
+                android:singleLine="true"
+                android:id="@+id/item_txt"
+                android:text="@{kokken_Model.itemtype}"
+                android:layout_weight="1.3"
+                android:layout_marginRight="@dimen/_5sdp"
+                />
+
+
+
+
+
+
+
+        </LinearLayout>
+
+
+    </RelativeLayout>
+
+
+
+
+</layout>

@@ -11,6 +11,7 @@ import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.databinding.RowRestaurantlistPBinding
 import java.util.ArrayList
 import android.support.v7.widget.AppCompatImageView
+import android.util.Log
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.RestaurantList
 
 
@@ -37,7 +38,6 @@ class RestaurantListParentAdapter(val c: Context, val list : ArrayList<Restauran
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
 
         if (holder is MyViewHolder) {
-
             holder.binding.status = list.get(position).status
 
             holder.binding.recyclerViewChild.apply {
@@ -45,6 +45,7 @@ class RestaurantListParentAdapter(val c: Context, val list : ArrayList<Restauran
                 layoutManager = LinearLayoutManager(c)
                 adapter = mAdapter
             }
+            holder.binding.executePendingBindings()
         }
     }
 

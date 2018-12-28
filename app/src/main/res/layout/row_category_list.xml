@@ -91,7 +91,7 @@
                     android:layout_gravity="center_vertical"
                     android:layout_marginEnd="8dp"
                     android:gravity="right"
-                    android:maxLength="12"
+                    android:maxLength="15"
                     android:text="@{data.product_attribute == null ? `fra: `+util.convertCurrencyToDanish(data.p_price) : `fra: `+productpricecalculation.getprice(data)}"
                     app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_two"
                     app:layout_constraintHorizontal_bias="1.0"

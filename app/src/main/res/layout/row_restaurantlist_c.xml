@@ -174,10 +174,11 @@
                         <android.support.v7.widget.AppCompatTextView
                             style="@style/SubtitleMidium_TextViewSmall"
                             android:layout_gravity="center_vertical"
+                            android:id="@+id/cuisines_txt"
                             android:layout_marginLeft="@dimen/_3sdp"
                             android:layout_marginTop="@dimen/_3sdp"
+                            android:text="@{restaurant.cuisines}"
                             android:maxLines="3"
-                            android:text="Italiensk, Pizza"
                             />
 
                         <FrameLayout
@@ -330,6 +331,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
+                        android:id="@+id/deliverypresent_view"
                         android:gravity="center_horizontal"
                         android:layout_weight="1"
                         android:layout_marginEnd="@dimen/_8sdp"
@@ -343,9 +345,9 @@
 
                         <android.support.v7.widget.AppCompatTextView
                             style="@style/Subtitle_TextViewSmall"
+                            android:id="@+id/delivery_present"
                             android:layout_marginTop="@dimen/_5sdp"
                             android:gravity="center"
-                            android:text="Leveringspris: fra 50,00 kr"
                             />
 
 
@@ -356,6 +358,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:layout_weight="1"
+                        android:id="@+id/minimum_order_view"
                         android:gravity="center_horizontal"
                         android:layout_marginEnd="@dimen/_8sdp"
                         >
@@ -370,8 +373,8 @@
                         <android.support.v7.widget.AppCompatTextView
                             style="@style/Subtitle_TextViewSmall"
                             android:layout_marginTop="@dimen/_5sdp"
+                            android:id="@+id/minimum_order"
                             android:gravity="center"
-                            android:text="Minimumorder: kr. 80,00"
                             />
 
 
@@ -381,6 +384,7 @@
                         android:layout_height="wrap_content"
                         android:orientation="vertical"
                         android:gravity="center_horizontal"
+                        android:id="@+id/opening_hours_view"
                         android:layout_weight="1"
                         >
                         <android.support.v7.widget.AppCompatImageView
@@ -393,8 +397,8 @@
                         <android.support.v7.widget.AppCompatTextView
                             style="@style/Subtitle_TextViewSmall"
                             android:layout_marginTop="@dimen/_5sdp"
+                            android:id="@+id/opening_hour"
                             android:gravity="center"
-                            android:text="Abner kl: 16:00"
                             />
 
 

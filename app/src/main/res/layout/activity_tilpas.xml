@@ -1,0 +1,197 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+
+        <import type="android.view.View"/>
+
+        <variable
+            name="handler"
+            type="dk.eatmore.foodapp.activity.main.filter.Tilpas.MyClickHandler">
+
+        </variable>
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        >
+        <android.support.design.widget.AppBarLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:id="@+id/appbar"
+            >
+            <include layout="@layout/toolbar"
+                >
+
+            </include>
+
+        </android.support.design.widget.AppBarLayout>
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/appbar"
+
+                >
+                <android.support.v4.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_above="@+id/continue_btn"
+
+                    >
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:background="@color/white"
+                        android:orientation="vertical"
+                        >
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+
+                            android:background="@color/background_light"
+                            android:orientation="horizontal">
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/cat_title"
+                                style="@style/Titlelight_TextViewSmall"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1.05"
+                                android:text="Tilpas"
+                                android:padding="@dimen/_12sdp"
+                                app:layout_constraintBottom_toTopOf="@+id/cat_desc"
+                                app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_one"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="0.0" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            >
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/tilpas_recycler_view"
+                                android:clipToPadding="false"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:nestedScrollingEnabled="false"
+                                android:layout_marginStart="@dimen/_4sdp"
+                                android:layout_marginEnd="@dimen/_4sdp"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                />
+
+
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_vertical"
+                            android:background="@color/background_light"
+                            android:orientation="horizontal">
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/Titlelight_TextViewSmall"
+                                android:layout_width="0dp"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical"
+                                android:layout_weight="1.05"
+                                android:text="Sort efter :"
+                                android:padding="@dimen/_12sdp"
+                                app:layout_constraintBottom_toTopOf="@+id/cat_desc"
+                                app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_one"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_bias="0.0" />
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            >
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/sort_recycler_view"
+                                android:clipToPadding="false"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:nestedScrollingEnabled="false"
+                                android:layout_marginStart="@dimen/_4sdp"
+                                android:layout_marginEnd="@dimen/_4sdp"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                />
+
+
+                        </LinearLayout>
+
+
+
+
+
+
+
+
+
+                    </LinearLayout>
+
+                </android.support.v4.widget.NestedScrollView>
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_48sdp"
+                    android:id="@+id/continue_btn"
+                    android:onClick="@{handler::continue_btn}"
+                    android:layout_alignParentBottom="true"
+                    >
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/divider_color"
+                        />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/TextViewMid"
+                        android:id="@+id/addtocart_txt"
+                        android:text="@string/continue_"
+                        android:layout_centerInParent="true"
+                        android:textColor="@color/theme_color"
+                        />
+
+
+                </RelativeLayout>
+
+            </RelativeLayout>
+
+
+
+
+    </RelativeLayout>
+
+</layout>
+
+
+

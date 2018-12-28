@@ -162,6 +162,9 @@
     <string name="order_eat_amp_njoy"><![CDATA[Order, Eat & Njoy!]]></string>
     <string name="bestil_din_take_away_mad_online">Bestil din take away mad online</string>
     <string name="cokkie_policy">Cokkie policy</string>
+    <string name="kokkentype">Kokkentype</string>
+    <string name="tilpas">Tilpas</string>
+    <string name="all">All</string>
 
 
 </resources>

@@ -75,7 +75,7 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center_vertical"
                 android:textStyle="bold"
-                android:maxLength="12"
+                android:maxLength="15"
                 android:gravity="right"
                 android:textColor="@color/black_light"
                 app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_two"

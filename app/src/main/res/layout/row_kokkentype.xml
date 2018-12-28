@@ -1,0 +1,120 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    >
+
+    <data>
+
+
+        <import type="android.view.View"/>
+
+
+        <variable
+            name="kokken_Model"
+            type="dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.RestaurantList.kokken_Model"
+            >
+
+        </variable>
+
+        <variable
+            name="myClickHandler"
+            type="dk.eatmore.foodapp.activity.main.filter.KokkenType.MyClickHandler"
+            >
+
+        </variable>
+
+
+    </data>
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        >
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical"
+            >
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:onClick="@{(v) -> myClickHandler.item_check(v,kokken_Model)}"
+                android:id="@+id/row_onlychild_cart_itemlayout"
+                android:background="@color/white"
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_8sdp"
+                    android:gravity="center_vertical"
+                    android:layout_weight="2"
+                    android:orientation="horizontal">
+
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:clickable="false"
+                        android:id="@+id/checkbox"
+                        android:checked="@{kokken_Model.is_itemselected}"
+                        android:buttonTint="@color/theme_color"
+                        />
+
+
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/Subtitle_TextViewSmall"
+                        android:layout_width="0dp"
+                        android:id="@+id/row_onlyextratop_child_txt"
+                        android:layout_gravity="center_vertical"
+                        android:singleLine="true"
+                        android:text="@{kokken_Model.itemtype +` (`+kokken_Model.itemcount+`) `}"
+                        android:layout_weight="1.3"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        />
+
+
+
+
+
+
+
+                </LinearLayout>
+
+
+
+            </LinearLayout>
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:alpha="0.1"
+                android:background="@color/divider_color"
+                />
+
+
+
+
+        </LinearLayout>
+
+
+
+
+
+
+
+
+
+    </RelativeLayout>
+
+</layout>
+
+
+

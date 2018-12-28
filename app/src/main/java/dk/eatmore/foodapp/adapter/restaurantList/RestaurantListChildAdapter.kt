@@ -13,6 +13,7 @@ import dk.eatmore.foodapp.databinding.RowRestaurantlistCBinding
 import java.util.ArrayList
 import android.R.attr.pivotY
 import android.R.attr.pivotX
+import android.databinding.Bindable
 import android.graphics.Matrix
 import android.widget.ImageView.ScaleType
 import android.support.v4.view.ViewCompat.setTranslationY
@@ -20,12 +21,10 @@ import android.support.v4.view.ViewCompat.setTranslationX
 import android.support.v4.view.ViewCompat.setRotation
 import android.opengl.ETC1.getHeight
 import android.opengl.ETC1.getWidth
+import android.util.Log
 import android.view.View
 import android.widget.RelativeLayout
-
-
-
-
+import dk.eatmore.foodapp.utils.BindDataUtils
 
 
 class RestaurantListChildAdapter(val context: Context, val listner: RestaurantListParentAdapter.AdapterListener, val parentPosition: Int, val list : ArrayList<RestaurantList.StatusWiseRestaurant> ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -46,6 +45,7 @@ class RestaurantListChildAdapter(val context: Context, val listner: RestaurantLi
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is MyViewHolder) {
+
             Glide.with(context).load(list.get(parentPosition).restaurant.get(position).app_icon).into(holder.binding.imageview);
           //  ViewCompat.setTransitionName(holder.binding.imageview, position.toString() + "vnhvn")
 
@@ -59,10 +59,58 @@ class RestaurantListChildAdapter(val context: Context, val listner: RestaurantLi
             holder.binding.itemIsNew.visibility= View.GONE
             holder.binding.ordertype=list.get(parentPosition).ordertype
             holder.binding.restaurant=list.get(parentPosition).restaurant.get(position)
+            val restaurant =list.get(parentPosition).restaurant.get(position)
+            if(restaurant.total_rating > 5){
+                Log.e("TAG","big---"+restaurant.total_rating.toString())
+                restaurant.sort_fiveplus_rate=true
+            }else{
+                Log.e("TAG","small---"+restaurant.total_rating.toString())
+                restaurant.sort_fiveplus_rate=false
+            }
+
+            // delivery present
+            if(restaurant.delivery_present){
+                holder.binding.deliverypresentView.visibility=View.VISIBLE
+                if((restaurant.delivery_charge_title == "" || restaurant.delivery_charge_title == null) && (restaurant.delivery_charge?.toDouble() == 0.0)){
+                    holder.binding.deliveryPresent.text="Gratis levering"
+                    restaurant.sort_free_delivery=true
+                }else{
+                    val label ="Leveringspris \n ${restaurant.delivery_charge_title?:""} ${BindDataUtils.convertCurrencyToDanish(restaurant.delivery_charge!!)}"
+                    holder.binding.deliveryPresent.text=label
+                    restaurant.sort_free_delivery=false
+                }
+            }else{
+                holder.binding.deliverypresentView.visibility=View.GONE
+            }
+
+            //opening titles
+            if(restaurant.opening_title.toLowerCase() == "lukket"){
+                holder.binding.openingHour.text=restaurant.opening_title
+            }else{
+                val label ="${restaurant.opening_title} ${restaurant.time}"
+                holder.binding.openingHour.text=label
+            }
+
+            //Minimum order
+            if(restaurant.delivery_present){
+                holder.binding.minimumOrderView.visibility=View.VISIBLE
+                if((restaurant.minimum_order_price == null) || (restaurant.minimum_order_price =="")){
+                    holder.binding.minimumOrderView.visibility=View.GONE
+                }else{
+                    val label ="Minimumordre: \n ${BindDataUtils.convertCurrencyToDanish(restaurant.minimum_order_price)}"
+                    holder.binding.minimumOrder.text=label
+                    holder.binding.minimumOrderView.visibility=View.VISIBLE
+                }
+            }else{
+                holder.binding.minimumOrderView.visibility=View.GONE
+            }
+
+
             holder.binding.rowChildItem.setOnClickListener {
                 listner.itemClicked(false,parentPosition,position)
 
             }
+            holder.binding.executePendingBindings()
         }
     }
 

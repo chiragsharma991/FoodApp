@@ -29,10 +29,14 @@ data class AreaDetails(val city_name: String = "", val postal_code: String = "")
 data class Restaurant(
         val postal_code: String = "",
         val restaurant_name: String = "",
+        val minimum_order_price: String? = null,
+        val opening_title: String = "", //null
+        val time: String = "", //null
         val address: String = "",
         val city: String = "",
         val is_new: String = "",
         val cuisines: String = "",
+        val cuisines_list : ArrayList<String> = arrayListOf(),
         val total_rating: Float = 0.0f,
         val quality_of_food_ratiing: Float = 0.0f,
         val customer_service_ratiing: Float = 0.0f,
@@ -43,8 +47,8 @@ data class Restaurant(
         var cartcnt : String?=null,
         var cartamt : String?=null,
         val free_text : String="",
-        val delivery_charge_title : String="",
-        val delivery_charge : String="0.0",
+        val delivery_charge_title : String?=null,
+        val delivery_charge : String?=null,
         val delivery_present : Boolean=true,
         val pickup_present : Boolean=true,
         val shipping_type : String="",
@@ -53,7 +57,11 @@ data class Restaurant(
         val review_list : ArrayList<Review_list> = arrayListOf(),
         val opening_hours : ArrayList<Opening_hours> = arrayListOf(),
         val shipping_charges : ArrayList<Shipping_charges> = arrayListOf(),
-        val total_review_count : String=""
+        val total_review_count : String="",
+        // sorting parms:
+        var sort_free_delivery : Boolean = false,
+        var sort_fiveplus_rate : Boolean = false
+
 
 ):Serializable
 

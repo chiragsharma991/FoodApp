@@ -1,6 +1,8 @@
 package dk.eatmore.foodapp.utils
 
 import android.support.v7.app.AppCompatActivity
+import java.util.*
+import kotlin.collections.ArrayList
 
 class Test  {
 
@@ -19,9 +21,20 @@ class Test  {
 
             // initializer block
             init {
-            /*    fName = "chirag suthar"
-                personAge = personAge
-*/
+
+                val str = "abdc , psdv ,sdvosdv, dfpbkdd"
+                var parts : Array<String> = str.split((",").toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
+                System.out.println("Using : as a delimiter " + Arrays.toString(parts))
+                for(i in 0 until parts.size){
+
+                    System.out.println("Using : as a delimiter " + parts.get(i).toString())
+                }
+            /*    parts = str.split(("d").toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
+                System.out.println(Arrays.toString(parts))
+                val str2 = "This is a string to tokenize"
+                parts = str2.split((" ").toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
+                System.out.println(Arrays.toString(parts))*/
+
                 println("First Name = $fName")
                 println("Age = $personAge")
             }

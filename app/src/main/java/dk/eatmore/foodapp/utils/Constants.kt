@@ -67,6 +67,7 @@ class Constants {
     const  val CARTCOUNT_BROADCAST="cartcount_broadcast"
     const  val CARTCNT="cartcnt"
     const  val SHOW_MSG="show_msg"
+    const  val IS_DELIVERY_ALLOWED="is_delivery_allowed"
     const  val CARTAMT="cartamt"
     const  val USER_INFO="user_info"
     const  val POSTAL_CITY="postal_city"
@@ -116,11 +117,18 @@ class Constants {
     const  val PAYMENTTYPE="paymenttype"
     const  val TXNID="txnid"
     const  val CARDNO="cardno"
+    const  val KOKKENTYPE="Kokkentype"
+    const  val KOKKEN_RESTAURANTLISTMODEL="KokkenRestaurantListModel"
+    const  val TILPAS_RESTAURANTLISTMODEL="TilpasRestaurantListModel"
+    const  val FILTER_RESTAURANTLISTMODEL="FilterRestaurantListModel"
+    const  val BUNDLE="bundle"
     const  val EPAY_MERCHANT="epay_merchant"
     const  val EPAY_MERCHANT_TEST="8024206"
     const  val BOTTOM_TO_TOP_ANIM =200
     const  val REQ_CAT_RESAURANT_CLOSED = 1
     const  val REQ_SEA_RESAURANT_CLOSED = 2
+    const  val REQ_FILTER_RESAURANT_LIST = 3
+    const  val REQ_SORT_RESAURANT_LIST = 4
 
 
 

@@ -163,8 +163,8 @@ class DetailsFragment : BaseFragment() {
         broadcastEvent(restaurant_info)
         delivery_present=restaurant_info.delivery_present
         pickup_present=restaurant_info.pickup_present
-        delivery_charge=restaurant_info.delivery_charge
-        delivery_charge_title=restaurant_info.delivery_charge_title
+        delivery_charge= restaurant_info.delivery_charge?:"0"
+        delivery_charge_title=restaurant_info.delivery_charge_title?:"null"
         total_cartcnt =if(restaurant_info.cartcnt ==null || restaurant_info.cartcnt =="0") 0 else restaurant_info.cartcnt!!.toInt()
         total_cartamt =if(restaurant_info.cartamt ==null || restaurant_info.cartamt =="0") "00.00" else restaurant_info.cartamt.toString()
         updatebatchcount(0)

@@ -107,6 +107,7 @@ class Address : BaseFragment(), TextWatcher {
             postnumber_edt.imeOptions=EditorInfo.IME_ACTION_DONE
             postnumber_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
                 override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                    loge(TAG,"post number edit...")
                     moveon_next()
                     return true
                 }
@@ -395,36 +396,32 @@ class Address : BaseFragment(), TextWatcher {
             override fun <T> onSuccess(body: T?) {
                 val jsonObject = body as JsonObject
                 if (jsonObject.get(Constants.STATUS).asBoolean) {
-
-                    EpayFragment.paymentattributes.first_name=name_edt.text.toString()
-                    EpayFragment.paymentattributes.telephone_no=telephone_number_edt.text.toString()
-                    //                        finalCartJson.put("address", street + " " + houseNo + " " + floorDoorString + ", " + postal_code + " " + city);
-                    EpayFragment.paymentattributes.address=String.format(getString(R.string.fulladdress),street_edt.text.trim().toString(),house_edt.text.trim().toString(),floor_edt.text.trim().toString(),postnumber_edt.text.trim().toString(),city_edt.text.trim().toString())
-                    EpayFragment.paymentattributes.postal_code=postnumber_edt.text.toString()
-                    //   EpayActivity.paymentattributes.discount_type=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.DISCOUNT_TYPE].asString
-                    // EpayActivity.paymentattributes.discount_amount=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.DISCOUNT_AMOUNT].asString
-                    EpayFragment.paymentattributes.shipping_charge=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString =="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString
-                    EpayFragment.paymentattributes.upto_min_shipping=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString =="")"0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString
-                    EpayFragment.paymentattributes.minimum_order_price=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString== "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString
-                    //  EpayActivity.paymentattributes.additional_charges_cash=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_CASH].asString
-                    EpayFragment.paymentattributes.additional_charges_online=if(!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_ONLINE)) || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString=="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString
-                    EpayFragment.paymentattributes.additional_charges_cash=if(!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_CASH)) || jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString=="") "0" else jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString
-
-                    EpayFragment.paymentattributes.distance=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString =="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString
-                    EpayFragment.paymentattributes.first_time=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString== "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString
-
-
-
-                    val time_list =LinkedHashMap<String,String>()
-                    for (i in 0.until(jsonObject.getAsJsonObject(Constants.RESULT).getAsJsonArray(Constants.TIME_LIST).size())){
-                        time_list.put((jsonObject.getAsJsonObject(Constants.RESULT).getAsJsonArray(Constants.TIME_LIST).get(i) as JsonObject)[Constants.ACTUAL].asString,
-                                (jsonObject.getAsJsonObject(Constants.RESULT).getAsJsonArray(Constants.TIME_LIST).get(i) as JsonObject)[Constants.DISPLAY].asString )
-                    }
-                    val fragment = DeliveryTimeslot.newInstance(time_list)
-                    (parentFragment as EpayFragment).addFragment(R.id.epay_container,fragment, DeliveryTimeslot.TAG,true)
                     proceed_view_nxt.isEnabled = true
                     //progresswheel(progresswheel,false)
                     progress_bar.visibility=View.GONE
+
+                    //        EpayFragment.paymentattributes.shipping_charge=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString =="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString
+                    val show_msg : Boolean = if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHOW_MSG].isJsonNull) false  else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHOW_MSG].asBoolean
+                    val is_delivery_allowed : Boolean = if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.IS_DELIVERY_ALLOWED].isJsonNull) true  else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.IS_DELIVERY_ALLOWED].asBoolean
+
+                    if(show_msg){
+                        val msg =jsonObject.get(Constants.MSG).asString
+                        DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!, R.color.black),msg = msg,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                            override fun onPositiveButtonClick(position: Int) {
+                                if(!is_delivery_allowed){
+                                    (activity as HomeActivity).onBackPressed()
+                                }else{
+                                    //move next
+                                    calculated_arguments(jsonObject)
+                                }
+                            }
+                            override fun onNegativeButtonClick() {
+                            }
+                        })
+                    }else{
+                        //move next
+                        calculated_arguments(jsonObject)
+                    }
 
                 } else {
                     //progresswheel(progresswheel,false)
@@ -454,6 +451,38 @@ class Address : BaseFragment(), TextWatcher {
                 progress_bar.visibility=View.GONE
             }
         })
+    }
+
+
+    private fun calculated_arguments(jsonObject : JsonObject){
+
+        EpayFragment.paymentattributes.first_name=name_edt.text.toString()
+        EpayFragment.paymentattributes.telephone_no=telephone_number_edt.text.toString()
+        //                        finalCartJson.put("address", street + " " + houseNo + " " + floorDoorString + ", " + postal_code + " " + city);
+        EpayFragment.paymentattributes.address=String.format(getString(R.string.fulladdress),street_edt.text.trim().toString(),house_edt.text.trim().toString(),floor_edt.text.trim().toString(),postnumber_edt.text.trim().toString(),city_edt.text.trim().toString())
+        EpayFragment.paymentattributes.postal_code=postnumber_edt.text.toString()
+        //   EpayActivity.paymentattributes.discount_type=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.DISCOUNT_TYPE].asString
+        // EpayActivity.paymentattributes.discount_amount=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.DISCOUNT_AMOUNT].asString
+        EpayFragment.paymentattributes.shipping_charge=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString =="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString
+        EpayFragment.paymentattributes.upto_min_shipping=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString =="")"0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString
+        EpayFragment.paymentattributes.minimum_order_price=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString== "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString
+        //  EpayActivity.paymentattributes.additional_charges_cash=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_CASH].asString
+        EpayFragment.paymentattributes.additional_charges_online=if(!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_ONLINE)) || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString=="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString
+        EpayFragment.paymentattributes.additional_charges_cash=if(!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_CASH)) || jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString=="") "0" else jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString
+
+        EpayFragment.paymentattributes.distance=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString =="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString
+        EpayFragment.paymentattributes.first_time=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString== "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString
+
+
+
+        val time_list =LinkedHashMap<String,String>()
+        for (i in 0.until(jsonObject.getAsJsonObject(Constants.RESULT).getAsJsonArray(Constants.TIME_LIST).size())){
+            time_list.put((jsonObject.getAsJsonObject(Constants.RESULT).getAsJsonArray(Constants.TIME_LIST).get(i) as JsonObject)[Constants.ACTUAL].asString,
+                    (jsonObject.getAsJsonObject(Constants.RESULT).getAsJsonArray(Constants.TIME_LIST).get(i) as JsonObject)[Constants.DISPLAY].asString )
+        }
+        val fragment = DeliveryTimeslot.newInstance(time_list)
+        (parentFragment as EpayFragment).addFragment(R.id.epay_container,fragment, DeliveryTimeslot.TAG,true)
+
     }
 
     private fun getpostal_city(jsonObject: JsonObject): Map<String, String> {
