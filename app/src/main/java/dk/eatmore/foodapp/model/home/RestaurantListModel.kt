@@ -52,6 +52,7 @@ data class Restaurant(
         val delivery_present : Boolean=true,
         val pickup_present : Boolean=true,
         val shipping_type : String="",
+        val created_date : String="",
         val shipping_unit : String="",
         val rating_details : ArrayList<Rating_details> = arrayListOf(),
         val review_list : ArrayList<Review_list> = arrayListOf(),
@@ -60,7 +61,12 @@ data class Restaurant(
         val total_review_count : String="",
         // sorting parms:
         var sort_free_delivery : Boolean = false,
-        var sort_fiveplus_rate : Boolean = false
+        var sort_fiveplus_rate : Boolean = false,
+        var sort_min_order_price : Double = 0.0,
+        var sort_created_date : Long = 0,
+        var sort_delivery_charge : Double = 0.0,
+        var is_open_now : Boolean = false
+
 
 
 ):Serializable

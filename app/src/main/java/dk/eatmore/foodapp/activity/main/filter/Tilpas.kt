@@ -26,19 +26,25 @@ import kotlinx.android.synthetic.main.toolbar.*
 import java.util.ArrayList
 
 
-class Tilpas : BaseActivity() {
+class Tilpas : Kokken_tilpas_filter() {
 
 
     private lateinit var binding: ActivityTilpasBinding
+
+    private lateinit var easysort_list: ArrayList<RestaurantList.kokken_Model>
+    private var cpy_easysort_list: ArrayList<RestaurantList.kokken_Model> = ArrayList()
+    private lateinit var tilpassort_list: ArrayList<RestaurantList.kokken_Model>
+    private var cpy_tilpassort_list: ArrayList<RestaurantList.kokken_Model> = ArrayList()
+    private lateinit var kokkenType_list: ArrayList<RestaurantList.kokken_Model>
     private lateinit var restaurantlistmodel: RestaurantListModel // total selected restaurant from restaurant list (which is still filtered from kokken type)
+
     private lateinit var filterable_restaurantlistmodel: RestaurantListModel
 
 
     private lateinit var tilpassort_mAdapter: UniversalAdapter<RestaurantList.kokken_Model, RowTilpasSortBinding>
     private lateinit var easysort_mAdapter: UniversalAdapter<RestaurantList.kokken_Model, RowEasySortBinding>
 
-    private lateinit var easysort_list: ArrayList<RestaurantList.kokken_Model>
-    private lateinit var tilpassort_list: ArrayList<RestaurantList.kokken_Model>
+
 
     private val myclickhandler : MyClickHandler =MyClickHandler(this)
 
@@ -70,6 +76,13 @@ class Tilpas : BaseActivity() {
         restaurantlistmodel  = intent.getBundleExtra(Constants.BUNDLE).getSerializable(Constants.TILPAS_RESTAURANTLISTMODEL) as RestaurantListModel
         easysort_list =RestaurantList.ui_model!!.easysort_list
         tilpassort_list =RestaurantList.ui_model!!.tilpassort_list
+        kokkenType_list  = RestaurantList.ui_model!!.kokkenType_list
+        for (i in 0 until easysort_list.size){
+            cpy_easysort_list.add(RestaurantList.kokken_Model(itemtype = easysort_list[i].itemtype,itemcount =easysort_list[i].itemcount,is_itemselected = easysort_list[i].is_itemselected))
+        }
+        for (i in 0 until tilpassort_list.size){
+            cpy_tilpassort_list.add(RestaurantList.kokken_Model(itemtype = tilpassort_list[i].itemtype,itemcount =tilpassort_list[i].itemcount,is_itemselected = tilpassort_list[i].is_itemselected))
+        }
         refreshview()
 
     }
@@ -98,127 +111,28 @@ class Tilpas : BaseActivity() {
         sort_recycler_view.adapter = easysort_mAdapter
     }
 
-    private fun filterbytilpas(){
+    private fun applyFilter(){
 
 
-        val open_now: ArrayList<Restaurant> = ArrayList()
-        val pre_order: ArrayList<Restaurant> = ArrayList()
-        val closed: ArrayList<Restaurant> = ArrayList()
-
-        // Open now--
-        for (i in 0 until restaurantlistmodel.restaurant_list.open_now.size){
-            val restaurant =restaurantlistmodel.restaurant_list.open_now[i]
-
-            if(tilpassort_list[0].is_itemselected){
-                // Gratis levering
-                if(restaurant.sort_free_delivery){
-                    // Add this list
-                    //open_now.add(restaurant)
-                }
-                else{
-                    // dont add this list
-                    continue
-                }
-            }
-
-            if(tilpassort_list[1].is_itemselected){
-                // 5 + Rate
-                if(restaurant.sort_fiveplus_rate){
-                    // Add this list
-                  //  open_now.add(restaurant)
-                }
-                else{
-                    // dont add this list
-                    continue
-                }
-            }
-
-            // if all sorting checks are disable.
-            open_now.add(restaurant)
-
-        }
-
-        // pre order--
-        for (i in 0 until restaurantlistmodel.restaurant_list.pre_order.size){
-            val restaurant =restaurantlistmodel.restaurant_list.pre_order[i]
-
-            if(tilpassort_list[0].is_itemselected){
-                // Gratis levering
-                if(restaurant.sort_free_delivery){
-                    // Add this list
-                   // pre_order.add(restaurant)
-                }
-                else{
-                    // dont add this list
-                    continue
-                }
-            }
-
-            if(tilpassort_list[1].is_itemselected){
-                // 5 + Rate
-                if(restaurant.sort_fiveplus_rate){
-                    // Add this list
-                 //   pre_order.add(restaurant)
-                }
-                else{
-                    // dont add this list
-                    continue
-                }
-            }
-
-            // if all sorting checks are disable.
-            pre_order.add(restaurant)
-
-        }
-
-        // closed order--
-        for (i in 0 until restaurantlistmodel.restaurant_list.closed.size){
-            val restaurant =restaurantlistmodel.restaurant_list.closed[i]
-
-            if(tilpassort_list[0].is_itemselected){
-                // Gratis levering
-                if(restaurant.sort_free_delivery){
-                    // Add this list
-                   // closed.add(restaurant)
-                }
-                else{
-                    // dont add this list
-                    continue
-                }
-            }
-
-            if(tilpassort_list[1].is_itemselected){
-                // 5 + Rate
-                if(restaurant.sort_fiveplus_rate){
-                    // Add this list
-                 //   closed.add(restaurant)
-                }
-                else{
-                    // dont add this list
-                    continue
-                }
-            }
-
-            // if all sorting checks are disable.
-            closed.add(restaurant)
-
-        }
-
-        filterable_restaurantlistmodel=restaurantlistmodel.copy(restaurant_list =dk.eatmore.foodapp.model.home.RestaurantList(open_now = open_now ,pre_order = pre_order,closed = closed) )
-        val intent = Intent()
-        val bundle = Bundle()
-        bundle.putSerializable(Constants.FILTER_RESTAURANTLISTMODEL,filterable_restaurantlistmodel)
-        intent.putExtra(Constants.BUNDLE,bundle)
-        setResult(Activity.RESULT_OK,intent)
-        finish()
-
-
-
+        filterbyKokken(easysort_list = easysort_list,
+                kokkenType_list = kokkenType_list,
+                tilpassort_list =tilpassort_list,
+                restaurantlistmodel = restaurantlistmodel )
 
     }
 
 
+    override fun onBackPressed() {
+        // if user did not changed , then retain all state.
+        for (i in 0 until cpy_easysort_list.size){
+            easysort_list.get(i).is_itemselected= if(cpy_easysort_list.get(i).is_itemselected) true else false
+        }
+        for (i in 0 until cpy_tilpassort_list.size){
+            tilpassort_list.get(i).is_itemselected= if(cpy_tilpassort_list.get(i).is_itemselected) true else false
+        }
 
+        finish()
+    }
     override fun onDestroy() {
         super.onDestroy()
         logd(TAG, "on destroy...")
@@ -235,7 +149,7 @@ class Tilpas : BaseActivity() {
 
         fun continue_btn (view: View) {
             Log.e("TAG","btn--")
-            tilpas.filterbytilpas()
+            tilpas.applyFilter()
         }
         fun tilpas_row_item (view: View,model :RestaurantList.kokken_Model) {
             Log.e("TAG","tilpas--")

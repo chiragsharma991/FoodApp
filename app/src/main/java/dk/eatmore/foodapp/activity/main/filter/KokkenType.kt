@@ -29,15 +29,22 @@ import kotlinx.android.synthetic.main.select_address.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.sql.Struct
 import java.util.*
+import kotlin.collections.ArrayList
 
-class KokkenType : BaseActivity() {
+class KokkenType : Kokken_tilpas_filter() {
 
     private lateinit var binding: ActivityKokkentypeBinding
+
     private lateinit var kokkenType_list: ArrayList<RestaurantList.kokken_Model>
+    private var cpy_kokkenType_list: ArrayList<RestaurantList.kokken_Model> = ArrayList()
+    private lateinit var easysort_list: ArrayList<RestaurantList.kokken_Model>
+    private lateinit var tilpassort_list: ArrayList<RestaurantList.kokken_Model>
+    private lateinit var restaurantlistmodel: RestaurantListModel
+
+    private lateinit var filterable_restaurantlistmodel: RestaurantListModel
+
     private var myclickhandler: MyClickHandler = MyClickHandler(this)
     private lateinit var mAdapter: UniversalAdapter<RestaurantList.kokken_Model, RowKokkentypeBinding>
-    private lateinit var restaurantlistmodel: RestaurantListModel
-    private lateinit var filterable_restaurantlistmodel: RestaurantListModel
 
 
     companion object {
@@ -62,12 +69,15 @@ class KokkenType : BaseActivity() {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         binding.handler=myclickhandler
         img_toolbar_back.setImageResource(R.drawable.close)
-        img_toolbar_back.setOnClickListener{finish()}
+        img_toolbar_back.setOnClickListener{onBackPressed()}
         txt_toolbar.setText(getString(R.string.kokkentype))
         kokkenType_list  = RestaurantList.ui_model!!.kokkenType_list
+        easysort_list =RestaurantList.ui_model!!.easysort_list
+        tilpassort_list =RestaurantList.ui_model!!.tilpassort_list
         restaurantlistmodel  = intent.getBundleExtra(Constants.BUNDLE).getSerializable(Constants.KOKKEN_RESTAURANTLISTMODEL) as RestaurantListModel
-
-        loge(TAG,"After size="+kokkenType_list.size)
+        for (i in 0 until kokkenType_list.size){
+            cpy_kokkenType_list.add(RestaurantList.kokken_Model(itemtype = kokkenType_list[i].itemtype,itemcount =kokkenType_list[i].itemcount,is_itemselected = kokkenType_list[i].is_itemselected))
+        }
         refreshview()
 
 
@@ -89,52 +99,19 @@ class KokkenType : BaseActivity() {
         recycler_view.adapter = mAdapter
     }
 
-    private fun  filterbyKokken(){
+    private fun  applyFilter(){
 
-        // Note: if checkedItem list is [""] empty then it will add all list  just like select All option.
-        val checkedItem : ArrayList<String> = ArrayList()
-        for(kokken_Model_ in kokkenType_list){
-            if(kokken_Model_.is_itemselected && !(kokken_Model_.itemtype.trim()==getString(R.string.all).trim())){
-                checkedItem.add(kokken_Model_.itemtype.trim())
-            }
-        }
-        val open_now: ArrayList<Restaurant> = ArrayList()
-        val pre_order: ArrayList<Restaurant> = ArrayList()
-        val closed: ArrayList<Restaurant> = ArrayList()
-
-        for (i in 0 until restaurantlistmodel.restaurant_list.open_now.size){
-            loge(TAG,"check-"+restaurantlistmodel.restaurant_list.open_now[i].cuisines_list.toString()+"-"+checkedItem.toString()+"-")
-            if(restaurantlistmodel.restaurant_list.open_now[i].cuisines_list.containsAll(checkedItem)){
-                open_now.add(restaurantlistmodel.restaurant_list.open_now.get(i))
-            }
-        }
-        for (i in 0 until restaurantlistmodel.restaurant_list.pre_order.size){
-            if(restaurantlistmodel.restaurant_list.pre_order[i].cuisines_list.containsAll(checkedItem)){
-                pre_order.add(restaurantlistmodel.restaurant_list.pre_order.get(i))
-            }
-        }
-        for (i in 0 until restaurantlistmodel.restaurant_list.closed.size){
-            if(restaurantlistmodel.restaurant_list.closed[i].cuisines_list.containsAll(checkedItem)){
-                closed.add(restaurantlistmodel.restaurant_list.closed.get(i))
-            }
-        }
-
-        filterable_restaurantlistmodel=restaurantlistmodel.copy(restaurant_list =dk.eatmore.foodapp.model.home.RestaurantList(open_now = open_now ,pre_order = pre_order,closed = closed) )
-        val intent = Intent()
-        val bundle = Bundle()
-        bundle.putSerializable(Constants.FILTER_RESTAURANTLISTMODEL,filterable_restaurantlistmodel)
-        intent.putExtra(Constants.BUNDLE,bundle)
-        setResult(Activity.RESULT_OK,intent)
-        finish()
-
+        filterbyKokken(easysort_list = easysort_list,
+                kokkenType_list = kokkenType_list,
+                tilpassort_list =tilpassort_list,
+                restaurantlistmodel = restaurantlistmodel )
     }
-
 
     class MyClickHandler(val kokkentype_: KokkenType) {
 
 
         fun continue_btn (view: View) {
-            kokkentype_.filterbyKokken()
+            kokkentype_.applyFilter()
         }
 
         fun item_check (view : View, model :RestaurantList.kokken_Model) {
@@ -170,15 +147,19 @@ class KokkenType : BaseActivity() {
                         kokkentype_.kokkenType_list.get(i).is_itemselected=true
                 }
             }
-
             kokkentype_.mAdapter.notifyDataSetChanged()
-
         }
-
-
     }
 
 
+    override fun onBackPressed() {
+
+        // if user did not changed , then retain all state.
+        for (i in 0 until cpy_kokkenType_list.size){
+            kokkenType_list.get(i).is_itemselected= if(cpy_kokkenType_list.get(i).is_itemselected) true else false
+        }
+        finish()
+    }
 
 
 

@@ -2,6 +2,7 @@
 
 <layout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:ProgressWheel="http://schemas.android.com/apk/res-auto"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:zhy="http://schemas.android.com/tools">
 
     <data>
@@ -14,96 +15,109 @@
     </data>
 
 
-    <RelativeLayout xmlns:app="http://schemas.android.com/apk/res-auto"
+    <android.support.design.widget.CoordinatorLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:background="@color/background_light"
-        android:clickable="true"
         android:fitsSystemWindows="true"
-        android:focusable="true"
-        android:layoutDirection="locale">
+        android:background="@color/white"
+        >
 
-        <RelativeLayout
-            android:id="@+id/toolbar_view"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="visible">
 
-            <android.support.design.widget.CollapsingToolbarLayout
-                android:id="@+id/collapse_toolbar"
+
+            <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:fitsSystemWindows="true"
-                app:contentScrim="?attr/colorPrimary"
-                app:layout_scrollFlags="scroll|exitUntilCollapsed|snap"
-                app:titleEnabled="false">
+                app:elevation="0dp"
+                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                >
+                    <include layout="@layout/toolbar"
+                        app:layout_scrollFlags="scroll|enterAlways"
+                        android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
+                        app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
+                        android:layout_width="match_parent"
+                        android:layout_height="?attr/actionBarSize"
+                        >
 
-                <include layout="@layout/toolbar">
-
-                </include>
+                    </include>
 
 
-            </android.support.design.widget.CollapsingToolbarLayout>
-
-        </RelativeLayout>
 
 
-        <RelativeLayout
+
+            </android.support.design.widget.AppBarLayout>
+
+
+
+
+
+
+
+        <FrameLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_below="@+id/toolbar_view"
-            android:fitsSystemWindows="true"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior">
+            android:id="@+id/clayout_crt"
+            android:background="@color/background_light"
+            app:layout_behavior="@string/appbar_scrolling_view_behavior"
+            >
 
-            <FrameLayout
+
+
+
+            <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:fitsSystemWindows="true">
+                android:orientation="vertical">
 
-                <android.support.design.widget.CoordinatorLayout
-                    android:id="@+id/clayout_crt"
+                <FrameLayout
+                    android:id="@+id/cart_container"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:background="@color/background_light">
+                    android:layout_height="wrap_content">
 
-
-                    <RelativeLayout
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical">
 
-                        <FrameLayout
-                            android:id="@+id/cart_container"
+                        <android.support.design.widget.AppBarLayout
+                            android:id="@+id/appbar"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
                             <LinearLayout
                                 android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="vertical">
+                                android:layout_height="@dimen/_42sdp"
+                                android:background="@color/white"
+                                android:orientation="horizontal">
 
-                                <android.support.design.widget.AppBarLayout
-                                    android:id="@+id/appbar"
+                                <android.support.constraint.ConstraintLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="wrap_content">
+                                    android:id="@+id/constraint"
+                                    android:layout_height="match_parent">
 
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
-                                        android:layout_height="@dimen/_42sdp"
-                                        android:background="@color/white"
-                                        android:orientation="horizontal">
+                                    <android.support.constraint.Guideline
+                                        android:id="@+id/guideline7"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:orientation="vertical"
+                                        app:layout_constraintGuide_percent="0.5" />
+
+
+                                    <RelativeLayout
+                                        android:id="@+id/kokken_view"
+                                        android:layout_width="0dp"
+                                        android:layout_height="0dp"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintLeft_toLeftOf="parent"
+                                        app:layout_constraintRight_toLeftOf="@+id/guideline7"
+                                        app:layout_constraintTop_toTopOf="parent">
+
 
                                         <android.support.constraint.ConstraintLayout
                                             android:layout_width="match_parent"
-                                            android:layout_height="match_parent">
-
-                                            <android.support.constraint.Guideline
-                                                android:id="@+id/guideline7"
-                                                android:layout_width="wrap_content"
-                                                android:layout_height="wrap_content"
-                                                android:orientation="vertical"
-                                                app:layout_constraintGuide_percent="0.5" />
-
+                                            android:layout_height="match_parent"
+                                            android:onClick="@{handler::kokkenType}"
+                                            android:background="?attr/selectableItemBackgroundBorderless"
+                                            >
 
                                             <android.support.v7.widget.AppCompatImageView
                                                 android:id="@+id/kokken_img"
@@ -111,7 +125,6 @@
                                                 android:layout_height="@dimen/_20sdp"
                                                 android:layout_marginStart="8dp"
                                                 android:scaleType="fitXY"
-                                                android:onClick="@{handler::kokkenType}"
                                                 android:src="@mipmap/kokkentype"
                                                 app:layout_constraintBottom_toBottomOf="parent"
                                                 app:layout_constraintEnd_toStartOf="@+id/kokken_txt"
@@ -129,13 +142,38 @@
                                                 android:layout_marginStart="8dp"
                                                 android:layout_marginEnd="8dp"
                                                 android:layout_weight="1"
-                                                android:onClick="@{handler::kokkenType}"
                                                 android:text="@string/kokkentype"
                                                 app:layout_constraintBottom_toBottomOf="parent"
-                                                app:layout_constraintEnd_toStartOf="@+id/guideline7"
+                                                app:layout_constraintEnd_toEndOf="parent"
                                                 app:layout_constraintStart_toEndOf="@+id/kokken_img"
                                                 app:layout_constraintTop_toTopOf="parent" />
 
+
+
+
+                                        </android.support.constraint.ConstraintLayout>
+
+
+
+                                    </RelativeLayout>
+
+                                    <RelativeLayout
+                                        android:id="@+id/tilpas_view"
+                                        android:layout_width="0dp"
+                                        android:layout_height="0dp"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintLeft_toRightOf="@+id/guideline7"
+                                        app:layout_constraintRight_toRightOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent"
+
+                                        >
+
+                                        <android.support.constraint.ConstraintLayout
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            android:onClick="@{handler::tilpas}"
+                                            android:background="?attr/selectableItemBackgroundBorderless"
+                                            >
 
                                             <android.support.v7.widget.AppCompatImageView
                                                 android:id="@+id/tilpas_img"
@@ -144,13 +182,11 @@
                                                 android:layout_marginStart="8dp"
                                                 android:scaleType="fitXY"
                                                 android:src="@mipmap/tilps"
-                                                android:onClick="@{handler::tilpas}"
                                                 app:layout_constraintBottom_toBottomOf="parent"
                                                 app:layout_constraintEnd_toStartOf="@+id/tilpas_txt"
                                                 app:layout_constraintHorizontal_bias="0.5"
                                                 app:layout_constraintHorizontal_chainStyle="packed"
-                                                app:layout_constraintStart_toEndOf="@+id/kokken_txt"
-                                                app:layout_constraintStart_toStartOf="@+id/guideline7"
+                                                app:layout_constraintStart_toStartOf="parent"
                                                 app:layout_constraintTop_toTopOf="parent" />
 
                                             <android.support.v7.widget.AppCompatTextView
@@ -160,7 +196,6 @@
                                                 android:layout_marginStart="8dp"
                                                 android:layout_marginEnd="8dp"
                                                 android:layout_weight="1"
-                                                android:onClick="@{handler::tilpas}"
                                                 android:text="@string/tilpas"
                                                 app:layout_constraintBottom_toBottomOf="parent"
                                                 app:layout_constraintEnd_toEndOf="parent"
@@ -168,152 +203,159 @@
                                                 app:layout_constraintStart_toEndOf="@+id/tilpas_img"
                                                 app:layout_constraintTop_toTopOf="parent" />
 
-                                            <View
-                                                android:id="@+id/view"
-                                                android:layout_width="1dp"
-                                                android:layout_height="match_parent"
-                                                android:layout_marginStart="8dp"
-                                                android:layout_marginTop="8dp"
-                                                android:layout_marginEnd="8dp"
-                                                android:layout_marginBottom="8dp"
-                                                android:alpha="0.2"
-                                                android:background="@color/divider_color"
-                                                app:layout_constraintBottom_toBottomOf="parent"
-                                                app:layout_constraintEnd_toEndOf="parent"
-                                                app:layout_constraintStart_toStartOf="parent"
-                                                app:layout_constraintTop_toTopOf="parent" />
+
 
 
                                         </android.support.constraint.ConstraintLayout>
 
 
-                                        <!--         <LinearLayout
-                                                     android:layout_width="match_parent"
-                                                     android:layout_height="match_parent"
-                                                     android:orientation="vertical"
-                                                     >
 
 
+                                    </RelativeLayout>
 
-                                                 </LinearLayout>
-                                                 <LinearLayout
-                                                     android:layout_width="match_parent"
-                                                     android:layout_height="match_parent"
-                                                     android:orientation="vertical"
-                                                     >
-
-                                                 </LinearLayout>
-
-                                           -->
-
-                                    </LinearLayout>
-
-
-                                </android.support.design.widget.AppBarLayout>
-
-                                <android.support.v4.widget.NestedScrollView
-                                    android:id="@+id/nested_scroll"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent">
-
-                                    <LinearLayout
-                                        android:layout_width="match_parent"
+                                    <View
+                                        android:id="@+id/view"
+                                        android:layout_width="1dp"
                                         android:layout_height="match_parent"
-                                        android:orientation="vertical">
-                                        <!--  <android.support.v7.widget.CardView
-                                              style="@style/CardViewStyle"
-                                              android:id="@+id/search_view"
-                                              android:layout_margin="8dp"
-                                              app:cardUseCompatPadding="true"
-                                              >
+                                        android:layout_marginStart="8dp"
+                                        android:layout_marginTop="8dp"
+                                        android:layout_marginEnd="8dp"
+                                        android:layout_marginBottom="8dp"
+                                        android:alpha="0.2"
+                                        android:background="@color/divider_color"
+                                        app:layout_constraintBottom_toBottomOf="parent"
+                                        app:layout_constraintEnd_toEndOf="parent"
+                                        app:layout_constraintStart_toStartOf="parent"
+                                        app:layout_constraintTop_toTopOf="parent" />
 
 
-                                          </android.support.v7.widget.CardView>
-        -->
+                                </android.support.constraint.ConstraintLayout>
 
 
-                                        <android.support.v7.widget.RecyclerView
-                                            android:id="@+id/recycler_view_parent"
-                                            android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginTop="@dimen/_8sdp"
-                                            android:clipToPadding="false"
-                                            android:nestedScrollingEnabled="false" />
+                                <!--         <LinearLayout
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             android:orientation="vertical"
+                                             >
 
 
-                                    </LinearLayout>
 
+                                         </LinearLayout>
+                                         <LinearLayout
+                                             android:layout_width="match_parent"
+                                             android:layout_height="match_parent"
+                                             android:orientation="vertical"
+                                             >
 
-                                </android.support.v4.widget.NestedScrollView>
+                                         </LinearLayout>
+
+                                   -->
 
                             </LinearLayout>
 
 
-                        </FrameLayout>
+                        </android.support.design.widget.AppBarLayout>
 
-
-                        <LinearLayout
-                            android:id="@+id/error_view"
+                        <android.support.v4.widget.NestedScrollView
+                            android:id="@+id/nested_scroll"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-                            android:gravity="center_vertical|center_horizontal"
-                            android:visibility="gone">
+                            android:layout_height="match_parent">
 
-                            <RelativeLayout
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"
+                                android:orientation="vertical">
+                                <!--  <android.support.v7.widget.CardView
+                                      style="@style/CardViewStyle"
+                                      android:id="@+id/search_view"
+                                      android:layout_margin="8dp"
+                                      app:cardUseCompatPadding="true"
+                                      >
 
-                                >
 
-                                <android.support.v7.widget.AppCompatTextView
-                                    android:id="@+id/error_txt"
-                                    style="@style/SubtitleMidium_TextViewSmall"
+                                  </android.support.v7.widget.CardView>
+-->
+
+
+                                <android.support.v7.widget.RecyclerView
+                                    android:id="@+id/recycler_view_parent"
+                                    android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:gravity="center_horizontal"
-                                    android:text="@string/unfortunately_error"
-                                    android:textColor="@color/black_default"
-
-                                    />
-
-                                <android.support.v7.widget.AppCompatButton
-                                    android:id="@+id/search_again_btn"
-                                    style="@style/Button"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:layout_below="@+id/error_txt"
-                                    android:layout_centerHorizontal="true"
                                     android:layout_marginTop="@dimen/_8sdp"
-                                    android:text="@string/search_again" />
+                                    android:clipToPadding="false"
+                                    android:nestedScrollingEnabled="false" />
 
 
-                            </RelativeLayout>
+                            </LinearLayout>
 
 
-                        </LinearLayout>
+                        </android.support.v4.widget.NestedScrollView>
 
-                        <ProgressBar
-                            android:id="@+id/progress_bar"
-                            style="?android:attr/progress"
+                    </LinearLayout>
+
+
+                </FrameLayout>
+
+
+                <LinearLayout
+                    android:id="@+id/error_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:gravity="center_vertical|center_horizontal"
+                    android:visibility="gone">
+
+                    <RelativeLayout
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+
+                        >
+
+                        <android.support.v7.widget.AppCompatTextView
+                            android:id="@+id/error_txt"
+                            style="@style/SubtitleMidium_TextViewSmall"
+                            android:layout_height="wrap_content"
+                            android:gravity="center_horizontal"
+                            android:text="@string/unfortunately_error"
+                            android:textColor="@color/black_default"
+
+                            />
+
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/search_again_btn"
+                            style="@style/Button"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_centerInParent="true"
+                            android:layout_below="@+id/error_txt"
                             android:layout_centerHorizontal="true"
-                            android:layout_marginTop="@dimen/_16sdp"
-                            android:indeterminate="true"
-                            app:layout_behavior="@string/appbar_scrolling_view_behavior" />
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:text="@string/search_again" />
 
 
                     </RelativeLayout>
 
 
-                </android.support.design.widget.CoordinatorLayout>
+                </LinearLayout>
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    style="?android:attr/progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:indeterminate="true"
+                    app:layout_behavior="@string/appbar_scrolling_view_behavior" />
 
 
-            </FrameLayout>
+            </RelativeLayout>
 
 
-        </RelativeLayout>
 
-    </RelativeLayout>
+
+        </FrameLayout>
+
+
+</android.support.design.widget.CoordinatorLayout>
 
 </layout>

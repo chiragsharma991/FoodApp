@@ -159,6 +159,7 @@ class RestaurantList : BaseFragment() {
                         when (i) {
                             0 -> {
                                 for (j in 0 until restaurantlistmodel!!.restaurant_list.open_now.size) {
+                                    restaurantlistmodel!!.restaurant_list.open_now[j].is_open_now=true
                                     if (restaurantlistmodel!!.restaurant_list.open_now[j].cuisines.length > 0) {
                                         val items: Array<String> = restaurantlistmodel!!.restaurant_list.open_now[j].cuisines.split((",").toRegex()).dropLastWhile({ it.isEmpty() }).toTypedArray()
                                         for (item: String in items) {
@@ -442,38 +443,30 @@ class RestaurantList : BaseFragment() {
 
 
         fun kokkenType(view: View) {
-            val intent = Intent(restaurantlist.context, KokkenType::class.java)
-            val bundle = Bundle()
-            if(restaurantlist.restaurantlistmodel !=null){
-                // move : actual list
-                bundle.putSerializable(Constants.KOKKEN_RESTAURANTLISTMODEL, restaurantlist.restaurantlistmodel)
-                intent.putExtra(Constants.BUNDLE, bundle)
-                restaurantlist.startActivityForResult(intent, Constants.REQ_FILTER_RESAURANT_LIST)
+
+            if(restaurantlist.progress_bar.visibility == View.GONE){
+                val intent = Intent(restaurantlist.context, KokkenType::class.java)
+                val bundle = Bundle()
+                if(restaurantlist.restaurantlistmodel !=null){
+                    // move : actual list
+                    bundle.putSerializable(Constants.KOKKEN_RESTAURANTLISTMODEL, restaurantlist.restaurantlistmodel)
+                    intent.putExtra(Constants.BUNDLE, bundle)
+                    restaurantlist.startActivityForResult(intent, Constants.REQ_FILTER_RESAURANT_LIST)
+                }
             }
         }
 
         fun tilpas(view: View) {
-            val intent = Intent(restaurantlist.context, Tilpas::class.java)
-            val bundle = Bundle()
-            if(restaurantlist.filterable_restaurantlistmodel == null){
-                if(restaurantlist.restaurantlistmodel !=null){
-                    //move : actual list
-                    bundle.putSerializable(Constants.TILPAS_RESTAURANTLISTMODEL, restaurantlist.restaurantlistmodel)
-                    Log.e("TAG","btn actual--"+restaurantlist.restaurantlistmodel!!.restaurant_list.open_now.size.toString())
-                    intent.putExtra(Constants.BUNDLE, bundle)
-                    restaurantlist.startActivityForResult(intent, Constants.REQ_SORT_RESAURANT_LIST)
-                }
-            }else{
-                // move : filter list
-                bundle.putSerializable(Constants.TILPAS_RESTAURANTLISTMODEL, restaurantlist.filterable_restaurantlistmodel)
+
+            if(restaurantlist.progress_bar.visibility == View.GONE){
+                val intent = Intent(restaurantlist.context, Tilpas::class.java)
+                val bundle = Bundle()
+                bundle.putSerializable(Constants.TILPAS_RESTAURANTLISTMODEL, restaurantlist.restaurantlistmodel)
+                Log.e("TAG","btn actual--"+restaurantlist.restaurantlistmodel!!.restaurant_list.open_now.size.toString())
                 intent.putExtra(Constants.BUNDLE, bundle)
-                Log.e("TAG","btn filterlist--"+restaurantlist.filterable_restaurantlistmodel!!.restaurant_list.open_now.size.toString())
                 restaurantlist.startActivityForResult(intent, Constants.REQ_SORT_RESAURANT_LIST)
             }
-
         }
-
-
     }
 
 

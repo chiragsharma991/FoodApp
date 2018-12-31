@@ -477,6 +477,14 @@ abstract class BaseFragment : Fragment() {
         return s.format(Date(cal.timeInMillis))
     }
 
+    fun gettimefrom_date(target_date : String, target_format : String): Long {
+        //val sdf = SimpleDateFormat("dd/MM/yyyy")
+        val sdf = SimpleDateFormat(target_format)
+        val strDate = sdf.parse(target_date)
+        return strDate.time
+    }
+
+
 
 
     // Transition

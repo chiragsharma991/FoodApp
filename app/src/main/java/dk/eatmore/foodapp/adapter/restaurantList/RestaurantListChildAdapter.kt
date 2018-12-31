@@ -25,6 +25,7 @@ import android.util.Log
 import android.view.View
 import android.widget.RelativeLayout
 import dk.eatmore.foodapp.utils.BindDataUtils
+import java.text.SimpleDateFormat
 
 
 class RestaurantListChildAdapter(val context: Context, val listner: RestaurantListParentAdapter.AdapterListener, val parentPosition: Int, val list : ArrayList<RestaurantList.StatusWiseRestaurant> ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -61,25 +62,28 @@ class RestaurantListChildAdapter(val context: Context, val listner: RestaurantLi
             holder.binding.restaurant=list.get(parentPosition).restaurant.get(position)
             val restaurant =list.get(parentPosition).restaurant.get(position)
             if(restaurant.total_rating > 5){
-                Log.e("TAG","big---"+restaurant.total_rating.toString())
                 restaurant.sort_fiveplus_rate=true
             }else{
-                Log.e("TAG","small---"+restaurant.total_rating.toString())
                 restaurant.sort_fiveplus_rate=false
             }
+            val sdf = SimpleDateFormat("yyyy-MM-dd")
+            restaurant.sort_created_date = sdf.parse(restaurant.created_date.trim()).time
 
             // delivery present
             if(restaurant.delivery_present){
                 holder.binding.deliverypresentView.visibility=View.VISIBLE
                 if((restaurant.delivery_charge_title == "" || restaurant.delivery_charge_title == null) && (restaurant.delivery_charge?.toDouble() == 0.0)){
                     holder.binding.deliveryPresent.text="Gratis levering"
+                    restaurant.sort_delivery_charge=0.0
                     restaurant.sort_free_delivery=true
                 }else{
                     val label ="Leveringspris \n ${restaurant.delivery_charge_title?:""} ${BindDataUtils.convertCurrencyToDanish(restaurant.delivery_charge!!)}"
                     holder.binding.deliveryPresent.text=label
+                    restaurant.sort_delivery_charge=restaurant.delivery_charge.toDouble()
                     restaurant.sort_free_delivery=false
                 }
             }else{
+                restaurant.sort_delivery_charge=0.0
                 holder.binding.deliverypresentView.visibility=View.GONE
             }
 
@@ -95,13 +99,16 @@ class RestaurantListChildAdapter(val context: Context, val listner: RestaurantLi
             if(restaurant.delivery_present){
                 holder.binding.minimumOrderView.visibility=View.VISIBLE
                 if((restaurant.minimum_order_price == null) || (restaurant.minimum_order_price =="")){
+                    restaurant.sort_min_order_price=0.0
                     holder.binding.minimumOrderView.visibility=View.GONE
                 }else{
                     val label ="Minimumordre: \n ${BindDataUtils.convertCurrencyToDanish(restaurant.minimum_order_price)}"
+                    restaurant.sort_min_order_price=restaurant.minimum_order_price.toDouble()
                     holder.binding.minimumOrder.text=label
                     holder.binding.minimumOrderView.visibility=View.VISIBLE
                 }
             }else{
+                restaurant.sort_min_order_price=0.0
                 holder.binding.minimumOrderView.visibility=View.GONE
             }
 
