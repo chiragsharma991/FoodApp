@@ -122,6 +122,7 @@ class Constants {
     const  val TILPAS_RESTAURANTLISTMODEL="TilpasRestaurantListModel"
     const  val FILTER_RESTAURANTLISTMODEL="FilterRestaurantListModel"
     const  val BUNDLE="bundle"
+    const  val HEALTH_REPORT_LINK="health_report_link"
     const  val EPAY_MERCHANT="epay_merchant"
     const  val EPAY_MERCHANT_TEST="8024206"
     const  val BOTTOM_TO_TOP_ANIM =200

@@ -80,9 +80,7 @@ dependencies {
     // lottie animation
     implementation 'com.airbnb.android:lottie:2.5.0'
     implementation files('libs/epaylibrary.jar')
-
     implementation 'com.android.support:multidex:1.0.3'
-
 }
 
 apply plugin: 'com.google.gms.google-services'

@@ -70,7 +70,7 @@ class Tilpas : Kokken_tilpas_filter() {
     private fun initView(savedInstanceState: Bundle?) {
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
         img_toolbar_back.setImageResource(R.drawable.close)
-        img_toolbar_back.setOnClickListener{finish()}
+        img_toolbar_back.setOnClickListener{onBackPressed()}
         txt_toolbar.setText(getString(R.string.tilpas))
         binding.handler=myclickhandler
         restaurantlistmodel  = intent.getBundleExtra(Constants.BUNDLE).getSerializable(Constants.TILPAS_RESTAURANTLISTMODEL) as RestaurantListModel

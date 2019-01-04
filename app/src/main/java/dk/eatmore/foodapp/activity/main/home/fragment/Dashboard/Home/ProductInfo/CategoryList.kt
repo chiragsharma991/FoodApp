@@ -17,6 +17,8 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.airbnb.lottie.utils.Utils
+import com.bumptech.glide.util.Util
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
@@ -54,12 +56,12 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
     companion object {
 
         val TAG = "CategoryList"
-        fun newInstance(restaurant: Restaurant,data: MenuListItem): CategoryList {
+        fun newInstance(restaurant: Restaurant, data: MenuListItem): CategoryList {
             val fragment = CategoryList()
             val bundle = Bundle()
             bundle.putSerializable(Constants.RESTAURANT, restaurant)
-            bundle.putString(Constants.TITLE,data.c_name)
-            bundle.putString(Constants.C_DESC,data.c_desc)
+            bundle.putString(Constants.TITLE, data.c_name)
+            bundle.putString(Constants.C_DESC, data.c_desc)
             bundle.putSerializable(Constants.PRODUCTLIST, data)
             fragment.arguments = bundle
             return fragment
@@ -81,18 +83,17 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
     }
 
 
-
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
-            loge(TAG, "saveInstance NULL"+(arguments?.getSerializable(Constants.RESTAURANT) as Restaurant).toString())
+            loge(TAG, "saveInstance NULL" + (arguments?.getSerializable(Constants.RESTAURANT) as Restaurant).toString())
             productpricecalculation = ProductPriceCalculation(this)
             updatebatchcount(0)
-            restaurant=arguments?.getSerializable(Constants.RESTAURANT) as Restaurant
+            restaurant = arguments?.getSerializable(Constants.RESTAURANT) as Restaurant
             val menuListItem = arguments?.getSerializable(Constants.PRODUCTLIST) as MenuListItem
             val bundle = arguments
             subtxt_toolbar.text = bundle?.getString(Constants.TITLE, "") ?: ""
-            subtxt_desc.text=bundle?.getString(Constants.C_DESC, "") ?: ""
-            subtxt_desc.visibility = if(subtxt_desc.text.toString().trim().length > 0) View.VISIBLE else View.GONE
+            subtxt_desc.text = bundle?.getString(Constants.C_DESC, "") ?: ""
+            subtxt_desc.visibility = if (subtxt_desc.text.toString().trim().length > 0) View.VISIBLE else View.GONE
             setanim_toolbartitle(appbar, txt_toolbar, bundle?.getString(Constants.TITLE, "") ?: "")
             img_toolbar_back.setOnClickListener {
                 (activity as HomeActivity).onBackPressed()
@@ -106,23 +107,23 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
             recycler_view_category.layoutManager = LinearLayoutManager(getActivityBase())
             recycler_view_category.adapter = mAdapter
             viewcart.setOnClickListener {
-                if(DetailsFragment.total_cartcnt == 0) return@setOnClickListener
+                if (DetailsFragment.total_cartcnt == 0) return@setOnClickListener
 
                 val fragment = EpayFragment.newInstance(restaurant)
-                var enter : Slide?=null
+                var enter: Slide? = null
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     enter = Slide()
                     enter.setDuration(300)
                     enter.slideEdge = Gravity.BOTTOM
-                    val changeBoundsTransition : ChangeBounds = ChangeBounds()
+                    val changeBoundsTransition: ChangeBounds = ChangeBounds()
                     changeBoundsTransition.duration = 300
-                    fragment.sharedElementEnterTransition=changeBoundsTransition
-                    fragment.enterTransition=enter
+                    fragment.sharedElementEnterTransition = changeBoundsTransition
+                    fragment.enterTransition = enter
                 }
-                if((activity as HomeActivity).fragmentTab_is() == 1)
-                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment().addFragment(R.id.home_order_container,fragment,EpayFragment.TAG,false)
+                if ((activity as HomeActivity).fragmentTab_is() == 1)
+                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment().addFragment(R.id.home_order_container, fragment, EpayFragment.TAG, false)
                 else
-                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().addFragment(R.id.home_fragment_container,fragment, EpayFragment.TAG,false)
+                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().addFragment(R.id.home_fragment_container, fragment, EpayFragment.TAG, false)
 
 
                 /*   val intent = Intent(activity, EpayActivity::class.java)
@@ -141,28 +142,32 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
 
     fun updatebatchcount(count: Int) {
 
-        try{
-            badge_notification_txt.visibility = if (DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
-            toolbar_badge_view.visibility= if(DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
+        try {
+            badge_notification_txt.visibility = View.GONE
+            toolbar_badge_view.visibility = if (DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
             //viewcart.alpha= if(DetailsFragment.total_cartcnt == 0) 0.3f else 0.9f
-            badge_notification_txt.text = DetailsFragment.total_cartcnt.toString()
-            badge_countprice.text = BindDataUtils.convertCurrencyToDanish(DetailsFragment.total_cartamt)
-        }catch (e : Exception){
-            loge(TAG,"exception: - "+e.message)
+            //badge_notification_txt.text = DetailsFragment.total_cartcnt.toString()
+            if (DetailsFragment.total_cartcnt == 0 || DetailsFragment.total_cartcnt == 1)
+                badge_countprice.text = BindDataUtils.convertCurrencyToDanish(DetailsFragment.total_cartamt)
+            else
+                badge_countprice.text = String.format(getString(R.string.count_ammount), DetailsFragment.total_cartcnt, BindDataUtils.convertCurrencyToDanish(DetailsFragment.total_cartamt))
+
+        } catch (e: Exception) {
+            loge(TAG, "exception: - " + e.message)
         }
     }
 
 
-     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-         loge("onActivityResult categorylist---","---")
-         // request : send code with request
-         // result :  get code from target activity
-         if(requestCode == Constants.REQ_CAT_RESAURANT_CLOSED){
-             if(resultCode == Activity.RESULT_OK){
-                 any_preorder_closedRestaurant(data!!.extras.get(Constants.IS_RESTAURANT_CLOSED) as Boolean,data.extras.get(Constants.PRE_ORDER) as Boolean,data.extras.get(Constants.MSG) as String )
-             }
-         }
-     }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        loge("onActivityResult categorylist---", "---")
+        // request : send code with request
+        // result :  get code from target activity
+        if (requestCode == Constants.REQ_CAT_RESAURANT_CLOSED) {
+            if (resultCode == Activity.RESULT_OK) {
+                any_preorder_closedRestaurant(data!!.extras.get(Constants.IS_RESTAURANT_CLOSED) as Boolean, data.extras.get(Constants.PRE_ORDER) as Boolean, data.extras.get(Constants.MSG) as String)
+            }
+        }
+    }
 
 
     override fun <T> onClick(model: T?) {
@@ -175,11 +180,10 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
             val intent = Intent(activity, CartActivity::class.java)
             intent.putExtra("TITLE", data.p_name)
             intent.putExtra("PID", data.p_id)
-            intent.putExtra("p_price", if (data.product_attribute == null) BindDataUtils.convertCurrencyToDanish(data.p_price
-                    ?: "0") else productpricecalculation.getprice(data))
+            intent.putExtra("p_price",productpricecalculation.getprice(data))
             val pairs: Array<Pair<View, String>> = TransitionHelper.createSafeTransitionParticipants(activity!!, true)
             val transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, *pairs)
-            startActivityForResult(intent,Constants.REQ_CAT_RESAURANT_CLOSED,transitionActivityOptions.toBundle())
+            startActivityForResult(intent, Constants.REQ_CAT_RESAURANT_CLOSED, transitionActivityOptions.toBundle())
         }
 
     }
@@ -211,12 +215,12 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
                 if (jsonObject.get(Constants.STATUS).asBoolean) {
                     showProgressDialog()
 
-                    if((jsonObject.has(Constants.IS_RESTAURANT_CLOSED) && jsonObject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean == true) &&
-                            (jsonObject.has(Constants.PRE_ORDER) && jsonObject.get(Constants.PRE_ORDER).asBoolean == false) ){
-                        val msg= if(jsonObject.has(Constants.MSG))jsonObject.get(Constants.MSG).asString else getString(R.string.sorry_restaurant_has_been_closed)
-                        any_preorder_closedRestaurant(jsonObject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean ,jsonObject.get(Constants.PRE_ORDER).asBoolean ,msg )
+                    if ((jsonObject.has(Constants.IS_RESTAURANT_CLOSED) && jsonObject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean == true) &&
+                            (jsonObject.has(Constants.PRE_ORDER) && jsonObject.get(Constants.PRE_ORDER).asBoolean == false)) {
+                        val msg = if (jsonObject.has(Constants.MSG)) jsonObject.get(Constants.MSG).asString else getString(R.string.sorry_restaurant_has_been_closed)
+                        any_preorder_closedRestaurant(jsonObject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean, jsonObject.get(Constants.PRE_ORDER).asBoolean, msg)
 
-                    }else{
+                    } else {
                         val intent = Intent(Constants.CARTCOUNT_BROADCAST)
                         intent.putExtra(Constants.CARTCNT, if (jsonObject.get(Constants.CARTCNT).isJsonNull || jsonObject.get(Constants.CARTCNT).asString == "0") 0 else (jsonObject.get(Constants.CARTCNT).asString).toInt())
                         intent.putExtra(Constants.CARTAMT, if (jsonObject.get(Constants.CARTAMT).isJsonNull || jsonObject.get(Constants.CARTAMT).asString == "0") "00.00" else jsonObject.get(Constants.CARTAMT).asString)
@@ -279,16 +283,27 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
         return true
     }
 
-
     class ProductPriceCalculation(val categorylist: CategoryList) {
-
+        // this is calculation of showing p price which will take from array or object.
         var attribute_cost: Double = 0.0
+
         fun getprice(productListItem: ProductListItem): String {
-            attribute_cost = 0.0
-            for (i in 0..productListItem.product_attribute.size - 1) {
-                attribute_cost = attribute_cost + productListItem.product_attribute.get(i).default_attribute_value.a_price.toDouble()
-            }
-            return BindDataUtils.convertCurrencyToDanish(attribute_cost.toString()) ?: "null"
+
+
+                if (productListItem.product_attribute == null) {
+                    return BindDataUtils.convertCurrencyToDanish(productListItem.p_price!!)!!
+                } else {
+                    attribute_cost = 0.0
+                    for (i in 0..productListItem.product_attribute.size - 1) {
+                        attribute_cost = attribute_cost + productListItem.product_attribute.get(i).default_attribute_value.a_price.toDouble()
+                    }
+                    return BindDataUtils.convertCurrencyToDanish(attribute_cost.toString())
+                            ?: "null"
+                }
+
+
+
+
         }
 
     }

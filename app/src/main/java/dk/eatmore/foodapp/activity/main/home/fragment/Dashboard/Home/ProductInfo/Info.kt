@@ -133,7 +133,7 @@ class Info : BaseFragment() {
 
     private fun tapOnHealthReport() {
 
-        val fragment = HealthReport.newInstance()
+        val fragment = HealthReport.newInstance(restaurant.health_report_link)
         val homefragment: HomeFragment = ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment()
         homefragment.addFragment(R.id.home_fragment_container, fragment, HealthReport.TAG, true)
 

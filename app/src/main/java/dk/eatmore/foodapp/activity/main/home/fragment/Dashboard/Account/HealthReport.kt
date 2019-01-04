@@ -26,6 +26,7 @@ import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.databinding.HealthreportBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
+import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.healthreport.*
 import kotlinx.android.synthetic.main.toolbar.*
 
@@ -40,8 +41,12 @@ class HealthReport : BaseFragment() {
     companion object {
 
         val TAG = "HealthReport"
-        fun newInstance(): HealthReport {
-            return HealthReport()
+        fun newInstance(health_report_link : String): HealthReport {
+            val fragment =HealthReport()
+            val bundle = Bundle()
+            bundle.putString(Constants.HEALTH_REPORT_LINK,health_report_link)
+            fragment.arguments = bundle
+            return fragment
         }
 
     }
@@ -77,7 +82,7 @@ class HealthReport : BaseFragment() {
 
 
         webview.getSettings().setJavaScriptEnabled(true) // enable javascript
-        webview.loadUrl("http://www.findsmiley.dk")
+        webview.loadUrl(arguments!!.getString(Constants.HEALTH_REPORT_LINK) as String)
         webview.setWebViewClient(WebViewController())
     }
 

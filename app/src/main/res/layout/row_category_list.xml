@@ -47,120 +47,144 @@
             <android.support.constraint.ConstraintLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="@dimen/_14sdp"
-                android:layout_marginEnd="@dimen/_14sdp"
-                android:layout_marginBottom="@dimen/_8sdp"
+
                 >
 
-                <android.support.constraint.Guideline
-                    android:id="@+id/guidline_vertical_one"
+                <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.6" />
-
-                <android.support.constraint.Guideline
-                    android:id="@+id/guidline_vertical_two"
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:orientation="vertical"
-                    app:layout_constraintGuide_percent="0.9" />
-
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/cat_title"
-                    style="@style/Titlelight_TextViewSmall"
-                    android:layout_width="0dp"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="8dp"
-                    android:layout_weight="1.05"
-                    android:text="@{data.p_name}"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_one"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:layout_constraintVertical_bias="0.0" />
+                    android:id="@+id/constraint_ch_one"
+                    android:layout_marginStart="@dimen/_14sdp"
+                    android:layout_marginEnd="@dimen/_14sdp"
+                    android:layout_marginBottom="@dimen/_8sdp"
+                    >
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/appCompatTextView"
-                    style="@style/TitleRegular_TextViewSmall"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginEnd="8dp"
-                    android:gravity="right"
-                    android:maxLength="15"
-                    android:text="@{data.product_attribute == null ? `fra: `+util.convertCurrencyToDanish(data.p_price) : `fra: `+productpricecalculation.getprice(data)}"
-                    app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_two"
-                    app:layout_constraintHorizontal_bias="1.0"
-                    app:layout_constraintStart_toEndOf="@+id/guidline_vertical_one"
-                    app:layout_constraintTop_toTopOf="parent" />
+                    <android.support.constraint.Guideline
+                        android:id="@+id/guidline_vertical_one"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.6" />
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/appCompatTextView3"
-                    style="@style/Subtitle_TextViewSmall"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_weight="1.05"
-                    android:text="@{data.p_desc}"
-                    android:visibility="@{data.p_desc.equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}"
-                    app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_one"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/cat_title" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/appCompatTextView2"
-                    style="@style/Subtitle_TextViewSmall"
-                    android:layout_width="0dp"
-                    android:layout_height="wrap_content"
-                    android:layout_gravity="center_vertical"
-                    android:layout_marginTop="8dp"
-                    android:layout_weight="1.05"
-                    android:visibility="gone"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="@+id/appCompatTextView3"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/appCompatTextView3"
-                    app:layout_constraintVertical_bias="0.0" />
+                    <android.support.constraint.Guideline
+                        android:id="@+id/guidline_vertical_two"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        app:layout_constraintGuide_percent="0.9" />
 
 
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/cat_title"
+                        style="@style/Titlelight_TextViewSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="8dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_weight="1.05"
+                        android:text="@{data.p_name}"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_one"
+                        app:layout_constraintHorizontal_bias="0.0"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0" />
 
-                <android.support.v7.widget.AppCompatImageView
-                    android:id="@+id/appCompatImageView"
-                    android:layout_width="@dimen/_23sdp"
-                    android:layout_height="@dimen/_25sdp"
-                    android:layout_gravity="top"
-                    android:layout_marginStart="8dp"
-                    android:layout_marginEnd="8dp"
-                    android:background="@color/theme_color"
-                    android:scaleType="fitXY"
-                    android:paddingTop="@dimen/_6sdp"
-                    android:paddingStart="@dimen/_3sdp"
-                    android:paddingEnd="@dimen/_3sdp"
-                    android:paddingBottom="@dimen/_3sdp"
-                    app:layout_constraintBottom_toBottomOf="@+id/appCompatTextView"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="@+id/guidline_vertical_two"
-                    app:layout_constraintTop_toTopOf="parent"
-                    app:srcCompat="@drawable/add"
-                    />
+                    <!--
+                    Note : Fra : this is `from` label which can be add if Products having attributes, or ingredients or extra toppings assigned
+                    -->
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/appCompatTextView"
+                        style="@style/TitleRegular_TextViewSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:gravity="right"
+                        android:maxLength="15"
+                        android:text="@{(data.is_attributes.equalsIgnoreCase(`0`) &amp;&amp; data.extra_topping_group == null) ? productpricecalculation.getprice(data) : `fra: `+productpricecalculation.getprice(data) }"
+                        app:layout_constraintBottom_toBottomOf="@+id/appCompatImageView"
+                        app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_two"
+                        app:layout_constraintHorizontal_bias="1.0"
+                        app:layout_constraintStart_toEndOf="@+id/guidline_vertical_one"
+                        app:layout_constraintTop_toTopOf="@+id/appCompatImageView" />
+
+                    <!--
+                                    android:text="@{data.product_attribute == null ? util.convertCurrencyToDanish(data.p_price) : `fra\n`+productpricecalculation.getprice(data)}"
+                    -->
+
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/appCompatTextView3"
+                        style="@style/Subtitle_TextViewSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_weight="1.05"
+                        android:text="@{data.p_desc}"
+                        android:layout_marginEnd="8dp"
+                        android:visibility="visible"
+                        app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_one"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/cat_title" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/appCompatTextView2"
+                        style="@style/Subtitle_TextViewSmall"
+                        android:layout_width="0dp"
+                        android:layout_height="wrap_content"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginTop="8dp"
+                        android:layout_weight="1.05"
+                        android:visibility="gone"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="@+id/appCompatTextView3"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/appCompatTextView3"
+                        app:layout_constraintVertical_bias="0.0" />
+
+
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/appCompatImageView"
+                        android:layout_width="@dimen/_23sdp"
+                        android:layout_height="@dimen/_23sdp"
+                        android:layout_gravity="top"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="8dp"
+                        android:background="@color/theme_color"
+                        android:paddingStart="@dimen/_3sdp"
+                        android:paddingTop="@dimen/_3sdp"
+                        android:paddingEnd="@dimen/_3sdp"
+                        android:paddingBottom="@dimen/_3sdp"
+                        android:scaleType="fitXY"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="@+id/guidline_vertical_two"
+                        app:layout_constraintTop_toTopOf="parent"
+                        app:layout_constraintVertical_bias="0.0"
+                        app:srcCompat="@drawable/add" />
+
+
+
+
+
+                </android.support.constraint.ConstraintLayout>
+
 
                 <View
                     android:id="@+id/view"
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:layout_marginTop="8dp"
+                    android:layout_marginStart="@dimen/_14sdp"
+                    android:layout_marginEnd="@dimen/_14sdp"
                     android:alpha="0.2"
                     android:background="@color/divider_color"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/appCompatTextView2" />
-
-
+                    app:layout_constraintTop_toBottomOf="@+id/constraint_ch_one" />
 
             </android.support.constraint.ConstraintLayout>
 

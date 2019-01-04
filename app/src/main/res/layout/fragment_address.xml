@@ -59,6 +59,7 @@
                 android:layout_below="@+id/app_bar"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:id="@+id/empty_view"
                 android:visibility="@{user_Info ==null ? View.GONE : View.VISIBLE }"
                 >
 
@@ -283,6 +284,30 @@
                             app:layout_constraintTop_toBottomOf="@+id/postnumber_edt" />
 
 
+                      <!--  <android.support.v7.widget.AppCompatEditText
+                            android:id="@+id/city_edt"
+                            style="@style/EditText_Normal"
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="@dimen/_16sdp"
+                            android:layout_weight="1.5"
+                            android:background="@drawable/rectgreycurve_shape"
+                            android:enabled="false"
+                            android:padding="@dimen/_8sdp"
+                            android:singleLine="true"
+                            android:text="sdfsdf"
+                            android:textColorHint="@color/black_txt_light"
+                            android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toBottomOf="@+id/city_txt"
+
+                            />
+-->
                         <android.support.v7.widget.AppCompatEditText
                             android:id="@+id/city_edt"
                             style="@style/EditText_Normal"
@@ -297,11 +322,14 @@
                             android:enabled="false"
                             android:padding="@dimen/_8sdp"
                             android:singleLine="true"
+                            android:textColor="@color/black_light"
                             android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
                             app:layout_constraintBottom_toBottomOf="parent"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/city_txt" />
+                            app:layout_constraintTop_toBottomOf="@+id/city_txt"
+
+                            />
 
 
                         <!--<android.support.v7.widget.AppCompatButton

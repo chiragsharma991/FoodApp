@@ -58,12 +58,10 @@
                 android:id="@+id/parent_child"
                 android:layout_marginStart="@dimen/_8sdp"
                 android:layout_marginEnd="@dimen/_8sdp"
-                android:layout_marginTop="@dimen/_8sdp"
                 >
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/recycler_view_child"
-                    android:paddingTop="@dimen/_3sdp"
                     android:clipToPadding="false"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>

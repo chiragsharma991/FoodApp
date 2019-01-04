@@ -27,6 +27,7 @@ import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.*
 import dk.eatmore.foodapp.fragment.Dashboard.Home.AddressForm
 import dk.eatmore.foodapp.model.ModelUtility
+import dk.eatmore.foodapp.model.home.RestaurantListModel
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
@@ -34,6 +35,7 @@ import dk.eatmore.foodapp.utils.Constants
 import dk.eatmore.foodapp.utils.DialogUtils
 import kotlinx.android.synthetic.main.editaddress.*
 import kotlinx.android.synthetic.main.toolbar.*
+import retrofit2.Call
 import java.io.Serializable
 
 class EditAddress : BaseFragment() {
@@ -41,6 +43,10 @@ class EditAddress : BaseFragment() {
     private lateinit var binding: EditaddressBinding
     private lateinit var clickEvent: MyClickHandler
     private var is_visible : Boolean = false
+    private var call_shippingaddress_list : Call<EditaddressListModel>? = null
+    private var call_delete_shippingaddress : Call<JsonObject>? = null
+    private var mAdapter: UniversalAdapter<Messages, RowAddressBinding>?=null
+
 
 
     companion object {
@@ -67,6 +73,8 @@ class EditAddress : BaseFragment() {
             logd(TAG,"saveInstance NULL")
             error_txt.visibility=View.GONE
             txt_toolbar.text=getString(R.string.addresses)
+            txt_toolbar_right.text= getString(R.string.add)
+            txt_toolbar_right.setOnClickListener{ editAddress(null) }
             img_toolbar_back.setOnClickListener{(activity as HomeActivity).onBackPressed()}
             if(RestaurantList.ui_model == null) is_visible = false else is_visible= true
             progress_bar.visibility=View.GONE
@@ -102,6 +110,7 @@ class EditAddress : BaseFragment() {
 
      fun fetchuserInfo() {
         progress_bar.visibility=View.VISIBLE
+        error_txt.visibility=View.GONE
         val postParam = JsonObject()
         postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
         postParam.addProperty(Constants.EATMORE_APP,true)
@@ -109,10 +118,8 @@ class EditAddress : BaseFragment() {
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
          postParam.addProperty(Constants.LANGUAGE, Constants.EN)
-
-         callAPI(ApiCall.shippingaddress_list(
-                jsonObject = postParam
-        ), object : BaseFragment.OnApiCallInteraction {
+         call_shippingaddress_list=ApiCall.shippingaddress_list(jsonObject = postParam)
+         callAPI(call_shippingaddress_list!!, object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
                 val editaddresslist = body as EditaddressListModel
@@ -125,6 +132,10 @@ class EditAddress : BaseFragment() {
                         }
                         ui_model!!.editaddressList.value=editaddresslist
                     }else{
+                        if(mAdapter != null){
+                            ui_model!!.editaddressList.value!!.messages.clear()
+                            mAdapter!!.notifyDataSetChanged()
+                        }
                         error_txt.visibility=View.VISIBLE
                     }
 
@@ -134,6 +145,10 @@ class EditAddress : BaseFragment() {
             }
 
             override fun onFail(error: Int) {
+
+                if (call_shippingaddress_list!!.isCanceled ) {
+                    return
+                }
                 when (error) {
                     404 -> {
                         showSnackBar(editaddress_container, getString(R.string.error_404))
@@ -159,11 +174,8 @@ class EditAddress : BaseFragment() {
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
         postParam.addProperty(Constants.LANGUAGE, Constants.EN)
-
-        callAPI(ApiCall.delete_shippingaddress(
-                jsonObject = postParam
-        ), object : BaseFragment.OnApiCallInteraction {
-
+        call_delete_shippingaddress=ApiCall.delete_shippingaddress(jsonObject = postParam)
+        callAPI(call_delete_shippingaddress!!, object : BaseFragment.OnApiCallInteraction {
             override fun <T> onSuccess(body: T?) {
                 val jsonObject = body as JsonObject
                 if (jsonObject.get(Constants.STATUS).asBoolean) {
@@ -174,6 +186,9 @@ class EditAddress : BaseFragment() {
             }
 
             override fun onFail(error: Int) {
+                if (call_delete_shippingaddress!!.isCanceled ) {
+                    return
+                }
                 when (error) {
                     404 -> {
                         showSnackBar(editaddress_container, getString(R.string.error_404))
@@ -188,10 +203,11 @@ class EditAddress : BaseFragment() {
     }
 
 
+
     private fun refreshview(){
         loge(TAG,"refresh view...")
 
-        val mAdapter = UniversalAdapter(context!!, ui_model!!.editaddressList.value!!.messages, R.layout.row_address, object : RecyclerCallback<RowAddressBinding, Messages> {
+        mAdapter = UniversalAdapter(context!!, ui_model!!.editaddressList.value!!.messages, R.layout.row_address, object : RecyclerCallback<RowAddressBinding, Messages> {
             override fun bindData(binder: RowAddressBinding, model: Messages) {
                 setRecyclerData(binder, model)
             }
@@ -220,18 +236,25 @@ class EditAddress : BaseFragment() {
             }
         })
     }
-    private fun editAddress(model: Messages) {
+    private fun editAddress(model: Messages?) {
         loge(TAG,"edit function")
-        val fragment = AddressForm.newInstance(
-                address = model
-        )
+        val fragment : AddressForm
+        if(model == null){
+            // Add address
+            fragment = AddressForm.newInstance()
+        }else{
+            // Edit address
+             fragment = AddressForm.newInstance(
+                    address = model
+            )
+        }
         var enter : Slide?=null
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
             enter = Slide()
-            enter.setDuration(150)
+            enter.setDuration(Constants.BOTTOM_TO_TOP_ANIM.toLong())
             enter.slideEdge = Gravity.BOTTOM
             val changeBoundsTransition : ChangeBounds = ChangeBounds()
-            changeBoundsTransition.duration = 150
+            changeBoundsTransition.duration = Constants.BOTTOM_TO_TOP_ANIM.toLong()
             //fragment!!.sharedElementEnterTransition=changeBoundsTransition
             fragment.sharedElementEnterTransition=changeBoundsTransition
             fragment.sharedElementReturnTransition=changeBoundsTransition
@@ -244,20 +267,28 @@ class EditAddress : BaseFragment() {
 
 
     override fun onDestroy() {
-        super.onDestroy()
+
         logd(TAG, "on destroy...")
+
+        call_shippingaddress_list?.let {
+            it.cancel()
+        }
+        call_delete_shippingaddress?.let {
+            it.cancel()
+        }
+
+        super.onDestroy()
     }
+
 
     override fun onDetach() {
         super.onDetach()
         logd(TAG, "on detech...")
-
     }
 
     override fun onPause() {
         super.onPause()
         logd(TAG, "on pause...")
-
     }
 
     data class EditaddressListModel(
@@ -282,12 +313,15 @@ class EditAddress : BaseFragment() {
     class MyClickHandler(val editaddress: EditAddress) {
 
         fun deleteAddress(view: View , model: Messages) {
-            editaddress.deleteAddress(model)
+            if(editaddress.progress_bar.visibility == View.GONE){
+                editaddress.deleteAddress(model)
+            }
         }
         fun editAddress(view: View, model: Messages) {
-            editaddress.editAddress(model)
+            if(editaddress.progress_bar.visibility == View.GONE){
+                editaddress.editAddress(model)
+            }
         }
-
     }
 
 }

@@ -53,6 +53,7 @@ data class Restaurant(
         val pickup_present : Boolean=true,
         val shipping_type : String="",
         val created_date : String="",
+        val health_report_link : String="",
         val shipping_unit : String="",
         val rating_details : ArrayList<Rating_details> = arrayListOf(),
         val review_list : ArrayList<Review_list> = arrayListOf(),

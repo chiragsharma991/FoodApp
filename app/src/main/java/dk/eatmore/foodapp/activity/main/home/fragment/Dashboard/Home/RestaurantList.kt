@@ -40,6 +40,7 @@ import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
 import dk.eatmore.foodapp.utils.HidingScrollListener
+import dk.eatmore.foodapp.utils.RecyclerSectionItemDecoration
 import kotlinx.android.synthetic.main.fragment_home_container.*
 import kotlinx.android.synthetic.main.restaurantlist.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -63,6 +64,7 @@ class RestaurantList : BaseFragment() {
     private  var restaurantlistmodel: RestaurantListModel? =null
     private  var filterable_restaurantlistmodel: RestaurantListModel?=null
     private val kokkenType_map: HashMap<String, Int> = HashMap()
+    private var is_from_filter : Boolean = false
 
 
     companion object {
@@ -96,6 +98,7 @@ class RestaurantList : BaseFragment() {
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
+            error_view.visibility = View.GONE
             clickEvent = MyClickHandler(this)
             binding.handler = clickEvent
             setToolbarforThis()
@@ -305,7 +308,16 @@ class RestaurantList : BaseFragment() {
             list.add(statuswiserestaurant)
         }
         if (list.size <= 0) {
-            error_view.visibility = View.VISIBLE
+            if(is_from_filter){
+                error_view.visibility = View.VISIBLE
+                error_txt.text =getString(R.string.didnot_match_restaurant_error)
+                search_again_btn.visibility=View.GONE
+                is_from_filter=false
+            }else{
+                error_view.visibility = View.VISIBLE
+                error_txt.text =getString(R.string.unfortunately_error)
+                search_again_btn.visibility=View.VISIBLE
+            }
         } else {
             error_view.visibility = View.GONE
         }
@@ -361,6 +373,11 @@ class RestaurantList : BaseFragment() {
                     (parentFragment as HomeFragment).addFragment(R.id.home_fragment_container, fragment, DetailsFragment.TAG, false)
                 }
             })
+
+            val sectionItemDecoration = RecyclerSectionItemDecoration(resources.getDimensionPixelSize(R.dimen._40sdp),
+                    true,
+                    getSectionCallback(list))
+            addItemDecoration(sectionItemDecoration)
             layoutManager = LinearLayoutManager(context)
             adapter = mAdapter
         }
@@ -369,6 +386,22 @@ class RestaurantList : BaseFragment() {
         progress_bar.visibility = View.GONE
 
 
+    }
+
+    private fun getSectionCallback(list: ArrayList<StatusWiseRestaurant>): RecyclerSectionItemDecoration.SectionCallback {
+        return object : RecyclerSectionItemDecoration.SectionCallback {
+           override fun isSection(position: Int): Boolean {
+                Log.e("TAG", "in section---")
+                return position == 0 || position == 1 || position == 2
+            }
+
+            override  fun getSectionHeader(position: Int): CharSequence {
+                Log.e("TAG", "get section---")
+
+                return list[position]
+                        .status
+            }
+        }
     }
 
 
@@ -449,6 +482,7 @@ class RestaurantList : BaseFragment() {
                 val bundle = Bundle()
                 if(restaurantlist.restaurantlistmodel !=null){
                     // move : actual list
+                    restaurantlist.is_from_filter=true
                     bundle.putSerializable(Constants.KOKKEN_RESTAURANTLISTMODEL, restaurantlist.restaurantlistmodel)
                     intent.putExtra(Constants.BUNDLE, bundle)
                     restaurantlist.startActivityForResult(intent, Constants.REQ_FILTER_RESAURANT_LIST)
@@ -461,6 +495,7 @@ class RestaurantList : BaseFragment() {
             if(restaurantlist.progress_bar.visibility == View.GONE){
                 val intent = Intent(restaurantlist.context, Tilpas::class.java)
                 val bundle = Bundle()
+                restaurantlist.is_from_filter=true
                 bundle.putSerializable(Constants.TILPAS_RESTAURANTLISTMODEL, restaurantlist.restaurantlistmodel)
                 Log.e("TAG","btn actual--"+restaurantlist.restaurantlistmodel!!.restaurant_list.open_now.size.toString())
                 intent.putExtra(Constants.BUNDLE, bundle)

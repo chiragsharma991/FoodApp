@@ -6,6 +6,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.graphics.Canvas
 import android.graphics.Paint
@@ -30,7 +31,6 @@ import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.adapter.OrderListAdapter
 import dk.eatmore.foodapp.databinding.FragmentHomeFragmentBinding
 import dk.eatmore.foodapp.model.home.UI_HomeFragment
-import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import kotlinx.android.synthetic.main.fragment_home_fragment.*
 import com.google.android.gms.auth.api.signin.GoogleSignInClient
@@ -45,9 +45,7 @@ import dk.eatmore.foodapp.databinding.SwipeCartItemBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedRestaurant
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
-import dk.eatmore.foodapp.utils.BindDataUtils
-import dk.eatmore.foodapp.utils.CommanAPI
-import dk.eatmore.foodapp.utils.Constants
+import dk.eatmore.foodapp.utils.*
 import kotlinx.android.synthetic.main.toolbar.*
 import java.util.ArrayList
 
@@ -316,6 +314,8 @@ class HomeFragment : CommanAPI() {
         fun onFindClicked(view: View) {
 
             if (find_rest_edt.text.trim().toString().length > 0) {
+               // val intent = Intent(homefragment.context,LocationFinder :: class.java)
+               // startActivity(intent)
                 val restaurantlist = RestaurantList.newInstance(find_rest_edt.text.trim().toString())
                 addFragment(R.id.home_fragment_container, restaurantlist, RestaurantList.TAG, true)
             }

@@ -325,7 +325,7 @@ class DetailsFragment : BaseFragment() {
         // this is update method will call in both category and details.
         try{
             total_cartcnt= total_cartcnt + count
-            badge_notification_txt.visibility = if (total_cartcnt == 0) View.GONE else View.VISIBLE
+            badge_notification_txt.visibility = View.GONE
             if((ui_model!!.category_menulist.value!!.is_restaurant_closed !=null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) &&
                     (ui_model!!.category_menulist.value!!.pre_order !=null && ui_model!!.category_menulist.value!!.pre_order == false)){
                 toolbar_badge_view.visibility= View.GONE
@@ -333,8 +333,11 @@ class DetailsFragment : BaseFragment() {
             }else{
                 toolbar_badge_view.visibility= if (total_cartcnt == 0) View.GONE else View.VISIBLE
             }
-            badge_notification_txt.text= total_cartcnt.toString()
-            badge_countprice.text= BindDataUtils.convertCurrencyToDanish(total_cartamt)
+          //  badge_notification_txt.text= total_cartcnt.toString()
+            if(total_cartcnt == 0 ||total_cartcnt == 1)
+                badge_countprice.text= BindDataUtils.convertCurrencyToDanish(total_cartamt)
+            else
+                badge_countprice.text= String.format(getString(R.string.count_ammount),total_cartcnt,BindDataUtils.convertCurrencyToDanish(total_cartamt))
         }catch (e : Exception){
             loge(TAG,"exception: - "+e.message)
         }
@@ -525,7 +528,9 @@ class DetailsFragment : BaseFragment() {
 
     private fun tapOnRating() {
 
-        if(ui_model!!.category_menulist.value!!.is_restaurant_closed !=null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true ){
+        if((ui_model!!.category_menulist.value!!.is_restaurant_closed !=null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) &&
+                (ui_model!!.category_menulist.value!!.pre_order !=null && ui_model!!.category_menulist.value!!.pre_order == false)){
+            // closed restaurant---
             viewpager.setCurrentItem(0,true)
         }else{
             viewpager.setCurrentItem(1,true)

@@ -229,7 +229,7 @@ class Profile : BaseFragment() {
             profile.logOut()
         }
         fun healthreport(view: View){
-            profile.healthreport = HealthReport.newInstance()
+            profile.healthreport = HealthReport.newInstance("http://www.findsmiley.dk")
             profile.addFragment(R.id.profile_container, profile.healthreport!!, HealthReport.TAG, false)
         }
         fun profileInfo(view: View){

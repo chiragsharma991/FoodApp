@@ -100,11 +100,12 @@
                 style="@style/Subtitle_TextViewSmall"
                 android:id="@+id/free_txt"
                 android:visibility="@{restaurant.free_text.equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}"
-                android:text="@{restaurant.free_text.replace(`\n`,``).replace(`\r`,``)}"
+                android:text="@{restaurant.free_text.trim()}"
                 android:layout_marginBottom="@dimen/_8sdp"
                 android:textColor="@color/theme_color"
                 android:gravity="center_horizontal"
                 />
+            <!--            android:text="@{restaurant.free_text.replace(`\n`,``).replace(`\r`,``)}"-->
 
 
             <android.support.v7.widget.CardView

@@ -84,6 +84,7 @@
 
                     <android.support.v7.widget.AppCompatTextView
                         style="@style/Titlelight_TextViewSmall"
+                        android:fontFamily="@font/ubuntu_r"
                         android:layout_gravity="center_vertical"
                         android:layout_width="match_parent"
                         android:layout_weight="1"
@@ -108,14 +109,14 @@
                     android:layout_width="match_parent"
                     android:layout_height="1dp"
                     android:alpha="0.2"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:background="@color/divider_color"
                     />
 
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:orientation="horizontal">
 
 
@@ -197,7 +198,7 @@
                 <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
@@ -228,14 +229,14 @@
                             android:background="@color/divider_color">
 
                         </View>
+
+
                         <View
                             android:layout_width="0dp"
                             android:layout_height="match_parent"
                             android:alpha="0.2"
-                            android:id="@+id/view06"
-                            android:layout_calculatewidth="@{restaurant.rating_details.get(0).rate_per}"
                             android:background="@color/theme_color"
-
+                            android:layout_calculatewidth="@{restaurant.rating_details.get(0).rate_per}"
                             >
 
                         </View>
@@ -631,7 +632,7 @@
                     android:layout_height="1dp"
                     android:alpha="0.2"
                     android:visibility="visible"
-                    android:layout_marginTop="@dimen/_8sdp"
+                    android:layout_marginTop="@dimen/_16sdp"
                     android:background="@color/divider_color"
                     />
 

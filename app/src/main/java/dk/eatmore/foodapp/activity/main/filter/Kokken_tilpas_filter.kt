@@ -20,6 +20,7 @@ abstract class Kokken_tilpas_filter : BaseActivity() {
     fun filterbyKokken(kokkenType_list: ArrayList<RestaurantList.kokken_Model>, easysort_list: ArrayList<RestaurantList.kokken_Model>, tilpassort_list: ArrayList<RestaurantList.kokken_Model>, restaurantlistmodel: RestaurantListModel) {
 
         // Note: if checkedItem list is [""] empty then it will add all list  just like select All option.
+        // $contains -> specific object $conainsAll -> collection type like model class
         val checkedItem: ArrayList<String> = ArrayList()
         for (kokken_Model_ in kokkenType_list) {
             if (kokken_Model_.is_itemselected && !(kokken_Model_.itemtype.trim() == getString(R.string.all).trim())) {
@@ -32,18 +33,44 @@ abstract class Kokken_tilpas_filter : BaseActivity() {
 
         for (i in 0 until restaurantlistmodel.restaurant_list.open_now.size) {
             loge(KokkenType.TAG, "check-" + restaurantlistmodel.restaurant_list.open_now[i].cuisines_list.toString() + "-" + checkedItem.toString() + "-")
-            if (restaurantlistmodel.restaurant_list.open_now[i].cuisines_list.containsAll(checkedItem)) {
+            if(checkedItem.size <= 0){
+                // if All is select
                 open_now.add(restaurantlistmodel.restaurant_list.open_now.get(i))
+            }else{
+                for (j in 0 until checkedItem.size ){
+                    if (restaurantlistmodel.restaurant_list.open_now[i].cuisines_list.contains(checkedItem[j])) {
+                        open_now.add(restaurantlistmodel.restaurant_list.open_now.get(i))
+                        break
+                    }
+                }
             }
+
+
         }
         for (i in 0 until restaurantlistmodel.restaurant_list.pre_order.size) {
-            if (restaurantlistmodel.restaurant_list.pre_order[i].cuisines_list.containsAll(checkedItem)) {
+            if(checkedItem.size <= 0){
+                // if All is select
                 pre_order.add(restaurantlistmodel.restaurant_list.pre_order.get(i))
+            }else{
+                for (j in 0 until checkedItem.size ){
+                    if (restaurantlistmodel.restaurant_list.pre_order[i].cuisines_list.contains(checkedItem[j])) {
+                        pre_order.add(restaurantlistmodel.restaurant_list.pre_order.get(i))
+                        break
+                    }
+                }
             }
         }
         for (i in 0 until restaurantlistmodel.restaurant_list.closed.size) {
-            if (restaurantlistmodel.restaurant_list.closed[i].cuisines_list.containsAll(checkedItem)) {
+            if(checkedItem.size <= 0){
+                // if All is select
                 closed.add(restaurantlistmodel.restaurant_list.closed.get(i))
+            }else{
+                for (j in 0 until checkedItem.size ){
+                    if (restaurantlistmodel.restaurant_list.closed[i].cuisines_list.contains(checkedItem[j])) {
+                        closed.add(restaurantlistmodel.restaurant_list.closed.get(i))
+                        break
+                    }
+                }
             }
         }
 
@@ -234,7 +261,9 @@ abstract class Kokken_tilpas_filter : BaseActivity() {
             Collections.sort(restaurantlistmodel.restaurant_list.open_now, object : Comparator<Restaurant> {
                 override fun compare(lhs: Restaurant, rhs: Restaurant): Int {
 
-                    if(lhs.total_rating > rhs.total_rating){
+                    if(lhs.total_rating == rhs.total_rating){
+                        return 0
+                    } else if(lhs.total_rating > rhs.total_rating){
                         return -1
                     }else{
                         return 1
@@ -246,7 +275,9 @@ abstract class Kokken_tilpas_filter : BaseActivity() {
             Collections.sort(restaurantlistmodel.restaurant_list.pre_order, object : Comparator<Restaurant> {
                 override fun compare(lhs: Restaurant, rhs: Restaurant): Int {
 
-                    if(lhs.total_rating > rhs.total_rating){
+                    if(lhs.total_rating == rhs.total_rating){
+                        return 0
+                    } else if(lhs.total_rating > rhs.total_rating){
                         return -1
                     }else{
                         return 1
@@ -258,7 +289,9 @@ abstract class Kokken_tilpas_filter : BaseActivity() {
             Collections.sort(restaurantlistmodel.restaurant_list.closed, object : Comparator<Restaurant> {
                 override fun compare(lhs: Restaurant, rhs: Restaurant): Int {
 
-                    if(lhs.total_rating > rhs.total_rating){
+                    if(lhs.total_rating == rhs.total_rating){
+                        return 0
+                    } else if(lhs.total_rating > rhs.total_rating){
                         return -1
                     }else{
                         return 1
@@ -279,7 +312,9 @@ abstract class Kokken_tilpas_filter : BaseActivity() {
             Collections.sort(restaurantlistmodel.restaurant_list.open_now, object : Comparator<Restaurant> {
                 override fun compare(lhs: Restaurant, rhs: Restaurant): Int {
 
-                    if(lhs.sort_delivery_charge > rhs.sort_delivery_charge){
+                    if(lhs.sort_delivery_charge == rhs.sort_delivery_charge){
+                        return 0
+                    }else if(lhs.sort_delivery_charge > rhs.sort_delivery_charge){
                         return 1
                     }else{
                         return -1
@@ -291,7 +326,9 @@ abstract class Kokken_tilpas_filter : BaseActivity() {
             Collections.sort(restaurantlistmodel.restaurant_list.pre_order, object : Comparator<Restaurant> {
                 override fun compare(lhs: Restaurant, rhs: Restaurant): Int {
 
-                    if(lhs.sort_delivery_charge > rhs.sort_delivery_charge){
+                    if(lhs.sort_delivery_charge == rhs.sort_delivery_charge){
+                        return 0
+                    }else if(lhs.sort_delivery_charge > rhs.sort_delivery_charge){
                         return 1
                     }else{
                         return -1
@@ -303,7 +340,9 @@ abstract class Kokken_tilpas_filter : BaseActivity() {
             Collections.sort(restaurantlistmodel.restaurant_list.closed, object : Comparator<Restaurant> {
                 override fun compare(lhs: Restaurant, rhs: Restaurant): Int {
 
-                    if(lhs.sort_delivery_charge > rhs.sort_delivery_charge){
+                    if(lhs.sort_delivery_charge == rhs.sort_delivery_charge){
+                        return 0
+                    }else if(lhs.sort_delivery_charge > rhs.sort_delivery_charge){
                         return 1
                     }else{
                         return -1
@@ -324,7 +363,9 @@ abstract class Kokken_tilpas_filter : BaseActivity() {
             Collections.sort(restaurantlistmodel.restaurant_list.open_now, object : Comparator<Restaurant> {
                 override fun compare(lhs: Restaurant, rhs: Restaurant): Int {
 
-                    if(lhs.sort_min_order_price > rhs.sort_min_order_price){
+                    if(lhs.sort_min_order_price == rhs.sort_min_order_price){
+                        return 0
+                    }else if(lhs.sort_min_order_price > rhs.sort_min_order_price){
                         return 1
                     }else{
                         return -1
@@ -336,7 +377,9 @@ abstract class Kokken_tilpas_filter : BaseActivity() {
             Collections.sort(restaurantlistmodel.restaurant_list.pre_order, object : Comparator<Restaurant> {
                 override fun compare(lhs: Restaurant, rhs: Restaurant): Int {
 
-                    if(lhs.sort_min_order_price > rhs.sort_min_order_price){
+                    if(lhs.sort_min_order_price == rhs.sort_min_order_price){
+                        return 0
+                    }else if(lhs.sort_min_order_price > rhs.sort_min_order_price){
                         return 1
                     }else{
                         return -1
@@ -348,7 +391,9 @@ abstract class Kokken_tilpas_filter : BaseActivity() {
             Collections.sort(restaurantlistmodel.restaurant_list.closed, object : Comparator<Restaurant> {
                 override fun compare(lhs: Restaurant, rhs: Restaurant): Int {
 
-                    if(lhs.sort_min_order_price > rhs.sort_min_order_price){
+                    if(lhs.sort_min_order_price == rhs.sort_min_order_price){
+                        return 0
+                    }else if(lhs.sort_min_order_price > rhs.sort_min_order_price){
                         return 1
                     }else{
                         return -1
@@ -370,6 +415,8 @@ abstract class Kokken_tilpas_filter : BaseActivity() {
                 override fun compare(lhs: Restaurant, rhs: Restaurant): Int {
 
                     if(lhs.sort_created_date > rhs.sort_created_date){
+                        return 0
+                    }else if(lhs.sort_created_date > rhs.sort_created_date){
                         return -1
                     }else{
                         return 1
@@ -382,6 +429,8 @@ abstract class Kokken_tilpas_filter : BaseActivity() {
                 override fun compare(lhs: Restaurant, rhs: Restaurant): Int {
 
                     if(lhs.sort_created_date > rhs.sort_created_date){
+                        return 0
+                    }else if(lhs.sort_created_date > rhs.sort_created_date){
                         return -1
                     }else{
                         return 1
@@ -394,6 +443,8 @@ abstract class Kokken_tilpas_filter : BaseActivity() {
                 override fun compare(lhs: Restaurant, rhs: Restaurant): Int {
 
                     if(lhs.sort_created_date > rhs.sort_created_date){
+                        return 0
+                    }else if(lhs.sort_created_date > rhs.sort_created_date){
                         return -1
                     }else{
                         return 1

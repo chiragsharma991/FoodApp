@@ -38,7 +38,7 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
+                android:layout_marginTop="@dimen/_16sdp"
                 android:orientation="vertical"
                 >
                 <LinearLayout
@@ -52,7 +52,7 @@
                         style="@style/Titlelight_TextViewSmall"
                         android:layout_gravity="center_vertical"
                         android:layout_marginLeft="@dimen/_3sdp"
-                        android:fontFamily="@font/ubuntu_m"
+                        android:fontFamily="@font/ubuntu_r"
                         android:layout_weight="1.05"
                         android:text="@{review_list.review_by}"
                         />

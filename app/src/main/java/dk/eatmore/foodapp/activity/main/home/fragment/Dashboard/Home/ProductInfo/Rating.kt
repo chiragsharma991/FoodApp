@@ -72,7 +72,6 @@ class Rating : BaseFragment(), RecyclerClickListner {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if(savedInstanceState == null){
             logd(TAG,"saveInstance NULL")
-            getlength()
             restaurant= arguments!!.getSerializable(Constants.RESTAURANT) as Restaurant
             clickEvent = MyClickHandler(this)
             binding.restaurant=restaurant
@@ -104,29 +103,6 @@ class Rating : BaseFragment(), RecyclerClickListner {
         binder.reviewList=model
         binder.handler=this
     }
-
-    private fun getlength(){
-
-            val observer = rating_line.getViewTreeObserver()
-            observer.addOnGlobalLayoutListener(object: ViewTreeObserver.OnGlobalLayoutListener {
-                override fun onGlobalLayout() {
-                    val headerLayoutHeight = rating_line.getHeight()
-                    val headerLayoutWidth = rating_line.getWidth()
-                    val density = context!!.getResources().displayMetrics.density
-                    val px = 100 * density
-                    val dp = 100 / density
-                    loge("view length is ",""+headerLayoutHeight+" "+headerLayoutWidth+" "+px+" "+dp)
-                    view06.layoutParams.width=0
-                    view06.requestLayout()
-                    rating_line.getViewTreeObserver().removeGlobalOnLayoutListener(
-                            this)
-                }
-            })
-
-    }
-
-
-
 
 
 

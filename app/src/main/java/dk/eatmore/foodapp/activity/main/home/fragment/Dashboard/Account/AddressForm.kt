@@ -33,6 +33,7 @@ import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.ragistration_form.*
 import kotlinx.android.synthetic.main.toolbar.*
+import retrofit2.Call
 import java.util.*
 
 class AddressForm : BaseFragment(), TextWatcher {
@@ -43,9 +44,10 @@ class AddressForm : BaseFragment(), TextWatcher {
     private  var mAdapter: CartViewAdapter?=null
     private lateinit var binding: RagistrationFormBinding
     private lateinit var homeFragment: HomeFragment
-    private lateinit var address: EditAddress.Messages
+    private var address: EditAddress.Messages? = null
     private val inputValidStates = HashMap<EditText, Boolean>()
     private var postalcity: LinkedHashMap<String, String> ?=null
+    var call_save_edt_address : Call<JsonObject>? = null
 
 
 
@@ -58,6 +60,10 @@ class AddressForm : BaseFragment(), TextWatcher {
             val bundle =Bundle()
             bundle.putSerializable(Constants.ADDRESS,address)
             fragment.arguments=bundle
+            return fragment
+        }
+        fun newInstance() : AddressForm {
+            val fragment = AddressForm()
             return fragment
         }
     }
@@ -77,7 +83,6 @@ class AddressForm : BaseFragment(), TextWatcher {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
-            txt_toolbar.text=getString(R.string.edit_address)
             img_toolbar_back.setImageResource(R.drawable.close)
             img_toolbar_back.setOnClickListener{(activity as HomeActivity).onBackPressed()}
             //   setToolbarforThis()
@@ -89,20 +94,38 @@ class AddressForm : BaseFragment(), TextWatcher {
                     postalcity!!.put(RestaurantList.ui_model!!.restaurantList.value!!.postal_city[i].postal_code,RestaurantList.ui_model!!.restaurantList.value!!.postal_city[i].city_name)
                 }
             }
-            address= arguments!!.getSerializable(Constants.ADDRESS) as EditAddress.Messages
-            loge(TAG,"city is"+address.city)
-            binding.address=address
+            address= arguments?.getSerializable(Constants.ADDRESS) as EditAddress.Messages?
+            if(address == null){
+                // Add address
+                txt_toolbar.text=getString(R.string.add_new_address)
+                Handler().postDelayed({
+                    city_edt.addTextChangedListener(this)
+                    postnumber_edt.addTextChangedListener(this)
+                    street_edt.addTextChangedListener(this)
+                    house_edt.addTextChangedListener(this)
+                    inputValidStates[postnumber_edt] = false
+                    inputValidStates[street_edt] = false
+                    inputValidStates[house_edt] = false
+                    inputValidStates[city_edt] = false
+                },200)
+            }else{
+                // Edit address
+                txt_toolbar.text=getString(R.string.edit_address)
+                binding.address=address
+                Handler().postDelayed({
+                    city_edt.addTextChangedListener(this)
+                    postnumber_edt.addTextChangedListener(this)
+                    street_edt.addTextChangedListener(this)
+                    house_edt.addTextChangedListener(this)
+                    inputValidStates[postnumber_edt] = true
+                    inputValidStates[street_edt] = true
+                    inputValidStates[house_edt] = true
+                    inputValidStates[city_edt] = true
+                },200)
 
-            Handler().postDelayed({
-                city_edt.addTextChangedListener(this)
-                postnumber_edt.addTextChangedListener(this)
-                street_edt.addTextChangedListener(this)
-                house_edt.addTextChangedListener(this)
-                inputValidStates[postnumber_edt] = true
-                inputValidStates[street_edt] = true
-                inputValidStates[house_edt] = true
-                inputValidStates[city_edt] = true
-            },200)
+            }
+
+
 
             postnumber_edt.imeOptions= EditorInfo.IME_ACTION_DONE
             postnumber_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
@@ -149,7 +172,31 @@ class AddressForm : BaseFragment(), TextWatcher {
     fun moveon_save(){
 
         if (validationFields()) {
-            saveuserInfo(address.id)
+            val postParam = JsonObject()
+            postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
+            postParam.addProperty(Constants.EATMORE_APP,true)
+            postParam.addProperty(Constants.IS_LOGIN, "1")
+            postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
+            postParam.addProperty(Constants.STREET, street_edt.text.trim().toString())
+            postParam.addProperty(Constants.HOUSE_NO, house_edt.text.trim().toString())
+            postParam.addProperty(Constants.FLOOR_DOOR, floor_edt.text.trim().toString())
+            postParam.addProperty(Constants.POSTAL_CODE, postnumber_edt.text.trim().toString())
+            postParam.addProperty(Constants.CITY, city_edt.text.trim().toString())
+            postParam.addProperty(Constants.ADDRESS_TITLE, address_title.text.trim().toString())
+            postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+            postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+
+            if(address == null){
+                // Add address
+                call_save_edt_address = ApiCall.add_shippingaddress(jsonObject = postParam)
+                saveuserInfo()
+            }else{
+                // Edit address
+                postParam.addProperty(Constants.ID, address!!.id)
+                call_save_edt_address = ApiCall.edit_shippingaddress(jsonObject = postParam)
+                saveuserInfo()
+            }
+
         }
     }
 
@@ -192,27 +239,10 @@ class AddressForm : BaseFragment(), TextWatcher {
     }
 
 
-    private fun saveuserInfo(id : String) {
+    private fun saveuserInfo() {
 
         showProgressDialog()
-        val postParam = JsonObject()
-        postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
-        postParam.addProperty(Constants.EATMORE_APP,true)
-        postParam.addProperty(Constants.ID, id)
-        postParam.addProperty(Constants.IS_LOGIN, "1")
-        postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
-        postParam.addProperty(Constants.STREET, street_edt.text.trim().toString())
-        postParam.addProperty(Constants.HOUSE_NO, house_edt.text.trim().toString())
-        postParam.addProperty(Constants.FLOOR_DOOR, floor_edt.text.trim().toString())
-        postParam.addProperty(Constants.POSTAL_CODE, postnumber_edt.text.trim().toString())
-        postParam.addProperty(Constants.CITY, city_edt.text.trim().toString())
-        postParam.addProperty(Constants.ADDRESS_TITLE, address_title.text.trim().toString())
-        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
-        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
-
-        callAPI(ApiCall.edit_shippingaddress(
-                jsonObject = postParam
-        ), object : BaseFragment.OnApiCallInteraction {
+        callAPI(call_save_edt_address!!, object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
                 val jsonObject = body as JsonObject

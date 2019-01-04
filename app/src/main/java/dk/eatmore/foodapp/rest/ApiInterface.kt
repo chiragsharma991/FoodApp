@@ -156,6 +156,10 @@ interface ApiInterface {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun edit_shippingaddress(@Body jsonObject: JsonObject): Call<JsonObject>
 
+    @POST("Enduser/enduser/add-shipping-address")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun add_shippingaddress(@Body jsonObject: JsonObject): Call<JsonObject>
+
     @FormUrlEncoded
     @POST("Enduser/enduser/update_record")
     fun update_record(

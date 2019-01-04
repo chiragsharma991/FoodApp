@@ -69,6 +69,7 @@
                         style="@style/TitleMidiumlight_TextViewMid"
                         android:layout_gravity="center_vertical"
                         android:layout_width="match_parent"
+                        android:gravity="center_horizontal"
                         android:text="@{restaurant.restaurant_name}"
                         />
 
@@ -76,6 +77,7 @@
                         style="@style/Subtitle_TextViewSmall"
                         android:layout_gravity="center_vertical"
                         android:layout_width="match_parent"
+                        android:gravity="center_horizontal"
                         android:text="@{restaurant.address}"
                         />
 
@@ -83,9 +85,11 @@
                         style="@style/Subtitle_TextViewSmall"
                         android:layout_gravity="center_vertical"
                         android:layout_width="match_parent"
-                        android:text="@string/food_administration"
+                        android:textColor="@color/dark_blue"
+                        android:text="@{restaurant.health_report_link}"
+                        android:gravity="center_horizontal"
                         android:onClick="@{handler::tapOnHealthReport}"
-                        android:textColor="@color/theme_color" />
+                        />
 
 
 

@@ -28,6 +28,7 @@ import dk.eatmore.foodapp.activity.main.epay.fragment.DeliveryTimeslot
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.EditAddress
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.SelectAddress
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.RestaurantList
 import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.FragmentAddressBinding
 import dk.eatmore.foodapp.databinding.RowAddressBinding
@@ -52,6 +53,7 @@ class Address : BaseFragment(), TextWatcher {
     private lateinit var homeFragment: HomeFragment
     private val inputValidStates = java.util.HashMap<EditText, Boolean>()
     private lateinit var restaurant : Restaurant
+    private var postalcity: java.util.LinkedHashMap<String, String>?=null
     private var call_userinfo  : Call<JsonObject>? =null
     private var call_deliveryDetails  : Call<JsonObject>? =null
 
@@ -104,6 +106,16 @@ class Address : BaseFragment(), TextWatcher {
             inputValidStates[street_edt] = false
             inputValidStates[house_edt] = false
             inputValidStates[city_edt] = false
+
+            if(RestaurantList.ui_model !=null){
+                // Add postal code if restaurant list is open anotherwise null
+                loge(AddressForm.TAG,"postal size is-"+ RestaurantList.ui_model!!.restaurantList.value!!.postal_city.size.toString())
+                postalcity = java.util.LinkedHashMap<String, String>()
+                for(i in 0 until RestaurantList.ui_model!!.restaurantList.value!!.postal_city.size){
+                    postalcity!!.put(RestaurantList.ui_model!!.restaurantList.value!!.postal_city[i].postal_code, RestaurantList.ui_model!!.restaurantList.value!!.postal_city[i].city_name)
+                }
+            }
+
             postnumber_edt.imeOptions=EditorInfo.IME_ACTION_DONE
             postnumber_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
                 override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
@@ -117,15 +129,18 @@ class Address : BaseFragment(), TextWatcher {
                 moveon_next()
             }
             change_txt.setOnClickListener{
-                val fragment = SelectAddress.newInstance()
-                var enter : Slide?=null
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    enter = Slide()
-                    enter.setDuration(300)
-                    enter.slideEdge = Gravity.BOTTOM
-                    fragment.enterTransition=enter
+
+                if(progress_bar.visibility == View.GONE){
+                    val fragment = SelectAddress.newInstance()
+                    var enter : Slide?=null
+                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                        enter = Slide()
+                        enter.setDuration(300)
+                        enter.slideEdge = Gravity.BOTTOM
+                        fragment.enterTransition=enter
+                    }
+                    (parentFragment as EpayFragment).addFragment(R.id.epay_container,fragment, SelectAddress.TAG,false)
                 }
-                (parentFragment as EpayFragment).addFragment(R.id.epay_container,fragment, SelectAddress.TAG,false)
             }
             ui_model = createViewModel()
             if (ui_model!!.user_infoList.value == null) {
@@ -193,9 +208,14 @@ class Address : BaseFragment(), TextWatcher {
 
         } else if (postnumber_edt.text.hashCode() == s!!.hashCode()) {
             postnumber_edt.error = null
+
             if (postnumber_edt.text.trim().toString().length > 0) {
-                inputValidStates[postnumber_edt] = true
-                city_edt.setText(ui_model!!.user_infoList.value!!.postal_city.get(postnumber_edt.text.toString()))
+                if(postalcity == null){
+                    inputValidStates[postnumber_edt] = false
+                }else{
+                    inputValidStates[postnumber_edt] = true
+                    city_edt.setText(postalcity!!.get(postnumber_edt.text.toString()))
+                }
             } else
                 inputValidStates[postnumber_edt] = false
 
@@ -345,9 +365,16 @@ class Address : BaseFragment(), TextWatcher {
                     ui_model!!.user_infoList.value = userinfo_model
                     loge(TAG, "data is---" + userinfo_model.user_info.telephone_no + " " + userinfo_model.user_info.name)
                   //  progresswheel(progresswheel,false)
-                    progress_bar.visibility=View.GONE
                     // ui_model!!.user_infoList.value!!.user_info.name
+                    progress_bar.visibility=View.GONE
+
                 }
+                else{
+                    progress_bar.visibility=View.GONE
+                    empty_view.visibility=View.VISIBLE
+                }
+
+
             }
 
             override fun onFail(error: Int) {

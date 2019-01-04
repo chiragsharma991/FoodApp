@@ -132,6 +132,9 @@ class ApiCall {
         fun edit_shippingaddress(jsonObject: JsonObject ) : Call<JsonObject> {
             return getApiInterface().edit_shippingaddress(jsonObject)
         }
+        fun add_shippingaddress(jsonObject: JsonObject ) : Call<JsonObject> {
+            return getApiInterface().add_shippingaddress(jsonObject)
+        }
         fun update_record(auth_key : String, telephone_no : String, first_name : String, eatmore_app : Boolean, email : String, id : String) : Call<JsonObject> {
             return getApiInterface().update_record(auth_key =auth_key, telephone_no = telephone_no, first_name = first_name, eatmore_app = eatmore_app, email = email, id = id,app = Constants.RESTAURANT_FOOD_ANDROID )
         }

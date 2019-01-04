@@ -288,6 +288,7 @@
                                     android:background="@color/background_light"
                                     android:backgroundTint="@color/theme_color"
                                     android:text="@{ordertype}"
+                                    android:fontFamily="@font/hindvadodara_light"
                                     android:textColor="@color/white"
                                     android:visibility="@{(ordertype.equalsIgnoreCase(@string/notavailable)) ? View.INVISIBLE : View.VISIBLE }" />
 
