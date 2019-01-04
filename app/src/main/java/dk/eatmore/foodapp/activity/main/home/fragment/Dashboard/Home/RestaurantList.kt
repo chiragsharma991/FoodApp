@@ -58,7 +58,7 @@ class RestaurantList : BaseFragment() {
     private lateinit var binding: RestaurantlistBinding
     private lateinit var clickEvent: MyClickHandler
     private lateinit var list: ArrayList<StatusWiseRestaurant>
-    private lateinit var mAdapter: RestaurantListParentAdapter
+    private  var mAdapter: RestaurantListParentAdapter? = null
     private var call_restaurantlist: Call<RestaurantListModel>? = null
     private val overall_cuisines_list: ArrayList<String> = ArrayList()
     private  var restaurantlistmodel: RestaurantListModel? =null
@@ -322,34 +322,40 @@ class RestaurantList : BaseFragment() {
             error_view.visibility = View.GONE
         }
 
-
+   /*     if(mAdapter !=null){
+            loge(TAG,"notified---")
+            mAdapter!!.notifyDataSetChanged()
+            progress_bar.visibility = View.GONE
+            return
+        }*/
         recycler_view_parent.apply {
-
-          /*  recycler_view_parent.addOnScrollListener(object : HidingScrollListener() {
-                override fun onHide() {
-                    Log.e(TAG,"-"+"Hide----")
-                    toolbar.visibility=View.GONE
-                    toolbar.animate().translationY((-toolbar.getHeight()).toFloat()).setInterpolator(AccelerateInterpolator(2f))
-                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).bottom_menu.animate()
-                            .translationY((-((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).bottom_menu.getHeight()).toFloat()).setInterpolator(AccelerateInterpolator(2f))
+            loge(TAG,"recycler_view_parent---")
 
 
-                }
+            /*  recycler_view_parent.addOnScrollListener(object : HidingScrollListener() {
+                  override fun onHide() {
+                      Log.e(TAG,"-"+"Hide----")
+                      toolbar.visibility=View.GONE
+                      toolbar.animate().translationY((-toolbar.getHeight()).toFloat()).setInterpolator(AccelerateInterpolator(2f))
+                      ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).bottom_menu.animate()
+                              .translationY((-((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).bottom_menu.getHeight()).toFloat()).setInterpolator(AccelerateInterpolator(2f))
 
-                override fun onShow() {
-                    Log.e(TAG,"-"+"Show----")
-                 //   toolbar.visibility=View.VISIBLE
 
-                              toolbar.animate().translationY(0f).setInterpolator(DecelerateInterpolator(2f))
-                              ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).bottom_menu.animate().translationY(0f).setInterpolator(DecelerateInterpolator(2f))
+                  }
 
-                }
-            }
-            )*/
+                  override fun onShow() {
+                      Log.e(TAG,"-"+"Show----")
+                   //   toolbar.visibility=View.VISIBLE
+
+                                toolbar.animate().translationY(0f).setInterpolator(DecelerateInterpolator(2f))
+                                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).bottom_menu.animate().translationY(0f).setInterpolator(DecelerateInterpolator(2f))
+
+                  }
+              }
+              )*/
 
             mAdapter = RestaurantListParentAdapter(context!!, list, object : RestaurantListParentAdapter.AdapterListener {
                 override fun itemClicked(parentView: Boolean, parentPosition: Int, chilPosition: Int) {
-                    loge(TAG, "clicked---")
                     if (progress_bar.visibility == View.VISIBLE) return
                     val fragment = DetailsFragment.newInstance(
                             //    restaurant = list.get(parentPosition).restaurant.get(chilPosition),
@@ -374,9 +380,14 @@ class RestaurantList : BaseFragment() {
                 }
             })
 
-            val sectionItemDecoration = RecyclerSectionItemDecoration(resources.getDimensionPixelSize(R.dimen._40sdp),
+            val sectionItemDecoration = RecyclerSectionItemDecoration(resources.getDimensionPixelSize(R.dimen._45sdp),
                     true,
                     getSectionCallback(list))
+          //  removeItemDecoration(sectionItemDecoration)
+            while (recycler_view_parent.getItemDecorationCount() > 0) {
+                loge(TAG, "clicked---"+recycler_view_parent.getItemDecorationCount() )
+                recycler_view_parent.removeItemDecorationAt(0);
+            }
             addItemDecoration(sectionItemDecoration)
             layoutManager = LinearLayoutManager(context)
             adapter = mAdapter

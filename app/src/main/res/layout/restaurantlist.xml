@@ -256,15 +256,12 @@
 
                         </android.support.design.widget.AppBarLayout>
 
-                        <android.support.v4.widget.NestedScrollView
+               <!--         <android.support.v4.widget.NestedScrollView
                             android:id="@+id/nested_scroll"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent">
+                            android:layout_height="match_parent">-->
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:orientation="vertical">
+
                                 <!--  <android.support.v7.widget.CardView
                                       style="@style/CardViewStyle"
                                       android:id="@+id/search_view"
@@ -281,15 +278,18 @@
                                     android:id="@+id/recycler_view_parent"
                                     android:layout_width="match_parent"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginTop="@dimen/_8sdp"
+                                    app:layout_behavior="@string/appbar_scrolling_view_behavior"
                                     android:clipToPadding="false"
-                                    android:nestedScrollingEnabled="false" />
+                                    android:paddingTop="@dimen/_5sdp"
+                                    android:nestedScrollingEnabled="true"
+                                    />
 
 
-                            </LinearLayout>
 
 
+<!--
                         </android.support.v4.widget.NestedScrollView>
+-->
 
                     </LinearLayout>
 

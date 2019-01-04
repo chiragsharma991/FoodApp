@@ -37,7 +37,7 @@ class RecyclerSectionItemDecoration(private val headerOffset: Int, private val s
 
         if (headerView == null) {
             headerView = inflateHeaderView(parent)
-            header = headerView!!.findViewById<View>(R.id.item_rcc_txt) as TextView
+            header = headerView!!.findViewById<View>(R.id.row_cart_txt) as TextView
             fixLayoutSize(headerView!!,
                     parent)
         }
@@ -74,7 +74,7 @@ class RecyclerSectionItemDecoration(private val headerOffset: Int, private val s
 
     private fun inflateHeaderView(parent: RecyclerView): View {
         return LayoutInflater.from(parent.context)
-                .inflate(R.layout.row_child_cart_view,
+                .inflate(R.layout.row_restaurant_sticky,
                         parent,
                         false)
     }
