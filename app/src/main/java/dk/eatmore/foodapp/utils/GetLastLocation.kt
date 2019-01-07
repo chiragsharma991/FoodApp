@@ -8,6 +8,7 @@ import android.location.Location
 import android.os.Looper
 import android.support.v4.app.ActivityCompat
 import android.util.Log
+import android.widget.Toast
 import com.google.android.gms.common.api.ApiException
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
@@ -16,7 +17,7 @@ import com.google.android.gms.location.*
  * Created by Mohit on 15-Feb-18.
  */
 
-class GetLastLocation(private val context: Activity, val onLocationInteraction: LocationUpdate.OnLocationInteraction) {
+class GetLastLocation(private val context: Activity, val onLocationInteraction: OnLocationInteraction) {
 
     /**
      * Provides access to the LocationUpdate Settings API.
@@ -45,21 +46,30 @@ class GetLastLocation(private val context: Activity, val onLocationInteraction: 
     //10 secs
     private val FASTEST_INTERVAL: Long = 2000
     //2 sec
+    private  var fusedLocationClient: FusedLocationProviderClient?=null
 
 
 
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
+
+    interface OnLocationInteraction {
+        fun onLocationUpdate(lat: Double, lng: Double)
+        fun onReqPermission()
+    }
+
+
 
     init {
         createLocationRequest()
         createLocationCallback()
         buildLocationSettingsRequest()
+        startLocationUpdates()
 
-        if (checkPermissions()) {
-            startLocationUpdates()
-        } else if (!checkPermissions()) {
-            this.onLocationInteraction.onReqPermission()
-        }
+
+        /*   if (checkPermissions()) {
+               startLocationUpdates()
+           } else if (!checkPermissions()) {
+               this.onLocationInteraction.onReqPermission()
+           }*/
     }
 
     private fun updateLocationUI() {
@@ -87,13 +97,13 @@ class GetLastLocation(private val context: Activity, val onLocationInteraction: 
     }
 
     private fun createLocationRequest() {
-//        mLocationRequest = LocationRequest()
-//        mLocationRequest!!.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        mLocationRequest = LocationRequest()
+        mLocationRequest!!.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
-        mLocationRequest = LocationRequest.create()
+    /*    mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(UPDATE_INTERVAL)
-                .setFastestInterval(FASTEST_INTERVAL)
+                .setFastestInterval(FASTEST_INTERVAL)*/
     }
 
     private fun createLocationCallback() {
@@ -103,6 +113,7 @@ class GetLastLocation(private val context: Activity, val onLocationInteraction: 
                 Log.e("mLocationCallback--",""+locationResult!!.locations)
                 mCurrentLocation = locationResult.lastLocation
                 updateLocationUI()
+
             }
         }
     }
@@ -117,27 +128,16 @@ class GetLastLocation(private val context: Activity, val onLocationInteraction: 
         mSettingsClient.checkLocationSettings(mLocationSettingsRequest)
                 .addOnSuccessListener(context) {
                     Log.e(TAG, "All location settings are satisfied.")
+
                     fusedLocationClient = LocationServices.getFusedLocationProviderClient(context)
 
-
-                    fusedLocationClient.requestLocationUpdates(mLocationRequest,
+                    if (ActivityCompat.checkSelfPermission(context, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(context!!, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+                        Log.e(TAG, "Check permission")
+                        return@addOnSuccessListener
+                    }
+                    fusedLocationClient!!.requestLocationUpdates(mLocationRequest,
                             mLocationCallback!!, Looper.myLooper())
-                    //updateLocationUI()
 
-
-                    /*   fusedLocationClient.lastLocation
-                               .addOnSuccessListener { location : Location? ->
-                                   if(location != null) {
-                                       Log.e(TAG,"location != null")
-                                       mCurrentLocation = location
-                                       updateLocationUI()
-                                   }else {
-                                       Log.e(TAG,"location == null")
-                                      // createLocationCallback()
-                                       fusedLocationClient.requestLocationUpdates(mLocationRequest,
-                                               mLocationCallback!!, Looper.myLooper())
-                                   }
-                               }*/
                 }
                 .addOnFailureListener(context) { e ->
                     val statusCode = (e as ApiException).statusCode
@@ -152,7 +152,6 @@ class GetLastLocation(private val context: Activity, val onLocationInteraction: 
                             } catch (sie: IntentSender.SendIntentException) {
                                 Log.e(TAG, "PendingIntent unable to execute request.")
                             }
-
                         }
                         LocationSettingsStatusCodes.SETTINGS_CHANGE_UNAVAILABLE -> {
                             val errorMessage = "LocationUpdate settings are inadequate, and cannot be " + "fixed here. Fix in Settings."
@@ -162,8 +161,6 @@ class GetLastLocation(private val context: Activity, val onLocationInteraction: 
                     updateLocationUI()
                 }
     }
-
-
 
  /*   fun stopLocationUpdates() {
         if (!mRequestingLocationUpdates!!) {

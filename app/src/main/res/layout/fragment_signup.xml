@@ -197,14 +197,14 @@
                         >
 
                         <android.support.design.widget.TextInputLayout
-                            android:id="@+id/input_layout_name"
+                            android:id="@+id/forgot_email_inputlayout"
                             android:layout_width="match_parent"
                             app:hintTextAppearance="@style/textinputfontstyle"
                             app:errorTextAppearance="@style/error_appearance"
                             android:layout_height="wrap_content">
 
                             <EditText
-                                android:id="@+id/input_name"
+                                android:id="@+id/forgot_email_edt"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:backgroundTint="@color/gray"

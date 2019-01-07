@@ -57,6 +57,16 @@ interface ApiInterface {
             @Field("app") app : String
     ): Call<ProductListModel>
 
+    @FormUrlEncoded
+    @POST("Enduser/enduser/forgot-password")
+    fun forgot_password(
+            @Field("auth_key") auth_key: String ,
+            @Field("eatmore_app") eatmore_app: Boolean,
+            @Field("device_type") device_type: String,
+            @Field("email") email : String,
+            @Field("app") app : String
+    ): Call<JsonObject>
+
 
     @FormUrlEncoded
     @POST("Category/category/menu")

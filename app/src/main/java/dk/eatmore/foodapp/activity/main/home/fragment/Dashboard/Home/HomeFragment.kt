@@ -193,21 +193,17 @@ class HomeFragment : CommanAPI() {
 
         if(is_location_PermissionGranted()){
             loge(TAG,"is_location_PermissionGranted---")
-   /*       val   locationUpdate = LocationUpdate(activity!!, object : LocationUpdate.OnLocationInteraction {
+            val   locationUpdate = GetLastLocation(activity!!, object : GetLastLocation.OnLocationInteraction {
                 override fun onLocationUpdate(lat: Double, lng: Double) {
                     loge(TAG, "onLocationUpdate: $lat, $lng")
-
-
+                    find_rest_edt.setText(getpostalfrom_latlang(latitude = lat,longitude = lng).trim())
                 }
 
                 override fun onReqPermission() {
                     loge(TAG, "onReqPermission: ")
                 }
             })
-*/
-
         }
-
     }
 
 
@@ -383,25 +379,14 @@ class HomeFragment : CommanAPI() {
 
         fun onFindClicked(view: View) {
 
-            val   locationUpdate = GetLastLocation(activity!!, object : LocationUpdate.OnLocationInteraction {
-                override fun onLocationUpdate(lat: Double, lng: Double) {
-                    loge(TAG, "onLocationUpdate: $lat, $lng")
-
-
-                }
-
-                override fun onReqPermission() {
-                    loge(TAG, "onReqPermission: ")
-                }
-            })
-
-          /*  if (find_rest_edt.text.trim().toString().length > 0) {
+            if (find_rest_edt.text.trim().toString().length > 0) {
                 val restaurantlist = RestaurantList.newInstance(find_rest_edt.text.trim().toString())
                 addFragment(R.id.home_fragment_container, restaurantlist, RestaurantList.TAG, true)
-            }*/
+            }
         }
         fun onFindLocation(view: View) {
-           is_location_PermissionGranted()
+           homefragment.getcurrent_location()
+
         }
 
         fun reOrder(view: View, model: OrderFragment.Orderresult) {

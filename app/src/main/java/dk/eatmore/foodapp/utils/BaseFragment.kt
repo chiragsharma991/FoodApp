@@ -20,6 +20,8 @@ import java.text.SimpleDateFormat
 import java.util.*
 import android.support.v4.app.ActivityCompat
 import android.content.pm.PackageManager
+import android.location.Address
+import android.location.Geocoder
 import android.net.ParseException
 import android.os.Build
 import android.support.design.widget.AppBarLayout
@@ -122,7 +124,6 @@ abstract class BaseFragment : Fragment() {
         }
     }
     fun is_location_PermissionGranted(): Boolean {
-        loge("TAG","is location---")
         if (Build.VERSION.SDK_INT >= 23) {
             // location permission
             if (context!!.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
@@ -138,8 +139,20 @@ abstract class BaseFragment : Fragment() {
             return true
         }
 
+    }
 
+    fun getpostalfrom_latlang(latitude : Double ,longitude :Double ) : String{
 
+        val gcd = Geocoder(context!!)
+        val addresses  :List<Address> = gcd.getFromLocation(latitude,longitude,1)
+        for (address : Address in  addresses) {
+            if(address.getLocality()!=null && address.getPostalCode()!=null){
+               // Log.e("",address.getLocality())
+                Log.e("getpostalfrom_latlang",address.getPostalCode())
+                return address.getPostalCode()
+            }
+        }
+        return ""
     }
 
 

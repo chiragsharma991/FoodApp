@@ -35,6 +35,9 @@ class ApiCall {
         fun signup(jsonObject: JsonObject ) : Call<JsonObject> {
             return getApiInterface().signup(jsonObject )
         }
+        fun forgot_password(auth_key : String, app: String, eatmore_app : Boolean,device_type : String,email: String) : Call<JsonObject> {
+            return getApiInterface().forgot_password(auth_key = auth_key, app = app ,eatmore_app = eatmore_app ,device_type = device_type ,email = email)
+        }
 
 
       /*  fun getProductList(r_token : String, r_key : String, customer_id : String ) : Call<ProductListModel> {

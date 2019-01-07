@@ -9,6 +9,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.Toast
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
@@ -65,6 +66,7 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
             sign_up_email_edt.addTextChangedListener(this)
             sign_up_password_edt.addTextChangedListener(this)
             sign_up_cnf_password_edt.addTextChangedListener(this)
+            forgot_email_edt.addTextChangedListener(this)
 
             first_name.setOnFocusChangeListener(this)
             sign_up_email_edt.setOnFocusChangeListener(this)
@@ -85,10 +87,21 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
                     forget_password_view.visibility = View.GONE
                 }
                 2 -> {
-                    input_name.requestFocus()
+                    forgot_email_edt.requestFocus()
                     txt_toolbar.text=getString(R.string.forgot_password)
                     signup_view.visibility = View.GONE
                     forget_password_view.visibility = View.VISIBLE
+                    acc_forget_btn.setOnClickListener({
+                        if(forgot_email_edt.text.trim().length > 0){
+                            loge("TAG-",""+validMail(forgot_email_edt.text.toString()))
+                            if (validMail(forgot_email_edt.text.toString())) {
+                                forgotFunction()
+                            } else {
+                                forgot_email_inputlayout.error = getString(R.string.enter_valid_email_address)
+
+                            }
+                        }
+                    })
                 }
             }
 
@@ -119,6 +132,9 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
         }
         else if (sign_up_cnf_password_edt.text.hashCode() == s.hashCode()) {
             sign_up_cnf_password_inputlayout.isErrorEnabled=false
+        }
+        else if (forgot_email_edt.text.hashCode() == s.hashCode()) {
+            forgot_email_inputlayout.isErrorEnabled=false
         }
     }
 
@@ -234,6 +250,37 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
                 }
                 showProgressDialog()
 
+            }
+
+            override fun onFail(error: Int) {
+
+                when (error) {
+                    404 -> {
+                        showSnackBar(clayout, getString(R.string.error_404))
+                    }
+                    100 -> {
+
+                        showSnackBar(clayout, getString(R.string.internet_not_available))
+                    }
+                }
+                showProgressDialog()
+            }
+        })
+
+    }
+    private fun forgotFunction() {
+        showProgressDialog()
+        callAPI(ApiCall.forgot_password(auth_key = Constants.AUTH_VALUE,email = forgot_email_edt.text.trim().toString(),device_type = Constants.DEVICE_TYPE_VALUE,eatmore_app = true,app =Constants.RESTAURANT_FOOD_ANDROID), object : BaseFragment.OnApiCallInteraction {
+            override fun <T> onSuccess(body: T?) {
+                val json = body as JsonObject  // please be mind you are using jsonobject(Gson)
+                if (json.get("status").asBoolean) {
+                    Toast.makeText(context!!,json.get(Constants.MSG).asString,Toast.LENGTH_SHORT).show()
+                    //showSnackBar(clayout, json.get(Constants.MSG).asString)
+                    (activity as HomeActivity).onBackPressed()
+                } else {
+                    showSnackBar(clayout, json.get(Constants.MSG).asString)
+                }
+                showProgressDialog()
             }
 
             override fun onFail(error: Int) {
