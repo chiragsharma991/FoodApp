@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.BindingAdapter
 import android.databinding.DataBindingUtil
+import android.location.Address
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -43,6 +44,7 @@ import java.util.*
 
 class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
 
+
     private lateinit var binding: FragmentOrderContainerBinding
     private val myclickhandler = MyClickHandler(this@OrderFragment)
     public var mAdapter: UniversalAdapter<Orderresult, RowOrderedPizzaBinding>? = null
@@ -78,7 +80,6 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
     override fun getLayout(): Int {
         return R.layout.fragment_order_container
     }
-
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         loge(TAG, "saveInstance " + savedInstanceState)

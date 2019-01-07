@@ -77,6 +77,12 @@ dependencies {
     implementation 'com.google.firebase:firebase-auth:16.0.2'
     implementation 'com.google.firebase:firebase-messaging:17.1.0'
     implementation 'com.google.android.gms:play-services-auth:15.0.1'
+
+    //Google place and location api
+    implementation "com.google.android.gms:play-services-places:$googleServiceVersion"
+    implementation "com.google.android.gms:play-services-maps:$googleServiceVersion"
+    implementation "com.google.android.gms:play-services-location:$googleServiceVersion"
+
     // lottie animation
     implementation 'com.airbnb.android:lottie:2.5.0'
     implementation files('libs/epaylibrary.jar')

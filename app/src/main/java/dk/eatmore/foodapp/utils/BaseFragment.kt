@@ -106,18 +106,40 @@ abstract class BaseFragment : Fragment() {
         return animation
     }
 
-    fun isPermissionGranted(): Boolean {
+    fun is_callphn_PermissionGranted(): Boolean {
         if (Build.VERSION.SDK_INT >= 23) {
+            //phone permission
             if (context!!.checkSelfPermission(android.Manifest.permission.CALL_PHONE) == PackageManager.PERMISSION_GRANTED) {
                 return true
             } else {
                 //ActivityCompat.requestPermissions(activity!!, arrayOf(Manifest.permission.CALL_PHONE), 1)
-                requestPermissions(arrayOf(Manifest.permission.CALL_PHONE), 1)
+                requestPermissions(arrayOf(Manifest.permission.CALL_PHONE), 0)
                 return false
             }
+
+            } else { //permission is automatically granted on sdk<23 upon installation
+            return true
+        }
+    }
+    fun is_location_PermissionGranted(): Boolean {
+        loge("TAG","is location---")
+        if (Build.VERSION.SDK_INT >= 23) {
+            // location permission
+            if (context!!.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    context!!.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                return true
+
+            } else {
+                requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), 1)
+                return false
+            }
+
         } else { //permission is automatically granted on sdk<23 upon installation
             return true
         }
+
+
+
     }
 
 

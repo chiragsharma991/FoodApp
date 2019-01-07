@@ -337,7 +337,7 @@ class TransactionStatus : BaseFragment() {
         override fun onClick(textView: View) {
             Log.e(TAG, "onClick:--- ")
             dialog = AlertDialog.Builder(activity).setMessage("Do you want to call ${"88826543"}").setCancelable(true).setPositiveButton("yes") { dialogInterface, i ->
-                if (isPermissionGranted()) {
+                if (is_callphn_PermissionGranted()) {
                     val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "88826543"))
                     startActivity(intent)
                 }
@@ -362,7 +362,7 @@ class TransactionStatus : BaseFragment() {
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         loge(TAG, "permission result---")
         when (requestCode) {
-            1 -> {
+            0 -> {
 
                 if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "88826543"))

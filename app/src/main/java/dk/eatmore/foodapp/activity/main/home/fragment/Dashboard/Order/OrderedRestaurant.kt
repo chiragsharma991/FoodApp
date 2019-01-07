@@ -6,6 +6,7 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.BindingAdapter
 import android.databinding.DataBindingUtil
+import android.location.Address
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -37,6 +38,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 import java.util.*
 
 class OrderedRestaurant : CommanAPI() {
+
 
 
     lateinit var binding: FragmentOrderedRestaurantBinding
@@ -75,7 +77,6 @@ class OrderedRestaurant : CommanAPI() {
         return binding.root
 
     }
-
 
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {

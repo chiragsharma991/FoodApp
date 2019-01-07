@@ -159,6 +159,7 @@
                                                     android:singleLine="true"
                                                     android:inputType="number"
                                                     android:lines="1"
+                                                    android:layout_toStartOf="@+id/mylocation_btn"
                                                     android:background="@android:color/transparent"
                                                     style="@style/EditText_Normal"
                                                     android:textAppearance="?android:attr/textAppearanceSmall"
@@ -166,14 +167,56 @@
 
                                                 </android.support.v7.widget.AppCompatEditText>
 
-                                                <ImageView
+                                                <RelativeLayout
+                                                    android:layout_width="@dimen/_40sdp"
+                                                    android:layout_height="@dimen/_40sdp"
+                                                    android:id="@+id/mylocation_btn"
+                                                    android:layout_toStartOf="@+id/search_button"
+                                                    android:background="?attr/selectableItemBackgroundBorderless"
+                                                    android:onClick="@{handlers::onFindLocation}"
+                                                    android:scaleType="centerInside"
+                                                    >
+
+                                                    <ImageView
+                                                        android:layout_width="@dimen/_20sdp"
+                                                        android:layout_height="@dimen/_20sdp"
+                                                        android:scaleType="centerInside"
+                                                        android:layout_centerInParent="true"
+                                                        app:srcCompat="@drawable/my_location" />
+
+                                                </RelativeLayout>
+
+                                                <RelativeLayout
                                                     android:layout_width="@dimen/_40sdp"
                                                     android:layout_height="@dimen/_40sdp"
                                                     android:layout_alignParentRight="true"
+                                                    android:id="@+id/search_button"
                                                     android:onClick="@{handlers::onFindClicked}"
                                                     android:background="@color/theme_color"
-                                                    android:scaleType="centerInside"
-                                                    app:srcCompat="@drawable/search" />
+                                                    >
+
+                                                    <ImageView
+                                                        android:layout_width="@dimen/_40sdp"
+                                                        android:layout_height="@dimen/_40sdp"
+                                                        android:scaleType="centerInside"
+                                                        android:visibility="visible"
+                                                        android:layout_centerInParent="true"
+                                                        app:srcCompat="@drawable/search" />
+
+
+                                                    <ProgressBar
+                                                        android:id="@+id/progress_bar"
+                                                        style="?android:attr/progressBarStyleSmall"
+                                                        android:layout_centerInParent="true"
+                                                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:visibility="gone"
+                                                        android:indeterminateTint="@color/white"
+                                                        android:indeterminate="true" />
+
+
+                                                </RelativeLayout>
 
                                             </RelativeLayout>
 

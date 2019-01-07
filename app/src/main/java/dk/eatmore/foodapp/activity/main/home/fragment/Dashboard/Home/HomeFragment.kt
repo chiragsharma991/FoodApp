@@ -7,9 +7,12 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.graphics.Canvas
 import android.graphics.Paint
+import android.location.Address
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
@@ -25,6 +28,7 @@ import android.view.*
 import android.view.animation.TranslateAnimation
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.facebook.*
 import dk.eatmore.foodapp.R
@@ -37,6 +41,7 @@ import com.google.android.gms.auth.api.signin.GoogleSignInClient
 import com.google.firebase.analytics.FirebaseAnalytics
 import com.google.firebase.auth.*
 import com.google.gson.JsonObject
+import dk.eatmore.foodapp.activity.main.epay.fragment.TransactionStatus
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.RestaurantList
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
@@ -51,6 +56,7 @@ import java.util.ArrayList
 
 
 class HomeFragment : CommanAPI() {
+
 
     private lateinit var binding: FragmentHomeFragmentBinding
     lateinit var clickEvent: MyClickHandler
@@ -121,13 +127,56 @@ class HomeFragment : CommanAPI() {
                 })
                 layoutParams.behavior = appBarLayoutBehaviour
             }
-
+            getcurrent_location()
 
         } else {
             logd(TAG, "saveInstance NOT NULL")
         }
 
     }
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        loge(TransactionStatus.TAG, "permission result---")
+        when (requestCode) {
+            1 -> {
+                loge(TAG,"grant permission--"+grantResults.toString())
+
+                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    loge(TAG,"PERMISSION_GRANTED (0)--")
+                    getcurrent_location()
+
+                } else {
+                    loge(TAG,"PERMISSION_GRANTED false (0)--")
+                    Toast.makeText(context, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
+
+                }
+
+                if (grantResults.size > 0 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
+                    loge(TAG,"PERMISSION_GRANTED (1)--")
+
+                } else {
+                    loge(TAG,"PERMISSION_GRANTED false (1)--")
+                    Toast.makeText(context, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
+                }
+
+                return
+            }
+        }
+    }
+
+
+/*
+    override fun locationtracking_success(address: Address) {
+        loge(TAG,"locationtracking_success-----")
+
+    }
+
+    override fun locationtracking_failed() {
+        loge(TAG,"locationtracking_failed-----")
+    }
+
+*/
 
     fun checkFirebaseAnalytics() {
         val bundle = Bundle()
@@ -137,6 +186,27 @@ class HomeFragment : CommanAPI() {
         firebaseAnalytics.logEvent("checkButtonTest", bundle);
         //firebaseAnalytics.setAnalyticsCollectionEnabled(true);
 
+
+    }
+
+    fun getcurrent_location(){
+
+        if(is_location_PermissionGranted()){
+            loge(TAG,"is_location_PermissionGranted---")
+   /*       val   locationUpdate = LocationUpdate(activity!!, object : LocationUpdate.OnLocationInteraction {
+                override fun onLocationUpdate(lat: Double, lng: Double) {
+                    loge(TAG, "onLocationUpdate: $lat, $lng")
+
+
+                }
+
+                override fun onReqPermission() {
+                    loge(TAG, "onReqPermission: ")
+                }
+            })
+*/
+
+        }
 
     }
 
@@ -313,14 +383,25 @@ class HomeFragment : CommanAPI() {
 
         fun onFindClicked(view: View) {
 
-            if (find_rest_edt.text.trim().toString().length > 0) {
-               // val intent = Intent(homefragment.context,LocationFinder :: class.java)
-               // startActivity(intent)
+            val   locationUpdate = GetLastLocation(activity!!, object : LocationUpdate.OnLocationInteraction {
+                override fun onLocationUpdate(lat: Double, lng: Double) {
+                    loge(TAG, "onLocationUpdate: $lat, $lng")
+
+
+                }
+
+                override fun onReqPermission() {
+                    loge(TAG, "onReqPermission: ")
+                }
+            })
+
+          /*  if (find_rest_edt.text.trim().toString().length > 0) {
                 val restaurantlist = RestaurantList.newInstance(find_rest_edt.text.trim().toString())
                 addFragment(R.id.home_fragment_container, restaurantlist, RestaurantList.TAG, true)
-            }
-
-
+            }*/
+        }
+        fun onFindLocation(view: View) {
+           is_location_PermissionGranted()
         }
 
         fun reOrder(view: View, model: OrderFragment.Orderresult) {
