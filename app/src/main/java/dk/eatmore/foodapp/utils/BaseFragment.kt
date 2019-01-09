@@ -46,6 +46,7 @@ import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.AccountFragment
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.Profile
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.RestaurantList
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.fragment.Dashboard.Account.Signup
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
@@ -212,6 +213,9 @@ abstract class BaseFragment : Fragment() {
                             childFragmentManager.popBackStack()
                         }
                         is DetailsFragment ->{
+                            fragment.onBackpress()
+                        }
+                        is RestaurantList ->{
                             fragment.onBackpress()
                         }
                         is Profile -> {

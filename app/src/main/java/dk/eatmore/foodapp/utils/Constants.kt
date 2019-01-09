@@ -130,6 +130,8 @@ class Constants {
     const  val REQ_SEA_RESAURANT_CLOSED = 2
     const  val REQ_FILTER_RESAURANT_LIST = 3
     const  val REQ_SORT_RESAURANT_LIST = 4
+    const  val REQUEST_CHECK_SETTINGS = 5
+
 
 
 

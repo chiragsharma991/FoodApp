@@ -200,6 +200,7 @@
                                                         android:layout_height="@dimen/_40sdp"
                                                         android:scaleType="centerInside"
                                                         android:visibility="visible"
+                                                        android:id="@+id/search_icon"
                                                         android:layout_centerInParent="true"
                                                         app:srcCompat="@drawable/search" />
 

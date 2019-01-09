@@ -88,3 +88,13 @@ Notes :
    11.How to assign null in dataclass
 
 
+
+   -- Bugs :
+
+   1. edit text ime not working properly.
+   2. Add firebase tocken and add app in firebase and facebook
+   3. postal code from gps not working.
+   4. add icon and text in bottom bar.
+
+
+

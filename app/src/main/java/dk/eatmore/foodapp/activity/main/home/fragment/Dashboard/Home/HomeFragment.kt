@@ -193,10 +193,14 @@ class HomeFragment : CommanAPI() {
 
         if(is_location_PermissionGranted()){
             loge(TAG,"is_location_PermissionGranted---")
+            search_icon.visibility=View.GONE
+            progress_bar.visibility=View.VISIBLE
             val   locationUpdate = GetLastLocation(activity!!, object : GetLastLocation.OnLocationInteraction {
                 override fun onLocationUpdate(lat: Double, lng: Double) {
                     loge(TAG, "onLocationUpdate: $lat, $lng")
                     find_rest_edt.setText(getpostalfrom_latlang(latitude = lat,longitude = lng).trim())
+                    search_icon.visibility=View.VISIBLE
+                    progress_bar.visibility=View.GONE
                 }
 
                 override fun onReqPermission() {
@@ -306,6 +310,7 @@ class HomeFragment : CommanAPI() {
     }
 
 
+
     fun fetchLastOrder() {
 
         val postParam = JsonObject()
@@ -376,15 +381,15 @@ class HomeFragment : CommanAPI() {
 
     inner class MyClickHandler(internal var homefragment: HomeFragment) {
 
-
         fun onFindClicked(view: View) {
 
-            if (find_rest_edt.text.trim().toString().length > 0) {
+            if (find_rest_edt.text.trim().toString().length > 0 && homefragment.progress_bar.visibility==View.GONE ) {
                 val restaurantlist = RestaurantList.newInstance(find_rest_edt.text.trim().toString())
                 addFragment(R.id.home_fragment_container, restaurantlist, RestaurantList.TAG, true)
             }
         }
         fun onFindLocation(view: View) {
+           if(homefragment.progress_bar.visibility==View.GONE)
            homefragment.getcurrent_location()
 
         }

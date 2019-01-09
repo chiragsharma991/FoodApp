@@ -7,11 +7,13 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
+import android.content.res.ColorStateList
 import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
-import android.support.v7.widget.AppCompatImageView
 import android.support.v7.widget.LinearLayoutManager
+import android.text.Editable
+import android.text.TextWatcher
 import android.transition.ChangeBounds
 import android.transition.Slide
 import android.util.Log
@@ -19,14 +21,12 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AccelerateInterpolator
-import android.view.animation.DecelerateInterpolator
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.filter.KokkenType
+import dk.eatmore.foodapp.activity.main.filter.SearchRestaurant
 import dk.eatmore.foodapp.activity.main.filter.Tilpas
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
-import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Rating
 import dk.eatmore.foodapp.adapter.restaurantList.RestaurantListParentAdapter
 import dk.eatmore.foodapp.databinding.RestaurantlistBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
@@ -39,21 +39,17 @@ import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
-import dk.eatmore.foodapp.utils.HidingScrollListener
 import dk.eatmore.foodapp.utils.RecyclerSectionItemDecoration
-import kotlinx.android.synthetic.main.fragment_home_container.*
 import kotlinx.android.synthetic.main.restaurantlist.*
 import kotlinx.android.synthetic.main.toolbar.*
 import retrofit2.Call
 import java.io.Serializable
 import java.util.*
-import java.util.Arrays.asList
 import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
-class RestaurantList : BaseFragment() {
-
+class RestaurantList : SearchRestaurant() {
 
     private lateinit var binding: RestaurantlistBinding
     private lateinit var clickEvent: MyClickHandler
@@ -118,10 +114,40 @@ class RestaurantList : BaseFragment() {
 
     fun setToolbarforThis() {
         progress_bar.visibility = View.GONE
+        toolbar.visibility = View.VISIBLE
+        search_tool.visibility = View.GONE
         txt_toolbar.text = getString(R.string.restaurants)
         img_toolbar_back.setImageResource(R.drawable.back)
         img_toolbar_back.setOnClickListener {
             onBackpress()
+        }
+
+
+        //-- search list --//
+
+
+        search_clear_btn.setOnClickListener{
+            search_edt.text.clear()
+
+        }
+
+        search_edt.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(arg0: Editable) {
+                is_from_filter=true
+                searchRestaurantList(search_edt.text.toString(),filterable_restaurantlistmodel)
+            }
+
+            override fun beforeTextChanged(arg0: CharSequence, arg1: Int,
+                                           arg2: Int, arg3: Int) {
+            }
+
+            override fun onTextChanged(arg0: CharSequence, arg1: Int, arg2: Int,
+                                       arg3: Int) {
+            }
+        })
+
+        search_tool_cancel.setOnClickListener{
+          onBackpress()
         }
     }
 
@@ -244,6 +270,7 @@ class RestaurantList : BaseFragment() {
 
 
                     ui_model!!.restaurantList.value = restaurantlistmodel!!
+                    filterable_restaurantlistmodel=ui_model!!.restaurantList.value
 
                 }
             }
@@ -278,17 +305,33 @@ class RestaurantList : BaseFragment() {
         if (requestCode == Constants.REQ_FILTER_RESAURANT_LIST) {
             if (resultCode == Activity.RESULT_OK) {
                 filterable_restaurantlistmodel = data!!.getBundleExtra(Constants.BUNDLE).getSerializable(Constants.FILTER_RESTAURANTLISTMODEL) as RestaurantListModel
-                ui_model!!.restaurantList.value = filterable_restaurantlistmodel
+                if(search_tool.visibility == View.VISIBLE){
+                    searchRestaurantList(search_edt.text.toString(),filterable_restaurantlistmodel)
+                }else{
+                    ui_model!!.restaurantList.value = filterable_restaurantlistmodel
+                }
 
             }
         }else if(requestCode == Constants.REQ_SORT_RESAURANT_LIST){
             if (resultCode == Activity.RESULT_OK) {
                 filterable_restaurantlistmodel = data!!.getBundleExtra(Constants.BUNDLE).getSerializable(Constants.FILTER_RESTAURANTLISTMODEL) as RestaurantListModel
                 ui_model!!.restaurantList.value = filterable_restaurantlistmodel
-                loge(TAG,"on activity -- sort---"+filterable_restaurantlistmodel!!.restaurant_list.open_now.size.toString())
+                if(search_tool.visibility == View.VISIBLE){
+                    searchRestaurantList(search_edt.text.toString(),filterable_restaurantlistmodel)
+                }else{
+                    ui_model!!.restaurantList.value = filterable_restaurantlistmodel
+                }
             }
         }
     }
+
+
+    override fun searchcompleted(list: RestaurantListModel) {
+        // get result from search restaurant.
+        loge(TAG,"searchcompleted---")
+        ui_model!!.restaurantList.value = list
+    }
+
 
 
     private fun refreshview() {
@@ -402,13 +445,10 @@ class RestaurantList : BaseFragment() {
     private fun getSectionCallback(list: ArrayList<StatusWiseRestaurant>): RecyclerSectionItemDecoration.SectionCallback {
         return object : RecyclerSectionItemDecoration.SectionCallback {
            override fun isSection(position: Int): Boolean {
-                Log.e("TAG", "in section---")
                 return position == 0 || position == 1 || position == 2
             }
 
             override  fun getSectionHeader(position: Int): CharSequence {
-                Log.e("TAG", "get section---")
-
                 return list[position]
                         .status
             }
@@ -467,7 +507,20 @@ class RestaurantList : BaseFragment() {
     }
 
     fun onBackpress() {
-        (activity as HomeActivity).onBackPressed()
+
+        if(search_tool.visibility == View.VISIBLE){
+            search_edt.text.clear()
+            is_from_filter=false
+            toolbar.visibility = View.VISIBLE
+            search_tool.visibility = View.GONE
+            search_edt.clearFocus()
+            hideKeyboard()
+
+        }else{
+
+            ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().childFragmentManager.popBackStack()
+        }
+
     }
 
     data class kokken_Model(val itemtype: String, val itemcount: Int =0 , var is_itemselected: Boolean = false) : Serializable
@@ -498,6 +551,18 @@ class RestaurantList : BaseFragment() {
                     intent.putExtra(Constants.BUNDLE, bundle)
                     restaurantlist.startActivityForResult(intent, Constants.REQ_FILTER_RESAURANT_LIST)
                 }
+            }
+        }
+
+        fun searchType(view: View) {
+
+            if(restaurantlist.progress_bar.visibility == View.GONE){
+                restaurantlist.app_bar.setExpanded(true)
+                restaurantlist.search_edt.requestFocus()
+                restaurantlist.showKeyboard()
+                restaurantlist.toolbar.visibility = View.GONE
+                restaurantlist.search_tool.visibility = View.VISIBLE
+
             }
         }
 

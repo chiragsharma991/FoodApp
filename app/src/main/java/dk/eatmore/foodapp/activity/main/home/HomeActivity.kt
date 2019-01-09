@@ -1,5 +1,6 @@
 package dk.eatmore.foodapp.activity.main.home
 
+import android.app.Activity
 import android.content.Intent
 import android.os.Bundle
 import android.support.v4.app.Fragment
@@ -22,7 +23,7 @@ import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
-import kotlinx.android.synthetic.main.menu_restaurant.*
+import kotlinx.android.synthetic.main.fragment_home_fragment.*
 import org.json.JSONException
 import java.util.*
 
@@ -92,6 +93,20 @@ class HomeActivity : BaseActivity() {
 
                 }
             })
+        }
+    }
+
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        loge(TAG,"onActivityResult---"+resultCode+""+requestCode)
+        super.onActivityResult(requestCode, resultCode, data)
+        if (requestCode == Constants.REQUEST_CHECK_SETTINGS) {
+            if (resultCode == Activity.RESULT_OK) {
+                (getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().getcurrent_location()
+            }else{
+                (getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().search_icon.visibility = View.VISIBLE
+                (getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().progress_bar.visibility = View.GONE
+            }
         }
     }
 

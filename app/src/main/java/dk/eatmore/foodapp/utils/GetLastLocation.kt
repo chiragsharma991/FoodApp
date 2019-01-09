@@ -97,13 +97,13 @@ class GetLastLocation(private val context: Activity, val onLocationInteraction: 
     }
 
     private fun createLocationRequest() {
-        mLocationRequest = LocationRequest()
-        mLocationRequest!!.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+       // mLocationRequest = LocationRequest()
+      //  mLocationRequest!!.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
 
-    /*    mLocationRequest = LocationRequest.create()
+        mLocationRequest = LocationRequest.create()
                 .setPriority(LocationRequest.PRIORITY_HIGH_ACCURACY)
                 .setInterval(UPDATE_INTERVAL)
-                .setFastestInterval(FASTEST_INTERVAL)*/
+                .setFastestInterval(FASTEST_INTERVAL)
     }
 
     private fun createLocationCallback() {
@@ -113,10 +113,12 @@ class GetLastLocation(private val context: Activity, val onLocationInteraction: 
                 Log.e("mLocationCallback--",""+locationResult!!.locations)
                 mCurrentLocation = locationResult.lastLocation
                 updateLocationUI()
-
+                fusedLocationClient!!.removeLocationUpdates(mLocationCallback!!)
             }
         }
     }
+
+
 
 
     /**
@@ -148,7 +150,7 @@ class GetLastLocation(private val context: Activity, val onLocationInteraction: 
                                 // Show the dialog by calling startResolutionForResult(), and check the
                                 // result in onActivityResult().
                                 val rae = e as ResolvableApiException
-                                rae.startResolutionForResult(context, REQUEST_CHECK_SETTINGS)
+                                rae.startResolutionForResult(context, Constants.REQUEST_CHECK_SETTINGS)
                             } catch (sie: IntentSender.SendIntentException) {
                                 Log.e(TAG, "PendingIntent unable to execute request.")
                             }
@@ -173,12 +175,13 @@ class GetLastLocation(private val context: Activity, val onLocationInteraction: 
     }*/
 
 
+
+
     companion object {
         private val TAG = "GetLastLocation"
         /**
          * Constant used in the location settings dialog.
          */
-        val REQUEST_CHECK_SETTINGS = 0x1
     }
 
 }
