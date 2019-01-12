@@ -183,7 +183,8 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
             intent.putExtra("p_price",productpricecalculation.getprice(data))
             val pairs: Array<Pair<View, String>> = TransitionHelper.createSafeTransitionParticipants(activity!!, true)
             val transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, *pairs)
-            startActivityForResult(intent, Constants.REQ_CAT_RESAURANT_CLOSED, transitionActivityOptions.toBundle())
+            //startActivityForResult(intent, Constants.REQ_CAT_RESAURANT_CLOSED, transitionActivityOptions.toBundle())
+            startActivityForResult(intent, Constants.REQ_CAT_RESAURANT_CLOSED)
         }
 
     }

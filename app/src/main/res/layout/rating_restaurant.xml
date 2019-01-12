@@ -8,6 +8,10 @@
 
     <data>
 
+        <import type="android.view.View">
+
+        </import>
+
         <variable name="util"
             type="dk.eatmore.foodapp.utils.BindDataUtils"/>
 
@@ -623,6 +627,18 @@
 
                 </LinearLayout>
 
+
+                <android.support.v7.widget.AppCompatCheckBox
+                    style="@style/Subtitle_TextViewSmall"
+                    android:layout_width="wrap_content"
+                    android:id="@+id/checkbox_filter"
+                    android:checked="false"
+                    android:visibility="@{restaurant.review_list.size() > 0 ? View.VISIBLE : View.GONE}"
+                    android:layout_marginTop="@dimen/_16sdp"
+                    android:layout_height="wrap_content"
+                    android:text="Vis kun kommentarer."
+
+                    />
 
 
 

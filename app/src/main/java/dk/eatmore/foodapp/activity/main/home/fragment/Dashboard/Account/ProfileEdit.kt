@@ -1,5 +1,6 @@
 package dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account
 
+import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.text.Editable
@@ -68,11 +69,14 @@ class ProfileEdit : BaseFragment(), TextWatcher {
             name_edt.requestFocus()
             name_edt.addTextChangedListener(this)
             email_edt.addTextChangedListener(this)
+            telephone_edt.addTextChangedListener(this)
             inputValidStates[name_edt] = false
             inputValidStates[email_edt] = false
+            inputValidStates[telephone_edt] = false
             name_edt.setText(PreferenceUtil.getString(PreferenceUtil.FIRST_NAME,""))
             email_edt.setText(PreferenceUtil.getString(PreferenceUtil.E_MAIL,""))
             telephone_edt.setText(PreferenceUtil.getString(PreferenceUtil.TELEPHONE_NO,""))
+            changepassword_txt.setOnClickListener{startActivity(Intent(context,ChangePassword::class.java))}
             telephone_edt.imeOptions= EditorInfo.IME_ACTION_DONE
             telephone_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
                 override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
@@ -114,6 +118,16 @@ class ProfileEdit : BaseFragment(), TextWatcher {
             else
                 inputValidStates[email_edt] = false
         }
+        else if (telephone_edt.text.hashCode() == s.hashCode()) {
+            telephone_edt.error = null
+            if (telephone_edt.text.trim().toString().length >= 8)
+                inputValidStates[telephone_edt] = true
+            else
+                inputValidStates[telephone_edt] = false
+
+        }
+
+
     }
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
     }
@@ -132,6 +146,11 @@ class ProfileEdit : BaseFragment(), TextWatcher {
             email_edt.error = getString(R.string.enter_valid_email_address)
             isvalidate = false
         }
+        if (!inputValidStates[telephone_edt]!!) {
+            telephone_edt.error = getString(R.string.enter_the_valid_number)
+            isvalidate = false
+        }
+
         return isvalidate
     }
 
@@ -162,6 +181,13 @@ class ProfileEdit : BaseFragment(), TextWatcher {
                 val jsonObject = body as JsonObject
                 if (jsonObject.get(Constants.STATUS).asBoolean) {
                     Toast.makeText(context,jsonObject.get(Constants.MSG).asString, Toast.LENGTH_SHORT).show()
+     /*               name_edt.setText(PreferenceUtil.getString(PreferenceUtil.FIRST_NAME,""))
+                    email_edt.setText(PreferenceUtil.getString(PreferenceUtil.E_MAIL,""))
+                    telephone_edt.setText(PreferenceUtil.getString(PreferenceUtil.TELEPHONE_NO,""))*/
+                    PreferenceUtil.putValue(PreferenceUtil.FIRST_NAME, name_edt.text.trim().toString())
+                    PreferenceUtil.putValue(PreferenceUtil.E_MAIL,email_edt.text.trim().toString())
+                    PreferenceUtil.putValue(PreferenceUtil.TELEPHONE_NO,telephone_edt.text.trim().toString())
+                    PreferenceUtil.save()
                     (activity as HomeActivity).onBackPressed()
                 }else{
                     showSnackBar(userprofile_container,jsonObject.get(Constants.MSG).asString)

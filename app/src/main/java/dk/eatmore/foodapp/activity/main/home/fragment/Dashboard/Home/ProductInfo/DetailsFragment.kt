@@ -79,6 +79,8 @@ class DetailsFragment : BaseFragment() {
         var total_cartamt : String = ""
         var delivery_charge_title : String = ""
         var delivery_charge : String = ""
+        var delivery_text ="Sample of deliverytext"
+        var pickup_text ="Sample of pickuptext"
         var ui_model: UIModel? = null
         fun newInstance( status: String): DetailsFragment {
 

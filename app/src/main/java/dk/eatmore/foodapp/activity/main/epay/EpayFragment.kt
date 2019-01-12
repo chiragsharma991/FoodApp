@@ -454,6 +454,10 @@ class EpayFragment : BaseFragment() {
             isPickup=false
         }
 
+        if(isPickup)binding.pickupDeliveryTxt = DetailsFragment.pickup_text else binding.pickupDeliveryTxt = DetailsFragment.delivery_text
+        binding.executePendingBindings()
+
+
         menu_tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
@@ -464,6 +468,7 @@ class EpayFragment : BaseFragment() {
                 when(menu_tabs.selectedTabPosition){
                     1->{
                         isPickup=true
+                        binding.pickupDeliveryTxt = DetailsFragment.pickup_text.also { binding.executePendingBindings() }
                         DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!, R.color.black),msg = getString(R.string.you_are_ordering_pickup),title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
                             override fun onPositiveButtonClick(position: Int) {
                             }
@@ -473,6 +478,7 @@ class EpayFragment : BaseFragment() {
                     }
                     0->{
                         isPickup=false
+                        binding.pickupDeliveryTxt = DetailsFragment.delivery_text.also { binding.executePendingBindings() }
                     }
                 }
 

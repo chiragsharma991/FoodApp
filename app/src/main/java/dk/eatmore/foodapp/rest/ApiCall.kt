@@ -110,6 +110,10 @@ class ApiCall {
         fun devicetoken (token : String , eatmore_app : Boolean, auth_key : String, device_type : String, user_id: String) : Call<JsonObject> {
             return getApiInterface().devicetoken(token=token ,eatmore_app = eatmore_app, auth_key =auth_key, device_type = device_type, user_id = user_id,app = Constants.RESTAURANT_FOOD_ANDROID )
         }
+
+        fun change_password ( eatmore_app : Boolean, auth_key : String, device_type : String, id: String,old_password : String, newpassword : String,language : String) : Call<JsonObject> {
+            return getApiInterface().change_password(eatmore_app = eatmore_app, auth_key =auth_key, device_type = device_type,id = id,language = language,newpassword = newpassword,old_password = old_password,app = Constants.RESTAURANT_FOOD_ANDROID )
+        }
         fun clearcart (eatmore_app : Boolean, auth_key : String, customer_id : String) : Call<JsonObject> {
             return getApiInterface().clearcart(eatmore_app = eatmore_app, auth_key =auth_key, customer_id = customer_id,app = Constants.RESTAURANT_FOOD_ANDROID )
         }

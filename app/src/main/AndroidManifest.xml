@@ -63,6 +63,12 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
+        <activity android:name=".activity.main.home.fragment.Dashboard.Account.ChangePassword"
+            android:screenOrientation="portrait"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:theme="@style/AppTheme.NoActionBar">
+        </activity>
+
         <activity android:name=".activity.main.RestaurantClosed"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"

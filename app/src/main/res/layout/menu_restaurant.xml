@@ -96,15 +96,41 @@
             -->
 
 
-            <android.support.v7.widget.AppCompatTextView
-                style="@style/Subtitle_TextViewSmall"
-                android:id="@+id/free_txt"
-                android:visibility="@{restaurant.free_text.equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}"
-                android:text="@{restaurant.free_text.trim()}"
-                android:layout_marginBottom="@dimen/_8sdp"
-                android:textColor="@color/theme_color"
-                android:gravity="center_horizontal"
-                />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/free_txt_view"
+                android:gravity="center_vertical"
+                android:layout_marginBottom="@dimen/_16sdp"
+                >
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/Subtitle_TextViewSmall"
+                    android:id="@+id/free_txt"
+                    android:visibility="@{restaurant.free_text.equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}"
+                    android:text="@{restaurant.free_text.trim()}"
+                    android:layout_alignParentStart="true"
+                    android:ellipsize="end"
+                    android:maxLines="1"
+                    android:layout_toStartOf="@+id/expandtxt_btn"
+                    android:textColor="@color/theme_color"
+                    android:gravity="start"
+                    />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:scaleType="fitXY"
+                    android:id="@+id/expandtxt_btn"
+                    android:layout_alignParentEnd="true"
+                    app:srcCompat="@drawable/down_arrow"
+                    android:tint="@color/black_default"
+                    />
+
+
+            </RelativeLayout>
+
+
             <!--            android:text="@{restaurant.free_text.replace(`\n`,``).replace(`\r`,``)}"-->
 
 
@@ -112,7 +138,7 @@
                 style="@style/CardViewStyle"
                 android:id="@+id/search_view"
                 android:layout_margin="0dp"
-                android:layout_below="@+id/free_txt"
+                android:layout_below="@+id/free_txt_view"
                 android:transitionName="@string/transition_string"
                 >
 

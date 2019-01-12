@@ -13,9 +13,20 @@
 
         </import>
 
+        <import type="android.view.View">
+
+        </import>
+
+
         <variable
             name="data"
             type="android.arch.lifecycle.MutableLiveData&lt;ViewcardModel&gt;">
+
+        </variable>
+
+        <variable
+            name="pickup_delivery_txt"
+            type="String">
 
         </variable>
 
@@ -169,17 +180,34 @@
                                         app:layout_constraintTop_toBottomOf="@+id/epay_total_lbl" />
             -->
 
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/pick_delivery_txt"
+                                style="@style/SubtitleMidium_TextViewSmall"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:gravity="center_horizontal"
+                                android:text="@{pickup_delivery_txt}"
+                                android:visibility="@{pickup_delivery_txt.equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}"
+                                android:textColor="@color/black_default"
+                                ProgressWheel:layout_constraintEnd_toEndOf="parent"
+                                ProgressWheel:layout_constraintStart_toStartOf="parent"
+                                ProgressWheel:layout_constraintTop_toBottomOf="@+id/tab_card" />
+
                             <LinearLayout
+                                android:id="@+id/linearLayout2"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-                                android:layout_marginBottom="@dimen/_100sdp"
                                 android:layout_marginTop="8dp"
+                                android:layout_marginBottom="@dimen/_100sdp"
                                 android:background="@color/white"
                                 android:orientation="vertical"
                                 app:layout_constraintBottom_toBottomOf="parent"
                                 app:layout_constraintEnd_toEndOf="parent"
                                 app:layout_constraintStart_toStartOf="parent"
-                                app:layout_constraintTop_toBottomOf="@+id/tab_card"
+                                app:layout_constraintTop_toBottomOf="@+id/pick_delivery_txt"
                                 app:layout_constraintVertical_bias="0.0">
 
                                 <View
@@ -238,8 +266,8 @@
                                         android:id="@+id/add_parentitem_view"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginEnd="@dimen/_8sdp"
                                         android:layout_marginStart="@dimen/_8sdp"
+                                        android:layout_marginEnd="@dimen/_8sdp"
                                         android:orientation="vertical">
 
 
@@ -267,31 +295,30 @@
                                                 android:layout_width="match_parent"
                                                 android:layout_height="2dp"
                                                 android:layout_below="@+id/add_parentitem_view"
-                                                android:layout_marginEnd="@dimen/_8sdp"
                                                 android:layout_marginStart="@dimen/_8sdp"
                                                 android:layout_marginTop="@dimen/_8sdp"
+                                                android:layout_marginEnd="@dimen/_8sdp"
                                                 android:layerType="software"
                                                 android:src="@drawable/dashline" />
 
                                             <LinearLayout
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:layout_marginEnd="@dimen/_8sdp"
                                                 android:layout_marginStart="@dimen/_8sdp"
                                                 android:layout_marginTop="@dimen/_8sdp"
+                                                android:layout_marginEnd="@dimen/_8sdp"
                                                 android:orientation="horizontal">
 
                                                 <android.support.v7.widget.AppCompatTextView
                                                     style="@style/SubtitleMidium_TextViewSmall"
                                                     android:layout_width="0dp"
-                                                    android:fontFamily="@font/hindvadodara_medium"
                                                     android:layout_height="wrap_content"
                                                     android:layout_marginEnd="@dimen/_8sdp"
                                                     android:layout_weight="1.2"
+                                                    android:fontFamily="@font/hindvadodara_medium"
                                                     android:gravity="start"
                                                     android:singleLine="true"
-                                                    android:text="Subtotal"
-                                                    />
+                                                    android:text="Subtotal" />
 
                                                 <android.support.v7.widget.AppCompatTextView
                                                     android:id="@+id/subtotal"
@@ -302,8 +329,7 @@
                                                     android:layout_weight="0.8"
                                                     android:gravity="end"
                                                     android:singleLine="true"
-                                                    android:text="45,00kr"
-                                                    />
+                                                    android:text="45,00kr" />
 
 
                                             </LinearLayout>
@@ -311,8 +337,8 @@
                                             <LinearLayout
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:layout_marginEnd="@dimen/_8sdp"
                                                 android:layout_marginStart="@dimen/_8sdp"
+                                                android:layout_marginEnd="@dimen/_8sdp"
                                                 android:orientation="horizontal"
                                                 android:visibility="gone">
 
@@ -324,8 +350,7 @@
                                                     android:layout_weight="1.7"
                                                     android:gravity="start"
                                                     android:singleLine="true"
-                                                    android:text="Tax"
-                                                    />
+                                                    android:text="Tax" />
 
                                                 <android.support.v7.widget.AppCompatTextView
                                                     style="@style/SubtitleMidium_TextViewSmall"
@@ -335,8 +360,7 @@
                                                     android:layout_weight="0.3"
                                                     android:gravity="end"
                                                     android:singleLine="true"
-                                                    android:text="0,00 kr"
-                                                    />
+                                                    android:text="0,00 kr" />
 
 
                                             </LinearLayout>
@@ -344,9 +368,9 @@
                                             <LinearLayout
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:layout_marginEnd="@dimen/_8sdp"
                                                 android:layout_marginStart="@dimen/_8sdp"
                                                 android:layout_marginTop="@dimen/_8sdp"
+                                                android:layout_marginEnd="@dimen/_8sdp"
                                                 android:orientation="horizontal">
 
                                                 <android.support.v7.widget.AppCompatTextView
@@ -357,8 +381,7 @@
                                                     android:layout_weight="1.2"
                                                     android:gravity="start"
                                                     android:singleLine="true"
-                                                    android:text="Total"
-                                                    />
+                                                    android:text="Total" />
 
                                                 <android.support.v7.widget.AppCompatTextView
                                                     android:id="@+id/total"
@@ -369,8 +392,7 @@
                                                     android:layout_weight="0.8"
                                                     android:gravity="end"
                                                     android:singleLine="true"
-                                                    android:text="145,00kr"
-                                                    />
+                                                    android:text="145,00kr" />
 
 
                                             </LinearLayout>
@@ -378,9 +400,9 @@
                                             <LinearLayout
                                                 android:layout_width="match_parent"
                                                 android:layout_height="wrap_content"
-                                                android:layout_marginBottom="@dimen/_8sdp"
-                                                android:layout_marginEnd="@dimen/_8sdp"
                                                 android:layout_marginStart="@dimen/_8sdp"
+                                                android:layout_marginEnd="@dimen/_8sdp"
+                                                android:layout_marginBottom="@dimen/_8sdp"
                                                 android:orientation="horizontal"
                                                 android:visibility="gone">
 

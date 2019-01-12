@@ -2,6 +2,7 @@ package dk.eatmore.foodapp.activity.main.home
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
 import android.os.Bundle
 import android.support.v4.app.Fragment
 import android.view.View
@@ -26,6 +27,9 @@ import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.fragment_home_fragment.*
 import org.json.JSONException
 import java.util.*
+import android.os.Build
+
+
 
 
 class HomeActivity : BaseActivity() {
@@ -58,7 +62,9 @@ class HomeActivity : BaseActivity() {
 */
 
     private fun initView(savedInstanceState: Bundle?) {
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+      //  getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
+       // fullScreen()
+        setLightStatusBar(this)
         mHomeContainerFragment = HomeContainerFragment.newInstance()
         supportFragmentManager.beginTransaction().add(R.id.home_container, mHomeContainerFragment, HomeContainerFragment.TAG).addToBackStack(HomeContainerFragment.TAG).commit()
 
@@ -68,6 +74,18 @@ class HomeActivity : BaseActivity() {
 
         return mHomeContainerFragment
 
+    }
+
+    fun setLightStatusBar( activity: Activity) {
+
+
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+
+            var flags = activity.getWindow().getDecorView().systemUiVisibility
+            flags = flags or View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR
+            activity.getWindow().getDecorView().systemUiVisibility = flags
+            activity.window.statusBarColor = Color.WHITE
+        }
     }
 
     override fun onResume() {
@@ -101,12 +119,7 @@ class HomeActivity : BaseActivity() {
         loge(TAG,"onActivityResult---"+resultCode+""+requestCode)
         super.onActivityResult(requestCode, resultCode, data)
         if (requestCode == Constants.REQUEST_CHECK_SETTINGS) {
-            if (resultCode == Activity.RESULT_OK) {
-                (getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().getcurrent_location()
-            }else{
-                (getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().search_icon.visibility = View.VISIBLE
-                (getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().progress_bar.visibility = View.GONE
-            }
+            (getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().getcurrent_location()
         }
     }
 

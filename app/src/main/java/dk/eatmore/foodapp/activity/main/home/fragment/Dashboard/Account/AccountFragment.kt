@@ -534,7 +534,7 @@ class AccountFragment : BaseFragment() {
                     val photo = mAuth.getCurrentUser()!!.photoUrl
                     val phone = mAuth.getCurrentUser()!!.phoneNumber
                     Log.e(TAG, "GsignInWithCredential:success" + email + " " + phone + " " + photo + " " + displayName)
-                    moveOnProfileInfo(
+               /*     moveOnProfileInfo(
                             userName = displayName.toString(),
                             first_name = phone.toString(),
                             customer_id = "",
@@ -542,7 +542,7 @@ class AccountFragment : BaseFragment() {
                             email = email.toString(),
                             login_from = Constants.GOOGLE,
                             language = "en"
-                    )
+                    )*/
                 } else {
                     Log.e(HomeFragment.TAG, "GsignInWithCredential:failure", task.getException());
                 }

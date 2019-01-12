@@ -42,6 +42,8 @@
     <string name="enter_valid_email_address">Enter valid email address</string>
     <string name="password_must_consist">Password must consist of minimum 8 characters.</string>
     <string name="enter_your_unique_password">Enter your unique password</string>
+    <string name="enter_your_new_password">Enter your new password</string>
+    <string name="enter_your_old_password">Enter your valid old password</string>
     <string name="enter_your_confirm_password">Enter your confirm password</string>
     <string name="signup">Signup</string>
     <string name="add_to_cart">ADD TO CART %1$s</string>
@@ -60,9 +62,9 @@
     <string name="first_name">First name</string>
     <string name="we_are_sorry">We are Sorry.\nThis restaurant is closed.\nPlease check opening hours.</string>
     <string name="subscribe">Modtag nyhedsbrev fra EatMore. Bare rolig vi spammer dig selvfølgelig ikke. Du accepterer at vi må kontakte dig via e-mail, telefon, push notifikationer eller sms med gode tilbud og informationer omkring konkurrencer, produkter og tjenester. Du kan til enhver tid afmelde dig.</string>
-    <string name="open_now">Open Now</string>
-    <string name="pre_order">Pre Order</string>
-    <string name="closed">Closed</string>
+    <string name="open_now">%1$s restauranter er åbne nu, sorteret efter bedste match</string>
+    <string name="pre_order">%1$s restauranter åbner senere</string>
+    <string name="closed">%1$s restauranter er ikke tilgængelig</string>
     <string name="ordernow">Order Now</string>
     <string name="preorder">Pre Order</string>
     <string name="notavailable">Not available</string>
@@ -169,6 +171,7 @@
     <string name="tilpas">Tilpas</string>
     <string name="all">All</string>
     <string name="search_the_restaurant">Search the restaurant</string>
+    <string name="change_password">Skift adgangskode</string>
 
 
 </resources>

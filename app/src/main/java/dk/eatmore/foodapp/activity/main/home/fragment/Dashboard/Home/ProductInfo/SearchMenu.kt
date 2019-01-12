@@ -233,7 +233,8 @@ class SearchMenu : BaseFragment() {
                         intent.putExtra("p_price", if (data.product_attribute == null) BindDataUtils.convertCurrencyToDanish(data.p_price ?: "0") else productpricecalculation.getprice(data))
                         val pairs: Array<Pair<View, String>> = TransitionHelper.createSafeTransitionParticipants(activity!!, true)
                         val transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, *pairs)
-                        startActivityForResult(intent,Constants.REQ_SEA_RESAURANT_CLOSED, transitionActivityOptions.toBundle())
+                        //startActivityForResult(intent,Constants.REQ_SEA_RESAURANT_CLOSED, transitionActivityOptions.toBundle())
+                        startActivityForResult(intent,Constants.REQ_SEA_RESAURANT_CLOSED)
                     }
 
                 }

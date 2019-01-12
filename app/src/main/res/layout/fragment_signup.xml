@@ -168,13 +168,13 @@
                                 />
 
                             <android.support.v7.widget.AppCompatTextView
-                                style="@style/TextViewSmall"
+                                style="@style/Subtitle_TextViewSmall"
                                 android:layout_toRightOf="@+id/subscribe_chk"
                                 android:id="@+id/subscribe_txt"
                                 android:layout_marginLeft="@dimen/_3sdp"
                                 android:layout_gravity="center_vertical"
                                 android:text="@string/subscribe"
-                                android:textColor="@color/black_light" />
+                                />
 
 
                         </RelativeLayout>

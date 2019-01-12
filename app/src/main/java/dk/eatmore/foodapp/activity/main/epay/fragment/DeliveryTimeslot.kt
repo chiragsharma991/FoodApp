@@ -100,7 +100,7 @@ class DeliveryTimeslot : BaseFragment() {
                             EpayFragment.paymentattributes.expected_time=entries.key
                         }
                     }
-                    EpayFragment.paymentattributes.comments=comment_edt.text.trim().toString()
+                    EpayFragment.paymentattributes.comments=comment_edt.text.trim().toString().replace(":",",",false)
                     (parentFragment as EpayFragment).addFragment(R.id.epay_container,Paymentmethod.newInstance(),Paymentmethod.TAG,true)
                 }
                 else {

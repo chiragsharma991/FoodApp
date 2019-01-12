@@ -140,23 +140,22 @@ class HomeFragment : CommanAPI() {
         loge(TransactionStatus.TAG, "permission result---")
         when (requestCode) {
             1 -> {
-                loge(TAG,"grant permission--"+grantResults.toString())
 
                 if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    loge(TAG,"PERMISSION_GRANTED (0)--")
                     getcurrent_location()
 
                 } else {
-                    loge(TAG,"PERMISSION_GRANTED false (0)--")
+                    gps_img.visibility=View.VISIBLE
+                    progress_bar.visibility=View.GONE
                     Toast.makeText(context, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
 
                 }
 
                 if (grantResults.size > 0 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
-                    loge(TAG,"PERMISSION_GRANTED (1)--")
 
                 } else {
-                    loge(TAG,"PERMISSION_GRANTED false (1)--")
+                    gps_img.visibility=View.VISIBLE
+                    progress_bar.visibility=View.GONE
                     Toast.makeText(context, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
                 }
 
@@ -193,13 +192,14 @@ class HomeFragment : CommanAPI() {
 
         if(is_location_PermissionGranted()){
             loge(TAG,"is_location_PermissionGranted---")
-            search_icon.visibility=View.GONE
+            gps_img.visibility=View.GONE
             progress_bar.visibility=View.VISIBLE
             val   locationUpdate = GetLastLocation(activity!!, object : GetLastLocation.OnLocationInteraction {
                 override fun onLocationUpdate(lat: Double, lng: Double) {
                     loge(TAG, "onLocationUpdate: $lat, $lng")
                     find_rest_edt.setText(getpostalfrom_latlang(latitude = lat,longitude = lng).trim())
-                    search_icon.visibility=View.VISIBLE
+                    find_rest_edt.setSelection(find_rest_edt.text.length)
+                    gps_img.visibility=View.VISIBLE
                     progress_bar.visibility=View.GONE
                 }
 
@@ -207,6 +207,7 @@ class HomeFragment : CommanAPI() {
                     loge(TAG, "onReqPermission: ")
                 }
             })
+
         }
     }
 
@@ -383,7 +384,9 @@ class HomeFragment : CommanAPI() {
 
         fun onFindClicked(view: View) {
 
-            if (find_rest_edt.text.trim().toString().length > 0 && homefragment.progress_bar.visibility==View.GONE ) {
+            if (find_rest_edt.text.trim().toString().length > 0 ) {
+                homefragment.progress_bar.visibility=View.GONE
+                gps_img.visibility=View.VISIBLE
                 val restaurantlist = RestaurantList.newInstance(find_rest_edt.text.trim().toString())
                 addFragment(R.id.home_fragment_container, restaurantlist, RestaurantList.TAG, true)
             }
@@ -396,16 +399,21 @@ class HomeFragment : CommanAPI() {
 
         fun reOrder(view: View, model: OrderFragment.Orderresult) {
             loge(TAG, "reorder---")
+            homefragment.progress_bar.visibility=View.GONE
+            gps_img.visibility=View.VISIBLE
             fetchReorder_info(model, home_fragment_container)
         }
 
         fun onDetails(view: View, model: OrderFragment.Orderresult) {
             val fragment = OrderedRestaurant.newInstance(model)
+            homefragment.progress_bar.visibility=View.GONE
+            gps_img.visibility=View.VISIBLE
             addFragment(R.id.home_fragment_container, fragment, OrderedRestaurant.TAG, true)
         }
 
         fun onRate(view: View, model: OrderFragment.Orderresult) {
-
+            homefragment.progress_bar.visibility=View.GONE
+            gps_img.visibility=View.VISIBLE
             val fragment = RateOrder.newInstance(order_no = model.order_no, orderresult = model)
             var enter: Slide? = null
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {

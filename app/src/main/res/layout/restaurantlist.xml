@@ -485,7 +485,6 @@
                             android:gravity="center_horizontal"
                             android:text="@string/unfortunately_error"
                             android:textColor="@color/black_default"
-
                             />
 
                         <android.support.v7.widget.AppCompatButton

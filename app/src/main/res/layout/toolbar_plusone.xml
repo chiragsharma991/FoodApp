@@ -54,7 +54,8 @@
             android:layout_centerVertical="true"
             android:includeFontPadding="false"
             android:layout_height="wrap_content"
-            android:maxLength="23"
+            android:maxLength="18"
+            android:ellipsize="end"
             android:singleLine="true"
             android:layout_toEndOf="@+id/img_toolbar_back"
             android:fontFamily="@font/hindvadodara_medium"
@@ -98,7 +99,7 @@
                     android:fontFamily="@font/hindvadodara_regular"
                     android:layout_marginLeft="@dimen/_3sdp"
                     android:layout_centerVertical="true"
-                    android:text="00.00 kr"
+                    android:text="00 |00.00 kr"
                     android:textColor="@color/white" />
             </RelativeLayout>
             <TextView

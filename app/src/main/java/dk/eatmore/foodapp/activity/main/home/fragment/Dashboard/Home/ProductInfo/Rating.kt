@@ -4,32 +4,24 @@ import android.databinding.BindingAdapter
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.support.v7.widget.LinearLayoutManager
-import android.support.v7.widget.RecyclerView
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.ViewTreeObserver
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.AccountFragment
-import dk.eatmore.foodapp.adapter.GenericAdapter
-import dk.eatmore.foodapp.adapter.ViewHolderFactory
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerCallback
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerClickListner
 import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
-import dk.eatmore.foodapp.databinding.FragmentAccountContainerBinding
 import dk.eatmore.foodapp.databinding.RatingRestaurantBinding
-import dk.eatmore.foodapp.databinding.RowMenuRestaurantBinding
 import dk.eatmore.foodapp.databinding.RowRatingListBinding
-import dk.eatmore.foodapp.model.User
-import dk.eatmore.foodapp.model.home.MenuListItem
-import dk.eatmore.foodapp.model.home.Rating_details
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.model.home.Review_list
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.BindDataUtils
 import dk.eatmore.foodapp.utils.Constants
-import kotlinx.android.synthetic.main.menu_restaurant.*
 import kotlinx.android.synthetic.main.rating_restaurant.*
+import android.widget.CompoundButton
+
+
 
 class Rating : BaseFragment(), RecyclerClickListner {
 
@@ -38,6 +30,7 @@ class Rating : BaseFragment(), RecyclerClickListner {
     private lateinit var restaurant : Restaurant
     private lateinit var clickEvent: MyClickHandler
     private var mAdapter: UniversalAdapter<Review_list, RowRatingListBinding>? = null
+    private var review_list : ArrayList<Review_list> = ArrayList()
 
 
 
@@ -77,13 +70,12 @@ class Rating : BaseFragment(), RecyclerClickListner {
             binding.restaurant=restaurant
             binding.handler=clickEvent
             binding.util=BindDataUtils
-            mAdapter = UniversalAdapter(context!!,restaurant.review_list, R.layout.row_rating_list, object : RecyclerCallback<RowRatingListBinding, Review_list> {
-                override fun bindData(binder: RowRatingListBinding, model: Review_list) {
-                    setRecyclerData(binder, model)
-                }
+            review_list.addAll(restaurant.review_list)
+            checkbox_filter.setOnCheckedChangeListener(CompoundButton.OnCheckedChangeListener { buttonView, isChecked ->
+               if(restaurant.review_list.size > 0)
+               filterout_Rating(isChecked)
             })
-            recycler_view.layoutManager = LinearLayoutManager(getActivityBase())
-            recycler_view.adapter = mAdapter
+            onRefresh()
 
         }else{
             logd(TAG,"saveInstance NOT NULL")
@@ -98,13 +90,46 @@ class Rating : BaseFragment(), RecyclerClickListner {
 
     }
 
+    private fun onRefresh(){
+        loge(TAG,"review list --"+review_list.size.toString())
+        mAdapter = UniversalAdapter(context!!,review_list, R.layout.row_rating_list, object : RecyclerCallback<RowRatingListBinding, Review_list> {
+            override fun bindData(binder: RowRatingListBinding, model: Review_list) {
+                setRecyclerData(binder, model)
+            }
+        })
+        recycler_view.layoutManager = LinearLayoutManager(getActivityBase())
+        recycler_view.adapter = mAdapter
+    }
+
 
     private fun setRecyclerData(binder: RowRatingListBinding, model: Review_list) {
         binder.reviewList=model
         binder.handler=this
     }
 
+    private fun filterout_Rating(checked: Boolean) {
 
+        review_list.clear()
+
+        when(checked){
+
+            true ->{
+                for (i in 0 until restaurant.review_list.size){
+                    if(restaurant.review_list[i].review != "")
+                        review_list.add(restaurant.review_list[i])
+
+                }
+                mAdapter!!.notifyDataSetChanged()
+            }
+            false ->{
+                for (i in 0 until restaurant.review_list.size){
+                        review_list.add(restaurant.review_list[i])
+                }
+                mAdapter!!.notifyDataSetChanged()
+            }
+        }
+
+    }
 
     override fun onDestroy() {
         super.onDestroy()

@@ -106,6 +106,20 @@ interface ApiInterface {
             @Field("app") app : String
     ): Call<JsonObject>
 
+    //        fun change_password ( old_password : String, newpassword : String,language : String) : Call<JsonObject> {
+    @FormUrlEncoded
+    @POST("Enduser/enduser/change-password")
+    fun change_password(
+            @Field("device_type") device_type: String,
+            @Field("auth_key") auth_key: String,
+            @Field("eatmore_app") eatmore_app: Boolean,
+            @Field("id") id: String,
+            @Field("old_password") old_password: String,
+            @Field("newpassword") newpassword: String,
+            @Field("language") language: String,
+            @Field("app") app : String
+    ): Call<JsonObject>
+
     @FormUrlEncoded
     @POST("Cart/cart/clearcart")
     fun clearcart(

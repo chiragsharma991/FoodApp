@@ -29,206 +29,382 @@
     </data>
 
 
-    <android.support.v7.widget.CardView
-        style="@style/CardViewStyle"
-        android:id="@+id/search_view"
-        android:layout_margin="5dp"
-        android:layout_below="@+id/free_txt"
-        android:transitionName="@string/transition_string"
-        app:cardUseCompatPadding="true"
-        >
-        <RelativeLayout
-            android:id="@+id/rowChildItem"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
+        <android.support.v7.widget.CardView
+            style="@style/CardViewStyle"
+            android:id="@+id/search_view"
+            android:background="?attr/selectableItemBackgroundBorderless"
+            android:layout_margin="5dp"
+            android:layout_below="@+id/free_txt"
+            android:transitionName="@string/transition_string"
+            app:cardUseCompatPadding="true"
+            >
 
-            <android.support.constraint.ConstraintLayout
+            <RelativeLayout
+                android:id="@+id/rowChildItem"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-
-                >
+                android:layout_height="wrap_content">
 
 
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:id="@+id/constraint_one"
+
                     >
 
 
-                    <android.support.constraint.Guideline
-                        android:id="@+id/guideline"
+                    <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.23" />
-
-                    <android.support.constraint.Guideline
-                        android:id="@+id/guideline6"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.70" />
+                        android:layout_height="wrap_content"
+                        android:id="@+id/constraint_one"
+                        >
 
 
-                    <LinearLayout
-                        android:id="@+id/linearLayout"
-                        android:layout_width="0dp"
-                        android:layout_height="80dp"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_weight="0.7"
-                        android:orientation="vertical"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0">
+                        <android.support.constraint.Guideline
+                            android:id="@+id/guideline"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.23" />
 
-                        <android.support.v7.widget.CardView
-                            android:layout_width="@dimen/_60sdp"
-                            android:layout_height="@dimen/_60sdp"
-                            app:cardCornerRadius="@dimen/_5sdp"
-                            app:cardElevation="@dimen/_5sdp">
+                        <android.support.constraint.Guideline
+                            android:id="@+id/guideline6"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            app:layout_constraintGuide_percent="0.70" />
 
-                            <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
 
-                                >
+                        <LinearLayout
+                            android:id="@+id/linearLayout"
+                            android:layout_width="0dp"
+                            android:layout_height="80dp"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_weight="0.7"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline"
+                            app:layout_constraintStart_toStartOf="parent"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0">
 
-                                <android.support.v7.widget.AppCompatImageView
-                                    android:id="@+id/imageview"
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-                                    android:background="@color/gray"
-                                    android:scaleType="fitXY" />
-
+                            <android.support.v7.widget.CardView
+                                android:layout_width="@dimen/_60sdp"
+                                android:layout_height="@dimen/_60sdp"
+                                app:cardCornerRadius="@dimen/_5sdp"
+                                app:cardElevation="@dimen/_5sdp">
 
                                 <RelativeLayout
-                                    android:id="@+id/item_is_new"
                                     android:layout_width="match_parent"
-                                    android:layout_height="@dimen/_15sdp"
-                                    android:layout_alignParentBottom="false"
-                                    android:layout_marginEnd="@dimen/_8sdp"
-                                    android:layout_marginBottom="@dimen/_10sdp"
-                                    android:rotation="-40"
-                                    android:translationX="-16dp"
-                                    android:translationY="0dp"
-                                    android:visibility="@{restaurant.is_new.equalsIgnoreCase(`1`) ? View.VISIBLE : View.GONE}">
+                                    android:layout_height="match_parent"
 
-                                    <dk.eatmore.foodapp.utils.ZigzagView
-                                        android:id="@+id/zigzag_view"
+                                    >
+
+                                    <android.support.v7.widget.AppCompatImageView
+                                        android:id="@+id/imageview"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        app:zigzagBackgroundColor="@color/green"
-                                        app:zigzagHeight="1dp"
-                                        app:zigzagShadowAlpha="0.9"
-                                        app:zigzagSides="bottom">
+                                        android:background="@color/gray"
+                                        android:scaleType="fitXY" />
 
 
-                                    </dk.eatmore.foodapp.utils.ZigzagView>
+                                    <RelativeLayout
+                                        android:id="@+id/item_is_new"
+                                        android:layout_width="match_parent"
+                                        android:layout_height="@dimen/_15sdp"
+                                        android:layout_alignParentBottom="false"
+                                        android:layout_marginEnd="@dimen/_8sdp"
+                                        android:layout_marginBottom="@dimen/_10sdp"
+                                        android:rotation="-40"
+                                        android:translationX="-16dp"
+                                        android:translationY="0dp"
+                                        android:visibility="@{restaurant.is_new.equalsIgnoreCase(`1`) ? View.VISIBLE : View.GONE}">
+
+                                        <dk.eatmore.foodapp.utils.ZigzagView
+                                            android:id="@+id/zigzag_view"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="match_parent"
+                                            app:zigzagBackgroundColor="@color/green"
+                                            app:zigzagHeight="1dp"
+                                            app:zigzagShadowAlpha="0.9"
+                                            app:zigzagSides="bottom">
 
 
-                                    <android.support.v7.widget.AppCompatTextView
-                                        style="@style/Subtitle_TextViewSmall"
-                                        android:layout_centerInParent="true"
-                                        android:singleLine="true"
-                                        android:text="New "
-                                        android:textColor="@color/white"
-                                        android:textSize="@dimen/_8sdp" />
+                                        </dk.eatmore.foodapp.utils.ZigzagView>
+
+
+                                        <android.support.v7.widget.AppCompatTextView
+                                            style="@style/Subtitle_TextViewSmall"
+                                            android:layout_centerInParent="true"
+                                            android:singleLine="true"
+                                            android:text="New "
+                                            android:textColor="@color/white"
+                                            android:textSize="@dimen/_8sdp" />
+
+
+                                    </RelativeLayout>
 
 
                                 </RelativeLayout>
 
 
+                            </android.support.v7.widget.CardView>
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1.3"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="parent"
+                            app:layout_constraintEnd_toStartOf="@+id/guideline6"
+                            app:layout_constraintHorizontal_bias="0.0"
+                            app:layout_constraintStart_toStartOf="@+id/guideline"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0">
+
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/Titlelight_TextViewSmall"
+                                android:text="@{restaurant.restaurant_name}"
+                                />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/SubtitleMidium_TextViewSmall"
+                                android:layout_gravity="center_vertical"
+                                android:id="@+id/cuisines_txt"
+                                android:layout_marginLeft="@dimen/_3sdp"
+                                android:layout_marginTop="@dimen/_3sdp"
+                                android:text="@{restaurant.cuisines}"
+                                android:maxLines="3"
+                                />
+
+                            <FrameLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:visibility="gone">
+
+                                <android.support.v7.widget.AppCompatImageView
+                                    android:layout_width="@dimen/_30sdp"
+                                    android:layout_height="@dimen/_30sdp"
+                                    android:scaleType="centerInside"
+                                    android:scaleX="2"
+                                    android:scaleY="2"
+                                    android:src="@mipmap/price_tag" />
+
+                                <android.support.v7.widget.AppCompatTextView
+                                    style="@style/TextViewSmall"
+                                    android:layout_gravity="center_vertical"
+                                    android:maxLength="4"
+                                    android:paddingLeft="@dimen/_2sdp"
+                                    android:text="-20%"
+                                    android:textColor="@color/white" />
+
+
+                            </FrameLayout>
+
+
+                            <LinearLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_3sdp"
+                                android:gravity="center_vertical"
+                                android:orientation="horizontal">
+
+                                <android.support.v7.widget.AppCompatImageView
+                                    android:layout_width="20dp"
+                                    android:layout_height="@dimen/_20sdp"
+                                    android:layout_gravity="top"
+                                    android:layout_marginTop="@dimen/_4sdp"
+                                    android:scaleType="fitXY"
+                                    android:src="@mipmap/map_marker"
+                                    android:tint="@color/black_txt_light" />
+
+
+                                <android.support.v7.widget.AppCompatTextView
+                                    style="@style/Subtitle_TextViewSmall"
+                                    android:layout_gravity="center_vertical"
+                                    android:layout_marginLeft="@dimen/_3sdp"
+                                    android:text="@{restaurant.address}"
+                                    />
+
+
+                            </LinearLayout>
+
+
+                        </LinearLayout>
+
+                        <LinearLayout
+                            android:id="@+id/linear_ratedview"
+                            android:layout_width="0dp"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_weight="1"
+                            android:orientation="vertical"
+                            app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
+                            app:layout_constraintEnd_toEndOf="parent"
+                            app:layout_constraintStart_toStartOf="@+id/guideline6"
+                            app:layout_constraintTop_toTopOf="parent"
+                            app:layout_constraintVertical_bias="0.0">
+
+                            <RelativeLayout
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+
+                                >
+
+                                <LinearLayout
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:orientation="vertical">
+
+                                    <RatingBar
+                                        android:id="@+id/rating"
+                                        style="?android:attr/ratingBarStyleSmall"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:isIndicator="true"
+                                        android:numStars="6"
+                                        android:rating="@{restaurant.total_rating}"
+                                        android:stepSize="0.0" />
+
+                                    <android.support.v7.widget.AppCompatTextView
+                                        android:id="@+id/ratingtxt"
+                                        style="@style/Subtitle_TextViewSmall"
+                                        android:layout_gravity="center_vertical"
+                                        android:fontFamily="@font/hindvadodara_regular"
+                                        android:singleLine="true"
+                                        android:text="@{@string/restaurant_rating(restaurant.total_review_count)}"
+                                        android:textColor="@color/black_light" />
+
+                                    <android.support.v7.widget.AppCompatButton
+                                        android:id="@+id/order_now"
+                                        style="@style/Button"
+                                        android:layout_height="@dimen/_25sdp"
+                                        android:layout_marginTop="@dimen/_3sdp"
+                                        android:background="@color/background_light"
+                                        android:backgroundTint="@color/theme_color"
+                                        android:text="@{ordertype}"
+                                        android:fontFamily="@font/hindvadodara_light"
+                                        android:textColor="@color/white"
+                                        android:visibility="@{(ordertype.equalsIgnoreCase(@string/notavailable)) ? View.INVISIBLE : View.VISIBLE }" />
+
+
+                                </LinearLayout>
+
+
                             </RelativeLayout>
 
 
-                        </android.support.v7.widget.CardView>
+                        </LinearLayout>
 
 
-                    </LinearLayout>
+                    </android.support.constraint.ConstraintLayout>
+
+
+
+                    <View
+                        android:id="@+id/view_divider"
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:layout_margin="@dimen/_8sdp"
+                        android:alpha="0.2"
+                        android:background="@color/divider_color"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/constraint_one" />
 
                     <LinearLayout
-                        android:layout_width="0dp"
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_weight="1.3"
-                        android:orientation="vertical"
+                        android:layout_margin="@dimen/_8sdp"
+                        android:id="@+id/linear_restinfo"
+                        android:orientation="horizontal"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/guideline6"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="@+id/guideline"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0">
-
-
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/Titlelight_TextViewSmall"
-                            android:text="@{restaurant.restaurant_name}"
-                            />
-
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/SubtitleMidium_TextViewSmall"
-                            android:layout_gravity="center_vertical"
-                            android:id="@+id/cuisines_txt"
-                            android:layout_marginLeft="@dimen/_3sdp"
-                            android:layout_marginTop="@dimen/_3sdp"
-                            android:text="@{restaurant.cuisines}"
-                            android:maxLines="3"
-                            />
-
-                        <FrameLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:visibility="gone">
-
-                            <android.support.v7.widget.AppCompatImageView
-                                android:layout_width="@dimen/_30sdp"
-                                android:layout_height="@dimen/_30sdp"
-                                android:scaleType="centerInside"
-                                android:scaleX="2"
-                                android:scaleY="2"
-                                android:src="@mipmap/price_tag" />
-
-                            <android.support.v7.widget.AppCompatTextView
-                                style="@style/TextViewSmall"
-                                android:layout_gravity="center_vertical"
-                                android:maxLength="4"
-                                android:paddingLeft="@dimen/_2sdp"
-                                android:text="-20%"
-                                android:textColor="@color/white" />
-
-
-                        </FrameLayout>
-
+                        app:layout_constraintTop_toTopOf="@+id/view_divider">
 
                         <LinearLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_3sdp"
-                            android:gravity="center_vertical"
-                            android:orientation="horizontal">
+                            android:orientation="vertical"
+                            android:id="@+id/deliverypresent_view"
+                            android:gravity="center_horizontal"
+                            android:layout_weight="1"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            >
+                            <android.support.v7.widget.AppCompatImageView
+                                android:layout_width="20dp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:scaleType="fitXY"
+                                android:src="@mipmap/motorcycle"
+                                />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/Subtitle_TextViewSmall"
+                                android:id="@+id/delivery_present"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:gravity="center"
+                                />
+
+
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:layout_weight="1"
+                            android:id="@+id/minimum_order_view"
+                            android:gravity="center_horizontal"
+                            android:layout_marginEnd="@dimen/_8sdp"
+                            >
 
                             <android.support.v7.widget.AppCompatImageView
                                 android:layout_width="20dp"
                                 android:layout_height="@dimen/_20sdp"
-                                android:layout_gravity="top"
-                                android:layout_marginTop="@dimen/_4sdp"
                                 android:scaleType="fitXY"
-                                android:src="@mipmap/map_marker"
-                                android:tint="@color/black_txt_light" />
-
+                                android:src="@mipmap/danish_krone"
+                                />
 
                             <android.support.v7.widget.AppCompatTextView
                                 style="@style/Subtitle_TextViewSmall"
-                                android:layout_gravity="center_vertical"
-                                android:layout_marginLeft="@dimen/_3sdp"
-                                android:text="@{restaurant.address}"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:id="@+id/minimum_order"
+                                android:gravity="center"
                                 />
+
+
+                        </LinearLayout>
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:orientation="vertical"
+                            android:gravity="center_horizontal"
+                            android:id="@+id/opening_hours_view"
+                            android:layout_weight="1"
+                            >
+                            <android.support.v7.widget.AppCompatImageView
+                                android:layout_width="20dp"
+                                android:layout_height="@dimen/_20sdp"
+                                android:scaleType="fitXY"
+                                android:src="@mipmap/stopwatch"
+                                />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/Subtitle_TextViewSmall"
+                                android:layout_marginTop="@dimen/_5sdp"
+                                android:id="@+id/opening_hour"
+                                android:gravity="center"
+                                />
+
 
 
                         </LinearLayout>
@@ -236,203 +412,46 @@
 
                     </LinearLayout>
 
-                    <LinearLayout
-                        android:id="@+id/linear_ratedview"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_weight="1"
-                        android:orientation="vertical"
-                        app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintStart_toStartOf="@+id/guideline6"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0">
-
-                        <RelativeLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-
-                            >
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:orientation="vertical">
-
-                                <RatingBar
-                                    android:id="@+id/rating"
-                                    style="?android:attr/ratingBarStyleSmall"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:isIndicator="true"
-                                    android:numStars="6"
-                                    android:rating="@{restaurant.total_rating}"
-                                    android:stepSize="0.0" />
-
-                                <android.support.v7.widget.AppCompatTextView
-                                    android:id="@+id/ratingtxt"
-                                    style="@style/Subtitle_TextViewSmall"
-                                    android:layout_gravity="center_vertical"
-                                    android:fontFamily="@font/hindvadodara_regular"
-                                    android:singleLine="true"
-                                    android:text="@{@string/restaurant_rating(restaurant.total_review_count)}"
-                                    android:textColor="@color/black_light" />
-
-                                <android.support.v7.widget.AppCompatButton
-                                    android:id="@+id/order_now"
-                                    style="@style/Button"
-                                    android:layout_height="@dimen/_25sdp"
-                                    android:layout_marginTop="@dimen/_3sdp"
-                                    android:background="@color/background_light"
-                                    android:backgroundTint="@color/theme_color"
-                                    android:text="@{ordertype}"
-                                    android:fontFamily="@font/hindvadodara_light"
-                                    android:textColor="@color/white"
-                                    android:visibility="@{(ordertype.equalsIgnoreCase(@string/notavailable)) ? View.INVISIBLE : View.VISIBLE }" />
-
-
-                            </LinearLayout>
-
-
-                        </RelativeLayout>
-
-
-                    </LinearLayout>
-
+                    <!--      <View
+                              android:id="@+id/view_divider_two"
+                              android:layout_width="match_parent"
+                              android:layout_height="1dp"
+                              android:layout_marginStart="@dimen/_8sdp"
+                              android:layout_marginEnd="@dimen/_8sdp"
+                              android:layout_marginTop="@dimen/_8sdp"
+                              android:layout_marginBottom="@dimen/_16sdp"
+                              android:alpha="0.2"
+                              android:background="@color/divider_color"
+                              app:layout_constraintEnd_toEndOf="parent"
+                              android:visibility="invisible"
+                              app:layout_constraintStart_toStartOf="parent"
+                              app:layout_constraintTop_toBottomOf="@+id/linear_restinfo"
+                              app:layout_constraintBottom_toBottomOf="parent"
+                              />
+          -->
 
                 </android.support.constraint.ConstraintLayout>
 
 
+            </RelativeLayout>
 
-                <View
-                    android:id="@+id/view_divider"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_margin="@dimen/_8sdp"
-                    android:alpha="0.2"
-                    android:background="@color/divider_color"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraint_one" />
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#99ffffff"
+                android:alpha="0.6"
+                android:id="@+id/blocking_view"
+                android:visibility="@{(ordertype.equalsIgnoreCase(@string/notavailable)) ? View.VISIBLE : View.GONE }"
+            >
 
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_8sdp"
-                    android:id="@+id/linear_restinfo"
-                    android:orientation="horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/view_divider">
+            </RelativeLayout>
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:id="@+id/deliverypresent_view"
-                        android:gravity="center_horizontal"
-                        android:layout_weight="1"
-                        android:layout_marginEnd="@dimen/_8sdp"
-                        >
-                        <android.support.v7.widget.AppCompatImageView
-                            android:layout_width="20dp"
-                            android:layout_height="@dimen/_20sdp"
-                            android:scaleType="fitXY"
-                            android:src="@mipmap/motorcycle"
-                            />
 
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/Subtitle_TextViewSmall"
-                            android:id="@+id/delivery_present"
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:gravity="center"
-                            />
+        </android.support.v7.widget.CardView>
 
 
 
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:layout_weight="1"
-                        android:id="@+id/minimum_order_view"
-                        android:gravity="center_horizontal"
-                        android:layout_marginEnd="@dimen/_8sdp"
-                        >
 
-                        <android.support.v7.widget.AppCompatImageView
-                            android:layout_width="20dp"
-                            android:layout_height="@dimen/_20sdp"
-                            android:scaleType="fitXY"
-                            android:src="@mipmap/danish_krone"
-                            />
-
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/Subtitle_TextViewSmall"
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:id="@+id/minimum_order"
-                            android:gravity="center"
-                            />
-
-
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:orientation="vertical"
-                        android:gravity="center_horizontal"
-                        android:id="@+id/opening_hours_view"
-                        android:layout_weight="1"
-                        >
-                        <android.support.v7.widget.AppCompatImageView
-                            android:layout_width="20dp"
-                            android:layout_height="@dimen/_20sdp"
-                            android:scaleType="fitXY"
-                            android:src="@mipmap/stopwatch"
-                            />
-
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/Subtitle_TextViewSmall"
-                            android:layout_marginTop="@dimen/_5sdp"
-                            android:id="@+id/opening_hour"
-                            android:gravity="center"
-                            />
-
-
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
-
-                <!--      <View
-                          android:id="@+id/view_divider_two"
-                          android:layout_width="match_parent"
-                          android:layout_height="1dp"
-                          android:layout_marginStart="@dimen/_8sdp"
-                          android:layout_marginEnd="@dimen/_8sdp"
-                          android:layout_marginTop="@dimen/_8sdp"
-                          android:layout_marginBottom="@dimen/_16sdp"
-                          android:alpha="0.2"
-                          android:background="@color/divider_color"
-                          app:layout_constraintEnd_toEndOf="parent"
-                          android:visibility="invisible"
-                          app:layout_constraintStart_toStartOf="parent"
-                          app:layout_constraintTop_toBottomOf="@+id/linear_restinfo"
-                          app:layout_constraintBottom_toBottomOf="parent"
-                          />
-      -->
-
-            </android.support.constraint.ConstraintLayout>
-
-
-        </RelativeLayout>
-
-    </android.support.v7.widget.CardView>
 
 
 </layout>

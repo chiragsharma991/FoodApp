@@ -338,16 +338,20 @@ class RestaurantList : SearchRestaurant() {
         loge(TAG, "refresh---")
         var statuswiserestaurant: StatusWiseRestaurant
         list = ArrayList()
+        val open_now = ui_model!!.restaurantList.value!!.restaurant_list.open_now
+        val pre_order = ui_model!!.restaurantList.value!!.restaurant_list.pre_order
+        val closed = ui_model!!.restaurantList.value!!.restaurant_list.closed
+
         if (ui_model!!.restaurantList.value!!.restaurant_list.open_now.size > 0) {
-            statuswiserestaurant = StatusWiseRestaurant(getString(R.string.open_now), getString(R.string.ordernow), ui_model!!.restaurantList.value!!.restaurant_list.open_now)
+            statuswiserestaurant = StatusWiseRestaurant(String.format(getString(R.string.open_now),open_now.size), getString(R.string.ordernow),open_now)
             list.add(statuswiserestaurant)
         }
         if (ui_model!!.restaurantList.value!!.restaurant_list.pre_order.size > 0) {
-            statuswiserestaurant = StatusWiseRestaurant(getString(R.string.pre_order), getString(R.string.preorder), ui_model!!.restaurantList.value!!.restaurant_list.pre_order)
+            statuswiserestaurant = StatusWiseRestaurant(String.format(getString(R.string.pre_order),pre_order.size), getString(R.string.preorder), pre_order)
             list.add(statuswiserestaurant)
         }
         if (ui_model!!.restaurantList.value!!.restaurant_list.closed.size > 0) {
-            statuswiserestaurant = StatusWiseRestaurant(getString(R.string.closed), getString(R.string.notavailable), ui_model!!.restaurantList.value!!.restaurant_list.closed)
+            statuswiserestaurant = StatusWiseRestaurant(String.format(getString(R.string.closed),closed.size), getString(R.string.notavailable),closed)
             list.add(statuswiserestaurant)
         }
         if (list.size <= 0) {
@@ -399,7 +403,7 @@ class RestaurantList : SearchRestaurant() {
 
             mAdapter = RestaurantListParentAdapter(context!!, list, object : RestaurantListParentAdapter.AdapterListener {
                 override fun itemClicked(parentView: Boolean, parentPosition: Int, chilPosition: Int) {
-                    if (progress_bar.visibility == View.VISIBLE) return
+                    if (progress_bar.visibility == View.VISIBLE || list.get(parentPosition).ordertype == getString(R.string.notavailable)) return
                     val fragment = DetailsFragment.newInstance(
                             //    restaurant = list.get(parentPosition).restaurant.get(chilPosition),
                             status = list.get(parentPosition).status
@@ -541,7 +545,7 @@ class RestaurantList : SearchRestaurant() {
 
         fun kokkenType(view: View) {
 
-            if(restaurantlist.progress_bar.visibility == View.GONE){
+            if(restaurantlist.progress_bar.visibility == View.GONE  && restaurantlist.list.size > 0 ){
                 val intent = Intent(restaurantlist.context, KokkenType::class.java)
                 val bundle = Bundle()
                 if(restaurantlist.restaurantlistmodel !=null){
@@ -556,7 +560,7 @@ class RestaurantList : SearchRestaurant() {
 
         fun searchType(view: View) {
 
-            if(restaurantlist.progress_bar.visibility == View.GONE){
+            if(restaurantlist.progress_bar.visibility == View.GONE && restaurantlist.list.size > 0){
                 restaurantlist.app_bar.setExpanded(true)
                 restaurantlist.search_edt.requestFocus()
                 restaurantlist.showKeyboard()
@@ -568,7 +572,7 @@ class RestaurantList : SearchRestaurant() {
 
         fun tilpas(view: View) {
 
-            if(restaurantlist.progress_bar.visibility == View.GONE){
+            if(restaurantlist.progress_bar.visibility == View.GONE && restaurantlist.list.size > 0){
                 val intent = Intent(restaurantlist.context, Tilpas::class.java)
                 val bundle = Bundle()
                 restaurantlist.is_from_filter=true

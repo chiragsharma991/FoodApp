@@ -5,8 +5,11 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.DataBindingUtil
+import android.graphics.PorterDuff
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
@@ -34,6 +37,9 @@ import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.menu_restaurant.*
 import java.io.Serializable
 import java.util.ArrayList
+import android.text.Layout
+
+
 
 
 class Menu : BaseFragment(), RecyclerClickListner {
@@ -82,17 +88,15 @@ class Menu : BaseFragment(), RecyclerClickListner {
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if(savedInstanceState == null){
+            logd(TAG,"saveInstance NULL")
             progress_bar.visibility=View.GONE
             restaurant= arguments!!.getSerializable(Constants.RESTAURANT) as Restaurant
             menuListItem= arguments!!.getSerializable(Constants.MENULISTITEM) as ArrayList<MenuListItem>
             binding.restaurant=restaurant
-           // if(ui_model == null)
-            //    ui_model=createViewModel()
-            logd(TAG,"saveInstance NULL")
+            binding.executePendingBindings()
+            freetext_function()
             val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
             homeFragment=(fragmentof as HomeContainerFragment).getHomeFragment()
-            // free_txt.visibility =if(restaurant.free_text =="") View.GONE else View.VISIBLE
-            // free_txt.text=restaurant.free_text.replace("\n","").replace("\r","")
             menu_search.setOnClickListener{
 
 
@@ -136,6 +140,48 @@ class Menu : BaseFragment(), RecyclerClickListner {
         }else{
             logd(TAG,"saveInstance NOT NULL")
 
+        }
+
+    }
+
+    private fun freetext_function() {
+
+        expandtxt_btn.visibility= View.GONE
+
+        Handler().postDelayed({
+            loge(TAG, "addOnGlobalLayoutListener--")
+
+            val layout = free_txt.layout
+            if (layout != null) {
+                val lines = free_txt.getLineCount()
+                if (lines > 0) {
+                    val ellipsisCount = layout.getEllipsisCount(lines - 1)
+                    if (ellipsisCount > 0) {
+                        expandtxt_btn.visibility= View.VISIBLE
+                    }else{
+                        expandtxt_btn.visibility= View.GONE
+                    }
+                }
+            }
+
+        },100)
+
+        var isTextViewClicked = false
+        free_txt_view.setOnClickListener{
+
+            if(isTextViewClicked){
+                //This will shrink textview to 2 lines if it is expanded.
+                free_txt.maxLines =1;
+                expandtxt_btn.setImageResource(R.drawable.down_arrow)
+                expandtxt_btn.setColorFilter(ContextCompat.getColor(context!!,R.color.black_default),PorterDuff.Mode.SRC_IN)
+                isTextViewClicked = false;
+            } else {
+                //This will expand the textview if it is of 2 lines
+                free_txt.setMaxLines(Integer.MAX_VALUE);
+                expandtxt_btn.setImageResource(R.drawable.up_arrow)
+                expandtxt_btn.setColorFilter(ContextCompat.getColor(context!!,R.color.black_default),PorterDuff.Mode.SRC_IN)
+                isTextViewClicked = true;
+            }
         }
 
     }
@@ -211,7 +257,6 @@ class Menu : BaseFragment(), RecyclerClickListner {
             (parentFragment as DetailsFragment).collapse_toolbar.setBackgroundColor(ContextCompat.getColor(context!!,R.color.white));
             (parentFragment as DetailsFragment).collapse_toolbar.setStatusBarScrimColor(ContextCompat.getColor(context!!,R.color.white))
             (parentFragment as DetailsFragment).collapse_toolbar.setContentScrimColor(ContextCompat.getColor(context!!,R.color.white))*/
-
 
         val fragment = CategoryList.newInstance(restaurant,data)
         var enter :Slide?=null

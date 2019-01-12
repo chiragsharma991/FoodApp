@@ -13,6 +13,14 @@ android {
         enabled = true
     }
 
+   /* sourceSets {
+        main {
+
+            assets.srcDirs = ['/res/raw']
+
+        }
+    }
+*/
     compileSdkVersion 27
     defaultConfig {
         applicationId "dk.eatmore.foodapp"

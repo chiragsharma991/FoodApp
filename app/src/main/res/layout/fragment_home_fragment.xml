@@ -171,7 +171,7 @@
                                                     android:layout_width="@dimen/_40sdp"
                                                     android:layout_height="@dimen/_40sdp"
                                                     android:id="@+id/mylocation_btn"
-                                                    android:layout_toStartOf="@+id/search_button"
+                                                      android:layout_toStartOf="@+id/search_button"
                                                     android:background="?attr/selectableItemBackgroundBorderless"
                                                     android:onClick="@{handlers::onFindLocation}"
                                                     android:scaleType="centerInside"
@@ -180,9 +180,21 @@
                                                     <ImageView
                                                         android:layout_width="@dimen/_20sdp"
                                                         android:layout_height="@dimen/_20sdp"
+                                                        android:id="@+id/gps_img"
+                                                        android:visibility="visible"
                                                         android:scaleType="centerInside"
                                                         android:layout_centerInParent="true"
                                                         app:srcCompat="@drawable/my_location" />
+
+                                                    <ProgressBar
+                                                        android:id="@+id/progress_bar"
+                                                        style="?android:attr/progressBarStyleSmall"
+                                                        android:layout_centerInParent="true"
+                                                        app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                                                        android:layout_width="wrap_content"
+                                                        android:layout_height="wrap_content"
+                                                        android:visibility="gone"
+                                                        android:indeterminate="true" />
 
                                                 </RelativeLayout>
 
@@ -205,7 +217,7 @@
                                                         app:srcCompat="@drawable/search" />
 
 
-                                                    <ProgressBar
+                                         <!--           <ProgressBar
                                                         android:id="@+id/progress_bar"
                                                         style="?android:attr/progressBarStyleSmall"
                                                         android:layout_centerInParent="true"
@@ -214,7 +226,7 @@
                                                         android:layout_height="wrap_content"
                                                         android:visibility="gone"
                                                         android:indeterminateTint="@color/white"
-                                                        android:indeterminate="true" />
+                                                        android:indeterminate="true" />-->
 
 
                                                 </RelativeLayout>
