@@ -80,6 +80,7 @@ class ExtratoppingsChildAdapter(val context: Context, val listner: Extratoppings
 
                CartActivity.ui_model!!.any_selection.value=true
             }
+            holder.binding.executePendingBindings()
 
 
         }

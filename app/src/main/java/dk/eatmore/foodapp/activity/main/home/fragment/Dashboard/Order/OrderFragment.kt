@@ -21,6 +21,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.facebook.internal.Utility
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
@@ -501,7 +502,10 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
 fun setImage(view: AppCompatImageView, model: OrderFragment.Orderresult) {
     // i set 100 fixed dp in rating page thats why i am using 100
     Log.e("set image", "----" + model.toString())
-    Glide.with(view.context).load(model.app_icon).into(view);
+    Glide.with(view.context)
+            .load(model.app_icon)
+            .apply(RequestOptions().placeholder(BindDataUtils.getRandomDrawbleColor()).error(BindDataUtils.getRandomDrawbleColor()))
+            .into(view)
 
 }
 

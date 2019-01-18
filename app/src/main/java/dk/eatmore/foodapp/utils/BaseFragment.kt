@@ -22,6 +22,7 @@ import android.support.v4.app.ActivityCompat
 import android.content.pm.PackageManager
 import android.location.Address
 import android.location.Geocoder
+import android.location.LocationManager
 import android.net.ParseException
 import android.os.Build
 import android.support.design.widget.AppBarLayout
@@ -361,6 +362,12 @@ abstract class BaseFragment : Fragment() {
 
 
         }
+    }
+
+    fun isGpsEnable() : Boolean {
+        val  manager = context!!.getSystemService(Context.LOCATION_SERVICE ) as LocationManager
+        val statusOfGPS = manager.isProviderEnabled(LocationManager.GPS_PROVIDER)
+        return statusOfGPS
     }
 
 

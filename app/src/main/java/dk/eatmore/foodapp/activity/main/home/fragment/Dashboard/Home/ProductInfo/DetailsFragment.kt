@@ -26,6 +26,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
@@ -61,33 +62,31 @@ class DetailsFragment : BaseFragment() {
     private var mAdapter: OrderListAdapter? = null
     var adapter: ViewPagerAdapter? = null
     private lateinit var binding: FragmentDetailBinding
-    private var canIrefreshpre_Function : Boolean =false
+    private var canIrefreshpre_Function: Boolean = false
     private lateinit var mYourBroadcastReceiver: BroadcastReceiver
-   // private lateinit var restaurant : Restaurant
-    private var call_category_menu  : Call<JsonObject>? =null
-
-
+    // private lateinit var restaurant : Restaurant
+    private var call_category_menu: Call<JsonObject>? = null
 
 
     companion object {
 
         //delivery_present & pickup_present are two condition to show / hide .
-        var delivery_present : Boolean=true
-        var pickup_present : Boolean=true
+        var delivery_present: Boolean = true
+        var pickup_present: Boolean = true
         val TAG = "DetailsFragment"
-        var total_cartcnt : Int = 0
-        var total_cartamt : String = ""
-        var delivery_charge_title : String = ""
-        var delivery_charge : String = ""
-        var delivery_text ="Sample of deliverytext"
-        var pickup_text ="Sample of pickuptext"
+        var total_cartcnt: Int = 0
+        var total_cartamt: String = ""
+        var delivery_charge_title: String = ""
+        var delivery_charge: String = ""
+        var delivery_text = "Sample of deliverytext"
+        var pickup_text = "Sample of pickuptext"
         var ui_model: UIModel? = null
-        fun newInstance( status: String): DetailsFragment {
+        fun newInstance(status: String): DetailsFragment {
 
             val fragment = DetailsFragment()
             val bundle = Bundle()
             bundle.putString(Constants.STATUS, status)
-           // bundle.putSerializable(Constants.RESTAURANT, restaurant)
+            // bundle.putSerializable(Constants.RESTAURANT, restaurant)
             fragment.arguments = bundle
             return fragment
         }
@@ -104,12 +103,12 @@ class DetailsFragment : BaseFragment() {
     }
 
     override fun getUserVisibleHint(): Boolean {
-        loge(TAG,"getUserVisibleHint--")
+        loge(TAG, "getUserVisibleHint--")
         return super.getUserVisibleHint()
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
-        loge(TAG,"setUserVisibleHint--"+isVisibleToUser)
+        loge(TAG, "setUserVisibleHint--" + isVisibleToUser)
 
         super.setUserVisibleHint(isVisibleToUser)
     }
@@ -123,9 +122,9 @@ class DetailsFragment : BaseFragment() {
 
 
         if (savedInstanceState == null) {
-          //  restaurant = arguments?.getSerializable(Constants.RESTAURANT) as Restaurant
-            binding.isUiprogress=true  // you are also comming back so no loader is required.
-            toolbar_badge_view.visibility= View.GONE  // By default viewcart should be gone.
+            //  restaurant = arguments?.getSerializable(Constants.RESTAURANT) as Restaurant
+            binding.isUiprogress = true  // you are also comming back so no loader is required.
+            toolbar_badge_view.visibility = View.GONE  // By default viewcart should be gone.
             logd(DetailsFragment.TAG, "saveInstance NULL")
             img_toolbar_back.setImageResource(R.drawable.close)
             img_toolbar_back.setOnClickListener {
@@ -138,7 +137,6 @@ class DetailsFragment : BaseFragment() {
             logd(DetailsFragment.TAG, "saveInstance NOT NULL")
         }
     }
-
 
 
     class UIModel : ViewModel() {
@@ -160,37 +158,40 @@ class DetailsFragment : BaseFragment() {
 
     private fun refreshview(restaurant_info: Restaurant) {
 
-        loge(TAG,"refresh---")
-        binding.isUiprogress=false
+        loge(TAG, "refresh---")
+        binding.isUiprogress = false
         broadcastEvent(restaurant_info)
-        delivery_present=restaurant_info.delivery_present
-        pickup_present=restaurant_info.pickup_present
-        delivery_charge= restaurant_info.delivery_charge?:"0"
-        delivery_charge_title=restaurant_info.delivery_charge_title?:"null"
-        total_cartcnt =if(restaurant_info.cartcnt ==null || restaurant_info.cartcnt =="0") 0 else restaurant_info.cartcnt!!.toInt()
-        total_cartamt =if(restaurant_info.cartamt ==null || restaurant_info.cartamt =="0") "00.00" else restaurant_info.cartamt.toString()
+        delivery_present = restaurant_info.delivery_present
+        pickup_present = restaurant_info.pickup_present
+        delivery_charge = restaurant_info.delivery_charge ?: "0"
+        delivery_charge_title = restaurant_info.delivery_charge_title ?: "null"
+        total_cartcnt = if (restaurant_info.cartcnt == null || restaurant_info.cartcnt == "0") 0 else restaurant_info.cartcnt!!.toInt()
+        total_cartamt = if (restaurant_info.cartamt == null || restaurant_info.cartamt == "0") "00.00" else restaurant_info.cartamt.toString()
         updatebatchcount(0)
         val myclickhandler = MyClickHandler(this)
         binding.restaurant = restaurant_info
         binding.handler = myclickhandler
+        Glide.with(context!!)
+                .load(restaurant_info.app_icon)
+                .apply(RequestOptions().placeholder(BindDataUtils.getRandomDrawbleColor()).error(BindDataUtils.getRandomDrawbleColor()))
+                .into(imageview)
+        adapter = ViewPagerAdapter(childFragmentManager)
 
-        Glide.with(context!!).load(restaurant_info.app_icon).into(imageview);
-            adapter = ViewPagerAdapter(childFragmentManager)
 
-        if((ui_model!!.category_menulist.value!!.is_restaurant_closed !=null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) &&
-           (ui_model!!.category_menulist.value!!.pre_order !=null && ui_model!!.category_menulist.value!!.pre_order == false)){
+        if ((ui_model!!.category_menulist.value!!.is_restaurant_closed != null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) &&
+                (ui_model!!.category_menulist.value!!.pre_order != null && ui_model!!.category_menulist.value!!.pre_order == false)) {
             // closed restaurant---
 
 
-
-            if(arguments!!.getString(Constants.STATUS) == getString(R.string.open_now)){
+            if (arguments!!.getString(Constants.STATUS) == getString(R.string.open_now)) {
                 /*TODO  if user is coming from open restaurant and then restaurent suddenly closed then:*/
-                val msg =ui_model!!.category_menulist.value!!.msg ?: ""
-                DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!, R.color.black),msg = msg,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                val msg = ui_model!!.category_menulist.value!!.msg ?: ""
+                DialogUtils.openDialogDefault(context = context!!, btnNegative = "", btnPositive = getString(R.string.ok), color = ContextCompat.getColor(context!!, R.color.black), msg = msg, title = "", onDialogClickListener = object : DialogUtils.OnDialogClickListener {
                     override fun onPositiveButtonClick(position: Int) {
-                       // viewpager.setCurrentItem(1,true)
-                        canIrefreshpre_Function=true
+                        // viewpager.setCurrentItem(1,true)
+                        canIrefreshpre_Function = true
                     }
+
                     override fun onNegativeButtonClick() {
                     }
                 })
@@ -200,11 +201,11 @@ class DetailsFragment : BaseFragment() {
             adapter!!.addFragment(Info.newInstance(restaurant_info), getString(R.string.info))
             viewpager.offscreenPageLimit = 2
             viewpager.setAdapter(adapter)
-            viewpager.setCurrentItem(1,true)
+            viewpager.setCurrentItem(1, true)
 
-        }else{
+        } else {
             // open and preorder Restaurant---
-            adapter!!.addFragment(Menu.newInstance(ui_model!!.category_menulist.value!!.menu!!,restaurant_info), getString(R.string.menu))
+            adapter!!.addFragment(Menu.newInstance(ui_model!!.category_menulist.value!!.menu!!, restaurant_info), getString(R.string.menu))
             adapter!!.addFragment(Rating.newInstance(restaurant_info), getString(R.string.rating))
             adapter!!.addFragment(Info.newInstance(restaurant_info), getString(R.string.info))
             viewpager.offscreenPageLimit = 3
@@ -212,62 +213,63 @@ class DetailsFragment : BaseFragment() {
 
         }
 
-            tabs.setupWithViewPager(viewpager)
-            //  setPalette()
-            viewcart.setOnClickListener {
-             //   if(total_cartcnt==0) return@setOnClickListener
+        tabs.setupWithViewPager(viewpager)
+        //  setPalette()
+        viewcart.setOnClickListener {
+            //   if(total_cartcnt==0) return@setOnClickListener
 
-                val fragment = EpayFragment.newInstance(restaurant_info)
-                var enter : Slide?=null
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    enter = Slide()
-                    enter.setDuration(300)
-                    enter.slideEdge = Gravity.BOTTOM
-                    val changeBoundsTransition : ChangeBounds = ChangeBounds()
-                    changeBoundsTransition.duration = 300
-                    fragment.sharedElementEnterTransition=changeBoundsTransition
-                    fragment.enterTransition=enter
-                }
-
-                if((activity as HomeActivity).fragmentTab_is() == 1)
-                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment().addFragment(R.id.home_order_container,fragment,EpayFragment.TAG,false)
-                else
-                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().addFragment(R.id.home_fragment_container,fragment,EpayFragment.TAG,false)
+            val fragment = EpayFragment.newInstance(restaurant_info)
+            var enter: Slide? = null
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                enter = Slide()
+                enter.setDuration(300)
+                enter.slideEdge = Gravity.BOTTOM
+                val changeBoundsTransition: ChangeBounds = ChangeBounds()
+                changeBoundsTransition.duration = 300
+                fragment.sharedElementEnterTransition = changeBoundsTransition
+                fragment.enterTransition = enter
             }
+
+            if ((activity as HomeActivity).fragmentTab_is() == 1)
+                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment().addFragment(R.id.home_order_container, fragment, EpayFragment.TAG, false)
+            else
+                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().addFragment(R.id.home_fragment_container, fragment, EpayFragment.TAG, false)
+        }
 
     }
 
 
-     fun fetch_category_menu() {
+    fun fetch_category_menu() {
 
-         val postParam = JsonObject()
-         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN,""))
-         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY,""))
-         if(PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS,false)){
-             postParam.addProperty(Constants.IS_LOGIN, "1")
-             postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,""))
-         }else{
-             postParam.addProperty(Constants.IS_LOGIN, "0")
-         }
-         postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
-         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
-         postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+        val postParam = JsonObject()
+        postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
+        postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
+        if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
+            postParam.addProperty(Constants.IS_LOGIN, "1")
+            postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
+        } else {
+            postParam.addProperty(Constants.IS_LOGIN, "0")
+        }
+        postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN, ""))
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
 
-       //  progress_bar_layout.visibility=View.VISIBLE
-         call_category_menu=ApiCall.category_menu(postParam)
+        //  progress_bar_layout.visibility=View.VISIBLE
+        call_category_menu = ApiCall.category_menu(postParam)
         callAPI(call_category_menu!!, object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
-                val response= body as JsonObject
+                val response = body as JsonObject
                 val restaurantInfoModel = GsonBuilder().create().fromJson(response.toString(), RestaurantInfoModel::class.java)
                 if (restaurantInfoModel.status) {
-                    ui_model!!.category_menulist.value=restaurantInfoModel
+                    ui_model!!.category_menulist.value = restaurantInfoModel
                 }
             }
-            override fun onFail(error: Int) {
-                binding.isUiprogress=false
 
-                if(call_category_menu!!.isCanceled){
+            override fun onFail(error: Int) {
+                binding.isUiprogress = false
+
+                if (call_category_menu!!.isCanceled) {
                     return
                 }
 
@@ -288,31 +290,30 @@ class DetailsFragment : BaseFragment() {
 
 
     private fun broadcastEvent(restaurant_info: Restaurant) {
-        mYourBroadcastReceiver = object  : BroadcastReceiver(){
+        mYourBroadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
-                loge(TAG,"broadcast receive...")
-                if(intent!!.action == Constants.CARTCOUNT_BROADCAST){
-                    restaurant_info.cartcnt=intent.extras.getInt(Constants.CARTCNT).toString()
-                    restaurant_info.cartamt=intent.extras.getString(Constants.CARTAMT).toString()
-                    loge(TAG,"new model cartcnt is..."+restaurant_info.cartcnt)
+                loge(TAG, "broadcast receive...")
+                if (intent!!.action == Constants.CARTCOUNT_BROADCAST) {
+                    restaurant_info.cartcnt = intent.extras.getInt(Constants.CARTCNT).toString()
+                    restaurant_info.cartamt = intent.extras.getString(Constants.CARTAMT).toString()
+                    loge(TAG, "new model cartcnt is..." + restaurant_info.cartcnt)
                     total_cartcnt = intent.extras.getInt(Constants.CARTCNT)
                     total_cartamt = intent.extras.getString(Constants.CARTAMT)
                     updatebatchcount(0)
 
                     // check if category screen is present then update therir batch count as well as this screen.
-                    if((activity as HomeActivity).fragmentTab_is() == 1){
+                    if ((activity as HomeActivity).fragmentTab_is() == 1) {
                         val fragment = ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment().childFragmentManager.findFragmentByTag(CategoryList.TAG)
-                        if(fragment !=null){
+                        if (fragment != null) {
                             (fragment as CategoryList).updatebatchcount(0)
                         }
-                    }else{
-                        val homefragment : HomeFragment = ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment()
-                        val fragment =homefragment.childFragmentManager.findFragmentByTag(CategoryList.TAG)
-                        if(fragment !=null){
+                    } else {
+                        val homefragment: HomeFragment = ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment()
+                        val fragment = homefragment.childFragmentManager.findFragmentByTag(CategoryList.TAG)
+                        if (fragment != null) {
                             (fragment as CategoryList).updatebatchcount(0)
                         }
                     }
-
 
 
                 }
@@ -323,25 +324,25 @@ class DetailsFragment : BaseFragment() {
 
     }
 
-    fun updatebatchcount(count : Int){
+    fun updatebatchcount(count: Int) {
         // this is update method will call in both category and details.
-        try{
-            total_cartcnt= total_cartcnt + count
+        try {
+            total_cartcnt = total_cartcnt + count
             badge_notification_txt.visibility = View.GONE
-            if((ui_model!!.category_menulist.value!!.is_restaurant_closed !=null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) &&
-                    (ui_model!!.category_menulist.value!!.pre_order !=null && ui_model!!.category_menulist.value!!.pre_order == false)){
-                toolbar_badge_view.visibility= View.GONE
+            if ((ui_model!!.category_menulist.value!!.is_restaurant_closed != null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) &&
+                    (ui_model!!.category_menulist.value!!.pre_order != null && ui_model!!.category_menulist.value!!.pre_order == false)) {
+                toolbar_badge_view.visibility = View.GONE
 
-            }else{
-                toolbar_badge_view.visibility= if (total_cartcnt == 0) View.GONE else View.VISIBLE
+            } else {
+                toolbar_badge_view.visibility = if (total_cartcnt == 0) View.GONE else View.VISIBLE
             }
-          //  badge_notification_txt.text= total_cartcnt.toString()
-            if(total_cartcnt == 0 ||total_cartcnt == 1)
-                badge_countprice.text= BindDataUtils.convertCurrencyToDanish(total_cartamt)
+            //  badge_notification_txt.text= total_cartcnt.toString()
+            if (total_cartcnt == 0 || total_cartcnt == 1)
+                badge_countprice.text = BindDataUtils.convertCurrencyToDanish(total_cartamt)
             else
-                badge_countprice.text= String.format(getString(R.string.count_ammount),total_cartcnt,BindDataUtils.convertCurrencyToDanish(total_cartamt))
-        }catch (e : Exception){
-            loge(TAG,"exception: - "+e.message)
+                badge_countprice.text = String.format(getString(R.string.count_ammount), total_cartcnt, BindDataUtils.convertCurrencyToDanish(total_cartamt))
+        } catch (e: Exception) {
+            loge(TAG, "exception: - " + e.message)
         }
 
     }
@@ -350,12 +351,12 @@ class DetailsFragment : BaseFragment() {
     fun onBackpress() {
         // parentFragment!!.childFragmentManager.popBackStack()
         showTabBar(true)
-        if(parentFragment is HomeFragment){
-            val restaurantList= (parentFragment as HomeFragment).childFragmentManager.findFragmentByTag(RestaurantList.TAG)
-            if(restaurantList !=null && canIrefreshpre_Function) (restaurantList as RestaurantList).fetch_ProductDetailList()
-            canIrefreshpre_Function=false
+        if (parentFragment is HomeFragment) {
+            val restaurantList = (parentFragment as HomeFragment).childFragmentManager.findFragmentByTag(RestaurantList.TAG)
+            if (restaurantList != null && canIrefreshpre_Function) (restaurantList as RestaurantList).fetch_ProductDetailList()
+            canIrefreshpre_Function = false
             (parentFragment as HomeFragment).childFragmentManager.popBackStack()
-        }else{
+        } else {
             (parentFragment as OrderFragment).childFragmentManager.popBackStack()
         }
     }
@@ -389,7 +390,7 @@ class DetailsFragment : BaseFragment() {
 
     fun setPalette() {
 
-        val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.banner)
+        val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.eatmore_search_backgrond)
         Palette.from(bitmap).generate(object : Palette.PaletteAsyncListener {
             override fun onGenerated(palette: Palette) {
 
@@ -421,7 +422,6 @@ class DetailsFragment : BaseFragment() {
         loge(TAG, "on destroy...")
 
 
-
     }
 
     override fun onDetach() {
@@ -441,7 +441,7 @@ class DetailsFragment : BaseFragment() {
             it.cancel()
         }
 
-        if(::mYourBroadcastReceiver.isInitialized){
+        if (::mYourBroadcastReceiver.isInitialized) {
             LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(mYourBroadcastReceiver);
         }
 
@@ -459,7 +459,7 @@ class DetailsFragment : BaseFragment() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         loge(TAG, "on create...")
-      //  broadcastEvent()
+        //  broadcastEvent()
 
     }
 
@@ -480,17 +480,17 @@ class DetailsFragment : BaseFragment() {
         loge(TAG, "on stop...")
     }
 
-     data class RestaurantInfoModel (val msg: String? = null,
-                                    val cartcnt: String = "",
-                                    val is_user_deleted: Boolean = false,
-                                    val is_restaurant_closed: Boolean? = null,
-                                    val pre_order: Boolean? = null,
-                                    val image_path: String = "",
-                                    val product_image_thumbnail_path: String = "",
-                                    val time: String = "",
-                                    val menu: ArrayList<MenuListItem>? = null,
-                                    val restaurant_info: Restaurant? =null ,
-                                    val status: Boolean = false) : ModelUtility(), Serializable
+    data class RestaurantInfoModel(val msg: String? = null,
+                                   val cartcnt: String = "",
+                                   val is_user_deleted: Boolean = false,
+                                   val is_restaurant_closed: Boolean? = null,
+                                   val pre_order: Boolean? = null,
+                                   val image_path: String = "",
+                                   val product_image_thumbnail_path: String = "",
+                                   val time: String = "",
+                                   val menu: ArrayList<MenuListItem>? = null,
+                                   val restaurant_info: Restaurant? = null,
+                                   val status: Boolean = false) : ModelUtility(), Serializable
 
 
     inner class ViewPagerAdapter(manager: FragmentManager) : FragmentPagerAdapter(manager) {
@@ -521,7 +521,7 @@ class DetailsFragment : BaseFragment() {
 
 
         fun tapOnRating(view: View) {
-            Log.e(TAG,"click ---")
+            Log.e(TAG, "click ---")
             detailsfragment.tapOnRating()
         }
 
@@ -530,17 +530,15 @@ class DetailsFragment : BaseFragment() {
 
     private fun tapOnRating() {
 
-        if((ui_model!!.category_menulist.value!!.is_restaurant_closed !=null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) &&
-                (ui_model!!.category_menulist.value!!.pre_order !=null && ui_model!!.category_menulist.value!!.pre_order == false)){
+        if ((ui_model!!.category_menulist.value!!.is_restaurant_closed != null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) &&
+                (ui_model!!.category_menulist.value!!.pre_order != null && ui_model!!.category_menulist.value!!.pre_order == false)) {
             // closed restaurant---
-            viewpager.setCurrentItem(0,true)
-        }else{
-            viewpager.setCurrentItem(1,true)
+            viewpager.setCurrentItem(0, true)
+        } else {
+            viewpager.setCurrentItem(1, true)
         }
 
     }
-
-
 
 
 }

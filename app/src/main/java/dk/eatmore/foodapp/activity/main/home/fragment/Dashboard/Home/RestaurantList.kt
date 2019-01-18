@@ -49,7 +49,8 @@ import kotlin.collections.ArrayList
 import kotlin.collections.HashMap
 
 
-class RestaurantList : SearchRestaurant() {
+class RestaurantList : SearchRestaurant(), TextWatcher {
+
 
     private lateinit var binding: RestaurantlistBinding
     private lateinit var clickEvent: MyClickHandler
@@ -98,6 +99,7 @@ class RestaurantList : SearchRestaurant() {
             clickEvent = MyClickHandler(this)
             binding.handler = clickEvent
             setToolbarforThis()
+            search_edt.addTextChangedListener(this)
             search_again_btn.setOnClickListener { onBackpress() }
             ui_model = createViewModel()
             if (ui_model!!.restaurantList.value == null) {
@@ -111,6 +113,13 @@ class RestaurantList : SearchRestaurant() {
         }
 
     }
+
+    override fun afterTextChanged(s: Editable?) {
+    }
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+    }
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+        app_bar.setExpanded(true) }
 
     fun setToolbarforThis() {
         progress_bar.visibility = View.GONE

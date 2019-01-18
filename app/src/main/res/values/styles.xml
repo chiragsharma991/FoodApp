@@ -203,6 +203,7 @@
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/_40sdp</item>
         <item name="android:lines">1</item>
+        <item name="android:inputType">textEmailAddress</item>
         <item name="android:singleLine">true</item>
         <item name="android:paddingLeft">@dimen/_8sdp</item>
         <item name="android:background">@drawable/round_corner</item>
@@ -213,6 +214,7 @@
     <style name="EditText_Normal" parent="Widget.AppCompat.EditText">
         <item name="android:layout_width">match_parent</item>
         <item name="android:layout_height">@dimen/_40sdp</item>
+        <item name="android:inputType">textEmailAddress</item>
         <item name="android:paddingLeft">@dimen/_8sdp</item>
         <item name="android:fontFamily">@font/hindvadodara_light</item>
         <item name="android:textAppearance">?android:attr/textAppearanceSmall</item>
@@ -242,6 +244,8 @@
 
     <style name="tab_text" parent="@android:style/TextAppearance.Widget.TabWidget">
         <item name="android:fontFamily">@font/ubuntu_r</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
+
 
     </style>
 

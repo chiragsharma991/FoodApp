@@ -178,7 +178,7 @@
             style="@style/TextViewMid"
             android:id="@+id/continue_btn"
             android:visibility="gone"
-            android:text="@string/continue_"
+            android:text="@string/confirm"
             android:layout_centerInParent="true"
             android:textColor="@color/theme_color"
             />

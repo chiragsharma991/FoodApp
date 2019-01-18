@@ -14,7 +14,7 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.location.*
 
 /**
- * Created by Mohit on 15-Feb-18.
+ * Created by chirag on 15-Feb-18.
  */
 
 class GetLastLocation(private val context: Activity, val onLocationInteraction: OnLocationInteraction) {

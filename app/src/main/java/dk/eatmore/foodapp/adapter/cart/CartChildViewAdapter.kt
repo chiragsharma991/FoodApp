@@ -38,6 +38,7 @@ class CartChildViewAdapter(val context: Context, val listner: CartViewAdapter.Ad
         if (holder is MyViewHolder) {
 
             holder.binding.data=list_child[position]
+            holder.binding.executePendingBindings()
 
             if (list_child[position].is_itemselected){
                 holder.binding.itemRccTxt.setTextColor(ContextCompat.getColor(context, R.color.theme_color))
@@ -79,7 +80,8 @@ class CartChildViewAdapter(val context: Context, val listner: CartViewAdapter.Ad
 
              }*/
 
-            Log.e("count", "" + count)
+            holder.binding.executePendingBindings()
+
         }
 
     }

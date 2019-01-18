@@ -77,6 +77,7 @@ class EpayFragment : BaseFragment() {
         var isPickup:Boolean = false  // just for check pickup/delivery selection on tabview.
         var first_time : String =""
 
+
         fun newInstance(restaurant: Restaurant): EpayFragment {
             val fragment = EpayFragment()
             val bundle =Bundle()
@@ -541,6 +542,8 @@ class EpayFragment : BaseFragment() {
             var telephone_no :String ="",
             var postal_code :String ="",
             var comments :String ="",
+            var payment_address :String ="",
+            var payment_time :String ="",
             var expected_time :String ="",
             var first_time :String ="",
             var discount_id :Int =0,

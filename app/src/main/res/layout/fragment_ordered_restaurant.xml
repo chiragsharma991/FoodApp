@@ -86,16 +86,16 @@
                         >
 
 
-                        <android.support.v7.widget.CardView
+                 <!--       <android.support.v7.widget.CardView
                             android:layout_width="@dimen/_80sdp"
                             android:layout_height="@dimen/_80sdp"
                             app:cardElevation="@dimen/_5sdp"
                             app:cardCornerRadius="@dimen/_5sdp"
                             >
-
+-->
                             <RelativeLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
+                                android:layout_width="@dimen/_80sdp"
+                                android:layout_height="@dimen/_80sdp"
 
                                 >
 
@@ -111,7 +111,9 @@
                             </RelativeLayout>
 
 
+<!--
                         </android.support.v7.widget.CardView>
+-->
 
                         <android.support.v7.widget.AppCompatTextView
                             style="@style/Subtitle_TextViewSmall"

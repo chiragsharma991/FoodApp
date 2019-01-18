@@ -242,6 +242,7 @@
 
     <style name="tab_text" parent="@android:style/TextAppearance.Widget.TabWidget">
         <item name="android:fontFamily">@font/ubuntu_r</item>
+        <item name="android:textAppearance">?android:attr/textAppearanceMedium</item>
 
     </style>
 

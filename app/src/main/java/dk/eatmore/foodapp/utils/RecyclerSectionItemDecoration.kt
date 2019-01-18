@@ -3,6 +3,7 @@ package dk.eatmore.foodapp.utils
 import android.graphics.Canvas
 import android.graphics.Rect
 import android.support.v7.widget.RecyclerView
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -60,6 +61,7 @@ class RecyclerSectionItemDecoration(private val headerOffset: Int, private val s
 
     private fun drawHeader(c: Canvas, child: View, headerView: View) {
         c.save()
+       // Log.e("sticky--",sticky.toString())
         if (sticky) {
             c.translate(0f,
                     Math.max(0,

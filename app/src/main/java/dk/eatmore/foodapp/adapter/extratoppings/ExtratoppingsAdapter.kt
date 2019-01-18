@@ -56,6 +56,9 @@ class ExtratoppingsAdapter(val c: Context, val list :ArrayList<Topping_subgroup_
                 adapter = mAdapter
             }
 
+            holder.binding.executePendingBindings()
+
+
 
         }
 

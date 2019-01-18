@@ -61,8 +61,8 @@
                     <android.support.v7.widget.AppCompatCheckBox
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:clickable="false"
                         android:id="@+id/checkbox"
+                        android:clickable="false"
                         android:checked="@{kokken_Model.is_itemselected}"
                         android:buttonTint="@color/theme_color"
                         />
@@ -73,6 +73,7 @@
                         android:layout_width="0dp"
                         android:id="@+id/row_onlyextratop_child_txt"
                         android:layout_gravity="center_vertical"
+                        android:textColor="@{kokken_Model.is_itemselected ?  @color/theme_color : @color/black_txt_light}"
                         android:singleLine="true"
                         android:text="@{kokken_Model.itemtype +` (`+kokken_Model.itemcount+`) `}"
                         android:layout_weight="1.3"

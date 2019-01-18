@@ -61,6 +61,8 @@ class OnlyExtratoppingsChildAdapter(val context: Context, val listner: OnlyExtra
 
                 CartActivity.ui_model!!.any_selection.value=true
             }
+            holder.binding.executePendingBindings()
+
 
 
         }

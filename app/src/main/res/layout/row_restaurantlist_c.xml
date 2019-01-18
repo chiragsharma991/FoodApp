@@ -38,6 +38,8 @@
             android:layout_below="@+id/free_txt"
             android:transitionName="@string/transition_string"
             app:cardUseCompatPadding="true"
+            app:cardBackgroundColor="@{(ordertype.equalsIgnoreCase(@string/preorder)) ? @color/white_light : @color/white }"
+
             >
 
             <RelativeLayout
@@ -89,23 +91,22 @@
                             app:layout_constraintTop_toTopOf="parent"
                             app:layout_constraintVertical_bias="0.0">
 
-                            <android.support.v7.widget.CardView
+    <!--                        <android.support.v7.widget.CardView
                                 android:layout_width="@dimen/_60sdp"
                                 android:layout_height="@dimen/_60sdp"
-                                app:cardCornerRadius="@dimen/_5sdp"
-                                app:cardElevation="@dimen/_5sdp">
+                                app:cardCornerRadius="@dimen/_8sdp"
+                                app:cardBackgroundColor="@android:color/transparent"
+                                app:cardElevation="@dimen/_2sdp">-->
 
                                 <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="match_parent"
-
+                                    android:layout_width="@dimen/_60sdp"
+                                    android:layout_height="@dimen/_60sdp"
                                     >
 
                                     <android.support.v7.widget.AppCompatImageView
                                         android:id="@+id/imageview"
                                         android:layout_width="match_parent"
                                         android:layout_height="match_parent"
-                                        android:background="@color/gray"
                                         android:scaleType="fitXY" />
 
 
@@ -149,7 +150,9 @@
                                 </RelativeLayout>
 
 
+<!--
                             </android.support.v7.widget.CardView>
+-->
 
 
                         </LinearLayout>
@@ -236,6 +239,18 @@
 
                             </LinearLayout>
 
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/Subtitle_TextViewSmall"
+                                android:maxLines="1"
+                                android:ellipsize="end"
+                                android:visibility="@{(ordertype.equalsIgnoreCase(@string/notavailable)) ? View.VISIBLE : View.GONE }"
+                                android:id="@+id/not_available_txt"
+                                android:layout_gravity="center_vertical"
+                                android:text="@string/ikke_tilg_ngelig"
+                                android:layout_marginStart="@dimen/_23sdp"
+                                android:textColor="@color/theme_color"
+                                />
+
 
                         </LinearLayout>
 
@@ -247,6 +262,7 @@
                             android:layout_marginEnd="8dp"
                             android:layout_weight="1"
                             android:orientation="vertical"
+                            android:visibility="@{(ordertype.equalsIgnoreCase(@string/notavailable)) ? View.INVISIBLE : View.VISIBLE }"
                             app:layout_constraintBottom_toBottomOf="@+id/linearLayout"
                             app:layout_constraintEnd_toEndOf="parent"
                             app:layout_constraintStart_toStartOf="@+id/guideline6"
@@ -256,7 +272,7 @@
                             <RelativeLayout
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
-
+                                android:visibility="visible"
                                 >
 
                                 <LinearLayout
@@ -325,6 +341,7 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="@dimen/_8sdp"
                         android:id="@+id/linear_restinfo"
+                        android:visibility="@{(ordertype.equalsIgnoreCase(@string/notavailable)) ? View.GONE : View.VISIBLE }"
                         android:orientation="horizontal"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
@@ -439,12 +456,21 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:background="#99ffffff"
-                android:alpha="0.6"
+                android:alpha="0.7"
                 android:id="@+id/blocking_view"
                 android:visibility="@{(ordertype.equalsIgnoreCase(@string/notavailable)) ? View.VISIBLE : View.GONE }"
             >
 
             </RelativeLayout>
+     <!--       <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#99ffffff"
+                android:alpha="0.4"
+                android:visibility="@{(ordertype.equalsIgnoreCase(@string/preorder)) ? View.VISIBLE : View.GONE }"
+            >
+
+            </RelativeLayout>-->
 
 
         </android.support.v7.widget.CardView>

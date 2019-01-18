@@ -26,6 +26,13 @@ import android.view.View
 import android.widget.RelativeLayout
 import dk.eatmore.foodapp.utils.BindDataUtils
 import java.text.SimpleDateFormat
+import android.graphics.Bitmap
+import com.bumptech.glide.request.target.SimpleTarget
+import android.R.attr.path
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import com.bumptech.glide.request.RequestOptions
+import com.bumptech.glide.request.transition.Transition
 
 
 class RestaurantListChildAdapter(val context: Context, val listner: RestaurantListParentAdapter.AdapterListener, val parentPosition: Int, val list : ArrayList<RestaurantList.StatusWiseRestaurant> ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -46,17 +53,22 @@ class RestaurantListChildAdapter(val context: Context, val listner: RestaurantLi
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is MyViewHolder) {
+      /*      Glide.with(context)
+                    .asBitmap()
+                    .load(list.get(parentPosition).restaurant.get(position).app_icon)
+                    .into(object : SimpleTarget<Bitmap>() {
+                        override fun onResourceReady(resource: Bitmap, transition: Transition<in Bitmap>?) {
+                            holder.binding.imageview.setImageBitmap(BindDataUtils.convertImagetoBlackwhite(resource))
+                        }
 
-            Glide.with(context).load(list.get(parentPosition).restaurant.get(position).app_icon).into(holder.binding.imageview);
+                    })*/
+
+       Glide.with(context)
+            .load(list.get(parentPosition).restaurant.get(position).app_icon)
+            .apply(RequestOptions().placeholder(BindDataUtils.getRandomDrawbleColor()).error(BindDataUtils.getRandomDrawbleColor()))
+            .into(holder.binding.imageview)
+
           //  ViewCompat.setTransitionName(holder.binding.imageview, position.toString() + "vnhvn")
-
-    /*        val matrix = Matrix()
-            holder.binding.itemIsNew.setScaleType(ImageView.ScaleType.MATRIX)   //required
-            matrix.postRotate(angle as Float, pivotX, pivotY)
-            imageView.setImageMatrix(matrix)
-            imageView.getDrawable().getBounds().width()/2, imageView.getDrawable().getBounds().height()/2)*/
-
-
             holder.binding.itemIsNew.visibility= View.GONE
             holder.binding.ordertype=list.get(parentPosition).ordertype
             holder.binding.restaurant=list.get(parentPosition).restaurant.get(position)
@@ -84,7 +96,7 @@ class RestaurantListChildAdapter(val context: Context, val listner: RestaurantLi
                 }
             }else{
                 restaurant.sort_delivery_charge=0.0
-                holder.binding.deliverypresentView.visibility=View.GONE
+                holder.binding.deliverypresentView.visibility=View.INVISIBLE
             }
 
             //opening titles
@@ -100,7 +112,7 @@ class RestaurantListChildAdapter(val context: Context, val listner: RestaurantLi
                 holder.binding.minimumOrderView.visibility=View.VISIBLE
                 if((restaurant.minimum_order_price == null) || (restaurant.minimum_order_price =="")){
                     restaurant.sort_min_order_price=0.0
-                    holder.binding.minimumOrderView.visibility=View.GONE
+                    holder.binding.minimumOrderView.visibility=View.INVISIBLE
                 }else{
                     val label ="Minimumordre: \n ${BindDataUtils.convertCurrencyToDanish(restaurant.minimum_order_price)}"
                     restaurant.sort_min_order_price=restaurant.minimum_order_price.toDouble()
@@ -109,7 +121,7 @@ class RestaurantListChildAdapter(val context: Context, val listner: RestaurantLi
                 }
             }else{
                 restaurant.sort_min_order_price=0.0
-                holder.binding.minimumOrderView.visibility=View.GONE
+                holder.binding.minimumOrderView.visibility=View.INVISIBLE
             }
 
 

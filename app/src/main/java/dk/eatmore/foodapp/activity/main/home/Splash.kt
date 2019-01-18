@@ -43,6 +43,7 @@ import com.airbnb.lottie.model.KeyPath
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
+import dk.eatmore.foodapp.activity.main.home.intro.Intro_slider
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
@@ -75,7 +76,6 @@ class Splash : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         loge(TAG, "---Activity Result Activity---")
-
         super.onActivityResult(requestCode, resultCode, data)
     }
 
@@ -354,14 +354,26 @@ class Splash : BaseActivity() {
 
     private fun moveToLogin() {
 
-        if (PreferenceUtil.getString(PreferenceUtil.USER_NAME, "") == "") {
+        if(PreferenceUtil.getBoolean(PreferenceUtil.CLOSE_INTRO_SLIDE, false) == true){
+            // move -> Home Activity
+            startActivity(Intent(this, HomeActivity::class.java))
+            finish()
+        } else{
+            // move -> Intro slide
+            PreferenceUtil.putValue(PreferenceUtil.CLOSE_INTRO_SLIDE,true)
+            PreferenceUtil.save()
+            startActivity(Intent(this, Intro_slider::class.java))
+            finish()
+        }
+
+   /*     if (PreferenceUtil.getString(PreferenceUtil.USER_NAME, "") == "") {
              startActivity(Intent(this, HomeActivity::class.java))
              finish()
         } else {
              startActivity(Intent(this, HomeActivity::class.java))
             finish()
 
-        }
+        }*/
     }
 
 

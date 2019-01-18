@@ -79,8 +79,9 @@
                         </option>
                         <option name="values">
                           <map>
-                            <entry key="outputName" value="my_location" />
-                            <entry key="sourceFile" value="C:\Users\baps" />
+                            <entry key="assetSourceType" value="FILE" />
+                            <entry key="outputName" value="ic_motorsvg" />
+                            <entry key="sourceFile" value="C:\Users\baps\Downloads\motorsvg.svg" />
                           </map>
                         </option>
                       </PersistentState>

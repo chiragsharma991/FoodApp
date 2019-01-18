@@ -184,8 +184,8 @@ class AccountFragment : BaseFragment() {
                             moveOnProfileInfo(
                                     userName = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.USERNAME).asString,
                                     email = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.EMAIL).asString,
-                                    telephone_no = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.TELEPHONE_NO).asString,
-                                    first_name = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.FIRST_NAME).asString,
+                                    telephone_no = if(json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.TELEPHONE_NO).isJsonNull) "" else json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.TELEPHONE_NO).asString,
+                                    first_name = if(json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.FIRST_NAME).isJsonNull) "" else json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.FIRST_NAME).asString,
                                     customer_id = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.ID).asString,
                                     login_from = Constants.FACEBOOK,
                                     language = "en"
@@ -206,7 +206,7 @@ class AccountFragment : BaseFragment() {
                                 userName = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.USERNAME).asString,
                                 email = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.EMAIL).asString,
                                 telephone_no = if(json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.TELEPHONE_NO).isJsonNull) "" else json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.TELEPHONE_NO).asString ,
-                                first_name = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.FIRST_NAME).asString,
+                                first_name = if(json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.FIRST_NAME).isJsonNull) "" else json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.FIRST_NAME).asString,
                                 customer_id = json.getAsJsonObject(Constants.USER_DETAILS).get(Constants.ID).asString,
                                 login_from = Constants.DIRECT,
                                 language = "en"

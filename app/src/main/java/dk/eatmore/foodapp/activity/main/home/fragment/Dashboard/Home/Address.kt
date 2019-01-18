@@ -52,12 +52,10 @@ class Address : BaseFragment(), TextWatcher {
     private var mAdapter: UniversalAdapter<User, RowAddressBinding>? = null
     private lateinit var homeFragment: HomeFragment
     private val inputValidStates = java.util.HashMap<EditText, Boolean>()
-    private lateinit var restaurant : Restaurant
-    private var postalcity: java.util.LinkedHashMap<String, String>?=null
-    private var call_userinfo  : Call<JsonObject>? =null
-    private var call_deliveryDetails  : Call<JsonObject>? =null
-
-
+    private lateinit var restaurant: Restaurant
+    private var postalcity: java.util.LinkedHashMap<String, String>? = null
+    private var call_userinfo: Call<JsonObject>? = null
+    private var call_deliveryDetails: Call<JsonObject>? = null
 
 
     companion object {
@@ -65,10 +63,10 @@ class Address : BaseFragment(), TextWatcher {
         val TAG = "Address"
         var ui_model: UIModel? = null
         fun newInstance(restaurant: Restaurant): Address {
-            val fragment= Address()
+            val fragment = Address()
             val bundle = Bundle()
-            bundle.putSerializable(Constants.RESTAURANT,restaurant)
-            fragment.arguments=bundle
+            bundle.putSerializable(Constants.RESTAURANT, restaurant)
+            fragment.arguments = bundle
             return fragment
         }
 
@@ -89,8 +87,8 @@ class Address : BaseFragment(), TextWatcher {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
-            progress_bar.visibility=View.GONE
-            restaurant=arguments!!.getSerializable(Constants.RESTAURANT) as Restaurant
+            progress_bar.visibility = View.GONE
+            restaurant = arguments!!.getSerializable(Constants.RESTAURANT) as Restaurant
             binding.isPickup = EpayFragment.isPickup
             binding.executePendingBindings()
             setToolbarforThis()
@@ -107,19 +105,19 @@ class Address : BaseFragment(), TextWatcher {
             inputValidStates[house_edt] = false
             inputValidStates[city_edt] = false
 
-            if(RestaurantList.ui_model !=null){
+            if (RestaurantList.ui_model != null) {
                 // Add postal code if restaurant list is open anotherwise null
-                loge(AddressForm.TAG,"postal size is-"+ RestaurantList.ui_model!!.restaurantList.value!!.postal_city.size.toString())
+                loge(AddressForm.TAG, "postal size is-" + RestaurantList.ui_model!!.restaurantList.value!!.postal_city.size.toString())
                 postalcity = java.util.LinkedHashMap<String, String>()
-                for(i in 0 until RestaurantList.ui_model!!.restaurantList.value!!.postal_city.size){
+                for (i in 0 until RestaurantList.ui_model!!.restaurantList.value!!.postal_city.size) {
                     postalcity!!.put(RestaurantList.ui_model!!.restaurantList.value!!.postal_city[i].postal_code, RestaurantList.ui_model!!.restaurantList.value!!.postal_city[i].city_name)
                 }
             }
 
-            postnumber_edt.imeOptions=EditorInfo.IME_ACTION_DONE
+            postnumber_edt.imeOptions = EditorInfo.IME_ACTION_DONE
             postnumber_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
                 override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                    loge(TAG,"post number edit...")
+                    loge(TAG, "post number edit...")
                     moveon_next()
                     return true
                 }
@@ -128,18 +126,18 @@ class Address : BaseFragment(), TextWatcher {
             proceed_view_nxt.setOnClickListener {
                 moveon_next()
             }
-            change_txt.setOnClickListener{
+            change_txt.setOnClickListener {
 
-                if(progress_bar.visibility == View.GONE){
+                if (progress_bar.visibility == View.GONE) {
                     val fragment = SelectAddress.newInstance()
-                    var enter : Slide?=null
+                    var enter: Slide? = null
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                         enter = Slide()
                         enter.setDuration(300)
                         enter.slideEdge = Gravity.BOTTOM
-                        fragment.enterTransition=enter
+                        fragment.enterTransition = enter
                     }
-                    (parentFragment as EpayFragment).addFragment(R.id.epay_container,fragment, SelectAddress.TAG,false)
+                    (parentFragment as EpayFragment).addFragment(R.id.epay_container, fragment, SelectAddress.TAG, false)
                 }
             }
             ui_model = createViewModel()
@@ -155,7 +153,7 @@ class Address : BaseFragment(), TextWatcher {
 
     }
 
-    fun moveon_next(){
+    fun moveon_next() {
 
         if (validationFields()) {
 
@@ -167,16 +165,19 @@ class Address : BaseFragment(), TextWatcher {
              * - if i call api in "delivery time slot" only on one condition to get time, if i am coming from "Pickup"
              */
 
-            if(EpayFragment.isPickup){
-                EpayFragment.paymentattributes.first_name=name_edt.text.toString()
-                EpayFragment.paymentattributes.telephone_no=telephone_number_edt.text.toString()
-                EpayFragment.paymentattributes.upto_min_shipping="0"
+            if (EpayFragment.isPickup) {
+                //pickup address (on payment)
+                EpayFragment.paymentattributes.payment_address = "${restaurant.address} ${restaurant.postal_code}"
+                EpayFragment.paymentattributes.first_name = name_edt.text.toString()
+                EpayFragment.paymentattributes.telephone_no = telephone_number_edt.text.toString()
+                EpayFragment.paymentattributes.upto_min_shipping = "0"
                 val fragment = DeliveryTimeslot.newInstance(null)
-                (parentFragment as EpayFragment).addFragment(R.id.epay_container,fragment, DeliveryTimeslot.TAG,true)
-            }
-            else{
-                if(proceed_view_nxt.isEnabled == false) return
-                proceed_view_nxt.isEnabled =false
+                (parentFragment as EpayFragment).addFragment(R.id.epay_container, fragment, DeliveryTimeslot.TAG, true)
+            } else {
+                if (proceed_view_nxt.isEnabled == false) return
+                proceed_view_nxt.isEnabled = false
+                val userinfomodel = ui_model!!.user_infoList.value!!.user_info
+                EpayFragment.paymentattributes.payment_address = "${userinfomodel.street},${userinfomodel.house_no},${userinfomodel.floor_door} ${userinfomodel.city} ${userinfomodel.postal_code}"
                 submitdelivery()
             }
 
@@ -185,7 +186,7 @@ class Address : BaseFragment(), TextWatcher {
 
     fun onFragmentResult(model: EditAddress.Messages) {
         // backpress from next fragment.
-        loge(TAG,"on fragment result---"+model.address_title)
+        loge(TAG, "on fragment result---" + model.address_title)
         street_edt.setText(model.street)
         house_edt.setText(model.house_no)
         floor_edt.setText(model.floor_door)
@@ -194,10 +195,8 @@ class Address : BaseFragment(), TextWatcher {
     }
 
 
-
-
     override fun afterTextChanged(s: Editable?) {
-        loge(TAG,"after text changed...")
+        loge(TAG, "after text changed...")
 
         if (name_edt.text.hashCode() == s!!.hashCode()) {
             name_edt.error = null
@@ -210,9 +209,9 @@ class Address : BaseFragment(), TextWatcher {
             postnumber_edt.error = null
 
             if (postnumber_edt.text.trim().toString().length > 0) {
-                if(postalcity == null){
+                if (postalcity == null) {
                     inputValidStates[postnumber_edt] = false
-                }else{
+                } else {
                     inputValidStates[postnumber_edt] = true
                     city_edt.setText(postalcity!!.get(postnumber_edt.text.toString()))
                 }
@@ -328,8 +327,8 @@ class Address : BaseFragment(), TextWatcher {
 
 
     private fun fetchuserInfo() {
-       // progresswheel(progresswheel,true)
-        progress_bar.visibility=View.VISIBLE
+        // progresswheel(progresswheel,true)
+        progress_bar.visibility = View.VISIBLE
         val postParam = JsonObject()
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
@@ -341,7 +340,7 @@ class Address : BaseFragment(), TextWatcher {
         } else {
             postParam.addProperty(Constants.IS_LOGIN, "0")
         }
-        call_userinfo=ApiCall.userInfo(jsonObject = postParam)
+        call_userinfo = ApiCall.userInfo(jsonObject = postParam)
         callAPI(call_userinfo!!, object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
@@ -364,14 +363,13 @@ class Address : BaseFragment(), TextWatcher {
 
                     ui_model!!.user_infoList.value = userinfo_model
                     loge(TAG, "data is---" + userinfo_model.user_info.telephone_no + " " + userinfo_model.user_info.name)
-                  //  progresswheel(progresswheel,false)
+                    //  progresswheel(progresswheel,false)
                     // ui_model!!.user_infoList.value!!.user_info.name
-                    progress_bar.visibility=View.GONE
+                    progress_bar.visibility = View.GONE
 
-                }
-                else{
-                    progress_bar.visibility=View.GONE
-                    empty_view.visibility=View.VISIBLE
+                } else {
+                    progress_bar.visibility = View.GONE
+                    empty_view.visibility = View.VISIBLE
                 }
 
 
@@ -379,7 +377,7 @@ class Address : BaseFragment(), TextWatcher {
 
             override fun onFail(error: Int) {
 
-                if(call_userinfo!!.isCanceled){
+                if (call_userinfo!!.isCanceled) {
                     return
                 }
 
@@ -393,7 +391,7 @@ class Address : BaseFragment(), TextWatcher {
                     }
                 }
                 //progresswheel(progresswheel,false)
-                progress_bar.visibility=View.GONE
+                progress_bar.visibility = View.GONE
 
             }
         })
@@ -402,12 +400,12 @@ class Address : BaseFragment(), TextWatcher {
 
     private fun submitdelivery() {
         //progresswheel(progresswheel,true)
-        progress_bar.visibility=View.VISIBLE
+        progress_bar.visibility = View.VISIBLE
         val postParam = JsonObject()
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
-        postParam.addProperty(Constants.ORDER_TOTAL,EpayFragment.paymentattributes.order_total)
+        postParam.addProperty(Constants.ORDER_TOTAL, EpayFragment.paymentattributes.order_total)
         postParam.addProperty(Constants.SHIPPING, if (EpayFragment.isPickup) getString(R.string.pickup) else getString(R.string.delivery))
         postParam.addProperty(Constants.STREET, street_edt.text.toString())
         postParam.addProperty(Constants.HOUSE_NO, house_edt.text.toString())
@@ -417,7 +415,7 @@ class Address : BaseFragment(), TextWatcher {
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
         postParam.addProperty(Constants.LANGUAGE, Constants.EN)
 
-        call_deliveryDetails=ApiCall.deliveryDetails(jsonObject = postParam)
+        call_deliveryDetails = ApiCall.deliveryDetails(jsonObject = postParam)
         callAPI(call_deliveryDetails!!, object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
@@ -425,41 +423,43 @@ class Address : BaseFragment(), TextWatcher {
                 if (jsonObject.get(Constants.STATUS).asBoolean) {
                     proceed_view_nxt.isEnabled = true
                     //progresswheel(progresswheel,false)
-                    progress_bar.visibility=View.GONE
+                    progress_bar.visibility = View.GONE
 
                     //        EpayFragment.paymentattributes.shipping_charge=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString =="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString
-                    val show_msg : Boolean = if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHOW_MSG].isJsonNull) false  else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHOW_MSG].asBoolean
-                    val is_delivery_allowed : Boolean = if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.IS_DELIVERY_ALLOWED].isJsonNull) true  else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.IS_DELIVERY_ALLOWED].asBoolean
+                    val show_msg: Boolean = if (jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHOW_MSG].isJsonNull) false else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHOW_MSG].asBoolean
+                    val is_delivery_allowed: Boolean = if (jsonObject.getAsJsonObject(Constants.RESULT)[Constants.IS_DELIVERY_ALLOWED].isJsonNull) true else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.IS_DELIVERY_ALLOWED].asBoolean
 
-                    if(show_msg){
-                        val msg =jsonObject.get(Constants.MSG).asString
-                        DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!, R.color.black),msg = msg,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                    if (show_msg) {
+                        val msg = jsonObject.get(Constants.MSG).asString
+                        DialogUtils.openDialogDefault(context = context!!, btnNegative = "", btnPositive = getString(R.string.ok), color = ContextCompat.getColor(context!!, R.color.black), msg = msg, title = "", onDialogClickListener = object : DialogUtils.OnDialogClickListener {
                             override fun onPositiveButtonClick(position: Int) {
-                                if(!is_delivery_allowed){
+                                if (!is_delivery_allowed) {
                                     (activity as HomeActivity).onBackPressed()
-                                }else{
+                                } else {
                                     //move next
                                     calculated_arguments(jsonObject)
                                 }
                             }
+
                             override fun onNegativeButtonClick() {
                             }
                         })
-                    }else{
+                    } else {
                         //move next
                         calculated_arguments(jsonObject)
                     }
 
                 } else {
                     //progresswheel(progresswheel,false)
-                    progress_bar.visibility=View.GONE
+                    progress_bar.visibility = View.GONE
                     showSnackBar(address_container, getString(R.string.error_404))
                     proceed_view_nxt.isEnabled = true
                 }
             }
+
             override fun onFail(error: Int) {
 
-                if(call_deliveryDetails!!.isCanceled ){
+                if (call_deliveryDetails!!.isCanceled) {
                     return
                 }
 
@@ -475,40 +475,39 @@ class Address : BaseFragment(), TextWatcher {
 
                 proceed_view_nxt.isEnabled = true
                 //progresswheel(progresswheel,false)
-                progress_bar.visibility=View.GONE
+                progress_bar.visibility = View.GONE
             }
         })
     }
 
 
-    private fun calculated_arguments(jsonObject : JsonObject){
+    private fun calculated_arguments(jsonObject: JsonObject) {
 
-        EpayFragment.paymentattributes.first_name=name_edt.text.toString()
-        EpayFragment.paymentattributes.telephone_no=telephone_number_edt.text.toString()
+        EpayFragment.paymentattributes.first_name = name_edt.text.toString()
+        EpayFragment.paymentattributes.telephone_no = telephone_number_edt.text.toString()
         //                        finalCartJson.put("address", street + " " + houseNo + " " + floorDoorString + ", " + postal_code + " " + city);
-        EpayFragment.paymentattributes.address=String.format(getString(R.string.fulladdress),street_edt.text.trim().toString(),house_edt.text.trim().toString(),floor_edt.text.trim().toString(),postnumber_edt.text.trim().toString(),city_edt.text.trim().toString())
-        EpayFragment.paymentattributes.postal_code=postnumber_edt.text.toString()
+        EpayFragment.paymentattributes.address = String.format(getString(R.string.fulladdress), street_edt.text.trim().toString(), house_edt.text.trim().toString(), floor_edt.text.trim().toString(), postnumber_edt.text.trim().toString(), city_edt.text.trim().toString())
+        EpayFragment.paymentattributes.postal_code = postnumber_edt.text.toString()
         //   EpayActivity.paymentattributes.discount_type=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.DISCOUNT_TYPE].asString
         // EpayActivity.paymentattributes.discount_amount=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.DISCOUNT_AMOUNT].asString
-        EpayFragment.paymentattributes.shipping_charge=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString =="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString
-        EpayFragment.paymentattributes.upto_min_shipping=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString =="")"0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString
-        EpayFragment.paymentattributes.minimum_order_price=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString== "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString
+        EpayFragment.paymentattributes.shipping_charge = if (jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString
+        EpayFragment.paymentattributes.upto_min_shipping = if (jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString
+        EpayFragment.paymentattributes.minimum_order_price = if (jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString
         //  EpayActivity.paymentattributes.additional_charges_cash=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_CASH].asString
-        EpayFragment.paymentattributes.additional_charges_online=if(!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_ONLINE)) || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString=="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString
-        EpayFragment.paymentattributes.additional_charges_cash=if(!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_CASH)) || jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString=="") "0" else jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString
+        EpayFragment.paymentattributes.additional_charges_online = if (!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_ONLINE)) || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString
+        EpayFragment.paymentattributes.additional_charges_cash = if (!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_CASH)) || jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString
 
-        EpayFragment.paymentattributes.distance=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString =="") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString
-        EpayFragment.paymentattributes.first_time=if(jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString== "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString
+        EpayFragment.paymentattributes.distance = if (jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString
+        EpayFragment.paymentattributes.first_time = if (jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString
 
 
-
-        val time_list =LinkedHashMap<String,String>()
-        for (i in 0.until(jsonObject.getAsJsonObject(Constants.RESULT).getAsJsonArray(Constants.TIME_LIST).size())){
+        val time_list = LinkedHashMap<String, String>()
+        for (i in 0.until(jsonObject.getAsJsonObject(Constants.RESULT).getAsJsonArray(Constants.TIME_LIST).size())) {
             time_list.put((jsonObject.getAsJsonObject(Constants.RESULT).getAsJsonArray(Constants.TIME_LIST).get(i) as JsonObject)[Constants.ACTUAL].asString,
-                    (jsonObject.getAsJsonObject(Constants.RESULT).getAsJsonArray(Constants.TIME_LIST).get(i) as JsonObject)[Constants.DISPLAY].asString )
+                    (jsonObject.getAsJsonObject(Constants.RESULT).getAsJsonArray(Constants.TIME_LIST).get(i) as JsonObject)[Constants.DISPLAY].asString)
         }
         val fragment = DeliveryTimeslot.newInstance(time_list)
-        (parentFragment as EpayFragment).addFragment(R.id.epay_container,fragment, DeliveryTimeslot.TAG,true)
+        (parentFragment as EpayFragment).addFragment(R.id.epay_container, fragment, DeliveryTimeslot.TAG, true)
 
     }
 
@@ -525,11 +524,11 @@ class Address : BaseFragment(), TextWatcher {
     fun setToolbarforThis() {
 
         txt_toolbar.text = getString(R.string.address)
-        txt_toolbar_right_img.apply { visibility= if(EpayFragment.isPickup) View.GONE else View.VISIBLE  ; setImageResource(R.drawable.info_outline) }
+        txt_toolbar_right_img.apply { visibility = if (EpayFragment.isPickup) View.GONE else View.VISIBLE; setImageResource(R.drawable.info_outline) }
         img_toolbar_back.setImageResource(R.drawable.back)
-        img_toolbar_back.setOnClickListener{(activity as HomeActivity).onBackPressed()}
+        img_toolbar_back.setOnClickListener { (activity as HomeActivity).onBackPressed() }
         txt_toolbar_right_img.setOnClickListener {
-            showDialog(context = context!! ,restaurant = restaurant)
+            showDialog(context = context!!, restaurant = restaurant)
         }
     }
 
@@ -539,8 +538,8 @@ class Address : BaseFragment(), TextWatcher {
 
       }*/
 
-    fun showDialog(restaurant: Restaurant,context: Context) {
-        val dialog = Dialog(context,R.style.AppCompatAlertDialogStyle_Transparent)
+    fun showDialog(restaurant: Restaurant, context: Context) {
+        val dialog = Dialog(context, R.style.AppCompatAlertDialogStyle_Transparent)
         dialog.requestWindowFeature(Window.FEATURE_NO_TITLE)
         dialog.setCancelable(true)
         dialog.setContentView(R.layout.infodialog)
@@ -589,20 +588,20 @@ class Address : BaseFragment(), TextWatcher {
                         textView1.gravity = Gravity.START
                     textView1.setSingleLine(true)
                     textView1.setTextAppearance(context, R.style.SubtitleMidium_TextViewSmall)
-                  //  textView1.typeface= Typeface.DEFAULT_BOLD
-                  //  textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                    //  textView1.typeface= Typeface.DEFAULT_BOLD
+                    //  textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
 
                     parent.addView(textView1)
 
                 }
 
                 shippinginfo_container.addView(parent)
-                val view= View(context)
+                val view = View(context)
                 val vparms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2)
-                vparms.topMargin=8
-                view.alpha=0.3f
-                view.background= ContextCompat.getDrawable(context!!,R.color.divider_color)
-                view.layoutParams=vparms
+                vparms.topMargin = 8
+                view.alpha = 0.3f
+                view.background = ContextCompat.getDrawable(context!!, R.color.divider_color)
+                view.layoutParams = vparms
                 shippinginfo_container.addView(view)
 
 
@@ -633,7 +632,7 @@ class Address : BaseFragment(), TextWatcher {
                         if (j == 0)
                             textView1.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].from_pd)
                         else if (j == 1)
-                            textView1.text = if(restaurant.shipping_charges[i].to_pd ==null ) Constants.OPEFTER else BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].to_pd!!)
+                            textView1.text = if (restaurant.shipping_charges[i].to_pd == null) Constants.OPEFTER else BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].to_pd!!)
                         else if (j == 2)
                             textView1.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].price)
 
@@ -645,20 +644,19 @@ class Address : BaseFragment(), TextWatcher {
                             textView1.gravity = Gravity.START
                         textView1.setSingleLine(true)
                         textView1.setTextAppearance(context, R.style.Subtitle_TextViewSmall)
-                       // textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                        // textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
 
                         parent.addView(textView1)
 
                     }
                     shippinginfo_container.addView(parent)
-                    val view= View(context)
+                    val view = View(context)
                     val vparms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2)
-                    vparms.topMargin=8
-                    view.alpha=0.3f
-                    view.background= ContextCompat.getDrawable(context!!,R.color.divider_color)
-                    view.layoutParams=vparms
+                    vparms.topMargin = 8
+                    view.alpha = 0.3f
+                    view.background = ContextCompat.getDrawable(context!!, R.color.divider_color)
+                    view.layoutParams = vparms
                     shippinginfo_container.addView(view)
-
 
 
                 }
@@ -699,20 +697,20 @@ class Address : BaseFragment(), TextWatcher {
                         textView1.gravity = Gravity.START
                     textView1.setSingleLine(true)
                     textView1.setTextAppearance(context, R.style.SubtitleMidium_TextViewSmall)
-                  //  textView1.typeface= Typeface.DEFAULT_BOLD
-                  //  textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                    //  textView1.typeface= Typeface.DEFAULT_BOLD
+                    //  textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
 
                     parent.addView(textView1)
 
                 }
 
                 shippinginfo_container.addView(parent)
-                val view= View(context)
+                val view = View(context)
                 val vparms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2)
-                vparms.topMargin=8
-                view.alpha=0.3f
-                view.background= ContextCompat.getDrawable(context!!,R.color.divider_color)
-                view.layoutParams=vparms
+                vparms.topMargin = 8
+                view.alpha = 0.3f
+                view.background = ContextCompat.getDrawable(context!!, R.color.divider_color)
+                view.layoutParams = vparms
                 shippinginfo_container.addView(view)
 
 
@@ -755,20 +753,19 @@ class Address : BaseFragment(), TextWatcher {
                             textView1.gravity = Gravity.START
                         textView1.setSingleLine(true)
                         textView1.setTextAppearance(context, R.style.Subtitle_TextViewSmall)
-                       // textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                        // textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
 
                         parent.addView(textView1)
 
                     }
                     shippinginfo_container.addView(parent)
-                    val view= View(context)
+                    val view = View(context)
                     val vparms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2)
-                    vparms.topMargin=8
-                    view.alpha=0.3f
-                    view.background= ContextCompat.getDrawable(context!!,R.color.divider_color)
-                    view.layoutParams=vparms
+                    vparms.topMargin = 8
+                    view.alpha = 0.3f
+                    view.background = ContextCompat.getDrawable(context!!, R.color.divider_color)
+                    view.layoutParams = vparms
                     shippinginfo_container.addView(view)
-
 
 
                 }
@@ -809,20 +806,20 @@ class Address : BaseFragment(), TextWatcher {
                         textView1.gravity = Gravity.START
                     textView1.setSingleLine(true)
                     textView1.setTextAppearance(context, R.style.SubtitleMidium_TextViewSmall)
-                  //  textView1.typeface= Typeface.DEFAULT_BOLD
-                  //  textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                    //  textView1.typeface= Typeface.DEFAULT_BOLD
+                    //  textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
 
                     parent.addView(textView1)
 
                 }
 
                 shippinginfo_container.addView(parent)
-                val view= View(context)
+                val view = View(context)
                 val vparms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2)
-                vparms.topMargin=8
-                view.alpha=0.3f
-                view.background= ContextCompat.getDrawable(context!!,R.color.divider_color)
-                view.layoutParams=vparms
+                vparms.topMargin = 8
+                view.alpha = 0.3f
+                view.background = ContextCompat.getDrawable(context!!, R.color.divider_color)
+                view.layoutParams = vparms
                 shippinginfo_container.addView(view)
 
 
@@ -853,7 +850,7 @@ class Address : BaseFragment(), TextWatcher {
                         if (j == 0)
                             textView1.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].from_pd)
                         else if (j == 1)
-                            textView1.text = if(restaurant.shipping_charges[i].to_pd ==null) Constants.OPEFTER else BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].to_pd!!)
+                            textView1.text = if (restaurant.shipping_charges[i].to_pd == null) Constants.OPEFTER else BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].to_pd!!)
                         else if (j == 2)
                             textView1.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(restaurant.shipping_charges[i].price)
 
@@ -865,20 +862,19 @@ class Address : BaseFragment(), TextWatcher {
                             textView1.gravity = Gravity.START
                         textView1.setSingleLine(true)
                         textView1.setTextAppearance(context, R.style.Subtitle_TextViewSmall)
-                       // textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                        // textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
 
                         parent.addView(textView1)
 
                     }
                     shippinginfo_container.addView(parent)
-                    val view= View(context)
+                    val view = View(context)
                     val vparms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2)
-                    vparms.topMargin=8
-                    view.alpha=0.3f
-                    view.background= ContextCompat.getDrawable(context!!,R.color.divider_color)
-                    view.layoutParams=vparms
+                    vparms.topMargin = 8
+                    view.alpha = 0.3f
+                    view.background = ContextCompat.getDrawable(context!!, R.color.divider_color)
+                    view.layoutParams = vparms
                     shippinginfo_container.addView(view)
-
 
 
                 }
@@ -906,15 +902,15 @@ class Address : BaseFragment(), TextWatcher {
                         parms.rightMargin = 0
                     textView1.layoutParams = parms
                     textView1.text = headerlist[i]
-                    textView1.typeface= Typeface.DEFAULT_BOLD
+                    textView1.typeface = Typeface.DEFAULT_BOLD
                     if (i == 0)
                         textView1.gravity = Gravity.START
                     else if (i == 1)
                         textView1.gravity = Gravity.START
                     textView1.setSingleLine(true)
                     textView1.setTextAppearance(context, R.style.SubtitleMidium_TextViewSmall)
-                   // textView1.typeface= Typeface.DEFAULT_BOLD
-                   // textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
+                    // textView1.typeface= Typeface.DEFAULT_BOLD
+                    // textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
                     parent.addView(textView1)
                 }
 
@@ -925,7 +921,7 @@ class Address : BaseFragment(), TextWatcher {
 
 
         } catch (e: Exception) {
-            Log.e("exception",e.message.toString())
+            Log.e("exception", e.message.toString())
         }
 
         dialog.show()
@@ -943,12 +939,12 @@ class Address : BaseFragment(), TextWatcher {
         call_deliveryDetails?.let {
             proceed_view_nxt.isEnabled = true
             //progresswheel(progresswheel,false)
-            progress_bar.visibility=View.GONE
+            progress_bar.visibility = View.GONE
             it.cancel()
         }
 
         call_userinfo?.let {
-            progress_bar.visibility=View.GONE
+            progress_bar.visibility = View.GONE
             //progresswheel(progresswheel,false)
             it.cancel()
         }

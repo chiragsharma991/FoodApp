@@ -37,6 +37,7 @@ class OnlyExtratoppingsAdapter(val c: Context, val list :ArrayList<Topping_subgr
         if (holder is MyViewHolder) {
             //val holder: MyViewHolder = holder
             holder.binding.data= list[position]
+
             /* holder.binding.rowOrderCardview.setOnClickListener {
                  listner.itemClicked(position)
              }
@@ -53,6 +54,8 @@ class OnlyExtratoppingsAdapter(val c: Context, val list :ArrayList<Topping_subgr
                 layoutManager = LinearLayoutManager(c)
                 adapter = mAdapter
             }
+            holder.binding.executePendingBindings()
+
 
 
         }

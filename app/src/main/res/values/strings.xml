@@ -171,6 +171,21 @@
     <string name="all">All</string>
     <string name="search_the_restaurant">Search the restaurant</string>
     <string name="change_password">Skift adgangskode</string>
+    <string name="next">Next</string>
+    <string name="skip">Skip</string>
+    <string name="start">Start</string>
+    <string name="gotit">Got it!</string>
+
+    <string name="slider_one_btntxt">Brug min placering</string>
+    <string name="slider_one_title">Hej, Jeg er EatMore</string>
+    <string name="slider_one_desc">Og mit eneste formål i denne verden er at gøre det nemt for dig at bestille take away. Jeg skal bare lige have lov til at bruge din placering , så kan vi komme i gang med den sjove del</string>
+    <string name="slider_two_btntxt">Ja, send mig beskeder</string>
+    <string name="slider_two_title">Følg din bestilling</string>
+    <string name="slider_two_desc">Når restauranten modtager din bestilling, får du en notifikation om, hvornår maden er klar. En gang imellem giver jeg dig også et ekstra lækkert tilbud. Men jeg lover at ikke blive for anmassende</string>
+    <string name="slider_three_btntxt">Got it!</string>
+    <string name="slider_three_title">Futuristic Header</string>
+    <string name="slider_three_desc">Description 3 will be displayed in this space when ready, for now it is just placed to make the screen look fuller. Will be replaced in future with the actual text provided by Mustapha</string>
+    <string name="ikke_tilg_ngelig">Ikke tilgængelig</string>
 
 
 </resources>

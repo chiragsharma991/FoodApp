@@ -1,6 +1,7 @@
 package dk.eatmore.foodapp.fragment.Dashboard.Home
 
 
+import android.Manifest
 import android.arch.lifecycle.LiveData
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
@@ -97,7 +98,7 @@ class HomeFragment : CommanAPI() {
 
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
-            Glide.with(context!!).load(ContextCompat.getDrawable(context!!,R.mipmap.banner)).into(imageview);
+            Glide.with(context!!).load(ContextCompat.getDrawable(context!!,R.mipmap.eatmore_search_backgrond)).into(imageview);
             restaurant_logo.visibility=View.VISIBLE
             img_toolbar_back.visibility=View.GONE
             firebaseAnalytics = FirebaseAnalytics.getInstance(context!!);
@@ -137,7 +138,8 @@ class HomeFragment : CommanAPI() {
 
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
-        loge(TransactionStatus.TAG, "permission result---")
+        // result from permission only
+        loge(HomeFragment.TAG, "permission result---")
         when (requestCode) {
             1 -> {
 
@@ -145,24 +147,29 @@ class HomeFragment : CommanAPI() {
                     getcurrent_location()
 
                 } else {
-                    gps_img.visibility=View.VISIBLE
-                    progress_bar.visibility=View.GONE
-                    Toast.makeText(context, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
+                    gpsPermissiondenied()
 
                 }
 
                 if (grantResults.size > 0 && grantResults[1] == PackageManager.PERMISSION_GRANTED) {
 
                 } else {
-                    gps_img.visibility=View.VISIBLE
-                    progress_bar.visibility=View.GONE
-                    Toast.makeText(context, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
+                    gpsPermissiondenied()
                 }
 
                 return
             }
         }
     }
+
+    fun gpsPermissiondenied(){
+        gps_enableNdisable()
+        gps_img.visibility=View.VISIBLE
+        progress_bar.visibility=View.GONE
+        Toast.makeText(context, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
+    }
+
+
 
 
 /*
@@ -189,6 +196,7 @@ class HomeFragment : CommanAPI() {
     }
 
     fun getcurrent_location(){
+        gps_enableNdisable()
 
         if(is_location_PermissionGranted()){
             loge(TAG,"is_location_PermissionGranted---")
@@ -211,10 +219,34 @@ class HomeFragment : CommanAPI() {
         }
     }
 
+    fun gps_enableNdisable(){
+        // Change gps icon color of Enable/Disable.
+
+        if (Build.VERSION.SDK_INT >= 23) {
+            // location permission
+            if (context!!.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    context!!.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                if(isGpsEnable()){
+                    gps_img.setColorFilter(ContextCompat.getColor(context!!,R.color.black_txt_light))  // enable
+                }else{
+                    gps_img.setColorFilter(ContextCompat.getColor(context!!,R.color.colorLanguageUnselectedGrey))
+                }
+            } else {
+                gps_img.setColorFilter(ContextCompat.getColor(context!!,R.color.colorLanguageUnselectedGrey))
+            }
+
+        } else {
+            if(isGpsEnable()){
+                gps_img.setColorFilter(ContextCompat.getColor(context!!,R.color.black_txt_light))  // enable
+            }else{
+                gps_img.setColorFilter(ContextCompat.getColor(context!!,R.color.colorLanguageUnselectedGrey))
+            }
+        }
+    }
+
 
     class UIModel : ViewModel() {
         var reloadfragment = MutableLiveData<Boolean>()
-
     }
 
     fun createViewModel(): UIModel =
@@ -268,14 +300,14 @@ class HomeFragment : CommanAPI() {
                     /* Set your color for positive displacement */
 
                     // Draw Rect with varying right side, equal to displacement dX
-                    c.drawRect(itemView.left.toFloat(), itemView.top.toFloat(), 0f,
-                            itemView.bottom.toFloat(), p)
+                  //  c.drawRect(itemView.left.toFloat(), itemView.top.toFloat(), 0f,
+                           // itemView.bottom.toFloat(), p)
                 } else {
                     /* Set your color for negative displacement */
 
                     // Draw Rect with varying left side, equal to the item's right side plus negative displacement dX
-                    c.drawRect(itemView.right.toFloat() + 0f, itemView.top.toFloat(),
-                            itemView.right.toFloat(), itemView.bottom.toFloat(), p)
+                   // c.drawRect(itemView.right.toFloat() + 0f, itemView.top.toFloat(),
+                          //  itemView.right.toFloat(), itemView.bottom.toFloat(), p)
                 }
 
                 super.onChildDraw(null, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)

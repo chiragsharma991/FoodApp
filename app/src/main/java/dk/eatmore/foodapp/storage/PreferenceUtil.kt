@@ -3,6 +3,7 @@ package dk.eatmore.foodapp.storage
 import android.content.Context
 import android.content.SharedPreferences
 import android.preference.PreferenceManager
+import android.util.Log
 
 object PreferenceUtil {
 
@@ -27,6 +28,7 @@ object PreferenceUtil {
         if (sharedPreferences == null) {
             sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mcontext)
             editor = sharedPreferences!!.edit()
+            Log.e("Splash","first time pref"+ getBoolean(PreferenceUtil.CLOSE_INTRO_SLIDE,false))
         }
     }
 
@@ -144,6 +146,7 @@ object PreferenceUtil {
     val DEVICE_TOKEN = "device_token"
     val LANGUAGE = "language"
     val FIRST_NAME = "first_name"
+    val CLOSE_INTRO_SLIDE = "close_intro_slide"
     val PHONE = "keep_screen_on"
     val LOGIN_FROM = "login_from"
     val KSTATUS = "kStatus"

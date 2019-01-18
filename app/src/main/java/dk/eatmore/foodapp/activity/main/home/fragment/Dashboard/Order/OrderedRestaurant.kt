@@ -19,6 +19,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
@@ -200,7 +201,10 @@ class OrderedRestaurant : CommanAPI() {
         binding.util=BindDataUtils
         binding.orderStatus=model.order_status
         binding.enableRating=arguments!!.getBoolean(Constants.ENABLE_RATING)
-        Glide.with(imageview.context).load(ui_model!!.ordered_details.value!!.data[0].app_icon).into(imageview);
+        Glide.with(imageview.context)
+                .load(ui_model!!.ordered_details.value!!.data[0].app_icon)
+                .apply(RequestOptions().placeholder(BindDataUtils.getRandomDrawbleColor()).error(BindDataUtils.getRandomDrawbleColor()))
+                .into(imageview)
         add_parentitem_view.removeAllViewsInLayout()
         val list =ui_model!!.ordered_details.value!!.data[0].order_products_details
         for (i in 0 until list.size){

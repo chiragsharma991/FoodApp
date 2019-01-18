@@ -75,6 +75,7 @@
                     <android.support.v4.widget.NestedScrollView
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
+                        android:layout_above="@+id/btn_view"
                         android:fillViewport="true">
 
 
@@ -459,6 +460,7 @@
                     </android.support.v4.widget.NestedScrollView>
 
 
+<!--
                     <android.support.v7.widget.AppCompatButton
                         android:id="@+id/epay_continue_btn"
                         style="@style/Button"
@@ -469,8 +471,36 @@
                         android:backgroundTint="@color/theme_color"
                         android:text="@string/continue_"
                         android:textColor="@color/white" />
+-->
 
 
+
+                    <RelativeLayout
+                        android:id="@+id/btn_view"
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentBottom="true"
+                        android:background="@color/white">
+
+                        <View
+                            android:layout_width="match_parent"
+                            android:layout_height="1dp"
+                            android:alpha="0.2"
+                            android:background="@color/divider_color"
+                            android:visibility="visible" />
+
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/epay_continue_btn"
+                            style="@style/Button"
+                            android:layout_marginStart="8dp"
+                            android:layout_marginTop="8dp"
+                            android:layout_marginEnd="8dp"
+                            android:layout_marginBottom="8dp"
+                            android:backgroundTint="@color/theme_color"
+                            android:text="@string/continue_"
+                            android:textColor="@color/white" />
+
+                    </RelativeLayout>
 
 
 

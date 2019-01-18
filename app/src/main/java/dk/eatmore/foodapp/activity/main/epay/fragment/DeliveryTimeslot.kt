@@ -1,6 +1,7 @@
 package dk.eatmore.foodapp.activity.main.epay.fragment
 
 import android.app.AlertDialog
+import android.content.Context
 import android.content.DialogInterface
 import android.databinding.DataBindingUtil
 import android.os.Bundle
@@ -25,6 +26,13 @@ import kotlinx.android.synthetic.main.deliverytimeslot.*
 import kotlinx.android.synthetic.main.toolbar.*
 import retrofit2.Call
 import kotlin.collections.ArrayList
+import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
+import android.widget.EditText
+import com.google.android.gms.common.util.InputMethodUtils.showSoftInput
+import android.content.Context.INPUT_METHOD_SERVICE
+import android.view.MotionEvent
+import android.view.inputmethod.InputMethodManager
+
 
 class DeliveryTimeslot : BaseFragment() {
 
@@ -100,13 +108,31 @@ class DeliveryTimeslot : BaseFragment() {
                             EpayFragment.paymentattributes.expected_time=entries.key
                         }
                     }
+//                    Delivery: "Levering ønsket til" + " " + TIME
+//                    Pickup: "Afhentining" + " " + TIME
                     EpayFragment.paymentattributes.comments=comment_edt.text.trim().toString().replace(":",",",false)
+                    EpayFragment.paymentattributes.payment_time=if(EpayFragment.isPickup)"Afhentining ${EpayFragment.paymentattributes.expected_time}" else "Levering ønsket til ${EpayFragment.paymentattributes.expected_time}"
                     (parentFragment as EpayFragment).addFragment(R.id.epay_container,Paymentmethod.newInstance(),Paymentmethod.TAG,true)
                 }
                 else {
                     seterror(address_container)
                 }
             }
+
+            comment_edt.setOnTouchListener(View.OnTouchListener { view, motionEvent ->
+                view.parent.requestDisallowInterceptTouchEvent(true)
+                when (motionEvent.action and MotionEvent.ACTION_MASK) {
+                    MotionEvent.ACTION_SCROLL -> {
+                        view.parent.requestDisallowInterceptTouchEvent(false)
+                        return@OnTouchListener true
+                    }
+                    MotionEvent.ACTION_BUTTON_PRESS -> {
+                        val imm = context!!.getSystemService(Context.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.showSoftInput(comment_edt, InputMethodManager.SHOW_IMPLICIT)
+                    }
+                }
+                false
+            })
 
         }else{
             //  (parentFragment as EpayFragment).popWithTag(DeliveryTimeslot.TAG)

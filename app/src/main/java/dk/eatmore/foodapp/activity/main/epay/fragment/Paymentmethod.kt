@@ -27,6 +27,8 @@ import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import android.view.animation.AnticipateOvershootInterpolator
 import android.widget.Toast
+import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
@@ -46,6 +48,8 @@ import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.*
 import kotlinx.android.synthetic.main.deliverytimeslot.*
+import kotlinx.android.synthetic.main.dynamic_raw_item.view.*
+import kotlinx.android.synthetic.main.dynamic_raw_subitem.view.*
 import kotlinx.android.synthetic.main.paymentmethod.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
 import kotlinx.android.synthetic.main.transaction_status.*
@@ -102,7 +106,7 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             applycashgift_edt.addTextChangedListener(this)
             paymentmethod_visible_are()
             setToolbarforThis()
-            generateBillDetails(Constants.OTHER)
+            showproductInfo()
         }
     }
 
@@ -218,8 +222,88 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             total_txt.text=BindDataUtils.convertCurrencyToDanishWithoutLabel(String.format("%.2f",final_amount))
             online_btn.text = if(final_amount <= 0.0) getString(R.string.confirm) else getString(R.string.pay)
         }
+
+        // Add restaurant address and time--
+        address_txt.text=EpayFragment.paymentattributes.payment_address
+        deliverytime_txt.text=EpayFragment.paymentattributes.payment_time
+        paymenttype_img.setImageResource(if(EpayFragment.isPickup) R.mipmap.danish_krone else R.mipmap.motorcycle)
+        Glide.with(context!!)
+                .load("https://eatmore.dk/admin/web/images/payment_logo/201809120309047.png")
+                .apply(RequestOptions().placeholder(R.drawable.credit_card).error(R.drawable.credit_card))
+                .into(online_payment_icon)
+        Glide.with(context!!)
+                .load(R.drawable.credit_card)
+                .apply(RequestOptions().placeholder(R.drawable.credit_card).error(R.drawable.credit_card))
+                .into(cash_payment_icon)
+
     }
 
+
+    private fun showproductInfo(){
+
+        if(EpayFragment.ui_model!!.viewcard_list.value ==null){
+            // this condition will null if all item has been deleted : so just clear view and inflate empty view on screen.
+            add_parentitem_view.removeAllViewsInLayout()
+            add_parentitem_view.invalidate()
+            generateBillDetails(Constants.OTHER)
+            return
+        }
+
+        add_parentitem_view.removeAllViewsInLayout()
+        for (i in 0 until EpayFragment.ui_model!!.viewcard_list.value!!.result!!.size){
+            var inflater= context!!.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+            val view= inflater.inflate(R.layout.dynamic_raw_item,null)
+            view.remove_item.tag=i
+            view.remove_item.visibility=View.GONE
+            view.item_name.text=EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].product_name
+            view.item_price.text=if(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].p_price !=null) BindDataUtils.convertCurrencyToDanish(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].p_price!!) else "null"
+            view.add_subitem_view.removeAllViewsInLayout()
+
+            // fill first ingredients size if not null
+            for (j in 0 until (EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].removed_ingredients?.size ?: 0)){
+                inflater= context!!.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                val ingredientview= inflater.inflate(R.layout.dynamic_raw_subitem,null)
+                ingredientview.subitem_name.text=String.format(getString(R.string.minues),EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].removed_ingredients!!.get(j).ingredient_name)
+                ingredientview.subitem_name.setTextColor(ContextCompat.getColor(context!!, R.color.red))
+                ingredientview.subitem_price.visibility= View.INVISIBLE
+                ingredientview.dummy_image.visibility= View.GONE
+                view.add_subitem_view.addView(ingredientview)
+            }
+
+            // if attribute is present then fetch extratoppings only from attribute list
+            if(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].is_attributes !=null && EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].is_attributes.equals("1")){
+                if(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes !=null){
+                    for (k in 0 until EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes!!.size){
+                        for (l in 0 until (EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes!![k].order_product_extra_topping_group?.size ?: 0)){
+                            inflater= context!!.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                            val extratoppings= inflater.inflate(R.layout.dynamic_raw_subitem,null)
+                            extratoppings.subitem_name.text=String.format(getString(R.string.plus),EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes!!.get(k).order_product_extra_topping_group!![l].ingredient_name)
+                            // view.subitem_price.visibility=View.VISIBLE
+                            extratoppings.subitem_price.text= BindDataUtils.convertCurrencyToDanish(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes!!.get(k).order_product_extra_topping_group!![l].t_price) ?: "null"
+                            extratoppings.dummy_image.visibility= View.GONE
+                            view.add_subitem_view.addView(extratoppings)
+                        }
+                    }
+                }
+            }
+            else
+            {
+                // if extratopping group only present then add only extratoppings in the list.
+                for (k in 0 until (EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].order_product_extra_topping_group?.size ?:0)){
+                    inflater= context!!.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                    val onlyextratoppings= inflater.inflate(R.layout.dynamic_raw_subitem,null)
+                    onlyextratoppings.subitem_name.text=String.format(getString(R.string.plus),EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].order_product_extra_topping_group!!.get(k).ingredient_name)
+                    // view.subitem_price.visibility=View.VISIBLE
+                    onlyextratoppings.subitem_price.text= BindDataUtils.convertCurrencyToDanish(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].order_product_extra_topping_group!!.get(k).t_price) ?: "null"
+                    onlyextratoppings.dummy_image.visibility= View.GONE
+                    view.add_subitem_view.addView(onlyextratoppings)
+                }
+            }
+            add_parentitem_view.addView(view)
+        }
+        generateBillDetails(Constants.OTHER)
+
+    }
 
 
     private fun paymentmethod_visible_are(){

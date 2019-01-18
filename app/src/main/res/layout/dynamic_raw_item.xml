@@ -12,15 +12,15 @@
         >
 
         <android.support.v7.widget.AppCompatImageView
-            android:layout_width="@dimen/_25sdp"
-            android:layout_height="@dimen/_25sdp"
+            android:layout_width="@dimen/_22sdp"
+            android:layout_height="@dimen/_22sdp"
             android:layout_marginEnd="8dp"
             android:scaleType="fitXY"
             android:id="@+id/remove_item"
             app:srcCompat="@mipmap/minus"
-            android:tint="@color/theme_color"
+            android:tint="@color/white"
             android:padding="@dimen/_5sdp"
-            android:background="@color/grey"
+            android:background="@color/theme_color"
             />
 
       <!--  <android.support.v7.widget.AppCompatTextView
@@ -38,7 +38,7 @@
             />-->
 
         <android.support.v7.widget.AppCompatTextView
-            style="@style/Subtitle_TextViewSmall"
+            style="@style/Titlelight_TextViewSmall"
             android:singleLine="true"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
@@ -50,7 +50,7 @@
             />
 
         <android.support.v7.widget.AppCompatTextView
-            style="@style/Subtitle_TextViewSmall"
+            style="@style/Titlelight_TextViewSmall"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:singleLine="true"

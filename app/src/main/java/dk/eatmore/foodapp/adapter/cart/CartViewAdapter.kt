@@ -42,10 +42,11 @@ class CartViewAdapter(val c: Context, val list :ArrayList<ProductAttributeListIt
         if (holder is MyViewHolder) {
             //val holder: MyViewHolder = holder
             holder.binding.data = list[position]
-           /* holder.binding.rowOrderCardview.setOnClickListener {
-                listner.itemClicked(position)
-            }
-*/
+
+            /* holder.binding.rowOrderCardview.setOnClickListener {
+                 listner.itemClicked(position)
+             }
+ */
           //  holder.binding.parentChild.visibility= View.GONE
       /*      holder.binding.rowCartTxt.setOnClickListener{
                 if(holder.binding.parentChild.visibility == View.VISIBLE)
@@ -59,6 +60,9 @@ class CartViewAdapter(val c: Context, val list :ArrayList<ProductAttributeListIt
                 layoutManager = LinearLayoutManager(c)
                 adapter = mAdapter
             }
+
+            holder.binding.executePendingBindings()
+
 
 
         }

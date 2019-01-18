@@ -200,7 +200,7 @@
                         android:id="@+id/comment_edt"
                         android:layout_height="@dimen/_80sdp"
                         android:layout_width="match_parent"
-                        android:inputType="textCapSentences|textMultiLine"
+                        android:inputType="textCapSentences|textMultiLine|textEmailAddress"
                         android:gravity="top|start"
                         android:textAppearance="?android:attr/textAppearanceSmall"
                         android:lines="5"

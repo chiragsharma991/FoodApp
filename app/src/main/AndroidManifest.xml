@@ -32,6 +32,14 @@
             </intent-filter>
         </activity>
 
+
+        <activity android:name=".activity.main.home.intro.Intro_slider"
+            android:configChanges="keyboardHidden|orientation|screenSize"
+            android:windowSoftInputMode="stateHidden|adjustPan"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.Splash">
+        </activity>
+
         <activity android:name=".activity.main.home.HomeActivity"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:windowSoftInputMode="stateHidden|adjustPan"

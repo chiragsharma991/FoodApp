@@ -13,6 +13,22 @@ import java.text.NumberFormat
 import java.util.*
 import android.view.ViewGroup
 import java.text.SimpleDateFormat
+import android.R.attr.src
+import android.graphics.*
+import android.opengl.ETC1.getHeight
+import android.opengl.ETC1.getWidth
+import android.graphics.BitmapFactory
+import android.graphics.Bitmap
+import java.io.File
+import android.R.attr.src
+import android.opengl.ETC1.getHeight
+import android.opengl.ETC1.getWidth
+import android.graphics.Color.parseColor
+import android.graphics.drawable.ColorDrawable
+
+
+
+
 
 
 object BindDataUtils {
@@ -69,6 +85,43 @@ object BindDataUtils {
 
     }
 
+    fun convertImagetoBlackwhite(myBitmap : Bitmap) : Bitmap{
+
+        val width = myBitmap.getWidth()
+        val height = myBitmap.getHeight()
+
+        val bmOut = Bitmap.createBitmap(width, height, Bitmap.Config.ARGB_8888)
+
+        val factor = 255f
+        val redBri = 0.2126f
+        val greenBri = 0.2126f
+        val blueBri = 0.0722f
+
+        val length = width * height
+        val inpixels = IntArray(length)
+        val oupixels = IntArray(length)
+
+        myBitmap.getPixels(inpixels, 0, width, 0, 0, width, height)
+
+        var point = 0
+        for (pix in inpixels) {
+            val R = pix shr 16 and 0xFF
+            val G = pix shr 8 and 0xFF
+            val B = pix and 0xFF
+
+            val lum = redBri * R / factor + greenBri * G / factor + blueBri * B / factor
+
+            if (lum > 0.4) {
+                oupixels[point] = -0x1
+            } else {
+                oupixels[point] = -0x1000000
+            }
+            point++
+        }
+        bmOut.setPixels(oupixels, 0, width, 0, 0, width, height)
+        return bmOut
+    }
+
 
     fun calculateRatingline() : Float {
       return 70f
@@ -94,6 +147,13 @@ object BindDataUtils {
         return str!!
     }
 
+
+    private val vibrantLightColorList = arrayOf(ColorDrawable(Color.parseColor("#F0EFF5")), ColorDrawable(Color.parseColor("#F0EFF5")), ColorDrawable(Color.parseColor("#F0EFF5")), ColorDrawable(Color.parseColor("#F0EFF5")), ColorDrawable(Color.parseColor("#F0EFF5")), ColorDrawable(Color.parseColor("#F0EFF5")), ColorDrawable(Color.parseColor("#F0EFF5")), ColorDrawable(Color.parseColor("#F0EFF5")))
+
+    fun getRandomDrawbleColor(): ColorDrawable {
+        val idx = Random().nextInt(vibrantLightColorList.size)
+        return vibrantLightColorList[idx]
+    }
 
 }
 

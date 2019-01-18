@@ -71,9 +71,10 @@
                             android:layout_marginRight="@dimen/_5sdp"
                             android:gravity="right"
                             android:singleLine="true"
-                            android:text="@{util.convertCurrencyToDanish(data.a_price)}"
+                            android:text="@{ Double.parseDouble(data.a_price) &lt;= 0 ? `` : util.convertCurrencyToDanish(data.a_price)}"
                             />
 
+                        <!--android:text="@{util.convertCurrencyToDanish(data.a_price)}"-->
 
                    <!--     <android.support.v7.widget.AppCompatImageView
                             android:id="@+id/row_child_cart_add_btn"

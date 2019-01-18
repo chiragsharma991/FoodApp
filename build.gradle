@@ -2,7 +2,7 @@
 
 buildscript {
     ext.kotlin_version = '1.2.50'
-    ext.glide_version = '4.6.1'
+    ext.glide_version = '4.8.0'
     ext.firebse_version = '15.0.0'
     ext.support_version = '27.1.1'
     ext.googleServiceVersion = "15.0.1"
