@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 
 
-<layout xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
-    xmlns:android="http://schemas.android.com/apk/res/android">
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
 
     <data>
 
@@ -13,9 +13,11 @@
         -->
 
 
-        <import type="android.view.View"/>
+        <import type="android.view.View" />
 
-        <variable name="util" type="dk.eatmore.foodapp.utils.BindDataUtils"/>
+        <variable
+            name="util"
+            type="dk.eatmore.foodapp.utils.BindDataUtils" />
 
         <variable
             name="orderresult"
@@ -36,24 +38,22 @@
     <android.support.v7.widget.CardView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        app:cardElevation="@dimen/_2sdp"
         android:layout_margin="@dimen/_8sdp"
         app:cardBackgroundColor="@color/white"
-        >
+        app:cardElevation="@dimen/_2sdp">
+
         <RelativeLayout
             android:id="@+id/rowChildItem"
             android:layout_width="match_parent"
             android:layout_height="wrap_content">
 
 
-
             <android.support.constraint.ConstraintLayout
+                android:id="@+id/row_contoller"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/_3sdp"
-                android:id="@+id/row_contoller"
                 android:onClick="@{(v)-> myclickhandler.onDetails(v,orderresult)}"
-                >
+                android:padding="@dimen/_3sdp">
 
                 <android.support.constraint.Guideline
                     android:id="@+id/guideline"
@@ -138,25 +138,36 @@
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/item_price"
-                        style="@style/TitleRegular_TextViewSmall"
+                        style="@style/Subtitle_TextViewSmall"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:text="@{util.convertCurrencyToDanish(orderresult.total_to_pay)}" />
+                        android:text="@{util.convertCurrencyToDanishWithoutLabel(orderresult.total_to_pay)}" />
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/item_date"
                         style="@style/Subtitle_TextViewSmall"
                         android:layout_gravity="center_vertical"
-                        android:text="@{util.parseDateToddMMyyyy(orderresult.order_date)}" />
+                        android:text="@{orderresult.shipping.equalsIgnoreCase(@string/pickup_caps) ? util.parsewithoutTimeToddMMyyyy(orderresult.order_date)+` `+@string/for_hent_selv : util.parsewithoutTimeToddMMyyyy(orderresult.order_date)+` `+@string/til_levering}" />
 
 
                     <android.support.v7.widget.AppCompatTextView
                         style="@style/Subtitle_TextViewSmall"
                         android:onClick="@{(v)-> myclickhandler.onRate(v,orderresult)}"
-                        android:text="@{(orderresult.enable_rating==true &amp;&amp; orderresult.order_status.toLowerCase().equalsIgnoreCase(`accepted`)) ? @string/rate_it_exclaim : @string/ordre_under_behandling }"
+                        android:text="@{util.showOrderstatus(orderresult.payment_status,orderresult.order_status,orderresult.enable_rating)}"
                         android:textColor="@color/theme_color"
-                        android:visibility="@{orderresult.enable_rating ==true ? View.VISIBLE : View.GONE}" />
+                        android:visibility="@{util.showOrderstatus(orderresult.payment_status,orderresult.order_status,orderresult.enable_rating).equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}" />
 
+             <!--       <RatingBar
+                        style="?android:attr/ratingBarStyleSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginBottom="@dimen/_5sdp"
+                        android:isIndicator="true"
+                        android:numStars="6"
+                        android:rating="@{orderresult.total_rating}"
+                        android:stepSize="0.0"
+                        android:visibility="@{(orderresult.enable_rating == false &amp;&amp; orderresult.order_status.toLowerCase().equalsIgnoreCase(`accepted`)) ? View.VISIBLE : View.GONE}" />
 
+-->
                 </LinearLayout>
 
                 <LinearLayout
@@ -207,10 +218,7 @@
                 </LinearLayout>
 
 
-
-
             </android.support.constraint.ConstraintLayout>
-
 
 
         </RelativeLayout>

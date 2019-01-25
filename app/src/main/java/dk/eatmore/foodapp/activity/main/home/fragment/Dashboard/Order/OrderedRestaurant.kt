@@ -9,6 +9,7 @@ import android.databinding.DataBindingUtil
 import android.location.Address
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatImageView
 import android.transition.ChangeBounds
@@ -26,6 +27,8 @@ import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.RateOrder
 import dk.eatmore.foodapp.databinding.FragmentOrderedRestaurantBinding
+import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
+import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
@@ -83,22 +86,31 @@ class OrderedRestaurant : CommanAPI() {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         loge(TAG,"saveInstance "+savedInstanceState)
         if(savedInstanceState == null){
-            model = arguments!!.getSerializable(Constants.ORDERRESULT) as OrderFragment.Orderresult
-            myclickhandler=  MyClickHandler(this)
-            //txt_toolbar.text=getString(R.string.orders)
-            txt_toolbar_right.text=Constants.REORDER
-            txt_toolbar_right.setOnClickListener{
-                if(progress_bar.visibility == View.GONE){
-                    //  (parentFragment as OrderFragment).fetchReorder_info(model)
-                    //  (activity as HomeActivity).onBackPressed()
-                    fetchReorder_info(model,orderedrestaurant_container)
-                }
-            }
-            img_toolbar_back.setOnClickListener { (activity as HomeActivity).onBackPressed()}
-            setanim_toolbartitle(appbar, txt_toolbar, getString(R.string.orders))
-            ui_model = createViewModel()
-            fetchRestaurant_info()
+            setToolbar()
+            binding.isProgress=true
+            Handler().postDelayed({
+                model = arguments!!.getSerializable(Constants.ORDERRESULT) as OrderFragment.Orderresult
+                myclickhandler=  MyClickHandler(this)
+                ui_model = createViewModel()
+                fetchRestaurant_info()
+
+            },300)
         }
+    }
+
+
+    private fun setToolbar(){
+
+        txt_toolbar.text=getString(R.string.orders)
+        txt_toolbar_right.text=Constants.REORDER
+        txt_toolbar_right.setOnClickListener{
+            loge(TAG,"reorder---")
+                //  (parentFragment as OrderFragment).fetchReorder_info(model)
+                //  (activity as HomeActivity).onBackPressed()
+                fetchReorder_info(model,orderedrestaurant_container)
+
+        }
+        img_toolbar_back.setOnClickListener {backpress()}
     }
 
 
@@ -118,6 +130,7 @@ class OrderedRestaurant : CommanAPI() {
                 })
 
             }
+
 
 
     private fun generateBillDetails(){
@@ -194,17 +207,23 @@ class OrderedRestaurant : CommanAPI() {
 
 
     private fun refreshview() {
+
         loge(TAG,"refresh view...")
-        binding.data= ui_model!!.ordered_details.value!!.data[0]
         binding.data= ui_model!!.ordered_details.value!!.data[0]
         binding.myclickhandler=myclickhandler
         binding.util=BindDataUtils
-        binding.orderStatus=model.order_status
         binding.enableRating=arguments!!.getBoolean(Constants.ENABLE_RATING)
+        binding.isProgress=false
+        binding.executePendingBindings()
+
+        val data =ui_model!!.ordered_details.value!!.data[0]
+        showOrderstatus(payment_status = data.payment_status,enable_rating = data.enable_rating,order_status = data.order_status)
+
         Glide.with(imageview.context)
                 .load(ui_model!!.ordered_details.value!!.data[0].app_icon)
                 .apply(RequestOptions().placeholder(BindDataUtils.getRandomDrawbleColor()).error(BindDataUtils.getRandomDrawbleColor()))
                 .into(imageview)
+
         add_parentitem_view.removeAllViewsInLayout()
         val list =ui_model!!.ordered_details.value!!.data[0].order_products_details
         for (i in 0 until list.size){
@@ -265,6 +284,7 @@ class OrderedRestaurant : CommanAPI() {
 
     fun fetchRestaurant_info() {
 
+        binding.isProgress=true
         val postParam = JsonObject()
         postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
         postParam.addProperty(Constants.EATMORE_APP,true)
@@ -303,7 +323,7 @@ class OrderedRestaurant : CommanAPI() {
 
     private fun on_rating() {
         loge(TAG,"on rating...")
-        if(model.order_status.toLowerCase() == Constants.ACCEPTED){
+        if(ui_model!!.ordered_details.value!!.data[0].order_status.toLowerCase() == Constants.ACCEPTED){
             val fragment = RateOrder.newInstance(order_no = arguments!!.getString(Constants.ORDER_NO),orderresult = model)
             var enter : Slide?=null
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -321,6 +341,90 @@ class OrderedRestaurant : CommanAPI() {
         }
     }
 
+    fun showOrderstatus(payment_status : String, order_status : String, enable_rating : Boolean)  {
+
+        loge(TAG,"showOrderstatus--"+payment_status+" "+order_status +" "+enable_rating)
+        if(payment_status.toLowerCase() == Constants.REFUNDED){
+
+            order_status_view.visibility=View.VISIBLE
+            order_status_txt.text="Ordre er refunderet"
+            rating_view.visibility=View.GONE
+            rated_view.visibility=View.GONE
+
+
+        }else if(enable_rating == true && order_status.toLowerCase() == Constants.ACCEPTED){
+
+            order_status_view.visibility=View.VISIBLE
+            order_status_txt.text="Order accepteret til"
+            rating_view.visibility=View.VISIBLE
+            rated_view.visibility=View.GONE
+
+        } else if(enable_rating == false && order_status.toLowerCase() == Constants.ACCEPTED){
+
+            order_status_view.visibility=View.VISIBLE
+            order_status_txt.text="Order accepteret til"
+            rating_view.visibility=View.GONE
+            rated_view.visibility=View.VISIBLE
+            showuser_rate()
+
+        } else if(order_status.toLowerCase() == Constants.REJECTED){
+
+            order_status_view.visibility=View.VISIBLE
+            order_status_txt.text="Ordre er anulleret"
+            rating_view.visibility=View.GONE
+            rated_view.visibility=View.GONE
+
+        } else if(enable_rating == true && order_status.toLowerCase() != Constants.ACCEPTED && order_status.toLowerCase() != Constants.REJECTED){
+
+            order_status_view.visibility=View.VISIBLE
+            order_status_txt.text="Ordre under behandling"
+            rating_view.visibility=View.GONE
+            rated_view.visibility=View.GONE
+
+        } else if(order_status.toLowerCase() == Constants.PENDING_OPENING_RESTAURANT){
+
+            order_status_view.visibility=View.VISIBLE
+            order_status_txt.text="Ordre under behandling"
+            rating_view.visibility=View.GONE
+            rated_view.visibility=View.GONE
+
+        }else{
+
+            order_status_view.visibility=View.GONE
+            rating_view.visibility=View.GONE
+            rated_view.visibility=View.GONE
+        }
+
+
+    }
+
+    fun showuser_rate(){
+        val label = arrayOf("","Elendigt","Dårligt","Fint","Godt","Fremragende","Fantastisk")
+        val data =ui_model!!.ordered_details.value!!.data[0]
+        Log.e(TAG,"rate: "+data.quality_of_food_rating+" "+data.total_rating)
+
+        total_rating.rating= data.total_rating
+
+        qty_rating.text= String.format(getString(R.string.qty_rate),data.quality_of_food_rating.toInt())
+        qty_remark.text= if(data.quality_of_food_rating.toInt() > 0) String.format(getString(R.string.rate_label),label[data.quality_of_food_rating.toInt()]) else ""
+
+        customer_rating.text=String.format(getString(R.string.customer_rate),data.customer_service_rating.toInt())
+        customer_remark.text=if(data.customer_service_rating.toInt() > 0) String.format(getString(R.string.rate_label), label[data.customer_service_rating.toInt()]) else ""
+
+        deliver_rating.text=String.format(getString(R.string.deliver_rate),data.delivery_time_rating.toInt())
+        deliver_remark.text=if(data.delivery_time_rating.toInt() > 0) String.format(getString(R.string.rate_label), label[data.delivery_time_rating.toInt()]) else ""
+
+        if(data.review.length > 0 ){
+            comment_txt.text=data.review
+            comment_txt.visibility=View.VISIBLE
+            your_rating_label.visibility=View.VISIBLE
+        }else{
+            comment_txt.visibility=View.GONE
+            your_rating_label.visibility=View.GONE
+        }
+    }
+
+
 
     override fun comman_apisuccess(status: String) {
         moveon_reOrder("")
@@ -329,12 +433,51 @@ class OrderedRestaurant : CommanAPI() {
     override fun comman_apifailed(error: String) {
     }
 
-    fun backpress(): Boolean {
+    fun backpress() {
+
+        // First back from rate...
         if(childFragmentManager.backStackEntryCount > 0){
-            childFragmentManager.popBackStack()
-            return true
+            childFragmentManager.popBackStack()  // if rate fragment is open apply only backpress (rate is child of ordered)
+            return
         }
-        return false
+
+        // second back from this.
+        if(parentFragment is OrderFragment){
+            // If user is from Order fragment
+            if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true   // every time refresh :  order fragment
+            ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment().childFragmentManager.popBackStack()
+
+        }else{
+            // from Home fragment
+            if(HomeFragment.ui_model?.reloadfragment !=null && HomeFragment.count ==1) HomeFragment.ui_model!!.reloadfragment.value=true  // reload last order from homefragment.
+            ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().childFragmentManager.popBackStack()
+        }
+
+    }
+
+    fun updateRate(){
+
+        if(childFragmentManager.backStackEntryCount > 0){
+            childFragmentManager.popBackStack()  // if rate fragment is open
+        }
+
+        if(parentFragment is OrderFragment){
+            // If user is from Order fragment
+            fetchRestaurant_info() // refresh current fragment to update view
+            if(HomeFragment.ui_model?.reloadfragment !=null && HomeFragment.count ==1) HomeFragment.ui_model!!.reloadfragment.value=true  // reload last order from homefragment.
+
+        }else{
+            // from Home fragment
+            val orderfragment =  ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment()
+            if(orderfragment.childFragmentManager.backStackEntryCount > 0){
+                orderfragment.childFragmentManager.popBackStack()  // pop all fragment upon order fragment
+            }
+            fetchRestaurant_info() // refresh current fragment to update view
+            if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true   // every time refresh :  order fragment
+
+
+        }
+
     }
 
     override fun onDestroy() {
@@ -359,6 +502,12 @@ class OrderedRestaurant : CommanAPI() {
 
         fun on_rating (view: View ) {
             orderedRestaurant.on_rating()
+        }
+        fun re_Order (view: View ) {
+                //  (parentFragment as OrderFragment).fetchReorder_info(model)
+                //  (activity as HomeActivity).onBackPressed()
+                orderedRestaurant.fetchReorder_info(orderedRestaurant.model,orderedRestaurant.orderedrestaurant_container)
+
         }
 
 
@@ -389,17 +538,29 @@ data class Data(
         val address : String ="",
         var total_to_pay: String = "",
         var shipping : String = "",
+        var order_status : String = "",
+        var payment_status : String = "",
         var upto_min_shipping :String ="0.0",
         var additional_charge :String ="0.0",
+        val total_rating: Float = 0.0f,
+        val quality_of_food_rating: Float = 0.0f,
+        val customer_service_rating: Float = 0.0f,
+        val delivery_time_rating: Float = 0.0f,
         var discount_amount :Double =0.0,
         var discount_type :String? =null,
         var shipping_costs :Double =0.0,
+        var accept_reject_time :String? =null,
+        var expected_time :String ="",
+        var review :String ="",
         var paymethod :String ="0",
         var order_total :String ="0", // this is same as subtotal + excluded Tax
         var restaurant_name: String = "",
         var app_icon: String = "",
+        var enable_rating: Boolean = false,
         val order_products_details : ArrayList<Orderproducts_Details> = arrayListOf()  // list of product.
 )
+
+
 
 data class Orderproducts_Details(
         val products : Products,

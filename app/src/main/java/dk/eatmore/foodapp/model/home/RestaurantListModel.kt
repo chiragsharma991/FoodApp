@@ -42,6 +42,7 @@ data class Restaurant(
         val customer_service_ratiing: Float = 0.0f,
         val delivery_time_ratiing: Float = 0.0f,
         val app_icon: String = "",
+        val phone: String = "",
         val r_key : String="",
         val r_token : String="",
         var cartcnt : String?=null,
@@ -55,6 +56,7 @@ data class Restaurant(
         val created_date : String="",
         val health_report_link : String="",
         val shipping_unit : String="",
+        val restpaymentmethods : ArrayList<Restpaymentmethods> = arrayListOf(),
         val rating_details : ArrayList<Rating_details> = arrayListOf(),
         val review_list : ArrayList<Review_list> = arrayListOf(),
         val opening_hours : ArrayList<Opening_hours> = arrayListOf(),
@@ -77,6 +79,7 @@ data class Postalcity(val postal_code: String = "",val city_name : String = ""):
 data class Rating_details(val review: Int = 0, val review_count: Int = 0, val rate_per: Int = 0):Serializable
 data class Review_list(val order_date: String = "", val review_by: String = "", val review: String = "",val rating : String=""):Serializable
 data class Opening_hours(val today: Boolean = false, val opens: String = "", val day: String = "",val closes : String=""):Serializable
+data class Restpaymentmethods(val pm_id: String = "", val pm_name: String = "",val logo : String=""):Serializable
 data class Shipping_charges(
 
         val minimum_order_price : String="",

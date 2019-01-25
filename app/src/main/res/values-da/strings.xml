@@ -36,9 +36,9 @@
     <string name="invalid_email">Invalid email Address</string>
     <string name="login_val_pass">Username/Password cannot be blank</string>
     <string name="internet_not_available">Please check internet connection</string>
-    <string name="error_404">Server not found... Try after sometime</string>
+    <string name="error_404">Server not found&#8230; Try after sometime</string>
     <string name="error_407">Server not responding\nPlease chenck the network connection.</string>
-    <string name="please_wait">Please wait...</string>
+    <string name="please_wait">Please wait&#8230;</string>
     <string name="enter_valid_email_address">Enter valid email address</string>
     <string name="password_must_consist">Password must consist of minimum 8 characters.</string>
     <string name="enter_your_unique_password">Enter your unique password</string>
@@ -50,7 +50,7 @@
     <string name="minues">- %1$s</string>
     <string name="plus">+ %1$s</string>
     <string name="total_goods">Total (%1$s Goods)</string>
-
+    <string name="restaurant_full_address">%1$s, %2$s</string>
     <string name="add_new_address">Add new address</string>
     <string name="verify">Verify</string>
     <string name="address">Address</string>
@@ -84,7 +84,7 @@
     <string name="didnot_match_restaurant_error">Sorry, we did not match any restaurant.</string>
     <string name="search_again">Search again</string>
     <string name="restaurants">Restaurants</string>
-    <string name="loading">Loading...</string>
+    <string name="loading">Loading&#8230;</string>
     <string name="login_to_continue">Login to continue</string>
     <string name="are_you_sure_would">Vil du gerne logge ud?</string>
     <string name="logout">Log ud</string>
@@ -187,6 +187,18 @@
     <string name="slider_three_title">Futuristic Header</string>
     <string name="slider_three_desc">Description 3 will be displayed in this space when ready, for now it is just placed to make the screen look fuller. Will be replaced in future with the actual text provided by Mustapha</string>
     <string name="ikke_tilg_ngelig">Ikke tilgængelig</string>
+    <string name="tak_for_din">Din ordre vil blive behandlet hurtigst muligt du vil modtage en endelig bekræftelse til din e-mail adresse test@gmail.com, så snart restauranten har behandlet din ordre.</string>
+    <string name="onsket_til">Endelig tidsbekræftelse sendes til din e-mail når ordren er behandlet af restauranten.</string>
+    <string name="for_hent_selv">For hent selv</string>
+    <string name="til_levering">Udbringning</string>
+    <string name="delivery_wid_expectedtime">%1$s ønsket til %2$s</string>
+    <string name="online">Online</string>
+    <string name="kontant_betaling">Kontant betaling</string>
+    <string name="qty_rate">%1$s/6</string>
+    <string name="customer_rate">%1$s/6</string>
+    <string name="deliver_rate">%1$s/6</string>
+    <string name="rate_label">(%1$s)</string>
+    <string name="ordredetaljer">Ordredetaljer</string>
 
 
 </resources>

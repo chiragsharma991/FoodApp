@@ -11,7 +11,7 @@ import android.widget.TextView
 import dk.eatmore.foodapp.R
 
 /**
- * Created by paetztm on 2/6/2017.
+ * Created by chirag on 2/6/2019.
  */
 
 class RecyclerSectionItemDecoration(private val headerOffset: Int, private val sticky: Boolean, private val sectionCallback: SectionCallback) : RecyclerView.ItemDecoration() {

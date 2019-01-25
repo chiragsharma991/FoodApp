@@ -111,21 +111,22 @@ class RateOrder : BaseFragment(), RatingBar.OnRatingBarChangeListener {
                     when(fragment){
 
                         is HomeFragment ->{
-                            if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true  // reload last order from homefragment.
-                            fragment.swipeAdapter!!.notifyDataSetChanged()
-                            if(fragment.childFragmentManager.backStackEntryCount > 0 && parentFragment is OrderedRestaurant)  // detail screen is open
-                                (parentFragment as OrderedRestaurant).binding.enableRating=false  // change back screen status
+                            if(parentFragment is OrderedRestaurant){
+                                (parentFragment as OrderedRestaurant).updateRate() // refresh ordered restaurant.
+                            }else{
+                                fragment.updateRate() // refresh order fragment
+                            }
                         }
                         is OrderFragment ->{
-                            if(HomeFragment.ui_model?.reloadfragment !=null && HomeFragment.count ==1) HomeFragment.ui_model!!.reloadfragment.value=true  // reload last order from homefragment.
-                            fragment.mAdapter!!.notifyDataSetChanged() // change in home order screen
-                            if(fragment.childFragmentManager.backStackEntryCount > 0 && parentFragment is OrderedRestaurant)  // detail screen is open
-                                (parentFragment as OrderedRestaurant).binding.enableRating=false  // change back screen status
 
+                            if(parentFragment is OrderedRestaurant){
+                                (parentFragment as OrderedRestaurant).updateRate() // refresh ordered restaurant.
+                            }else{
+                                fragment.updateRate() // refresh order fragment
+                            }
                         }
                     }
                     Toast.makeText(context, jsonObject.get(Constants.MSG).asString, Toast.LENGTH_SHORT).show()
-                    (activity as HomeActivity).onBackPressed()
 
                 } else {
                     showSnackBar(rate_container, jsonObject.get(Constants.MSG).asString)

@@ -309,6 +309,13 @@ class EpayFragment : BaseFragment() {
         }
         paymentattributes=PaymentAttributes()
         paymentattributes.order_total=ui_model!!.viewcard_list.value!!.order_total.toString()
+        paymentattributes.online_logo=restaurant.restpaymentmethods[0].logo
+        paymentattributes.cash_logo=restaurant.restpaymentmethods[1].logo
+        paymentattributes.restaurant_name=restaurant.restaurant_name
+        paymentattributes.restaurant_address=restaurant.address
+        paymentattributes.restaurant_phone=restaurant.phone
+        paymentattributes.restaurant_appicon=restaurant.app_icon
+
         epay_total_txt.text= BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.order_total.toString()) ?: "null"
         epay_total_lbl.text=String.format(getString(R.string.total_goods),ui_model!!.viewcard_list.value!!.cartcnt)
         add_parentitem_view.removeAllViewsInLayout()
@@ -545,7 +552,13 @@ class EpayFragment : BaseFragment() {
             var payment_address :String ="",
             var payment_time :String ="",
             var expected_time :String ="",
+            var restaurant_name :String ="",
+            var restaurant_address :String ="",
+            var restaurant_phone :String ="",
+            var restaurant_appicon :String ="",
             var first_time :String ="",
+            var online_logo :String ="",
+            var cash_logo :String ="",
             var discount_id :Int =0,
             var discount_type :String ="",
             var discount_amount :Double =0.0,

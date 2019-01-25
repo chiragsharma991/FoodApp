@@ -223,7 +223,7 @@ abstract class BaseFragment : Fragment() {
                             if (!fragment.backpress()) childFragmentManager.popBackStack()
                         }
                         is OrderedRestaurant -> {
-                            if(!fragment.backpress()) childFragmentManager.popBackStack()
+                             fragment.backpress()
                         }
                         is EpayFragment ->{
                             if(!fragment.backpress()) childFragmentManager.popBackStack()
@@ -280,9 +280,11 @@ abstract class BaseFragment : Fragment() {
 
     inline fun <reified T> popfrom_to( targetfragment: T){
 
+//*TODO : Please be make sure if you have this base + A fragment + B fragment > and you call this from B, you get= activity null because you are destroying intance B itself.
+
         loop@ for(i in 0 until(childFragmentManager.backStackEntryCount) ){
             childFragmentManager.executePendingTransactions()
-            val fragment = childFragmentManager.findFragmentByTag(childFragmentManager.getBackStackEntryAt(childFragmentManager.backStackEntryCount - 1).name)
+            val fragment = childFragmentManager.findFragmentByTag(childFragmentManager.getBackStackEntryAt(childFragmentManager.backStackEntryCount-1 ).name)
             if (fragment != null && fragment.isVisible) {
 
               //  targetfragment is DetailsFragment
@@ -518,16 +520,23 @@ abstract class BaseFragment : Fragment() {
 
     fun getCalculatedDate(dateFormat: String, days: Int): String {
         val cal = Calendar.getInstance()
-        val s = SimpleDateFormat(dateFormat)
+        val s = SimpleDateFormat(dateFormat,Locale.ENGLISH)
         cal.add(Calendar.DAY_OF_YEAR, days)
         return s.format(Date(cal.timeInMillis))
     }
 
     fun gettimefrom_date(target_date : String, target_format : String): Long {
         //val sdf = SimpleDateFormat("dd/MM/yyyy")
-        val sdf = SimpleDateFormat(target_format)
+        val sdf = SimpleDateFormat(target_format,Locale.ENGLISH)
         val strDate = sdf.parse(target_date)
         return strDate.time
+    }
+    fun getcurrentdate(): String {
+        //val sdf = SimpleDateFormat("dd/MM/yyyy")
+        val time =Calendar.getInstance().time
+        val df =SimpleDateFormat("dd-MM-yyyy", Locale.ENGLISH)
+        val currentdate : String =df.format(time)
+        return currentdate
     }
 
 

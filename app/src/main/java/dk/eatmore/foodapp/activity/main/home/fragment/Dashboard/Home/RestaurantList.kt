@@ -435,7 +435,6 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
                     (parentFragment as HomeFragment).addFragment(R.id.home_fragment_container, fragment, DetailsFragment.TAG, false)
                 }
             })
-
             val sectionItemDecoration = RecyclerSectionItemDecoration(resources.getDimensionPixelSize(R.dimen._45sdp),
                     true,
                     getSectionCallback(list))

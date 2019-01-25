@@ -27,6 +27,7 @@
             android:layout_height="wrap_content"
             android:layout_width="0dp"
             android:gravity="start"
+            android:layout_marginStart="@dimen/_5sdp"
             android:id="@+id/subitem_name"
             android:layout_weight="1"
             android:layout_marginEnd="@dimen/_8sdp"

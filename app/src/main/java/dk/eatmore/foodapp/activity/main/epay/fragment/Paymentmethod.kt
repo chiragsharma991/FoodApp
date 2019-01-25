@@ -52,7 +52,6 @@ import kotlinx.android.synthetic.main.dynamic_raw_item.view.*
 import kotlinx.android.synthetic.main.dynamic_raw_subitem.view.*
 import kotlinx.android.synthetic.main.paymentmethod.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
-import kotlinx.android.synthetic.main.transaction_status.*
 import retrofit2.Call
 
 
@@ -226,14 +225,12 @@ class Paymentmethod : BaseFragment(), TextWatcher {
         // Add restaurant address and time--
         address_txt.text=EpayFragment.paymentattributes.payment_address
         deliverytime_txt.text=EpayFragment.paymentattributes.payment_time
-        paymenttype_img.setImageResource(if(EpayFragment.isPickup) R.mipmap.danish_krone else R.mipmap.motorcycle)
+        paymenttype_img.setImageResource(if(EpayFragment.isPickup) R.mipmap.bag else R.mipmap.motorcycle)
         Glide.with(context!!)
-                .load("https://eatmore.dk/admin/web/images/payment_logo/201809120309047.png")
-                .apply(RequestOptions().placeholder(R.drawable.credit_card).error(R.drawable.credit_card))
+                .load(EpayFragment.paymentattributes.online_logo)
                 .into(online_payment_icon)
         Glide.with(context!!)
-                .load(R.drawable.credit_card)
-                .apply(RequestOptions().placeholder(R.drawable.credit_card).error(R.drawable.credit_card))
+                .load(EpayFragment.paymentattributes.cash_logo)
                 .into(cash_payment_icon)
 
     }
@@ -323,6 +320,8 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             error_of_cashgiftcard.visibility=View.GONE
             applycash_txt.visibility=View.VISIBLE
             applyonline_txt.visibility=View.VISIBLE
+            online_rht_img.setImageResource(R.drawable.up_arrow)
+            cash_rht_img.setImageResource(R.drawable.down_arrow)
 
         }else{
             online_method.visibility=View.GONE
@@ -339,6 +338,9 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             error_of_cashgiftcard.visibility=View.GONE
             applycash_txt.visibility=View.VISIBLE
             applyonline_txt.visibility=View.VISIBLE
+            online_rht_img.setImageResource(R.drawable.down_arrow)
+            cash_rht_img.setImageResource(R.drawable.up_arrow)
+
 
         }
     }

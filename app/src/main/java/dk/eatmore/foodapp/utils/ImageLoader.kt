@@ -11,6 +11,14 @@ import com.bumptech.glide.request.RequestOptions
 object ImageLoader {
 
 
+
+    fun loadImagefromurl(context: Context, resourceId: String, imageView: ImageView){
+        Glide.with(context)
+                .load(resourceId)
+                .apply(RequestOptions().placeholder(BindDataUtils.getRandomDrawbleColor()).error(BindDataUtils.getRandomDrawbleColor()))
+                .into(imageView)
+    }
+
     /**
      * Load image with round shape
      */

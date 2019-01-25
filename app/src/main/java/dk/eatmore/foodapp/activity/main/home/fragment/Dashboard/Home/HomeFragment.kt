@@ -49,6 +49,7 @@ import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragm
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.RateOrder
 import dk.eatmore.foodapp.databinding.SwipeCartItemBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedRestaurant
+import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.*
@@ -98,9 +99,9 @@ class HomeFragment : CommanAPI() {
 
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
-            Glide.with(context!!).load(ContextCompat.getDrawable(context!!,R.mipmap.eatmore_search_backgrond)).into(imageview);
-            restaurant_logo.visibility=View.VISIBLE
-            img_toolbar_back.visibility=View.GONE
+            Glide.with(context!!).load(ContextCompat.getDrawable(context!!, R.mipmap.eatmore_search_backgrond)).into(imageview);
+            restaurant_logo.visibility = View.VISIBLE
+            img_toolbar_back.visibility = View.GONE
             firebaseAnalytics = FirebaseAnalytics.getInstance(context!!);
             checkFirebaseAnalytics()
             clickEvent = MyClickHandler(this)
@@ -162,14 +163,12 @@ class HomeFragment : CommanAPI() {
         }
     }
 
-    fun gpsPermissiondenied(){
+    fun gpsPermissiondenied() {
         gps_enableNdisable()
-        gps_img.visibility=View.VISIBLE
-        progress_bar.visibility=View.GONE
+        gps_img.visibility = View.VISIBLE
+        progress_bar.visibility = View.GONE
         Toast.makeText(context, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
     }
-
-
 
 
 /*
@@ -195,20 +194,20 @@ class HomeFragment : CommanAPI() {
 
     }
 
-    fun getcurrent_location(){
+    fun getcurrent_location() {
         gps_enableNdisable()
 
-        if(is_location_PermissionGranted()){
-            loge(TAG,"is_location_PermissionGranted---")
-            gps_img.visibility=View.GONE
-            progress_bar.visibility=View.VISIBLE
-            val   locationUpdate = GetLastLocation(activity!!, object : GetLastLocation.OnLocationInteraction {
+        if (is_location_PermissionGranted()) {
+            loge(TAG, "is_location_PermissionGranted---")
+            gps_img.visibility = View.GONE
+            progress_bar.visibility = View.VISIBLE
+            val locationUpdate = GetLastLocation(activity!!, object : GetLastLocation.OnLocationInteraction {
                 override fun onLocationUpdate(lat: Double, lng: Double) {
                     loge(TAG, "onLocationUpdate: $lat, $lng")
-                    find_rest_edt.setText(getpostalfrom_latlang(latitude = lat,longitude = lng).trim())
+                    find_rest_edt.setText(getpostalfrom_latlang(latitude = lat, longitude = lng).trim())
                     find_rest_edt.setSelection(find_rest_edt.text.length)
-                    gps_img.visibility=View.VISIBLE
-                    progress_bar.visibility=View.GONE
+                    gps_img.visibility = View.VISIBLE
+                    progress_bar.visibility = View.GONE
                 }
 
                 override fun onReqPermission() {
@@ -219,27 +218,27 @@ class HomeFragment : CommanAPI() {
         }
     }
 
-    fun gps_enableNdisable(){
+    fun gps_enableNdisable() {
         // Change gps icon color of Enable/Disable.
 
         if (Build.VERSION.SDK_INT >= 23) {
             // location permission
             if (context!!.checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
                     context!!.checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
-                if(isGpsEnable()){
-                    gps_img.setColorFilter(ContextCompat.getColor(context!!,R.color.black_txt_light))  // enable
-                }else{
-                    gps_img.setColorFilter(ContextCompat.getColor(context!!,R.color.colorLanguageUnselectedGrey))
+                if (isGpsEnable()) {
+                    gps_img.setColorFilter(ContextCompat.getColor(context!!, R.color.black_txt_light))  // enable
+                } else {
+                    gps_img.setColorFilter(ContextCompat.getColor(context!!, R.color.colorLanguageUnselectedGrey))
                 }
             } else {
-                gps_img.setColorFilter(ContextCompat.getColor(context!!,R.color.colorLanguageUnselectedGrey))
+                gps_img.setColorFilter(ContextCompat.getColor(context!!, R.color.colorLanguageUnselectedGrey))
             }
 
         } else {
-            if(isGpsEnable()){
-                gps_img.setColorFilter(ContextCompat.getColor(context!!,R.color.black_txt_light))  // enable
-            }else{
-                gps_img.setColorFilter(ContextCompat.getColor(context!!,R.color.colorLanguageUnselectedGrey))
+            if (isGpsEnable()) {
+                gps_img.setColorFilter(ContextCompat.getColor(context!!, R.color.black_txt_light))  // enable
+            } else {
+                gps_img.setColorFilter(ContextCompat.getColor(context!!, R.color.colorLanguageUnselectedGrey))
             }
         }
     }
@@ -259,6 +258,16 @@ class HomeFragment : CommanAPI() {
                 })
             }
 
+
+    fun updateRate() {
+
+        fetchLastOrder() // refresh current fragment
+        val orderfragment =  ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment()
+        if(orderfragment.childFragmentManager.backStackEntryCount > 0){
+            orderfragment.childFragmentManager.popBackStack()  // pop all fragment upon order fragment
+        }
+        if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true   // every time refresh :  order fragment
+    }
 
     fun swipeView(model: OrderFragment.Myorder_Model) {
         /**TODO: swipe view visible condition:
@@ -300,14 +309,14 @@ class HomeFragment : CommanAPI() {
                     /* Set your color for positive displacement */
 
                     // Draw Rect with varying right side, equal to displacement dX
-                  //  c.drawRect(itemView.left.toFloat(), itemView.top.toFloat(), 0f,
-                           // itemView.bottom.toFloat(), p)
+                    //  c.drawRect(itemView.left.toFloat(), itemView.top.toFloat(), 0f,
+                    // itemView.bottom.toFloat(), p)
                 } else {
                     /* Set your color for negative displacement */
 
                     // Draw Rect with varying left side, equal to the item's right side plus negative displacement dX
-                   // c.drawRect(itemView.right.toFloat() + 0f, itemView.top.toFloat(),
-                          //  itemView.right.toFloat(), itemView.bottom.toFloat(), p)
+                    // c.drawRect(itemView.right.toFloat() + 0f, itemView.top.toFloat(),
+                    //  itemView.right.toFloat(), itemView.bottom.toFloat(), p)
                 }
 
                 super.onChildDraw(null, recyclerView, viewHolder, dX, dY, actionState, isCurrentlyActive)
@@ -341,7 +350,6 @@ class HomeFragment : CommanAPI() {
 
         }
     }
-
 
 
     fun fetchLastOrder() {
@@ -386,7 +394,7 @@ class HomeFragment : CommanAPI() {
     }
 
     override fun comman_apisuccess(status: String) {
-        loge(TAG, "success..."+"-")
+        loge(TAG, "success..." + "-")
         moveon_reOrder("")
     }
 
@@ -416,52 +424,54 @@ class HomeFragment : CommanAPI() {
 
         fun onFindClicked(view: View) {
 
-            if (find_rest_edt.text.trim().toString().length > 0 ) {
-                homefragment.progress_bar.visibility=View.GONE
-                gps_img.visibility=View.VISIBLE
+            if (find_rest_edt.text.trim().toString().length > 0) {
+                homefragment.progress_bar.visibility = View.GONE
+                gps_img.visibility = View.VISIBLE
                 val restaurantlist = RestaurantList.newInstance(find_rest_edt.text.trim().toString())
                 addFragment(R.id.home_fragment_container, restaurantlist, RestaurantList.TAG, true)
             }
         }
+
         fun onFindLocation(view: View) {
-           if(homefragment.progress_bar.visibility==View.GONE)
-           homefragment.getcurrent_location()
+            if (homefragment.progress_bar.visibility == View.GONE)
+                homefragment.getcurrent_location()
 
         }
 
         fun reOrder(view: View, model: OrderFragment.Orderresult) {
             loge(TAG, "reorder---")
-            homefragment.progress_bar.visibility=View.GONE
-            gps_img.visibility=View.VISIBLE
+            homefragment.progress_bar.visibility = View.GONE
+            gps_img.visibility = View.VISIBLE
             fetchReorder_info(model, home_fragment_container)
         }
 
         fun onDetails(view: View, model: OrderFragment.Orderresult) {
             val fragment = OrderedRestaurant.newInstance(model)
-            homefragment.progress_bar.visibility=View.GONE
-            gps_img.visibility=View.VISIBLE
+            homefragment.progress_bar.visibility = View.GONE
+            gps_img.visibility = View.VISIBLE
             addFragment(R.id.home_fragment_container, fragment, OrderedRestaurant.TAG, true)
         }
 
         fun onRate(view: View, model: OrderFragment.Orderresult) {
-            homefragment.progress_bar.visibility=View.GONE
-            gps_img.visibility=View.VISIBLE
-            val fragment = RateOrder.newInstance(order_no = model.order_no, orderresult = model)
-            var enter: Slide? = null
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                enter = Slide()
-                enter.setDuration(Constants.BOTTOM_TO_TOP_ANIM.toLong())
-                enter.slideEdge = Gravity.BOTTOM
-                val changeBoundsTransition: ChangeBounds = ChangeBounds()
-                changeBoundsTransition.duration = Constants.BOTTOM_TO_TOP_ANIM.toLong()
-                //fragment!!.sharedElementEnterTransition=changeBoundsTransition
-                fragment.sharedElementEnterTransition = changeBoundsTransition
-                fragment.sharedElementReturnTransition = changeBoundsTransition
-                fragment.enterTransition = enter
+
+            if (model.order_status.toLowerCase() == Constants.ACCEPTED && model.enable_rating == true) {
+                homefragment.progress_bar.visibility = View.GONE
+                gps_img.visibility = View.VISIBLE
+                val fragment = RateOrder.newInstance(order_no = model.order_no, orderresult = model)
+                var enter: Slide? = null
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    enter = Slide()
+                    enter.setDuration(Constants.BOTTOM_TO_TOP_ANIM.toLong())
+                    enter.slideEdge = Gravity.BOTTOM
+                    val changeBoundsTransition: ChangeBounds = ChangeBounds()
+                    changeBoundsTransition.duration = Constants.BOTTOM_TO_TOP_ANIM.toLong()
+                    //fragment!!.sharedElementEnterTransition=changeBoundsTransition
+                    fragment.sharedElementEnterTransition = changeBoundsTransition
+                    fragment.sharedElementReturnTransition = changeBoundsTransition
+                    fragment.enterTransition = enter
+                }
+                addFragment(R.id.home_fragment_container, fragment, RateOrder.TAG, false)
             }
-            addFragment(R.id.home_fragment_container, fragment, RateOrder.TAG, false)
-
-
         }
         /*   fun onClose(view: View, model: OrderFragment.Orderresult) {
                count = 0

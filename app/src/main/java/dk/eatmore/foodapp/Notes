@@ -69,12 +69,6 @@ Notes :
 
    2. Info fragment : null pointer on detech .
 
-   3. Databinding : add concte string and show double values
-
-   4. dataclass: add constructer and init to add logic to change values in dataclass variable
-
-   5. Add sticky notes.
-
    6. add toolbar in fragment and back button with hide and change another icon
 
    7. user constraint set in nested layout and use view visible or gone.
@@ -85,7 +79,10 @@ Notes :
 
    10. How to pass Linkedlist to another activity.
 
-   11.How to assign null in dataclass
+   11. Fragment popall getting error from transaction to home fragment.
+
+
+
 
 
 
@@ -93,8 +90,13 @@ Notes :
 
    1. edit text ime not working properly.
    2. Add firebase tocken and add app in firebase and facebook
-   3. postal code from gps not working.
+   3. When you on login to continue > change tab and login > text should be change > Continue instead of login to continue.
    4. add icon and text in bottom bar.
+   5. Remove static values to null.
+   6. order details some time clear -> data[null]
+   7. Shipping getting null - Address 493
+   8. Add postal ciry in shared pre and add in address where user ordered in web and after he moved on mobile then checkout from address.
+   9. Some time if you are in health screen and press back then App is moving direct home search screen.
 
 
 

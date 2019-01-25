@@ -61,11 +61,13 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
 
     override fun onRefresh() {
         // swipe to refresh>>>
-        if(PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS,false)){
+        if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
             swipetorefresh_view.visibility = View.GONE
             fetchmyOrder()
-            if(HomeFragment.ui_model?.reloadfragment !=null && HomeFragment.count ==1) HomeFragment.ui_model!!.reloadfragment.value=true  // reload last order from homefragment.
-        }else{  swipeRefresh.isRefreshing = false }
+            if (HomeFragment.ui_model?.reloadfragment != null && HomeFragment.count == 1) HomeFragment.ui_model!!.reloadfragment.value = true  // reload last order from homefragment.
+        } else {
+            swipeRefresh.isRefreshing = false
+        }
     }
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
@@ -85,14 +87,14 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         loge(TAG, "saveInstance " + savedInstanceState)
         if (savedInstanceState == null) {
-            loge(TAG,"check visible-"+getUserVisibleHint())
+            loge(TAG, "check visible-" + getUserVisibleHint())
             empty_view.visibility = View.GONE
             //progress_bar.visibility=View.GONE
             txt_toolbar.text = getString(R.string.your_orders)
             img_toolbar_back.visibility = View.GONE
             swipeRefresh.setOnRefreshListener(this)
             ui_model = createViewModel()
-            error_btn.setOnClickListener{((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2) }
+            error_btn.setOnClickListener { ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2) }
             if (!PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
                 show_ui_error(1)
                 return
@@ -111,18 +113,18 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
 */
     }
 
-    fun show_ui_error(viewid : Int){
-        if(viewid ==1){
+    fun show_ui_error(viewid: Int) {
+        if (viewid == 1) {
             // Please login
-           // swipetorefresh_view.visibility=View.GONE
+            // swipetorefresh_view.visibility=View.GONE
             empty_view.visibility = View.VISIBLE
-            error_image.visibility=View.GONE
-            error_btn.visibility=View.VISIBLE
+            error_image.visibility = View.GONE
+            error_btn.visibility = View.VISIBLE
             error_txt.text = getString(R.string.please_login_to_see)
-        }else{
+        } else {
             empty_view.visibility = View.VISIBLE
-            error_image.visibility=View.VISIBLE
-            error_btn.visibility=View.GONE
+            error_image.visibility = View.VISIBLE
+            error_btn.visibility = View.GONE
             error_txt.text = getString(R.string.no_order)
         }
 
@@ -130,10 +132,10 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
 
 
     class UIModel : ViewModel() {
+
         var myorder_List = MutableLiveData<Myorder_Model>()  // this is list to show pre order
         var restaurant_info = MutableLiveData<Myorder_Model>() // this is list for fetch restaurant info
         var reloadfragment = MutableLiveData<Boolean>()
-
     }
 
     fun createViewModel(): OrderFragment.UIModel =
@@ -155,7 +157,7 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
                 reloadfragment.observe(this@OrderFragment, Observer<Boolean> {
                     // reload fragment from here.
                     loge(TAG, "reload refresh---")
-                 //   swipetorefresh_view.visibility=View.VISIBLE
+                    //   swipetorefresh_view.visibility=View.VISIBLE
                     fetchmyOrder()
 
                 })
@@ -175,7 +177,7 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
                     binder.orderresult = model
                     binder.util = BindDataUtils
                     binder.myclickhandler = myclickhandler
-
+                    binder.executePendingBindings()
                     //   binder.handler=this@OrderFragment
                 }
             })
@@ -188,7 +190,7 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
     private fun moveon_next() {
 
         val fragment = DetailsFragment.newInstance(
-               // restaurant = ui_model!!.restaurant_info.value!!.restaurant_info,
+                // restaurant = ui_model!!.restaurant_info.value!!.restaurant_info,
                 status = ""
         )
         var enter: Slide? = null
@@ -230,6 +232,12 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
         addFragment(R.id.home_order_container, fragment, RateOrder.TAG, false)
     }
 
+    fun updateRate() {
+        fetchmyOrder()
+        childFragmentManager.popBackStack()
+    }
+
+
     fun fetchmyOrder() {
         empty_view.visibility = View.GONE
         //  progress_bar.visibility=View.VISIBLE
@@ -260,9 +268,9 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
                     }
                     //empty_view.visibility = View.VISIBLE
                     //error_txt.text = getString(R.string.no_order)
-                    if(PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS,false)){
+                    if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
                         show_ui_error(2)
-                    }else{
+                    } else {
                         show_ui_error(1)
                     }
                 }
@@ -403,7 +411,7 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
         }
 
     */
-    override fun comman_apisuccess(status : String) {
+    override fun comman_apisuccess(status: String) {
         moveon_reOrder(status)
     }
 
@@ -414,10 +422,10 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
     class MyClickHandler(val orderFragment: OrderFragment) {
 
         fun reOrder(view: View, model: Orderresult) {
-            if (orderFragment.swipeRefresh.isRefreshing == false){
-              //  orderFragment.empty_view.visibility = View.GONE
+            if (orderFragment.swipeRefresh.isRefreshing == false) {
+                //  orderFragment.empty_view.visibility = View.GONE
                 // orderFragment.fetchReorder_info(model)
-                orderFragment.fetchReorder_info(model,orderFragment.home_order_container)
+                orderFragment.fetchReorder_info(model, orderFragment.home_order_container)
             }
         }
 
@@ -427,7 +435,7 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
         }
 
         fun onRate(view: View, model: Orderresult) {
-            if (model.order_status.toLowerCase() == Constants.ACCEPTED) {
+            if (model.order_status.toLowerCase() == Constants.ACCEPTED && model.enable_rating == true) {
                 if (orderFragment.swipeRefresh.isRefreshing == false)
                     orderFragment.onRate(model)
             }
@@ -450,17 +458,20 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
             var customer_id: String = "",
             var restaurant_id: String = "",
             var order_status: String = "",
+            var payment_status: String = "",
             var order_no: String = "",
             var expected_time: String = "",
             var total_to_pay: String = "",
             var order_date: String = "",
             var discount_amount: String? = null,
             var restaurant_name: String = "",
+            var shipping : String = "",
             var postal_code: String = "",
             var app_icon: String = "",
             var is_restaurant_closed: Boolean = false,
             var r_key: String = "",
             var r_token: String = "",
+            val total_rating: Float = 0.0f,
             var enable_rating: Boolean = false
 
     ) : Serializable {

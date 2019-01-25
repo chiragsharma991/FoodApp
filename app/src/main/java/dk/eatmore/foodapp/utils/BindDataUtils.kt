@@ -21,14 +21,12 @@ import android.graphics.BitmapFactory
 import android.graphics.Bitmap
 import java.io.File
 import android.R.attr.src
+import android.databinding.Bindable
 import android.opengl.ETC1.getHeight
 import android.opengl.ETC1.getWidth
 import android.graphics.Color.parseColor
 import android.graphics.drawable.ColorDrawable
-
-
-
-
+import android.support.v7.widget.AppCompatImageView
 
 
 object BindDataUtils {
@@ -146,6 +144,42 @@ object BindDataUtils {
         }
         return str!!
     }
+    fun parsewithoutTimeToddMMyyyy(time:String):String {
+        val inputPattern = "yyyy-MM-dd HH:mm:ss"
+        val outputPattern = "dd-MMM-yyyy"
+     //   val outputPattern = "dd-MMM-yyyy h:mm a"
+        val inputFormat = SimpleDateFormat(inputPattern)
+        val outputFormat = SimpleDateFormat(outputPattern)
+        var date:Date? = null
+        var str:String? = null
+        try
+        {
+            date = inputFormat.parse(time)
+            str = outputFormat.format(date)
+        }
+        catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        return str!!
+    }
+    fun parseTimeToHHmm(time:String):String {
+        val inputPattern = "yyyy-MM-dd HH:mm:ss"
+        val outputPattern = "HH:mm"
+     //   val outputPattern = "dd-MMM-yyyy h:mm a"
+        val inputFormat = SimpleDateFormat(inputPattern)
+        val outputFormat = SimpleDateFormat(outputPattern)
+        var date:Date? = null
+        var str:String? = null
+        try
+        {
+            date = inputFormat.parse(time)
+            str = outputFormat.format(date)
+        }
+        catch (e: ParseException) {
+            e.printStackTrace()
+        }
+        return str!!
+    }
 
 
     private val vibrantLightColorList = arrayOf(ColorDrawable(Color.parseColor("#F0EFF5")), ColorDrawable(Color.parseColor("#F0EFF5")), ColorDrawable(Color.parseColor("#F0EFF5")), ColorDrawable(Color.parseColor("#F0EFF5")), ColorDrawable(Color.parseColor("#F0EFF5")), ColorDrawable(Color.parseColor("#F0EFF5")), ColorDrawable(Color.parseColor("#F0EFF5")), ColorDrawable(Color.parseColor("#F0EFF5")))
@@ -153,6 +187,39 @@ object BindDataUtils {
     fun getRandomDrawbleColor(): ColorDrawable {
         val idx = Random().nextInt(vibrantLightColorList.size)
         return vibrantLightColorList[idx]
+    }
+
+    fun showOrderstatus(payment_status : String, order_status : String, enable_rating : Boolean) : String {
+
+
+        if(payment_status.toLowerCase() == Constants.REFUNDED){
+
+            return "Ordre er refunderet"
+
+        }else if(enable_rating == true && order_status.toLowerCase() == Constants.ACCEPTED){
+
+            return "lav en bedømmelse"
+
+        } else if(enable_rating == false && order_status.toLowerCase() == Constants.ACCEPTED){
+
+            return "Din bedømmelse:"
+
+        } else if(order_status.toLowerCase() == Constants.REJECTED){
+
+            return "Ordre er anulleret"
+
+        } else if(enable_rating == true && order_status.toLowerCase() != Constants.ACCEPTED && order_status.toLowerCase() != Constants.REJECTED){
+
+            return "Ordre under behandling"
+
+        } else if(order_status.toLowerCase() == Constants.PENDING_OPENING_RESTAURANT){
+
+            return "Ordre under behandling. Restauranten åbner kl. HH:MM"
+        }else{
+
+            return ""
+        }
+
     }
 
 }
