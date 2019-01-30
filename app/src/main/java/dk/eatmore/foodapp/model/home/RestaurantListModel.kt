@@ -29,6 +29,8 @@ data class AreaDetails(val city_name: String = "", val postal_code: String = "")
 data class Restaurant(
         val postal_code: String = "",
         val restaurant_name: String = "",
+        val restaurant_id: String = "",
+        var is_fav : Boolean = false,
         val minimum_order_price: String? = null,
         val opening_title: String = "", //null
         val time: String = "", //null

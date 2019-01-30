@@ -31,8 +31,10 @@ import com.bumptech.glide.request.target.SimpleTarget
 import android.R.attr.path
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.support.v4.content.ContextCompat
 import com.bumptech.glide.request.RequestOptions
 import com.bumptech.glide.request.transition.Transition
+import dk.eatmore.foodapp.utils.Constants
 
 
 class RestaurantListChildAdapter(val context: Context, val listner: RestaurantListParentAdapter.AdapterListener, val parentPosition: Int, val list : ArrayList<RestaurantList.StatusWiseRestaurant> ) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
@@ -124,11 +126,20 @@ class RestaurantListChildAdapter(val context: Context, val listner: RestaurantLi
                 holder.binding.minimumOrderView.visibility=View.INVISIBLE
             }
 
+            if(list.get(parentPosition).restaurant.get(position).is_fav){
+                holder.binding.favoriteBtn.setColorFilter(ContextCompat.getColor(context,R.color.theme_color))
+            }else{
+                holder.binding.favoriteBtn.setColorFilter(ContextCompat.getColor(context,R.color.gray))
+            }
 
             holder.binding.rowChildItem.setOnClickListener {
-                listner.itemClicked(false,parentPosition,position)
+                listner.itemClicked(false,parentPosition,position,Constants.CARD_VIEW)
 
             }
+            holder.binding.favoriteBtn.setOnClickListener {
+                listner.itemClicked(false,parentPosition,position,Constants.FAVORITE_VIEW)
+            }
+
             holder.binding.executePendingBindings()
         }
     }

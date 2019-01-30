@@ -171,9 +171,9 @@
                                     <android.support.v7.widget.AppCompatTextView
                                         style="@style/Subtitle_TextViewSmall"
                                         android:layout_width="wrap_content"
+                                        android:id="@+id/thank_you_txt"
                                         android:layout_marginTop="@dimen/_5sdp"
                                         android:layout_height="wrap_content"
-                                        android:text="@string/tak_for_din"
                                         />
 
                                 </LinearLayout>
@@ -184,6 +184,8 @@
                                 style="@style/CardViewStyle"
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
+                                android:id="@+id/onsket_view"
+                                android:visibility="visible"
                                 android:layout_margin="@dimen/_8sdp"
                                 android:animateLayoutChanges="true">
 
@@ -234,6 +236,8 @@
                                         style="@style/Subtitle_TextViewSmall"
                                         android:layout_width="wrap_content"
                                         android:layout_marginTop="@dimen/_8sdp"
+                                        android:id="@+id/confirm_time_txt"
+                                        android:visibility="visible"
                                         android:layout_height="wrap_content"
                                         android:textColor="@color/theme_color"
                                         android:text="@string/onsket_til"
@@ -259,7 +263,7 @@
 
                                     <RelativeLayout
                                         android:layout_width="match_parent"
-                                        android:layout_height="wrap_content"
+                                        android:layout_height="@dimen/_40sdp"
                                         >
 
                                         <android.support.v7.widget.AppCompatTextView
@@ -270,9 +274,9 @@
                                             android:layout_centerVertical="true"
                                             android:maxLength="38"
                                             android:ellipsize="end"
-                                            android:text="Order accepteret tilsdsdfsdfsdfsdfsdf" />
+                                            />
 
-                                        <ProgressBar
+                                       <!-- <ProgressBar
                                             android:id="@+id/progress_bar"
                                             style="?android:attr/progressBarStyleSmall"
                                             android:layout_centerVertical="true"
@@ -282,7 +286,19 @@
                                             android:layout_marginStart="@dimen/_11sdp"
                                             android:layout_toEndOf="@+id/order_progress_text"
                                             android:visibility="visible"
-                                            android:indeterminate="true" />
+                                            android:indeterminate="true" />-->
+
+                                        <WebView
+                                            android:layout_width="@dimen/_40sdp"
+                                            android:layout_height="@dimen/_40sdp"
+                                            android:id="@+id/transaction_progress_bar"
+                                            android:scrollIndicators="none"
+                                            android:layout_toEndOf="@+id/order_progress_text"
+                                            android:layout_marginStart="@dimen/_8sdp"
+                                            android:visibility="visible"
+                                            >
+
+                                        </WebView>
 
                                     </RelativeLayout>
 
@@ -290,10 +306,9 @@
                                     <android.support.v7.widget.AppCompatTextView
                                         style="@style/Subtitle_TextViewSmall"
                                         android:layout_width="wrap_content"
-                                        android:id="@+id/order_accepted_date"
+                                        android:id="@+id/order_accepted_time"
                                         android:layout_marginTop="@dimen/_8sdp"
                                         android:layout_height="wrap_content"
-                                        android:text="18-01-2019 -kl.08:33"
                                         />
 
                                 </LinearLayout>
@@ -345,9 +360,15 @@
                                         android:layout_width="wrap_content"
                                         android:layout_marginTop="@dimen/_5sdp"
                                         android:layout_height="wrap_content"
+                                        android:id="@+id/customer_name"
+                                        android:visibility="visible"
+                                        />
+                                    <android.support.v7.widget.AppCompatTextView
+                                        style="@style/Subtitle_TextViewSmall"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
                                         android:id="@+id/pickupdelivery_address"
                                         android:visibility="visible"
-                                        android:text="Customer address"
                                         />
 
                                     <View
@@ -476,7 +497,7 @@
                                                 <android.support.v7.widget.AppCompatTextView
                                                     style="@style/TitleRegular_TextViewSmall"
                                                     android:id="@+id/restaurant_name"
-                                                    android:text="ROS" />
+                                                    />
 
 
                                                 <RelativeLayout
@@ -495,7 +516,6 @@
 
                                                     <android.support.v7.widget.AppCompatTextView
                                                         style="@style/SubtitleMidium_TextViewSmall"
-                                                        android:text="For hent selv"
                                                         android:id="@+id/restaurant_contact"
                                                         android:layout_toEndOf="@+id/contact_img"
                                                         android:layout_gravity="center_vertical"
@@ -527,7 +547,28 @@
                                                         android:layout_gravity="center_vertical"
                                                         android:id="@+id/restaurant_address"
                                                         android:layout_marginStart="@dimen/_8sdp"
-                                                        android:text="Address" />
+                                                        />
+
+
+                                                </LinearLayout>
+                                                <LinearLayout
+                                                    android:layout_width="match_parent"
+                                                    android:layout_height="wrap_content"
+                                                    android:gravity="center_vertical"
+                                                    android:layout_marginTop="@dimen/_5sdp"
+                                                    android:orientation="horizontal">
+
+
+
+                                                    <android.support.v7.widget.AppCompatTextView
+                                                        style="@style/Subtitle_TextViewSmall"
+                                                        android:layout_gravity="center_vertical"
+                                                        android:id="@+id/favorite_btn"
+                                                        android:text="Fjern favorit"
+                                                        android:onClick="@{(v) -> transactionhandler.onClick(v,`2`)}"
+                                                        android:textColor="@color/theme_color"
+                                                        android:layout_marginStart="@dimen/_5sdp"
+                                                        />
 
 
                                                 </LinearLayout>
@@ -598,8 +639,8 @@
                                     <android.support.v7.widget.AppCompatTextView
                                         style="@style/Subtitle_TextViewSmall"
                                         android:layout_width="wrap_content"
+                                        android:id="@+id/contact_txt"
                                         android:layout_height="wrap_content"
-                                        android:text="Har du brug for hjaelp til din ordre, er du mere end velkommen til at ringe direkte til restauranten pa 88826543"
                                         />
 
                                 </LinearLayout>
@@ -953,7 +994,7 @@
                                             android:layout_height="wrap_content"
                                             android:layout_marginEnd="@dimen/_8sdp"
                                             android:layout_weight="1"
-                                            android:gravity="center"
+                                            android:gravity="start"
                                             android:singleLine="true"
                                             android:text="Batlingsmetode:"
                                             />
@@ -964,8 +1005,8 @@
                                             android:id="@+id/onlin_offline_txt"
                                             android:layout_height="wrap_content"
                                             android:layout_alignParentEnd="true"
+                                            android:gravity="end"
                                             android:layout_weight="1"
-                                            android:gravity="center"
                                             android:singleLine="true"
                                             android:text="Kontant betaling"
                                             />

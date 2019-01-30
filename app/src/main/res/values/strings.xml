@@ -186,7 +186,7 @@
     <string name="slider_three_title">Futuristic Header</string>
     <string name="slider_three_desc">Description 3 will be displayed in this space when ready, for now it is just placed to make the screen look fuller. Will be replaced in future with the actual text provided by Mustapha</string>
     <string name="ikke_tilg_ngelig">Ikke tilgængelig</string>
-    <string name="tak_for_din">Din ordre vil blive behandlet hurtigst muligt du vil modtage en endelig bekræftelse til din e-mail adresse test@gmail.com, så snart restauranten har behandlet din ordre.</string>
+    <string name="tak_for_din">Din ordre vil blive behandlet hurtigst muligt du vil modtage en endelig bekræftelse til din e-mail adresse %1$s, så snart restauranten har behandlet din ordre.</string>
     <string name="onsket_til">Endelig tidsbekræftelse sendes til din e-mail når ordren er behandlet af restauranten.</string>
     <string name="for_hent_selv">For hent selv</string>
     <string name="til_levering">Udbringning</string>
@@ -198,5 +198,11 @@
     <string name="deliver_rate">%1$s/6</string>
     <string name="rate_label">(%1$s)</string>
     <string name="ordredetaljer">Ordredetaljer</string>
+    <string name="kl_hh_mm">kl.%1$s</string>
+    <string name="har_du_brug">Har du brug for hjaelp til din ordre, er du mere end velkommen til at ringe direkte til restauranten pa %1$s.</string>
+    <string name="dkk_price">DKK %1$s</string>
+    <string name="order_accept_date">%1$s -kl. %2$s</string>
+    <string name="fjern_favorit">Fjern favorit</string>
+    <string name="markere_som_favorit">Markere som favorit</string>
 
 </resources>

@@ -232,6 +232,18 @@ interface ApiInterface {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun ordertransaction(@Body jsonObject: JsonObject): Call<JsonObject>
 
+    @POST("Enduser/enduser/check-order")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun check_order(@Body jsonObject: JsonObject): Call<JsonObject>
+
+    @POST("Enduser/enduser/add-favorite-restaurant")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun add_favorite_restaurant(@Body jsonObject: JsonObject): Call<JsonObject>
+
+    @POST("Enduser/enduser/remove-favorite-restaurant")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun remove_favorite_restaurant(@Body jsonObject: JsonObject): Call<JsonObject>
+
     @FormUrlEncoded
     @POST("Cart/cart/cancelordertransaction")
     fun cancelordertransaction(

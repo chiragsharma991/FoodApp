@@ -315,6 +315,8 @@ class EpayFragment : BaseFragment() {
         paymentattributes.restaurant_address=restaurant.address
         paymentattributes.restaurant_phone=restaurant.phone
         paymentattributes.restaurant_appicon=restaurant.app_icon
+        paymentattributes.is_fav=restaurant.is_fav
+        paymentattributes.restaurant_id=restaurant.restaurant_id
 
         epay_total_txt.text= BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.order_total.toString()) ?: "null"
         epay_total_lbl.text=String.format(getString(R.string.total_goods),ui_model!!.viewcard_list.value!!.cartcnt)
@@ -549,7 +551,9 @@ class EpayFragment : BaseFragment() {
             var telephone_no :String ="",
             var postal_code :String ="",
             var comments :String ="",
+            var restaurant_id: String = "",
             var payment_address :String ="",
+            var is_fav : Boolean = false,
             var payment_time :String ="",
             var expected_time :String ="",
             var restaurant_name :String ="",

@@ -253,7 +253,7 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             view.remove_item.tag=i
             view.remove_item.visibility=View.GONE
             view.item_name.text=EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].product_name
-            view.item_price.text=if(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].p_price !=null) BindDataUtils.convertCurrencyToDanish(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].p_price!!) else "null"
+            view.item_price.text=if(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].p_price !=null) BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].p_price!!) else "null"
             view.add_subitem_view.removeAllViewsInLayout()
 
             // fill first ingredients size if not null
@@ -276,7 +276,7 @@ class Paymentmethod : BaseFragment(), TextWatcher {
                             val extratoppings= inflater.inflate(R.layout.dynamic_raw_subitem,null)
                             extratoppings.subitem_name.text=String.format(getString(R.string.plus),EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes!!.get(k).order_product_extra_topping_group!![l].ingredient_name)
                             // view.subitem_price.visibility=View.VISIBLE
-                            extratoppings.subitem_price.text= BindDataUtils.convertCurrencyToDanish(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes!!.get(k).order_product_extra_topping_group!![l].t_price) ?: "null"
+                            extratoppings.subitem_price.text= BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes!!.get(k).order_product_extra_topping_group!![l].t_price) ?: "null"
                             extratoppings.dummy_image.visibility= View.GONE
                             view.add_subitem_view.addView(extratoppings)
                         }
@@ -291,7 +291,7 @@ class Paymentmethod : BaseFragment(), TextWatcher {
                     val onlyextratoppings= inflater.inflate(R.layout.dynamic_raw_subitem,null)
                     onlyextratoppings.subitem_name.text=String.format(getString(R.string.plus),EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].order_product_extra_topping_group!!.get(k).ingredient_name)
                     // view.subitem_price.visibility=View.VISIBLE
-                    onlyextratoppings.subitem_price.text= BindDataUtils.convertCurrencyToDanish(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].order_product_extra_topping_group!!.get(k).t_price) ?: "null"
+                    onlyextratoppings.subitem_price.text= BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].order_product_extra_topping_group!!.get(k).t_price) ?: "null"
                     onlyextratoppings.dummy_image.visibility= View.GONE
                     view.add_subitem_view.addView(onlyextratoppings)
                 }

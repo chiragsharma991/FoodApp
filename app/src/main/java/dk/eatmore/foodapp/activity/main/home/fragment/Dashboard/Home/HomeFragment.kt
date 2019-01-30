@@ -393,12 +393,12 @@ class HomeFragment : CommanAPI() {
         })
     }
 
-    override fun comman_apisuccess(status: String) {
+    override fun comman_apisuccess(jsonObject: JsonObject ,api_tag : String) {
         loge(TAG, "success..." + "-")
         moveon_reOrder("")
     }
 
-    override fun comman_apifailed(error: String) {
+    override fun comman_apifailed(error: String ,api_tag : String) {
         loge(TAG, "failed...")
     }
 

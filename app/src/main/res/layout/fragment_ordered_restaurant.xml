@@ -210,14 +210,18 @@
 
 
                                                         <android.support.v7.widget.AppCompatImageView
-                                                            android:layout_width="20dp"
-                                                            android:layout_height="@dimen/_20sdp"
+                                                            android:layout_width="@dimen/_15sdp"
+                                                            android:layout_height="@dimen/_15sdp"
                                                             android:scaleType="fitXY"
+                                                            android:id="@+id/favorite_btn"
                                                             android:src="@mipmap/heart_full"
                                                             android:layout_marginTop="@dimen/_8sdp"
                                                             android:layout_below="@+id/imageview"
                                                             android:layout_centerHorizontal="true"
-                                                            android:tint="@color/black_txt_light" />
+                                                            android:onClick="@{myclickhandler :: on_favorite}"
+                                                            android:tint="@color/gray"
+                                                            />
+
 
 
                                                     </RelativeLayout>
@@ -337,9 +341,8 @@
 
                                         <RelativeLayout
                                             android:layout_width="match_parent"
-                                            android:layout_height="wrap_content"
+                                            android:layout_height="@dimen/_40sdp"
                                             >
-
                                             <android.support.v7.widget.AppCompatTextView
                                                 android:id="@+id/order_status_txt"
                                                 style="@style/Titlelight_TextViewSmall"
@@ -350,16 +353,18 @@
                                                 android:ellipsize="end"
                                                 android:text="Order accepteret " />
 
-                                            <ProgressBar
-                                                style="?android:attr/progressBarStyleSmall"
-                                                android:layout_centerVertical="true"
-                                                app:layout_behavior="@string/appbar_scrolling_view_behavior"
-                                                android:layout_width="@dimen/_20sdp"
-                                                android:layout_height="@dimen/_20sdp"
-                                                android:layout_marginStart="@dimen/_11sdp"
+
+                                            <WebView
+                                                android:layout_width="@dimen/_40sdp"
+                                                android:layout_height="@dimen/_40sdp"
+                                                android:id="@+id/transaction_progress_bar"
+                                                android:scrollIndicators="none"
                                                 android:layout_toEndOf="@+id/order_status_txt"
-                                                android:visibility="gone"
-                                                android:indeterminate="true" />
+                                                android:layout_marginStart="@dimen/_8sdp"
+                                                android:visibility="visible"
+                                                >
+
+                                            </WebView>
 
                                         </RelativeLayout>
 
@@ -367,7 +372,7 @@
                                         <android.support.v7.widget.AppCompatTextView
                                             style="@style/Subtitle_TextViewSmall"
                                             android:layout_width="wrap_content"
-                                            android:id="@+id/order_accepted_date"
+                                            android:id="@+id/order_accepted_time"
                                             android:layout_marginTop="@dimen/_8sdp"
                                             android:visibility="@{data.accept_reject_time == null ? View.GONE : View.VISIBLE}"
                                             android:layout_height="wrap_content"
@@ -416,8 +421,9 @@
                                         <android.support.v7.widget.AppCompatTextView
                                             style="@style/Subtitle_TextViewSmall"
                                             android:layout_width="wrap_content"
+                                            android:id="@+id/rate_txt"
                                             android:layout_height="wrap_content"
-                                            android:text="Har du brug for hjaelp til din ordre, er du mere end velkommen til at ringe direkte til restauranten pa 88826543"
+                                            android:text="Vi vil værdsætte din bedømmelse med ris og ros, så vi kan blive endu bedre."
                                             />
 
 
@@ -663,9 +669,8 @@
                                         <android.support.v7.widget.AppCompatTextView
                                             style="@style/Subtitle_TextViewSmall"
                                             android:layout_width="wrap_content"
-                                            android:id="@+id/kundeserice_txt"
+                                            android:id="@+id/contact_txt"
                                             android:layout_height="wrap_content"
-                                            android:text="Har du brug for hjaelp til din ordre, er du mere end velkommen til at ringe direkte til restauranten pa 88826543"
                                             />
 
 
@@ -1004,7 +1009,6 @@
                                                 android:layout_height="wrap_content"
                                                 android:layout_marginEnd="@dimen/_8sdp"
                                                 android:layout_weight="1"
-                                                android:gravity="center"
                                                 android:singleLine="true"
                                                 android:text="Batlingsmetode:"
                                                 />
@@ -1016,7 +1020,7 @@
                                                 android:layout_height="wrap_content"
                                                 android:layout_alignParentEnd="true"
                                                 android:layout_weight="1"
-                                                android:gravity="center"
+                                                android:gravity="end"
                                                 android:singleLine="true"
                                                 android:text="@{data.paymethod.equalsIgnoreCase(`1`) ? @string/online : @string/kontant_betaling}"
                                                 />
@@ -1056,7 +1060,7 @@
                                                 android:id="@+id/pickupdelivery_txt"
                                                 android:layout_toEndOf="@+id/pickupdelivery_icon"
                                                 android:layout_centerVertical="true"
-                                                android:text="@{data.shipping.equalsIgnoreCase(@string/pickup_caps) ? (@string/delivery_wid_expectedtime(@string/for_hent_selv,util.parseDateToddMMyyyy(data.expected_time))) : (@string/delivery_wid_expectedtime(@string/til_levering,util.parseDateToddMMyyyy(data.expected_time)))}"
+                                                android:text="@{data.shipping.equalsIgnoreCase(@string/pickup_caps) ? (@string/delivery_wid_expectedtime(@string/for_hent_selv,util.parseTimeToHHmm(data.expected_time))) : (@string/delivery_wid_expectedtime(@string/til_levering,util.parseTimeToHHmm(data.expected_time)))}"
                                                 />
 
                                         </RelativeLayout>
@@ -1099,7 +1103,6 @@
                             android:visibility="@{is_progress ? View.VISIBLE : View.GONE}"
                             >
                             <ProgressBar
-                                android:id="@+id/progress_bar"
                                 style="?android:attr/progress"
                                 app:layout_behavior="@string/appbar_scrolling_view_behavior"
                                 android:layout_width="wrap_content"

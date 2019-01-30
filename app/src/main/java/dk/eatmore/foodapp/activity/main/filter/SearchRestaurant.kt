@@ -3,15 +3,16 @@ package dk.eatmore.foodapp.activity.main.filter
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.model.home.RestaurantListModel
 import dk.eatmore.foodapp.utils.BaseFragment
+import dk.eatmore.foodapp.utils.CommanAPI
 import java.util.ArrayList
 
-abstract class SearchRestaurant : BaseFragment() {
+abstract class SearchRestaurant : CommanAPI() {
 
     abstract fun searchcompleted(list: RestaurantListModel)
     lateinit var searched_restaurantlistmodel: RestaurantListModel
 
 
-    val TAG: String = "SearchRestaurant"
+    val TAG_: String = "SearchRestaurant"
 
 
     protected fun searchRestaurantList(value: String, filterable_restaurantlistmodel: RestaurantListModel?) {
@@ -21,13 +22,13 @@ abstract class SearchRestaurant : BaseFragment() {
             val char = value.trim().toLowerCase()
             if (char.length <= 0) {
                 // Add all list
-                loge(TAG, "Add all list--")
+                loge(TAG_, "Add all list--")
                 searched_restaurantlistmodel = filterable_restaurantlistmodel!!
                 searchcompleted(searched_restaurantlistmodel)
 
             } else {
                 // add list according to target
-                loge(TAG, "Add list according to target--")
+                loge(TAG_, "Add list according to target--")
 
                 val open_now: ArrayList<Restaurant> = ArrayList()
                 val pre_order: ArrayList<Restaurant> = ArrayList()

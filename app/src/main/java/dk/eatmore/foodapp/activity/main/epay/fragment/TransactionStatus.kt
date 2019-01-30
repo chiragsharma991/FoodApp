@@ -11,6 +11,7 @@ import android.os.*
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.LocalBroadcastManager
 import android.text.*
+import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.transition.Transition
 import android.util.Log
@@ -29,6 +30,7 @@ import dk.eatmore.foodapp.databinding.TransactionStatusBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
+import dk.eatmore.foodapp.model.epay.ViewcardModel
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.*
@@ -39,7 +41,8 @@ import kotlinx.android.synthetic.main.transaction_status.*
 import retrofit2.Call
 
 
-class TransactionStatus : BaseFragment() {
+class TransactionStatus : CommanAPI() {
+
 
     var transition: Transition? = null
     private var timeslot: ArrayList<String>? = null
@@ -48,11 +51,15 @@ class TransactionStatus : BaseFragment() {
     private lateinit var binding: TransactionStatusBinding
     // we have two different API so we are passing call in "checkout API" it may be from pickup/delivery :
     private lateinit var checkout_api: Call<JsonObject>
+    private var call_check_order: Call<JsonObject>? = null
+    private var call_favorite: Call<JsonObject>? = null
+    private val timeoutHandler = Handler()
+    private var finalizer: Runnable? = null
 
 
     companion object {
         val TAG = "TransactionStatus"
-      //  var moveonsearch = false
+        //  var moveonsearch = false
 
 
         fun newInstance(): TransactionStatus {
@@ -78,7 +85,6 @@ class TransactionStatus : BaseFragment() {
             val myclickhandler = MyClickHandler(this)
             binding.statusIs = false
             binding.transactionhandler = myclickhandler
-            progress_bar.visibility = View.VISIBLE
             setToolbarforThis()
             currentView = Constants.PROGRESSDIALOG
             Handler().postDelayed({
@@ -91,7 +97,7 @@ class TransactionStatus : BaseFragment() {
                     statusfrom_cash()
                 }
                 showproductInfo()
-            }, 800)
+            }, 1200)
 
         }
     }
@@ -101,8 +107,6 @@ class TransactionStatus : BaseFragment() {
         currentView = Constants.PAYMENTSTATUS
         binding.statusIs = true
         setdelivery_info()
-        order_progress_text.text = "Ordre accepteret til"
-        progress_bar.visibility = View.GONE
         /*  lottie_transaction_status.visibility = View.VISIBLE
           lottie_transaction_status.scale = 0.4f
           status_view.visibility = View.INVISIBLE
@@ -121,8 +125,7 @@ class TransactionStatus : BaseFragment() {
         val v: Vibrator = context!!.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) v.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
         else v.vibrate(200);
-        addspantext()
-
+        check_order()
     }
 
 
@@ -205,8 +208,6 @@ class TransactionStatus : BaseFragment() {
             currentView = Constants.PAYMENTSTATUS
             binding.statusIs = true
             setdelivery_info()
-            order_progress_text.text = "Ordre accepteret til"
-            progress_bar.visibility = View.GONE
 
 /*            lottie_transaction_status.visibility = View.VISIBLE
             lottie_transaction_status.scale = 0.4f
@@ -220,6 +221,7 @@ class TransactionStatus : BaseFragment() {
             intent.putExtra(Constants.CARTCNT, 0)
             intent.putExtra(Constants.CARTAMT, "00.00")
             LocalBroadcastManager.getInstance(context!!).sendBroadcast(intent)
+            check_order()
             return
         }
 
@@ -251,11 +253,9 @@ class TransactionStatus : BaseFragment() {
             override fun <T> onSuccess(body: T?) {
                 currentView = Constants.PAYMENTSTATUS
                 binding.statusIs = true
-                progress_bar.visibility = View.GONE
                 val jsonobject = body as JsonObject
                 if (jsonobject.get(Constants.STATUS).asBoolean) {
                     setdelivery_info()
-                    order_progress_text.text = "Ordre accepteret til"
                     /*     lottie_transaction_status.visibility = View.VISIBLE
                          lottie_transaction_status.scale = 0.4f
                          status_view.visibility = View.INVISIBLE
@@ -268,29 +268,19 @@ class TransactionStatus : BaseFragment() {
                     intent.putExtra(Constants.CARTCNT, 0)
                     intent.putExtra(Constants.CARTAMT, "00.00")
                     LocalBroadcastManager.getInstance(context!!).sendBroadcast(intent)
-
+                    check_order()
                 } else {
-                    setdelivery_info()
-                    order_progress_text.text = "ordren mislykkedes"
-                    /*    lottie_transaction_status.visibility = View.GONE
-                        lottie_transaction_status.scale = 0.4f
-                        status_view.visibility = View.VISIBLE
-                        status_icon.setImageResource(R.drawable.animated_vector_cross)
-                        (status_icon.getDrawable() as Animatable).start()
-                        totalamount.text = String.format(getString(R.string.total_amount), BindDataUtils.convertCurrencyToDanish(EpayFragment.paymentattributes.final_amount.toString()))
-                        request_status.text = String.format(getString(R.string.request_successful), getString(R.string.failed))
-                        requested_user.text = PreferenceUtil.getString(PreferenceUtil.E_MAIL, "")
-                        order_number.text = getString(R.string.na)*/
+
+                    // setdelivery_info()
+                    //*TODO : api failed case
+
                 }
                 val v: Vibrator = context!!.getSystemService(Context.VIBRATOR_SERVICE) as Vibrator
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) v.vibrate(VibrationEffect.createOneShot(200, VibrationEffect.DEFAULT_AMPLITUDE));
                 else v.vibrate(200);
-                addspantext()
-
             }
 
             override fun onFail(error: Int) {
-                progress_bar.visibility = View.GONE
                 when (error) {
                     404 -> {
                         showSnackBar(transaction_constraint, getString(R.string.error_404))
@@ -300,10 +290,10 @@ class TransactionStatus : BaseFragment() {
 
                     }
                 }
+                //*TODO Api fail condition
+
                 currentView = Constants.PAYMENTSTATUS
                 binding.statusIs = true
-                setdelivery_info()
-                order_progress_text.text = "ordren mislykkedes"
                 /*   lottie_transaction_status.visibility = View.GONE
                    lottie_transaction_status.scale = 0.4f
                    status_view.visibility = View.VISIBLE
@@ -319,27 +309,140 @@ class TransactionStatus : BaseFragment() {
 
     }
 
+    private fun check_order() {
+
+        val postParam = JsonObject()
+        postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
+        postParam.addProperty(Constants.EATMORE_APP, true)
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+        postParam.addProperty(Constants.ORDER_NO, EpayFragment.paymentattributes.order_no)
+        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+        call_check_order = ApiCall.check_order(jsonObject = postParam)
+
+        callAPI(call_check_order!!, object : BaseFragment.OnApiCallInteraction {
+
+            override fun <T> onSuccess(body: T?) {
+                val jsonObject = body as JsonObject
+                // check_order api responce
+                var accept_reject_time=""
+                var reject_reason=""
+                val order_status = jsonObject.get(Constants.ORDER_STATUS).asString
+                val payment_status = jsonObject.get(Constants.PAYMENT_STATUS).asString
+                if(jsonObject.has(Constants.ACCEPT_REJECT_TIME)){
+                    accept_reject_time = if (jsonObject.get(Constants.ACCEPT_REJECT_TIME).isJsonNull) "" else jsonObject.get(Constants.ACCEPT_REJECT_TIME).asString
+                }
+                if(jsonObject.has(Constants.REJECT_REASON)){
+                    reject_reason = if(jsonObject.get(Constants.REJECT_REASON).isJsonNull) "" else jsonObject.get(Constants.REJECT_REASON).asString
+                }
+
+                if (call_check_order != null) {
+
+                    if (order_status.toLowerCase() == Constants.PENDING_RESTAURANT || order_status.toLowerCase() == Constants.PENDING_OPENING_RESTAURANT) {
+                        confirm_time_txt.visibility = View.VISIBLE
+                    } else {
+                        confirm_time_txt.visibility = View.GONE
+                    }
+
+                    order_progress_text.setTextColor(ContextCompat.getColor(context!!,R.color.black_txt_regular))
+
+                    if (order_status.toLowerCase() == Constants.PENDING_RESTAURANT || order_status.toLowerCase() == Constants.PENDING_OPENING_RESTAURANT) {
+                        // Processing view
+                        order_progress_text.text = "Ordre under behandling"
+                        transaction_progress_bar.visibility = View.VISIBLE
+
+                    } else {
+                        // status view
+                        transaction_progress_bar.visibility = View.GONE
+                        if (payment_status.toLowerCase() == Constants.REFUNDED) {
+                            order_progress_text.text = "Ordre er refunderet"
+                            order_accepted_time.text = "Bare rolig, har du benyttet et betalingskort, så er betalingen allerede refunderet."
+
+                        } else {
+                            if (order_status.toLowerCase() == Constants.REJECTED) {
+                                order_progress_text.text = "Ordre annulleret af restauranten, årsag: ${reject_reason}"
+                                order_progress_text.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))
+                                order_accepted_time.text = "Bare rolig, har du benyttet et betalingskort, så er betalingen allerede annulleret. Du kan nu lave en ny bestilling."
+
+                            } else if (order_status.toLowerCase() == Constants.ACCEPTED) {
+                                order_progress_text.text = "Ordre accepteret til"
+                                if (accept_reject_time.length > 0) {
+                                    order_accepted_time.visibility = View.VISIBLE
+                                    order_accepted_time.text = accept_reject_time
+                                    order_accepted_time.text = String.format(getString(R.string.order_accept_date),BindDataUtils.parsewithoutTimeToddMMyyyy(accept_reject_time),BindDataUtils.parseTimeToHHmm(accept_reject_time))
+                                }else{
+                                    order_accepted_time.visibility = View.GONE
+                                }
+                            }
+                        }
+                    }
+                }
+
+                // can i call again?
+
+                if ((order_status.toLowerCase() == Constants.PENDING_OPENING_RESTAURANT) || (order_status.toLowerCase() == Constants.PENDING_RESTAURANT) || (order_status.toLowerCase() == Constants.ACCEPTED && payment_status.toLowerCase() != Constants.REFUNDED)) {
+                    // call
+
+                    // we are continuous running because if manager wrong press--- he can change status.
+                    finalizer = object : Runnable {
+                        override fun run() {
+                            loge(TAG, "Handler-----")
+                            check_order()
+
+                        }
+                    }
+                    timeoutHandler.postDelayed(finalizer, 5 * 1000)
+                } else {
+                    // stop calling api
+                    // payment has been refunded---
+
+                }
+
+            }
+
+            override fun onFail(error: Int) {
+                when (error) {
+                    404 -> {
+                        // showSnackBar(containerview, getString(R.string.error_404))
+                        loge(TAG,getString(R.string.error_404))
+
+                    }
+                    100 -> {
+                        // showSnackBar(containerview, getString(R.string.internet_not_available))
+                        loge(TAG,getString(R.string.internet_not_available))
+                    }
+                }
+            }
+        })
+
+    }
+
+
     fun setdelivery_info() {
 
+        transaction_progress_bar.visibility = View.VISIBLE
+        transaction_progress_bar.loadUrl("file:///android_asset/sandclock.svg")
+        confirm_time_txt.visibility = View.VISIBLE
+        order_accepted_time.visibility = View.GONE
+        order_progress_text.text = "Ordre under behandling"
+        thank_you_txt.text = String.format(getString(R.string.tak_for_din), PreferenceUtil.getString(PreferenceUtil.E_MAIL, ""))
         pickupdelivery_address.visibility = View.GONE
-        expected_time.text = EpayFragment.paymentattributes.expected_time
-        order_progress_text.text = "Order under behandling"
+        expected_time.text = String.format(getString(R.string.kl_hh_mm), BindDataUtils.parseTimeToHHmm(EpayFragment.paymentattributes.expected_time))
         order_date.text = getcurrentdate()
-        order_number.text = EpayFragment.paymentattributes.order_no.toString()
-        order_accepted_date.visibility = View.GONE
-        onlin_offline_txt.text = if (Paymentmethod.isPaymentonline)  getString(R.string.online) else getString(R.string.kontant_betaling)
+        order_number.text = String.format(getString(R.string.order_no),EpayFragment.paymentattributes.order_no.toString())
+        onlin_offline_txt.text = if (Paymentmethod.isPaymentonline) getString(R.string.online) else getString(R.string.kontant_betaling)
         restaurant_fulladdress.text = String.format(getString(R.string.restaurant_full_address), EpayFragment.paymentattributes.restaurant_name, EpayFragment.paymentattributes.restaurant_address)
+        addspantext()
 
 
         if (EpayFragment.isPickup) {
             // pickup
             rest_pickupdelivery_txt.text = getString(R.string.for_hent_selv)
-            pickupdelivery_txt.text = String.format(getString(R.string.delivery_wid_expectedtime),getString(R.string.for_hent_selv),EpayFragment.paymentattributes.expected_time)
-            rest_pickupdelivery_icon.setImageResource(if(EpayFragment.isPickup ) R.mipmap.hent_selv_dark else R.mipmap.motorcycle_dark)
-            pickupdelivery_icon.setImageResource(if(EpayFragment.isPickup ) R.mipmap.hent_selv_dark else R.mipmap.motorcycle_dark)
+            pickupdelivery_txt.text = String.format(getString(R.string.delivery_wid_expectedtime), getString(R.string.for_hent_selv), BindDataUtils.parseTimeToHHmm(EpayFragment.paymentattributes.expected_time))
+            rest_pickupdelivery_icon.setImageResource(if (EpayFragment.isPickup) R.mipmap.hent_selv_dark else R.mipmap.motorcycle_dark)
+            pickupdelivery_icon.setImageResource(if (EpayFragment.isPickup) R.mipmap.hent_selv_dark else R.mipmap.motorcycle_dark)
             pickupdelivery_address.visibility = View.GONE
-            pickupdelivery_address.text=EpayFragment.paymentattributes.payment_address
-            ImageLoader.loadImagefromurl(context!!,EpayFragment.paymentattributes.restaurant_appicon,restaurant_img)
+            customer_name.visibility = View.GONE
+            ImageLoader.loadImagefromurl(context!!, EpayFragment.paymentattributes.restaurant_appicon, restaurant_img)
             restaurant_name.text = EpayFragment.paymentattributes.restaurant_name
             restaurant_contact.text = EpayFragment.paymentattributes.restaurant_phone
             restaurant_address.text = EpayFragment.paymentattributes.restaurant_address
@@ -347,12 +450,14 @@ class TransactionStatus : BaseFragment() {
         } else {
             // delivery
             rest_pickupdelivery_txt.text = getString(R.string.til_levering)
-            pickupdelivery_txt.text = String.format(getString(R.string.delivery_wid_expectedtime),getString(R.string.til_levering),EpayFragment.paymentattributes.expected_time)
-            rest_pickupdelivery_icon.setImageResource(if(EpayFragment.isPickup ) R.mipmap.hent_selv_dark else R.mipmap.motorcycle_dark)
-            pickupdelivery_icon.setImageResource(if(EpayFragment.isPickup ) R.mipmap.hent_selv_dark else R.mipmap.motorcycle_dark)
+            pickupdelivery_txt.text = String.format(getString(R.string.delivery_wid_expectedtime), getString(R.string.til_levering),BindDataUtils.parseTimeToHHmm(EpayFragment.paymentattributes.expected_time))
+            rest_pickupdelivery_icon.setImageResource(if (EpayFragment.isPickup) R.mipmap.hent_selv_dark else R.mipmap.motorcycle_dark)
+            pickupdelivery_icon.setImageResource(if (EpayFragment.isPickup) R.mipmap.hent_selv_dark else R.mipmap.motorcycle_dark)
             pickupdelivery_address.visibility = View.VISIBLE
-            pickupdelivery_address.text=EpayFragment.paymentattributes.payment_address
-            ImageLoader.loadImagefromurl(context!!,EpayFragment.paymentattributes.restaurant_appicon,restaurant_img)
+            pickupdelivery_address.text = EpayFragment.paymentattributes.payment_address
+            customer_name.text = EpayFragment.paymentattributes.first_name
+            customer_name.visibility = View.VISIBLE
+            ImageLoader.loadImagefromurl(context!!, EpayFragment.paymentattributes.restaurant_appicon, restaurant_img)
             restaurant_name.text = EpayFragment.paymentattributes.restaurant_name
             restaurant_contact.text = EpayFragment.paymentattributes.restaurant_phone
             restaurant_address.text = EpayFragment.paymentattributes.restaurant_address
@@ -405,7 +510,7 @@ class TransactionStatus : BaseFragment() {
 
             }
 
-            total_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(String.format("%.2f", final_amount))
+            total_txt.text = String.format(getString(R.string.dkk_price),BindDataUtils.convertCurrencyToDanishWithoutLabel(String.format("%.2f", final_amount)))
 
         }
 
@@ -455,7 +560,8 @@ class TransactionStatus : BaseFragment() {
                                 + if (Paymentmethod.isPaymentonline) EpayFragment.paymentattributes.additional_charges_online.toDouble() else EpayFragment.paymentattributes.additional_charges_cash.toDouble())
             }
 
-            total_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(String.format("%.2f", final_amount))
+            total_txt.text = String.format(getString(R.string.dkk_price),BindDataUtils.convertCurrencyToDanishWithoutLabel(String.format("%.2f", final_amount)))
+
         }
 
 
@@ -464,11 +570,13 @@ class TransactionStatus : BaseFragment() {
 
     private fun showproductInfo() {
 
+        favorite_btn.text=if(EpayFragment.paymentattributes.is_fav)getString(R.string.markere_som_favorit) else getString(R.string.fjern_favorit)
+
         if (EpayFragment.ui_model!!.viewcard_list.value == null) {
             // this condition will null if all item has been deleted : so just clear view and inflate empty view on screen.
             add_parentitem_view.removeAllViewsInLayout()
             add_parentitem_view.invalidate()
-            generateBillDetails(if(EpayFragment.paymentattributes.discount_type == Constants.GIFTCARD) Constants.GIFTCARD else if (EpayFragment.paymentattributes.discount_type == Constants.COUPON) Constants.COUPON else Constants.OTHER )
+            generateBillDetails(if (EpayFragment.paymentattributes.discount_type == Constants.GIFTCARD) Constants.GIFTCARD else if (EpayFragment.paymentattributes.discount_type == Constants.COUPON) Constants.COUPON else Constants.OTHER)
             return
         }
 
@@ -479,7 +587,7 @@ class TransactionStatus : BaseFragment() {
             view.remove_item.tag = i
             view.remove_item.visibility = View.GONE
             view.item_name.text = EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].product_name
-            view.item_price.text = if (EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].p_price != null) BindDataUtils.convertCurrencyToDanish(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].p_price!!) else "null"
+            view.item_price.text = if (EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].p_price != null) BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].p_price!!) else "null"
             view.add_subitem_view.removeAllViewsInLayout()
 
             // fill first ingredients size if not null
@@ -504,7 +612,7 @@ class TransactionStatus : BaseFragment() {
                             val extratoppings = inflater.inflate(R.layout.dynamic_raw_subitem, null)
                             extratoppings.subitem_name.text = String.format(getString(R.string.plus), EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes!!.get(k).order_product_extra_topping_group!![l].ingredient_name)
                             // view.subitem_price.visibility=View.VISIBLE
-                            extratoppings.subitem_price.text = BindDataUtils.convertCurrencyToDanish(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes!!.get(k).order_product_extra_topping_group!![l].t_price) ?: "null"
+                            extratoppings.subitem_price.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes!!.get(k).order_product_extra_topping_group!![l].t_price) ?: "null"
                             extratoppings.dummy_image.visibility = View.GONE
                             view.add_subitem_view.addView(extratoppings)
                         }
@@ -518,34 +626,33 @@ class TransactionStatus : BaseFragment() {
                     val onlyextratoppings = inflater.inflate(R.layout.dynamic_raw_subitem, null)
                     onlyextratoppings.subitem_name.text = String.format(getString(R.string.plus), EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].order_product_extra_topping_group!!.get(k).ingredient_name)
                     // view.subitem_price.visibility=View.VISIBLE
-                    onlyextratoppings.subitem_price.text = BindDataUtils.convertCurrencyToDanish(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].order_product_extra_topping_group!!.get(k).t_price) ?: "null"
+                    onlyextratoppings.subitem_price.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].order_product_extra_topping_group!!.get(k).t_price) ?: "null"
                     onlyextratoppings.dummy_image.visibility = View.GONE
                     view.add_subitem_view.addView(onlyextratoppings)
                 }
             }
             add_parentitem_view.addView(view)
         }
-        generateBillDetails(if(EpayFragment.paymentattributes.discount_type == Constants.GIFTCARD) Constants.GIFTCARD else if (EpayFragment.paymentattributes.discount_type == Constants.COUPON) Constants.COUPON else Constants.OTHER )
+        generateBillDetails(if (EpayFragment.paymentattributes.discount_type == Constants.GIFTCARD) Constants.GIFTCARD else if (EpayFragment.paymentattributes.discount_type == Constants.COUPON) Constants.COUPON else Constants.OTHER)
 
     }
 
 
     fun addspantext() {
-        val span = SpannableString(getString(R.string.if_you_have_any_questions) + " " + "88826543")
-        span.setSpan(clickableSpan, getString(R.string.if_you_have_any_questions).trim({ it <= ' ' }).length + 1,
-                getString(R.string.if_you_have_any_questions).trim({ it <= ' ' }).length + 8 + 1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        //   phone_txt.text = span
-        //    phone_txt.movementMethod = LinkMovementMethod.getInstance()
-
+        val span = SpannableString(String.format(getString(R.string.har_du_brug), EpayFragment.paymentattributes.restaurant_phone).trim())
+        span.setSpan(clickableSpan, (String.format(getString(R.string.har_du_brug), EpayFragment.paymentattributes.restaurant_phone).trim().length - (EpayFragment.paymentattributes.restaurant_phone.trim().length + 1)),
+                String.format(getString(R.string.har_du_brug), EpayFragment.paymentattributes.restaurant_phone).trim().length -1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        contact_txt.text = span
+        contact_txt.movementMethod = LinkMovementMethod.getInstance()
     }
 
     val clickableSpan = object : ClickableSpan() {
         var dialog: AlertDialog? = null
         override fun onClick(textView: View) {
             Log.e(TAG, "onClick:--- ")
-            dialog = AlertDialog.Builder(activity).setMessage("Do you want to call ${"88826543"}").setCancelable(true).setPositiveButton("yes") { dialogInterface, i ->
+            dialog = AlertDialog.Builder(activity).setMessage("Do you want to call ${EpayFragment.paymentattributes.restaurant_phone.trim()}").setCancelable(true).setPositiveButton("yes") { dialogInterface, i ->
                 if (is_callphn_PermissionGranted()) {
-                    val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "88826543"))
+                    val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + EpayFragment.paymentattributes.restaurant_phone.trim()))
                     startActivity(intent)
                 }
             }.setNegativeButton("no") { dialogInterface, i -> dialog!!.dismiss() }.show()
@@ -599,17 +706,61 @@ class TransactionStatus : BaseFragment() {
         }
     }
 
+    fun favourite(){
+
+        val postParam = JsonObject()
+        postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
+        postParam.addProperty(Constants.EATMORE_APP, true)
+        postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,""))      // if restaurant is closed then
+        postParam.addProperty(Constants.RESTAURANT_ID,EpayFragment.paymentattributes.restaurant_id)
+        if(EpayFragment.paymentattributes.is_fav){
+            // unfavourite--
+            call_favorite = ApiCall.remove_favorite_restaurant(jsonObject = postParam)
+            remove_favorite_restaurant(call_favorite!!,null)
+        }else{
+            // favourite---
+            call_favorite = ApiCall.add_favorite_restaurant(jsonObject = postParam)
+            setfavorite(call_favorite!!,null)
+        }
+    }
+
+    override fun comman_apisuccess(jsonObject: JsonObject, api_tag: String) {
+        when(api_tag ){
+            Constants.COM_ADD_FAVORITE_RESTAURANT->{
+                if(EpayFragment.paymentattributes.is_fav){
+                    EpayFragment.paymentattributes.is_fav=false
+                    favorite_btn.text=if(EpayFragment.paymentattributes.is_fav)getString(R.string.markere_som_favorit) else getString(R.string.fjern_favorit)
+                }else{
+                    EpayFragment.paymentattributes.is_fav=true
+                    favorite_btn.text=if(EpayFragment.paymentattributes.is_fav)getString(R.string.markere_som_favorit) else getString(R.string.fjern_favorit)
+                }
+            }
+
+        }
+    }
+
+    override fun comman_apifailed(error: String, api_tag: String) {
+        when(api_tag ){
+
+            Constants.COM_ADD_FAVORITE_RESTAURANT->{
+                favorite_btn.text=if(EpayFragment.paymentattributes.is_fav)getString(R.string.markere_som_favorit) else getString(R.string.fjern_favorit)
+            }
+        }
+    }
+
+
+
     fun onBackpress() {
 
         val fragment = (parentFragment as EpayFragment).parentFragment
         if (fragment is HomeFragment) {
             val homeFragment = fragment
-             for(i in 0 until(homeFragment.childFragmentManager.backStackEntryCount-2) ){
-                 homeFragment.childFragmentManager.popBackStack()
-             }
+            for (i in 0 until (homeFragment.childFragmentManager.backStackEntryCount - 2)) {
+                homeFragment.childFragmentManager.popBackStack()
+            }
         } else {
-            val orderfragment=fragment as OrderFragment
-            for (i in 0 until orderfragment.childFragmentManager.backStackEntryCount -1 ) {
+            val orderfragment = fragment as OrderFragment
+            for (i in 0 until orderfragment.childFragmentManager.backStackEntryCount - 1) {
                 orderfragment.childFragmentManager.popBackStack()
             }
         }
@@ -619,19 +770,19 @@ class TransactionStatus : BaseFragment() {
 
     }
 
-    fun moveonlastorder(){
+    fun moveonlastorder() {
 
         val fragment = (parentFragment as EpayFragment).parentFragment
         if (fragment is HomeFragment) {
             val homeFragment = fragment
-            for(i in 0 until(homeFragment.childFragmentManager.backStackEntryCount) ){
+            for (i in 0 until (homeFragment.childFragmentManager.backStackEntryCount)) {
                 homeFragment.childFragmentManager.popBackStack()
             }
             ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(1)
 
         } else {
-            val orderfragment=fragment as OrderFragment
-            for (i in 0 until orderfragment.childFragmentManager.backStackEntryCount ) {
+            val orderfragment = fragment as OrderFragment
+            for (i in 0 until orderfragment.childFragmentManager.backStackEntryCount) {
                 orderfragment.childFragmentManager.popBackStack()
             }
         }
@@ -652,9 +803,31 @@ class TransactionStatus : BaseFragment() {
                 "1" -> {
                     transactionstatus.moveonlastorder()
                 }
+                "2" -> {
+                    transactionstatus.favourite()
+                }
             }
 
         }
+
+    }
+
+    override fun onDestroyView() {
+
+        super.onDestroyView()
+
+        loge(TransactionStatus.TAG, "onDestroyView...")
+
+        timeoutHandler.removeCallbacks(finalizer)
+
+        if (call_check_order != null) {
+            call_check_order!!.cancel()
+        }
+
+        if (call_favorite != null) {
+            call_favorite!!.cancel()
+        }
+
 
     }
 

@@ -40,23 +40,22 @@ import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragm
 import dk.eatmore.foodapp.adapter.OrderListAdapter
 import dk.eatmore.foodapp.databinding.FragmentDetailBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
+import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedRestaurant
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.model.ModelUtility
 import dk.eatmore.foodapp.model.home.MenuListItem
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
-import dk.eatmore.foodapp.utils.BaseFragment
-import dk.eatmore.foodapp.utils.BindDataUtils
-import dk.eatmore.foodapp.utils.Constants
-import dk.eatmore.foodapp.utils.DialogUtils
+import dk.eatmore.foodapp.utils.*
 import kotlinx.android.synthetic.main.fragment_detail.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
 import retrofit2.Call
 import java.io.Serializable
 
 
-class DetailsFragment : BaseFragment() {
+class DetailsFragment : CommanAPI() {
+
 
     lateinit var clickEvent: HomeFragment.MyClickHandler
     private var mAdapter: OrderListAdapter? = null
@@ -66,6 +65,9 @@ class DetailsFragment : BaseFragment() {
     private lateinit var mYourBroadcastReceiver: BroadcastReceiver
     // private lateinit var restaurant : Restaurant
     private var call_category_menu: Call<JsonObject>? = null
+    private var call_favorite: Call<JsonObject>? = null
+    private var restaurant : Restaurant ? =null
+
 
 
     companion object {
@@ -81,12 +83,12 @@ class DetailsFragment : BaseFragment() {
         var delivery_text = "Sample of deliverytext"
         var pickup_text = "Sample of pickuptext"
         var ui_model: UIModel? = null
-        fun newInstance(status: String): DetailsFragment {
+        fun newInstance(status: String,restaurant : Restaurant?): DetailsFragment {
 
             val fragment = DetailsFragment()
             val bundle = Bundle()
             bundle.putString(Constants.STATUS, status)
-            // bundle.putSerializable(Constants.RESTAURANT, restaurant)
+            bundle.putSerializable(Constants.RESTAURANT, restaurant)
             fragment.arguments = bundle
             return fragment
         }
@@ -124,6 +126,8 @@ class DetailsFragment : BaseFragment() {
         if (savedInstanceState == null) {
             //  restaurant = arguments?.getSerializable(Constants.RESTAURANT) as Restaurant
             binding.isUiprogress = true  // you are also comming back so no loader is required.
+            restaurant=arguments?.getSerializable(Constants.RESTAURANT) as Restaurant?
+            loge(TAG,"---"+restaurant)
             toolbar_badge_view.visibility = View.GONE  // By default viewcart should be gone.
             logd(DetailsFragment.TAG, "saveInstance NULL")
             img_toolbar_back.setImageResource(R.drawable.close)
@@ -160,6 +164,7 @@ class DetailsFragment : BaseFragment() {
 
         loge(TAG, "refresh---")
         binding.isUiprogress = false
+        favorite_btn.setColorFilter(if(restaurant_info.is_fav)ContextCompat.getColor(context!!,R.color.theme_color) else ContextCompat.getColor(context!!,R.color.gray))
         broadcastEvent(restaurant_info)
         delivery_present = restaurant_info.delivery_present
         pickup_present = restaurant_info.pickup_present
@@ -289,6 +294,8 @@ class DetailsFragment : BaseFragment() {
     }
 
 
+
+
     private fun broadcastEvent(restaurant_info: Restaurant) {
         mYourBroadcastReceiver = object : BroadcastReceiver() {
             override fun onReceive(context: Context?, intent: Intent?) {
@@ -358,6 +365,13 @@ class DetailsFragment : BaseFragment() {
             (parentFragment as HomeFragment).childFragmentManager.popBackStack()
         } else {
             (parentFragment as OrderFragment).childFragmentManager.popBackStack()
+            // call order and ordered screeen again
+            val orderedfragment = (parentFragment as OrderFragment).childFragmentManager.findFragmentByTag(OrderedRestaurant.TAG)
+            if(orderedfragment !=null){
+                (orderedfragment as OrderedRestaurant).fetchRestaurant_info()
+            }else{
+                if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true   // every time refresh :  order fragment
+            }
         }
     }
 
@@ -415,6 +429,59 @@ class DetailsFragment : BaseFragment() {
 
     }
 
+    fun favourite(){
+        val restaurant_info= ui_model!!.category_menulist.value!!.restaurant_info
+        val postParam = JsonObject()
+        postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
+        postParam.addProperty(Constants.EATMORE_APP, true)
+        postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,""))      // if restaurant is closed then
+        postParam.addProperty(Constants.RESTAURANT_ID,restaurant_info!!.restaurant_id)
+        if(restaurant_info.is_fav){
+            // unfavourite--
+            call_favorite = ApiCall.remove_favorite_restaurant(jsonObject = postParam)
+            remove_favorite_restaurant(call_favorite!!,restaurant_info)
+        }else{
+            // favourite---
+            call_favorite = ApiCall.add_favorite_restaurant(jsonObject = postParam)
+            setfavorite(call_favorite!!,restaurant_info)
+        }
+    }
+
+    override fun comman_apisuccess(jsonObject: JsonObject, api_tag: String) {
+        updatefavourite()
+    }
+
+    override fun comman_apifailed(error: String, api_tag: String) {
+        updatefavourite()
+    }
+
+
+    fun updatefavourite(){
+
+        val restaurant_info= ui_model!!.category_menulist.value!!.restaurant_info
+        if(restaurant_info!!.is_fav){
+            favorite_btn.setColorFilter(ContextCompat.getColor(context!!,R.color.theme_color))
+        }else{
+            favorite_btn.setColorFilter(ContextCompat.getColor(context!!,R.color.gray))
+        }
+        // update in previous restaurant list.
+        if(restaurant != null && parentFragment is HomeFragment ){
+            loge(TAG,"restaurant != null---")
+            restaurant!!.is_fav=restaurant_info.is_fav
+            val homefragment=((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment()
+            val restaurantlist = homefragment.childFragmentManager.findFragmentByTag(RestaurantList.TAG) as RestaurantList
+            if(restaurantlist !=null){
+                restaurantlist.updatefavourite()
+            }
+        }else{
+            loge(TAG,"restaurant == null---")
+
+        }
+
+
+    }
+
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -432,6 +499,7 @@ class DetailsFragment : BaseFragment() {
 
     override fun onDestroyView() {
         loge(TAG, "onDestroyView...")
+        super.onDestroyView()
 
         ui_model?.let {
             ViewModelProviders.of(this).get(DetailsFragment.UIModel::class.java).category_menulist.removeObservers(this@DetailsFragment)
@@ -445,7 +513,10 @@ class DetailsFragment : BaseFragment() {
             LocalBroadcastManager.getInstance(activity!!).unregisterReceiver(mYourBroadcastReceiver);
         }
 
-        super.onDestroyView()
+        if (call_favorite != null) {
+            call_favorite!!.cancel()
+        }
+
 
     }
 
@@ -523,6 +594,10 @@ class DetailsFragment : BaseFragment() {
         fun tapOnRating(view: View) {
             Log.e(TAG, "click ---")
             detailsfragment.tapOnRating()
+        }
+        fun taponfavourite(view: View) {
+            Log.e(TAG, "taponfavourite ---")
+            detailsfragment.favourite()
         }
 
 

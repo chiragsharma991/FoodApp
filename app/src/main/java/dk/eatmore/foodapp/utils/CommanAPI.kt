@@ -9,17 +9,20 @@ import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
-import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
+import dk.eatmore.foodapp.fragment.Dashboard.Order.Data
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
+import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
-import kotlinx.android.synthetic.main.fragment_order_container.*
+import retrofit2.Call
 
 abstract class CommanAPI : BaseFragment(){
 
-    abstract fun comman_apisuccess(status : String)
-    abstract fun comman_apifailed(error : String)
+    val TAG: String = "CommanAPI"
+
+    abstract fun comman_apisuccess(jsonObject : JsonObject, api_tag : String)
+    abstract fun comman_apifailed(error : String , api_tag : String )
 
 
     fun fetchReorder_info(model : OrderFragment.Orderresult, containerview : View) {
@@ -53,7 +56,7 @@ abstract class CommanAPI : BaseFragment(){
                                     PreferenceUtil.putValue(PreferenceUtil.R_KEY, model.r_key)
                                     PreferenceUtil.putValue(PreferenceUtil.R_TOKEN,model.r_token)
                                     PreferenceUtil.save()
-                                    comman_apisuccess("")
+                                    comman_apisuccess(jsonObject,"")
                                 }
                                 override fun onNegativeButtonClick() {}
                             })
@@ -61,7 +64,7 @@ abstract class CommanAPI : BaseFragment(){
                             PreferenceUtil.putValue(PreferenceUtil.R_KEY, model.r_key)
                             PreferenceUtil.putValue(PreferenceUtil.R_TOKEN,model.r_token)
                             PreferenceUtil.save()
-                            comman_apisuccess("")
+                            comman_apisuccess(jsonObject,"")
 
                             //   OrderFragment.ui_model!!.restaurant_info.value = myorder_Model // move this response to another list to reorder perpose.
                         }
@@ -88,11 +91,11 @@ abstract class CommanAPI : BaseFragment(){
                 when (error) {
                     404 -> {
                         showSnackBar(containerview, getString(R.string.error_404))
-                        comman_apifailed(getString(R.string.error_404))
+                        comman_apifailed(getString(R.string.error_404),"")
                     }
                     100 -> {
                         showSnackBar(containerview, getString(R.string.internet_not_available))
-                        comman_apifailed(getString(R.string.internet_not_available))
+                        comman_apifailed(getString(R.string.internet_not_available),"")
                     }
                 }
                 showProgressDialog()
@@ -100,78 +103,133 @@ abstract class CommanAPI : BaseFragment(){
         })
     }
 
+    protected fun <T> setfavorite(call: Call<JsonObject>, restaurant: T?) {
 
 
-/*
-    fun fetchRestaurant_info(model : OrderFragment.Orderresult, cartcnt : String, cartamt : String, show_msg : Boolean, msg : String, containerview : View) {
+        callAPI(call, object : BaseFragment.OnApiCallInteraction {
 
-
-        callAPI(ApiCall.restaurant_info(
-                r_token = model.r_token,
-                r_key = model.r_key,
-                customer_id = PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,"")!!
-
-        ), object : BaseFragment.OnApiCallInteraction {
             override fun <T> onSuccess(body: T?) {
-                val myorder_Model= body as OrderFragment.Myorder_Model
-                if (myorder_Model.status) {
-                    PreferenceUtil.putValue(PreferenceUtil.R_KEY, model.r_key)
-                    PreferenceUtil.putValue(PreferenceUtil.R_TOKEN,model.r_token)
-                    myorder_Model.restaurant_info.cartamt=cartamt
-                    myorder_Model.restaurant_info.cartcnt=cartcnt
-                    PreferenceUtil.save()
-                    // if restaurant is closed then block all next process.
-                    if(model.is_restaurant_closed){
-                        DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!,R.color.black),msg =getString(R.string.we_are_sorry),title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
-                            override fun onPositiveButtonClick(position: Int) {}
-                            override fun onNegativeButtonClick() {}
-                        })
-                    }else{
-                        // if restaurant wants to show some info about then.
-                        if(show_msg){
-                            DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!,R.color.black),msg =msg,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
-                                override fun onPositiveButtonClick(position: Int) {
-                                    //  OrderFragment.ui_model!!.restaurant_info.value = myorder_Model // move this response to another list to reorder perpose.
-                                    comman_apisuccess(msg)
-                                }
-                                override fun onNegativeButtonClick() {}
-                            })
-                        }else{
-                            comman_apisuccess(msg)
-
-                            //   OrderFragment.ui_model!!.restaurant_info.value = myorder_Model // move this response to another list to reorder perpose.
+                val jsonObject = body as JsonObject
+                if(jsonObject.get(Constants.STATUS).asBoolean){
+                    if(restaurant !=null){
+                        if(restaurant is Restaurant){
+                            restaurant.is_fav=true
+                        }else if(restaurant is Data){
+                            restaurant.is_fav=true
                         }
-
                     }
-
+                    comman_apisuccess(jsonObject,Constants.COM_ADD_FAVORITE_RESTAURANT)
+                }else{
+                    if(restaurant !=null){
+                        if(restaurant is Restaurant){
+                            restaurant.is_fav=false
+                        }else if(restaurant is Data){
+                            restaurant.is_fav=false
+                        }
+                    }
+                    comman_apisuccess(jsonObject,Constants.COM_ADD_FAVORITE_RESTAURANT)
                 }
-                showProgressDialog()
+
             }
 
             override fun onFail(error: Int) {
+                if(restaurant !=null){
+                    if(restaurant is Restaurant){
+                        restaurant.is_fav=false
+                    }else if(restaurant is Data){
+                        restaurant.is_fav=false
+                    }
+                }
                 when (error) {
                     404 -> {
-                        showSnackBar(containerview, getString(R.string.error_404))
-                        comman_apifailed(getString(R.string.error_404))
+                        // showSnackBar(containerview, getString(R.string.error_404))
+                        loge(TAG,getString(R.string.error_404))
+                        comman_apifailed(getString(R.string.error_404),Constants.COM_ADD_FAVORITE_RESTAURANT)
+
+
                     }
                     100 -> {
-
-                        showSnackBar(containerview, getString(R.string.internet_not_available))
-                        comman_apifailed(getString(R.string.internet_not_available))
+                        // showSnackBar(containerview, getString(R.string.internet_not_available))
+                        loge(TAG,getString(R.string.internet_not_available))
+                        comman_apifailed(getString(R.string.internet_not_available),Constants.COM_ADD_FAVORITE_RESTAURANT)
 
                     }
                 }
-                showProgressDialog()
             }
         })
+
     }
-*/
+
+    protected fun <T> remove_favorite_restaurant(call: Call<JsonObject>, restaurant: T?) {
+
+
+        callAPI(call, object : BaseFragment.OnApiCallInteraction {
+
+            override fun <T> onSuccess(body: T?) {
+                val jsonObject = body as JsonObject
+                if(jsonObject.get(Constants.STATUS).asBoolean){
+                    if(restaurant !=null){
+                        if(restaurant is Restaurant){
+                            loge(TAG,"restaurant type")
+                            restaurant.is_fav=false
+                        }else if(restaurant is Data){
+                            restaurant.is_fav=false
+                        }
+                    }
+
+                    comman_apisuccess(jsonObject,Constants.COM_ADD_FAVORITE_RESTAURANT)
+                }else{
+                    if(restaurant !=null){
+                        if(restaurant is Restaurant){
+                            loge(TAG,"restaurant type")
+                            restaurant.is_fav=true  // if fail something then do not do unfavourite.
+                        }else if(restaurant is Data){
+                            restaurant.is_fav=true
+                        }
+                    }
+                    comman_apisuccess(jsonObject,Constants.COM_ADD_FAVORITE_RESTAURANT)
+                }
+
+            }
+
+            override fun onFail(error: Int) {
+                if(restaurant !=null){
+                    if(restaurant is Restaurant){
+                    loge(TAG,"restaurant type")
+                    restaurant.is_fav=true
+                }else if(restaurant is Data){
+                    restaurant.is_fav=true
+                }}
+
+
+                when (error) {
+                    404 -> {
+                        // showSnackBar(containerview, getString(R.string.error_404))
+                        loge(TAG,getString(R.string.error_404))
+                        comman_apifailed(getString(R.string.error_404),Constants.COM_ADD_FAVORITE_RESTAURANT)
+
+
+                    }
+                    100 -> {
+                        // showSnackBar(containerview, getString(R.string.internet_not_available))
+                        loge(TAG,getString(R.string.internet_not_available))
+                        comman_apifailed(getString(R.string.internet_not_available),Constants.COM_ADD_FAVORITE_RESTAURANT)
+
+                    }
+                }
+            }
+        })
+
+    }
+
+
+
 
 
     protected fun moveon_reOrder(status : String){
 
         val fragment = DetailsFragment.newInstance(
-               // restaurant =  model.restaurant_info,
+                restaurant =  null,
                 status =     ""
         )
         var enter : Slide?=null
@@ -196,6 +254,7 @@ abstract class CommanAPI : BaseFragment(){
         showTabBar(false)
 
     }
+
 
 
 }

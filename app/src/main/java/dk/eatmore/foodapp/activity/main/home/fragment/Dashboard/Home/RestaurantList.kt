@@ -7,7 +7,6 @@ import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
-import android.content.res.ColorStateList
 import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
@@ -62,6 +61,8 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
     private  var filterable_restaurantlistmodel: RestaurantListModel?=null
     private val kokkenType_map: HashMap<String, Int> = HashMap()
     private var is_from_filter : Boolean = false
+    private var call_favorite: Call<JsonObject>? = null
+
 
 
     companion object {
@@ -309,6 +310,14 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
     }
 
 
+
+
+    fun updatefavourite(){
+        if(mAdapter !=null)
+        mAdapter!!.notifyDataSetChanged()
+    }
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         loge("onActivityResult Restaurantlist---", "---")
         if (requestCode == Constants.REQ_FILTER_RESAURANT_LIST) {
@@ -378,63 +387,59 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
             error_view.visibility = View.GONE
         }
 
-   /*     if(mAdapter !=null){
-            loge(TAG,"notified---")
-            mAdapter!!.notifyDataSetChanged()
-            progress_bar.visibility = View.GONE
-            return
-        }*/
+
         recycler_view_parent.apply {
             loge(TAG,"recycler_view_parent---")
-
-
-            /*  recycler_view_parent.addOnScrollListener(object : HidingScrollListener() {
-                  override fun onHide() {
-                      Log.e(TAG,"-"+"Hide----")
-                      toolbar.visibility=View.GONE
-                      toolbar.animate().translationY((-toolbar.getHeight()).toFloat()).setInterpolator(AccelerateInterpolator(2f))
-                      ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).bottom_menu.animate()
-                              .translationY((-((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).bottom_menu.getHeight()).toFloat()).setInterpolator(AccelerateInterpolator(2f))
-
-
-                  }
-
-                  override fun onShow() {
-                      Log.e(TAG,"-"+"Show----")
-                   //   toolbar.visibility=View.VISIBLE
-
-                                toolbar.animate().translationY(0f).setInterpolator(DecelerateInterpolator(2f))
-                                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).bottom_menu.animate().translationY(0f).setInterpolator(DecelerateInterpolator(2f))
-
-                  }
-              }
-              )*/
-
             mAdapter = RestaurantListParentAdapter(context!!, list, object : RestaurantListParentAdapter.AdapterListener {
-                override fun itemClicked(parentView: Boolean, parentPosition: Int, chilPosition: Int) {
-                    if (progress_bar.visibility == View.VISIBLE || list.get(parentPosition).ordertype == getString(R.string.notavailable)) return
-                    val fragment = DetailsFragment.newInstance(
-                            //    restaurant = list.get(parentPosition).restaurant.get(chilPosition),
-                            status = list.get(parentPosition).status
-                    )
-                    var enter: Slide? = null
-                    if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                        enter = Slide()
-                        enter.setDuration(300)
-                        enter.slideEdge = Gravity.BOTTOM
-                        val changeBoundsTransition: ChangeBounds = ChangeBounds()
-                        changeBoundsTransition.duration = 300
-                        //fragment!!.sharedElementEnterTransition=changeBoundsTransition
-                        fragment.sharedElementEnterTransition = changeBoundsTransition
-                        fragment.sharedElementReturnTransition = changeBoundsTransition
-                        fragment.enterTransition = enter
+                override fun itemClicked(parentView: Boolean, parentPosition: Int, chilPosition: Int,tag : String) {
+
+                    when(tag){
+                        Constants.CARD_VIEW ->{
+
+                            if (progress_bar.visibility == View.VISIBLE || list.get(parentPosition).ordertype == getString(R.string.notavailable)) return
+                            val fragment = DetailsFragment.newInstance(
+                                    restaurant = list.get(parentPosition).restaurant.get(chilPosition),
+                                    status = list.get(parentPosition).status
+                            )
+                            var enter: Slide? = null
+                            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                                enter = Slide()
+                                enter.setDuration(300)
+                                enter.slideEdge = Gravity.BOTTOM
+                                val changeBoundsTransition: ChangeBounds = ChangeBounds()
+                                changeBoundsTransition.duration = 300
+                                //fragment!!.sharedElementEnterTransition=changeBoundsTransition
+                                fragment.sharedElementEnterTransition = changeBoundsTransition
+                                fragment.sharedElementReturnTransition = changeBoundsTransition
+                                fragment.enterTransition = enter
+                            }
+                            PreferenceUtil.putValue(PreferenceUtil.R_KEY, list.get(parentPosition).restaurant.get(chilPosition).r_key)
+                            PreferenceUtil.putValue(PreferenceUtil.R_TOKEN, list.get(parentPosition).restaurant.get(chilPosition).r_token)
+                            PreferenceUtil.save()
+                            (parentFragment as HomeFragment).addFragment(R.id.home_fragment_container, fragment, DetailsFragment.TAG, false)
+                        }
+
+                        Constants.FAVORITE_VIEW ->{
+                            val postParam = JsonObject()
+                            postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
+                            postParam.addProperty(Constants.EATMORE_APP, true)
+                            postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,""))      // if restaurant is closed then
+                            postParam.addProperty(Constants.RESTAURANT_ID,list[parentPosition].restaurant[chilPosition].restaurant_id)
+                            if(list[parentPosition].restaurant[chilPosition].is_fav){
+                                // unfavourite--
+                                call_favorite = ApiCall.add_favorite_restaurant(jsonObject = postParam)
+                                remove_favorite_restaurant(call_favorite!!,list[parentPosition].restaurant[chilPosition])
+                            }else{
+                                // favourite---
+                                call_favorite = ApiCall.add_favorite_restaurant(jsonObject = postParam)
+                                setfavorite(call_favorite!!,list[parentPosition].restaurant[chilPosition])
+                            }
+
+                        }
                     }
-                    PreferenceUtil.putValue(PreferenceUtil.R_KEY, list.get(parentPosition).restaurant.get(chilPosition).r_key)
-                    PreferenceUtil.putValue(PreferenceUtil.R_TOKEN, list.get(parentPosition).restaurant.get(chilPosition).r_token)
-                    PreferenceUtil.save()
-                    (parentFragment as HomeFragment).addFragment(R.id.home_fragment_container, fragment, DetailsFragment.TAG, false)
                 }
             })
+
             val sectionItemDecoration = RecyclerSectionItemDecoration(resources.getDimensionPixelSize(R.dimen._45sdp),
                     true,
                     getSectionCallback(list))
@@ -453,6 +458,15 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
 
 
     }
+
+    override fun comman_apisuccess(jsonObject: JsonObject, api_tag: String) {
+        updatefavourite()
+    }
+
+    override fun comman_apifailed(error: String, api_tag: String) {
+        updatefavourite()
+    }
+
 
     private fun getSectionCallback(list: ArrayList<StatusWiseRestaurant>): RecyclerSectionItemDecoration.SectionCallback {
         return object : RecyclerSectionItemDecoration.SectionCallback {
@@ -490,6 +504,8 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
 
     override fun onDestroyView() {
 
+        super.onDestroyView()
+
         logd(TAG, "onDestroyView...")
 
         ui_model?.let {
@@ -501,7 +517,9 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
             it.cancel()
         }
 
-        super.onDestroyView()
+        if (call_favorite != null) {
+            call_favorite!!.cancel()
+        }
 
     }
 

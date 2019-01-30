@@ -67,7 +67,7 @@ class RestaurantListParentAdapter(val c: Context, val list : ArrayList<Restauran
 
 
     interface AdapterListener {
-        fun itemClicked(parentView: Boolean, parentPosition: Int, chilPosition: Int)
+        fun itemClicked(parentView: Boolean, parentPosition: Int, chilPosition: Int,tag : String)
     }
 
 

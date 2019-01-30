@@ -6,7 +6,6 @@ import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
 import android.databinding.BindingAdapter
 import android.databinding.DataBindingUtil
-import android.location.Address
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.content.ContextCompat
@@ -22,7 +21,6 @@ import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
-import com.facebook.internal.Utility
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
@@ -40,6 +38,7 @@ import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.*
 import kotlinx.android.synthetic.main.fragment_order_container.*
 import kotlinx.android.synthetic.main.toolbar.*
+import retrofit2.Call
 import java.io.Serializable
 import java.util.*
 
@@ -49,6 +48,8 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
     private lateinit var binding: FragmentOrderContainerBinding
     private val myclickhandler = MyClickHandler(this@OrderFragment)
     public var mAdapter: UniversalAdapter<Orderresult, RowOrderedPizzaBinding>? = null
+    private var call_favorite: Call<JsonObject>? = null
+
 
 
     companion object {
@@ -190,7 +191,7 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
     private fun moveon_next() {
 
         val fragment = DetailsFragment.newInstance(
-                // restaurant = ui_model!!.restaurant_info.value!!.restaurant_info,
+                restaurant = null,
                 status = ""
         )
         var enter: Slide? = null
@@ -293,6 +294,46 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
             }
         })
     }
+
+    fun favourite(model: Orderresult) {
+        val postParam = JsonObject()
+        postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
+        postParam.addProperty(Constants.EATMORE_APP, true)
+        postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,""))      // if restaurant is closed then
+        postParam.addProperty(Constants.RESTAURANT_ID,model.restaurant_id)
+        if(model.is_fav){
+            // unfavourite--
+            call_favorite = ApiCall.remove_favorite_restaurant(jsonObject = postParam)
+            remove_favorite_restaurant(call_favorite!!,model)
+        }else{
+            // favourite---
+            call_favorite = ApiCall.add_favorite_restaurant(jsonObject = postParam)
+            setfavorite(call_favorite!!,model)
+        }
+    }
+
+    override fun comman_apisuccess(jsonObject: JsonObject,api_tag : String) {
+        when(api_tag ){
+             Constants.COM_ADD_FAVORITE_RESTAURANT->{
+                onRefresh()
+            }
+            else ->{
+                moveon_reOrder("")
+            }
+        }
+    }
+
+    override fun comman_apifailed(error: String,api_tag : String) {
+
+        when(api_tag ){
+            Constants.COM_ADD_FAVORITE_RESTAURANT->{
+                onRefresh()
+            }
+        }
+    }
+
+
+
 
 
 /*
@@ -411,12 +452,6 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
         }
 
     */
-    override fun comman_apisuccess(status: String) {
-        moveon_reOrder(status)
-    }
-
-    override fun comman_apifailed(error: String) {
-    }
 
 
     class MyClickHandler(val orderFragment: OrderFragment) {
@@ -440,6 +475,10 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
                     orderFragment.onRate(model)
             }
         }
+        fun onfavourite(view: View, model: Orderresult) {
+            Log.e(TAG, "taponfavourite ---")
+            orderFragment.favourite(model)
+        }
 
     }
 
@@ -459,6 +498,7 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
             var restaurant_id: String = "",
             var order_status: String = "",
             var payment_status: String = "",
+            var is_fav : Boolean = false,
             var order_no: String = "",
             var expected_time: String = "",
             var total_to_pay: String = "",

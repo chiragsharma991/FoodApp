@@ -84,6 +84,19 @@ class ApiCall {
         fun ordertransaction(jsonObject: JsonObject) : Call<JsonObject> {
             return getApiInterface().ordertransaction(jsonObject)
         }
+
+        fun check_order (jsonObject: JsonObject) : Call<JsonObject> {
+            return getApiInterface().check_order(jsonObject)
+        }
+
+        fun add_favorite_restaurant (jsonObject: JsonObject) : Call<JsonObject> {
+            return getApiInterface().add_favorite_restaurant(jsonObject)
+        }
+
+        fun remove_favorite_restaurant (jsonObject: JsonObject) : Call<JsonObject> {
+            return getApiInterface().remove_favorite_restaurant(jsonObject)
+        }
+
         fun cancelordertransaction(r_token : String , r_key : String, order_no : Int ) : Call<JsonObject> {
             return getApiInterface().cancelordertransaction(r_token,r_key,order_no,Constants.RESTAURANT_FOOD_ANDROID)
         }

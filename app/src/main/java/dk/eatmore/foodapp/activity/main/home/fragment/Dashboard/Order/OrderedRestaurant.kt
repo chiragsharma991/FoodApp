@@ -1,17 +1,30 @@
 package dk.eatmore.foodapp.fragment.Dashboard.Order
 
+import android.app.AlertDialog
 import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Intent
+import android.content.pm.PackageManager
 import android.databinding.BindingAdapter
 import android.databinding.DataBindingUtil
+import android.graphics.drawable.AnimatedVectorDrawable
+import android.graphics.drawable.PictureDrawable
 import android.location.Address
+import android.net.Uri
 import android.os.Build
 import android.os.Bundle
 import android.os.Handler
+import android.support.annotation.RequiresApi
 import android.support.v4.content.ContextCompat
+import android.support.v4.content.ContextCompat.getDrawable
 import android.support.v7.widget.AppCompatImageView
+import android.text.SpannableString
+import android.text.Spanned
+import android.text.TextPaint
+import android.text.method.LinkMovementMethod
+import android.text.style.ClickableSpan
 import android.transition.ChangeBounds
 import android.transition.Slide
 import android.util.Log
@@ -19,7 +32,9 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.model.StreamEncoder
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
@@ -31,14 +46,14 @@ import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
-import dk.eatmore.foodapp.utils.BaseFragment
-import dk.eatmore.foodapp.utils.BindDataUtils
-import dk.eatmore.foodapp.utils.CommanAPI
-import dk.eatmore.foodapp.utils.Constants
+import dk.eatmore.foodapp.utils.*
 import kotlinx.android.synthetic.main.dynamic_raw_item.view.*
 import kotlinx.android.synthetic.main.dynamic_raw_subitem.view.*
 import kotlinx.android.synthetic.main.fragment_ordered_restaurant.*
 import kotlinx.android.synthetic.main.toolbar.*
+import retrofit2.Call
+import java.io.File
+import java.io.InputStream
 import java.util.*
 
 class OrderedRestaurant : CommanAPI() {
@@ -48,6 +63,10 @@ class OrderedRestaurant : CommanAPI() {
     lateinit var binding: FragmentOrderedRestaurantBinding
     private lateinit var myclickhandler: MyClickHandler
     private lateinit var model: OrderFragment.Orderresult
+    private var call_check_order: Call<JsonObject>? = null
+    private val timeoutHandler = Handler()
+    private var finalizer: Runnable? = null
+    private var call_favorite: Call<JsonObject>? = null
 
 
 
@@ -104,11 +123,11 @@ class OrderedRestaurant : CommanAPI() {
         txt_toolbar.text=getString(R.string.orders)
         txt_toolbar_right.text=Constants.REORDER
         txt_toolbar_right.setOnClickListener{
-            loge(TAG,"reorder---")
-                //  (parentFragment as OrderFragment).fetchReorder_info(model)
-                //  (activity as HomeActivity).onBackPressed()
-                fetchReorder_info(model,orderedrestaurant_container)
-
+            timeoutHandler.removeCallbacks(finalizer)
+            if (call_check_order != null) {
+                call_check_order!!.cancel()
+            }
+            fetchReorder_info(model,orderedrestaurant_container)
         }
         img_toolbar_back.setOnClickListener {backpress()}
     }
@@ -134,7 +153,7 @@ class OrderedRestaurant : CommanAPI() {
 
 
     private fun generateBillDetails(){
-        val list =ui_model!!.ordered_details.value!!.data[0]
+        val list =ui_model!!.ordered_details.value!!.data!![0]
 
         if(list.shipping != "Delivery"){
             // pick up:
@@ -163,8 +182,7 @@ class OrderedRestaurant : CommanAPI() {
 
 
             }
-
-            total_txt.text=BindDataUtils.convertCurrencyToDanishWithoutLabel(list.total_to_pay)
+            total_txt.text = String.format(getString(R.string.dkk_price),BindDataUtils.convertCurrencyToDanishWithoutLabel(list.total_to_pay))
 
         }
 
@@ -201,36 +219,41 @@ class OrderedRestaurant : CommanAPI() {
 
             }
 
-            total_txt.text=BindDataUtils.convertCurrencyToDanishWithoutLabel(list.total_to_pay)
+            total_txt.text = String.format(getString(R.string.dkk_price),BindDataUtils.convertCurrencyToDanishWithoutLabel(list.total_to_pay))
+
         }
+        addspantext()
+        check_order()
     }
 
 
     private fun refreshview() {
 
         loge(TAG,"refresh view...")
-        binding.data= ui_model!!.ordered_details.value!!.data[0]
+        favorite_btn.setColorFilter(if(ui_model!!.ordered_details.value!!.data!![0].is_fav) ContextCompat.getColor(context!!,R.color.theme_color) else ContextCompat.getColor(context!!,R.color.gray))
+        transaction_progress_bar.loadUrl("file:///android_asset/sandclock.svg")
+        binding.data= ui_model!!.ordered_details.value!!.data!![0]
         binding.myclickhandler=myclickhandler
         binding.util=BindDataUtils
         binding.enableRating=arguments!!.getBoolean(Constants.ENABLE_RATING)
         binding.isProgress=false
         binding.executePendingBindings()
 
-        val data =ui_model!!.ordered_details.value!!.data[0]
+        val data =ui_model!!.ordered_details.value!!.data!![0]
         showOrderstatus(payment_status = data.payment_status,enable_rating = data.enable_rating,order_status = data.order_status)
 
         Glide.with(imageview.context)
-                .load(ui_model!!.ordered_details.value!!.data[0].app_icon)
+                .load(ui_model!!.ordered_details.value!!.data!![0].app_icon)
                 .apply(RequestOptions().placeholder(BindDataUtils.getRandomDrawbleColor()).error(BindDataUtils.getRandomDrawbleColor()))
                 .into(imageview)
 
         add_parentitem_view.removeAllViewsInLayout()
-        val list =ui_model!!.ordered_details.value!!.data[0].order_products_details
+        val list =ui_model!!.ordered_details.value!!.data!![0].order_products_details
         for (i in 0 until list.size){
             var inflater= context!!.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val view= inflater.inflate(R.layout.dynamic_raw_item,null)
             view.item_name.text=list[i].products.p_name
-            view.item_price.text=if(list[i].products.p_price !=null) BindDataUtils.convertCurrencyToDanish(list[i].products.p_price!!) else "null"
+            view.item_price.text=if(list[i].products.p_price !=null) BindDataUtils.convertCurrencyToDanishWithoutLabel(list[i].products.p_price!!) else "null"
             view.remove_item.visibility=View.GONE
             view.add_subitem_view.removeAllViewsInLayout()
 
@@ -254,7 +277,7 @@ class OrderedRestaurant : CommanAPI() {
                             val extratoppings= inflater.inflate(R.layout.dynamic_raw_subitem,null)
                             extratoppings.subitem_name.text=String.format(getString(R.string.plus),list[i].ordered_product_attributes!!.get(k).order_product_extra_topping_group!![l].ingredient_name)
                             // view.subitem_price.visibility=View.VISIBLE
-                            extratoppings.subitem_price.text= BindDataUtils.convertCurrencyToDanish(list[i].ordered_product_attributes!!.get(k).order_product_extra_topping_group!![l].t_price) ?: "null"
+                            extratoppings.subitem_price.text= BindDataUtils.convertCurrencyToDanishWithoutLabel(list[i].ordered_product_attributes!!.get(k).order_product_extra_topping_group!![l].t_price) ?: "null"
                             extratoppings.dummy_image.visibility=View.GONE
                             view.add_subitem_view.addView(extratoppings)
                         }
@@ -269,7 +292,7 @@ class OrderedRestaurant : CommanAPI() {
                     val onlyextratoppings= inflater.inflate(R.layout.dynamic_raw_subitem,null)
                     onlyextratoppings.subitem_name.text=String.format(getString(R.string.plus),list[i].order_product_extra_topping_group!!.get(k).ingredient_name)
                     // view.subitem_price.visibility=View.VISIBLE
-                    onlyextratoppings.subitem_price.text= BindDataUtils.convertCurrencyToDanish(list[i].order_product_extra_topping_group!!.get(k).t_price) ?: "null"
+                    onlyextratoppings.subitem_price.text= BindDataUtils.convertCurrencyToDanishWithoutLabel(list[i].order_product_extra_topping_group!!.get(k).t_price) ?: "null"
                     onlyextratoppings.dummy_image.visibility=View.GONE
                     view.add_subitem_view.addView(onlyextratoppings)
                 }
@@ -283,7 +306,6 @@ class OrderedRestaurant : CommanAPI() {
 
 
     fun fetchRestaurant_info() {
-
         binding.isProgress=true
         val postParam = JsonObject()
         postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
@@ -296,11 +318,22 @@ class OrderedRestaurant : CommanAPI() {
         callAPI(ApiCall.orderdetails(postParam), object : BaseFragment.OnApiCallInteraction {
             override fun <T> onSuccess(body: T?) {
                 val orderedDetails= body as OrderedDetails
-                if (orderedDetails.status) {
-                    orderedDetails.data.get(0).restaurant_name=arguments!!.get(Constants.RESTAURANT).toString()
-                    orderedDetails.data.get(0).app_icon=arguments!!.get(Constants.APP_ICON).toString()
-                    orderedDetails.data.get(0).order_date=arguments!!.get(Constants.ORDER_DATE).toString()
-                    ui_model!!.ordered_details.value=orderedDetails
+                if(orderedDetails.data!!.get(0) == null){
+                    // data is null
+                    DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!, R.color.black),msg = "We're Sorry.\nDetails for this order could not be fetched at this moment.",title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                        override fun onPositiveButtonClick(position: Int) {
+                            backpress()
+                        }
+                        override fun onNegativeButtonClick() {
+                        }
+                    })
+                }else{
+                    if (orderedDetails.status) {
+                        orderedDetails.data.get(0).restaurant_name=arguments!!.get(Constants.RESTAURANT).toString()
+                        orderedDetails.data.get(0).app_icon=arguments!!.get(Constants.APP_ICON).toString()
+                        orderedDetails.data.get(0).order_date=arguments!!.get(Constants.ORDER_DATE).toString()
+                        ui_model!!.ordered_details.value=orderedDetails
+                    }
                 }
             }
 
@@ -319,11 +352,53 @@ class OrderedRestaurant : CommanAPI() {
     }
 
 
+    fun favourite() {
+        val data = ui_model!!.ordered_details.value!!.data!![0]
+        val postParam = JsonObject()
+        postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
+        postParam.addProperty(Constants.EATMORE_APP, true)
+        postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,""))      // if restaurant is closed then
+        postParam.addProperty(Constants.RESTAURANT_ID,data.restaurant_id)
+        if(data.is_fav){
+            // unfavourite--
+            call_favorite = ApiCall.remove_favorite_restaurant(jsonObject = postParam)
+            remove_favorite_restaurant(call_favorite!!,data)
+        }else{
+            // favourite---
+            call_favorite = ApiCall.add_favorite_restaurant(jsonObject = postParam)
+            setfavorite(call_favorite!!,data)
+        }
+    }
+
+    override fun comman_apisuccess(jsonObject: JsonObject,api_tag : String) {
+        when(api_tag ){
+            Constants.COM_ADD_FAVORITE_RESTAURANT->{
+
+                val data = ui_model!!.ordered_details.value!!.data!![0]
+                favorite_btn.setColorFilter(if(data.is_fav) ContextCompat.getColor(context!!,R.color.theme_color) else ContextCompat.getColor(context!!,R.color.gray))
+            }
+            else ->{
+                moveon_reOrder("")
+            }
+        }
+    }
+
+    override fun comman_apifailed(error: String,api_tag : String) {
+
+        when(api_tag ){
+            Constants.COM_ADD_FAVORITE_RESTAURANT->{
+
+                val data = ui_model!!.ordered_details.value!!.data!![0]
+                favorite_btn.setColorFilter(if(data.is_fav) ContextCompat.getColor(context!!,R.color.theme_color) else ContextCompat.getColor(context!!,R.color.gray))
+            }
+        }
+    }
+
 
 
     private fun on_rating() {
         loge(TAG,"on rating...")
-        if(ui_model!!.ordered_details.value!!.data[0].order_status.toLowerCase() == Constants.ACCEPTED){
+        if(ui_model!!.ordered_details.value!!.data!![0].order_status.toLowerCase() == Constants.ACCEPTED){
             val fragment = RateOrder.newInstance(order_no = arguments!!.getString(Constants.ORDER_NO),orderresult = model)
             var enter : Slide?=null
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -400,7 +475,7 @@ class OrderedRestaurant : CommanAPI() {
 
     fun showuser_rate(){
         val label = arrayOf("","Elendigt","Dårligt","Fint","Godt","Fremragende","Fantastisk")
-        val data =ui_model!!.ordered_details.value!!.data[0]
+        val data =ui_model!!.ordered_details.value!!.data!![0]
         Log.e(TAG,"rate: "+data.quality_of_food_rating+" "+data.total_rating)
 
         total_rating.rating= data.total_rating
@@ -424,14 +499,6 @@ class OrderedRestaurant : CommanAPI() {
         }
     }
 
-
-
-    override fun comman_apisuccess(status: String) {
-        moveon_reOrder("")
-    }
-
-    override fun comman_apifailed(error: String) {
-    }
 
     fun backpress() {
 
@@ -479,6 +546,187 @@ class OrderedRestaurant : CommanAPI() {
         }
 
     }
+    private fun check_order() {
+
+        val postParam = JsonObject()
+        postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
+        postParam.addProperty(Constants.EATMORE_APP, true)
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+        postParam.addProperty(Constants.ORDER_NO,ui_model!!.ordered_details.value!!.data!![0].order_no)
+        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+        call_check_order = ApiCall.check_order(jsonObject = postParam)
+
+        callAPI(call_check_order!!, object : BaseFragment.OnApiCallInteraction {
+
+            override fun <T> onSuccess(body: T?) {
+                val jsonObject = body as JsonObject
+                // check_order api responce
+                var reject_reason=""
+                var accept_reject_time=""
+                val order_status = jsonObject.get(Constants.ORDER_STATUS).asString
+                val payment_status = jsonObject.get(Constants.PAYMENT_STATUS).asString
+                if(jsonObject.has(Constants.REJECT_REASON)){
+                    reject_reason = if(jsonObject.get(Constants.REJECT_REASON).isJsonNull) "" else jsonObject.get(Constants.REJECT_REASON).asString
+                }
+                if(jsonObject.has(Constants.ACCEPT_REJECT_TIME)){
+                    accept_reject_time = if (jsonObject.get(Constants.ACCEPT_REJECT_TIME).isJsonNull) "" else jsonObject.get(Constants.ACCEPT_REJECT_TIME).asString
+                }
+
+                if (call_check_order != null) {
+
+                    order_status_txt.setTextColor(ContextCompat.getColor(context!!,R.color.black_txt_regular))
+
+                    if (order_status.toLowerCase() == Constants.PENDING_RESTAURANT || order_status.toLowerCase() == Constants.PENDING_OPENING_RESTAURANT) {
+                        // Processing view
+                        order_status_txt.text = "Ordre under behandling"
+                        transaction_progress_bar.visibility = View.VISIBLE
+
+                    } else {
+                        // status view
+                        transaction_progress_bar.visibility = View.GONE
+                        if (payment_status.toLowerCase() == Constants.REFUNDED) {
+                            order_status_txt.text = "Ordre er refunderet"
+                            order_accepted_time.text = "Bare rolig, har du benyttet et betalingskort, så er betalingen allerede refunderet."
+
+                        } else {
+                            if (order_status.toLowerCase() == Constants.REJECTED) {
+                                order_status_txt.text = "Ordre annulleret af restauranten, årsag: ${reject_reason}"
+                                order_status_txt.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))
+                                order_accepted_time.text = "Bare rolig, har du benyttet et betalingskort, så er betalingen allerede annulleret. Du kan nu lave en ny bestilling."
+
+                            } else if (order_status.toLowerCase() == Constants.ACCEPTED) {
+                                order_status_txt.text = "Ordre accepteret til"
+                                if (accept_reject_time.length > 0) {
+                                    order_accepted_time.visibility = View.VISIBLE
+                                    order_accepted_time.text = accept_reject_time
+                                    order_accepted_time.text = String.format(getString(R.string.order_accept_date),BindDataUtils.parsewithoutTimeToddMMyyyy(accept_reject_time),BindDataUtils.parseTimeToHHmm(accept_reject_time))
+                                }else{
+                                    order_accepted_time.visibility = View.GONE
+                                }
+                            }
+
+                        }
+                    }
+                }
+
+                // can i call again?
+
+                if ((order_status.toLowerCase() == Constants.PENDING_OPENING_RESTAURANT) || (order_status.toLowerCase() == Constants.PENDING_RESTAURANT) || (order_status.toLowerCase() == Constants.ACCEPTED && payment_status.toLowerCase() != Constants.REFUNDED)) {
+                    // call
+
+                    // we are continuous running because if manager wrong press--- he can change status.
+                    finalizer = object : Runnable {
+                        override fun run() {
+                            loge(TAG, "Handler-----")
+                            check_order()
+
+                        }
+                    }
+                    timeoutHandler.postDelayed(finalizer, 5 * 1000)
+                } else {
+                    // stop calling api
+                    // payment has been refunded---
+
+                }
+            }
+
+            override fun onFail(error: Int) {
+                when (error) {
+                    404 -> {
+                        // showSnackBar(containerview, getString(R.string.error_404))
+                        loge(TAG,getString(R.string.error_404))
+
+                    }
+                    100 -> {
+                        // showSnackBar(containerview, getString(R.string.internet_not_available))
+                        loge(TAG,getString(R.string.internet_not_available))
+                    }
+                }
+            }
+        })
+
+    }
+
+
+    fun addspantext() {
+
+        val clickableSpan = object : ClickableSpan() {
+            val data= ui_model!!.ordered_details.value!!.data!![0]
+            var dialog: AlertDialog? = null
+            override fun onClick(textView: View) {
+                Log.e(TAG, "onClick:--- ")
+                dialog = AlertDialog.Builder(activity).setMessage("Do you want to call ${data.restaurant_phone.trim()}").setCancelable(true).setPositiveButton("yes") { dialogInterface, i ->
+                    if (is_callphn_PermissionGranted()) {
+                        val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + data.restaurant_phone.trim()))
+                        startActivity(intent)
+                    }
+                }.setNegativeButton("no") { dialogInterface, i -> dialog!!.dismiss() }.show()
+            }
+
+            override fun updateDrawState(ds: TextPaint) {
+                //
+                super.updateDrawState(ds)
+                ds.isUnderlineText = true
+                //                ds.setColor(getResources().getColor(R.color.orange));
+                try {
+                    val colour = ContextCompat.getColor(context!!, R.color.dark_blue)
+                    ds.color = colour
+                } catch (e: Exception) {
+                    Log.e(TAG, "updateDrawState: error " + e.message)
+                }
+
+            }
+        }
+        val data= ui_model!!.ordered_details.value!!.data!![0]
+        val span = SpannableString(String.format(getString(R.string.har_du_brug), data.restaurant_phone.trim()))
+        span.setSpan(clickableSpan, (String.format(getString(R.string.har_du_brug), data.restaurant_phone).trim().length - (data.restaurant_phone.trim().length + 1)),
+                String.format(getString(R.string.har_du_brug), data.restaurant_phone).trim().length -1, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        contact_txt.text = span
+        contact_txt.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        loge(TAG, "permission result---")
+        when (requestCode) {
+            0 -> {
+
+                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "88826543"))
+                    startActivity(intent)
+                    //    Toast.makeText(this, getString(R.string.permission_granted), Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
+                }
+                return
+            }
+        }
+    }
+
+
+
+
+
+
+    override fun onDestroyView() {
+
+        super.onDestroyView()
+
+        loge(OrderedRestaurant.TAG, "onDestroyView...")
+
+        timeoutHandler.removeCallbacks(finalizer)
+
+        if (call_check_order != null) {
+            call_check_order!!.cancel()
+        }
+
+        if (call_favorite != null) {
+            call_favorite!!.cancel()
+        }
+
+
+    }
+
 
     override fun onDestroy() {
         super.onDestroy()
@@ -501,15 +749,23 @@ class OrderedRestaurant : CommanAPI() {
     class MyClickHandler(val orderedRestaurant: OrderedRestaurant) {
 
         fun on_rating (view: View ) {
+            orderedRestaurant.timeoutHandler.removeCallbacks(orderedRestaurant.finalizer)
+            if (orderedRestaurant.call_check_order != null) {
+                orderedRestaurant.call_check_order!!.cancel()
+            }
             orderedRestaurant.on_rating()
         }
+        fun on_favorite (view: View ) {
+            orderedRestaurant.favourite()
+        }
         fun re_Order (view: View ) {
-                //  (parentFragment as OrderFragment).fetchReorder_info(model)
-                //  (activity as HomeActivity).onBackPressed()
-                orderedRestaurant.fetchReorder_info(orderedRestaurant.model,orderedRestaurant.orderedrestaurant_container)
+            orderedRestaurant.timeoutHandler.removeCallbacks(orderedRestaurant.finalizer)
+            if (orderedRestaurant.call_check_order != null) {
+                orderedRestaurant.call_check_order!!.cancel()
+            }
+            orderedRestaurant.fetchReorder_info(orderedRestaurant.model,orderedRestaurant.orderedrestaurant_container)
 
         }
-
 
     }
 
@@ -528,17 +784,21 @@ fun setImage(view : AppCompatImageView, model : String) {
 data class OrderedDetails(
         val msg: String = "",
         val status: Boolean = false,
-        val data: ArrayList<Data> // you can always fetch this, using get(0)
+        val data: ArrayList<Data>? = null
+        // you can always fetch this, using get(0)
 )
 
 data class Data(
         val order_no : String ="",
         var order_date : String ="",
+        var restaurant_id: String = "",
         val pickup_delivery_time : String ="",
         val address : String ="",
+        var is_fav : Boolean = false,
         var total_to_pay: String = "",
         var shipping : String = "",
         var order_status : String = "",
+        var restaurant_phone : String = "",
         var payment_status : String = "",
         var upto_min_shipping :String ="0.0",
         var additional_charge :String ="0.0",

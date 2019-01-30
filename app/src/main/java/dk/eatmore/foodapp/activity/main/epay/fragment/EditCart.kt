@@ -258,6 +258,7 @@ class EditCart : BaseFragment(), ICardRegistrationCallback, CardFormEditText.IOn
             (editcart.activity as EpayActivity).finishActivity()
         }
 
+
     }
 
 

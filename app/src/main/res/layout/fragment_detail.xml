@@ -129,21 +129,67 @@
                                 android:singleLine="false"
                                 android:text="@{restaurant.restaurant_name}" />
 
-                            <RatingBar
-                                style="?android:attr/ratingBarStyleSmall"
-                                android:layout_width="wrap_content"
+                            <RelativeLayout
+                                android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="@dimen/_5sdp"
-                                android:isIndicator="true"
-                                android:numStars="6"
-                                android:onClick="@{handler :: tapOnRating}"
-                                android:rating="@{restaurant.total_rating}"
-                                android:stepSize="1" />
+                                >
+
+                                <android.support.v7.widget.AppCompatImageView
+                                    android:layout_width="@dimen/_15sdp"
+                                    android:id="@+id/favorite_btn"
+                                    android:layout_height="@dimen/_15sdp"
+                                    android:scaleType="fitXY"
+                                    android:background="?attr/selectableItemBackgroundBorderless"
+                                    android:onClick="@{handler :: taponfavourite}"
+                                    android:src="@mipmap/heart_full"
+                                    android:layout_centerVertical="true"
+                                    android:tint="@color/gray"
+                                    />
+
+                                <View
+                                    android:layout_width="@dimen/_1sdp"
+                                    android:layout_height="@dimen/_15sdp"
+                                    android:alpha="0.2"
+                                    android:layout_marginStart="@dimen/_5sdp"
+                                    android:layout_marginEnd="@dimen/_5sdp"
+                                    android:layout_toEndOf="@+id/favorite_btn"
+                                    android:layout_centerVertical="true"
+                                    android:id="@+id/vertical_divider"
+                                    android:background="@color/divider_color"
+                                    />
+
+                                <RatingBar
+                                    android:id="@+id/rating"
+                                    style="?android:attr/ratingBarStyleSmall"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:isIndicator="true"
+                                    android:numStars="6"
+                                    android:layout_centerVertical="true"
+                                    android:layout_toEndOf="@+id/vertical_divider"
+                                    android:rating="@{restaurant.total_rating}"
+                                    android:stepSize="1" />
+
+                            </RelativeLayout>
+
+
+                            <!--  <RatingBar
+                                  style="?android:attr/ratingBarStyleSmall"
+                                  android:layout_width="wrap_content"
+                                  android:layout_height="wrap_content"
+                                  android:layout_marginTop="@dimen/_5sdp"
+                                  android:isIndicator="true"
+                                  android:numStars="6"
+                                  android:onClick="@{handler :: tapOnRating}"
+                                  android:rating="@{restaurant.total_rating}"
+                                  android:stepSize="1" />-->
 
                             <TextView
                                 style="@style/Subtitle_TextViewSmall"
                                 android:visibility="@{is_uiprogress ? View.GONE : View.VISIBLE}"
                                 android:onClick="@{handler::tapOnRating}"
+                                android:layout_marginTop="@dimen/_5sdp"
                                 android:textColor="@color/dark_blue"
                                 android:text="@{@string/restaurant_rating(restaurant.total_review_count)}" />
 

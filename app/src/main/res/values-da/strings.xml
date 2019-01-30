@@ -199,6 +199,12 @@
     <string name="deliver_rate">%1$s/6</string>
     <string name="rate_label">(%1$s)</string>
     <string name="ordredetaljer">Ordredetaljer</string>
+    <string name="kl_hh_mm">kl.%1$s</string>
+    <string name="har_du_brug">Har du brug for hjaelp til din ordre, er du mere end velkommen til at ringe direkte til restauranten pa %1$s.</string>
+    <string name="dkk_price">DKK %1$s</string>
+    <string name="order_accept_date">%1$s -kl. %2$s</string>
+    <string name="fjern_favorit">Fjern favorit</string>
+    <string name="markere_som_favorit">Markere som favorit</string>
 
 
 </resources>
