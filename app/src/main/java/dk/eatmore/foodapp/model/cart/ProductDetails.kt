@@ -71,6 +71,7 @@ data class ProductAttributeValueItem(
         val restaurant_id: String = "",
         val actionDt: String = "",
         var is_itemselected: Boolean = false,
+        var is_copyof_itemselected: Boolean = false,
         val extra_topping_group_deatils: Extra_topping_group_deatils = Extra_topping_group_deatils("","","","","","","", arrayListOf())
 ) : Serializable
 
