@@ -2,6 +2,7 @@ package dk.eatmore.foodapp.rest
 
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.EditAddress
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.RestPaymentMethods
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedDetails
 import dk.eatmore.foodapp.model.home.ProductListModel
@@ -136,9 +137,11 @@ class ApiCall {
         fun applycode(r_token : String , r_key : String , customer_id : String , upto_min_shipping: String , shipping : String , code: String , order_total: String , additional_charge: String , shipping_costs: String ) : Call<JsonObject> {
             return getApiInterface().applycode(r_token, r_key,customer_id , upto_min_shipping ,shipping , code, order_total , additional_charge , shipping_costs,Constants.RESTAURANT_FOOD_ANDROID)
         }
-
         fun userInfo(jsonObject: JsonObject ) : Call<JsonObject> {
             return getApiInterface().userInfo(jsonObject)
+        }
+        fun restaurant_payment_method(jsonObject: JsonObject ) : Call<RestPaymentMethods.RestPayMethodModel> {
+            return getApiInterface().restaurant_payment_method(jsonObject)
         }
         fun shippingaddress_list(jsonObject: JsonObject ) : Call<EditAddress.EditaddressListModel> {
             return getApiInterface().shippingaddress_list(jsonObject)
@@ -155,8 +158,11 @@ class ApiCall {
         fun add_shippingaddress(jsonObject: JsonObject ) : Call<JsonObject> {
             return getApiInterface().add_shippingaddress(jsonObject)
         }
-        fun update_record(auth_key : String, telephone_no : String, first_name : String, eatmore_app : Boolean, email : String, id : String) : Call<JsonObject> {
-            return getApiInterface().update_record(auth_key =auth_key, telephone_no = telephone_no, first_name = first_name, eatmore_app = eatmore_app, email = email, id = id,app = Constants.RESTAURANT_FOOD_ANDROID )
+        fun update_record(auth_key : String, telephone_no : String, first_name : String, eatmore_app : Boolean, email : String, id : String ,subscribe : Int) : Call<JsonObject> {
+            return getApiInterface().update_record(auth_key =auth_key, telephone_no = telephone_no, first_name = first_name, eatmore_app = eatmore_app, email = email, id = id,app = Constants.RESTAURANT_FOOD_ANDROID,subscribe = subscribe )
+        }
+        fun delete_record(jsonObject: JsonObject ) : Call<JsonObject> {
+            return getApiInterface().delete_record(jsonObject)
         }
         fun deliveryDetails(jsonObject: JsonObject ) : Call<JsonObject> {
             return getApiInterface().deliveryDetails(jsonObject)

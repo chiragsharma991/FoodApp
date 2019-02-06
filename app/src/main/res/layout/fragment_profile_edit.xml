@@ -7,6 +7,13 @@
     <data>
 
 
+
+        <variable
+            name="subscribe"
+            type="Boolean">
+
+        </variable>
+
     </data>
 
 
@@ -159,6 +166,20 @@
                         app:layout_constraintTop_toBottomOf="@+id/telephone_txt" />
 
 
+                    <android.support.v7.widget.AppCompatCheckBox
+                        android:id="@+id/checkbox_subscribe"
+                        style="@style/Subtitle_TextViewSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="16dp"
+                        android:checked="@{subscribe}"
+                        android:text="Modtag vores nyhedsbrev."
+                        app:layout_constraintStart_toStartOf="@+id/telephone_edt"
+                        app:layout_constraintTop_toBottomOf="@+id/telephone_edt"
+
+                        />
+
+
                     <android.support.v7.widget.AppCompatButton
                         android:id="@+id/update_view"
                         style="@style/Button"
@@ -174,24 +195,38 @@
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintHorizontal_bias="0.0"
                         app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/telephone_edt"
+                        app:layout_constraintTop_toBottomOf="@+id/checkbox_subscribe"
                         app:layout_constraintVertical_bias="0.0" />
 
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/changepassword_txt"
                         style="@style/Subtitle_TextViewSmall"
+                        android:layout_height="17dp"
                         android:layout_gravity="center_vertical"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
                         android:layout_marginEnd="16dp"
-                        android:layout_marginBottom="16dp"
                         android:text="@string/change_password"
-                        android:textColor="@color/black_light"
-                        app:layout_constraintBottom_toBottomOf="parent"
+                        android:textColor="@color/theme_color"
                         app:layout_constraintEnd_toEndOf="parent"
                         app:layout_constraintStart_toStartOf="parent"
                         app:layout_constraintTop_toBottomOf="@+id/update_view" />
+
+                    <android.support.v7.widget.AppCompatTextView
+                        android:id="@+id/delete_user_txt"
+                        style="@style/Subtitle_TextViewSmall"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginStart="8dp"
+                        android:layout_marginTop="16dp"
+                        android:layout_marginEnd="8dp"
+                        android:layout_marginBottom="16dp"
+                        android:text="@string/slet_bruger"
+                        android:textColor="@color/theme_color"
+                        app:layout_constraintBottom_toBottomOf="parent"
+                        app:layout_constraintEnd_toEndOf="parent"
+                        app:layout_constraintStart_toStartOf="parent"
+                        app:layout_constraintTop_toBottomOf="@+id/changepassword_txt" />
 
 
                 </android.support.constraint.ConstraintLayout>

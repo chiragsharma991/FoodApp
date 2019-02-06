@@ -53,83 +53,78 @@
             </android.support.design.widget.AppBarLayout>
 
 
-            <android.support.v7.widget.CardView
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="@dimen/_8sdp"
-                android:elevation="0dp"
+                android:orientation="vertical"
                 >
-
                 <LinearLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:orientation="vertical"
-                    >
-                    <LinearLayout
+                    android:layout_margin="@dimen/_16sdp"
+                    android:gravity="center_vertical"
+                    android:orientation="horizontal">
+
+
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/TextViewMid"
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:layout_weight="1"
+                        android:textColor="@color/black_txt_light"
+                        android:gravity="center_horizontal"
+                        android:textStyle="normal"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:text="@{xml_profile.userName}"
+                        />
+
+
+                </LinearLayout>
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_16sdp"
+                    android:layout_marginEnd="@dimen/_16sdp"
+                    android:layout_marginBottom="@dimen/_16sdp"
+                    android:orientation="horizontal">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/SubtitleMidium_TextViewSmall"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_16sdp"
-                        android:gravity="center_vertical"
-                        android:orientation="horizontal">
-
-
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/SubtitleMidium_TextViewSmall"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="@dimen/_3sdp"
-                            android:layout_weight="1"
-                            android:gravity="center_horizontal"
-                            android:textStyle="normal"
-                            android:layout_marginRight="@dimen/_5sdp"
-                            android:text="@{xml_profile.userName}"
-                            />
-
-
-                    </LinearLayout>
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:gravity="center_vertical"
-                        android:layout_marginStart="@dimen/_16sdp"
-                        android:layout_marginEnd="@dimen/_16sdp"
-                        android:layout_marginBottom="@dimen/_16sdp"
-                        android:orientation="horizontal">
-
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/SubtitleMidium_TextViewSmall"
-                            android:layout_width="match_parent"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="@dimen/_3sdp"
-                            android:layout_weight="1"
-                            android:gravity="center_horizontal"
-                            android:textStyle="normal"
-                            android:layout_marginRight="@dimen/_5sdp"
-                            android:text="@{xml_profile.email}"
-                            />
-                        <!--      <android.support.v7.widget.AppCompatTextView
-                                  style="@style/TextViewSmall"
-                                  android:layout_gravity="center_vertical"
-                                  android:layout_width="match_parent"
-                                  android:layout_marginLeft="@dimen/_3sdp"
-                                  android:layout_weight="1"
-                                  android:layout_marginRight="@dimen/_5sdp"
-                                  android:text=""
-                                  android:textColor="@color/black_light"
-                                  />
+                        android:layout_gravity="center_vertical"
+                        android:layout_marginLeft="@dimen/_3sdp"
+                        android:layout_weight="1"
+                        android:gravity="center_horizontal"
+                        android:textStyle="normal"
+                        android:layout_marginRight="@dimen/_5sdp"
+                        android:text="@{xml_profile.email}"
+                        />
+                    <!--      <android.support.v7.widget.AppCompatTextView
+                              style="@style/TextViewSmall"
+                              android:layout_gravity="center_vertical"
+                              android:layout_width="match_parent"
+                              android:layout_marginLeft="@dimen/_3sdp"
+                              android:layout_weight="1"
+                              android:layout_marginRight="@dimen/_5sdp"
+                              android:text=""
+                              android:textColor="@color/black_light"
+                              />
 -->
-
-                    </LinearLayout>
-
 
                 </LinearLayout>
 
 
-            </android.support.v7.widget.CardView>
+            </LinearLayout>
+
+
+
 
 
             <android.support.v4.widget.NestedScrollView
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
+                android:layout_height="match_parent"
 
                 >
                 <LinearLayout
@@ -138,397 +133,295 @@
                     android:orientation="vertical"
                     >
 
-                    <android.support.v7.widget.CardView
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/divider_color"
+                        />
+
+                    <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:elevation="0dp"
-                        >
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            >
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_16sdp"
-                                android:gravity="center_vertical"
-                                android:onClick="@{handlers::profileInfo}"
-                                android:orientation="horizontal">
+                        android:gravity="center_vertical"
+                        android:onClick="@{handlers::profileInfo}"
+                        android:background="@color/white"
+                        android:orientation="horizontal">
 
 
-                                <android.support.v7.widget.AppCompatTextView
-                                    style="@style/SubtitleMidium_TextViewSmall"
-                                    android:id="@+id/profile_info_txt"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="@dimen/_3sdp"
-                                    android:layout_weight="1"
-                                    android:textStyle="normal"
-                                    android:layout_marginRight="@dimen/_5sdp"
-                                    android:text="Profile Info"
-                                    />
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/SubtitleMidium_TextViewSmall"
+                            android:layout_weight="1"
+                            android:textStyle="normal"
+                            android:layout_margin="@dimen/_16sdp"
+                            android:onClick="@{handlers::profileInfo}"
+                            android:text="Brugeroplysninger"
+                            />
 
 
-                            </LinearLayout>
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/divider_color"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:background="@color/white"
+                        android:orientation="horizontal">
 
 
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:alpha="0.2"
-                                android:background="@color/divider_color"
-                                />
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_16sdp"
-                                android:gravity="center_vertical"
-                                android:onClick="@{handlers::giftcart}"
-                                android:orientation="horizontal">
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/SubtitleMidium_TextViewSmall"
+                            android:layout_weight="1"
+                            android:textStyle="normal"
+                            android:layout_margin="@dimen/_16sdp"
+                            android:text="Favorit Restauranter"
+                            />
 
 
-                                <android.support.v7.widget.AppCompatTextView
-                                    style="@style/SubtitleMidium_TextViewSmall"
-                                    android:id="@+id/gift_card_txt"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="@dimen/_3sdp"
-                                    android:layout_weight="1"
-                                    android:layout_marginRight="@dimen/_5sdp"
-                                    android:textStyle="normal"
-                                    android:text="@string/giftcard"
-                                    />
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/divider_color"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:background="@color/white"
+                        android:orientation="horizontal">
 
 
-                            </LinearLayout>
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/SubtitleMidium_TextViewSmall"
+                            android:layout_weight="1"
+                            android:textStyle="normal"
+                            android:layout_margin="@dimen/_16sdp"
+                            android:text="Kundle support"
+                            />
 
 
+                    </LinearLayout>
 
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:alpha="0.2"
-                                android:background="@color/divider_color"
-                                />
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_16sdp"
-                                android:id="@+id/health_report"
-                                android:gravity="center_vertical"
-                                android:onClick="@{handlers::healthreport}"
-                                android:orientation="horizontal">
-
-
-                                <android.support.v7.widget.AppCompatTextView
-                                    style="@style/SubtitleMidium_TextViewSmall"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="@dimen/_3sdp"
-                                    android:layout_weight="1"
-                                    android:layout_marginRight="@dimen/_5sdp"
-                                    android:textStyle="normal"
-                                    android:text="Health Report"
-                                    />
-
-
-                            </LinearLayout>
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:alpha="0.2"
-                                android:background="@color/divider_color"
-                                />
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_16sdp"
-                                android:id="@+id/terms_of_services"
-                                android:gravity="center_vertical"
-                                android:onClick="@{handlers::termsofservices}"
-                                android:orientation="horizontal">
-
-
-                                <android.support.v7.widget.AppCompatTextView
-                                    style="@style/TitleRegular_TextViewSmall"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="@dimen/_3sdp"
-                                    android:layout_weight="1"
-                                    android:layout_marginRight="@dimen/_5sdp"
-                                    android:textStyle="normal"
-                                    android:text="Terms of Services"
-                                    />
-
-
-                            </LinearLayout>
-
-
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:alpha="0.2"
-                                android:background="@color/divider_color"
-                                />
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_16sdp"
-                                android:id="@+id/Opening_hours"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-
-                                <android.support.v7.widget.AppCompatTextView
-                                    style="@style/SubtitleMidium_TextViewSmall"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="@dimen/_3sdp"
-                                    android:layout_weight="1"
-                                    android:textStyle="normal"
-                                    android:layout_marginRight="@dimen/_5sdp"
-                                    android:text="@string/payment_methods"
-                                    />
-
-
-                            </LinearLayout>
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:alpha="0.2"
-                                android:background="@color/divider_color"
-                                />
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_16sdp"
-                                android:gravity="center_vertical"
-                                android:onClick="@{handlers::editaddress}"
-                                android:orientation="horizontal">
-
-
-                                <android.support.v7.widget.AppCompatTextView
-                                    style="@style/SubtitleMidium_TextViewSmall"
-                                    android:textStyle="normal"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="@dimen/_3sdp"
-                                    android:layout_weight="1"
-                                    android:layout_marginRight="@dimen/_5sdp"
-                                    android:text="@string/addresses"
-                                    />
-
-
-                            </LinearLayout>
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:alpha="0.2"
-                                android:background="@color/divider_color"
-                                />
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_16sdp"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-
-                                <android.support.v7.widget.AppCompatTextView
-                                    style="@style/SubtitleMidium_TextViewSmall"
-                                    android:layout_gravity="center_vertical"
-                                    android:textStyle="normal"
-                                    android:layout_marginLeft="@dimen/_3sdp"
-                                    android:layout_weight="1"
-                                    android:layout_marginRight="@dimen/_5sdp"
-                                    android:text="@string/customer_service"
-                                    />
-
-
-                            </LinearLayout>
-
-
-
-                        </LinearLayout>
-
-
-
-
-
-                    </android.support.v7.widget.CardView>
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/divider_color"
+                        />
 
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_16sdp"
                         android:gravity="center_vertical"
+                        android:background="@color/white"
+                        android:onClick="@{handlers::editaddress}"
                         android:orientation="horizontal">
 
 
                         <android.support.v7.widget.AppCompatTextView
-                            style="@style/TitleRegular_TextViewSmall"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="@dimen/_3sdp"
+                            style="@style/SubtitleMidium_TextViewSmall"
                             android:layout_weight="1"
-                            android:layout_marginRight="@dimen/_5sdp"
                             android:textStyle="normal"
+                            android:layout_margin="@dimen/_16sdp"
+                            android:text="Leveringsadresse(r)"
+                            />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/divider_color"
+                        />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:background="@color/white"
+                        android:orientation="horizontal">
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/SubtitleMidium_TextViewSmall"
+                            android:layout_weight="1"
+                            android:textStyle="normal"
+                            android:layout_margin="@dimen/_16sdp"
+                            android:text="Rate the App!"
+                            />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/divider_color"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:background="@color/background_light"
+                        android:orientation="horizontal">
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/SubtitleMidium_TextViewSmall"
+                            android:layout_weight="1"
+                            android:layout_margin="@dimen/_16sdp"
+                            android:onClick="@{handlers::profileInfo}"
                             android:text="APP INFO"
                             />
 
 
                     </LinearLayout>
 
-
-                    <android.support.v7.widget.CardView
+                    <View
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:elevation="0dp"
-                        >
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            >
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/divider_color"
+                        />
 
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_16sdp"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-
-                                <android.support.v7.widget.AppCompatTextView
-                                    style="@style/SubtitleMidium_TextViewSmall"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="@dimen/_3sdp"
-                                    android:id="@+id/cokkie_policy"
-                                    android:textStyle="normal"
-                                    android:layout_weight="1"
-                                    android:onClick="@{handlers::cokkie_policy}"
-                                    android:layout_marginRight="@dimen/_5sdp"
-                                    android:text="@string/cokkie_policy"
-                                    />
-
-
-                            </LinearLayout>
-
-
-
-                            <View
-                                android:layout_width="match_parent"
-                                android:layout_height="1dp"
-                                android:alpha="0.2"
-                                android:background="@color/divider_color"
-                                />
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_16sdp"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-
-                                <android.support.v7.widget.AppCompatTextView
-                                    style="@style/SubtitleMidium_TextViewSmall"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginLeft="@dimen/_3sdp"
-                                    android:layout_weight="1"
-                                    android:textStyle="normal"
-                                    android:layout_marginRight="@dimen/_5sdp"
-                                    android:text="Reset App"
-                                    />
-
-
-                            </LinearLayout>
-
-
-
-                        </LinearLayout>
-
-
-
-
-
-                    </android.support.v7.widget.CardView>
-                    <android.support.v7.widget.CardView
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginTop="@dimen/_8sdp"
-                        android:elevation="0dp"
-                        >
-                        <LinearLayout
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:orientation="vertical"
-                            android:onClick="@{handlers::signout}"
-                            >
-
-
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:layout_margin="@dimen/_16sdp"
-                                android:gravity="center_vertical"
-                                android:orientation="horizontal">
-
-
-                                <android.support.v7.widget.AppCompatTextView
-                                    style="@style/SubtitleMidium_TextViewSmall"
-                                    android:layout_gravity="center_vertical"
-                                    android:textStyle="normal"
-                                    android:layout_marginLeft="@dimen/_3sdp"
-                                    android:layout_weight="1"
-                                    android:layout_marginRight="@dimen/_5sdp"
-                                    android:text="Sign out"
-                                    />
-
-
-                            </LinearLayout>
-
-
-                        </LinearLayout>
-
-
-
-
-
-                    </android.support.v7.widget.CardView>
 
 
                     <LinearLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_margin="@dimen/_16sdp"
-                        android:gravity="center"
-                        android:orientation="vertical">
+                        android:gravity="center_vertical"
+                        android:background="@color/white"
+                        android:onClick="@{handlers::rest_pay_methods}"
+                        android:orientation="horizontal">
 
 
                         <android.support.v7.widget.AppCompatTextView
-                            style="@style/TitleRegular_TextViewSmall"
-                            android:layout_marginLeft="@dimen/_3sdp"
+                            style="@style/SubtitleMidium_TextViewSmall"
                             android:layout_weight="1"
-                            android:layout_marginRight="@dimen/_5sdp"
-                            android:text="App version 2018.07.13.release"
                             android:textStyle="normal"
+                            android:layout_margin="@dimen/_16sdp"
+                            android:text="@string/payment_methods"
                             />
 
 
                     </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/divider_color"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:background="@color/white"
+                        android:onClick="@{handlers::termsofservices}"
+                        android:orientation="horizontal">
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/SubtitleMidium_TextViewSmall"
+                            android:layout_weight="1"
+                            android:textStyle="normal"
+                            android:layout_margin="@dimen/_16sdp"
+                            android:text="Handelsbetingelser"
+                            />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/divider_color"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:background="@color/background_light"
+                        android:orientation="horizontal">
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/Subtitle_TextViewSmall"
+                            android:layout_weight="1"
+                            android:textStyle="normal"
+                            android:id="@+id/app_version"
+                            android:gravity="center_horizontal"
+                            android:text="@string/app_version"
+                            android:layout_margin="@dimen/_16sdp"
+                            android:visibility="visible"
+                            />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/divider_color"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:onClick="@{handlers::signout}"
+                        android:background="@color/white"
+                        android:orientation="horizontal">
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/SubtitleMidium_TextViewSmall"
+                            android:layout_weight="1"
+                            android:textStyle="normal"
+                            android:gravity="center_horizontal"
+                            android:textColor="@color/theme_color"
+                            android:layout_margin="@dimen/_16sdp"
+                            android:text="Logout"
+                            />
+
+
+                    </LinearLayout>
+
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/divider_color"
+                        />
+
+
+
+
+
+
 
 
 

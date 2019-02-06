@@ -76,7 +76,17 @@ class RateOrder : BaseFragment(), RatingBar.OnRatingBarChangeListener {
     }
 
     override fun onRatingChanged(ratingBar: RatingBar?, rating: Float, fromUser: Boolean) {
-        loge(TAG, "rating changed..")
+
+        val label = arrayOf("","Elendigt","Dårligt","Fint","Godt","Fremragende","Fantastisk")
+
+        if(ratingBar!!.id == quality_of_food_rating.id){
+            qty_remark.text= if(rating.toInt() > 0) String.format(getString(R.string.rate_label),label[rating.toInt()]) else ""
+        }else if(ratingBar.id == customer_service_rating.id){
+            customer_service_remark.text= if(rating.toInt() > 0) String.format(getString(R.string.rate_label),label[rating.toInt()]) else ""
+        }else if(ratingBar.id == delivery_time_rating.id){
+            delivery_time_remark.text= if(rating.toInt() > 0) String.format(getString(R.string.rate_label),label[rating.toInt()]) else ""
+        }
+
         if ((quality_of_food_rating.rating.toInt() > 0) && (delivery_time_rating.rating.toInt() > 0) && (customer_service_rating.rating.toInt() > 0)) {
             rate_btn.alpha = 1.0f
             rate_btn.isEnabled = true

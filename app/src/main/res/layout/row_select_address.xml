@@ -9,12 +9,17 @@
     <data>
 
         <import type="android.view.View">
+
         </import>
 
         <variable
             name="editaddressListModel"
             type="dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.EditAddress.Messages">
         </variable>
+
+        <variable
+            name="myClickHandler"
+            type="dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.SelectAddress.MyClickHandler" />
 
 
     </data>
@@ -24,53 +29,173 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:orientation="vertical"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
         >
         <android.support.v7.widget.CardView
             style="@style/CardViewStyle"
             android:id="@+id/row_contain"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:layout_marginTop="@dimen/_8sdp"
             >
-            <RelativeLayout
+
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_8sdp"
+                android:orientation="horizontal"
                 >
 
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/SubtitleMidium_TextViewSmall"
-                    android:id="@+id/fst_txt"
-                    android:layout_gravity="center_vertical"
-                    android:text="@{editaddressListModel.address_title}"
-                    android:singleLine="true"
-                    />
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/Subtitle_TextViewSmall"
-                    android:id="@+id/sec_txt"
-                    android:layout_below="@+id/fst_txt"
-                    android:layout_gravity="center_vertical"
-                    android:text="@{@string/streethousefloor(editaddressListModel.street,editaddressListModel.house_no,editaddressListModel.floor_door)}"
-                    android:singleLine="true"
-                    />
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/Subtitle_TextViewSmall"
-                    android:id="@+id/third_txt"
-                    android:layout_below="@+id/sec_txt"
-                    android:layout_gravity="center_vertical"
-                    android:text="@{@string/postalcity(editaddressListModel.postal_code,editaddressListModel.city)}"
-                    android:singleLine="true"
-                    />
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="1"
+                    android:layout_margin="@dimen/_8sdp"
+                    android:layout_height="match_parent">
+
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/SubtitleMidium_TextViewSmall"
+                        android:id="@+id/fst_txt"
+                        android:layout_gravity="center_vertical"
+                        android:text="@{editaddressListModel.address_title}"
+                        android:singleLine="true"
+                        />
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/Subtitle_TextViewSmall"
+                        android:id="@+id/sec_txt"
+                        android:layout_below="@+id/fst_txt"
+                        android:layout_gravity="center_vertical"
+                        android:text="@{@string/streethousefloor(editaddressListModel.street,editaddressListModel.house_no,editaddressListModel.floor_door)}"
+                        />
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/Subtitle_TextViewSmall"
+                        android:id="@+id/third_txt"
+                        android:layout_below="@+id/sec_txt"
+                        android:layout_gravity="center_vertical"
+                        android:text="@{@string/postalcity(editaddressListModel.postal_code,editaddressListModel.city)}"
+                        />
 
 
+                </RelativeLayout>
+                <RelativeLayout
+                    android:layout_width="0dp"
+                    android:layout_weight="0.3"
+                    android:layout_height="match_parent">
 
-                <!--    <RadioButton
+                    <LinearLayout
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_alignParentRight="true"
                         android:layout_centerVertical="true"
+                        android:orientation="vertical"
+                        android:padding="@dimen/_8sdp"
+                        android:clickable="true"
+                        android:layout_alignParentTop="true"
+                        android:layout_centerHorizontal="true"
+                        >
 
-                        />-->
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/Subtitle_TextViewSmall"
+                            android:layout_below="@+id/fst_txt"
+                            android:layout_gravity="start"
+                            android:text="Edit"
+                            android:singleLine="true"
+                            android:onClick="@{(v) -> myClickHandler.editAddress(v,editaddressListModel)}"
+                            android:textColor="@color/dark_blue"
+                            />
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/Subtitle_TextViewSmall"
+                            android:layout_below="@+id/sec_txt"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_gravity="start"
+                            android:text="Delete"
+                            android:onClick="@{(v) -> myClickHandler.deleteAddress(v,editaddressListModel)}"
+                            android:singleLine="true"
+                            android:textColor="@color/theme_color"
+                            />
 
 
-            </RelativeLayout>
+                    </LinearLayout>
+
+                </RelativeLayout>
+
+            </LinearLayout>
+
+            <!--
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="wrap_content"
+                            android:layout_margin="@dimen/_8sdp"
+
+                            >
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/SubtitleMidium_TextViewSmall"
+                                android:id="@+id/fst_txt"
+                                android:layout_gravity="center_vertical"
+                                android:text="@{editaddressListModel.address_title}"
+                                android:singleLine="true"
+                                />
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/Subtitle_TextViewSmall"
+                                android:id="@+id/sec_txt"
+                                android:layout_below="@+id/fst_txt"
+                                android:layout_gravity="center_vertical"
+                                android:text="@{@string/streethousefloor(editaddressListModel.street,editaddressListModel.house_no,editaddressListModel.floor_door)}"
+                                android:singleLine="true"
+                                />
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/Subtitle_TextViewSmall"
+                                android:id="@+id/third_txt"
+                                android:layout_below="@+id/sec_txt"
+                                android:layout_gravity="center_vertical"
+                                android:text="@{@string/postalcity(editaddressListModel.postal_code,editaddressListModel.city)}"
+                                android:singleLine="true"
+                                />
+
+                            <LinearLayout
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_alignParentRight="true"
+                                android:layout_centerVertical="true"
+                                android:orientation="vertical"
+                                >
+
+                                <android.support.v7.widget.AppCompatTextView
+                                    style="@style/Subtitle_TextViewSmall"
+                                    android:layout_below="@+id/fst_txt"
+                                    android:layout_gravity="start"
+                                    android:text="Edit"
+                                    android:singleLine="true"
+                                    android:onClick="@{(v) -> myClickHandler.editAddress(v,editaddressListModel)}"
+                                    android:textColor="@color/dark_blue"
+                                    />
+                                <android.support.v7.widget.AppCompatTextView
+                                    style="@style/Subtitle_TextViewSmall"
+                                    android:layout_below="@+id/sec_txt"
+                                    android:layout_marginTop="@dimen/_5sdp"
+                                    android:layout_gravity="start"
+                                    android:text="Delete"
+                                    android:onClick="@{(v) -> myClickHandler.deleteAddress(v,editaddressListModel)}"
+                                    android:singleLine="true"
+                                    android:textColor="@color/theme_color"
+                                    />
+
+
+                            </LinearLayout>
+
+
+                            &lt;!&ndash;    <RadioButton
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content"
+                                    android:layout_alignParentRight="true"
+                                    android:layout_centerVertical="true"
+
+                                    />&ndash;&gt;
+
+
+                        </RelativeLayout>
+            -->
+
+
+
 
 
         </android.support.v7.widget.CardView>

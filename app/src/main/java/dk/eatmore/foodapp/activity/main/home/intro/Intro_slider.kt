@@ -22,6 +22,8 @@ import android.support.v4.view.ViewPager
 import android.view.WindowManager
 import android.view.ViewGroup
 import android.content.Context.LAYOUT_INFLATER_SERVICE
+import android.content.pm.PackageManager
+import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
 import android.support.v4.view.PagerAdapter
 import com.bumptech.glide.Glide
@@ -33,6 +35,8 @@ import com.bumptech.glide.request.target.Target
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.intro.Intro_slider.MyViewPagerAdapter
 import dk.eatmore.foodapp.storage.PreferenceUtil
+import dk.eatmore.foodapp.utils.Constants
+import dk.eatmore.foodapp.utils.DialogUtils
 import kotlinx.android.synthetic.main.intro_slide1.*
 import kotlinx.android.synthetic.main.intro_slide1.view.*
 import java.util.ArrayList
@@ -118,6 +122,20 @@ class Intro_slider : BaseActivity(){
         override fun onPageSelected(position: Int) {
             addBottomDots(position)
 
+            if(position== 1){
+                is_location_PermissionGranted()
+            }else if(position ==2){
+                DialogUtils.openDialogDefault(context = this@Intro_slider,btnNegative = "DENY",btnPositive = "ALLOW",
+                        color = ContextCompat.getColor(this@Intro_slider, R.color.default_permission),msg ="Notification may include alerts,sound and icon badges.This can be configured in settings",
+                        title = "EatMore Would Like To Send You Notifications",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                    override fun onPositiveButtonClick(position: Int) {
+
+                    }
+                    override fun onNegativeButtonClick() {
+                    }
+                })
+            }
+
             // changing the next button text 'NEXT' / 'GOT IT' (2=2)
             if (position == slider_layouts.size - 1) {
                 // last page. make button text to GOT IT
@@ -139,12 +157,22 @@ class Intro_slider : BaseActivity(){
         }
     }
 
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        // result from permission only
+        loge(TAG, "permission result---"+requestCode)
+        when (requestCode) {
+            1 -> {
+
+                return
+            }
+        }
+    }
+
     private fun getItem(i: Int): Int {
         return view_pager.getCurrentItem() + i
     }
 
     private fun launchHomeScreen() {
-        loge(TAG,"launchHomeScreen")
         startActivity(Intent(this, HomeActivity::class.java))
         finish()
     }
@@ -159,7 +187,6 @@ class Intro_slider : BaseActivity(){
 
     override fun setVisible(visible: Boolean) {
         super.setVisible(visible)
-        loge(TAG,"setVisible"+visible)
     }
 
     private fun addBottomDots(currentPage: Int) {
@@ -188,7 +215,6 @@ class Intro_slider : BaseActivity(){
         private var layoutInflater: LayoutInflater? = null
 
         override fun instantiateItem(container: ViewGroup, position: Int): Any {
-            loge(TAG,"instantiateItem")
             layoutInflater = getSystemService(LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val view = layoutInflater!!.inflate(slider_layouts[position], container, false)
             Glide.with(this@Intro_slider).asGif()
@@ -208,7 +234,6 @@ class Intro_slider : BaseActivity(){
 
 
         override fun isViewFromObject(view: View, obj: Any): Boolean {
-            loge(TAG,"isViewFromObject")
             return view === obj
         }
 

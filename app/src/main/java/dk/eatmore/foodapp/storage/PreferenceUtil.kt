@@ -28,7 +28,6 @@ object PreferenceUtil {
         if (sharedPreferences == null) {
             sharedPreferences = PreferenceManager.getDefaultSharedPreferences(mcontext)
             editor = sharedPreferences!!.edit()
-            Log.e("Splash","first time pref"+ getBoolean(PreferenceUtil.CLOSE_INTRO_SLIDE,false))
         }
     }
 
@@ -150,6 +149,7 @@ object PreferenceUtil {
     val PHONE = "keep_screen_on"
     val LOGIN_FROM = "login_from"
     val KSTATUS = "kStatus"
+    val SUBSCRIBE = "subscribe"
 
 
 }

@@ -31,11 +31,14 @@ data class Restaurant(
         val restaurant_name: String = "",
         val restaurant_id: String = "",
         var is_fav : Boolean = false,
+        var fav_progress : Boolean = false,
         val minimum_order_price: String? = null,
-        val opening_title: String = "", //null
-        val time: String = "", //null
+        val opening_title: String = "",
+        val time: String = "",
         val address: String = "",
         val city: String = "",
+        val delivery_text: String = "",
+        val pickup_text: String = "",
         val is_new: String = "",
         val cuisines: String = "",
         val cuisines_list : ArrayList<String> = arrayListOf(),

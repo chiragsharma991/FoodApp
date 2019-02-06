@@ -15,7 +15,7 @@
     <string name="order_now">Order now</string>
     <string name="orders">Orders</string>
     <string name="your_orders">Dine ordre</string>
-    <string name="my_profile">Account</string>
+    <string name="my_profile">Indstillinger</string>
     <string name="menu">Menu</string>
     <string name="rating">Rating</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
@@ -86,8 +86,8 @@
     <string name="login_to_continue">Login to continue</string>
     <string name="are_you_sure_would">Would you like to logout?</string>
     <string name="logout">Logout</string>
-    <string name="no">NO</string>
-    <string name="yes">YES</string>
+    <string name="no">Nej</string>
+    <string name="yes">Ja</string>
     <string name="are_you_sure_to_delete">Are you sure to delete ?</string>
     <string name="item_has_been">Item has been successfully added !</string>
     <string name="pickup">pickup</string>
@@ -116,8 +116,8 @@
     <string name="na">N/A</string>
     <string name="fulladdress">%1$s %2$s %3$s %4$s %5$s</string>
     <string name="apply_coupon">Apply Coupon</string>
-    <string name="online_payment">Online payment</string>
-    <string name="cash_payment">Cash payment</string>
+    <string name="online_payment">Online betaling</string>
+    <string name="cash_payment">Kontant betaling</string>
     <string name="how_do_you_want_to_pay">How do you want to pay?</string>
     <string name="apply">Apply</string>
     <string name="discount">- %1$s</string>
@@ -128,10 +128,10 @@
     <string name="pay">Pay</string>
     <string name="basket">Cart</string>
     <string name="info">Info</string>
-    <string name="payment">Payment</string>
+    <string name="payment">Betalingsmetoder</string>
     <string name="confirm_delivery_time">Confirm delivery time</string>
     <string name="giftcard">Giftcard</string>
-    <string name="payment_methods">Payment Methods</string>
+    <string name="payment_methods">Betalingsmetoder</string>
     <string name="addresses">Addresses</string>
     <string name="customer_service">Customer service</string>
     <string name="rate_the_app">Rate the App!</string>
@@ -142,7 +142,7 @@
     <string name="help">Help</string>
     <string name="health_report">Health Report</string>
     <string name="profile_info">User Profile</string>
-    <string name="terms_of_services">Terms of services</string>
+    <string name="terms_of_services">Handelsbetingelser</string>
     <string name="edit_address">Edit Address</string>
     <string name="telephone_number">Telephone number</string>
     <string name="update">Update</string>
@@ -161,7 +161,7 @@
     <string name="rate_it_exclaim">Rate it!</string>
     <string name="ordre_under_behandling">Ordre under process</string>
     <string name="no_entry_found_for_address">No entry found for address.</string>
-    <string name="change">Change</string>
+    <string name="change">Vælg adresse</string>
     <string name="sorry_restaurant_has_been_closed">Sorry Restaurant has been closed.</string>
     <string name="order_eat_amp_njoy"><![CDATA[Order, Eat & Njoy!]]></string>
     <string name="bestil_din_take_away_mad_online">Bestil din take away mad online</string>
@@ -204,5 +204,9 @@
     <string name="order_accept_date">%1$s -kl. %2$s</string>
     <string name="fjern_favorit">Fjern favorit</string>
     <string name="markere_som_favorit">Markere som favorit</string>
+    <string name="vil_du_fjerne">Vil du fjerne?</string>
+    <string name="brug_for_hjælp">Brug for hjælp? kontakt vores kundeservicecenter pa 73702515</string>
+    <string name="app_version">App version v%1$s_%2$s</string>
+    <string name="slet_bruger">Slet bruger</string>
 
 </resources>

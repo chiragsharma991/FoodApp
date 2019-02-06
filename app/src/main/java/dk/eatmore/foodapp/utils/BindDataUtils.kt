@@ -146,7 +146,7 @@ object BindDataUtils {
     }
     fun parsewithoutTimeToddMMyyyy(time:String):String {
         val inputPattern = "yyyy-MM-dd HH:mm:ss"
-        val outputPattern = "dd-MMM-yyyy"
+        val outputPattern = "dd-MM-yyyy"
      //   val outputPattern = "dd-MMM-yyyy h:mm a"
         val inputFormat = SimpleDateFormat(inputPattern)
         val outputFormat = SimpleDateFormat(outputPattern)

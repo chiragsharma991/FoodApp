@@ -105,7 +105,7 @@ class Splash : BaseActivity() {
     private fun screenPlay() {
         Handler().postDelayed({
 
-            showComponents()
+          //  showComponents()
 
             Handler().postDelayed({
                 val anim = ScaleAnimation(0.0f, 1.0f, 1.0f, 1.0f, Animation.RELATIVE_TO_SELF, 0.5f, Animation.RELATIVE_TO_SELF, 0.5f);

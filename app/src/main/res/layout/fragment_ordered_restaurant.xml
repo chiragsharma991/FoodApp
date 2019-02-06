@@ -341,7 +341,7 @@
 
                                         <RelativeLayout
                                             android:layout_width="match_parent"
-                                            android:layout_height="@dimen/_40sdp"
+                                            android:layout_height="match_parent"
                                             >
                                             <android.support.v7.widget.AppCompatTextView
                                                 android:id="@+id/order_status_txt"
@@ -376,7 +376,7 @@
                                             android:layout_marginTop="@dimen/_8sdp"
                                             android:visibility="@{data.accept_reject_time == null ? View.GONE : View.VISIBLE}"
                                             android:layout_height="wrap_content"
-                                            android:text="@{data.accept_reject_time == null ? `` : util.parsewithoutTimeToddMMyyyy(data.accept_reject_time)+` -kl. `+util.parseTimeToHHmm(data.accept_reject_time)}"
+                                            android:text="@{data.pickup_delivery_time == null ? `` : util.parsewithoutTimeToddMMyyyy(data.pickup_delivery_time)+` -kl. `+util.parseTimeToHHmm(data.pickup_delivery_time)}"
                                             />
 
                                     </LinearLayout>

@@ -7,7 +7,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:id="@+id/editaddress_container"
-        android:background="@color/background_light"
+        android:background="@color/white"
         android:clickable="true"
         android:focusable="true"
         android:layout_height="match_parent">
@@ -41,8 +41,12 @@
                     android:id="@+id/recycler_view"
                     android:clipToPadding="false"
                     android:layout_below="@+id/appbar"
+                    android:paddingTop="@dimen/_8sdp"
+                    android:paddingBottom="@dimen/_8sdp"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:layout_height="match_parent"
+
+                    />
 
 
 

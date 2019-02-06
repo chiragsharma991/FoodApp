@@ -1,14 +1,25 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout xmlns:tools="http://schemas.android.com/tools"
+<layout
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:bind="http://schemas.android.com/apk/res/android"
     >
 
     <data>
 
+        <import type="android.view.View">
+
+        </import>
+
         <variable
             name="handlers"
             type="dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.AccountFragment.MyClickHandler">
+
+        </variable>
+
+        <variable
+            name="view_is_setting"
+            type="Boolean">
 
         </variable>
 
@@ -56,165 +67,199 @@
 
                     </android.support.design.widget.AppBarLayout>
 
-
-
-                    <android.support.v4.widget.NestedScrollView
+                    <FrameLayout
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
-                        android:background="@color/background_light"
                         android:layout_below="@+id/appbar"
+                        android:animateLayoutChanges="false"
+
                         >
-                        <RelativeLayout
+                        <FrameLayout
                             android:layout_width="match_parent"
                             android:layout_height="match_parent"
-
+                            android:id="@+id/account_login_view"
+                            android:visibility="@{view_is_setting ? View.GONE : View.VISIBLE}"
                             >
-                            <com.facebook.login.widget.LoginButton
-                                android:id="@+id/login_buttonUser"
-                                android:layout_width="wrap_content"
-                                android:layout_height="wrap_content"
-                                android:visibility="gone" />
-
-                            <android.support.constraint.ConstraintLayout
+                            <android.support.v4.widget.NestedScrollView
                                 android:layout_width="match_parent"
                                 android:layout_height="match_parent"
-                                android:layout_alignParentBottom="true"
-                                android:layout_alignParentStart="true">
-
-                                <!--     <android.support.constraint.Guideline
-                                    android:id="@+id/guideline7"
-                                    android:layout_width="wrap_content"
-                                    android:layout_height="wrap_content"
-                                    android:orientation="horizontal" />-->
-
-                                <android.support.v7.widget.AppCompatEditText
-                                    android:id="@+id/acc_email_edt"
-                                    style="@style/EditText"
-                                    android:layout_marginEnd="8dp"
-                                    android:layout_marginStart="8dp"
-                                    android:layout_marginTop="8dp"
-                                    android:textAppearance="?android:attr/textAppearanceSmall"
-                                    android:background="@color/white"
-                                    android:hint="@string/email"
-                                    android:inputType="textEmailAddress"
-                                    android:singleLine="true"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toTopOf="parent">
-
-                                </android.support.v7.widget.AppCompatEditText>
-
-                                <android.support.v7.widget.AppCompatEditText
-                                    android:id="@+id/acc_password_edt"
-                                    style="@style/EditText"
-                                    android:layout_marginEnd="8dp"
-                                    android:layout_marginStart="8dp"
-                                    android:layout_marginTop="8dp"
-                                    android:background="@color/white"
-                                    android:inputType="textPassword"
-                                    android:singleLine="true"
-                                    android:textAppearance="?android:attr/textAppearanceSmall"
-                                    android:hint="@string/password"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintHorizontal_bias="1.0"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/acc_email_edt">
-
-                                </android.support.v7.widget.AppCompatEditText>
-
-                                <android.support.v7.widget.AppCompatButton
-                                    android:id="@+id/acc_login_btn"
-                                    style="@style/Button"
-                                    android:layout_alignParentBottom="true"
-                                    android:layout_marginEnd="8dp"
-                                    android:layout_marginStart="8dp"
-                                    android:layout_marginTop="8dp"
-                                    android:backgroundTint="@color/theme_color"
-                                    android:text="@string/login"
-                                    android:textColor="@color/white"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/acc_password_edt" />
-
-
-                                <android.support.v7.widget.AppCompatTextView
-                                    android:id="@+id/acc_forgot_txt"
-                                    style="@style/Subtitle_TextViewSmall"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginTop="16dp"
-                                    android:text="@string/forgot_password"
-                                    android:textColor="@color/black_light"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/acc_login_btn" />
-
-                                <View
-                                    android:id="@+id/view"
+                                android:background="@color/background_light"
+                                >
+                                <RelativeLayout
                                     android:layout_width="match_parent"
-                                    android:layout_height="1dp"
-                                    android:layout_marginEnd="16dp"
-                                    android:layout_marginStart="16dp"
-                                    android:layout_marginTop="16dp"
-                                    android:alpha="0.2"
-                                    android:background="@color/divider_color"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/acc_forgot_txt" />
+                                    android:layout_height="match_parent"
+
+                                    >
+                                    <com.facebook.login.widget.LoginButton
+                                        android:id="@+id/login_buttonUser"
+                                        android:layout_width="wrap_content"
+                                        android:layout_height="wrap_content"
+                                        android:visibility="gone" />
+
+                                    <android.support.constraint.ConstraintLayout
+                                        android:layout_width="match_parent"
+                                        android:layout_height="match_parent"
+                                        android:layout_alignParentBottom="true"
+                                        android:layout_alignParentStart="true">
+
+                                        <!--     <android.support.constraint.Guideline
+                                            android:id="@+id/guideline7"
+                                            android:layout_width="wrap_content"
+                                            android:layout_height="wrap_content"
+                                            android:orientation="horizontal" />-->
+
+                                        <android.support.v7.widget.AppCompatEditText
+                                            android:id="@+id/acc_email_edt"
+                                            style="@style/EditText"
+                                            android:layout_marginEnd="8dp"
+                                            android:layout_marginStart="8dp"
+                                            android:layout_marginTop="8dp"
+                                            android:textAppearance="?android:attr/textAppearanceSmall"
+                                            android:background="@color/white"
+                                            android:hint="@string/email"
+                                            android:inputType="textEmailAddress"
+                                            android:singleLine="true"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toTopOf="parent">
+
+                                        </android.support.v7.widget.AppCompatEditText>
+
+                                        <android.support.v7.widget.AppCompatEditText
+                                            android:id="@+id/acc_password_edt"
+                                            style="@style/EditText"
+                                            android:layout_marginEnd="8dp"
+                                            android:layout_marginStart="8dp"
+                                            android:layout_marginTop="8dp"
+                                            android:background="@color/white"
+                                            android:inputType="textPassword"
+                                            android:singleLine="true"
+                                            android:textAppearance="?android:attr/textAppearanceSmall"
+                                            android:hint="@string/password"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintHorizontal_bias="1.0"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toBottomOf="@+id/acc_email_edt">
+
+                                        </android.support.v7.widget.AppCompatEditText>
+
+                                        <android.support.v7.widget.AppCompatButton
+                                            android:id="@+id/acc_login_btn"
+                                            style="@style/Button"
+                                            android:layout_alignParentBottom="true"
+                                            android:layout_marginEnd="8dp"
+                                            android:layout_marginStart="8dp"
+                                            android:layout_marginTop="8dp"
+                                            android:backgroundTint="@color/theme_color"
+                                            android:text="@string/login"
+                                            android:textColor="@color/white"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toBottomOf="@+id/acc_password_edt" />
 
 
-                                <android.support.v7.widget.AppCompatButton
-                                    style="@style/Button"
-                                    android:id="@+id/acc_fb_btn"
-                                    android:layout_gravity="top"
-                                    android:layout_marginTop="16dp"
-                                    android:backgroundTint="@color/facebook"
-                                    android:layout_marginEnd="8dp"
-                                    android:layout_marginStart="8dp"
-                                    android:scaleType="fitXY"
-                                    android:text="Facebook"
-                                    android:onClick="@{handlers::facebookSign}"
-                                    app:layout_constraintEnd_toStartOf="@+id/acc_google_btn"
-                                    app:layout_constraintHorizontal_bias="0.5"
-                                    app:layout_constraintHorizontal_chainStyle="spread"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/view" />
+                                        <android.support.v7.widget.AppCompatTextView
+                                            android:id="@+id/acc_forgot_txt"
+                                            style="@style/Subtitle_TextViewSmall"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginTop="16dp"
+                                            android:text="@string/forgot_password"
+                                            android:textColor="@color/black_light"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toBottomOf="@+id/acc_login_btn" />
 
-                                <android.support.v7.widget.AppCompatImageView
-                                    android:id="@+id/acc_google_btn"
-                                    android:layout_width="@dimen/_30sdp"
-                                    android:layout_height="@dimen/_30sdp"
-                                    android:layout_gravity="top"
-                                    android:layout_marginTop="16dp"
-                                    android:visibility="gone"
-                                    android:scaleType="fitXY"
-                                    android:onClick="@{handlers::googleSign}"
-                                    android:src="@mipmap/google"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintHorizontal_bias="0.5"
-                                    app:layout_constraintStart_toEndOf="@+id/acc_fb_btn"
-                                    app:layout_constraintTop_toBottomOf="@+id/view" />
-
-                                <android.support.v7.widget.AppCompatTextView
-                                    android:id="@+id/acc_signup_txt"
-                                    style="@style/Subtitle_TextViewSmall"
-                                    android:layout_gravity="center_vertical"
-                                    android:layout_marginTop="@dimen/_32sdp"
-                                    android:layout_marginBottom="@dimen/_32sdp"
-                                    android:text="@string/new_to_eatmore_sign_up"
-                                    android:textColor="@color/black_light"
-                                    app:layout_constraintBottom_toBottomOf="parent"
-                                    app:layout_constraintEnd_toEndOf="parent"
-                                    app:layout_constraintHorizontal_bias="0.501"
-                                    app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/acc_fb_btn" />
+                                        <View
+                                            android:id="@+id/view"
+                                            android:layout_width="match_parent"
+                                            android:layout_height="1dp"
+                                            android:layout_marginEnd="16dp"
+                                            android:layout_marginStart="16dp"
+                                            android:layout_marginTop="16dp"
+                                            android:alpha="0.2"
+                                            android:background="@color/divider_color"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toBottomOf="@+id/acc_forgot_txt" />
 
 
-                            </android.support.constraint.ConstraintLayout>
+                                        <android.support.v7.widget.AppCompatButton
+                                            style="@style/Button"
+                                            android:id="@+id/acc_fb_btn"
+                                            android:layout_gravity="top"
+                                            android:layout_marginTop="16dp"
+                                            android:backgroundTint="@color/facebook"
+                                            android:layout_marginEnd="8dp"
+                                            android:layout_marginStart="8dp"
+                                            android:scaleType="fitXY"
+                                            android:text="Facebook"
+                                            android:onClick="@{handlers::facebookSign}"
+                                            app:layout_constraintEnd_toStartOf="@+id/acc_google_btn"
+                                            app:layout_constraintHorizontal_bias="0.5"
+                                            app:layout_constraintHorizontal_chainStyle="spread"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toBottomOf="@+id/view" />
 
-                        </RelativeLayout>
+                                        <android.support.v7.widget.AppCompatImageView
+                                            android:id="@+id/acc_google_btn"
+                                            android:layout_width="@dimen/_30sdp"
+                                            android:layout_height="@dimen/_30sdp"
+                                            android:layout_gravity="top"
+                                            android:layout_marginTop="16dp"
+                                            android:visibility="gone"
+                                            android:scaleType="fitXY"
+                                            android:onClick="@{handlers::googleSign}"
+                                            android:src="@mipmap/google"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintHorizontal_bias="0.5"
+                                            app:layout_constraintStart_toEndOf="@+id/acc_fb_btn"
+                                            app:layout_constraintTop_toBottomOf="@+id/view" />
+
+                                        <android.support.v7.widget.AppCompatTextView
+                                            android:id="@+id/acc_signup_txt"
+                                            style="@style/Subtitle_TextViewSmall"
+                                            android:layout_gravity="center_vertical"
+                                            android:layout_marginTop="@dimen/_32sdp"
+                                            android:layout_marginBottom="@dimen/_32sdp"
+                                            android:text="@string/new_to_eatmore_sign_up"
+                                            android:textColor="@color/black_light"
+                                            app:layout_constraintBottom_toBottomOf="parent"
+                                            app:layout_constraintEnd_toEndOf="parent"
+                                            app:layout_constraintHorizontal_bias="0.501"
+                                            app:layout_constraintStart_toStartOf="parent"
+                                            app:layout_constraintTop_toBottomOf="@+id/acc_fb_btn" />
 
 
-                    </android.support.v4.widget.NestedScrollView>
+                                    </android.support.constraint.ConstraintLayout>
+
+                                </RelativeLayout>
+
+
+                            </android.support.v4.widget.NestedScrollView>
+
+                        </FrameLayout>
+                        <FrameLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/account_setting_view"
+                            android:visibility="@{view_is_setting ? View.VISIBLE : View.GONE}"
+                            >
+
+                            <include layout="@layout/account_setting"
+                                bind:handlers="@{handlers}"
+
+                                >
+
+                            </include>
+
+
+                        </FrameLayout>
+
+
+
+
+                    </FrameLayout>
+
 
 
 

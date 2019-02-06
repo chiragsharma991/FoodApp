@@ -325,11 +325,15 @@ class TransactionStatus : CommanAPI() {
                 val jsonObject = body as JsonObject
                 // check_order api responce
                 var accept_reject_time=""
+                var pickup_delivery_time=""
                 var reject_reason=""
                 val order_status = jsonObject.get(Constants.ORDER_STATUS).asString
                 val payment_status = jsonObject.get(Constants.PAYMENT_STATUS).asString
                 if(jsonObject.has(Constants.ACCEPT_REJECT_TIME)){
                     accept_reject_time = if (jsonObject.get(Constants.ACCEPT_REJECT_TIME).isJsonNull) "" else jsonObject.get(Constants.ACCEPT_REJECT_TIME).asString
+                }
+                if(jsonObject.has(Constants.PICKUP_DELIVERY_TIME)){
+                    pickup_delivery_time = if (jsonObject.get(Constants.PICKUP_DELIVERY_TIME).isJsonNull) "" else jsonObject.get(Constants.PICKUP_DELIVERY_TIME).asString
                 }
                 if(jsonObject.has(Constants.REJECT_REASON)){
                     reject_reason = if(jsonObject.get(Constants.REJECT_REASON).isJsonNull) "" else jsonObject.get(Constants.REJECT_REASON).asString
@@ -365,10 +369,10 @@ class TransactionStatus : CommanAPI() {
 
                             } else if (order_status.toLowerCase() == Constants.ACCEPTED) {
                                 order_progress_text.text = "Ordre accepteret til"
-                                if (accept_reject_time.length > 0) {
+                                if (pickup_delivery_time.length > 0) {
                                     order_accepted_time.visibility = View.VISIBLE
-                                    order_accepted_time.text = accept_reject_time
-                                    order_accepted_time.text = String.format(getString(R.string.order_accept_date),BindDataUtils.parsewithoutTimeToddMMyyyy(accept_reject_time),BindDataUtils.parseTimeToHHmm(accept_reject_time))
+                                    //order_accepted_time.text = pickup_delivery_time
+                                    order_accepted_time.text = String.format(getString(R.string.order_accept_date),BindDataUtils.parsewithoutTimeToddMMyyyy(pickup_delivery_time),BindDataUtils.parseTimeToHHmm(pickup_delivery_time))
                                 }else{
                                     order_accepted_time.visibility = View.GONE
                                 }
@@ -403,12 +407,12 @@ class TransactionStatus : CommanAPI() {
                 when (error) {
                     404 -> {
                         // showSnackBar(containerview, getString(R.string.error_404))
-                        loge(TAG,getString(R.string.error_404))
+                     //   loge(TAG,getString(R.string.error_404))
 
                     }
                     100 -> {
                         // showSnackBar(containerview, getString(R.string.internet_not_available))
-                        loge(TAG,getString(R.string.internet_not_available))
+                      //  loge(TAG,getString(R.string.internet_not_available))
                     }
                 }
             }
@@ -679,7 +683,7 @@ class TransactionStatus : CommanAPI() {
             0 -> {
 
                 if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" + "88826543"))
+                    val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" +EpayFragment.paymentattributes.restaurant_phone.trim()))
                     startActivity(intent)
                     //    Toast.makeText(this, getString(R.string.permission_granted), Toast.LENGTH_SHORT).show()
                 } else {
@@ -715,8 +719,15 @@ class TransactionStatus : CommanAPI() {
         postParam.addProperty(Constants.RESTAURANT_ID,EpayFragment.paymentattributes.restaurant_id)
         if(EpayFragment.paymentattributes.is_fav){
             // unfavourite--
-            call_favorite = ApiCall.remove_favorite_restaurant(jsonObject = postParam)
-            remove_favorite_restaurant(call_favorite!!,null)
+            DialogUtils.openDialog(context = context!!,btnNegative = getString(R.string.no) , btnPositive = getString(R.string.yes),color = ContextCompat.getColor(context!!, R.color.theme_color),msg = getString(R.string.vil_du_fjerne),title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                override fun onPositiveButtonClick(position: Int) {
+                    call_favorite = ApiCall.remove_favorite_restaurant(jsonObject = postParam)
+                    remove_favorite_restaurant(call_favorite!!,null)
+                }
+                override fun onNegativeButtonClick() {
+                }
+            })
+
         }else{
             // favourite---
             call_favorite = ApiCall.add_favorite_restaurant(jsonObject = postParam)

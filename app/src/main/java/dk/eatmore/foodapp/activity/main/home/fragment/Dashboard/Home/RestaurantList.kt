@@ -10,6 +10,7 @@ import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.LinearLayoutManager
 import android.text.Editable
 import android.text.TextWatcher
@@ -38,6 +39,7 @@ import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
+import dk.eatmore.foodapp.utils.DialogUtils
 import dk.eatmore.foodapp.utils.RecyclerSectionItemDecoration
 import kotlinx.android.synthetic.main.restaurantlist.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -110,7 +112,6 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
             }
         } else {
             logd(TAG, "saveInstance NOT NULL")
-
         }
 
     }
@@ -399,7 +400,8 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
                             if (progress_bar.visibility == View.VISIBLE || list.get(parentPosition).ordertype == getString(R.string.notavailable)) return
                             val fragment = DetailsFragment.newInstance(
                                     restaurant = list.get(parentPosition).restaurant.get(chilPosition),
-                                    status = list.get(parentPosition).status
+                                    status = list.get(parentPosition).status,
+                                    ordertype = list.get(parentPosition).ordertype
                             )
                             var enter: Slide? = null
                             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -427,10 +429,22 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
                             postParam.addProperty(Constants.RESTAURANT_ID,list[parentPosition].restaurant[chilPosition].restaurant_id)
                             if(list[parentPosition].restaurant[chilPosition].is_fav){
                                 // unfavourite--
-                                call_favorite = ApiCall.add_favorite_restaurant(jsonObject = postParam)
-                                remove_favorite_restaurant(call_favorite!!,list[parentPosition].restaurant[chilPosition])
+
+                                DialogUtils.openDialog(context = context!!,btnNegative = getString(R.string.no) , btnPositive = getString(R.string.yes),color = ContextCompat.getColor(context!!, R.color.theme_color),msg = getString(R.string.vil_du_fjerne),title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                                    override fun onPositiveButtonClick(position: Int) {
+                                        list[parentPosition].restaurant[chilPosition].fav_progress=true
+                                        mAdapter!!.notifyDataSetChanged()
+                                        call_favorite = ApiCall.add_favorite_restaurant(jsonObject = postParam)
+                                        remove_favorite_restaurant(call_favorite!!,list[parentPosition].restaurant[chilPosition])
+                                    }
+                                    override fun onNegativeButtonClick() {
+                                    }
+                                })
+
                             }else{
                                 // favourite---
+                                list[parentPosition].restaurant[chilPosition].fav_progress=true
+                                mAdapter!!.notifyDataSetChanged()
                                 call_favorite = ApiCall.add_favorite_restaurant(jsonObject = postParam)
                                 setfavorite(call_favorite!!,list[parentPosition].restaurant[chilPosition])
                             }

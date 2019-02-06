@@ -3,6 +3,7 @@ package dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.KeyEvent
@@ -25,6 +26,7 @@ import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
+import dk.eatmore.foodapp.utils.DialogUtils
 import kotlinx.android.synthetic.main.fragment_profile_edit.*
 import kotlinx.android.synthetic.main.fragment_signup.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -37,7 +39,6 @@ class ProfileEdit : BaseFragment(), TextWatcher {
 
     private lateinit var binding: FragmentProfileEditBinding
     private val inputValidStates = HashMap<EditText, Boolean>()
-
 
 
     companion object {
@@ -55,17 +56,18 @@ class ProfileEdit : BaseFragment(), TextWatcher {
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        binding=DataBindingUtil.inflate(inflater,getLayout(),container,false)
+        binding = DataBindingUtil.inflate(inflater, getLayout(), container, false)
         return binding.root
 
     }
 
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
-        if(savedInstanceState == null){
-            logd(TAG,"saveInstance NULL")
-            txt_toolbar.text=getString(R.string.profile_info)
-            img_toolbar_back.setOnClickListener{(activity as HomeActivity).onBackPressed()}
+        if (savedInstanceState == null) {
+            logd(TAG, "saveInstance NULL")
+            binding.subscribe = PreferenceUtil.getBoolean(PreferenceUtil.SUBSCRIBE, true)
+            txt_toolbar.text = getString(R.string.profile_info)
+            img_toolbar_back.setOnClickListener { (activity as HomeActivity).onBackPressed() }
             name_edt.requestFocus()
             name_edt.addTextChangedListener(this)
             email_edt.addTextChangedListener(this)
@@ -73,11 +75,11 @@ class ProfileEdit : BaseFragment(), TextWatcher {
             inputValidStates[name_edt] = false
             inputValidStates[email_edt] = false
             inputValidStates[telephone_edt] = false
-            name_edt.setText(PreferenceUtil.getString(PreferenceUtil.FIRST_NAME,""))
-            email_edt.setText(PreferenceUtil.getString(PreferenceUtil.E_MAIL,""))
-            telephone_edt.setText(PreferenceUtil.getString(PreferenceUtil.TELEPHONE_NO,""))
-            changepassword_txt.setOnClickListener{startActivity(Intent(context,ChangePassword::class.java))}
-            telephone_edt.imeOptions= EditorInfo.IME_ACTION_DONE
+            name_edt.setText(PreferenceUtil.getString(PreferenceUtil.FIRST_NAME, ""))
+            email_edt.setText(PreferenceUtil.getString(PreferenceUtil.E_MAIL, ""))
+            telephone_edt.setText(PreferenceUtil.getString(PreferenceUtil.TELEPHONE_NO, ""))
+            changepassword_txt.setOnClickListener { startActivity(Intent(context, ChangePassword::class.java)) }
+            telephone_edt.imeOptions = EditorInfo.IME_ACTION_DONE
             telephone_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
                 override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                     if (validationFields()) {
@@ -86,18 +88,27 @@ class ProfileEdit : BaseFragment(), TextWatcher {
                     return true
                 }
             })
-            update_view.setOnClickListener{
+            update_view.setOnClickListener {
                 if (validationFields()) {
                     saveuserInfo()
                 }
             }
 
+            delete_user_txt.setOnClickListener {
 
-        }else{
-            logd(TAG,"saveInstance NOT NULL")
+                DialogUtils.openDialog(context!!,"Konfirmation", "Ønsker du at slette din Eatmore konto?",
+                        getString(R.string.ok), getString(R.string.no), ContextCompat.getColor(context!!, R.color.theme_color), object : DialogUtils.OnDialogClickListener {
+                    override fun onPositiveButtonClick(position: Int) {
+                        deleteuserInfo()
+                    }
+                    override fun onNegativeButtonClick() {
+                    }
+                })
+            }
+
+        } else {
+            logd(TAG, "saveInstance NOT NULL")
         }
-
-
 
 
     }
@@ -117,8 +128,7 @@ class ProfileEdit : BaseFragment(), TextWatcher {
                 inputValidStates[email_edt] = true
             else
                 inputValidStates[email_edt] = false
-        }
-        else if (telephone_edt.text.hashCode() == s.hashCode()) {
+        } else if (telephone_edt.text.hashCode() == s.hashCode()) {
             telephone_edt.error = null
             if (telephone_edt.text.trim().toString().length >= 8)
                 inputValidStates[telephone_edt] = true
@@ -129,6 +139,7 @@ class ProfileEdit : BaseFragment(), TextWatcher {
 
 
     }
+
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
     }
 
@@ -173,24 +184,26 @@ class ProfileEdit : BaseFragment(), TextWatcher {
                 email = email_edt.text.trim().toString(),
                 eatmore_app = true,
                 first_name = name_edt.text.trim().toString(),
-                telephone_no = telephone_edt.text.trim().toString()
+                telephone_no = telephone_edt.text.trim().toString(),
+                subscribe = if (checkbox_subscribe.isChecked) 1 else 0
 
         ), object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
                 val jsonObject = body as JsonObject
                 if (jsonObject.get(Constants.STATUS).asBoolean) {
-                    Toast.makeText(context,jsonObject.get(Constants.MSG).asString, Toast.LENGTH_SHORT).show()
-     /*               name_edt.setText(PreferenceUtil.getString(PreferenceUtil.FIRST_NAME,""))
-                    email_edt.setText(PreferenceUtil.getString(PreferenceUtil.E_MAIL,""))
-                    telephone_edt.setText(PreferenceUtil.getString(PreferenceUtil.TELEPHONE_NO,""))*/
+                    Toast.makeText(context, jsonObject.get(Constants.MSG).asString, Toast.LENGTH_SHORT).show()
+                    /*               name_edt.setText(PreferenceUtil.getString(PreferenceUtil.FIRST_NAME,""))
+                                   email_edt.setText(PreferenceUtil.getString(PreferenceUtil.E_MAIL,""))
+                                   telephone_edt.setText(PreferenceUtil.getString(PreferenceUtil.TELEPHONE_NO,""))*/
                     PreferenceUtil.putValue(PreferenceUtil.FIRST_NAME, name_edt.text.trim().toString())
-                    PreferenceUtil.putValue(PreferenceUtil.E_MAIL,email_edt.text.trim().toString())
-                    PreferenceUtil.putValue(PreferenceUtil.TELEPHONE_NO,telephone_edt.text.trim().toString())
+                    PreferenceUtil.putValue(PreferenceUtil.E_MAIL, email_edt.text.trim().toString())
+                    PreferenceUtil.putValue(PreferenceUtil.TELEPHONE_NO, telephone_edt.text.trim().toString())
+                    PreferenceUtil.putValue(PreferenceUtil.SUBSCRIBE, if (checkbox_subscribe.isChecked) true else false)
                     PreferenceUtil.save()
                     (activity as HomeActivity).onBackPressed()
-                }else{
-                    showSnackBar(userprofile_container,jsonObject.get(Constants.MSG).asString)
+                } else {
+                    showSnackBar(userprofile_container, jsonObject.get(Constants.MSG).asString)
                 }
                 showProgressDialog()
             }
@@ -208,8 +221,38 @@ class ProfileEdit : BaseFragment(), TextWatcher {
             }
         })
     }
+    private fun deleteuserInfo() {
 
+        val postParam = getDefaultApiParms()
+        postParam.addProperty(Constants.ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,""))
 
+        showProgressDialog()
+        callAPI(ApiCall.delete_record(postParam), object : BaseFragment.OnApiCallInteraction {
+
+            override fun <T> onSuccess(body: T?) {
+                showProgressDialog()
+                val jsonObject = body as JsonObject
+                if (jsonObject.get(Constants.STATUS).asBoolean) {
+                    (parentFragment as Profile).backpress()
+                    (parentFragment as Profile).clearaccount()
+                } else {
+                    showSnackBar(userprofile_container, getString(R.string.error_404))
+                }
+            }
+
+            override fun onFail(error: Int) {
+                when (error) {
+                    404 -> {
+                        showSnackBar(userprofile_container, getString(R.string.error_404))
+                    }
+                    100 -> {
+                        showSnackBar(userprofile_container, getString(R.string.internet_not_available))
+                    }
+                }
+                showProgressDialog()
+            }
+        })
+    }
 
 
     override fun onDestroy() {
@@ -228,8 +271,6 @@ class ProfileEdit : BaseFragment(), TextWatcher {
         logd(TAG, "on pause...")
 
     }
-
-
 
 
 }

@@ -67,6 +67,7 @@ class DetailsFragment : CommanAPI() {
     private var call_category_menu: Call<JsonObject>? = null
     private var call_favorite: Call<JsonObject>? = null
     private var restaurant : Restaurant ? =null
+    private var ordertype : String =""
 
 
 
@@ -80,14 +81,15 @@ class DetailsFragment : CommanAPI() {
         var total_cartamt: String = ""
         var delivery_charge_title: String = ""
         var delivery_charge: String = ""
-        var delivery_text = "Sample of deliverytext"
-        var pickup_text = "Sample of pickuptext"
+        var delivery_text : String =""
+        var pickup_text : String=""
         var ui_model: UIModel? = null
-        fun newInstance(status: String,restaurant : Restaurant?): DetailsFragment {
+        fun newInstance(status: String,ordertype : String,restaurant : Restaurant?): DetailsFragment {
 
             val fragment = DetailsFragment()
             val bundle = Bundle()
             bundle.putString(Constants.STATUS, status)
+            bundle.putString(Constants.ORDERTYPE, ordertype)
             bundle.putSerializable(Constants.RESTAURANT, restaurant)
             fragment.arguments = bundle
             return fragment
@@ -126,7 +128,9 @@ class DetailsFragment : CommanAPI() {
         if (savedInstanceState == null) {
             //  restaurant = arguments?.getSerializable(Constants.RESTAURANT) as Restaurant
             binding.isUiprogress = true  // you are also comming back so no loader is required.
+            binding.kstatus=PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)
             restaurant=arguments?.getSerializable(Constants.RESTAURANT) as Restaurant?
+            ordertype=arguments?.getString(Constants.ORDERTYPE) as String
             loge(TAG,"---"+restaurant)
             toolbar_badge_view.visibility = View.GONE  // By default viewcart should be gone.
             logd(DetailsFragment.TAG, "saveInstance NULL")
@@ -172,6 +176,8 @@ class DetailsFragment : CommanAPI() {
         delivery_charge_title = restaurant_info.delivery_charge_title ?: "null"
         total_cartcnt = if (restaurant_info.cartcnt == null || restaurant_info.cartcnt == "0") 0 else restaurant_info.cartcnt!!.toInt()
         total_cartamt = if (restaurant_info.cartamt == null || restaurant_info.cartamt == "0") "00.00" else restaurant_info.cartamt.toString()
+        delivery_text=restaurant_info.delivery_text
+        pickup_text=restaurant_info.pickup_text
         updatebatchcount(0)
         val myclickhandler = MyClickHandler(this)
         binding.restaurant = restaurant_info
@@ -240,6 +246,21 @@ class DetailsFragment : CommanAPI() {
             else
                 ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().addFragment(R.id.home_fragment_container, fragment, EpayFragment.TAG, false)
         }
+
+        if(ordertype == getString(R.string.preorder)){
+            DialogUtils.openDialogDefault(context = context!!,btnNegative = "Find andet take away i Aabenraa",btnPositive = "FORUDBESTIL NU",
+                    color = ContextCompat.getColor(context!!, R.color.theme_color),msg ="\nRestauranten ${restaurant_info.opening_title} ${restaurant_info.time}\n",
+                    title = "Denne restaurant har desværre lukket lige nu",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                override fun onPositiveButtonClick(position: Int) {
+                    // dismiss
+                }
+                override fun onNegativeButtonClick() {
+                    //back press
+                    onBackpress()
+                }
+            })
+        }
+
 
     }
 
@@ -438,8 +459,15 @@ class DetailsFragment : CommanAPI() {
         postParam.addProperty(Constants.RESTAURANT_ID,restaurant_info!!.restaurant_id)
         if(restaurant_info.is_fav){
             // unfavourite--
-            call_favorite = ApiCall.remove_favorite_restaurant(jsonObject = postParam)
-            remove_favorite_restaurant(call_favorite!!,restaurant_info)
+            DialogUtils.openDialog(context = context!!,btnNegative = getString(R.string.no) , btnPositive = getString(R.string.yes),color = ContextCompat.getColor(context!!, R.color.theme_color),msg = getString(R.string.vil_du_fjerne),title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                override fun onPositiveButtonClick(position: Int) {
+                    call_favorite = ApiCall.remove_favorite_restaurant(jsonObject = postParam)
+                    remove_favorite_restaurant(call_favorite!!,restaurant_info)
+                }
+                override fun onNegativeButtonClick() {
+
+                }
+            })
         }else{
             // favourite---
             call_favorite = ApiCall.add_favorite_restaurant(jsonObject = postParam)

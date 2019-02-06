@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+
+
+
+    </data>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        >
+
+        <FrameLayout
+            android:id="@+id/payment_method_container"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:background="@color/white"
+            >
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
+
+
+                <android.support.design.widget.AppBarLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:id="@+id/appbar"
+                    >
+                    <include layout="@layout/toolbar"
+                        >
+
+                    </include>
+
+                </android.support.design.widget.AppBarLayout>
+
+
+
+                        <RelativeLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:layout_below="@+id/appbar"
+                            >
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/recycler_view"
+                                android:clipToPadding="false"
+                                android:paddingTop="@dimen/_16sdp"
+                                android:layout_width="match_parent"
+                                android:layout_height="match_parent"/>
+
+                            <ProgressBar
+                                android:id="@+id/progress_bar"
+                                style="?android:attr/progress"
+                                android:visibility="visible"
+                                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center_vertical|center_horizontal"
+                                android:layout_centerInParent="true"
+                                android:indeterminate="true" />
+
+
+
+
+                        </RelativeLayout>
+
+
+
+
+
+
+
+
+
+            </RelativeLayout>
+
+
+
+
+
+        </FrameLayout>
+
+    </RelativeLayout>
+
+
+
+
+
+
+</layout>
+

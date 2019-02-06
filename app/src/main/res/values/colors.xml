@@ -24,6 +24,7 @@
     <color name="colorLanguageUnselectedGrey">#ADADAD</color>
     <color name="colorAccent">#019E0F</color>
     <color name="black">#000</color>
+    <color name="default_permission">#009688</color>
     <color name="black_light">#4c4c4c</color>
     <color name="black_default">#808080</color>
     <color name="black_transparent">#999</color>

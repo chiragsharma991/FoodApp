@@ -23,6 +23,7 @@
 
         <activity
             android:name=".activity.main.home.Splash"
+            android:hardwareAccelerated="false"
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.Splash">

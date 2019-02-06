@@ -15,6 +15,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import com.google.gson.JsonObject
+import dk.eatmore.foodapp.BuildConfig
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
@@ -37,6 +38,7 @@ class Profile : BaseFragment() {
     private var profileEdit_fragment: ProfileEdit? = null
     private var healthreport: HealthReport? = null
     private var termscondition: TermsCondition? = null
+    private var restpaymentmethods: RestPaymentMethods? = null
     private var editaddress: EditAddress? = null
     private var coupan_fragment: Coupan? = null
     private lateinit var ui_model: UIModel
@@ -66,8 +68,9 @@ class Profile : BaseFragment() {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
-            txt_toolbar.text=getString(R.string.help)
+            txt_toolbar.text=getString(R.string.my_profile)
             img_toolbar_back.visibility=View.GONE
+            setCurrentVersion()
             ui_model = createViewModel()
             ui_model.init()
 
@@ -123,52 +126,70 @@ class Profile : BaseFragment() {
 
     }
 
+    private fun setCurrentVersion() {
+
+        try {
+            val pm = context!!.packageManager
+            val pInfo = pm.getPackageInfo(context!!.packageName, 0)
+            app_version.text=String.format(getString(R.string.app_version),pInfo.versionCode.toString(),pInfo.versionName)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
+
+    }
+
     fun logOut() {
 
         DialogUtils.openDialog(context!!, getString(R.string.are_you_sure_would), "",
                 getString(R.string.logout), getString(R.string.cancel), ContextCompat.getColor(context!!, R.color.theme_color), object : DialogUtils.OnDialogClickListener {
             override fun onPositiveButtonClick(position: Int) {
-                showProgressDialog()
-                callAPI(ApiCall.clearcart(
-                        auth_key = Constants.AUTH_VALUE,
-                        customer_id = PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,"")!!,
-                        eatmore_app = true
-                ), object : BaseFragment.OnApiCallInteraction {
-
-                    override fun <T> onSuccess(body: T?) {
-                        val jsonObject = body as JsonObject
-                        (parentFragment as AccountFragment).signOut()
-                        PreferenceUtil.clearAll()
-                        val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
-                        (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
-                        fragmentof.getOrderFragment().popAllFragment()
-                        PreferenceUtil.save()
-                        // clear all but add id again to collect non user item into cart.
-                        PreferenceUtil.putValue(PreferenceUtil.DEVICE_TOKEN, Settings.Secure.getString(context!!.getContentResolver(), Settings.Secure.ANDROID_ID))
-                        PreferenceUtil.save()
-                        (activity as HomeActivity).onBackPressed()
-                        if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true
-                        if(HomeFragment.ui_model?.reloadfragment !=null) HomeFragment.ui_model!!.reloadfragment.value=true  // reload last order from homefragment.
-                        showProgressDialog()
-                    }
-
-                    override fun onFail(error: Int) {
-                        when (error) {
-                            404 -> {
-                                showSnackBar(profile_container, getString(R.string.error_404))
-                            }
-                            100 -> {
-                                showSnackBar(profile_container, getString(R.string.internet_not_available))
-                            }
-                        }
-                        showProgressDialog()
-                    }
-                })
+                clearaccount()
             }
-
             override fun onNegativeButtonClick() {
             }
         })
+    }
+
+    fun clearaccount(){
+
+        showProgressDialog()
+        callAPI(ApiCall.clearcart(
+                auth_key = Constants.AUTH_VALUE,
+                customer_id = PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,"")!!,
+                eatmore_app = true
+        ), object : BaseFragment.OnApiCallInteraction {
+
+            override fun <T> onSuccess(body: T?) {
+                val jsonObject = body as JsonObject
+                (parentFragment as AccountFragment).signOut()
+                PreferenceUtil.clearAll()
+                val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
+                (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
+                fragmentof.getOrderFragment().popAllFragment()
+                PreferenceUtil.save()
+                // clear all but add id again to collect non user item into cart.
+                PreferenceUtil.putValue(PreferenceUtil.DEVICE_TOKEN, Settings.Secure.getString(context!!.getContentResolver(), Settings.Secure.ANDROID_ID))
+                PreferenceUtil.putValue(PreferenceUtil.CLOSE_INTRO_SLIDE,true)
+                PreferenceUtil.save()
+                (activity as HomeActivity).onBackPressed()
+                if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true
+                if(HomeFragment.ui_model?.reloadfragment !=null) HomeFragment.ui_model!!.reloadfragment.value=true  // reload last order from homefragment.
+                showProgressDialog()
+            }
+
+            override fun onFail(error: Int) {
+                when (error) {
+                    404 -> {
+                        showSnackBar(profile_container, getString(R.string.error_404))
+                    }
+                    100 -> {
+                        showSnackBar(profile_container, getString(R.string.internet_not_available))
+                    }
+                }
+                showProgressDialog()
+            }
+        })
+
     }
 
 
@@ -185,6 +206,10 @@ class Profile : BaseFragment() {
                 return true
             }
             else if (termscondition != null && termscondition!!.isVisible) {
+                childFragmentManager.popBackStack()
+                return true
+            }
+            else if (restpaymentmethods != null && restpaymentmethods!!.isVisible) {
                 childFragmentManager.popBackStack()
                 return true
             }
@@ -243,6 +268,12 @@ class Profile : BaseFragment() {
         fun termsofservices(view: View){
             profile.termscondition = TermsCondition.newInstance(0)
             profile.addFragment(R.id.profile_container, profile.termscondition!!, TermsCondition.TAG, false)
+        }
+
+        fun rest_pay_methods(view: View) {
+            profile.restpaymentmethods = RestPaymentMethods.newInstance()
+            profile.addFragment(R.id.profile_container, profile.restpaymentmethods!!, RestPaymentMethods.TAG, false)
+
         }
         fun cokkie_policy(view: View){
             profile.termscondition = TermsCondition.newInstance(1)

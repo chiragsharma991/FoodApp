@@ -79,8 +79,8 @@ object DialogUtils {
         }
         val alert = builder.create()
         alert.show()
-        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(context,R.color.black_light))
-        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(context,R.color.black_light))
+        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(color)
+        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(color)
 
 
     }

@@ -1,0 +1,260 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+
+
+    >
+
+    <data>
+
+        <variable
+            name="handlers"
+            type="dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.AccountFragment.MyClickHandler">
+
+        </variable>
+
+    </data>
+
+
+    <FrameLayout
+        android:id="@+id/profile_container"
+        android:layout_width="match_parent"
+        android:background="@color/background_light"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            >
+
+
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+
+                >
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:orientation="vertical"
+                    >
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:background="@color/background_light"
+                        android:orientation="horizontal">
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/SubtitleMidium_TextViewSmall"
+                            android:layout_weight="1"
+                            android:textStyle="normal"
+                            android:layout_margin="@dimen/_16sdp"
+                            android:visibility="invisible"
+                            />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/divider_color"
+                        />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:background="@color/white"
+                        android:orientation="horizontal">
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/SubtitleMidium_TextViewSmall"
+                            android:layout_weight="1"
+                            android:textStyle="normal"
+                            android:layout_margin="@dimen/_16sdp"
+                            android:text="Kunde support"
+                            />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/divider_color"
+                        />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:background="@color/background_light"
+                        android:orientation="horizontal">
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/SubtitleMidium_TextViewSmall"
+                            android:layout_weight="1"
+                            android:layout_margin="@dimen/_16sdp"
+                            android:text="APP INFO"
+                            />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/divider_color"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:onClick="@{handlers::rest_pay_methods}"
+                        android:background="@color/white"
+                        android:orientation="horizontal">
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/SubtitleMidium_TextViewSmall"
+                            android:layout_weight="1"
+                            android:textStyle="normal"
+                            android:layout_margin="@dimen/_16sdp"
+                            android:text="Betalingsmetoder"
+                            />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/divider_color"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:onClick="@{handlers::terms_condition}"
+                        android:gravity="center_vertical"
+                        android:background="@color/white"
+                        android:orientation="horizontal">
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/SubtitleMidium_TextViewSmall"
+                            android:layout_weight="1"
+                            android:textStyle="normal"
+                            android:layout_margin="@dimen/_16sdp"
+                            android:text="@string/terms_of_services"
+                            />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/divider_color"
+                        />
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:background="@color/background_light"
+                        android:orientation="horizontal">
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/Subtitle_TextViewSmall"
+                            android:layout_weight="1"
+                            android:textStyle="normal"
+                            android:layout_margin="@dimen/_16sdp"
+                            android:gravity="center_horizontal"
+                            android:id="@+id/app_version"
+                            android:text="App version 2018.07.13.release"
+                            />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/divider_color"
+                        />
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="wrap_content"
+                        android:gravity="center_vertical"
+                        android:background="@color/white"
+                        android:onClick="@{handlers::account_login}"
+                        android:orientation="horizontal">
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/SubtitleMidium_TextViewSmall"
+                            android:layout_weight="1"
+                            android:textStyle="normal"
+                            android:gravity="center_horizontal"
+                            android:textColor="@color/theme_color"
+                            android:layout_margin="@dimen/_16sdp"
+                            android:text="Log ind"
+                            />
+
+
+                    </LinearLayout>
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="1dp"
+                        android:alpha="0.2"
+                        android:background="@color/divider_color"
+                        />
+
+
+
+
+
+                </LinearLayout>
+
+            </android.support.v4.widget.NestedScrollView>
+
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+
+
+
+
+
+</layout>
+

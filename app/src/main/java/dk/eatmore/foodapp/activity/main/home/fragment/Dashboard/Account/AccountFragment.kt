@@ -1,6 +1,7 @@
 package dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account
 
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.os.Handler
@@ -47,6 +48,7 @@ import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.Constants
 import dk.eatmore.foodapp.utils.DialogUtils
+import kotlinx.android.synthetic.main.account_setting.*
 import kotlinx.android.synthetic.main.activity_epay.*
 import retrofit2.Call
 import java.util.regex.Pattern
@@ -90,25 +92,15 @@ class AccountFragment : BaseFragment() {
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
+            logd(TAG, "saveInstance NULL")
             mAuth = FirebaseAuth.getInstance();
             clickEvent = MyClickHandler(this)
             binding.handlers = clickEvent
-            logd(TAG, "saveInstance NULL")
-            txt_toolbar.text = getString(R.string.my_profile)
+            binding.viewIsSetting=true
             img_toolbar_back.visibility=View.GONE
-            /* acc_password_edt.imeOptions = EditorInfo.IME_ACTION_DONE
-             acc_password_edt.setOnEditorActionListener(object  : TextView.OnEditorActionListener{
-                 override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                     if(actionId == EditorInfo.IME_ACTION_DONE){
-                         moveon_login()
-                         return true
-                     }else{
-                         return false
-                     }
-                 }
-
-             })*/
-
+            txt_toolbar.text = getString(R.string.my_profile)
+            setCurrentVersion()
+            img_toolbar_back.setOnClickListener {(activity as HomeActivity).onBackPressed()  }
 
             acc_forgot_txt.setOnClickListener {
                 val fragment = Signup.newInstance()
@@ -131,6 +123,7 @@ class AccountFragment : BaseFragment() {
             if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
                 val fragment = Profile.newInstance()
                 addFragment(R.id.home_account_container, fragment, Profile.TAG, false)
+                onBackpress()
             }
 
 
@@ -161,6 +154,17 @@ class AccountFragment : BaseFragment() {
         acc_email_edt.setText(username)
         acc_password_edt.setText(password_hash)
         moveon_login(username,password_hash)
+
+    }
+    private fun setCurrentVersion() {
+
+        try {
+            val pm = context!!.packageManager
+            val pInfo = pm.getPackageInfo(context!!.packageName, 0)
+            app_version.text=String.format(getString(R.string.app_version),pInfo.versionCode.toString(),pInfo.versionName)
+        } catch (e: Exception) {
+            e.printStackTrace()
+        }
 
     }
 
@@ -326,9 +330,12 @@ class AccountFragment : BaseFragment() {
             loge(TAG,"Moveonepay"+EpayFragment.moveonEpay)
             val epayFragment=((activity as HomeActivity).getHomeContainerFragment()as HomeContainerFragment).getHomeFragment().childFragmentManager.findFragmentByTag(EpayFragment.TAG)
             if(epayFragment !=null) epayFragment.epay_continue_btn.text=getString(R.string.continue_)
+            if(epayFragment !=null) (epayFragment as EpayFragment).fetch_viewCardList()
             ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0)
             EpayFragment.moveonEpay=false
         }
+
+        onBackpress() // to set setting view
 
 
     }
@@ -604,6 +611,18 @@ class AccountFragment : BaseFragment() {
 
     }
 
+    fun onBackpress(){
+
+        if(img_toolbar_back.visibility == View.VISIBLE){
+            hideKeyboard()
+            binding.viewIsSetting=true
+            img_toolbar_back.visibility= View.GONE
+        }else{
+            ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0)
+        }
+
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         logd(TAG, "on destroy...")
@@ -631,6 +650,23 @@ class AccountFragment : BaseFragment() {
 
         fun googleSign(view: View) {
             // accountfragment.googleSign()
+        }
+
+        fun account_login(view: View) {
+            accountfragment.binding.viewIsSetting=false
+            accountfragment.img_toolbar_back.visibility=View.VISIBLE
+
+            // accountfragment.googleSign()
+        }
+        fun terms_condition(view: View) {
+            val termscondition = TermsCondition.newInstance(0)
+            accountfragment.addFragment(R.id.home_account_container, termscondition, TermsCondition.TAG, false)
+
+        }
+        fun rest_pay_methods(view: View) {
+            val restpaymentmethods = RestPaymentMethods.newInstance()
+            accountfragment.addFragment(R.id.home_account_container, restpaymentmethods, RestPaymentMethods.TAG, false)
+
         }
 
     }

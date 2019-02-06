@@ -19,9 +19,11 @@ import android.widget.Toast
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.epay.EpayActivity
+import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.EditAddress
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.Profile
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.SelectAddress
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.RestaurantList
 import dk.eatmore.foodapp.adapter.cart.CartViewAdapter
 import dk.eatmore.foodapp.databinding.RagistrationFormBinding
@@ -248,8 +250,14 @@ class AddressForm : BaseFragment(), TextWatcher {
                 val jsonObject = body as JsonObject
                 if (jsonObject.get(Constants.STATUS).asBoolean) {
                     Toast.makeText(context,jsonObject.get(Constants.MSG).asString, Toast.LENGTH_SHORT).show()
-                    val fragment =(parentFragment as Profile).childFragmentManager.findFragmentByTag(EditAddress.TAG)
-                    (fragment as EditAddress).fetchuserInfo()
+                    if(parentFragment is EpayFragment){
+                        val fragment =(parentFragment as EpayFragment).childFragmentManager.findFragmentByTag(SelectAddress.TAG)
+                        (fragment as SelectAddress).fetchuserInfo()
+                    }else{
+                        val fragment =(parentFragment as Profile).childFragmentManager.findFragmentByTag(EditAddress.TAG)
+                        (fragment as EditAddress).fetchuserInfo()
+                        //SelectAddress
+                    }
                     (activity as HomeActivity).onBackPressed()
                 }
                 showProgressDialog()

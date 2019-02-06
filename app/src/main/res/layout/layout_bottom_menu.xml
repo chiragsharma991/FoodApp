@@ -2,24 +2,25 @@
 
 
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:layout_height="wrap_content">
+    android:layout_height="?attr/actionBarSize"
+    >
 
     <View
         android:layout_width="match_parent"
         android:layout_height="1dp"
-        android:alpha="0.2"
+        android:alpha="0.3"
         android:background="@color/divider_color"
 
         />
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:orientation="horizontal"
-        android:padding="@dimen/_13sdp"
         android:gravity="center"
         >
 
@@ -34,24 +35,43 @@
             android:clickable="true"
             android:layout_height="wrap_content">
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/img_home"
-                android:layout_width="wrap_content"
-                android:padding="@dimen/_5sdp"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@drawable/ic_bottom_home"            />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
 
-            <View
-                android:id="@+id/view_divider_home"
-                android:layout_width="wrap_content"
-                android:layout_height="3dp"
-                android:background="@color/theme_color"
-                android:layout_below="@+id/img_home"
-                android:layout_alignEnd="@+id/img_home"
-                android:layout_alignStart="@+id/img_home"
-                android:layout_marginTop="@dimen/_5sdp"
-                />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/img_home"
+                    android:layout_width="31dp"
+                    android:layout_height="23dp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@mipmap/restauranter" />
+
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/img_home_txt"
+                    style="@style/SubtitleMidium_TextViewSmall"
+                    android:layout_below="@+id/img_home"
+                    android:layout_alignEnd="@+id/img_home"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/hindvadodara_regular"
+                    android:singleLine="true"
+                    android:text="Restauranter"
+                    android:textSize="@dimen/_10sdp"
+                    app:layout_constraintEnd_toEndOf="@+id/img_home"
+                    app:layout_constraintStart_toStartOf="@+id/img_home"
+                    app:layout_constraintTop_toBottomOf="@+id/img_home" />
+
+
+
+            </android.support.constraint.ConstraintLayout>
+
+
 
         </RelativeLayout>
 
@@ -64,25 +84,41 @@
             android:clickable="true"
             android:layout_height="wrap_content">
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/img_fav"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@drawable/my_order"
-                />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
 
-            <View
-                android:id="@+id/view_divider_fav"
-                android:layout_width="wrap_content"
-                android:layout_height="2dp"
-                android:background="@color/theme_color"
-                android:layout_below="@+id/img_fav"
-                android:layout_alignEnd="@+id/img_fav"
-                android:layout_alignStart="@+id/img_fav"
-                android:visibility="invisible"
-                android:layout_marginTop="@dimen/_5sdp"
-                />
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/img_fav"
+                    android:layout_width="31dp"
+                    android:layout_height="23dp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@mipmap/ordre" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/img_fav_txt"
+                    style="@style/SubtitleMidium_TextViewSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/hindvadodara_regular"
+                    android:singleLine="true"
+                    android:text="Ordre"
+                    android:textSize="@dimen/_10sdp"
+                    app:layout_constraintEnd_toEndOf="@+id/img_fav"
+                    app:layout_constraintStart_toStartOf="@+id/img_fav"
+                    app:layout_constraintTop_toBottomOf="@+id/img_fav" />
+
+            </android.support.constraint.ConstraintLayout>
+
+
+
 
         </RelativeLayout>
 
@@ -95,25 +131,43 @@
             android:clickable="true"
             android:layout_height="wrap_content">
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/img_profile"
-                android:layout_width="wrap_content"
-                android:padding="@dimen/_5sdp"
-                android:layout_height="wrap_content"
-                android:background="?attr/selectableItemBackgroundBorderless"
-                app:srcCompat="@drawable/ic_bottom_profile"            />
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                >
 
-            <View
-                android:id="@+id/view_divider_profile"
-                android:layout_width="wrap_content"
-                android:layout_height="2dp"
-                android:background="@color/theme_color"
-                android:layout_below="@+id/img_profile"
-                android:layout_alignEnd="@+id/img_profile"
-                android:visibility="invisible"
-                android:layout_alignStart="@+id/img_profile"
-                android:layout_marginTop="@dimen/_5sdp"
-                />
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/img_profile"
+                    android:layout_width="31dp"
+                    android:layout_height="23dp"
+                    android:layout_marginTop="@dimen/_5sdp"
+                    android:background="?attr/selectableItemBackgroundBorderless"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@mipmap/indstillinger" />
+
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/img_profile_txt"
+                    style="@style/SubtitleMidium_TextViewSmall"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginTop="5dp"
+                    android:fontFamily="@font/hindvadodara_regular"
+                    android:singleLine="true"
+                    android:text="Indstillinger"
+                    android:textSize="@dimen/_10sdp"
+                    app:layout_constraintEnd_toEndOf="@+id/img_profile"
+                    app:layout_constraintStart_toStartOf="@+id/img_profile"
+                    app:layout_constraintTop_toBottomOf="@+id/img_profile" />
+
+
+
+
+            </android.support.constraint.ConstraintLayout>
+
 
         </RelativeLayout>
 

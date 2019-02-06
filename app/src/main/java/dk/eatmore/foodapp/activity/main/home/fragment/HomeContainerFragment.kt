@@ -105,26 +105,33 @@ class HomeContainerFragment : BaseFragment() {
     private fun changeMenu(position: Int) {
         if (position == 0) {
             img_home.setColorFilter(ContextCompat.getColor(getActivityBase(), R.color.theme_color), android.graphics.PorterDuff.Mode.SRC_IN);
-            view_divider_home.visibility = View.VISIBLE
+            img_home_txt.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))
+            //  view_divider_home.visibility = View.VISIBLE
+
         } else {
             img_home.setColorFilter(ContextCompat.getColor(getActivityBase(), R.color.colorLanguageUnselectedGrey), android.graphics.PorterDuff.Mode.SRC_IN);
-            view_divider_home.visibility = View.INVISIBLE
+            img_home_txt.setTextColor(ContextCompat.getColor(context!!,R.color.black_txt_light))
+            //  view_divider_home.visibility = View.INVISIBLE
         }
 
         if (position == 1) {
             img_fav.setColorFilter(ContextCompat.getColor(getActivityBase(), R.color.theme_color), android.graphics.PorterDuff.Mode.SRC_IN);
-            view_divider_fav.visibility = View.VISIBLE
+            img_fav_txt.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))
+            //  view_divider_fav.visibility = View.VISIBLE
         } else {
             img_fav.setColorFilter(ContextCompat.getColor(getActivityBase(), R.color.colorLanguageUnselectedGrey), android.graphics.PorterDuff.Mode.SRC_IN);
-            view_divider_fav.visibility = View.INVISIBLE
+            img_fav_txt.setTextColor(ContextCompat.getColor(context!!,R.color.black_txt_light))
+            //  view_divider_fav.visibility = View.INVISIBLE
         }
 
         if (position == 2) {
             img_profile.setColorFilter(ContextCompat.getColor(getActivityBase(), R.color.theme_color), android.graphics.PorterDuff.Mode.SRC_IN);
-            view_divider_profile.visibility = View.VISIBLE
+            img_profile_txt.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))
+            // view_divider_profile.visibility = View.VISIBLE
         } else {
             img_profile.setColorFilter(ContextCompat.getColor(getActivityBase(), R.color.colorLanguageUnselectedGrey), android.graphics.PorterDuff.Mode.SRC_IN);
-            view_divider_profile.visibility = View.INVISIBLE
+            img_profile_txt.setTextColor(ContextCompat.getColor(context!!,R.color.black_txt_light))
+            //   view_divider_profile.visibility = View.INVISIBLE
         }
 
 

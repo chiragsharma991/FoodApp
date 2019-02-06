@@ -192,7 +192,8 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
 
         val fragment = DetailsFragment.newInstance(
                 restaurant = null,
-                status = ""
+                status = "",
+                ordertype = ""
         )
         var enter: Slide? = null
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
@@ -303,8 +304,16 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
         postParam.addProperty(Constants.RESTAURANT_ID,model.restaurant_id)
         if(model.is_fav){
             // unfavourite--
-            call_favorite = ApiCall.remove_favorite_restaurant(jsonObject = postParam)
-            remove_favorite_restaurant(call_favorite!!,model)
+            DialogUtils.openDialog(context = context!!,btnNegative = getString(R.string.no) , btnPositive = getString(R.string.yes),color = ContextCompat.getColor(context!!, R.color.theme_color),msg = getString(R.string.vil_du_fjerne),title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                override fun onPositiveButtonClick(position: Int) {
+                    call_favorite = ApiCall.remove_favorite_restaurant(jsonObject = postParam)
+                    remove_favorite_restaurant(call_favorite!!,model)
+                }
+                override fun onNegativeButtonClick() {
+
+                }
+            })
+
         }else{
             // favourite---
             call_favorite = ApiCall.add_favorite_restaurant(jsonObject = postParam)

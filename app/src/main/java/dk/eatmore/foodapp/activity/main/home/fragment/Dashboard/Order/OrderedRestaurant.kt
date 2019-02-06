@@ -236,7 +236,6 @@ class OrderedRestaurant : CommanAPI() {
         binding.myclickhandler=myclickhandler
         binding.util=BindDataUtils
         binding.enableRating=arguments!!.getBoolean(Constants.ENABLE_RATING)
-        binding.isProgress=false
         binding.executePendingBindings()
 
         val data =ui_model!!.ordered_details.value!!.data!![0]
@@ -302,6 +301,10 @@ class OrderedRestaurant : CommanAPI() {
             //   total.text= BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.order_total.toString()) ?: "null"
         }
         generateBillDetails()
+        Handler().postDelayed({
+            binding.isProgress=false
+        },1000)
+
     }
 
 
@@ -361,8 +364,14 @@ class OrderedRestaurant : CommanAPI() {
         postParam.addProperty(Constants.RESTAURANT_ID,data.restaurant_id)
         if(data.is_fav){
             // unfavourite--
-            call_favorite = ApiCall.remove_favorite_restaurant(jsonObject = postParam)
-            remove_favorite_restaurant(call_favorite!!,data)
+            DialogUtils.openDialog(context = context!!,btnNegative = getString(R.string.no) , btnPositive = getString(R.string.yes),color = ContextCompat.getColor(context!!, R.color.theme_color),msg = getString(R.string.vil_du_fjerne),title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                override fun onPositiveButtonClick(position: Int) {
+                    call_favorite = ApiCall.remove_favorite_restaurant(jsonObject = postParam)
+                    remove_favorite_restaurant(call_favorite!!,data)
+                }
+                override fun onNegativeButtonClick() {
+                }
+            })
         }else{
             // favourite---
             call_favorite = ApiCall.add_favorite_restaurant(jsonObject = postParam)
@@ -792,7 +801,7 @@ data class Data(
         val order_no : String ="",
         var order_date : String ="",
         var restaurant_id: String = "",
-        val pickup_delivery_time : String ="",
+        val pickup_delivery_time : String? =null,
         val address : String ="",
         var is_fav : Boolean = false,
         var total_to_pay: String = "",

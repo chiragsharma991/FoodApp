@@ -196,7 +196,6 @@ class HomeFragment : CommanAPI() {
 
     fun getcurrent_location() {
         gps_enableNdisable()
-
         if (is_location_PermissionGranted()) {
             loge(TAG, "is_location_PermissionGranted---")
             gps_img.visibility = View.GONE

@@ -43,17 +43,31 @@
                     android:gravity="center_vertical"
                     android:orientation="horizontal">
 
+                    <android.support.v7.widget.AppCompatRadioButton
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:id="@+id/item_checkbox"
+                        android:layout_marginEnd="@dimen/_5sdp"
+                        android:clickable="false"
+                        android:buttonTint="@color/theme_color"
+                        />
+
+
 
                     <android.support.v7.widget.AppCompatTextView
                         android:id="@+id/item_rcc_txt"
                         style="@style/Subtitle_TextViewSmall"
                         android:layout_width="0dp"
                         android:layout_gravity="center_vertical"
-                        android:layout_marginRight="@dimen/_5sdp"
+                        android:layout_marginRight="@dimen/_8sdp"
                         android:layout_weight="1.3"
                         android:singleLine="true"
                         android:text="@{data.a_value}"
                         />
+
+<!--
+                    data.a_value}
+-->
 
                     <LinearLayout
                         android:layout_width="0dp"
@@ -67,13 +81,12 @@
                             style="@style/Subtitle_TextViewSmall"
                             android:id="@+id/price_rcc_txt"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="@dimen/_3sdp"
-                            android:layout_marginRight="@dimen/_5sdp"
                             android:gravity="right"
                             android:singleLine="true"
-                            android:text="@{ Double.parseDouble(data.a_price) &lt;= 0 ? `` : util.convertCurrencyToDanish(data.a_price)}"
+                            android:text="@{Double.parseDouble(data.a_price) &lt;= 0 ? `` : util.convertCurrencyToDanish(data.a_price)}"
                             />
 
+                        <!--Double.parseDouble(data.a_price) &lt;= 0 ? `` : util.convertCurrencyToDanish(data.a_price)-->
                         <!--android:text="@{util.convertCurrencyToDanish(data.a_price)}"-->
 
                    <!--     <android.support.v7.widget.AppCompatImageView
@@ -94,6 +107,7 @@
                             android:paddingTop="@dimen/_3sdp"
                             android:paddingStart="@dimen/_3sdp"
                             android:paddingEnd="@dimen/_3sdp"
+                            android:visibility="gone"
                             android:paddingBottom="@dimen/_3sdp"
                             android:background="@color/theme_color"
                             android:scaleType="fitXY"

@@ -7,6 +7,7 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
 import android.graphics.drawable.Animatable
+import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.*
 import android.support.constraint.ConstraintSet
@@ -106,6 +107,8 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             paymentmethod_visible_are()
             setToolbarforThis()
             showproductInfo()
+            addspantext()
+
         }
     }
 
@@ -231,8 +234,64 @@ class Paymentmethod : BaseFragment(), TextWatcher {
                 .into(online_payment_icon)
         Glide.with(context!!)
                 .load(EpayFragment.paymentattributes.cash_logo)
+                .apply(RequestOptions().error(BindDataUtils.getRandomDrawbleColor()))
                 .into(cash_payment_icon)
 
+
+
+    }
+
+
+    fun addspantext() {
+        val span = SpannableString(getString(R.string.brug_for_hjælp))
+        span.setSpan(clickableSpan, (getString(R.string.brug_for_hjælp).trim().length - 8),
+                getString(R.string.brug_for_hjælp).trim().length , Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        eatmore_contact.text = span
+        eatmore_contact.movementMethod = LinkMovementMethod.getInstance()
+    }
+
+    val clickableSpan = object : ClickableSpan() {
+        var dialog: AlertDialog? = null
+        override fun onClick(textView: View) {
+            Log.e(TAG, "onClick:--- ")
+            dialog = AlertDialog.Builder(activity).setMessage("Do you want to call 73702515").setCancelable(true).setPositiveButton("yes") { dialogInterface, i ->
+                if (is_callphn_PermissionGranted()) {
+                    val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" +"73702515"))
+                    startActivity(intent)
+                }
+            }.setNegativeButton("no") { dialogInterface, i -> dialog!!.dismiss() }.show()
+        }
+
+        override fun updateDrawState(ds: TextPaint) {
+            //
+            super.updateDrawState(ds)
+            ds.isUnderlineText = true
+            //                ds.setColor(getResources().getColor(R.color.orange));
+            try {
+                val colour = ContextCompat.getColor(context!!, R.color.dark_blue)
+                ds.color = colour
+            } catch (e: Exception) {
+                Log.e(TAG, "updateDrawState: error " + e.message)
+            }
+
+        }
+    }
+
+    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+        loge(TAG, "permission result---")
+        when (requestCode) {
+            0 -> {
+
+                if (grantResults.size > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
+                    val intent = Intent(Intent.ACTION_CALL, Uri.parse("tel:" +"73702515"))
+                    startActivity(intent)
+                    //    Toast.makeText(this, getString(R.string.permission_granted), Toast.LENGTH_SHORT).show()
+                } else {
+                    Toast.makeText(context, getString(R.string.permission_denied), Toast.LENGTH_SHORT).show()
+                }
+                return
+            }
+        }
     }
 
 
@@ -419,7 +478,16 @@ class Paymentmethod : BaseFragment(), TextWatcher {
                     }
 
                 } else {
-                    showSnackBar(pamentmethod_container, getString(R.string.error_404))
+                    val msg= if(jsonobject.has(Constants.MSG))jsonobject.get(Constants.MSG).asString else getString(R.string.error_404)
+                    DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),
+                            color = ContextCompat.getColor(context!!, R.color.theme_color),msg = msg,
+                            title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                        override fun onPositiveButtonClick(position: Int) {
+                        }
+                        override fun onNegativeButtonClick() {
+                        }
+                    })
+                    //showSnackBar(pamentmethod_container, getString(R.string.error_404))
                 }
             }
 
@@ -474,7 +542,15 @@ class Paymentmethod : BaseFragment(), TextWatcher {
                     }
                 }else
                 {
-                    showSnackBar(pamentmethod_container, getString(R.string.error_404))
+                    // if card is empty then :
+                    val msg= if(jsonobject.has(Constants.MSG))jsonobject.get(Constants.MSG).asString else getString(R.string.error_404)
+                    DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!,R.color.black),msg = msg,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                        override fun onPositiveButtonClick(position: Int) {
+                            /**TODO  2 CASE : if user is coming from home/order and destroy pop all fragment*/
+                        }
+                        override fun onNegativeButtonClick() {
+                        }
+                    })
 
                 }
             }
@@ -637,7 +713,7 @@ class Paymentmethod : BaseFragment(), TextWatcher {
         })
     }
 
-    override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+  /*  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         loge(TAG,"permission result---")
         when (requestCode) {
             1 -> {
@@ -652,7 +728,7 @@ class Paymentmethod : BaseFragment(), TextWatcher {
                 return
             }
         }
-    }
+    }*/
 
 
 

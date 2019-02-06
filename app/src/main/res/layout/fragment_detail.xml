@@ -28,6 +28,12 @@
 
         </variable>
 
+        <variable
+            name="kstatus"
+            type="Boolean">
+
+        </variable>
+
     </data>
 
 
@@ -143,6 +149,7 @@
                                     android:background="?attr/selectableItemBackgroundBorderless"
                                     android:onClick="@{handler :: taponfavourite}"
                                     android:src="@mipmap/heart_full"
+                                    android:visibility="@{kstatus ? View.VISIBLE : View.GONE}"
                                     android:layout_centerVertical="true"
                                     android:tint="@color/gray"
                                     />
@@ -154,6 +161,7 @@
                                     android:layout_marginStart="@dimen/_5sdp"
                                     android:layout_marginEnd="@dimen/_5sdp"
                                     android:layout_toEndOf="@+id/favorite_btn"
+                                    android:visibility="@{kstatus ? View.VISIBLE : View.GONE}"
                                     android:layout_centerVertical="true"
                                     android:id="@+id/vertical_divider"
                                     android:background="@color/divider_color"

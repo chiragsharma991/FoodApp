@@ -19,6 +19,7 @@ import android.annotation.TargetApi
 import android.widget.Toast
 import android.webkit.WebViewClient
 import android.app.Activity
+import android.graphics.Bitmap
 import android.util.Log
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.databinding.*
@@ -78,9 +79,8 @@ class TermsCondition : BaseFragment() {
 
     fun setwebview(){
 
-
         webview.getSettings().setJavaScriptEnabled(true) // enable javascript
-        webview.loadUrl(if(id ==0) ApiClient.TERMS_CONDITION else ApiClient.COOKIES_POLICY)
+        webview.loadUrl(if(fragment_id ==0) ApiClient.TERMS_CONDITION else ApiClient.COOKIES_POLICY)
         //http://eatmore.dk/web-view/t-o-s
         webview.setWebViewClient(WebViewController())
     }
@@ -93,6 +93,19 @@ class TermsCondition : BaseFragment() {
             view.loadUrl(url)
             return true
         }
+
+        override fun onPageFinished(view: WebView?, url: String?) {
+            super.onPageFinished(view, url)
+            progress_bar.visibility=View.GONE
+        }
+
+
+        override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+            super.onPageStarted(view, url, favicon)
+            progress_bar.visibility=View.VISIBLE
+        }
+
+
     }
 
 

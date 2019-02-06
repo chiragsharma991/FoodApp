@@ -145,7 +145,7 @@ class EpayFragment : BaseFragment() {
         }
     }
 
-    private fun fetch_viewCardList() {
+    fun fetch_viewCardList() {
 
         //{"customer_id":"1766","r_token":"w5oRqFiAXTBB3hwpixAORbg_BwUj0EMQ07042017114812","is_login":"1","r_key":"fcARlrbZFXYee1W6eYEIA0VRlw7MgV4o07042017114812"}
         val postParam = JsonObject()
@@ -309,8 +309,15 @@ class EpayFragment : BaseFragment() {
         }
         paymentattributes=PaymentAttributes()
         paymentattributes.order_total=ui_model!!.viewcard_list.value!!.order_total.toString()
-        paymentattributes.online_logo=restaurant.restpaymentmethods[0].logo
-        paymentattributes.cash_logo=restaurant.restpaymentmethods[1].logo
+        for (i in 0.until(restaurant.restpaymentmethods.size)){
+            if(restaurant.restpaymentmethods[i].pm_id =="1"){
+             // online
+             paymentattributes.online_logo=restaurant.restpaymentmethods[i].logo
+            }else{
+             //cash
+             paymentattributes.cash_logo=restaurant.restpaymentmethods[i].logo
+            }
+        }
         paymentattributes.restaurant_name=restaurant.restaurant_name
         paymentattributes.restaurant_address=restaurant.address
         paymentattributes.restaurant_phone=restaurant.phone

@@ -88,6 +88,24 @@ abstract class BaseActivity : AppCompatActivity()
             finish()
     }
 
+    fun is_location_PermissionGranted(): Boolean {
+        if (Build.VERSION.SDK_INT >= 23) {
+            // location permission
+            if (checkSelfPermission(Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED &&
+                    checkSelfPermission(Manifest.permission.ACCESS_COARSE_LOCATION) == PackageManager.PERMISSION_GRANTED) {
+                return true
+
+            } else {
+                requestPermissions(arrayOf(Manifest.permission.ACCESS_FINE_LOCATION, Manifest.permission.ACCESS_COARSE_LOCATION), 1)
+                return false
+            }
+
+        } else { //permission is automatically granted on sdk<23 upon installation
+            return true
+        }
+
+    }
+
     fun rightToLeftAnimation(context:Context): Animation {
         val animation = AnimationUtils.loadAnimation(context, R.anim.enter_from_right)
         animation.duration = 250

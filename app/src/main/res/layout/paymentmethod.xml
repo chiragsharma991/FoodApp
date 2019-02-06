@@ -203,7 +203,7 @@
                                             <LinearLayout
                                                 android:id="@+id/online_img"
                                                 android:layout_width="match_parent"
-                                                android:layout_height="@dimen/_23sdp"
+                                                android:layout_height="@dimen/_32sdp"
                                                 android:layout_marginStart="8dp"
                                                 android:layout_marginTop="8dp"
                                                 android:layout_marginEnd="8dp"
@@ -219,25 +219,15 @@
                                                     android:layout_width="match_parent"
                                                     android:layout_height="match_parent"
                                                     android:orientation="horizontal"
-                                                    android:layout_weight="0.9"
+                                                    android:layout_weight="0.6"
                                                     >
 
                                                     <android.support.v7.widget.AppCompatImageView
                                                         android:layout_width="match_parent"
                                                         android:layout_height="match_parent"
-                                                        android:scaleType="fitXY"
-                                                        android:layout_marginTop="@dimen/_4sdp"
-                                                        android:layout_marginBottom="@dimen/_4sdp"
+                                                        android:scaleType="fitCenter"
                                                         android:id="@+id/online_payment_icon"
                                                         />
-
-                                                </LinearLayout>
-                                                <LinearLayout
-                                                    android:layout_width="match_parent"
-                                                    android:layout_height="match_parent"
-                                                    android:orientation="horizontal"
-                                                    android:layout_weight="1.1"
-                                                    >
 
                                                 </LinearLayout>
 
@@ -441,7 +431,7 @@
                                             <LinearLayout
                                                 android:id="@+id/cash_img"
                                                 android:layout_width="match_parent"
-                                                android:layout_height="23dp"
+                                                android:layout_height="@dimen/_32sdp"
                                                 android:layout_marginStart="8dp"
                                                 android:layout_marginTop="8dp"
                                                 android:layout_marginEnd="8dp"
@@ -460,8 +450,8 @@
                                                     android:layout_weight="0.9"
                                                     >
                                                     <android.support.v7.widget.AppCompatImageView
-                                                        android:layout_width="@dimen/_25sdp"
-                                                        android:layout_height="@dimen/_25sdp"
+                                                        android:layout_width="@dimen/_32sdp"
+                                                        android:layout_height="match_parent"
                                                         android:scaleType="fitXY"
                                                         android:id="@+id/cash_payment_icon"
                                                         />
@@ -1016,7 +1006,7 @@
                                                 android:layout_marginStart="@dimen/_8sdp"
                                                 android:layout_marginEnd="@dimen/_8sdp"
                                                 android:layout_marginTop="@dimen/_5sdp"
-                                                android:layout_marginBottom="@dimen/_32sdp"
+                                                android:layout_marginBottom="@dimen/_8sdp"
                                                 android:orientation="horizontal">
 
 
@@ -1050,6 +1040,29 @@
 
                                             </android.support.constraint.ConstraintLayout>
 
+                                            <View
+                                                android:layout_width="match_parent"
+                                                android:layout_height="1dp"
+                                                android:alpha="0.2"
+                                                android:background="@color/divider_color"
+
+                                                />
+
+                                            <android.support.v7.widget.AppCompatTextView
+                                                style="@style/Subtitle_TextViewSmall"
+                                                android:layout_marginStart="@dimen/_8sdp"
+                                                android:layout_marginEnd="@dimen/_8sdp"
+                                                android:layout_marginTop="@dimen/_8sdp"
+                                                android:layout_marginBottom="@dimen/_8sdp"
+                                                android:alpha="0.8"
+                                                android:id="@+id/eatmore_contact"
+                                                android:gravity="center"
+                                                android:text="@string/brug_for_hjælp"
+                                                app:layout_constraintBottom_toBottomOf="parent"
+                                                app:layout_constraintEnd_toEndOf="parent"
+                                                app:layout_constraintHorizontal_bias="0.5"
+                                                app:layout_constraintStart_toEndOf="@+id/paymenttype_img"
+                                                app:layout_constraintTop_toTopOf="@+id/paymenttype_img" />
 
                                         </LinearLayout>
 

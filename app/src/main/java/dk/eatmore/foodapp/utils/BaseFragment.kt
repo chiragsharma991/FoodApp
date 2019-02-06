@@ -57,6 +57,7 @@ import dk.eatmore.foodapp.fragment.ProductInfo.CategoryList
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.rest.ApiClient
 import dk.eatmore.foodapp.rest.ApiInterface
+import dk.eatmore.foodapp.storage.PreferenceUtil
 import kotlinx.android.synthetic.main.category_list.*
 import kotlinx.android.synthetic.main.fragment_home_container.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
@@ -244,7 +245,7 @@ abstract class BaseFragment : Fragment() {
                         ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0)
                     }
                     is AccountFragment ->{
-                        ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0)
+                        fragment.onBackpress()
                     }
                     is HomeFragment ->{
                         (activity as HomeActivity).finish()
@@ -400,6 +401,16 @@ abstract class BaseFragment : Fragment() {
         }
     }
 
+    fun getDefaultApiParms() : JsonObject{
+        val postParam = JsonObject()
+        postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
+        postParam.addProperty(Constants.EATMORE_APP, true)
+        postParam.addProperty(Constants.DEVICE_TYPE, Constants.DEVICE_TYPE_VALUE)
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+        return postParam
+    }
+
 
     fun getActivityBase(): Activity {
         return activity!!
@@ -424,6 +435,7 @@ abstract class BaseFragment : Fragment() {
     }
 
     fun <T> callAPI(call: Call<T>, onAliCallInteraction: OnApiCallInteraction) {
+        hideKeyboard()
         if (isInternetAvailable()) {
             call.enqueue(object : Callback<T> {
                 override fun onResponse(call: Call<T>, response: Response<T>) {

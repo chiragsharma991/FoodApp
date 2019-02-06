@@ -139,16 +139,37 @@
                         android:text="Kavalitet"
                         />
 
-                    <RatingBar
-                        style="?android:attr/ratingBarStyleIndicator"
-                        android:layout_width="wrap_content"
-                        android:id="@+id/quality_of_food_rating"
+                    <RelativeLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:isIndicator="false"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:numStars="6"
-                        android:rating="0"
-                        android:stepSize="1" />
+                        >
+
+                        <RatingBar
+                            style="?android:attr/ratingBarStyleIndicator"
+                            android:layout_width="wrap_content"
+                            android:id="@+id/quality_of_food_rating"
+                            android:layout_height="wrap_content"
+                            android:isIndicator="false"
+                            android:numStars="6"
+                            android:rating="0"
+                            android:stepSize="1" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/Subtitle_TextViewSmall"
+                            android:id="@+id/qty_remark"
+                            android:layout_toEndOf="@+id/quality_of_food_rating"
+                            android:singleLine="true"
+                            android:textColor="@color/theme_color"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="@dimen/_16sdp"
+                            />
+
+
+
+                    </RelativeLayout>
+
+
 
                     <android.support.v7.widget.AppCompatTextView
                         style="@style/Titlelight_TextViewSmall"
@@ -157,16 +178,40 @@
                         android:text="Kundeservice"
                         />
 
-                    <RatingBar
-                        style="?android:attr/ratingBarStyleIndicator"
-                        android:layout_width="wrap_content"
+
+
+                    <RelativeLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:isIndicator="false"
-                        android:numStars="6"
-                        android:id="@+id/customer_service_rating"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:rating="0"
-                        android:stepSize="1" />
+                        >
+
+                        <RatingBar
+                            style="?android:attr/ratingBarStyleIndicator"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:isIndicator="false"
+                            android:numStars="6"
+                            android:id="@+id/customer_service_rating"
+                            android:rating="0"
+                            android:stepSize="1" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/Subtitle_TextViewSmall"
+                            android:id="@+id/customer_service_remark"
+                            android:layout_toEndOf="@+id/customer_service_rating"
+                            android:singleLine="true"
+                            android:textColor="@color/theme_color"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="@dimen/_16sdp"
+                            />
+
+
+
+                    </RelativeLayout>
+
+
+
 
                     <android.support.v7.widget.AppCompatTextView
                         style="@style/Titlelight_TextViewSmall"
@@ -175,16 +220,36 @@
                         android:text="Leveringstid"
                         />
 
-                    <RatingBar
-                        style="?android:attr/ratingBarStyleIndicator"
-                        android:layout_width="wrap_content"
-                        android:id="@+id/delivery_time_rating"
+                    <RelativeLayout
+                        android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:isIndicator="false"
-                        android:numStars="6"
                         android:layout_marginTop="@dimen/_5sdp"
-                        android:rating="0"
-                        android:stepSize="1" />
+                        >
+
+
+                        <RatingBar
+                            style="?android:attr/ratingBarStyleIndicator"
+                            android:layout_width="wrap_content"
+                            android:id="@+id/delivery_time_rating"
+                            android:layout_height="wrap_content"
+                            android:isIndicator="false"
+                            android:numStars="6"
+                            android:rating="0"
+                            android:stepSize="1" />
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/Subtitle_TextViewSmall"
+                            android:id="@+id/delivery_time_remark"
+                            android:layout_toEndOf="@+id/delivery_time_rating"
+                            android:singleLine="true"
+                            android:textColor="@color/theme_color"
+                            android:layout_centerVertical="true"
+                            android:layout_marginStart="@dimen/_16sdp"
+                            />
+
+
+
+                    </RelativeLayout>
 
                     <android.support.v7.widget.AppCompatTextView
                         style="@style/Titlelight_TextViewSmall"

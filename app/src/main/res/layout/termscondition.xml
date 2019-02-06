@@ -40,6 +40,10 @@
 
             </android.support.design.widget.AppBarLayout>
 
+
+
+
+
             <WebView
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -48,6 +52,18 @@
                 >
 
             </WebView>
+
+
+            <ProgressBar
+                android:id="@+id/progress_bar"
+                style="@style/Widget.AppCompat.ProgressBar.Horizontal"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="visible"
+                android:layout_below="@+id/appbar"
+                android:layout_marginTop="-7dp"
+                android:indeterminate="true" />
 
 
         </RelativeLayout>

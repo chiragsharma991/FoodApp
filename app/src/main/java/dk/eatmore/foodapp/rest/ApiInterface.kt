@@ -2,6 +2,7 @@ package dk.eatmore.foodapp.rest
 
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.EditAddress
+import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.RestPaymentMethods
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedDetails
 import dk.eatmore.foodapp.model.home.ProductListModel
@@ -160,6 +161,10 @@ interface ApiInterface {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun userInfo(@Body jsonObject: JsonObject): Call<JsonObject>
 
+    @POST("RestaurantPaymentMethod/restaurant-payment-method/view_record")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun restaurant_payment_method(@Body jsonObject: JsonObject): Call<RestPaymentMethods.RestPayMethodModel>
+
     @POST("Category/category/menu")
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun category_menu(@Body jsonObject: JsonObject): Call<JsonObject>
@@ -193,12 +198,17 @@ interface ApiInterface {
             @Field("first_name") first_name: String,
             @Field("email") email: String,
             @Field("telephone_no") telephone_no: String,
-            @Field("app") app : String
+            @Field("app") app : String,
+            @Field("subscribe") subscribe : Int
     ): Call<JsonObject>
 
     @POST("Cart/cart/delivery-details")
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun deliveryDetails(@Body jsonObject: JsonObject): Call<JsonObject>
+
+    @POST("Enduser/enduser/delete_record")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun delete_record(@Body jsonObject: JsonObject): Call<JsonObject>
 
     @POST("Cart/cart/pickup-info")
     @Headers("Content-Type: application/x-www-form-urlencoded")

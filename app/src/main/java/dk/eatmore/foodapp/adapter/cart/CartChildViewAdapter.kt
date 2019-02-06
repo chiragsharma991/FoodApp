@@ -40,9 +40,10 @@ class CartChildViewAdapter(val context: Context, val listner: CartViewAdapter.Ad
             holder.binding.data=list_child[position]
             holder.binding.executePendingBindings()
 
-            if (list_child[position].is_itemselected){
+            if (list_child[position].is_copyof_itemselected){
                 holder.binding.itemRccTxt.setTextColor(ContextCompat.getColor(context, R.color.theme_color))
                 holder.binding.priceRccTxt.setTextColor(ContextCompat.getColor(context, R.color.theme_color))
+                holder.binding.itemCheckbox.isChecked = true
            //     val model=CalculateAttribute(p_id,list_child[position].pad_id,list_child[position].a_price)
                 calculateAttribute.get(parentPosition).p_id = p_id
                 calculateAttribute.get(parentPosition).pad_id = list_child[position].pad_id
@@ -50,6 +51,8 @@ class CartChildViewAdapter(val context: Context, val listner: CartViewAdapter.Ad
             }else{
                 holder.binding.itemRccTxt.setTextColor(ContextCompat.getColor(context, R.color.black_txt_light))
                 holder.binding.priceRccTxt.setTextColor(ContextCompat.getColor(context, R.color.black_txt_light))
+                holder.binding.itemCheckbox.isChecked = false
+
             }
 
             holder.binding.rowChildCartItemlayout.setOnClickListener {
