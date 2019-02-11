@@ -88,6 +88,7 @@ class Splash : BaseActivity() {
             // hide the navigation bar.
             systemUiVisibility = View.SYSTEM_UI_FLAG_HIDE_NAVIGATION or View.SYSTEM_UI_FLAG_FULLSCREEN
         }
+        hideKeyboard()
         fullScreen()
         PreferenceUtil.save()
         getCurrentVersion()

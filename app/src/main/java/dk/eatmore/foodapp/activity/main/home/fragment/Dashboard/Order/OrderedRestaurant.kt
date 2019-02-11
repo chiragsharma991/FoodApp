@@ -316,7 +316,7 @@ class OrderedRestaurant : CommanAPI() {
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
         postParam.addProperty(Constants.ORDER_NO,arguments!!.getString(Constants.ORDER_NO))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
-        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+        postParam.addProperty(Constants.LANGUAGE, Constants.DA)
 
         callAPI(ApiCall.orderdetails(postParam), object : BaseFragment.OnApiCallInteraction {
             override fun <T> onSuccess(body: T?) {
@@ -562,7 +562,7 @@ class OrderedRestaurant : CommanAPI() {
         postParam.addProperty(Constants.EATMORE_APP, true)
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
         postParam.addProperty(Constants.ORDER_NO,ui_model!!.ordered_details.value!!.data!![0].order_no)
-        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+        postParam.addProperty(Constants.LANGUAGE, Constants.DA)
         call_check_order = ApiCall.check_order(jsonObject = postParam)
 
         callAPI(call_check_order!!, object : BaseFragment.OnApiCallInteraction {

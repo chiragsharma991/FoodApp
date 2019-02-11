@@ -159,7 +159,7 @@ class EpayFragment : BaseFragment() {
         }
         postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
-        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+        postParam.addProperty(Constants.LANGUAGE, Constants.DA)
         call_viewcartlist=ApiCall.viewcart(jsonObject = postParam)
         callAPI(call_viewcartlist!!, object : BaseFragment.OnApiCallInteraction {
 
@@ -222,7 +222,7 @@ class EpayFragment : BaseFragment() {
         postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
         postParam.addProperty(Constants.OP_ID, op_id)
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
-        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+        postParam.addProperty(Constants.LANGUAGE, Constants.DA)
         call_deleteitem=ApiCall.deleteitemFromcart(jsonObject = postParam)
         callAPI(call_deleteitem!!, object : BaseFragment.OnApiCallInteraction {
 
@@ -563,6 +563,7 @@ class EpayFragment : BaseFragment() {
             var is_fav : Boolean = false,
             var payment_time :String ="",
             var expected_time :String ="",
+            var expected_time_display :String ="",
             var restaurant_name :String ="",
             var restaurant_address :String ="",
             var restaurant_phone :String ="",

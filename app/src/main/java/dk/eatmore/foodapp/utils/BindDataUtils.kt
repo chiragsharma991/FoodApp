@@ -46,8 +46,10 @@ object BindDataUtils {
             val deviceLocale = Locale.getDefault().language //  if (deviceLocale.equalsIgnoreCase("en")) {
             //      return formatValueToMoney(amount);
             //  } else {
+
+            val decimal_price=amount.replace(",",".").replace(".",".")
             val mNumberFormat = NumberFormat.getCurrencyInstance(Locale.GERMANY)
-            var convertedAmount: String? = mNumberFormat.format(amount.toDouble())
+            var convertedAmount: String? = mNumberFormat.format(decimal_price.toDouble())
             println(convertedAmount)
             if (convertedAmount != null && convertedAmount.length > 2) {
                 convertedAmount = convertedAmount.substring(0, convertedAmount.length - 2)
@@ -67,8 +69,9 @@ object BindDataUtils {
             val deviceLocale = Locale.getDefault().language //  if (deviceLocale.equalsIgnoreCase("en")) {
             //      return formatValueToMoney(amount);
             //  } else {
+            val decimal_price=amount.replace(".",".").replace(",",".")
             val mNumberFormat = NumberFormat.getCurrencyInstance(Locale.GERMANY)
-            var convertedAmount: String? = mNumberFormat.format(amount.toDouble())
+            var convertedAmount: String? = mNumberFormat.format(decimal_price.toDouble())
             println(convertedAmount)
             if (convertedAmount != null && convertedAmount.length > 2) {
                 convertedAmount = convertedAmount.substring(0, convertedAmount.length - 2)

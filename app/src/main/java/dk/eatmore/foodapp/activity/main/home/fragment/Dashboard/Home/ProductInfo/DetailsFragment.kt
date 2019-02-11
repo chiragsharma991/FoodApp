@@ -278,7 +278,7 @@ class DetailsFragment : CommanAPI() {
         }
         postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN, ""))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
-        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+        postParam.addProperty(Constants.LANGUAGE, Constants.DA)
 
         //  progress_bar_layout.visibility=View.VISIBLE
         call_category_menu = ApiCall.category_menu(postParam)

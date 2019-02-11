@@ -154,7 +154,6 @@
                             android:layout_weight="1"
                             android:textStyle="normal"
                             android:layout_margin="@dimen/_16sdp"
-                            android:onClick="@{handlers::profileInfo}"
                             android:text="Brugeroplysninger"
                             />
 
@@ -172,6 +171,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
+                        android:onClick="@{handlers::go_onfavorite}"
                         android:background="@color/white"
                         android:orientation="horizontal">
 
@@ -199,6 +199,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:background="@color/white"
+                        android:onClick="@{handlers::kundle_support}"
                         android:orientation="horizontal">
 
 
@@ -207,7 +208,7 @@
                             android:layout_weight="1"
                             android:textStyle="normal"
                             android:layout_margin="@dimen/_16sdp"
-                            android:text="Kundle support"
+                            android:text="@string/kundle_support"
                             />
 
 

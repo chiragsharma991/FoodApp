@@ -249,7 +249,7 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
         postParam.addProperty(Constants.EATMORE_APP, true)
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
-        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+        postParam.addProperty(Constants.LANGUAGE, Constants.DA)
 
         callAPI(ApiCall.myorders(
                 jsonObject = postParam

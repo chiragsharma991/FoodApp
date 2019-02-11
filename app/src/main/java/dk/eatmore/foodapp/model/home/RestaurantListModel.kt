@@ -11,7 +11,7 @@ data class RestaurantListModel(
                                val msg: String = "",
                                val restaurant_list: RestaurantList,
                                val postal_city: ArrayList<Postalcity> = arrayListOf(),
-                               val area_details: AreaDetails,
+                               val area_details: AreaDetails?,
                                val status: Boolean = false): ModelUtility(),Serializable
 
 data class RestaurantList(

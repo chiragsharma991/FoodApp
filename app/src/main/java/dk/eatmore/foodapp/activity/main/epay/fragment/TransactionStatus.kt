@@ -236,7 +236,7 @@ class TransactionStatus : CommanAPI() {
         postParam.addProperty(Constants.PAYMENTTYPE, EpayFragment.paymentattributes.paymenttype)
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
-        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+        postParam.addProperty(Constants.LANGUAGE, Constants.DA)
         val jsonarray = JsonArray()
 
         for (i in 0.until(EpayFragment.selected_op_id.size)) {
@@ -316,7 +316,7 @@ class TransactionStatus : CommanAPI() {
         postParam.addProperty(Constants.EATMORE_APP, true)
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
         postParam.addProperty(Constants.ORDER_NO, EpayFragment.paymentattributes.order_no)
-        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+        postParam.addProperty(Constants.LANGUAGE, Constants.DA)
         call_check_order = ApiCall.check_order(jsonObject = postParam)
 
         callAPI(call_check_order!!, object : BaseFragment.OnApiCallInteraction {

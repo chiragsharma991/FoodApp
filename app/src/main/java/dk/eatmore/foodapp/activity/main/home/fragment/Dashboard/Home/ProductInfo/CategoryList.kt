@@ -205,7 +205,7 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
         postParam.addProperty(Constants.P_PRICE, data.p_price)
         postParam.addProperty(Constants.P_QUANTITY, "1")
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
-        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+        postParam.addProperty(Constants.LANGUAGE, Constants.DA)
 
         callAPI(ApiCall.addtocart(
                 jsonObject = postParam

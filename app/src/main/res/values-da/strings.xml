@@ -209,6 +209,7 @@
     <string name="brug_for_hjælp">Brug for hjælp? kontakt vores kundeservicecenter pa 73702515</string>
     <string name="app_version">App version v%1$s_%2$s</string>
     <string name="slet_bruger">Slet bruger</string>
+    <string name="kundle_support">Kundle support</string>
 
 
 </resources>

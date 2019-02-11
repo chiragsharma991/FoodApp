@@ -106,12 +106,13 @@ class DeliveryTimeslot : BaseFragment() {
                     for ( entries in time_list!!.entries){
                         if(time_list!!.get(entries.key) == delivery_time_slot.text.trim().toString()){
                             EpayFragment.paymentattributes.expected_time=entries.key
+                            EpayFragment.paymentattributes.expected_time_display=delivery_time_slot.text.trim().toString()
                         }
                     }
 //                    Delivery: "Levering ønsket til" + " " + TIME
 //                    Pickup: "Afhentining" + " " + TIME
                     EpayFragment.paymentattributes.comments=comment_edt.text.trim().toString().replace(":",",",false)
-                    EpayFragment.paymentattributes.payment_time=if(EpayFragment.isPickup)"Afhentining ${EpayFragment.paymentattributes.expected_time}" else "Levering ønsket til ${EpayFragment.paymentattributes.expected_time}"
+                    EpayFragment.paymentattributes.payment_time=if(EpayFragment.isPickup)"Afhentining ${EpayFragment.paymentattributes.expected_time_display}" else "Levering ønsket til ${EpayFragment.paymentattributes.expected_time_display}"
                     (parentFragment as EpayFragment).addFragment(R.id.epay_container,Paymentmethod.newInstance(),Paymentmethod.TAG,true)
                 }
                 else {
@@ -148,7 +149,7 @@ class DeliveryTimeslot : BaseFragment() {
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
         postParam.addProperty(Constants.SHIPPING, if (EpayFragment.isPickup) getString(R.string.pickup) else getString(R.string.delivery))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
-        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+        postParam.addProperty(Constants.LANGUAGE, Constants.DA)
         call_pickupinfo=ApiCall.pickupinfo(jsonObject = postParam)
         callAPI(call_pickupinfo!!, object : BaseFragment.OnApiCallInteraction {
 

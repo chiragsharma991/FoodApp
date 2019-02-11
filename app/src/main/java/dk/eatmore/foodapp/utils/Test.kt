@@ -22,80 +22,73 @@ class Test   {
                 str=str.replace(":",",",false)
                // System.out.println("Using : as a delimiter " + Arrays.toString(parts))
              //   println("First Name = $fName")
-                println("Age = $str")
-                val user = User(type = 5)
-                System.out.println("Out put>>>> "+user.name+" "+user.type)
+               // println("Age = $str")
+
+
+                val s = "."
+                val q = ","
+                val w = ","
+                val `as` = "12,00"
+                val newstring = `as`.replace(s, w).replace(q, w)
+                println("Age = $newstring")
+
+/*
+                val data = Data(pm_name = "test")
+                val list = ArrayList<Data>()
+                list.add(data)*/
+            //    val user = User(type = 5,data = null)
+             //   System.out.println("Out put>>>> "+user.name+" "+user.type+""+user.data)
 
 
             }
         }
 
-/*
-    companion object {
-        val TAG = "ChangePassword"
-        fun newInstance(): ChangePassword {
-            return ChangePassword()
-        }
-    }
-*/
-
-
-/*
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        setContentView(R.layout.test)
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);
-
-    */
-/*    Glide.with(this).asGif()
-                .load(R.raw.screen_revised)
-                .listener(object : RequestListener<GifDrawable>{
-                    override fun onLoadFailed(e: GlideException?, model: Any?, target: Target<GifDrawable>?, isFirstResource: Boolean): Boolean {
-                        loge(TAG,"onLoadFailed")
-                        return false
-                    }
-
-                    override fun onResourceReady(resource: GifDrawable?, model: Any?, target: Target<GifDrawable>?, dataSource: DataSource?, isFirstResource: Boolean): Boolean {
-                        loge(TAG,"onResourceReady")
-                        resource!!.setLoopCount(1)
-                        return false
-                    }
-
-                })
-                .into(image_view)*//*
 
 
 
-    }
-*/
 
-/*
-    data  class  User (val name: String? ="default value",
-                       val type: Int
-    ){
-        constructor(name: String?,type: Int) : this(name ?: "null not",type=5)
-    }
-*/
+ /*   data class User(
+            val status: Boolean,
+            val msg: String ,
+            val payment_method_image_path: String ,
+            val payment_method_thumbnail_logo: String ,
+            val data: ArrayList<Data>
 
-
-
-    data class User(
-            val name: Int ,
-            val type: Int
     ) {
         constructor(
-                name: Int? = 5,
-                type: Int? =7
-        ) : this(
-                name=name ?: 5 ,
-                type=type ?: 4
+                // ==1 means if you not pass value then assign by default.
+                status: Boolean? ,
+                msg: String? ,
+                payment_method_image_path: String? ,
+                payment_method_thumbnail_logo: String? ,
+                data: ArrayList<Data>?
+        ) : this (
+                status=status,
+                msg=msg,
+                data = data?: arrayListOf(),
+                payment_method_thumbnail_logo = "",
+                payment_method_image_path = ""
         )
 
 
-    }
+    }*/
 
 
-    }
+
+
+
+
+    data class Data (
+            val pm_name: String ="",
+            val logo: String ="",
+            var copy_logo: String =""
+
+    )
+
+
+
+
+}
 
 
 

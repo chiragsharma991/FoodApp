@@ -333,7 +333,7 @@ class Address : BaseFragment(), TextWatcher {
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
-        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+        postParam.addProperty(Constants.LANGUAGE, Constants.DA)
         if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
             postParam.addProperty(Constants.IS_LOGIN, "1")
             postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
@@ -413,7 +413,7 @@ class Address : BaseFragment(), TextWatcher {
         postParam.addProperty(Constants.POSTAL_CODE, postnumber_edt.text.toString())
         postParam.addProperty(Constants.CITY, city_edt.text.toString())
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
-        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+        postParam.addProperty(Constants.LANGUAGE, Constants.DA)
 
         call_deliveryDetails = ApiCall.deliveryDetails(jsonObject = postParam)
         callAPI(call_deliveryDetails!!, object : BaseFragment.OnApiCallInteraction {

@@ -75,10 +75,11 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
 
         val TAG = "RestaurantList"
         var ui_model: RestaurantList.UIModel? = null
-        fun newInstance(postal_code: String): RestaurantList {
+        fun newInstance(postal_code: String, is_fav : Boolean): RestaurantList {
             val fragment = RestaurantList()
             val bundle = Bundle()
             bundle.putString(Constants.POSTAL_CODE, postal_code)
+            bundle.putBoolean(Constants.IS_FAV, is_fav)
             fragment.arguments = bundle
             return fragment
         }
@@ -169,7 +170,12 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
         val jsonobject = JsonObject()
         jsonobject.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
         jsonobject.addProperty(Constants.EATMORE_APP, true)
-        jsonobject.addProperty(Constants.POSTAL_CODE, bundle!!.getString(Constants.POSTAL_CODE, "0"))
+        if(bundle!!.getBoolean(Constants.IS_FAV)){
+            // if you fav . then add this line.
+            jsonobject.addProperty(Constants.IS_FAV, true)
+            HomeFragment.is_fav=false
+        }
+        jsonobject.addProperty(Constants.POSTAL_CODE, bundle.getString(Constants.POSTAL_CODE, ""))
         if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
             jsonobject.addProperty(Constants.IS_LOGIN, "1")
             jsonobject.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
@@ -585,7 +591,7 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
 
         fun kokkenType(view: View) {
 
-            if(restaurantlist.progress_bar.visibility == View.GONE  && restaurantlist.list.size > 0 ){
+            if(restaurantlist.progress_bar.visibility == View.GONE  && restaurantlist.list.size  > 0 ){
                 val intent = Intent(restaurantlist.context, KokkenType::class.java)
                 val bundle = Bundle()
                 if(restaurantlist.restaurantlistmodel !=null){
@@ -612,7 +618,7 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
 
         fun tilpas(view: View) {
 
-            if(restaurantlist.progress_bar.visibility == View.GONE && restaurantlist.list.size > 0){
+            if(restaurantlist.progress_bar.visibility == View.GONE && restaurantlist.list.size  > 0){
                 val intent = Intent(restaurantlist.context, Tilpas::class.java)
                 val bundle = Bundle()
                 restaurantlist.is_from_filter=true

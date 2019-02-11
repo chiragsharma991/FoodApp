@@ -25,6 +25,8 @@ allprojects {
     repositories {
         google()
         jcenter()
+        maven { url 'https://zendesk.artifactoryonline.com/zendesk/repo' }
+
     }
 }
 

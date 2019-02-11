@@ -90,6 +90,7 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
+
         <!-- Firebase Start-->
         <service
             android:name=".service.fcm.FirebaseMessagingService">

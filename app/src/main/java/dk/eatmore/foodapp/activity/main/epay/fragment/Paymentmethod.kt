@@ -600,7 +600,7 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             postParam.addProperty(Constants.FIRST_NAME, EpayFragment.paymentattributes.first_name)
             postParam.addProperty(Constants.ADDITIONAL_CHARGE, if(Paymentmethod.isPaymentonline) EpayFragment.paymentattributes.additional_charges_online else EpayFragment.paymentattributes.additional_charges_cash)
             postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
-            postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+            postParam.addProperty(Constants.LANGUAGE, Constants.DA)
             val jsonarray=JsonArray()
             for (i in 0.until(EpayFragment.selected_op_id.size) ){
                 val jsonobject= JsonObject()

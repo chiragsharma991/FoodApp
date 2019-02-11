@@ -407,7 +407,7 @@ abstract class BaseFragment : Fragment() {
         postParam.addProperty(Constants.EATMORE_APP, true)
         postParam.addProperty(Constants.DEVICE_TYPE, Constants.DEVICE_TYPE_VALUE)
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
-        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+        postParam.addProperty(Constants.LANGUAGE, Constants.DA)
         return postParam
     }
 

@@ -73,6 +73,7 @@ class HomeFragment : CommanAPI() {
 
     companion object {
         var count: Int = 0
+        var is_fav : Boolean = false
         var ui_model: UIModel? = null
         val TAG = "HomeFragment"
         fun newInstance(): HomeFragment {
@@ -112,7 +113,7 @@ class HomeFragment : CommanAPI() {
             find_rest_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
                 override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                     if (find_rest_edt.text.trim().toString().length > 0) {
-                        val restaurantlist = RestaurantList.newInstance(find_rest_edt.text.trim().toString())
+                        val restaurantlist = RestaurantList.newInstance(find_rest_edt.text.trim().toString(), is_fav)
                         addFragment(R.id.home_fragment_container, restaurantlist, RestaurantList.TAG, true)
                     }
                     return true
@@ -258,6 +259,14 @@ class HomeFragment : CommanAPI() {
             }
 
 
+    fun go_onfavorite(){
+        is_fav=true
+        find_rest_edt.text.clear()
+        find_rest_edt.clearFocus()
+        val restaurantlist = RestaurantList.newInstance("", is_fav)
+        addFragment(R.id.home_fragment_container, restaurantlist, RestaurantList.TAG, true)
+    }
+
     fun updateRate() {
 
         fetchLastOrder() // refresh current fragment
@@ -358,7 +367,7 @@ class HomeFragment : CommanAPI() {
         postParam.addProperty(Constants.EATMORE_APP, true)
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
-        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+        postParam.addProperty(Constants.LANGUAGE, Constants.DA)
 
         callAPI(ApiCall.lastorder(postParam), object : BaseFragment.OnApiCallInteraction {
             override fun <T> onSuccess(body: T?) {
@@ -426,7 +435,7 @@ class HomeFragment : CommanAPI() {
             if (find_rest_edt.text.trim().toString().length > 0) {
                 homefragment.progress_bar.visibility = View.GONE
                 gps_img.visibility = View.VISIBLE
-                val restaurantlist = RestaurantList.newInstance(find_rest_edt.text.trim().toString())
+                val restaurantlist = RestaurantList.newInstance(find_rest_edt.text.trim().toString(), is_fav)
                 addFragment(R.id.home_fragment_container, restaurantlist, RestaurantList.TAG, true)
             }
         }

@@ -155,7 +155,7 @@ class SelectAddress : BaseFragment() {
         postParam.addProperty(Constants.IS_LOGIN, "1")
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
-        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+        postParam.addProperty(Constants.LANGUAGE, Constants.DA)
         callAPI(ApiCall.delete_shippingaddress(jsonObject = postParam), object : BaseFragment.OnApiCallInteraction {
             override fun <T> onSuccess(body: T?) {
                 showProgressDialog()
@@ -190,7 +190,7 @@ class SelectAddress : BaseFragment() {
         postParam.addProperty(Constants.IS_LOGIN, "1")
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
-        postParam.addProperty(Constants.LANGUAGE, Constants.EN)
+        postParam.addProperty(Constants.LANGUAGE, Constants.DA)
         call_shippingaddress_list=ApiCall.shippingaddress_list(jsonObject = postParam)
         callAPI(call_shippingaddress_list!!, object : BaseFragment.OnApiCallInteraction {
 

@@ -8,6 +8,7 @@ import android.arch.lifecycle.ViewModelProviders
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.os.Handler
 import android.provider.Settings
 import android.support.v4.content.ContextCompat
 import android.view.LayoutInflater
@@ -31,6 +32,10 @@ import dk.eatmore.foodapp.utils.DialogUtils
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_signup.*
 import kotlinx.android.synthetic.main.toolbar.*
+import zendesk.core.AnonymousIdentity
+import zendesk.core.Zendesk
+import zendesk.support.Support
+import zendesk.support.request.RequestActivity
 
 class Profile : BaseFragment() {
 
@@ -40,6 +45,7 @@ class Profile : BaseFragment() {
     private var termscondition: TermsCondition? = null
     private var restpaymentmethods: RestPaymentMethods? = null
     private var editaddress: EditAddress? = null
+    private var kundlesupport: KundleSupport? = null
     private var coupan_fragment: Coupan? = null
     private lateinit var ui_model: UIModel
 
@@ -221,6 +227,10 @@ class Profile : BaseFragment() {
                 childFragmentManager.popBackStack()
                 return true
             }
+            else if (kundlesupport != null && kundlesupport!!.isVisible) {
+                childFragmentManager.popBackStack()
+                return true
+            }
             else {
                 if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
                     ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0) // if user is login and press only back then move->Home
@@ -286,6 +296,32 @@ class Profile : BaseFragment() {
         fun editaddress(view: View){
             profile.editaddress = EditAddress.newInstance()
             profile.addFragment(R.id.profile_container, profile.editaddress!!, EditAddress.TAG, false)
+        }
+
+        fun kundle_support(view: View){
+            profile.kundlesupport = KundleSupport.newInstance()
+            profile.addFragment(R.id.profile_container, profile.kundlesupport!!, KundleSupport.TAG, false)
+
+          /*  Zendesk.INSTANCE.init(profile.context!!, "https://xyz5070.zendesk.com", "5607f30269e67f046f086eae038d6c1abf60d0e6490a03ae", "mobile_sdk_client_e5c9b367c7d7adf62d77")
+            val identity = AnonymousIdentity()
+            Zendesk.INSTANCE.setIdentity(identity)
+            Support.INSTANCE.init(Zendesk.INSTANCE)
+
+            RequestActivity.builder().show(profile.context!!)*/
+
+
+        }
+
+        fun go_onfavorite(view: View) {
+            profile.showProgressDialog()
+            val fragmentof = (profile.activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
+            val homefragment=((profile.activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment()
+            homefragment.popAllFragment()
+            homefragment.go_onfavorite()
+            Handler().postDelayed({
+                profile.showProgressDialog()
+                ((profile.activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0)
+            },2000)
         }
 
     }

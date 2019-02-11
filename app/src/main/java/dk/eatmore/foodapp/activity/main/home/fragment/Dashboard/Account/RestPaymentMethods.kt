@@ -145,7 +145,7 @@ class RestPaymentMethods : BaseFragment() {
             val payment_method_thumbnail_logo: String ="",
             val data: ArrayList<Data>
     )
-  /*  {
+ /*   {
         constructor (status: Boolean?,msg: String?,payment_method_image_path: String?,payment_method_thumbnail_logo: String?,data: ArrayList<Data>?): this(status,"","","", arrayListOf())
     }*/
     data class Data (
