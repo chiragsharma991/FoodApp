@@ -42,6 +42,7 @@ class SearchlistParentAdapter(val c: Context, val list : ArrayList<MenuListItem>
                 adapter = mAdapter
 
             }
+            holder.binding.executePendingBindings()
         }
     }
 

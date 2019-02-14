@@ -25,6 +25,7 @@ import android.text.TextWatcher
 import android.widget.Toast
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
+import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.model.home.DefaultAttributeValue
 import dk.eatmore.foodapp.model.home.ProductAttributeItem
 import dk.eatmore.foodapp.model.home.ProductListItem
@@ -158,24 +159,33 @@ class SearchMenu : BaseFragment() {
                 SearchMenu.searchString=charString.toLowerCase()
                 if (charString.isEmpty()) {
                     menu_list_filtered = menu_list
+
                 } else {
-                    val filteredList = ArrayList<MenuListItem>()
+
+                    val filteredList = ArrayList<MenuListItem>() // This is main list to add
                     var i =0
+
                     while (i < menu_list.size  && !isCancelled()) {
                         loge(TAG,"is p canceled "+isCancelled)
 
-                        val productlistitem = ArrayList<ProductListItem>()
+                        val productlistitem = ArrayList<ProductListItem>() // we can add filter list in this varg
                         var j =0
+
+                        // Product name
+
                         while (j < menu_list.get(i).product_list!!.size && !isCancelled()) {
+
+                            // category
 
                             if(menu_list.get(i).product_list!![j].p_name.toLowerCase().contains(charString.toLowerCase()) || menu_list.get(i).product_list!![j].p_desc.toLowerCase().contains(charString.toLowerCase())){
                                 count++
+                                loge(TAG,"count ---"+count)
+
                                 val productattributeitem = ArrayList<ProductAttributeItem>()
 
                                 if(menu_list.get(i).product_list!!.get(j).product_attribute ==null){
 
                                     productlistitem.add(ProductListItem("","", arrayListOf(), menu_list.get(i).product_list!![j].p_desc,if(menu_list.get(i).product_list!![j].p_price == null) "" else menu_list.get(i).product_list!![j].p_price,menu_list.get(i).product_list!![j].productNo, menu_list.get(i).product_list!![j].p_name,menu_list.get(i).product_list!![j].extra_topping_group,menu_list.get(i).product_list!![j].cId,menu_list.get(i).product_list!![j].is_attributes,menu_list.get(i).product_list!![j].pImage,menu_list.get(i).product_list!![j].p_id))
-                                    filteredList.add(MenuListItem("","","","", menu_list.get(i).c_name,productlistitem))
 
                                 }else{
                                     for (k in 0.until(menu_list.get(i).product_list!!.get(j).product_attribute.size) ){
@@ -192,13 +202,19 @@ class SearchMenu : BaseFragment() {
                                         )
                                     }
                                     productlistitem.add(ProductListItem("","", productattributeitem, menu_list.get(i).product_list!![j].p_desc,if(menu_list.get(i).product_list!![j].p_price == null) "" else menu_list.get(i).product_list!![j].p_price,menu_list.get(i).product_list!![j].productNo, menu_list.get(i).product_list!![j].p_name,menu_list.get(i).product_list!![j].extra_topping_group,menu_list.get(i).product_list!![j].cId,menu_list.get(i).product_list!![j].is_attributes,menu_list.get(i).product_list!![j].pImage,menu_list.get(i).product_list!![j].p_id))
-                                    filteredList.add(MenuListItem("","","","", menu_list.get(i).c_name,productlistitem))
                                 }
 
                             }
                             ++j
 
                         }
+                        // add if condition here
+                        if(productlistitem.size > 0)
+                        filteredList.add(MenuListItem("","","","", menu_list.get(i).c_name,productlistitem))
+
+
+
+
                         ++i
                     }
                     menu_list_filtered = filteredList
@@ -206,7 +222,7 @@ class SearchMenu : BaseFragment() {
                 return count.toString()
             }
             override fun onPostExecute(result: String) {
-                loge(TAG,"on post ---"+result)
+                //mAdapter.notifyDataSetChanged()
                 mAdapter.refreshlist(menu_list_filtered)
 
 
@@ -223,6 +239,7 @@ class SearchMenu : BaseFragment() {
                     loge(TAG,"clicked---"+parentPosition+"-"+chilPosition)
 
                     //Direct add to cart process condition
+                    if(DetailsFragment.is_restaurant_closed) return // if restaurant is closed then nothing will happen
                     val data = menu_list_filtered.get(parentPosition).product_list!!.get(chilPosition)
                     if (data.is_attributes == "0" && data.extra_topping_group == null) {
                         addToCard(data)

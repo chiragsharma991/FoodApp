@@ -137,6 +137,10 @@ class RestaurantListChildAdapter(val context: Context, val listner: RestaurantLi
                 listner.itemClicked(false,parentPosition,position,Constants.CARD_VIEW)
 
             }
+            holder.binding.orderNow.setOnClickListener {
+                listner.itemClicked(false,parentPosition,position,Constants.CARD_VIEW)
+
+            }
             holder.binding.favoriteBtn.setOnClickListener {
                 listner.itemClicked(false,parentPosition,position,Constants.FAVORITE_VIEW)
             }

@@ -118,13 +118,15 @@ class HomeActivity : BaseActivity() {
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         // this is result from enable gps or disable gps
         loge(TAG,"onActivityResult---"+resultCode+""+requestCode)
-        super.onActivityResult(requestCode, resultCode, data)
-        if (requestCode == Constants.REQUEST_CHECK_SETTINGS) {
-            if (resultCode == Activity.RESULT_OK) {
-                (getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().getcurrent_location()
+        if(data != null){
+            super.onActivityResult(requestCode, resultCode, data)
+            if (requestCode == Constants.REQUEST_CHECK_SETTINGS) {
+                if (resultCode == Activity.RESULT_OK) {
+                    (getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().getcurrent_location()
 
-            }else{
-                (getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().gpsPermissiondenied()
+                }else{
+                    (getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().gpsPermissiondenied()
+                }
             }
         }
     }

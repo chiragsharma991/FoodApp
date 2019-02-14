@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+
+    </data>
+
+
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:id="@+id/delete_img"
+                android:layout_height="wrap_content">
+
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/imageview"
+                    android:layout_width="@dimen/_60sdp"
+                    android:layout_height="@dimen/_75sdp"
+                    app:srcCompat="@color/gray"
+                    android:scaleType="fitXY" />
+
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginTop="1dp"
+                    android:layout_marginEnd="2dp"
+                    app:layout_constraintEnd_toEndOf="@+id/imageview"
+                    app:layout_constraintHorizontal_bias="1.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    app:srcCompat="@drawable/cancel" />
+
+
+
+
+            </android.support.constraint.ConstraintLayout>
+
+
+
+        </LinearLayout>
+
+
+
+
+
+
+
+</layout>
+

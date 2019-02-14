@@ -46,15 +46,15 @@
                 android:orientation="vertical"
                 >
 
-             <!--   <android.support.design.widget.FloatingActionButton
+                <android.support.design.widget.FloatingActionButton
                     android:id="@+id/attach_fab"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
                     android:layout_alignParentRight="true"
+                    android:tooltipText="Tilføj billede"
                     android:layout_margin="@dimen/fab_margin"
                     app:srcCompat="@drawable/add" />
--->
 
 
                 <android.support.v4.widget.NestedScrollView
@@ -75,7 +75,7 @@
                             style="@style/SubtitleMidium_TextViewSmall"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/first_name"
+                            android:text="Navn (valgfrit)"
 
                             />
 
@@ -87,7 +87,6 @@
                             android:layout_height="wrap_content"
                             android:nextFocusDown="@id/telephone_txt"
                             android:layout_weight="1.5"
-                            android:hint="Enter your name"
                             android:layout_marginTop="@dimen/_8sdp"
                             android:background="@drawable/rectangle_edittext"
                             android:inputType="textEmailAddress"
@@ -101,7 +100,7 @@
                             style="@style/SubtitleMidium_TextViewSmall"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="@string/email"
+                            android:text="E-mailadresse"
 
                             />
 
@@ -113,7 +112,6 @@
                             android:layout_height="wrap_content"
                             android:nextFocusDown="@id/telephone_txt"
                             android:layout_weight="1.5"
-                            android:hint="Enter your email address"
                             android:layout_marginTop="@dimen/_8sdp"
                             android:background="@drawable/rectangle_edittext"
                             android:inputType="textEmailAddress"
@@ -128,7 +126,7 @@
                             style="@style/SubtitleMidium_TextViewSmall"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:text="Description"
+                            android:text="Hvad kan jeg hjælpe dig med?"
 
                             />
 
@@ -147,7 +145,6 @@
                             android:overScrollMode="always"
                             android:scrollbarStyle="insideInset"
                             android:scrollbars="vertical"
-                            android:hint="Description"
                             android:background="@drawable/rectangle_edittext"
                             android:layout_weight="1.5"
                             app:layout_constraintTop_toBottomOf="@+id/comment"
@@ -167,12 +164,22 @@
                             app:layout_constraintTop_toBottomOf="@+id/demotxt"
                             />
 
-                <!--        <android.support.v7.widget.AppCompatImageView
+    <!--                    <android.support.v7.widget.AppCompatImageView
                             android:id="@+id/imageview"
-                            android:background="@color/gr"
+                            android:background="@color/gray"
                             android:layout_width="@dimen/_32sdp"
-                            android:layout_height="@dimen/_32sdp" />
--->
+                            android:layout_height="@dimen/_32sdp" />-->
+
+
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recycler_view"
+                            android:clipToPadding="false"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+
+
 
 
                     </LinearLayout>

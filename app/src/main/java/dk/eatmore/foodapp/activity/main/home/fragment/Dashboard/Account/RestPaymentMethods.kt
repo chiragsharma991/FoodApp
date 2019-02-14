@@ -135,25 +135,41 @@ class RestPaymentMethods : BaseFragment() {
         })
         recycler_view.layoutManager = LinearLayoutManager(getActivityBase())
         recycler_view.adapter = mAdapter
+
     }
 
 
      data class RestPayMethodModel (
-            val status: Boolean = false,
-            val msg: String ="",
-            val payment_method_image_path: String ="",
-            val payment_method_thumbnail_logo: String ="",
+            val status: Boolean,
+            val msg: String ,
+            val payment_method_image_path: String ,
+            val payment_method_thumbnail_logo: String ,
             val data: ArrayList<Data>
     )
- /*   {
-        constructor (status: Boolean?,msg: String?,payment_method_image_path: String?,payment_method_thumbnail_logo: String?,data: ArrayList<Data>?): this(status,"","","", arrayListOf())
-    }*/
-    data class Data (
-          val pm_name: String ="",
-          val logo: String ="",
-          var copy_logo: String =""
+    {
+        constructor (
+                status: Boolean? = false,
+                msg: String?="",
+                payment_method_image_path: String? ="",
+                payment_method_thumbnail_logo: String? ="",
+                data: ArrayList<Data>? = arrayListOf()):
+                this(status ?: false,msg ?: "",payment_method_image_path ?: "",payment_method_thumbnail_logo ?: "", data ?: arrayListOf())
+    }
 
+     data class Data (
+          val status :Boolean,
+          val pm_name: String ,
+          val logo: String ,
+          var copy_logo: String
     )
+    {
+         constructor(status: Boolean? =false, pm_name: String? ="",
+                                 logo: String? ="",
+                                 copy_logo: String? ="") : this(false,pm_name?:"",logo?:"",copy_logo?:"")
+    }
+
+
+
 
 
     override fun onDestroyView() {

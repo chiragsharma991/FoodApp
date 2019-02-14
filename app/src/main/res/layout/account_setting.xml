@@ -78,6 +78,7 @@
                         android:layout_height="wrap_content"
                         android:gravity="center_vertical"
                         android:background="@color/white"
+                        android:onClick="@{handlers::kundle_support}"
                         android:orientation="horizontal">
 
 

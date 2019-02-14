@@ -669,6 +669,12 @@ class AccountFragment : BaseFragment() {
 
         }
 
+        fun kundle_support(view: View){
+            val kundlesupport = KundleSupport.newInstance()
+            accountfragment.addFragment(R.id.home_account_container, kundlesupport, KundleSupport.TAG, false)
+
+        }
+
 
     }
 

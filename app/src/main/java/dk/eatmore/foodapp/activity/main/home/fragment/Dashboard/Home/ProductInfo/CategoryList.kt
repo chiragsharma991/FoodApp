@@ -144,7 +144,12 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
 
         try {
             badge_notification_txt.visibility = View.GONE
-            toolbar_badge_view.visibility = if (DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
+
+            if(DetailsFragment.is_restaurant_closed){
+                toolbar_badge_view.visibility = View.GONE
+            }else{
+                toolbar_badge_view.visibility = if (DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
+            }
             //viewcart.alpha= if(DetailsFragment.total_cartcnt == 0) 0.3f else 0.9f
             //badge_notification_txt.text = DetailsFragment.total_cartcnt.toString()
             if (DetailsFragment.total_cartcnt == 0 || DetailsFragment.total_cartcnt == 1)
@@ -173,6 +178,7 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
     override fun <T> onClick(model: T?) {
 
         //Direct add to cart process condition
+        if(DetailsFragment.is_restaurant_closed) return // if restaurant is closed then nothing will happen
         val data = model as ProductListItem
         if (data.is_attributes == "0" && data.extra_topping_group == null) {
             addToCard(data)
@@ -253,6 +259,7 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
 
     private fun setRecyclerData(binder: RowCategoryListBinding, model: ProductListItem) {
         binder.data = model
+        binder.isRestaurantClosed=DetailsFragment.is_restaurant_closed
         binder.productpricecalculation = productpricecalculation
         binder.util = BindDataUtils
         binder.handler = this

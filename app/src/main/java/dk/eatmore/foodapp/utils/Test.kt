@@ -1,5 +1,7 @@
 package dk.eatmore.foodapp.utils
 
+import com.google.gson.internal.LinkedTreeMap
+
 class Test   {
 
 
@@ -18,26 +20,11 @@ class Test   {
             // initializer block
             init {
 
-                var str = "Chirag:Mihir"
-                str=str.replace(":",",",false)
-               // System.out.println("Using : as a delimiter " + Arrays.toString(parts))
-             //   println("First Name = $fName")
-               // println("Age = $str")
 
+            //    println("Age = $newstring")
+                val user= User(msg = "",payment_method_image_path = "",payment_method_thumbnail_logo = "")
+                println("output =  ${user.msg}")
 
-                val s = "."
-                val q = ","
-                val w = ","
-                val `as` = "12,00"
-                val newstring = `as`.replace(s, w).replace(q, w)
-                println("Age = $newstring")
-
-/*
-                val data = Data(pm_name = "test")
-                val list = ArrayList<Data>()
-                list.add(data)*/
-            //    val user = User(type = 5,data = null)
-             //   System.out.println("Out put>>>> "+user.name+" "+user.type+""+user.data)
 
 
             }
@@ -46,32 +33,44 @@ class Test   {
 
 
 
-
- /*   data class User(
+    data class User(
             val status: Boolean,
             val msg: String ,
             val payment_method_image_path: String ,
-            val payment_method_thumbnail_logo: String ,
+            val payment_method_thumbnail_logo: String,
             val data: ArrayList<Data>
 
     ) {
         constructor(
-                // ==1 means if you not pass value then assign by default.
-                status: Boolean? ,
-                msg: String? ,
-                payment_method_image_path: String? ,
-                payment_method_thumbnail_logo: String? ,
-                data: ArrayList<Data>?
+                 status: Boolean?=true,
+                  msg: String?="" ,
+                  payment_method_image_path: String? ="",
+                  payment_method_thumbnail_logo: String?="",
+                 data: ArrayList<Data>? = arrayListOf()
+
         ) : this (
-                status=status,
-                msg=msg,
-                data = data?: arrayListOf(),
-                payment_method_thumbnail_logo = "",
-                payment_method_image_path = ""
+                status?: true,
+                "null msg",
+                //data = data?: arrayListOf(),
+                "",
+                 "null with value",
+             //    "null with value",
+                arrayListOf()
         )
 
 
-    }*/
+
+
+
+
+   /*     data class Activity(
+                val pm_name: String,
+                val logo: String,
+                val copy_logo: String
+
+        ) {
+            constructor(pm_name: String? ="",copy_logo: String?="",logo: String?="") : this("","","")
+        }*/
 
 
 
@@ -88,6 +87,10 @@ class Test   {
 
 
 
+
+
+
+}
 }
 
 

@@ -1028,7 +1028,7 @@
 
                                         </LinearLayout>
 
-
+<!--
                                         <View
                                             android:layout_width="match_parent"
                                             android:layout_height="1dp"
@@ -1063,7 +1063,7 @@
                                                 android:text="@{data.shipping.equalsIgnoreCase(@string/pickup_caps) ? (@string/delivery_wid_expectedtime(@string/for_hent_selv,util.parseTimeToHHmm(data.expected_time))) : (@string/delivery_wid_expectedtime(@string/til_levering,util.parseTimeToHHmm(data.expected_time)))}"
                                                 />
 
-                                        </RelativeLayout>
+                                        </RelativeLayout>-->
 
 
                                         <android.support.v7.widget.AppCompatButton
@@ -1074,7 +1074,7 @@
                                             android:stateListAnimator="@null"
                                             android:backgroundTint="@color/theme_color"
                                             android:gravity="center"
-                                            android:text="Genbestil"
+                                            android:text="@string/genbestil"
                                             android:onClick="@{myclickhandler :: re_Order}"
                                             android:textColor="@color/white" />
 

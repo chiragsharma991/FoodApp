@@ -21,6 +21,7 @@ import dk.eatmore.foodapp.activity.main.cart.CalculateExtratoppings
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
 import dk.eatmore.foodapp.adapter.extratoppings.ExtratoppingsAdapter
 import dk.eatmore.foodapp.databinding.RowOnlychildExtratopViewBinding
+import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.utils.BindDataUtils
 
 
@@ -48,6 +49,7 @@ class OnlyExtratoppingsChildAdapter(val context: Context, val listner: OnlyExtra
 
             holder.binding.data=list_child[position]
             holder.binding.rowOnlychildCartItemlayout.setOnClickListener {
+
                 when (holder.binding.checkboxRoce.isChecked ){
                     true -> {
                         holder.binding.checkboxRoce.isChecked =false

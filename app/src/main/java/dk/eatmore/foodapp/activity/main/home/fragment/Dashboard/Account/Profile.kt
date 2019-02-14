@@ -45,6 +45,7 @@ class Profile : BaseFragment() {
     private var termscondition: TermsCondition? = null
     private var restpaymentmethods: RestPaymentMethods? = null
     private var editaddress: EditAddress? = null
+    private var ratetheapp: RatetheAPP? = null
     private var kundlesupport: KundleSupport? = null
     private var coupan_fragment: Coupan? = null
     private lateinit var ui_model: UIModel
@@ -227,6 +228,10 @@ class Profile : BaseFragment() {
                 childFragmentManager.popBackStack()
                 return true
             }
+            else if (ratetheapp != null && ratetheapp!!.isVisible) {
+                childFragmentManager.popBackStack()
+                return true
+            }
             else if (kundlesupport != null && kundlesupport!!.isVisible) {
                 childFragmentManager.popBackStack()
                 return true
@@ -296,6 +301,10 @@ class Profile : BaseFragment() {
         fun editaddress(view: View){
             profile.editaddress = EditAddress.newInstance()
             profile.addFragment(R.id.profile_container, profile.editaddress!!, EditAddress.TAG, false)
+        }
+        fun ratetheapp(view: View){
+            profile.ratetheapp = RatetheAPP.newInstance()
+            profile.addFragment(R.id.profile_container, profile.ratetheapp!!, RatetheAPP.TAG, false)
         }
 
         fun kundle_support(view: View){

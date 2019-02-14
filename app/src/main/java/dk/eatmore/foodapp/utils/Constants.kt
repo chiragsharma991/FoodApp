@@ -31,6 +31,8 @@ class Constants {
     const  val ACCEPT_REJECT_TIME="accept_reject_time"
     const  val PICKUP_DELIVERY_TIME="pickup_delivery_time"
     const  val CUSTOMER_ID = "customer_id"
+    const  val COMMENT = "comment"
+    const  val RATE = "rate"
     const  val RESTAURANT_FOOD_ANDROID = "restaurant_food_android"
     const  val APP = "app"
     const  val IS_LOGIN = "is_login"

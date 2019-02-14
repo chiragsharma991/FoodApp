@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+        <variable
+            name="ratemodel"
+            type="dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.RatetheAPP.RateModel">
+
+        </variable>
+
+    </data>
+
+
+
+    <LinearLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content">
+
+
+        <android.support.constraint.ConstraintLayout
+            android:layout_width="match_parent"
+            android:layout_marginEnd="@dimen/_16sdp"
+            android:id="@+id/delete_img"
+            android:layout_height="wrap_content">
+
+
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/imageview"
+                android:layout_width="@dimen/_37sdp"
+                android:layout_height="@dimen/_35sdp"
+                app:srcCompat="@mipmap/rate_emoji1"
+                android:alpha="@{ratemodel.is_selected ? 1.0f : 0.5f}"
+                android:scaleType="fitXY" />
+
+
+
+        </android.support.constraint.ConstraintLayout>
+
+
+
+    </LinearLayout>
+
+
+
+
+
+
+
+</layout>
+

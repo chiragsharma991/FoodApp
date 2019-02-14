@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    >
+
+    <data>
+
+
+    </data>
+
+
+    <FrameLayout
+        android:id="@+id/ratetheapp_container"
+        android:layout_width="match_parent"
+        android:background="@color/background_light"
+        android:layout_height="match_parent"
+        android:clickable="true"
+        android:focusable="true"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical"
+            android:background="@color/white"
+            >
+
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/appbar"
+                >
+                <include layout="@layout/toolbar"
+                    >
+
+                </include>
+
+            </android.support.design.widget.AppBarLayout>
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="vertical"
+                >
+
+
+                <android.support.v4.widget.NestedScrollView
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    >
+
+
+                    <LinearLayout
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:orientation="vertical"
+                        android:layout_margin="@dimen/_16sdp"
+                        >
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/SubtitleMidium_TextViewSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:text="@string/haordan_var_din_oplevelxse_med_app_en"
+
+                            />
+
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recycler_view"
+                            android:clipToPadding="false"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+
+
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/SubtitleMidium_TextViewSmall"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:text="Fortael os hvad du kan lide/ikke kan lide?"
+                            />
+
+
+                        <android.support.v7.widget.AppCompatEditText
+                            style="@style/EditText_Normal"
+                            android:id="@+id/comment_edt"
+                            android:padding="@dimen/_8sdp"
+                            android:layout_height="@dimen/_80sdp"
+                            android:layout_width="match_parent"
+                            android:maxLines="5"
+                            android:gravity="top|start"
+                            android:textAppearance="?android:attr/textAppearanceSmall"
+                            android:lines="5"
+                            android:inputType="textEmailAddress|textMultiLine"
+                            android:overScrollMode="always"
+                            android:scrollbarStyle="insideInset"
+                            android:scrollbars="vertical"
+                            android:background="@drawable/rectangle_edittext"
+                            android:layout_weight="1.5"
+                            app:layout_constraintTop_toBottomOf="@+id/comment"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            />
+
+
+                        <android.support.v7.widget.AppCompatButton
+                            android:id="@+id/send_btn"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            style="@style/Button"
+                            android:text="@string/save"
+                            android:textColor="@color/white"
+                            />
+
+
+
+
+
+
+                    </LinearLayout>
+
+
+
+                </android.support.v4.widget.NestedScrollView>
+
+
+
+
+
+
+            </RelativeLayout>
+
+
+
+        </LinearLayout>
+
+
+    </FrameLayout>
+
+
+
+
+
+
+</layout>
+

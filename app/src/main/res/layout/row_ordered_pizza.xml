@@ -69,7 +69,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.80" />
+                        app:layout_constraintGuide_percent="0.75" />
 
                     <LinearLayout
                         android:id="@+id/linearLayout"
@@ -249,7 +249,7 @@
                             android:stateListAnimator="@null"
                             android:gravity="center"
                             android:onClick="@{(v)-> myclickhandler.reOrder(v,orderresult)}"
-                            android:text="Reorder"
+                            android:text="@string/genbestil"
                             android:textColor="@color/white" />
 
 
@@ -264,7 +264,7 @@
                             android:backgroundTint="@color/grey"
                             android:stateListAnimator="@null"
                             android:gravity="center"
-                            android:text="Details"
+                            android:text="@string/se_deltajer"
                             android:textColor="@color/black" />
 
 

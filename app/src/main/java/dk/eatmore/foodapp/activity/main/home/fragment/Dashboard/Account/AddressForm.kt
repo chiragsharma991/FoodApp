@@ -99,7 +99,7 @@ class AddressForm : BaseFragment(), TextWatcher {
             address= arguments?.getSerializable(Constants.ADDRESS) as EditAddress.Messages?
             if(address == null){
                 // Add address
-                txt_toolbar.text=getString(R.string.add_new_address)
+                txt_toolbar.text=getString(R.string.tilføj_ny_leveringsadresse)
                 Handler().postDelayed({
                     city_edt.addTextChangedListener(this)
                     postnumber_edt.addTextChangedListener(this)
@@ -112,7 +112,7 @@ class AddressForm : BaseFragment(), TextWatcher {
                 },200)
             }else{
                 // Edit address
-                txt_toolbar.text=getString(R.string.edit_address)
+                txt_toolbar.text=getString(R.string.leveringsadresse)
                 binding.address=address
                 Handler().postDelayed({
                     city_edt.addTextChangedListener(this)

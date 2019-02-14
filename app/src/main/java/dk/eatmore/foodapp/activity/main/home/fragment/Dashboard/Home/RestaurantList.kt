@@ -403,7 +403,7 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
                     when(tag){
                         Constants.CARD_VIEW ->{
 
-                            if (progress_bar.visibility == View.VISIBLE || list.get(parentPosition).ordertype == getString(R.string.notavailable)) return
+                            if (progress_bar.visibility == View.VISIBLE ) return
                             val fragment = DetailsFragment.newInstance(
                                     restaurant = list.get(parentPosition).restaurant.get(chilPosition),
                                     status = list.get(parentPosition).status,

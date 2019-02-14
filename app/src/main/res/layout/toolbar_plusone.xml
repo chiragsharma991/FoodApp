@@ -89,7 +89,7 @@
                     android:id="@+id/addtocart_bascket"
                     android:layout_width="20dip"
                     android:layout_height="20dip"
-                    app:srcCompat="@drawable/shopping_basket_black_24dp"
+                    app:srcCompat="@mipmap/basketwhite"
                     />
 
                 <android.support.v7.widget.AppCompatTextView
@@ -97,7 +97,7 @@
                     android:id="@+id/badge_countprice"
                     android:layout_toEndOf="@+id/addtocart_bascket"
                     android:fontFamily="@font/hindvadodara_regular"
-                    android:layout_marginLeft="@dimen/_3sdp"
+                    android:layout_marginLeft="@dimen/_5sdp"
                     android:layout_centerVertical="true"
                     android:text="00 |00.00 kr"
                     android:textColor="@color/white" />

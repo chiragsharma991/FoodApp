@@ -47,7 +47,7 @@
                 android:layout_gravity="center_vertical"
                 android:layout_weight="0.5"
                 android:gravity="right"
-                android:text="@{opening_hours.opens.equalsIgnoreCase(opening_hours.closes) ? @string/closed : @string/openandclose(opening_hours.opens,opening_hours.closes)}"
+                android:text="@{opening_hours.opens.equalsIgnoreCase(opening_hours.closes) ? @string/lukket : @string/openandclose(opening_hours.opens,opening_hours.closes)}"
                 android:textColor="@{opening_hours.today ? @color/theme_color : @color/black_txt_light }"
 
                 />

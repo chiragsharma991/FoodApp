@@ -62,6 +62,7 @@ import kotlinx.android.synthetic.main.category_list.*
 import kotlinx.android.synthetic.main.fragment_home_container.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
 import org.json.JSONObject
+import java.util.regex.Pattern
 
 
 abstract class BaseFragment : Fragment() {
@@ -410,6 +411,11 @@ abstract class BaseFragment : Fragment() {
         postParam.addProperty(Constants.LANGUAGE, Constants.DA)
         return postParam
     }
+
+
+
+
+
 
 
     fun getActivityBase(): Activity {

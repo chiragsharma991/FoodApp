@@ -22,6 +22,7 @@ import android.annotation.TargetApi
 import android.widget.Toast
 import android.webkit.WebViewClient
 import android.app.Activity
+import android.graphics.Bitmap
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.databinding.HealthreportBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
@@ -80,7 +81,6 @@ class HealthReport : BaseFragment() {
 
     fun setwebview(){
 
-
         webview.getSettings().setJavaScriptEnabled(true) // enable javascript
         webview.loadUrl(arguments!!.getString(Constants.HEALTH_REPORT_LINK) as String)
         webview.setWebViewClient(WebViewController())
@@ -94,6 +94,19 @@ class HealthReport : BaseFragment() {
             view.loadUrl(url)
             return true
         }
+
+        override fun onPageFinished(view: WebView?, url: String?) {
+            super.onPageFinished(view, url)
+            progress_bar.visibility=View.GONE
+        }
+
+
+        override fun onPageStarted(view: WebView?, url: String?, favicon: Bitmap?) {
+            super.onPageStarted(view, url, favicon)
+            progress_bar.visibility=View.VISIBLE
+        }
+
+
     }
 
 

@@ -163,7 +163,7 @@
                                                     android:background="@android:color/transparent"
                                                     style="@style/EditText_Normal"
                                                     android:textAppearance="?android:attr/textAppearanceSmall"
-                                                    android:hint="Enter your postal code">
+                                                    android:hint="@string/indtast_din_postnummer">
 
                                                 </android.support.v7.widget.AppCompatEditText>
 

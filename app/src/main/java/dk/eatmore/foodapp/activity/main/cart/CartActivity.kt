@@ -36,6 +36,7 @@ import dk.eatmore.foodapp.activity.main.cart.fragment.OnlyExtratoppings
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Menu
 import dk.eatmore.foodapp.adapter.cart.CartViewAdapter
 import dk.eatmore.foodapp.databinding.ActivityCartBinding
+import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.model.cart.Data
 import dk.eatmore.foodapp.model.cart.ProductAttributeListItem
@@ -178,8 +179,8 @@ class CartActivity : BaseActivity() {
 
         }
         (tagadapter as TagAdapter<String>).setSelectedList(set)
-
         flowlayout.setOnSelectListener(TagFlowLayout.OnSelectListener { selectPosSet ->
+
             Log.e(TAG, "selected ---" + selectPosSet + " checked list " + set.toString())
 
             for (i in 0..ui_model!!.product_ingredients.value!!.size - 1) {
@@ -223,6 +224,7 @@ class CartActivity : BaseActivity() {
 
 
         recycler_view_cart.apply {
+
 
             mAdapter = CartViewAdapter(context!!, ui_model!!.product_attribute_list.value!!, ui_model!!.calculateAttribute.value!!, object : CartViewAdapter.AdapterListener {
                 override fun itemClicked(parentView: Boolean, parentPosition: Int, chilPosition: Int) {
@@ -289,6 +291,7 @@ class CartActivity : BaseActivity() {
 
     private fun initView(savedInstanceState: Bundle?) {
         binding.isIngradientsVisible = false
+        binding.isRestaurantClosed=DetailsFragment.is_restaurant_closed
         progress_bar.visibility = View.GONE
         addtocart_txt.visibility = View.VISIBLE
         //continue_btn.visibility = View.GONE
@@ -310,6 +313,10 @@ class CartActivity : BaseActivity() {
         val text = String.format(getString(R.string.add_to_cart), p_price)
         addtocart_txt.text = text
         ui_model = createViewModel()
+
+
+
+
         if (ui_model!!.product_attribute_list.value == null) {
             fetch_ProductDetailList()
 

@@ -109,8 +109,8 @@
                 />
 
             <android.support.v7.widget.AppCompatImageView
-                android:layout_width="@dimen/_20sdp"
-                android:layout_height="@dimen/_20sdp"
+                android:layout_width="@dimen/_30sdp"
+                android:layout_height="@dimen/_30sdp"
                 android:layout_gravity="top"
                 android:visibility="gone"
                 android:id="@+id/txt_toolbar_right_img"

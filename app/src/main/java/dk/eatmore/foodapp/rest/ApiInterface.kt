@@ -234,6 +234,10 @@ interface ApiInterface {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun rating(@Body jsonObject: JsonObject): Call<JsonObject>
 
+    @POST("Enduser/enduser/app-rating")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun app_rating(@Body jsonObject: JsonObject): Call<JsonObject>
+
     @POST("Cart/cart/checkout-pickup")
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun checkout_pickup(@Body jsonObject: JsonObject): Call<JsonObject>

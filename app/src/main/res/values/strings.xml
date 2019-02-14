@@ -7,27 +7,27 @@
     <string name="order_your_take_away_food_online">Order your take away food online</string>
     <string name="email">Email</string>
     <string name="password">Password</string>
-    <string name="login">Login</string>
-    <string name="forgot_password">Forgot Password?</string>
-    <string name="new_to_eatmore_sign_up">New to EatMore? SIGN UP!</string>
+    <string name="login">Log ind</string>
+    <string name="forgot_password">Glemt dit kodeord?</string>
+    <string name="new_to_eatmore_sign_up">Ny hos EatMore? Opret konto</string>
     <string name="reorder">Reorder</string>
     <string name="details">Details</string>
     <string name="order_now">Order now</string>
     <string name="orders">Orders</string>
-    <string name="your_orders">Dine ordre</string>
+    <string name="your_orders">Orderhistorik</string>
     <string name="my_profile">Indstillinger</string>
-    <string name="menu">Menu</string>
-    <string name="rating">Rating</string>
+    <string name="menu">Menukort</string>
+    <string name="rating">Bedømmelser</string>
     <string name="default_notification_channel_id" translatable="false">fcm_default_channel</string>
     <string name="large_text">
         "A material metaphor is the unifying theory of a rationalized space and a system of motion."
         "The material is grounded in tactile reality, inspired by the study of paper and ink, yet "
         "technologically advanced and open to imagination and magic.\n"
     </string>
-    <string name="search_the_menu">Search the menu</string>
     <string name="transition_string">card_transition</string>
-    <string name="continue_">Continue</string>
-    <string name="add">Add</string>
+    <string name="continue_">Til kassen</string>
+    <string name="search_the_menu">Søg i menukortet</string>
+    <string name="add">tilføje</string>
     <string name="go_on_playstore">Go on PlayStore</string>
     <string name="new_update">New uppdate is available now</string>
     <string name="dismiss">Dismiss</string>
@@ -49,10 +49,10 @@
     <string name="minues">- %1$s</string>
     <string name="total_goods">Total ( %1$s Products )</string>
     <string name="plus">+ %1$s</string>
-    <string name="restaurant_rating">(%1$s ratings)</string>
+    <string name="restaurant_rating">(%1$s bedømmelser)</string>
     <string name="add_new_address">Add new address</string>
     <string name="verify">Verify</string>
-    <string name="address">Address</string>
+    <string name="address">Adresse</string>
     <string name="ok">OK</string>
     <string name="go_to_payment">Go to payment</string>
     <string name="select_delivery_time">Select delivery time:</string>
@@ -63,10 +63,11 @@
     <string name="open_now">%1$s restauranter er åbne nu, sorteret efter bedste match</string>
     <string name="pre_order">%1$s restauranter åbner senere</string>
     <string name="closed">%1$s restauranter er ikke tilgængelig</string>
-    <string name="ordernow">Order Now</string>
-    <string name="preorder">Pre Order</string>
+    <string name="lukket">lukket</string>
+    <string name="ordernow">Bestil nu</string>
+    <string name="preorder">Forudbestil nu</string>
     <string name="notavailable">Not available</string>
-    <string name="user_have_reviewed">%1$s user have reviewed</string>
+    <string name="user_have_reviewed">%1$s bedømmelser</string>
     <string name="samlet">Samlet</string>
     <string name="we_are_sorry">We are Sorry.\nThis restaurant is closed.\nPlease check opening hours.</string>
     <string name="kvalitet">Kvalitet</string>
@@ -90,8 +91,8 @@
     <string name="yes">Ja</string>
     <string name="are_you_sure_to_delete">Are you sure to delete ?</string>
     <string name="item_has_been">Item has been successfully added !</string>
-    <string name="pickup">pickup</string>
-    <string name="delivery">delivery</string>
+    <string name="pickup">Hent selv</string>
+    <string name="delivery">Udbringning</string>
     <string name="pickup_caps">Pickup</string>
     <string name="delivery_caps">Delivery</string>
     <string name="you_are_ordering_pickup">Du er ved at bestille din mad til afhentning!</string>
@@ -115,7 +116,7 @@
     <string name="total_amount">%1$s</string>
     <string name="na">N/A</string>
     <string name="fulladdress">%1$s %2$s %3$s %4$s %5$s</string>
-    <string name="apply_coupon">Apply Coupon</string>
+    <string name="apply_coupon">Har du en rabatkode?</string>
     <string name="online_payment">Online betaling</string>
     <string name="cash_payment">Kontant betaling</string>
     <string name="how_do_you_want_to_pay">How do you want to pay?</string>
@@ -127,9 +128,9 @@
     <string name="confirm">Confirm</string>
     <string name="pay">Pay</string>
     <string name="basket">Cart</string>
-    <string name="info">Info</string>
+    <string name="info">Information</string>
     <string name="payment">Betalingsmetoder</string>
-    <string name="confirm_delivery_time">Confirm delivery time</string>
+    <string name="confirm_delivery_time">Bekræft din leveringstid</string>
     <string name="giftcard">Giftcard</string>
     <string name="payment_methods">Betalingsmetoder</string>
     <string name="addresses">Addresses</string>
@@ -138,7 +139,7 @@
     <string name="streethousefloor">%1$s %2$s %3$s,</string>
     <string name="postalcity">%1$s %2$s</string>
     <string name="title">Title</string>
-    <string name="save">Save</string>
+    <string name="save">Gem</string>
     <string name="help">Help</string>
     <string name="health_report">Health Report</string>
     <string name="profile_info">User Profile</string>
@@ -209,5 +210,29 @@
     <string name="app_version">App version v%1$s_%2$s</string>
     <string name="slet_bruger">Slet bruger</string>
     <string name="kundle_support">Kundle support</string>
+    <string name="indtast_en_værdi">Indtast en værdi.</string>
+    <string name="haordan_var_din_oplevelxse_med_app_en">Haordan var din oplevelxse med app\'en?</string>
+    <string name="send">Send</string>
+    <string name="bed_m_app">Bedøm App!</string>
+    <string name="qty_n_price">%1$s x %2$s</string>
+    <string name="se_deltajer">Se deltajer</string>
+    <string name="opening_hours">Åbningstider</string>
+    <string name="new_rest">ny</string>
+    <string name="navn">Navn</string>
+    <string name="telefon_nummer">Telefon nummer</string>
+    <string name="postnummer">Postnummer</string>
+    <string name="by">By</string>
+    <string name="redigere">redigere</string>
+    <string name="slette">slette</string>
+    <string name="eks_hjem_eller_arbejde">Eks. hjem eller arbejde</string>
+    <string name="dine_bem_rkninger_til_restauranten">Dine bemærkninger til restauranten:</string>
+    <string name="delivery_time">Delivery time</string>
+    <string name="din_ordre">Din ordre</string>
+    <string name="genbestil">Genbestil</string>
+    <string name="leveringsadresse">Leveringsadresse(r)</string>
+    <string name="tilføj_ny_leveringsadresse">Tilføj ny leveringsadresse</string>
+    <string name="log_ud">Log ud</string>
+    <string name="indtast_din_postnummer">indtast din postnummer</string>
+
 
 </resources>

@@ -352,7 +352,7 @@ class EpayFragment : BaseFragment() {
                 }
             }
             view.item_name.text=ui_model!!.viewcard_list.value!!.result!![i].product_name
-            view.item_price.text=if(ui_model!!.viewcard_list.value!!.result!![i].p_price !=null) BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.result!![i].p_price!!) else "null"
+            view.item_price.text=if(ui_model!!.viewcard_list.value!!.result!![i].p_price !=null) BindDataUtils.convertCurrencyToDanishWithoutLabel(ui_model!!.viewcard_list.value!!.result!![i].p_price!!) else "null"
             view.add_subitem_view.removeAllViewsInLayout()
 
             // fill first ingredients size if not null
@@ -369,12 +369,21 @@ class EpayFragment : BaseFragment() {
             if(ui_model!!.viewcard_list.value!!.result!![i].is_attributes !=null && ui_model!!.viewcard_list.value!!.result!![i].is_attributes.equals("1")){
                 if(ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes !=null){
                     for (k in 0 until ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes!!.size){
+                        // attribute_value_name = AB
+                        inflater= context!!.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                        val attribute_value_name= inflater.inflate(R.layout.dynamic_raw_subitem,null)
+                        attribute_value_name.subitem_name.text=ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes!!.get(k).attribute_value_name
+                        attribute_value_name.subitem_price.visibility= View.INVISIBLE
+                        view.add_subitem_view.addView(attribute_value_name)
+
                         for (l in 0 until (ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes!![k].order_product_extra_topping_group?.size ?: 0)){
+                            // attribute's ingredient_name +a +b
                             inflater= context!!.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
                             val extratoppings= inflater.inflate(R.layout.dynamic_raw_subitem,null)
                             extratoppings.subitem_name.text=String.format(getString(R.string.plus),ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes!!.get(k).order_product_extra_topping_group!![l].ingredient_name)
                             // view.subitem_price.visibility=View.VISIBLE
-                            extratoppings.subitem_price.text= BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes!!.get(k).order_product_extra_topping_group!![l].t_price) ?: "null"
+                           // extratoppings.subitem_price.text= BindDataUtils.convertCurrencyToDanishWithoutLabel(ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes!!.get(k).order_product_extra_topping_group!![l].t_price) ?: "null"
+                            extratoppings.subitem_price.visibility=View.INVISIBLE
                             view.add_subitem_view.addView(extratoppings)
                         }
                     }
@@ -388,7 +397,8 @@ class EpayFragment : BaseFragment() {
                     val onlyextratoppings= inflater.inflate(R.layout.dynamic_raw_subitem,null)
                     onlyextratoppings.subitem_name.text=String.format(getString(R.string.plus),ui_model!!.viewcard_list.value!!.result!![i].order_product_extra_topping_group!!.get(k).ingredient_name)
                     // view.subitem_price.visibility=View.VISIBLE
-                    onlyextratoppings.subitem_price.text= BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.result!![i].order_product_extra_topping_group!!.get(k).t_price) ?: "null"
+                  //  onlyextratoppings.subitem_price.text= BindDataUtils.convertCurrencyToDanishWithoutLabel(ui_model!!.viewcard_list.value!!.result!![i].order_product_extra_topping_group!!.get(k).t_price) ?: "null"
+                    onlyextratoppings.subitem_price.visibility=View.INVISIBLE
                     view.add_subitem_view.addView(onlyextratoppings)
                 }
             }

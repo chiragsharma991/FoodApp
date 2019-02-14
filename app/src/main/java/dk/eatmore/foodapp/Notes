@@ -59,6 +59,32 @@ Notes :
       if API have not key of that then default values would show.
 
 
+     data class RestPayMethodModel (
+     // If data have all values proper
+            val status: Boolean,
+            val msg: String ,
+            val payment_method_image_path: String ,
+            val payment_method_thumbnail_logo: String ,
+            val data: ArrayList<Data>
+    )
+    {
+        constructor (
+        // if data have null (? for null) or not assign any value ("" for default)
+                status: Boolean? = false,
+                msg: String?="",
+                payment_method_image_path: String? ="",
+                payment_method_thumbnail_logo: String? ="",
+                data: ArrayList<Data>? = arrayListOf()):
+                // assign  ?: for any null another wise default or given values.
+                this(status ?: false,msg ?: "",payment_method_image_path ?: "",payment_method_thumbnail_logo ?: "", data ?: arrayListOf())
+    }
+
+    data class Data (
+          val pm_name: String ="",
+          val logo: String ="",
+          var copy_logo: String =""
+
+    )
 
 
    --Research:

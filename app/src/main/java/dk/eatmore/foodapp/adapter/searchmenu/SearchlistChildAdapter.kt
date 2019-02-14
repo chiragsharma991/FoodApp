@@ -22,6 +22,7 @@ import dk.eatmore.foodapp.adapter.restaurantList.RestaurantListParentAdapter
 import dk.eatmore.foodapp.databinding.RowChildCartViewBinding
 import dk.eatmore.foodapp.databinding.RowRestaurantlistCBinding
 import dk.eatmore.foodapp.databinding.RowSearchlistCBinding
+import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.model.cart.ProductAttributeValueItem
 import dk.eatmore.foodapp.model.home.MenuListItem
 import dk.eatmore.foodapp.model.home.ProductListItem
@@ -44,6 +45,7 @@ class SearchlistChildAdapter(val context: Context, val listner: SearchlistParent
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
         if (holder is MyViewHolder) {
             //  holder.binding.util=BindDataUtils
+            holder.binding.isRestaurantClosed=DetailsFragment.is_restaurant_closed
             holder.binding.productlistItem= list_filtered[parentPosition].product_list!![position]
             holder.binding.catTitle.text = list_filtered[parentPosition].product_list!![position].p_name
             holder.binding.catDesc.text = list_filtered[parentPosition].product_list!![position].p_desc
@@ -75,6 +77,7 @@ class SearchlistChildAdapter(val context: Context, val listner: SearchlistParent
             holder.binding.rowChildItem.setOnClickListener {
                 listner.itemClicked(false, parentPosition, position)
             }
+            holder.binding.executePendingBindings()
         }
     }
 

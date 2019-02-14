@@ -583,9 +583,9 @@ class Address : BaseFragment(), TextWatcher {
                     if (i == 0)
                         textView1.gravity = Gravity.START
                     else if (i == 1)
-                        textView1.gravity = Gravity.START
+                        textView1.gravity = Gravity.CENTER_HORIZONTAL
                     else if (i == 2)
-                        textView1.gravity = Gravity.START
+                        textView1.gravity = Gravity.END
                     textView1.setSingleLine(true)
                     textView1.setTextAppearance(context, R.style.SubtitleMidium_TextViewSmall)
                     //  textView1.typeface= Typeface.DEFAULT_BOLD
@@ -639,9 +639,9 @@ class Address : BaseFragment(), TextWatcher {
                         if (j == 0)
                             textView1.gravity = Gravity.START
                         else if (j == 1)
-                            textView1.gravity = Gravity.START
+                            textView1.gravity = Gravity.CENTER_HORIZONTAL
                         else if (j == 2)
-                            textView1.gravity = Gravity.START
+                            textView1.gravity = Gravity.END
                         textView1.setSingleLine(true)
                         textView1.setTextAppearance(context, R.style.Subtitle_TextViewSmall)
                         // textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
@@ -692,9 +692,9 @@ class Address : BaseFragment(), TextWatcher {
                     if (i == 0)
                         textView1.gravity = Gravity.START
                     else if (i == 1)
-                        textView1.gravity = Gravity.START
+                        textView1.gravity = Gravity.CENTER_HORIZONTAL
                     else if (i == 2)
-                        textView1.gravity = Gravity.START
+                        textView1.gravity = Gravity.END
                     textView1.setSingleLine(true)
                     textView1.setTextAppearance(context, R.style.SubtitleMidium_TextViewSmall)
                     //  textView1.typeface= Typeface.DEFAULT_BOLD
@@ -748,9 +748,9 @@ class Address : BaseFragment(), TextWatcher {
                         if (j == 0)
                             textView1.gravity = Gravity.START
                         else if (j == 1)
-                            textView1.gravity = Gravity.START
+                            textView1.gravity = Gravity.CENTER_HORIZONTAL
                         else if (j == 2)
-                            textView1.gravity = Gravity.START
+                            textView1.gravity = Gravity.END
                         textView1.setSingleLine(true)
                         textView1.setTextAppearance(context, R.style.Subtitle_TextViewSmall)
                         // textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
@@ -801,9 +801,9 @@ class Address : BaseFragment(), TextWatcher {
                     if (i == 0)
                         textView1.gravity = Gravity.START
                     else if (i == 1)
-                        textView1.gravity = Gravity.START
+                        textView1.gravity = Gravity.CENTER_HORIZONTAL
                     else if (i == 2)
-                        textView1.gravity = Gravity.START
+                        textView1.gravity = Gravity.END
                     textView1.setSingleLine(true)
                     textView1.setTextAppearance(context, R.style.SubtitleMidium_TextViewSmall)
                     //  textView1.typeface= Typeface.DEFAULT_BOLD
@@ -857,9 +857,9 @@ class Address : BaseFragment(), TextWatcher {
                         if (j == 0)
                             textView1.gravity = Gravity.START
                         else if (j == 1)
-                            textView1.gravity = Gravity.START
+                            textView1.gravity = Gravity.CENTER_HORIZONTAL
                         else if (j == 2)
-                            textView1.gravity = Gravity.START
+                            textView1.gravity = Gravity.END
                         textView1.setSingleLine(true)
                         textView1.setTextAppearance(context, R.style.Subtitle_TextViewSmall)
                         // textView1.setTextColor(ContextCompat.getColor(context!!, R.color.black_light)) // hex color 0xAARRGGBB
@@ -906,7 +906,7 @@ class Address : BaseFragment(), TextWatcher {
                     if (i == 0)
                         textView1.gravity = Gravity.START
                     else if (i == 1)
-                        textView1.gravity = Gravity.START
+                        textView1.gravity = Gravity.CENTER_HORIZONTAL
                     textView1.setSingleLine(true)
                     textView1.setTextAppearance(context, R.style.SubtitleMidium_TextViewSmall)
                     // textView1.typeface= Typeface.DEFAULT_BOLD

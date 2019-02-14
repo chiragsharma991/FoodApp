@@ -83,6 +83,7 @@ class DetailsFragment : CommanAPI() {
         var delivery_charge: String = ""
         var delivery_text : String =""
         var pickup_text : String=""
+        var is_restaurant_closed : Boolean =false
         var ui_model: UIModel? = null
         fun newInstance(status: String,ordertype : String,restaurant : Restaurant?): DetailsFragment {
 
@@ -127,7 +128,7 @@ class DetailsFragment : CommanAPI() {
 
         if (savedInstanceState == null) {
             //  restaurant = arguments?.getSerializable(Constants.RESTAURANT) as Restaurant
-            binding.isUiprogress = true  // you are also comming back so no loader is required.
+          //  binding.isUiprogress = true  // you are also comming back so no loader is required.
             binding.kstatus=PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)
             restaurant=arguments?.getSerializable(Constants.RESTAURANT) as Restaurant?
             ordertype=arguments?.getString(Constants.ORDERTYPE) as String
@@ -192,35 +193,45 @@ class DetailsFragment : CommanAPI() {
         if ((ui_model!!.category_menulist.value!!.is_restaurant_closed != null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) &&
                 (ui_model!!.category_menulist.value!!.pre_order != null && ui_model!!.category_menulist.value!!.pre_order == false)) {
             // closed restaurant---
-
-
-            if (arguments!!.getString(Constants.STATUS) == getString(R.string.open_now)) {
-                /*TODO  if user is coming from open restaurant and then restaurent suddenly closed then:*/
-                val msg = ui_model!!.category_menulist.value!!.msg ?: ""
-                DialogUtils.openDialogDefault(context = context!!, btnNegative = "", btnPositive = getString(R.string.ok), color = ContextCompat.getColor(context!!, R.color.black), msg = msg, title = "", onDialogClickListener = object : DialogUtils.OnDialogClickListener {
-                    override fun onPositiveButtonClick(position: Int) {
-                        // viewpager.setCurrentItem(1,true)
-                        canIrefreshpre_Function = true
-                    }
-
-                    override fun onNegativeButtonClick() {
-                    }
-                })
-            }
-
+            is_restaurant_closed=true
+            adapter!!.addFragment(Menu.newInstance(ui_model!!.category_menulist.value!!.menu!!, restaurant_info), getString(R.string.menu))
             adapter!!.addFragment(Rating.newInstance(restaurant_info), getString(R.string.rating))
             adapter!!.addFragment(Info.newInstance(restaurant_info), getString(R.string.info))
             viewpager.offscreenPageLimit = 2
             viewpager.setAdapter(adapter)
-            viewpager.setCurrentItem(1, true)
+            //viewpager.setCurrentItem(1, true)
+                DialogUtils.openDialogDefault(context = context!!,btnNegative = "FORUDBESTIL NU",btnPositive = "Find andet take away i Aabenraa",
+                        color = ContextCompat.getColor(context!!, R.color.theme_color),msg ="\nRestauranten ${restaurant_info.opening_title} ${restaurant_info.time}\n",
+                        title ="We are closed today. Please check opening hours",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                    override fun onPositiveButtonClick(position: Int) {
+                        //back press
+                        onBackpress()
+                    }
+                    override fun onNegativeButtonClick() {
+                        // dismiss
+                    }
+                })
+
 
         } else {
             // open and preorder Restaurant---
+            is_restaurant_closed=false
             adapter!!.addFragment(Menu.newInstance(ui_model!!.category_menulist.value!!.menu!!, restaurant_info), getString(R.string.menu))
             adapter!!.addFragment(Rating.newInstance(restaurant_info), getString(R.string.rating))
             adapter!!.addFragment(Info.newInstance(restaurant_info), getString(R.string.info))
             viewpager.offscreenPageLimit = 3
             viewpager.setAdapter(adapter)
+                DialogUtils.openDialogDefault(context = context!!,btnNegative = "FORUDBESTIL NU",btnPositive = "Find andet take away i Aabenraa",
+                        color = ContextCompat.getColor(context!!, R.color.theme_color),msg ="\nRestauranten ${restaurant_info.opening_title} ${restaurant_info.time}\n",
+                        title = "Denne restaurant har desværre lukket lige nu",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                    override fun onPositiveButtonClick(position: Int) {
+                        //back press
+                        onBackpress()
+                    }
+                    override fun onNegativeButtonClick() {
+                        // dismiss
+                    }
+                })
 
         }
 
@@ -247,19 +258,6 @@ class DetailsFragment : CommanAPI() {
                 ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().addFragment(R.id.home_fragment_container, fragment, EpayFragment.TAG, false)
         }
 
-        if(ordertype == getString(R.string.preorder)){
-            DialogUtils.openDialogDefault(context = context!!,btnNegative = "Find andet take away i Aabenraa",btnPositive = "FORUDBESTIL NU",
-                    color = ContextCompat.getColor(context!!, R.color.theme_color),msg ="\nRestauranten ${restaurant_info.opening_title} ${restaurant_info.time}\n",
-                    title = "Denne restaurant har desværre lukket lige nu",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
-                override fun onPositiveButtonClick(position: Int) {
-                    // dismiss
-                }
-                override fun onNegativeButtonClick() {
-                    //back press
-                    onBackpress()
-                }
-            })
-        }
 
 
     }
@@ -267,6 +265,7 @@ class DetailsFragment : CommanAPI() {
 
     fun fetch_category_menu() {
 
+        binding.isUiprogress = true  // you are also comming back so no loader is required.
         val postParam = JsonObject()
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
