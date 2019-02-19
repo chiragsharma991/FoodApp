@@ -1,65 +1,84 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:orientation="vertical"
+    android:background="@color/theme_color"
     >
-
-    <data>
-
-
-
-
-    </data>
-
-
-    <FrameLayout
-        xmlns:app="http://schemas.android.com/apk/res-auto"
-        android:id="@+id/profile_container"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:background="@color/background_light"
-        android:layout_height="match_parent"
-        android:clickable="true"
-        android:focusable="true"
-        android:fitsSystemWindows="true"
-        android:orientation="vertical">
+        android:layout_height="@dimen/_22sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:orientation="horizontal"
+        >
+
+        <android.support.v7.widget.AppCompatImageView
+            android:layout_width="@dimen/_22sdp"
+            android:layout_height="@dimen/_22sdp"
+            android:layout_marginEnd="8dp"
+            android:scaleType="fitXY"
+            android:id="@+id/remove_item"
+            app:srcCompat="@mipmap/minus"
+            android:tint="@color/white"
+            android:padding="@dimen/_5sdp"
+            android:background="@color/theme_color"
+            />
+
+        <!--  <android.support.v7.widget.AppCompatTextView
+              style="@style/Subtitle_TextViewSmall"
+              android:layout_width="@dimen/_25sdp"
+              android:layout_height="@dimen/_25sdp"
+              android:layout_marginEnd="8dp"
+              android:scaleType="fitXY"
+              android:gravity="center"
+              android:background="@color/grey"
+              android:text="-"
+              android:textColor="@color/theme_color"
+              android:textStyle="bold"
+              android:id="@+id/remove_item"
+              />-->
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/SubtitleMidium_TextViewSmall"
+            android:singleLine="true"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:layout_gravity="center_vertical"
+            android:gravity="start"
+            android:id="@+id/item_name"
+            android:layout_weight="1.2"
+            android:text="sdfsdfsdfsdfsdf"
+            android:layout_marginEnd="@dimen/_8sdp"
+            />
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/SubtitleMidium_TextViewSmall"
+            android:layout_height="wrap_content"
+            android:layout_width="0dp"
+            android:singleLine="true"
+            android:id="@+id/item_price"
+            android:gravity="end"
+            android:text="sdfsdfsd"
+            android:layout_gravity="center_vertical"
+            android:layout_weight="0.8"
+            android:layout_alignParentEnd="true"
+            />
 
 
-        <android.support.constraint.ConstraintLayout
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
 
 
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/imageview"
-                android:layout_width="@dimen/_60sdp"
-                android:layout_marginEnd="@dimen/_16sdp"
-                android:layout_height="@dimen/_60sdp"
-                app:srcCompat="@color/gray"
-                android:scaleType="fitXY" />
+    </LinearLayout>
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:id="@+id/add_subitem_view"
+
+        >
 
 
-
-            <android.support.v7.widget.AppCompatImageView
-                android:id="@+id/img_toolbar_back"
-                android:layout_width="@dimen/_50sdp"
-                android:layout_height="@dimen/_40sdp"
-                app:srcCompat="@drawable/cancel"
-                android:padding="@dimen/_8sdp"
-                />
+    </LinearLayout>
 
 
-
-
-        </android.support.constraint.ConstraintLayout>
-
-
-
-    </FrameLayout>
-
-
-
-
-
-
-</layout>
-
+</LinearLayout>

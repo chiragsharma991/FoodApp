@@ -483,7 +483,6 @@
                             style="@style/SubtitleMidium_TextViewSmall"
                             android:layout_height="wrap_content"
                             android:gravity="center_horizontal"
-                            android:text="@string/unfortunately_error"
                             android:textColor="@color/black_default"
                             />
 
@@ -495,7 +494,7 @@
                             android:layout_below="@+id/error_txt"
                             android:layout_centerHorizontal="true"
                             android:layout_marginTop="@dimen/_8sdp"
-                            android:text="@string/search_again" />
+                            />
 
 
                     </RelativeLayout>

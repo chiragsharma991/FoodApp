@@ -160,6 +160,7 @@
                             android:id="@+id/qty_remark"
                             android:layout_toEndOf="@+id/quality_of_food_rating"
                             android:singleLine="true"
+
                             android:textColor="@color/theme_color"
                             android:layout_centerVertical="true"
                             android:layout_marginStart="@dimen/_16sdp"

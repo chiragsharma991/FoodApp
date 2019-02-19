@@ -128,7 +128,9 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
         progress_bar.visibility = View.GONE
         toolbar.visibility = View.VISIBLE
         search_tool.visibility = View.GONE
-        txt_toolbar.text = getString(R.string.restaurants)
+        txt_toolbar.text =if(HomeFragment.is_fav) getString(R.string.favourite_restauranter) else getString(R.string.restaurants)
+        error_txt.text =if(HomeFragment.is_fav) getString(R.string.ingen_favorit_restauranter) else getString(R.string.ingen_restauranter_prøv_en_anden_søgning)
+        search_again_btn.text =if(HomeFragment.is_fav) getString(R.string.søg_efter_restaurnter) else getString(R.string.søg_igen)
         img_toolbar_back.setImageResource(R.drawable.back)
         img_toolbar_back.setOnClickListener {
             onBackpress()

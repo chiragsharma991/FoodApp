@@ -20,6 +20,7 @@ import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
 import android.transition.ChangeBounds
 import android.transition.Slide
+import android.transition.Visibility
 import android.util.Log
 import android.view.Gravity
 import android.view.LayoutInflater
@@ -108,7 +109,8 @@ class OrderedRestaurant : CommanAPI() {
 
     private fun setToolbar() {
 
-        txt_toolbar.text = getString(R.string.orders)
+        txt_toolbar.text = getString(R.string.orderhistorik)
+        txt_toolbar_right.visibility=View.GONE
         txt_toolbar_right.text = getString(R.string.genbestil)
         txt_toolbar_right.setOnClickListener {
             timeoutHandler.removeCallbacks(finalizer)

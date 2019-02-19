@@ -16,6 +16,8 @@
 
     </style>
 
+
+
     <style name="AppTheme.Splash">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
@@ -26,4 +28,7 @@
         <item name="android:navigationBarDividerColor">@color/black</item>
 
     </style>
+
+
+
 </resources>

@@ -12,6 +12,8 @@ import android.databinding.DataBindingUtil
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
+import android.support.design.widget.AppBarLayout
+import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
@@ -25,6 +27,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.GsonBuilder
@@ -49,7 +52,7 @@ import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.*
 import kotlinx.android.synthetic.main.fragment_detail.*
-import kotlinx.android.synthetic.main.toolbar_plusone.*
+import kotlinx.android.synthetic.main.test.view.*
 import retrofit2.Call
 import java.io.Serializable
 
@@ -68,6 +71,8 @@ class DetailsFragment : CommanAPI() {
     private var call_favorite: Call<JsonObject>? = null
     private var restaurant : Restaurant ? =null
     private var ordertype : String =""
+    private var isShow = false
+
 
 
 
@@ -127,18 +132,54 @@ class DetailsFragment : CommanAPI() {
 
 
         if (savedInstanceState == null) {
-            //  restaurant = arguments?.getSerializable(Constants.RESTAURANT) as Restaurant
-          //  binding.isUiprogress = true  // you are also comming back so no loader is required.
+          //  restaurant = arguments?.getSerializable(Constants.RESTAURANT) as Restaurant
+            binding.isUiprogress = true  // you are also comming back so no loader is required.
             binding.kstatus=PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)
             restaurant=arguments?.getSerializable(Constants.RESTAURANT) as Restaurant?
             ordertype=arguments?.getString(Constants.ORDERTYPE) as String
             loge(TAG,"---"+restaurant)
             toolbar_badge_view.visibility = View.GONE  // By default viewcart should be gone.
             logd(DetailsFragment.TAG, "saveInstance NULL")
-            img_toolbar_back.setImageResource(R.drawable.close)
             img_toolbar_back.setOnClickListener {
                 onBackpress()
             }
+
+           // App bar default text and background color.
+            badge_countprice.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))
+            addtocart_bascket.setColorFilter(ContextCompat.getColor(context!!,R.color.theme_color))
+            viewcart.background=ContextCompat.getDrawable(context!!,R.drawable.rectangle_curvewhite_shape)
+            appbar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
+                override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
+
+                    //  Vertical offset == 0 indicates appBar is fully expanded.
+                    if (Math.abs(verticalOffset) > 200) {
+                        if(!isShow){
+                            loge(TAG,"expanded >200---"+Math.abs(verticalOffset))
+                            badge_countprice.setTextColor(ContextCompat.getColor(context!!,R.color.white))
+                            addtocart_bascket.setColorFilter(ContextCompat.getColor(context!!,R.color.white))
+                            viewcart.background=ContextCompat.getDrawable(context!!,R.drawable.rectangle_curve_shape)
+                            txt_toolbar.text= ui_model?.category_menulist?.value?.restaurant_info?.restaurant_name ?: ""
+                            img_toolbar_back.setColorFilter(ContextCompat.getColor(context!!,R.color.black_default))
+
+                            isShow=true
+                        }
+
+                    } else {
+                        if(isShow){
+                            loge(TAG,"expanded true---"+Math.abs(verticalOffset))
+                            badge_countprice.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))
+                            addtocart_bascket.setColorFilter(ContextCompat.getColor(context!!,R.color.theme_color))
+                            viewcart.background=ContextCompat.getDrawable(context!!,R.drawable.rectangle_curvewhite_shape)
+                            txt_toolbar.text=""
+                            img_toolbar_back.setColorFilter(ContextCompat.getColor(context!!,R.color.white))
+                            isShow=false
+                        }
+
+                    }
+                }
+            })
+
+
             ui_model = createViewModel()
             fetch_category_menu()
 
@@ -146,6 +187,9 @@ class DetailsFragment : CommanAPI() {
             logd(DetailsFragment.TAG, "saveInstance NOT NULL")
         }
     }
+
+
+
 
 
     class UIModel : ViewModel() {
@@ -167,9 +211,31 @@ class DetailsFragment : CommanAPI() {
 
     private fun refreshview(restaurant_info: Restaurant) {
 
+
+/*
+        val mInflater= context!!.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+        val snackbar = Snackbar.make(testview, "-def-", Snackbar.LENGTH_INDEFINITE)
+        val layout = snackbar.getView() as Snackbar.SnackbarLayout
+        val textView = layout.findViewById(android.support.design.R.id.snackbar_text) as TextView
+        textView.setVisibility(View.INVISIBLE)
+        val snackView = mInflater.inflate(R.layout.test, null)
+     //   val imageView = snackView.findViewById(R.id.image) as ImageView
+      //  imageView.setImageBitmap(image)
+        snackView.item_name.text = "Add to cart test"
+        snackView.item_name.setOnClickListener({loge(TAG,"click---")})
+        layout.setPadding(0,0,0,0)
+        layout.addView(snackView, 0)
+        snackbar.show()
+
+*/
+
+
+
+
+
         loge(TAG, "refresh---")
+        favorite_btn.setImageResource(if(restaurant_info.is_fav) R.mipmap.heartfilled_white else R.mipmap.heart_white)
         binding.isUiprogress = false
-        favorite_btn.setColorFilter(if(restaurant_info.is_fav)ContextCompat.getColor(context!!,R.color.theme_color) else ContextCompat.getColor(context!!,R.color.gray))
         broadcastEvent(restaurant_info)
         delivery_present = restaurant_info.delivery_present
         pickup_present = restaurant_info.pickup_present
@@ -201,7 +267,7 @@ class DetailsFragment : CommanAPI() {
             viewpager.setAdapter(adapter)
             //viewpager.setCurrentItem(1, true)
                 DialogUtils.openDialogDefault(context = context!!,btnNegative = "FORUDBESTIL NU",btnPositive = "Find andet take away i Aabenraa",
-                        color = ContextCompat.getColor(context!!, R.color.theme_color),msg ="\nRestauranten ${restaurant_info.opening_title} ${restaurant_info.time}\n",
+                        color = ContextCompat.getColor(context!!, R.color.theme_color),msg ="",
                         title ="We are closed today. Please check opening hours",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
                     override fun onPositiveButtonClick(position: Int) {
                         //back press
@@ -213,8 +279,9 @@ class DetailsFragment : CommanAPI() {
                 })
 
 
-        } else {
-            // open and preorder Restaurant---
+        } else if((ui_model!!.category_menulist.value!!.is_restaurant_closed != null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) &&
+                (ui_model!!.category_menulist.value!!.pre_order != null && ui_model!!.category_menulist.value!!.pre_order == true)) {
+            // preorder Restaurant---
             is_restaurant_closed=false
             adapter!!.addFragment(Menu.newInstance(ui_model!!.category_menulist.value!!.menu!!, restaurant_info), getString(R.string.menu))
             adapter!!.addFragment(Rating.newInstance(restaurant_info), getString(R.string.rating))
@@ -233,6 +300,14 @@ class DetailsFragment : CommanAPI() {
                     }
                 })
 
+        }else{
+            // Open Restaurant---
+            is_restaurant_closed=false
+            adapter!!.addFragment(Menu.newInstance(ui_model!!.category_menulist.value!!.menu!!, restaurant_info), getString(R.string.menu))
+            adapter!!.addFragment(Rating.newInstance(restaurant_info), getString(R.string.rating))
+            adapter!!.addFragment(Info.newInstance(restaurant_info), getString(R.string.info))
+            viewpager.offscreenPageLimit = 3
+            viewpager.setAdapter(adapter)
         }
 
         tabs.setupWithViewPager(viewpager)
@@ -487,9 +562,9 @@ class DetailsFragment : CommanAPI() {
 
         val restaurant_info= ui_model!!.category_menulist.value!!.restaurant_info
         if(restaurant_info!!.is_fav){
-            favorite_btn.setColorFilter(ContextCompat.getColor(context!!,R.color.theme_color))
+            favorite_btn.setImageResource(R.mipmap.heartfilled_white)
         }else{
-            favorite_btn.setColorFilter(ContextCompat.getColor(context!!,R.color.gray))
+            favorite_btn.setImageResource(R.mipmap.heart_white)
         }
         // update in previous restaurant list.
         if(restaurant != null && parentFragment is HomeFragment ){

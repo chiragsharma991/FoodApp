@@ -5,7 +5,7 @@
     <string name="delicious_food_for_every_mood">DELICIOUS FOOD FOR EVERY MOOD</string>
     <string name="order_from_food_over_200_restaurants">Order from food over 200 restaurants</string>
     <string name="order_your_take_away_food_online">Order your take away food online</string>
-    <string name="email">Email</string>
+    <string name="email">E-mail adresse</string>
     <string name="password">Password</string>
     <string name="login">Log ind</string>
     <string name="forgot_password">Glemt dit kodeord?</string>
@@ -14,7 +14,7 @@
     <string name="details">Details</string>
     <string name="order_now">Order now</string>
     <string name="orders">Orders</string>
-    <string name="your_orders">Orderhistorik</string>
+    <string name="your_orders">Ordre</string>
     <string name="my_profile">Indstillinger</string>
     <string name="menu">Menukort</string>
     <string name="rating">Bedømmelser</string>
@@ -27,7 +27,7 @@
     <string name="transition_string">card_transition</string>
     <string name="continue_">Til kassen</string>
     <string name="search_the_menu">Søg i menukortet</string>
-    <string name="add">tilføje</string>
+    <string name="add">Tilføje</string>
     <string name="go_on_playstore">Go on PlayStore</string>
     <string name="new_update">New uppdate is available now</string>
     <string name="dismiss">Dismiss</string>
@@ -53,7 +53,7 @@
     <string name="add_new_address">Add new address</string>
     <string name="verify">Verify</string>
     <string name="address">Adresse</string>
-    <string name="ok">OK</string>
+    <string name="ok">Ja</string>
     <string name="go_to_payment">Go to payment</string>
     <string name="select_delivery_time">Select delivery time:</string>
     <string name="if_you_have_any_questions">If you have any questions or enquiries please call us on:</string>
@@ -82,7 +82,7 @@
     <string name="unfortunately_error">Unfortunately, we did not find any restaurant \n  in your area.</string>
     <string name="didnot_match_restaurant_error">Sorry, we did not match any restaurant.</string>
     <string name="search_again">Search again</string>
-    <string name="restaurants">Restaurants</string>
+    <string name="restaurants">Restauranter</string>
     <string name="loading">Loading&#8230;</string>
     <string name="login_to_continue">Login to continue</string>
     <string name="are_you_sure_would">Would you like to logout?</string>
@@ -92,7 +92,9 @@
     <string name="are_you_sure_to_delete">Are you sure to delete ?</string>
     <string name="item_has_been">Item has been successfully added !</string>
     <string name="pickup">Hent selv</string>
+    <string name="pickup_">pickup</string>
     <string name="delivery">Udbringning</string>
+    <string name="delivery_">delivery</string>
     <string name="pickup_caps">Pickup</string>
     <string name="delivery_caps">Delivery</string>
     <string name="you_are_ordering_pickup">Du er ved at bestille din mad til afhentning!</string>
@@ -100,7 +102,7 @@
     <string name="enter_your_postal_number">Enter your postal number</string>
     <string name="enter_the_valid_number">Enter the valid number</string>
     <string name="enter_your_street_number">Enter your street number</string>
-    <string name="enter_your_house_number">Enter your house number</string>
+    <string name="enter_your_house_number">Husnummer</string>
     <string name="enter_your_floor_number">Enter your floor number</string>
     <string name="postal_number_is_not_valid">Postal number is not valid</string>
     <string name="request_successful">Request %1$s</string>
@@ -125,11 +127,11 @@
     <string name="count_ammount">%1$s | %2$s</string>
     <string name="fra">fra\n%1$s</string>
     <string name="transaction_has_been_declined">Transaction has been declined</string>
-    <string name="confirm">Confirm</string>
-    <string name="pay">Pay</string>
-    <string name="basket">Cart</string>
+    <string name="confirm">Bekræfte</string>
+    <string name="pay">Gå til betaling</string>
+    <string name="basket">Indkøbskurv</string>
     <string name="info">Information</string>
-    <string name="payment">Betalingsmetoder</string>
+    <string name="payment">Hvordan til du betaling?</string>
     <string name="confirm_delivery_time">Bekræft din leveringstid</string>
     <string name="giftcard">Giftcard</string>
     <string name="payment_methods">Betalingsmetoder</string>
@@ -172,7 +174,7 @@
     <string name="all">All</string>
     <string name="search_the_restaurant">Search the restaurant</string>
     <string name="change_password">Skift adgangskode</string>
-    <string name="next">Next</string>
+    <string name="next">Næste</string>
     <string name="skip">Skip</string>
     <string name="start">Start</string>
     <string name="gotit">Got it!</string>
@@ -207,7 +209,7 @@
     <string name="markere_som_favorit">Markere som favorit</string>
     <string name="vil_du_fjerne">Vil du fjerne?</string>
     <string name="brug_for_hjælp">Brug for hjælp? kontakt vores kundeservicecenter pa 73702515</string>
-    <string name="app_version">App version v%1$s_%2$s</string>
+    <string name="app_version">Eatmore\nv%1$s.%2$s</string>
     <string name="slet_bruger">Slet bruger</string>
     <string name="kundle_support">Kundle support</string>
     <string name="indtast_en_værdi">Indtast en værdi.</string>
@@ -222,8 +224,8 @@
     <string name="telefon_nummer">Telefon nummer</string>
     <string name="postnummer">Postnummer</string>
     <string name="by">By</string>
-    <string name="redigere">redigere</string>
-    <string name="slette">slette</string>
+    <string name="redigere">Redigere</string>
+    <string name="slette">Slet</string>
     <string name="eks_hjem_eller_arbejde">Eks. hjem eller arbejde</string>
     <string name="dine_bem_rkninger_til_restauranten">Dine bemærkninger til restauranten:</string>
     <string name="delivery_time">Delivery time</string>
@@ -233,6 +235,31 @@
     <string name="tilføj_ny_leveringsadresse">Tilføj ny leveringsadresse</string>
     <string name="log_ud">Log ud</string>
     <string name="indtast_din_postnummer">indtast din postnummer</string>
+    <string name="baseret_p_anmeldelser">Baseret på %1$s anmeldelser</string>
+    <string name="etage_dor_andet_valgfrit">Etage/dor/andet(valgfrit)</string>
+    <string name="vej">Vej</string>
+    <string name="dine_oplysninger">Dine Oplysninger</string>
+    <string name="næste">Næste</string>
+    <string name="bekræft_din_hent_selv_tid">Bekræft din hent selv tid</string>
+    <string name="hent_selv_tid">Hent selv tid</string>
+    <string name="brugeroplysninger">Brugeroplysninger</string>
+    <string name="nuv_rende_adgangskode">Nuværende adgangskode</string>
+    <string name="gammel_adgangskode">Gammel adgangskode</string>
+    <string name="ny_adgangskode">Ny adgangskode</string>
+    <string name="gentag_adgangskode">Gentag adgangskode</string>
+    <string name="orderhistorik">Orderhistorik</string>
+    <string name="subtotal">Subtotal</string>
+    <string name="rabat">Rabat</string>
+    <string name="rest_op_til_minimum">Rest op til minimum</string>
+    <string name="leveringsomkostninger">Leveringsomkostninger</string>
+    <string name="servicegebyr">Servicegebyr</string>
+    <string name="samlet_pris">Samlet pris</string>
+    <string name="favourite_restauranter">Favourite restauranter</string>
+    <string name="ingen_restauranter_prøv_en_anden_søgning">Ingen restauranter. Prøv en anden søgning.</string>
+    <string name="søg_igen">Søg igen</string>
+    <string name="ingen_favorit_restauranter">Ingen favorit restauranter</string>
+    <string name="søg_efter_restaurnter">Søg efter restaurnter</string>
+    <string name="fodevarestyrelsen_kontrolrapport">Fødevarestyrelsen Kontrolrapport</string>
 
 
 </resources>

@@ -174,6 +174,7 @@ abstract class BaseFragment : Fragment() {
                  if (scrollRange == -1) {
                      scrollRange = appBarLayout.totalScrollRange
                  }
+                // loge("TAG","scroll---"+scrollRange+"+"+verticalOffset)
                  if ((scrollRange + verticalOffset == 0) && isShow) {
                      val alpha = AlphaAnimation(1.0f,0.0f)
                      alpha.duration=500

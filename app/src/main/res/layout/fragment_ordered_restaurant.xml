@@ -770,7 +770,7 @@
                                                 android:layout_weight="1.2"
                                                 android:gravity="start"
                                                 android:singleLine="true"
-                                                android:text="Subtotal:"
+                                                android:text="@string/subtotal"
                                                 />
 
                                             <android.support.v7.widget.AppCompatTextView
@@ -803,7 +803,7 @@
                                                 android:layout_weight="1.2"
                                                 android:gravity="start"
                                                 android:singleLine="true"
-                                                android:text="Discount:"
+                                                android:text="@string/rabat"
                                                 />
 
                                             <android.support.v7.widget.AppCompatTextView
@@ -836,7 +836,7 @@
                                                 android:layout_weight="1.2"
                                                 android:gravity="start"
                                                 android:singleLine="true"
-                                                android:text="Rest upto minimum:"
+                                                android:text="@string/rest_op_til_minimum"
                                                 />
 
                                             <android.support.v7.widget.AppCompatTextView
@@ -869,7 +869,7 @@
                                                 android:layout_weight="1.2"
                                                 android:gravity="start"
                                                 android:singleLine="true"
-                                                android:text="Shipping Charges:"
+                                                android:text="@string/leveringsomkostninger"
                                                 />
 
                                             <android.support.v7.widget.AppCompatTextView
@@ -902,7 +902,7 @@
                                                 android:layout_weight="1.2"
                                                 android:gravity="start"
                                                 android:singleLine="true"
-                                                android:text="Additional Charges:"
+                                                android:text="@string/servicegebyr"
                                                 />
 
                                             <android.support.v7.widget.AppCompatTextView
@@ -935,7 +935,7 @@
                                                 android:layout_weight="1.2"
                                                 android:gravity="start"
                                                 android:singleLine="true"
-                                                android:text="Discount:"
+                                                android:text="@string/rabat"
                                                 />
 
                                             <android.support.v7.widget.AppCompatTextView
@@ -968,7 +968,7 @@
                                                 android:layout_weight="1.2"
                                                 android:gravity="start"
                                                 android:singleLine="true"
-                                                android:text="Total:"
+                                                android:text="@string/samlet_pris"
                                                 />
 
                                             <android.support.v7.widget.AppCompatTextView

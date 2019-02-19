@@ -80,6 +80,7 @@
                         android:gravity="start"
                         android:text="@{restaurant.address}"
                         />
+<!--
 
                     <android.support.v7.widget.AppCompatTextView
                         style="@style/Subtitle_TextViewSmall"
@@ -87,6 +88,17 @@
                         android:layout_width="match_parent"
                         android:textColor="@color/dark_blue"
                         android:text="@{restaurant.health_report_link}"
+                        android:gravity="start"
+                        android:onClick="@{handler::tapOnHealthReport}"
+                        />
+-->
+
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/Subtitle_TextViewSmall"
+                        android:layout_gravity="center_vertical"
+                        android:layout_width="match_parent"
+                        android:textColor="@color/theme_color"
+                        android:text="@string/fodevarestyrelsen_kontrolrapport"
                         android:gravity="start"
                         android:onClick="@{handler::tapOnHealthReport}"
                         />

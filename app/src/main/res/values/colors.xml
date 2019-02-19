@@ -28,7 +28,7 @@
     <color name="black_light">#4c4c4c</color>
     <color name="black_default">#808080</color>
     <color name="black_transparent">#999</color>
-    <color name="white">#fff</color>
+    <color name="white">#ffffff</color>
     <color name="white_light">#fafafa</color>
     <color name="white_transparent">#10000000</color>
     <color name="white_light_grey">#f4f6f7</color>

@@ -66,7 +66,7 @@ class ProfileEdit : BaseFragment(), TextWatcher {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
             binding.subscribe = PreferenceUtil.getBoolean(PreferenceUtil.SUBSCRIBE, true)
-            txt_toolbar.text = getString(R.string.profile_info)
+            txt_toolbar.text = getString(R.string.brugeroplysninger)
             img_toolbar_back.setOnClickListener { (activity as HomeActivity).onBackPressed() }
             name_edt.requestFocus()
             name_edt.addTextChangedListener(this)
@@ -96,7 +96,7 @@ class ProfileEdit : BaseFragment(), TextWatcher {
 
             delete_user_txt.setOnClickListener {
 
-                DialogUtils.openDialog(context!!,"Konfirmation", "Ønsker du at slette din Eatmore konto?",
+                DialogUtils.openDialog(context!!,"Ønsker du at slette din Eatmore konto?", "Konfirmation",
                         getString(R.string.ok), getString(R.string.no), ContextCompat.getColor(context!!, R.color.theme_color), object : DialogUtils.OnDialogClickListener {
                     override fun onPositiveButtonClick(position: Int) {
                         deleteuserInfo()

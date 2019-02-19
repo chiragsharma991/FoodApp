@@ -147,7 +147,7 @@ class DeliveryTimeslot : BaseFragment() {
         val postParam = JsonObject()
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
-        postParam.addProperty(Constants.SHIPPING, if (EpayFragment.isPickup) getString(R.string.pickup) else getString(R.string.delivery))
+        postParam.addProperty(Constants.SHIPPING, if (EpayFragment.isPickup) context!!.getString(R.string.pickup_) else context!!.getString(R.string.delivery_))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
         postParam.addProperty(Constants.LANGUAGE, Constants.DA)
         call_pickupinfo=ApiCall.pickupinfo(jsonObject = postParam)
@@ -233,7 +233,8 @@ class DeliveryTimeslot : BaseFragment() {
     // set common toolbar from this and set pre fragment toolbar from this.
 
     fun setToolbarforThis() {
-        txt_toolbar.text = getString(R.string.confirm_delivery_time)
+        txt_toolbar.text =if(EpayFragment.isPickup) getString(R.string.bekræft_din_hent_selv_tid) else getString(R.string.confirm_delivery_time)
+        delivery_time.text =if(EpayFragment.isPickup) getString(R.string.hent_selv_tid) else getString(R.string.leveringstid)
         img_toolbar_back.setOnClickListener { (activity as HomeActivity).onBackPressed() }
     }
 

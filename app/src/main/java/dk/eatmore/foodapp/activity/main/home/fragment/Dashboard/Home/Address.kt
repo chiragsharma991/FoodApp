@@ -406,7 +406,7 @@ class Address : BaseFragment(), TextWatcher {
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
         postParam.addProperty(Constants.ORDER_TOTAL, EpayFragment.paymentattributes.order_total)
-        postParam.addProperty(Constants.SHIPPING, if (EpayFragment.isPickup) getString(R.string.pickup) else getString(R.string.delivery))
+        postParam.addProperty(Constants.SHIPPING, if (EpayFragment.isPickup) context!!.getString(R.string.pickup_) else context!!.getString(R.string.delivery_))
         postParam.addProperty(Constants.STREET, street_edt.text.toString())
         postParam.addProperty(Constants.HOUSE_NO, house_edt.text.toString())
         postParam.addProperty(Constants.FLOOR_DOOR, floor_edt.text.toString())
@@ -498,7 +498,7 @@ class Address : BaseFragment(), TextWatcher {
         EpayFragment.paymentattributes.additional_charges_cash = if (!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_CASH)) || jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString
 
         EpayFragment.paymentattributes.distance = if (!jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.USER_DISTANCE)|| jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].isJsonNull || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString
-        EpayFragment.paymentattributes.first_time = if (jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString
+        EpayFragment.paymentattributes.first_time = if (!jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.FIRST_TIME) || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].isJsonNull || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString
 
 
         val time_list = LinkedHashMap<String, String>()
@@ -523,7 +523,7 @@ class Address : BaseFragment(), TextWatcher {
 
     fun setToolbarforThis() {
 
-        txt_toolbar.text = getString(R.string.address)
+        txt_toolbar.text = getString(R.string.dine_oplysninger)
         txt_toolbar_right_img.apply { visibility = if (EpayFragment.isPickup) View.GONE else View.VISIBLE; setImageResource(R.drawable.info_outline) }
         img_toolbar_back.setImageResource(R.drawable.back)
         img_toolbar_back.setOnClickListener { (activity as HomeActivity).onBackPressed() }
