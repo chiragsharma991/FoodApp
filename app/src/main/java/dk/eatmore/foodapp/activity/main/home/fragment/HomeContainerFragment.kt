@@ -11,6 +11,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
+import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.AccountFragment
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
@@ -103,6 +104,8 @@ class HomeContainerFragment : BaseFragment() {
 
 
     private fun changeMenu(position: Int) {
+        EpayFragment.moveonEpay=false
+
         if (position == 0) {
             img_home.setColorFilter(ContextCompat.getColor(getActivityBase(), R.color.theme_color), android.graphics.PorterDuff.Mode.SRC_IN);
             img_home_txt.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))

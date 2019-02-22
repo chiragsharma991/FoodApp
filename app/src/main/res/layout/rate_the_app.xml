@@ -47,87 +47,106 @@
                 >
 
 
-                <android.support.v4.widget.NestedScrollView
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    >
-
-
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        android:layout_margin="@dimen/_16sdp"
-                        >
-
-
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/SubtitleMidium_TextViewSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:text="@string/haordan_var_din_oplevelxse_med_app_en"
-
-                            />
-
-
-                        <android.support.v7.widget.RecyclerView
-                            android:id="@+id/recycler_view"
-                            android:clipToPadding="false"
-                            android:layout_marginTop="@dimen/_8sdp"
+                        <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"/>
+                            android:layout_height="match_parent"
+                            android:orientation="vertical"
+                            android:nestedScrollingEnabled="true"
+                            android:layout_margin="@dimen/_16sdp"
+                            >
+
+
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/SubtitleMidium_TextViewSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:text="@string/haordan_var_din_oplevelxse_med_app_en"
+
+                                />
+
+
+                            <android.support.v7.widget.RecyclerView
+                                android:id="@+id/recycler_view"
+                                android:clipToPadding="false"
+                                android:layout_marginTop="@dimen/_8sdp"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"/>
 
 
 
 
-                        <android.support.v7.widget.AppCompatTextView
-                            style="@style/SubtitleMidium_TextViewSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="@dimen/_16sdp"
-                            android:text="Fortael os hvad du kan lide/ikke kan lide?"
-                            />
+                            <android.support.v7.widget.AppCompatTextView
+                                style="@style/SubtitleMidium_TextViewSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="@dimen/_16sdp"
+                                android:text="Fortael os hvad du kan lide/ikke kan lide?"
+                                />
 
 
-                        <android.support.v7.widget.AppCompatEditText
-                            style="@style/EditText_Normal"
-                            android:id="@+id/comment_edt"
-                            android:padding="@dimen/_8sdp"
-                            android:layout_height="@dimen/_80sdp"
-                            android:layout_width="match_parent"
-                            android:maxLines="5"
-                            android:gravity="top|start"
-                            android:textAppearance="?android:attr/textAppearanceSmall"
-                            android:lines="5"
-                            android:inputType="textEmailAddress|textMultiLine"
-                            android:overScrollMode="always"
-                            android:scrollbarStyle="insideInset"
-                            android:scrollbars="vertical"
-                            android:background="@drawable/rectangle_edittext"
-                            android:layout_weight="1.5"
-                            app:layout_constraintTop_toBottomOf="@+id/comment"
-                            android:layout_marginTop="@dimen/_8sdp"
-                            />
+                            <!--      <android.support.v7.widget.AppCompatEditText
+                                      style="@style/EditText_Normal"
+                                      android:id="@+id/comment_edt"
+                                      android:padding="@dimen/_8sdp"
+                                      android:layout_height="@dimen/_80sdp"
+                                      android:layout_width="match_parent"
+                                      android:maxLines="5"
+                                      android:nestedScrollingEnabled="true"
+                                      android:gravity="top|start"
+                                      android:textAppearance="?android:attr/textAppearanceSmall"
+                                      android:lines="5"
+                                      android:inputType="textEmailAddress|textMultiLine"
+                                      android:overScrollMode="always"
+                                      android:scrollbarStyle="insideInset"
+                                      android:scrollbars="vertical"
+                                      android:background="@drawable/rectangle_edittext"
+                                      android:layout_weight="1.5"
+                                      app:layout_constraintTop_toBottomOf="@+id/comment"
+                                      android:layout_marginTop="@dimen/_8sdp"
+                                      />-->
 
 
-                        <android.support.v7.widget.AppCompatButton
-                            android:id="@+id/send_btn"
-                            android:layout_marginTop="@dimen/_16sdp"
-                            style="@style/Button"
-                            android:text="@string/save"
-                            android:textColor="@color/white"
-                            />
+                            <android.support.v7.widget.AppCompatEditText
+                                style="@style/EditText_Normal"
+                                android:id="@+id/comment_edt"
+                                android:padding="@dimen/_5sdp"
+                                android:layout_height="@dimen/_80sdp"
+                                android:layout_width="match_parent"
+                                android:maxLines="5"
+                                android:hint="@string/skriv_din_kommentar_her"
+                                android:gravity="top|start"
+                                android:textAppearance="?android:attr/textAppearanceSmall"
+                                android:lines="5"
+                                android:inputType="textEmailAddress|textMultiLine"
+                                android:overScrollMode="always"
+                                android:scrollbarStyle="insideInset"
+                                android:scrollbars="vertical"
+                                android:background="@drawable/rectangle_edittext"
+                                app:layout_constraintTop_toBottomOf="@+id/comment"
+                                android:layout_marginTop="@dimen/_16sdp"
+                                />
+
+
+
+                            <android.support.v7.widget.AppCompatButton
+                                android:id="@+id/send_btn"
+                                android:layout_marginTop="@dimen/_16sdp"
+                                style="@style/Button"
+                                android:text="@string/save"
+                                android:textColor="@color/white"
+                                />
 
 
 
 
 
 
-                    </LinearLayout>
+                        </LinearLayout>
 
 
 
-                </android.support.v4.widget.NestedScrollView>
+
+
 
 
 

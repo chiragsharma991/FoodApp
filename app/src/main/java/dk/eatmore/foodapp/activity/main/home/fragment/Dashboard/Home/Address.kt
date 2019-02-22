@@ -114,7 +114,7 @@ class Address : BaseFragment(), TextWatcher {
                 }
             }
 
-            postnumber_edt.imeOptions = EditorInfo.IME_ACTION_DONE
+       /*     postnumber_edt.imeOptions = EditorInfo.IME_ACTION_DONE
             postnumber_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
                 override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                     loge(TAG, "post number edit...")
@@ -122,7 +122,7 @@ class Address : BaseFragment(), TextWatcher {
                     return true
                 }
 
-            })
+            })*/
             proceed_view_nxt.setOnClickListener {
                 moveon_next()
             }

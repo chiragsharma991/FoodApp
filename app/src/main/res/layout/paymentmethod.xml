@@ -393,6 +393,8 @@
                                                 app:constraint_referenced_ids="online_img,apply_giftcard_txt,online_btn" />
 
 
+                                            <!--*******-->
+
                                             <RelativeLayout
                                                 android:id="@+id/cash_payment"
                                                 android:layout_width="match_parent"

@@ -97,14 +97,14 @@ class Paymentmethod : BaseFragment(), TextWatcher {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
-            isPaymentonline=true
+          //  isPaymentonline=true
             val myclickhandler=MyClickHandler(this)
             binding.handlers=myclickhandler
             binding.executePendingBindings()
             //setanim_toolbartitle(appbar,(activity as EpayActivity).txt_toolbar,getString(R.string.payment))
             applyonlinegift_edt.addTextChangedListener(this)
             applycashgift_edt.addTextChangedListener(this)
-            paymentmethod_visible_are()
+            availablerest_paymethods()
             setToolbarforThis()
             showproductInfo()
             addspantext()
@@ -131,7 +131,6 @@ class Paymentmethod : BaseFragment(), TextWatcher {
 
         if(EpayFragment.isPickup){
             // pick up:
-
             subtotal_layout.visibility=View.VISIBLE
             restuptominimum_layout.visibility=if(EpayFragment.paymentattributes.upto_min_shipping.toDouble() <= 0.0) View.GONE else View.VISIBLE  // product price - mincharge
             shipping_layout.visibility=View.GONE
@@ -412,6 +411,64 @@ class Paymentmethod : BaseFragment(), TextWatcher {
             applyonline_txt.visibility=View.VISIBLE
             online_rht_img.setImageResource(R.drawable.down_arrow)
             cash_rht_img.setImageResource(R.drawable.up_arrow)
+
+
+        }
+    }
+    private fun availablerest_paymethods(){
+
+        if(EpayFragment.paymentattributes.online_logo !="" && EpayFragment.paymentattributes.cash_logo==""){
+            // only online---
+            cash_payment.visibility=View.GONE
+            online_method.visibility=View.VISIBLE
+            cash_method.visibility=View.GONE
+            giftonline_view.visibility=View.GONE
+            giftcash_view.visibility=View.GONE
+            EpayFragment.paymentattributes.discount_amount=0.0
+            EpayFragment.paymentattributes.discount_id=0
+            EpayFragment.paymentattributes.discount_type=""
+            generateBillDetails(Constants.OTHER)
+            progress_applyonlinegift.visibility=View.GONE
+            progress_applycashgift.visibility=View.GONE
+            error_of_onlinegiftcard.visibility=View.GONE
+            error_of_cashgiftcard.visibility=View.GONE
+            applycash_txt.visibility=View.VISIBLE
+            applyonline_txt.visibility=View.VISIBLE
+            online_rht_img.setImageResource(R.drawable.up_arrow)
+            cash_rht_img.setImageResource(R.drawable.down_arrow)
+            isPaymentonline=true
+
+        }
+        else if(EpayFragment.paymentattributes.online_logo =="" && EpayFragment.paymentattributes.cash_logo !=""){
+            // only cash---
+            online_payment.visibility=View.GONE
+            online_method.visibility=View.GONE
+            cash_method.visibility=View.VISIBLE
+            giftonline_view.visibility=View.GONE
+            giftcash_view.visibility=View.GONE
+            EpayFragment.paymentattributes.discount_amount=0.0
+            EpayFragment.paymentattributes.discount_id=0
+            EpayFragment.paymentattributes.discount_type=""
+            generateBillDetails(Constants.OTHER)
+            progress_applyonlinegift.visibility=View.GONE
+            progress_applycashgift.visibility=View.GONE
+            error_of_onlinegiftcard.visibility=View.GONE
+            error_of_cashgiftcard.visibility=View.GONE
+            applycash_txt.visibility=View.VISIBLE
+            applyonline_txt.visibility=View.VISIBLE
+            online_rht_img.setImageResource(R.drawable.down_arrow)
+            cash_rht_img.setImageResource(R.drawable.up_arrow)
+            isPaymentonline=false
+
+
+
+        }else{
+            // online and cash
+            cash_payment.visibility=View.VISIBLE
+            online_payment.visibility=View.VISIBLE
+            isPaymentonline=true
+            paymentmethod_visible_are()
+
 
 
         }

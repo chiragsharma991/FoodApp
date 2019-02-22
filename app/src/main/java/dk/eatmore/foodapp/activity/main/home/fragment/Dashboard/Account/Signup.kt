@@ -5,10 +5,12 @@ import android.os.Bundle
 import android.os.Handler
 import android.text.Editable
 import android.text.TextWatcher
+import android.view.KeyEvent
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.EditText
+import android.widget.TextView
 import android.widget.Toast
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
@@ -56,11 +58,11 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
-            img_toolbar_back.setOnClickListener{(activity as HomeActivity).onBackPressed() }
+            img_toolbar_back.setOnClickListener { (activity as HomeActivity).onBackPressed() }
             clickEvent = MyClickHandler(this)
             binding.handlers = clickEvent
-           // acc_signup_btn.setEnabled(false)
-          //  acc_signup_btn.alpha = 0.5F
+            // acc_signup_btn.setEnabled(false)
+            //  acc_signup_btn.alpha = 0.5F
 
             first_name.addTextChangedListener(this)
             sign_up_email_edt.addTextChangedListener(this)
@@ -78,26 +80,39 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
             inputValidStates[sign_up_password_edt] = false
             inputValidStates[sign_up_cnf_password_edt] = false
 
+            forgot_email_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+                override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                    if (forgot_email_edt.text.trim().length > 0) {
+                        if (validMail(forgot_email_edt.text.toString())) {
+                            forgotFunction()
+                        } else {
+                            forgot_email_inputlayout.error = getString(R.string.enter_valid_email_address)
+                        }
+                    }
+                    return false
+                }
+            })
+
             logd(TAG, "saveInstance NULL")
             when (ID) {
                 1 -> {
                     first_name.requestFocus()
-                    txt_toolbar.text=getString(R.string.signup)
+                    txt_toolbar.text = getString(R.string.opret_konto)
                     signup_view.visibility = View.VISIBLE
                     forget_password_view.visibility = View.GONE
                 }
                 2 -> {
                     forgot_email_edt.requestFocus()
-                    txt_toolbar.text=getString(R.string.forgot_password)
+                    txt_toolbar.text = getString(R.string.forgot_password)
                     signup_view.visibility = View.GONE
                     forget_password_view.visibility = View.VISIBLE
                     acc_forget_btn.setOnClickListener({
-                        if(forgot_email_edt.text.trim().length > 0){
-                            loge("TAG-",""+validMail(forgot_email_edt.text.toString()))
+                        if (forgot_email_edt.text.trim().length > 0) {
+                            loge("TAG-", "" + validMail(forgot_email_edt.text.toString()))
                             if (validMail(forgot_email_edt.text.toString())) {
                                 forgotFunction()
                             } else {
-                                forgot_email_inputlayout.error = getString(R.string.enter_valid_email_address)
+                                forgot_email_inputlayout.error = getString(R.string.indtast_venligst_dine_mail)
 
                             }
                         }
@@ -119,90 +134,87 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
 
     override fun afterTextChanged(s: Editable?) {
 
-        loge(TAG,"afterTextChanged---")
+        loge(TAG, "afterTextChanged---")
         if (first_name.text.hashCode() == s!!.hashCode()) {
-            sign_up_firstname_inputlayout.isErrorEnabled=false
-        }
-        else if (sign_up_email_edt.text.hashCode() == s.hashCode()) {
-            sign_up_email_inputlayout.isErrorEnabled=false
+            sign_up_firstname_inputlayout.isErrorEnabled = false
+        } else if (sign_up_email_edt.text.hashCode() == s.hashCode()) {
+            sign_up_email_inputlayout.isErrorEnabled = false
             // validationFields()
         } else if (sign_up_password_edt.text.hashCode() == s.hashCode()) {
-            sign_up_password_inputlayout.isErrorEnabled=false
+            sign_up_password_inputlayout.isErrorEnabled = false
             // validationFields()
-        }
-        else if (sign_up_cnf_password_edt.text.hashCode() == s.hashCode()) {
-            sign_up_cnf_password_inputlayout.isErrorEnabled=false
-        }
-        else if (forgot_email_edt.text.hashCode() == s.hashCode()) {
-            forgot_email_inputlayout.isErrorEnabled=false
+        } else if (sign_up_cnf_password_edt.text.hashCode() == s.hashCode()) {
+            sign_up_cnf_password_inputlayout.isErrorEnabled = false
+        } else if (forgot_email_edt.text.hashCode() == s.hashCode()) {
+            forgot_email_inputlayout.isErrorEnabled = false
         }
     }
 
-    fun signup_validation(): Boolean{
-        var result =true
+    fun signup_validation(): Boolean {
+        var result = true
 
-            if (first_name.text.trim().toString().length > 0) {
-                inputValidStates[first_name] = true
-            } else {
-                inputValidStates[first_name] = false
-            }
-            if (validMail(sign_up_email_edt.text.toString())) {
-                inputValidStates[sign_up_email_edt] = true
-            } else {
-                inputValidStates[sign_up_email_edt] = false
-            }
-            // validationFields()
-            if(sign_up_password_edt.text.trim().toString().length >= 8){
-                inputValidStates[sign_up_password_edt] = true
-            }else{
-                inputValidStates[sign_up_password_edt] = false
-            }
-            // validationFields()
-            if(sign_up_cnf_password_edt.text.trim().length <= 0){
-                inputValidStates[sign_up_cnf_password_edt] = false
-            }else if(sign_up_cnf_password_edt.text.trim().toString().equals(sign_up_password_edt.text.trim().toString())){
-                inputValidStates[sign_up_cnf_password_edt] = true
-            }else{
-                inputValidStates[sign_up_cnf_password_edt] = false
-            }
+        if (first_name.text.trim().toString().length > 0) {
+            inputValidStates[first_name] = true
+        } else {
+            inputValidStates[first_name] = false
+        }
+        if (validMail(sign_up_email_edt.text.toString())) {
+            inputValidStates[sign_up_email_edt] = true
+        } else {
+            inputValidStates[sign_up_email_edt] = false
+        }
+        // validationFields()
+        if (sign_up_password_edt.text.trim().toString().length >= 6) {
+            inputValidStates[sign_up_password_edt] = true
+        } else {
+            inputValidStates[sign_up_password_edt] = false
+        }
+        // validationFields()
+        if (sign_up_cnf_password_edt.text.trim().length <= 0) {
+            inputValidStates[sign_up_cnf_password_edt] = false
+        } else if (sign_up_cnf_password_edt.text.trim().toString().equals(sign_up_password_edt.text.trim().toString())) {
+            inputValidStates[sign_up_cnf_password_edt] = true
+        } else {
+            inputValidStates[sign_up_cnf_password_edt] = false
+        }
 
 
         if (!inputValidStates[first_name]!!) {
-            sign_up_firstname_inputlayout.isErrorEnabled=true
-            sign_up_firstname_inputlayout.error= getString(R.string.enter_your_full_name)
-            result=false
+            sign_up_firstname_inputlayout.isErrorEnabled = true
+            sign_up_firstname_inputlayout.error = getString(R.string.indtast_vengligst_dit_navn)
+            result = false
         }
         if (!inputValidStates[sign_up_email_edt]!!) {
-            sign_up_email_inputlayout.error = getString(R.string.enter_valid_email_address)
-            result=false
+            sign_up_email_inputlayout.error = getString(R.string.indtast_venligst_en_gylding_e_mail)
+            result = false
         }
         if (!inputValidStates[sign_up_password_edt]!!) {
-            if(sign_up_password_edt.text.trim().length <= 0){
+            if (sign_up_password_edt.text.trim().length <= 0) {
                 sign_up_password_inputlayout.error = getString(R.string.enter_your_unique_password)
-            }else{
+            } else {
                 sign_up_password_inputlayout.error = getString(R.string.password_must_consist)
             }
-            result=false
+            result = false
         }
         if (!inputValidStates[sign_up_cnf_password_edt]!!) {
-            if(sign_up_cnf_password_edt.text.trim().length <= 0){
+            if (sign_up_cnf_password_edt.text.trim().length <= 0) {
                 sign_up_cnf_password_inputlayout.error = getString(R.string.enter_your_confirm_password)
-            }else{
+            } else {
                 sign_up_cnf_password_inputlayout.error = getString(R.string.your_password_and_confirm_password_do_not_match)
             }
-            result=false
+            result = false
         }
 
         return result
     }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-        loge(TAG,"beforeTextChanged")
+        loge(TAG, "beforeTextChanged")
 
     }
 
     override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-        loge(TAG,"onTextChanged")
+        loge(TAG, "onTextChanged")
 
     }
 
@@ -222,18 +234,18 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
 
 
     private fun signupFunction() {
-        if(!signup_validation())return
+        if (!signup_validation()) return
         loge(TAG, "signup...")
         showProgressDialog()
         callAPI(ApiCall.signup(
-        createRowdata(
-                auth_key = Constants.AUTH_VALUE,
-                eatmore_app = true,
-                email = sign_up_email_edt.text.toString(),
-                first_name = first_name.text.toString(),
-                password_hash = sign_up_password_edt.text.toString(),
-                subscribe =if (subscribe_chk.isChecked ) "1" else "0"
-        )
+                createRowdata(
+                        auth_key = Constants.AUTH_VALUE,
+                        eatmore_app = true,
+                        email = sign_up_email_edt.text.toString(),
+                        first_name = first_name.text.toString(),
+                        password_hash = sign_up_password_edt.text.toString(),
+                        subscribe = if (subscribe_chk.isChecked) "1" else "0"
+                )
         ), object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
@@ -243,7 +255,7 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
                     Handler().postDelayed({
                         (parentFragment as AccountFragment).loginfrom_signup(username = sign_up_email_edt.text.toString(), password_hash = sign_up_password_edt.text.toString())
                         (activity as HomeActivity).onBackPressed()
-                    },800)
+                    }, 800)
 
                 } else {
                     showSnackBar(clayout, json.get("msg").asString)
@@ -268,13 +280,14 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
         })
 
     }
+
     private fun forgotFunction() {
         showProgressDialog()
-        callAPI(ApiCall.forgot_password(auth_key = Constants.AUTH_VALUE,email = forgot_email_edt.text.trim().toString(),device_type = Constants.DEVICE_TYPE_VALUE,eatmore_app = true,app =Constants.RESTAURANT_FOOD_ANDROID), object : BaseFragment.OnApiCallInteraction {
+        callAPI(ApiCall.forgot_password(auth_key = Constants.AUTH_VALUE, email = forgot_email_edt.text.trim().toString(), device_type = Constants.DEVICE_TYPE_VALUE, eatmore_app = true, app = Constants.RESTAURANT_FOOD_ANDROID), object : BaseFragment.OnApiCallInteraction {
             override fun <T> onSuccess(body: T?) {
                 val json = body as JsonObject  // please be mind you are using jsonobject(Gson)
                 if (json.get("status").asBoolean) {
-                    Toast.makeText(context!!,json.get(Constants.MSG).asString,Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context!!, json.get(Constants.MSG).asString, Toast.LENGTH_SHORT).show()
                     //showSnackBar(clayout, json.get(Constants.MSG).asString)
                     (activity as HomeActivity).onBackPressed()
                 } else {
@@ -355,15 +368,15 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
 
     }
 
-    fun createRowdata( auth_key: String , eatmore_app:Boolean , first_name:String , email:String , password_hash:String , subscribe:String ) : JsonObject {
-        val jsonobject= JsonObject()
-        jsonobject.addProperty(Constants.AUTH_KEY,auth_key)
-        jsonobject.addProperty(Constants.EATMORE_APP,eatmore_app)
-        jsonobject.addProperty(Constants.FIRST_NAME,first_name)
-        jsonobject.addProperty(Constants.EMAIL,email)
-        jsonobject.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,""))
-        jsonobject.addProperty(Constants.PASSWORD_HASH,password_hash)
-        jsonobject.addProperty(Constants.SUBSCRIBE,subscribe)
+    fun createRowdata(auth_key: String, eatmore_app: Boolean, first_name: String, email: String, password_hash: String, subscribe: String): JsonObject {
+        val jsonobject = JsonObject()
+        jsonobject.addProperty(Constants.AUTH_KEY, auth_key)
+        jsonobject.addProperty(Constants.EATMORE_APP, eatmore_app)
+        jsonobject.addProperty(Constants.FIRST_NAME, first_name)
+        jsonobject.addProperty(Constants.EMAIL, email)
+        jsonobject.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN, ""))
+        jsonobject.addProperty(Constants.PASSWORD_HASH, password_hash)
+        jsonobject.addProperty(Constants.SUBSCRIBE, subscribe)
         jsonobject.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
         return jsonobject
 
@@ -388,8 +401,8 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
     }
 
     fun backpress(): Boolean {
-      //  (parentFragment as AccountFragment).img_toolbar_back.visibility=View.GONE
-       // (parentFragment as AccountFragment).txt_toolbar.text=getString(R.string.my_profile)
+        //  (parentFragment as AccountFragment).img_toolbar_back.visibility=View.GONE
+        // (parentFragment as AccountFragment).txt_toolbar.text=getString(R.string.my_profile)
         return true
     }
 

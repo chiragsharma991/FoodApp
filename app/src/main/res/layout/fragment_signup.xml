@@ -21,6 +21,8 @@
         xmlns:tools="http://schemas.android.com/tools"
         android:layout_width="match_parent"
         android:id="@+id/clayout"
+        android:focusable="true"
+        android:clickable="true"
         android:layout_height="match_parent"
         android:background="@color/background_light"
         >
@@ -79,11 +81,12 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/hindvadodara_light"
+                                android:nextFocusDown="@id/sign_up_email_edt"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
                                 android:inputType="textEmailAddress"
                                 android:singleLine="true"
                                 android:backgroundTint="@color/gray"
-                                android:hint="@string/first_name" />
+                                android:hint="@string/indtast_venligst_dit_navn" />
                         </android.support.design.widget.TextInputLayout>
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/sign_up_email_inputlayout"
@@ -97,11 +100,12 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:fontFamily="@font/hindvadodara_light"
+                                android:nextFocusDown="@id/sign_up_password_edt"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
                                 android:inputType="textEmailAddress"
                                 android:singleLine="true"
                                 android:backgroundTint="@color/gray"
-                                android:hint="Email address" />
+                                android:hint="@string/indtast_din_email_adresse" />
                         </android.support.design.widget.TextInputLayout>
                         <android.support.design.widget.TextInputLayout
                             android:id="@+id/sign_up_password_inputlayout"
@@ -115,9 +119,11 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="textPassword"
+                                android:maxLength="6"
+                                android:nextFocusDown="@id/sign_up_cnf_password_edt"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
                                 android:fontFamily="@font/hindvadodara_light"
-                                android:hint="Password"
+                                android:hint="@string/adgangskode"
                                 android:singleLine="true"
                                 android:backgroundTint="@color/gray"
                                 />
@@ -134,10 +140,11 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="wrap_content"
                                 android:inputType="textPassword"
+                                android:maxLength="6"
                                 android:id="@+id/sign_up_cnf_password_edt"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
                                 android:fontFamily="@font/hindvadodara_light"
-                                android:hint="Confirm password"
+                                android:hint="@string/bekr_ft_adgangskode"
                                 android:singleLine="true"
                                 android:backgroundTint="@color/gray"
                                 />
@@ -149,7 +156,7 @@
                             style="@style/Button"
                             android:onClick="@{handlers::signupFunction}"
                             android:layout_marginTop="40dp"
-                            android:text="@string/signup"
+                            android:text="@string/opret_konto"
                             android:textColor="@color/white"
                             />
 
@@ -209,6 +216,7 @@
                                 android:layout_height="wrap_content"
                                 android:backgroundTint="@color/gray"
                                 android:inputType="textEmailAddress"
+                                android:imeOptions="actionDone"
                                 android:textAppearance="?android:attr/textAppearanceSmall"
                                 android:fontFamily="@font/hindvadodara_light"
                                 android:singleLine="true"
@@ -218,11 +226,20 @@
                         </android.support.design.widget.TextInputLayout>
 
 
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/Subtitle_TextViewSmall"
+                            android:layout_marginTop="@dimen/_16sdp"
+                            android:layout_gravity="center_vertical"
+                            android:text="@string/skriv_venligst_din_e_mail_adresse_vi_sender_dig_et_link_til_nulstilling_af_din_adgangskode"
+                            />
+
+
+
 
                         <android.support.v7.widget.AppCompatButton
                             android:id="@+id/acc_forget_btn"
                             style="@style/Button"
-                            android:layout_marginTop="40dp"
+                            android:layout_marginTop="@dimen/_16sdp"
                             android:text="Submit"
                             android:textColor="@color/white"
                             />

@@ -66,7 +66,7 @@ class BamboraWebfunction : BaseFragment(), PaymentResultListener {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
             setToolbarforThis()
-            progresswheel(progresswheel,true)
+            progress_bar.visibility=View.VISIBLE
             val paymentView = EpayWebView(this@BamboraWebfunction, webiview, false)
             paymentView.LoadPaymentWindow(getData())
           //  checkout_delivery()
@@ -126,7 +126,8 @@ class BamboraWebfunction : BaseFragment(), PaymentResultListener {
     }
 
     fun onBackpress()  {
-        if(progresswheel.isSpinning) return
+
+        if(progress_bar.visibility == View.VISIBLE) return
         (parentFragment as EpayFragment).popFragment()
         val fragment= (parentFragment as EpayFragment).childFragmentManager.findFragmentByTag(Paymentmethod.TAG)
         (fragment as Paymentmethod).onlineTransactionFailed()
@@ -139,13 +140,13 @@ class BamboraWebfunction : BaseFragment(), PaymentResultListener {
 
     override fun PaymentWindowLoaded() {
         Log.e("epay--","PaymentWindowLoaded")
-        progresswheel(progresswheel,false)
+        progress_bar.visibility=View.GONE
     }
 
     override fun PaymentAccepted(map: MutableMap<String, String>?) {
         Log.e("epay--","PaymentAccepted")
         if(isprocess_on == true){
-            progresswheel(progresswheel,false)
+            progress_bar.visibility=View.GONE
             EpayFragment.paymentattributes.cardno=map!!.get(Constants.CARDNO).toString()
             EpayFragment.paymentattributes.txnid=map.get(Constants.TXNID).toString()
             EpayFragment.paymentattributes.paymenttype=map.get(Constants.PAYMENTTYPE).toString()
@@ -157,7 +158,7 @@ class BamboraWebfunction : BaseFragment(), PaymentResultListener {
     }
 
     override fun PaymentWindowCancelled() {
-        progresswheel(progresswheel,false)
+        progress_bar.visibility=View.GONE
         (parentFragment as EpayFragment).popFragment()
         val fragment= (parentFragment as EpayFragment).childFragmentManager.findFragmentByTag(Paymentmethod.TAG)
         (fragment as Paymentmethod).onlineTransactionFailed()
@@ -169,7 +170,7 @@ class BamboraWebfunction : BaseFragment(), PaymentResultListener {
 
     override fun ErrorOccurred(p0: Int, p1: String?, p2: String?) {
         Log.e("epay--","ErrorOccurred")
-        progresswheel(progresswheel,false)
+        progress_bar.visibility=View.GONE
 
     }
 

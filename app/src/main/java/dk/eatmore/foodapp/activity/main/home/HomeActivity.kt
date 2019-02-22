@@ -8,7 +8,6 @@ import android.support.v4.app.Fragment
 import android.view.View
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
-import dk.eatmore.foodapp.utils.BaseActivity
 import com.facebook.GraphResponse
 import org.json.JSONObject
 import com.facebook.GraphRequest
@@ -22,14 +21,12 @@ import dk.eatmore.foodapp.fragment.ProductInfo.CategoryList
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
-import dk.eatmore.foodapp.utils.BaseFragment
-import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.fragment_home_fragment.*
 import org.json.JSONException
 import java.util.*
 import android.os.Build
-
-
+import dk.eatmore.foodapp.utils.*
+import org.greenrobot.eventbus.Subscribe
 
 
 class HomeActivity : BaseActivity() {
@@ -50,6 +47,9 @@ class HomeActivity : BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home_activity)
         initView(savedInstanceState)
+
+     //   val parsingEvents =ParsingEvents.ActivityFragmentMessage ("chirag ActivityFragmentMessage")
+      //  GlobalBus.bus.post(parsingEvents)
         //   log(TAG, "savedInstanceState..."+savedInstanceState)
 
     }
@@ -117,8 +117,8 @@ class HomeActivity : BaseActivity() {
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         // this is result from enable gps or disable gps
-        loge(TAG,"onActivityResult---"+resultCode+""+requestCode)
         if(data != null){
+            loge(TAG,"onActivityResult---"+resultCode+"||"+requestCode+"||"+data)
             super.onActivityResult(requestCode, resultCode, data)
             if (requestCode == Constants.REQUEST_CHECK_SETTINGS) {
                 if (resultCode == Activity.RESULT_OK) {
@@ -129,7 +129,7 @@ class HomeActivity : BaseActivity() {
                 }
             }
         }
-    }
+    }//1||64206||Intent { (has extras) }   &&  ---Activity Result account fragment---64206
 
     override fun onBackPressed() {
         loge(TAG, "back pressed...")
@@ -168,7 +168,22 @@ class HomeActivity : BaseActivity() {
         return result
     }
 
+  /*  @Subscribe
+    fun  getMesage(parsingevents : ParsingEvents.FragmentActivityMessage){
+        loge(TAG,"--get FragmentActivityMessage-"+parsingevents.message)
+    }*/
 
+    override fun onStart() {
+        loge(TAG, "onStart...")
+        super.onStart()
+        //GlobalBus.bus.register(this)
+    }
+
+    override fun onStop() {
+        loge(TAG, "onStop...")
+        super.onStop()
+        //GlobalBus.bus.unregister(this)
+    }
 
     override fun onDestroy() {
         super.onDestroy()

@@ -118,6 +118,15 @@ class AccountFragment : BaseFragment() {
             acc_login_btn.setOnClickListener {
                 moveon_login(username = acc_email_edt.text.toString(), password_hash = acc_password_edt.text.toString())
             }
+
+            //acc_password_edt.imeOptions = EditorInfo.IME_ACTION_DONE
+            acc_password_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+                override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                    moveon_login(username = acc_email_edt.text.toString(), password_hash = acc_password_edt.text.toString())
+                    return false
+                }
+            })
+
             // show Profle screen every time if user is already login.
             loge(TAG,"kstatus is-"+PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)+"--"+PreferenceUtil.getString(PreferenceUtil.E_MAIL, ""))
             if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
@@ -194,7 +203,7 @@ class AccountFragment : BaseFragment() {
                                     login_from = Constants.FACEBOOK,
                                     language = "en"
                             )
-                            showProgressDialog()
+                           // showProgressDialog()
                             showSnackBar(clayout, json.get("msg").asString)
 
                         } else {
@@ -215,7 +224,7 @@ class AccountFragment : BaseFragment() {
                                 login_from = Constants.DIRECT,
                                 language = "en"
                         )
-                        showProgressDialog()
+                       // showProgressDialog()
                         showSnackBar(clayout, json.get("msg").asString)
                     }
 
@@ -326,16 +335,22 @@ class AccountFragment : BaseFragment() {
         if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true
         if(HomeFragment.ui_model?.reloadfragment !=null) HomeFragment.ui_model!!.reloadfragment.value=true  // reload last order from homefragment.
         // When user is comming from cart to login then:
+        val epayFragment=((activity as HomeActivity).getHomeContainerFragment()as HomeContainerFragment).getHomeFragment().childFragmentManager.findFragmentByTag(EpayFragment.TAG)
+        if(epayFragment !=null) epayFragment.epay_continue_btn.text=getString(R.string.continue_)
         if (EpayFragment.moveonEpay){
-            loge(TAG,"Moveonepay"+EpayFragment.moveonEpay)
-            val epayFragment=((activity as HomeActivity).getHomeContainerFragment()as HomeContainerFragment).getHomeFragment().childFragmentManager.findFragmentByTag(EpayFragment.TAG)
-            if(epayFragment !=null) epayFragment.epay_continue_btn.text=getString(R.string.continue_)
-            if(epayFragment !=null) (epayFragment as EpayFragment).fetch_viewCardList()
-            ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0)
-            EpayFragment.moveonEpay=false
+            if(epayFragment !=null) (epayFragment as EpayFragment).continuefromviewcart()
+            // if(epayFragment !=null) (epayFragment as EpayFragment).fetch_viewCardList()
+            Handler().postDelayed({
+                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0)
+                showProgressDialog()
+            },2000)
+
+        }else{
+            showProgressDialog()
         }
 
         onBackpress() // to set setting view
+
 
 
     }
@@ -372,7 +387,12 @@ class AccountFragment : BaseFragment() {
 
     fun facebookSign() {
         loge(TAG, "call to Facebook")
-        login_buttonUser.performClick()
+        //logout facebook - while already login
+        try {
+            LoginManager.getInstance().logOut()
+        } catch (e: Exception) {
+            loge(TAG,"facebook exception-"+e.message)
+        }
         login_buttonUser.setFragment(this@AccountFragment)
         login_buttonUser.setReadPermissions("email", "public_profile");
         login_buttonUser.registerCallback(callbackManager,
@@ -476,6 +496,7 @@ class AccountFragment : BaseFragment() {
 
                     }
                 })
+        login_buttonUser.performClick()
 
 
     }

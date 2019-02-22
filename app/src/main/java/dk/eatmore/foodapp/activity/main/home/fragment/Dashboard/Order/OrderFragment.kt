@@ -65,7 +65,6 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
         if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
             swipetorefresh_view.visibility = View.GONE
             fetchmyOrder()
-            if (HomeFragment.ui_model?.reloadfragment != null && HomeFragment.count == 1) HomeFragment.ui_model!!.reloadfragment.value = true  // reload last order from homefragment.
         } else {
             swipeRefresh.isRefreshing = false
         }
@@ -126,7 +125,7 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
             empty_view.visibility = View.VISIBLE
             error_image.visibility = View.VISIBLE
             error_btn.visibility = View.GONE
-            error_txt.text = getString(R.string.no_order)
+            error_txt.text = getString(R.string.du_har_ingen_ordre)
         }
 
     }
@@ -250,6 +249,7 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
         postParam.addProperty(Constants.LANGUAGE, Constants.DA)
+        if (HomeFragment.ui_model?.reloadfragment != null && HomeFragment.count == 1) HomeFragment.ui_model!!.reloadfragment.value = true  // reload last order from homefragment.
 
         callAPI(ApiCall.myorders(
                 jsonObject = postParam

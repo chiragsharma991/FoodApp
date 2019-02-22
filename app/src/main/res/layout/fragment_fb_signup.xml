@@ -24,76 +24,100 @@
         android:layout_height="match_parent"
         android:background="@color/background_light"
         >
-
-        <android.support.v4.widget.NestedScrollView
+        <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
 
             >
 
-            <RelativeLayout
+            <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_margin="@dimen/_3sdp"
+                android:id="@+id/appbar"
                 >
-
-                <android.support.v7.widget.CardView
-                    android:id="@+id/row_order_cardview"
-                    style="@style/CardViewStyle"
-                    android:foreground="?android:attr/selectableItemBackground"
+                <include layout="@layout/toolbar"
                     >
 
-                    <!--SignUp View-->
+                </include>
 
-                    <LinearLayout
-                        android:layout_width="fill_parent"
-                        android:layout_height="match_parent"
-                        android:id="@+id/signup_view"
-                        android:visibility="visible"
-                        android:layout_marginTop="?attr/actionBarSize"
-                        android:orientation="vertical"
-                        android:layout_margin="@dimen/_8sdp"
+            </android.support.design.widget.AppBarLayout>
+
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/appbar"
+                >
+
+                <RelativeLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_margin="@dimen/_3sdp"
+                    >
+
+                    <android.support.v7.widget.CardView
+                        android:id="@+id/row_order_cardview"
+                        style="@style/CardViewStyle"
+                        android:foreground="?android:attr/selectableItemBackground"
                         >
-                        <android.support.design.widget.TextInputLayout
-                            android:id="@+id/email_inputlayout"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content">
 
-                            <EditText
-                                android:id="@+id/email_edt"
+                        <!--SignUp View-->
+
+                        <LinearLayout
+                            android:layout_width="fill_parent"
+                            android:layout_height="match_parent"
+                            android:id="@+id/signup_view"
+                            android:visibility="visible"
+                            android:layout_marginTop="?attr/actionBarSize"
+                            android:orientation="vertical"
+                            android:layout_margin="@dimen/_8sdp"
+                            >
+                            <android.support.design.widget.TextInputLayout
+                                android:id="@+id/email_inputlayout"
+                                app:hintTextAppearance="@style/textinputfontstyle"
+                                app:errorTextAppearance="@style/error_appearance"
                                 android:layout_width="match_parent"
-                                android:layout_height="wrap_content"
-                                android:fontFamily="@font/hindvadodara_medium"
-                                android:textAppearance="?android:attr/textAppearanceSmall"
-                                android:inputType="textEmailAddress"
-                                android:singleLine="true"
-                                android:backgroundTint="@color/gray"
-                                android:hint="Email address" />
-                        </android.support.design.widget.TextInputLayout>
+                                android:layout_height="wrap_content">
 
-                        <android.support.v7.widget.AppCompatButton
-                            android:id="@+id/continue_btn"
-                            style="@style/Button"
-                            android:onClick="@{handlers::signupFunction}"
-                            android:layout_marginTop="40dp"
-                            android:text="@string/continue_"
-                            android:textColor="@color/white"
-                            />
+                                <EditText
+                                    android:id="@+id/email_edt"
+                                    android:layout_width="match_parent"
+                                    android:layout_height="wrap_content"
+                                    android:fontFamily="@font/hindvadodara_light"
+                                    android:nextFocusDown="@id/sign_up_password_edt"
+                                    android:textAppearance="?android:attr/textAppearanceSmall"
+                                    android:inputType="textEmailAddress"
+                                    android:singleLine="true"
+                                    android:backgroundTint="@color/gray"
+                                    android:hint="@string/indtast_din_email_adresse" />
+                            </android.support.design.widget.TextInputLayout>
 
 
-
-
-
-                    </LinearLayout>
-
-
-                </android.support.v7.widget.CardView>
-
-            </RelativeLayout>
+                            <android.support.v7.widget.AppCompatButton
+                                android:id="@+id/continue_btn"
+                                style="@style/Button"
+                                android:onClick="@{handlers::signupFunction}"
+                                android:layout_marginTop="40dp"
+                                android:text="@string/continue_"
+                                android:textColor="@color/white"
+                                />
 
 
 
-        </android.support.v4.widget.NestedScrollView>
+
+
+                        </LinearLayout>
+
+
+                    </android.support.v7.widget.CardView>
+
+                </RelativeLayout>
+
+
+
+            </android.support.v4.widget.NestedScrollView>
+
+
+        </RelativeLayout>
 
 
     </android.support.design.widget.CoordinatorLayout>

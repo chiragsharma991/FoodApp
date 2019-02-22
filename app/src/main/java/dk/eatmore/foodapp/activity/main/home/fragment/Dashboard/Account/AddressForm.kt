@@ -129,13 +129,13 @@ class AddressForm : BaseFragment(), TextWatcher {
 
 
 
-            postnumber_edt.imeOptions= EditorInfo.IME_ACTION_DONE
+      /*      postnumber_edt.imeOptions= EditorInfo.IME_ACTION_DONE
             postnumber_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
                 override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                     moveon_save()
                     return true
                 }
-            })
+            })*/
             save.setOnClickListener {
                 moveon_save()
             }

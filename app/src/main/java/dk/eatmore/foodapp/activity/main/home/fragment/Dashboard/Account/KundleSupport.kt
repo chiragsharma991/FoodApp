@@ -20,9 +20,12 @@ import android.text.Editable
 import android.text.TextWatcher
 import android.util.Log
 import android.widget.EditText
+import android.widget.Toast
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.facebook.FacebookSdk.getApplicationContext
+import com.google.gson.Gson
+import com.google.gson.JsonObject
 import com.zendesk.service.ErrorResponse
 import com.zendesk.service.ZendeskCallback
 import com.zendesk.belvedere.Belvedere
@@ -35,6 +38,7 @@ import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.RowAttachedImgBinding
 import dk.eatmore.foodapp.utils.BindDataUtils
 import kotlinx.android.synthetic.main.kundlesupport.*
+import org.json.JSONObject
 import zendesk.support.*
 import java.util.ArrayList
 import java.util.HashMap
@@ -314,8 +318,10 @@ class KundleSupport : BaseFragment(), TextWatcher {
                                 }
 
                                 override fun onError(errorResponse: ErrorResponse) {
-                                    loge(TAG, "onError--  onActivityResult--"+errorResponse.responseBody+" - "+errorResponse.url)
-
+                                    loge(TAG, "onError--  onActivityResult--"+errorResponse.responseBody)
+                                    val json = Gson().fromJson(errorResponse.responseBody,JsonObject::class.java)
+                                    val error_msg=(json as JsonObject).get("description").asString
+                                    Toast.makeText(context!!,error_msg,Toast.LENGTH_SHORT).show()
                                     showProgressDialog()
 
                                     // Make sure to keep track of how many requests are in progress

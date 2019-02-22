@@ -110,22 +110,7 @@ class EpayFragment : BaseFragment() {
         setToolbarforThis()
         epay_continue_btn.text=if(PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS,false)) getString(R.string.continue_) else getString(R.string.login_to_continue)
         epay_continue_btn.setOnClickListener{
-            if(epay_continue_btn.text == getString(R.string.continue_)){
-                //collect op_id to proceed in payment.
-                selected_op_id= ArrayList()
-                for (i in 0.until(ui_model!!.viewcard_list.value!!.result!!.size)){
-                    selected_op_id.add(ui_model!!.viewcard_list.value!!.result!!.get(i).op_id)
-                }
-                val fragment = Address.newInstance(restaurant)
-                addFragment(R.id.epay_container,fragment,Address.TAG,true)
-
-            }else{
-                moveonEpay=true
-                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2)
-
-                //setResult(RESULT_OK);
-                // onBackPressed()
-            }
+            continuefromviewcart()
         }
         ui_model = createViewModel()
         if (ui_model!!.viewcard_list.value == null) {
@@ -142,6 +127,26 @@ class EpayFragment : BaseFragment() {
             loge(TAG,"eapay finishing...")
             //   onBackPressed()
             (activity as HomeActivity).onBackPressed()
+        }
+    }
+
+    fun continuefromviewcart(){
+
+        if(epay_continue_btn.text == getString(R.string.continue_)){
+            //collect op_id to proceed in payment.
+            selected_op_id= ArrayList()
+            for (i in 0.until(ui_model!!.viewcard_list.value!!.result!!.size)){
+                selected_op_id.add(ui_model!!.viewcard_list.value!!.result!!.get(i).op_id)
+            }
+            val fragment = Address.newInstance(restaurant)
+            addFragment(R.id.epay_container,fragment,Address.TAG,true)
+
+        }else{
+            ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2)
+            moveonEpay=true
+
+            //setResult(RESULT_OK);
+            // onBackPressed()
         }
     }
 

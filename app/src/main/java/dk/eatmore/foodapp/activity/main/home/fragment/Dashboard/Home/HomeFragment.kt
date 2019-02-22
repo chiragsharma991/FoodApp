@@ -109,14 +109,14 @@ class HomeFragment : CommanAPI() {
             binding.handlers = clickEvent
             ui_model = createViewModel()
             fetchLastOrder()
-            find_rest_edt.imeOptions = EditorInfo.IME_ACTION_DONE
+           // find_rest_edt.imeOptions = EditorInfo.IME_ACTION_DONE
             find_rest_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
                 override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                     if (find_rest_edt.text.trim().toString().length > 0) {
                         val restaurantlist = RestaurantList.newInstance(find_rest_edt.text.trim().toString(), is_fav)
                         addFragment(R.id.home_fragment_container, restaurantlist, RestaurantList.TAG, true)
                     }
-                    return true
+                    return false
                 }
             })
             // disable app bar scrolling.
@@ -268,7 +268,7 @@ class HomeFragment : CommanAPI() {
     }
 
     fun updateRate() {
-
+        childFragmentManager.popBackStack() // close rateorder screen.
         fetchLastOrder() // refresh current fragment
         val orderfragment =  ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment()
         if(orderfragment.childFragmentManager.backStackEntryCount > 0){

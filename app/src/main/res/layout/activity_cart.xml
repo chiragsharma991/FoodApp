@@ -89,7 +89,8 @@
                             <android.support.v7.widget.AppCompatTextView
                                 style="@style/SubtitleMidium_TextViewSmall"
                                 android:singleLine="true"
-                                android:text="Remove Ingredients?" />
+                                android:textColor="@color/theme_color"
+                                android:text="Tryk på ingrediens for at fjerne fra din mad." />
 
 
                         </LinearLayout>

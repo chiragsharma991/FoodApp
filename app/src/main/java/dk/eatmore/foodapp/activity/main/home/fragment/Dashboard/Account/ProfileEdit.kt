@@ -79,15 +79,14 @@ class ProfileEdit : BaseFragment(), TextWatcher {
             email_edt.setText(PreferenceUtil.getString(PreferenceUtil.E_MAIL, ""))
             telephone_edt.setText(PreferenceUtil.getString(PreferenceUtil.TELEPHONE_NO, ""))
             changepassword_txt.setOnClickListener { startActivity(Intent(context, ChangePassword::class.java)) }
-            telephone_edt.imeOptions = EditorInfo.IME_ACTION_DONE
-            telephone_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+          /*  telephone_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
                 override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
                     if (validationFields()) {
                         saveuserInfo()
                     }
                     return true
                 }
-            })
+            })*/
             update_view.setOnClickListener {
                 if (validationFields()) {
                     saveuserInfo()

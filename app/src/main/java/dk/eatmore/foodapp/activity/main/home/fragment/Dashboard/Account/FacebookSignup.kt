@@ -19,6 +19,7 @@ import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.fragment_fb_signup.*
+import kotlinx.android.synthetic.main.toolbar.*
 import java.util.HashMap
 import java.util.regex.Pattern
 
@@ -56,6 +57,7 @@ class FacebookSignup : BaseFragment(), TextWatcher {
         if (savedInstanceState == null) {
 
             clickEvent = MyClickHandler(this)
+            img_toolbar_back.setOnClickListener { (activity as HomeActivity).onBackPressed() }
             binding.handlers = clickEvent
             email_edt.requestFocus()
             email_edt.addTextChangedListener(this)
@@ -109,7 +111,7 @@ class FacebookSignup : BaseFragment(), TextWatcher {
             },800)
 
         }else{
-            email_inputlayout.error=getString(R.string.enter_valid_email_address)
+            email_inputlayout.error=getString(R.string.indtast_venligst_en_gylding_e_mail)
         }
 
     }

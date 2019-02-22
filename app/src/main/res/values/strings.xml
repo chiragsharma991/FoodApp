@@ -8,8 +8,8 @@
     <string name="email">E-mail adresse</string>
     <string name="password">Password</string>
     <string name="login">Log ind</string>
-    <string name="forgot_password">Glemt dit kodeord?</string>
-    <string name="new_to_eatmore_sign_up">Ny hos EatMore? Opret konto</string>
+    <string name="forgot_password">Glemt adgangskode</string>
+    <string name="new_to_eatmore_sign_up">Opret konto</string>
     <string name="reorder">Reorder</string>
     <string name="details">Details</string>
     <string name="order_now">Order now</string>
@@ -39,11 +39,11 @@
     <string name="error_407">Server not responding\nPlease chenck the network connection.</string>
     <string name="please_wait">Please wait&#8230;</string>
     <string name="enter_valid_email_address">Enter valid email address</string>
-    <string name="password_must_consist">Password must consist of minimum 8 characters.</string>
-    <string name="enter_your_unique_password">Enter your unique password</string>
+    <string name="password_must_consist">Password cannot be less than 6 characters</string>
+    <string name="enter_your_unique_password">Please enter password</string>
     <string name="enter_your_new_password">Enter your new password</string>
     <string name="enter_your_old_password">Enter your valid old password</string>
-    <string name="enter_your_confirm_password">Enter your confirm password</string>
+    <string name="enter_your_confirm_password">Please confirm password</string>
     <string name="signup">Signup</string>
     <string name="add_to_cart">ADD TO CART %1$s</string>
     <string name="minues">- %1$s</string>
@@ -160,7 +160,7 @@
     <string name="rate_order">Rate Order</string>
     <string name="enter_your_valid_information">Enter your valid information</string>
     <string name="enter_your_full_name">Enter your full name</string>
-    <string name="your_password_and_confirm_password_do_not_match">Your password and confirm password do not match.</string>
+    <string name="your_password_and_confirm_password_do_not_match">Passwords do not match</string>
     <string name="rate_it_exclaim">Rate it!</string>
     <string name="ordre_under_behandling">Ordre under process</string>
     <string name="no_entry_found_for_address">No entry found for address.</string>
@@ -260,6 +260,19 @@
     <string name="ingen_favorit_restauranter">Ingen favorit restauranter</string>
     <string name="søg_efter_restaurnter">Søg efter restaurnter</string>
     <string name="fodevarestyrelsen_kontrolrapport">Fødevarestyrelsen Kontrolrapport</string>
+    <string name="find_andet_take_away">Find andet take away i %1$s</string>
+    <string name="du_har_ingen_ordre">Du har ingen ordre</string>
+    <string name="indtast_din_email_adresse">indtast din email adresse</string>
+    <string name="adgangskode">Adgangskode</string>
+    <string name="eller">Eller</string>
+    <string name="indtast_venligst_dit_navn">indtast venligst dit navn</string>
+    <string name="bekr_ft_adgangskode">Bekræft adgangskode</string>
+    <string name="indtast_vengligst_dit_navn">Please enter your name</string>
+    <string name="indtast_venligst_en_gylding_e_mail">Please enter valid email address</string>
+    <string name="opret_konto">Opret Konto</string>
+    <string name="skriv_venligst_din_e_mail_adresse_vi_sender_dig_et_link_til_nulstilling_af_din_adgangskode">Skriv venligst din e-mail adresse, vi sender dig et link til nulstilling af din adgangskode.</string>
+    <string name="indtast_venligst_dine_mail">Indtast venligst din e-mail</string>
+    <string name="skriv_din_kommentar_her">Skriv din kommentar her</string>
 
 
 </resources>

@@ -37,12 +37,10 @@ import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.model.home.RestaurantListModel
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
-import dk.eatmore.foodapp.utils.BaseFragment
-import dk.eatmore.foodapp.utils.Constants
-import dk.eatmore.foodapp.utils.DialogUtils
-import dk.eatmore.foodapp.utils.RecyclerSectionItemDecoration
+import dk.eatmore.foodapp.utils.*
 import kotlinx.android.synthetic.main.restaurantlist.*
 import kotlinx.android.synthetic.main.toolbar.*
+import org.greenrobot.eventbus.Subscribe
 import retrofit2.Call
 import java.io.Serializable
 import java.util.*
@@ -93,7 +91,6 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, getLayout(), container, false)
         return binding.root
-
     }
 
 
@@ -106,6 +103,7 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
             search_edt.addTextChangedListener(this)
             search_again_btn.setOnClickListener { onBackpress() }
             ui_model = createViewModel()
+
             if (ui_model!!.restaurantList.value == null) {
                 fetch_ProductDetailList()
             } else {

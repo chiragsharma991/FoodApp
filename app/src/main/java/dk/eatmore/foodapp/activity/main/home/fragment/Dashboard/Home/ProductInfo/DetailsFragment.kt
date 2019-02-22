@@ -266,7 +266,7 @@ class DetailsFragment : CommanAPI() {
             viewpager.offscreenPageLimit = 2
             viewpager.setAdapter(adapter)
             //viewpager.setCurrentItem(1, true)
-                DialogUtils.openDialogDefault(context = context!!,btnNegative = "FORUDBESTIL NU",btnPositive = "Find andet take away i Aabenraa",
+                DialogUtils.openDialogDefault(context = context!!,btnNegative = "Se menukort",btnPositive = String.format(getString(R.string.find_andet_take_away),restaurant_info.city),
                         color = ContextCompat.getColor(context!!, R.color.theme_color),msg ="",
                         title ="We are closed today. Please check opening hours",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
                     override fun onPositiveButtonClick(position: Int) {
@@ -288,7 +288,7 @@ class DetailsFragment : CommanAPI() {
             adapter!!.addFragment(Info.newInstance(restaurant_info), getString(R.string.info))
             viewpager.offscreenPageLimit = 3
             viewpager.setAdapter(adapter)
-                DialogUtils.openDialogDefault(context = context!!,btnNegative = "FORUDBESTIL NU",btnPositive = "Find andet take away i Aabenraa",
+                DialogUtils.openDialogDefault(context = context!!,btnNegative = "FORUDBESTIL NU",btnPositive = String.format(getString(R.string.find_andet_take_away),restaurant_info.city),
                         color = ContextCompat.getColor(context!!, R.color.theme_color),msg ="\nRestauranten ${restaurant_info.opening_title} ${restaurant_info.time}\n",
                         title = "Denne restaurant har desværre lukket lige nu",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
                     override fun onPositiveButtonClick(position: Int) {
