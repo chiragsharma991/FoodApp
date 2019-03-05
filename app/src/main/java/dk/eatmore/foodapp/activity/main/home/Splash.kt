@@ -29,14 +29,18 @@ import java.util.regex.Pattern
 import java.util.regex.PatternSyntaxException
 import android.graphics.PorterDuff
 import android.graphics.PorterDuffColorFilter
+import android.net.Uri
 import android.os.Build
 import android.preference.PreferenceGroup
 import android.provider.Settings
 import android.support.constraint.ConstraintSet
 import android.support.transition.ChangeBounds
 import android.support.transition.TransitionManager
+import android.support.v7.app.AlertDialog
 import android.view.View
 import android.view.animation.*
+import android.widget.CheckBox
+import android.widget.CompoundButton
 import com.airbnb.lottie.LottieProperty
 import com.airbnb.lottie.TextDelegate
 import com.airbnb.lottie.model.KeyPath
@@ -47,6 +51,7 @@ import dk.eatmore.foodapp.activity.main.home.intro.Intro_slider
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
+import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.splash_activity.*
 
 
@@ -119,7 +124,7 @@ class Splash : BaseActivity() {
                 shimmerLayout.startAnimation(AnimationUtils.loadAnimation(this@Splash, R.anim.text_bottomto_top))
                 Handler().postDelayed({
                        // GetLatestVersion().execute()
-                    savedevice_token()
+                    anyupdates()
                 },4000)
 
             },100)
@@ -131,8 +136,8 @@ class Splash : BaseActivity() {
 
     private fun savedevice_token() {
         lottie_loader.visibility=View.VISIBLE
-        callAPI(ApiCall.devicetoken(
-                token = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID),
+        callAPI(ApiCall.devicetoken (
+                token = PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,"")!!,
                 user_id = PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,"")!!,
                 device_type = Constants.DEVICE_TYPE_VALUE,
                 eatmore_app = true,
@@ -142,8 +147,8 @@ class Splash : BaseActivity() {
             override fun <T> onSuccess(body: T?) {
                 val jsonObject = body as JsonObject
                 if (jsonObject.get(Constants.STATUS).asBoolean) {
-                    PreferenceUtil.putValue(PreferenceUtil.DEVICE_TOKEN,Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))
-                    PreferenceUtil.save()
+//                    PreferenceUtil.putValue(PreferenceUtil.DEVICE_TOKEN,Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID))
+//                    PreferenceUtil.save()
                     moveToLogin()
                 }else{
                     lottie_loader.visibility=View.GONE
@@ -177,6 +182,126 @@ class Splash : BaseActivity() {
     }
 
 
+    private fun anyupdates() {
+        val postParam = JsonObject()
+        postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
+        postParam.addProperty(Constants.EATMORE_APP, true)
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)
+        callAPI(ApiCall.force_update(postParam), object : BaseFragment.OnApiCallInteraction {
+            override fun <T> onSuccess(body: T?) {
+                val jsonObject = body as JsonObject
+                if (jsonObject.get(Constants.STATUS).asBoolean) {
+                    var androidversion=""
+                    var latestversion=""
+                    try {
+                        val pm = packageManager
+                        val pInfo = pm.getPackageInfo(packageName, 0)
+                        androidversion=pInfo.versionName
+                        latestversion=jsonObject.get(Constants.DATA).asJsonObject.get(Constants.EATMORE_VERSION_ANDROID).asString
+                        if(latestversion == androidversion){
+                            //ignore
+                            savedevice_token()
+                        }else{
+                            // update
+                            if(jsonObject.get(Constants.DATA).asJsonObject.get(Constants.FORCE_UPDATE_ANDROID).asString == "1"){
+                                // force update
+                                DialogUtils.openDialogDefault(context = this@Splash,btnNegative = "",btnPositive = getString(R.string.ok), color = ContextCompat.getColor(this@Splash,R.color.default_permission),msg = getString(R.string.this_version_is_no_longer), title = getString(R.string.update),onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                                    override fun onPositiveButtonClick(position: Int) {
+                                    startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Constants.URLOFAPPFROMPLAYSTORE)))
+                                        finish()
+                                    }
+                                    override fun onNegativeButtonClick() {}
+                                })
+                            }else{
+                                // non force update
+                                if(PreferenceUtil.getBoolean(PreferenceUtil.IS_SKIP_VERSION,false)){
+                                    // if version skip is true
+                                    if(PreferenceUtil.getString(PreferenceUtil.SKIPED_VERSION_NAME,"") == latestversion){
+                                        // skip alert and continue
+                                        savedevice_token()
+                                    }else{
+                                       // show alert bcz version is changed
+                                        val builder = AlertDialog.Builder(this@Splash, R.style.AppCompatAlertDialogDefaultStyle)
+                                        builder.setMessage(getString(R.string.this_version_is_no_longer))
+                                        builder.setTitle(getString(R.string.update))
+                                        builder.setCancelable(false)
+                                        builder.setPositiveButton(getString(R.string.ok)) { _, _ ->
+                                            startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Constants.URLOFAPPFROMPLAYSTORE)))
+                                            finish()
+                                        }
+                                        builder.setNegativeButton(getString(R.string.cancel)){_,_ ->
+                                            savedevice_token()
+                                        }
+                                        builder.setNeutralButton(getString(R.string.skip_this_version)){_,_ ->
+                                            //dont show again this version
+                                            PreferenceUtil.putValue(PreferenceUtil.SKIPED_VERSION_NAME,latestversion)
+                                            PreferenceUtil.putValue(PreferenceUtil.IS_SKIP_VERSION,true)
+                                            PreferenceUtil.save()
+                                            savedevice_token()
+                                        }
+                                        val alert = builder.create()
+                                        alert.show()
+                                        alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this@Splash,R.color.default_permission))
+                                        alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this@Splash,R.color.default_permission))
+                                        alert.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(ContextCompat.getColor(this@Splash,R.color.default_permission))
+                                    }
+
+                                } else {
+                                    // if version skip is false
+                                    val builder = AlertDialog.Builder(this@Splash, R.style.AppCompatAlertDialogDefaultStyle)
+                                    builder.setMessage(getString(R.string.this_version_is_no_longer))
+                                    builder.setTitle(getString(R.string.update))
+                                    builder.setCancelable(false)
+                                    builder.setPositiveButton(getString(R.string.ok)) { _, _ ->
+                                        startActivity(Intent(Intent.ACTION_VIEW, Uri.parse(Constants.URLOFAPPFROMPLAYSTORE)))
+                                        finish()
+                                    }
+                                    builder.setNegativeButton(getString(R.string.cancel)){_,_ ->
+                                        savedevice_token()
+                                    }
+                                    builder.setNeutralButton(getString(R.string.skip_this_version)){_,_ ->
+                                        //dont show again this version
+                                        PreferenceUtil.putValue(PreferenceUtil.SKIPED_VERSION_NAME,latestversion)
+                                        PreferenceUtil.putValue(PreferenceUtil.IS_SKIP_VERSION,true)
+                                        PreferenceUtil.save()
+                                        savedevice_token()
+                                    }
+                                    val alert = builder.create()
+                                    alert.show()
+                                    alert.getButton(AlertDialog.BUTTON_NEGATIVE).setTextColor(ContextCompat.getColor(this@Splash,R.color.default_permission))
+                                    alert.getButton(AlertDialog.BUTTON_POSITIVE).setTextColor(ContextCompat.getColor(this@Splash,R.color.default_permission))
+                                    alert.getButton(AlertDialog.BUTTON_NEUTRAL).setTextColor(ContextCompat.getColor(this@Splash,R.color.default_permission))
+
+                                }
+
+                            }
+                        }
+
+                    } catch (e: Exception) {
+                        e.printStackTrace()
+                        loge(TAG,e.message.toString())
+                    }
+                }
+            }
+
+            override fun onFail(error: Int) {
+                when (error) {
+                    404 -> {
+                        DialogUtils.openDialogDefault(context = this@Splash,btnNegative = "",btnPositive = getString(R.string.ok), color = ContextCompat.getColor(this@Splash,R.color.black),msg =getString(R.string.error_404),title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                            override fun onPositiveButtonClick(position: Int) {finish()}
+                            override fun onNegativeButtonClick() {}
+                        })
+                    }
+                    100 -> {
+                        DialogUtils.openDialogDefault(context = this@Splash,btnNegative = "",btnPositive = getString(R.string.ok), color = ContextCompat.getColor(this@Splash,R.color.black),msg =getString(R.string.internet_not_available),title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                            override fun onPositiveButtonClick(position: Int) {finish()}
+                            override fun onNegativeButtonClick() {}
+                        })
+                    }
+                }
+            }
+        })
+    }
 
     private fun getCurrentVersion() {
 
@@ -361,8 +486,6 @@ class Splash : BaseActivity() {
             finish()
         } else{
             // move -> Intro slide
-            PreferenceUtil.putValue(PreferenceUtil.CLOSE_INTRO_SLIDE,true)
-            PreferenceUtil.save()
             startActivity(Intent(this, Intro_slider::class.java))
             finish()
         }

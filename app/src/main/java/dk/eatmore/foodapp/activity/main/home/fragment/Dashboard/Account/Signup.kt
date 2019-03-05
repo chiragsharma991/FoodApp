@@ -359,14 +359,7 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
         }
     }*/
 
-    fun validMail(email: String): Boolean {
 
-        val EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
-        val pattern = Pattern.compile(EMAIL_PATTERN)
-        val matcher = pattern.matcher(email)
-        return matcher.matches()
-
-    }
 
     fun createRowdata(auth_key: String, eatmore_app: Boolean, first_name: String, email: String, password_hash: String, subscribe: String): JsonObject {
         val jsonobject = JsonObject()

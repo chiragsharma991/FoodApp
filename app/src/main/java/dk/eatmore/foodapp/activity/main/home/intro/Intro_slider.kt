@@ -173,6 +173,8 @@ class Intro_slider : BaseActivity(){
     }
 
     private fun launchHomeScreen() {
+        PreferenceUtil.putValue(PreferenceUtil.CLOSE_INTRO_SLIDE,true)
+        PreferenceUtil.save()
         startActivity(Intent(this, HomeActivity::class.java))
         finish()
     }

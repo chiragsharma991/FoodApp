@@ -136,6 +136,8 @@
                             style="@style/EditText_Normal"
                             android:id="@+id/desc_edt"
                             android:padding="@dimen/_5sdp"
+                            android:layout_height="@dimen/_80sdp"
+                            android:layout_width="match_parent"
                             android:textAppearance="?android:attr/textAppearanceSmall"
                             android:lines="5"
                             android:inputType="textEmailAddress|textMultiLine"

@@ -3,6 +3,8 @@ package dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order
 
 import android.databinding.DataBindingUtil
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -22,8 +24,10 @@ import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
 import kotlinx.android.synthetic.main.rate_order.*
 import kotlinx.android.synthetic.main.toolbar.*
+import java.util.regex.Pattern
 
-class RateOrder : BaseFragment(), RatingBar.OnRatingBarChangeListener {
+class RateOrder : BaseFragment(), RatingBar.OnRatingBarChangeListener, TextWatcher {
+
 
 
     private lateinit var binding: RateOrderBinding
@@ -61,6 +65,7 @@ class RateOrder : BaseFragment(), RatingBar.OnRatingBarChangeListener {
             model = arguments!!.getSerializable(Constants.ORDERRESULT) as OrderFragment.Orderresult
             img_toolbar_back.setImageResource(R.drawable.close)
             img_toolbar_back.setOnClickListener {(activity as HomeActivity).onBackPressed()}
+            comment_edt.addTextChangedListener(this)
             rate_btn.alpha = 0.6f
             rate_btn.isEnabled = false
             quality_of_food_rating.onRatingBarChangeListener = this
@@ -74,6 +79,17 @@ class RateOrder : BaseFragment(), RatingBar.OnRatingBarChangeListener {
         }
 
     }
+
+    override fun afterTextChanged(s: Editable?) {
+        comment_edt.error = null
+        val emo_regex = "([\\u20a0-\\u32ff\\ud83c\\udc00-\\ud83d\\udeff\\udbb9\\udce5-\\udbb9\\udcee])"
+        val matcher = Pattern.compile(emo_regex).matcher(comment_edt.text.trim())
+        while (matcher.find()) {
+            comment_edt.error = getString(R.string.emoji_ikke_tilladt)
+        }
+    }
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
     override fun onRatingChanged(ratingBar: RatingBar?, rating: Float, fromUser: Boolean) {
 
@@ -98,6 +114,8 @@ class RateOrder : BaseFragment(), RatingBar.OnRatingBarChangeListener {
 
 
     fun submit_rate() {
+
+        if(comment_edt.error !=null ) return
 
         showProgressDialog()
         val postParam = JsonObject()

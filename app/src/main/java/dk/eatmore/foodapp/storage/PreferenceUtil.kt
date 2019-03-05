@@ -150,6 +150,8 @@ object PreferenceUtil {
     val LOGIN_FROM = "login_from"
     val KSTATUS = "kStatus"
     val SUBSCRIBE = "subscribe"
+    val IS_SKIP_VERSION = "is_skip_version"
+    val SKIPED_VERSION_NAME = "skiped_version_name"
 
 
 }

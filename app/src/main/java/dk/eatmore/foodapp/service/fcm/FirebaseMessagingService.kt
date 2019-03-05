@@ -22,25 +22,38 @@ import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.Constants
 import android.app.NotificationChannelGroup
-
-
+import android.provider.Settings
+import com.google.firebase.iid.FirebaseInstanceId
 
 
 class FirebaseMessagingService : FirebaseMessagingService() {
 
 
+    override fun onNewToken(refreshedToken: String?) {
+
+        Log.e(TAG, "Refreshed token:--- " + refreshedToken!!)
+
+        PreferenceUtil.putValue(PreferenceUtil.DEVICE_TOKEN,refreshedToken )
+        PreferenceUtil.save()
+    }
+
     override fun onMessageReceived(remoteMessage: RemoteMessage?) {
         Log.e(TAG, "onMessageReceived: " + remoteMessage!!.notification!!.body.toString())
-      //  generateNotification(applicationContext,remoteMessage.notification!!.body.toString())
-        //{vendor=vendor 1, offer_id=5a5f321bafcea80311f57699, type=offer, Title=TebeebBook, offer_title=Hospital, message=Added new offer, created_at=2018-01-11T04:03:55.311Z}
-        //{id=5a8cfcd4148ee50ed0d470b6, body=HELLO ALL CITY ADMIN PUSH, type=message, title=Tabeeb Book}
-        if (remoteMessage.data.isNotEmpty()) {
-            Log.e(TAG, "Message data payload: " + remoteMessage.data)
-          //  generateNotification(applicationContext, remoteMessage.data.get("message")!!, remoteMessage.data)
+
+        // Check if message contains a data payload.
+        if (remoteMessage.data.size > 0) {
+            Log.e("TAG", "Message data payload: " + remoteMessage.data)
 
         }
+
+        // Check if message contains a notification payload.
+        if (remoteMessage.notification != null) {
+            Log.e("TAG", "Message Notification Body: " + remoteMessage.notification!!.body!!)
+        }
+
+
     }
-    //dxpDXzgeEus:APA91bFyqfIJLf3NWrH-9pFmM4a_GyXTNape5I4Rwd0KBPwo5WLN3XKv3lVm4o30Ngf2QO5K4_zKAhelGsw71iHjTAEuuBdJuwCg_90XfZNjOXhnoK3AliXFXXmpLUz67wqf8b0OEFEDxYmsBtzDwq3mrCq2reEGyw
+
     companion object {
         private val TAG = "MyFirebaseMsgService"
 
@@ -77,10 +90,9 @@ class FirebaseMessagingService : FirebaseMessagingService() {
 
                 val groupId = "some_group_id"
                 val groupName = "Some Group"
-           //     mNotificationManager.createNotificationChannelGroup(NotificationChannelGroup(groupId, groupName))
+                //     mNotificationManager.createNotificationChannelGroup(NotificationChannelGroup(groupId, groupName))
 
             }
-//  dYSw2u_Vcvw:APA91bEEctPxdTsqkRlMMPf-GXiKlub5VHaVngHEHnTGZ9s-RO95jamzAyykhXGJRX5mA7Z0wDVI_qBqWGVNlkDprcZw2-VxoXQA7Wwjddy3ZunOXsLTLW8ws6NXwi9-bT1GZluN5ansYO_OSVbMNUu4I70o1JlXwA
             notification = NotificationCompat.Builder(context, channelId)
                     .setVibrate(longArrayOf(0, 100, 100, 100, 100, 100))
                     .setSound(RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION))
@@ -93,7 +105,7 @@ class FirebaseMessagingService : FirebaseMessagingService() {
                     .setAutoCancel(true)
                     .setStyle(bigText)
                     .setContentIntent(resultPendingIntent)
-                    .setPriority(if(Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) NotificationManager.IMPORTANCE_HIGH else Notification.PRIORITY_HIGH)
+                    .setPriority(if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) NotificationManager.IMPORTANCE_HIGH else Notification.PRIORITY_HIGH)
                     .build()
 
             mNotificationManager.notify(System.currentTimeMillis().toInt(), notification)
@@ -104,5 +116,34 @@ class FirebaseMessagingService : FirebaseMessagingService() {
             val whiteIcon = android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.LOLLIPOP
             return if (whiteIcon) R.mipmap.ic_launcher else R.mipmap.ic_launcher
         }
+    }
+
+    private fun sendNotification(messageBody: String) {
+        val intent = Intent(this, HomeActivity::class.java)
+        intent.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP)
+        val pendingIntent = PendingIntent.getActivity(this, 0 /* Request code */, intent,
+                PendingIntent.FLAG_ONE_SHOT)
+
+        val channelId = getString(R.string.default_notification_channel_id)
+        val defaultSoundUri = RingtoneManager.getDefaultUri(RingtoneManager.TYPE_NOTIFICATION)
+        val notificationBuilder = NotificationCompat.Builder(this, channelId)
+                .setSmallIcon(R.drawable.ic_launcher_background)
+                .setContentTitle("Content title")
+                .setContentText(messageBody)
+                .setAutoCancel(true)
+                .setSound(defaultSoundUri)
+                .setContentIntent(pendingIntent)
+
+        val notificationManager = getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
+
+        // Since android Oreo notification channel is needed.
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.O) {
+            val channel = NotificationChannel(channelId,
+                    "Channel human readable title",
+                    NotificationManager.IMPORTANCE_DEFAULT)
+            notificationManager.createNotificationChannel(channel)
+        }
+
+        notificationManager.notify(0 /* ID of notification */, notificationBuilder.build())
     }
 }

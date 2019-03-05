@@ -101,8 +101,8 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginTop="@dimen/_8sdp"
                                     android:singleLine="true"
-                                    android:textAppearance="?android:attr/textAppearanceLarge"
                                     android:text="Total (0 Products)"
+                                    android:textAppearance="?android:attr/textAppearanceLarge"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
                                     app:layout_constraintTop_toTopOf="parent" />
@@ -113,10 +113,10 @@
                                     android:layout_alignParentRight="true"
                                     android:layout_marginTop="8dp"
                                     android:layout_weight="0.3"
-                                    android:textAppearance="?android:attr/textAppearanceLarge"
                                     android:gravity="end"
                                     android:singleLine="true"
                                     android:text="00,00 Kr,"
+                                    android:textAppearance="?android:attr/textAppearanceLarge"
                                     android:textColor="@color/theme_color_secondary_dark"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
@@ -137,19 +137,17 @@
                                     app:layout_constraintTop_toBottomOf="@+id/epay_total_txt" />
 
 
-
                                 <RelativeLayout
                                     android:id="@+id/tab_card"
                                     android:layout_width="wrap_content"
                                     android:layout_height="wrap_content"
-                                    android:layout_marginEnd="8dp"
                                     android:layout_marginStart="8dp"
                                     android:layout_marginTop="8dp"
+                                    android:layout_marginEnd="8dp"
                                     android:gravity="center_horizontal"
                                     app:layout_constraintEnd_toEndOf="parent"
                                     app:layout_constraintStart_toStartOf="parent"
-                                    app:layout_constraintTop_toBottomOf="@+id/epay_continue_btn"
-                                    >
+                                    app:layout_constraintTop_toBottomOf="@+id/epay_continue_btn">
 
                                     <android.support.v7.widget.CardView
                                         android:layout_width="wrap_content"
@@ -215,14 +213,36 @@
                                     android:layout_height="wrap_content"
                                     android:layout_marginStart="8dp"
                                     android:layout_marginTop="8dp"
-                                    android:layout_marginEnd="8dp"
                                     android:gravity="center_horizontal"
                                     android:text="@{pickup_delivery_txt}"
-                                    android:visibility="@{pickup_delivery_txt.equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}"
                                     android:textColor="@color/black_default"
-                                    ProgressWheel:layout_constraintEnd_toEndOf="parent"
+                                    android:visibility="@{pickup_delivery_txt.equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}"
+                                    ProgressWheel:layout_constraintEnd_toStartOf="@+id/info_outline_img"
+                                    ProgressWheel:layout_constraintHorizontal_bias="0.5"
+                                    ProgressWheel:layout_constraintHorizontal_chainStyle="packed"
                                     ProgressWheel:layout_constraintStart_toStartOf="parent"
                                     ProgressWheel:layout_constraintTop_toBottomOf="@+id/tab_card" />
+
+
+                                <android.support.v7.widget.AppCompatImageView
+                                    android:id="@+id/info_outline_img"
+                                    android:layout_width="@dimen/_30sdp"
+                                    android:layout_height="@dimen/_30sdp"
+                                    android:layout_alignParentEnd="true"
+                                    android:layout_centerVertical="true"
+                                    android:layout_gravity="top"
+                                    android:layout_marginStart="5dp"
+                                    android:padding="@dimen/_5sdp"
+                                    android:scaleType="fitXY"
+                                    android:tint="@color/theme_color"
+                                    android:visibility="@{pickup_delivery_txt.equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}"
+                                    ProgressWheel:layout_constraintBottom_toBottomOf="@+id/pick_delivery_txt"
+                                    ProgressWheel:layout_constraintEnd_toEndOf="parent"
+                                    ProgressWheel:layout_constraintHorizontal_bias="0.5"
+                                    ProgressWheel:layout_constraintStart_toEndOf="@+id/pick_delivery_txt"
+                                    ProgressWheel:layout_constraintTop_toTopOf="@+id/pick_delivery_txt"
+                                    app:srcCompat="@drawable/info_outline" />
+
 
                                 <LinearLayout
                                     android:id="@+id/linearLayout2"
@@ -288,8 +308,7 @@
                                     <RelativeLayout
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_margin="@dimen/_8sdp"
-                                        >
+                                        android:layout_margin="@dimen/_8sdp">
 
                                         <LinearLayout
                                             android:id="@+id/add_parentitem_view"
@@ -479,6 +498,11 @@
 
 
                                 </LinearLayout>
+
+                                <android.support.constraint.Group
+                                    android:id="@+id/group"
+                                    android:layout_width="wrap_content"
+                                    android:layout_height="wrap_content" />
 
 
                             </android.support.constraint.ConstraintLayout>

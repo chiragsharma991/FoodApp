@@ -25,11 +25,13 @@ import kotlinx.android.synthetic.main.fragment_home_fragment.*
 import org.json.JSONException
 import java.util.*
 import android.os.Build
+import com.zopim.android.sdk.api.Chat
+import com.zopim.android.sdk.prechat.ChatListener
 import dk.eatmore.foodapp.utils.*
 import org.greenrobot.eventbus.Subscribe
 
 
-class HomeActivity : BaseActivity() {
+class HomeActivity : BaseActivity(), ChatListener {
 
     private lateinit var mHomeContainerFragment: HomeContainerFragment
 
@@ -60,6 +62,21 @@ class HomeActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
     }
 */
+
+
+    override fun onChatLoaded(p0: Chat?) {
+        loge(TAG,"onChatLoaded")
+    }
+
+    override fun onChatInitialized() {
+        loge(TAG,"onChatInitialized")
+    }
+
+    override fun onChatEnded() {
+        loge(TAG,"onChatEnded")
+        onBackPressed()
+    }
+
 
     private fun initView(savedInstanceState: Bundle?) {
       //  getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_LIGHT_STATUS_BAR);

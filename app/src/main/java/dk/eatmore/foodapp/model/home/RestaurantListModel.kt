@@ -23,9 +23,6 @@ data class RestaurantList(
 data class AreaDetails(val city_name: String = "", val postal_code: String = ""):Serializable
 
 
-
-
-
 data class Restaurant(
         val postal_code: String = "",
         val restaurant_name: String = "",

@@ -93,7 +93,7 @@
                         android:background="@drawable/rectangle_edittext"
                         android:padding="@dimen/_8sdp"
                         android:singleLine="true"
-                        android:hint="@string/eks_hjem_eller_arbejde"
+                        android:hint="@string/adress_titel"
                         android:text="@{address.address_title}"
                         android:textColor="@color/black_light"
                         app:layout_constraintEnd_toEndOf="parent"

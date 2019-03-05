@@ -47,6 +47,8 @@ object DialogUtils {
                 Log.e("setNegativeButton","---")
 
             })
+
+
         }
         val alert = builder.create()
       /*  val textView = alert.findViewById<TextView>(android.R.id.message) as TextView

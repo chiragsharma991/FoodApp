@@ -26,6 +26,7 @@
     <style name="AppTheme.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+
     </style>
 
     <style name="AppTheme.Splash">
@@ -273,6 +274,32 @@
     </style>
 
 
+    <!--customise chat wedget-->
+
+
+    <color name="chat_bubble_agent">@android:color/white</color>
+    <color name="chat_bubble_visitor">@color/theme_color</color>
+
+
+    <style name="ZopimChatTheme" parent="AppTheme.NoActionBar">
+        <!--Chat UI uses the toolbar so no need to show ActionBar-->
+        <item name="windowActionBar">false</item>
+        <!-- Customize chat theme here. -->
+        <item name="colorAccent">@color/theme_color</item>
+        <item name="colorPrimary">@color/theme_color</item>
+        <item name="colorPrimaryDark">@color/theme_color</item>
+        <item name="android:theme">@style/ThemeOverlay.AppCompat.Dark.ActionBar</item>
+        <item name="android:textColorSecondary">@color/theme_color</item>
+
+
+    </style>
+
+    <!--Customize not agents button-->
+    <style name="no_agents_button">
+        <item name="android:background">@color/theme_color</item>
+        <item name="android:padding">8dp</item>
+        <item name="android:textColor">@android:color/white</item>
+    </style>
 
 
 

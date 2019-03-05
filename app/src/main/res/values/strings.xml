@@ -27,9 +27,9 @@
     <string name="transition_string">card_transition</string>
     <string name="continue_">Til kassen</string>
     <string name="search_the_menu">Søg i menukortet</string>
-    <string name="add">Tilføje</string>
+    <string name="add">Tilføj</string>
     <string name="go_on_playstore">Go on PlayStore</string>
-    <string name="new_update">New uppdate is available now</string>
+    <string name="new_update">New update</string>
     <string name="dismiss">Dismiss</string>
     <string name="login_val_email">Username/Password cannot be blank</string>
     <string name="invalid_email">Invalid email Address</string>
@@ -47,13 +47,13 @@
     <string name="signup">Signup</string>
     <string name="add_to_cart">ADD TO CART %1$s</string>
     <string name="minues">- %1$s</string>
-    <string name="total_goods">Total ( %1$s Products )</string>
+    <string name="total_goods">I alt (%1$s produkt(er))</string>
     <string name="plus">+ %1$s</string>
     <string name="restaurant_rating">(%1$s bedømmelser)</string>
     <string name="add_new_address">Add new address</string>
     <string name="verify">Verify</string>
     <string name="address">Adresse</string>
-    <string name="ok">Ja</string>
+    <string name="ok">ok</string>
     <string name="go_to_payment">Go to payment</string>
     <string name="select_delivery_time">Select delivery time:</string>
     <string name="if_you_have_any_questions">If you have any questions or enquiries please call us on:</string>
@@ -89,7 +89,7 @@
     <string name="logout">Logout</string>
     <string name="no">Nej</string>
     <string name="yes">Ja</string>
-    <string name="are_you_sure_to_delete">Are you sure to delete ?</string>
+    <string name="are_you_sure_to_delete">Vil du slette?</string>
     <string name="item_has_been">Item has been successfully added !</string>
     <string name="pickup">Hent selv</string>
     <string name="pickup_">pickup</string>
@@ -148,7 +148,7 @@
     <string name="terms_of_services">Handelsbetingelser</string>
     <string name="edit_address">Edit Address</string>
     <string name="telephone_number">Telephone number</string>
-    <string name="update">Update</string>
+    <string name= "update">Update</string>
     <string name="please_login_to_see">Log ind for at se dine ordre.</string>
     <string name="no_order">No order(s) to display.</string>
     <string name="try_again">Try again</string>
@@ -211,7 +211,7 @@
     <string name="brug_for_hjælp">Brug for hjælp? kontakt vores kundeservicecenter pa 73702515</string>
     <string name="app_version">Eatmore\nv%1$s.%2$s</string>
     <string name="slet_bruger">Slet bruger</string>
-    <string name="kundle_support">Kundle support</string>
+    <string name="kundle_support">Kunde support</string>
     <string name="indtast_en_værdi">Indtast en værdi.</string>
     <string name="haordan_var_din_oplevelxse_med_app_en">Haordan var din oplevelxse med app\'en?</string>
     <string name="send">Send</string>
@@ -226,7 +226,7 @@
     <string name="by">By</string>
     <string name="redigere">Redigere</string>
     <string name="slette">Slet</string>
-    <string name="eks_hjem_eller_arbejde">Eks. hjem eller arbejde</string>
+    <string name="eks_hjem_eller_arbejde">Titel</string>
     <string name="dine_bem_rkninger_til_restauranten">Dine bemærkninger til restauranten:</string>
     <string name="delivery_time">Delivery time</string>
     <string name="din_ordre">Din ordre</string>
@@ -273,6 +273,12 @@
     <string name="skriv_venligst_din_e_mail_adresse_vi_sender_dig_et_link_til_nulstilling_af_din_adgangskode">Skriv venligst din e-mail adresse, vi sender dig et link til nulstilling af din adgangskode.</string>
     <string name="indtast_venligst_dine_mail">Indtast venligst din e-mail</string>
     <string name="skriv_din_kommentar_her">Skriv din kommentar her</string>
+    <string name="kontakt_os">Kontakt os</string>
+    <string name="end">End</string>
+    <string name="skip_this_version">Skip this version</string>
+    <string name="this_version_is_no_longer">This version is no longer available, please download our new version.</string>
+    <string name="adress_titel">Adress titel</string>
+    <string name="emoji_ikke_tilladt">Emoji ikke tilladt.</string>
 
 
 </resources>

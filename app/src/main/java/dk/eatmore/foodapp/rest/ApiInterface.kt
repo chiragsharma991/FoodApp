@@ -258,6 +258,10 @@ interface ApiInterface {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun remove_favorite_restaurant(@Body jsonObject: JsonObject): Call<JsonObject>
 
+    @POST("Enduser/enduser/force-update")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun force_update (@Body jsonObject: JsonObject): Call<JsonObject>
+
     @FormUrlEncoded
     @POST("Cart/cart/cancelordertransaction")
     fun cancelordertransaction(

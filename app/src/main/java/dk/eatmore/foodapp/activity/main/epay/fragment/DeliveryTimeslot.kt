@@ -30,11 +30,17 @@ import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
 import android.widget.EditText
 import com.google.android.gms.common.util.InputMethodUtils.showSoftInput
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
+import java.util.regex.Pattern
+import dk.eatmore.foodapp.R.id.group
 
 
-class DeliveryTimeslot : BaseFragment() {
+
+
+class DeliveryTimeslot : BaseFragment(), TextWatcher {
 
     var transition: Transition? = null
     private val userList = ArrayList<User>()
@@ -76,6 +82,7 @@ class DeliveryTimeslot : BaseFragment() {
             logd(TAG, "saveInstance NULL")
             time_list= arguments?.getSerializable(Constants.TIME_LIST) as? LinkedHashMap<String, String>
             setToolbarforThis()
+            comment_edt.addTextChangedListener(this)
             if(time_list !=null){
                 binding.isLoading=false
                 for (entries in time_list!!.entries ){
@@ -102,6 +109,9 @@ class DeliveryTimeslot : BaseFragment() {
                 }
             }
             secure_payment_btn.setOnClickListener{
+
+                if(comment_edt.error !=null ) return@setOnClickListener
+
                 if(time_list?.size ?:0 > 0){
                     for ( entries in time_list!!.entries){
                         if(time_list!!.get(entries.key) == delivery_time_slot.text.trim().toString()){
@@ -139,6 +149,18 @@ class DeliveryTimeslot : BaseFragment() {
             //  (parentFragment as EpayFragment).popWithTag(DeliveryTimeslot.TAG)
         }
     }
+
+
+    override fun afterTextChanged(s: Editable?) {
+        comment_edt.error = null
+        val emo_regex = "([\\u20a0-\\u32ff\\ud83c\\udc00-\\ud83d\\udeff\\udbb9\\udce5-\\udbb9\\udcee])"
+        val matcher = Pattern.compile(emo_regex).matcher(comment_edt.text.trim())
+        while (matcher.find()) {
+            comment_edt.error = getString(R.string.emoji_ikke_tilladt)
+        }
+    }
+    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
 
 
 

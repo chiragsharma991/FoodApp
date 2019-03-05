@@ -65,7 +65,8 @@
             app:layout_constraintHorizontal_bias="0.59"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/pizza_img" />
+
+            />
 
         <android.support.v7.widget.AppCompatImageView
             android:id="@+id/backgroundImgOverelay"
@@ -80,7 +81,8 @@
             app:layout_constraintHorizontal_bias="0.59"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@mipmap/pizza_img" />
+
+            />
 
 
         <android.support.v7.widget.AppCompatImageView

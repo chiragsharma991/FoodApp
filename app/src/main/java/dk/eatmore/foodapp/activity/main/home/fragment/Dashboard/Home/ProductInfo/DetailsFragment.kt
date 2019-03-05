@@ -243,8 +243,10 @@ class DetailsFragment : CommanAPI() {
         delivery_charge_title = restaurant_info.delivery_charge_title ?: "null"
         total_cartcnt = if (restaurant_info.cartcnt == null || restaurant_info.cartcnt == "0") 0 else restaurant_info.cartcnt!!.toInt()
         total_cartamt = if (restaurant_info.cartamt == null || restaurant_info.cartamt == "0") "00.00" else restaurant_info.cartamt.toString()
-        delivery_text=restaurant_info.delivery_text
-        pickup_text=restaurant_info.pickup_text
+       /* delivery_text=restaurant_info.delivery_text
+        pickup_text=restaurant_info.pickup_text*/
+        delivery_text="Se leveringspriser"
+        pickup_text=""
         updatebatchcount(0)
         val myclickhandler = MyClickHandler(this)
         binding.restaurant = restaurant_info

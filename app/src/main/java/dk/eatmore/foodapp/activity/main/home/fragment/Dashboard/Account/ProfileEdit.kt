@@ -95,7 +95,7 @@ class ProfileEdit : BaseFragment(), TextWatcher {
 
             delete_user_txt.setOnClickListener {
 
-                DialogUtils.openDialog(context!!,"Ønsker du at slette din Eatmore konto?", "Konfirmation",
+                DialogUtils.openDialog(context!!,"Ønsker du at slette din Eatmore konto?", "Bekræftelse",
                         getString(R.string.ok), getString(R.string.no), ContextCompat.getColor(context!!, R.color.theme_color), object : DialogUtils.OnDialogClickListener {
                     override fun onPositiveButtonClick(position: Int) {
                         deleteuserInfo()
@@ -164,14 +164,6 @@ class ProfileEdit : BaseFragment(), TextWatcher {
         return isvalidate
     }
 
-    fun validMail(email: String): Boolean {
-
-        val EMAIL_PATTERN = "^[_A-Za-z0-9-\\+]+(\\.[_A-Za-z0-9-]+)*@" + "[A-Za-z0-9-]+(\\.[A-Za-z0-9]+)*(\\.[A-Za-z]{2,})$"
-        val pattern = Pattern.compile(EMAIL_PATTERN)
-        val matcher = pattern.matcher(email)
-        return matcher.matches()
-
-    }
 
 
     private fun saveuserInfo() {

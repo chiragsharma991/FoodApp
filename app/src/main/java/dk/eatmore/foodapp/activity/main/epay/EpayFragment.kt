@@ -95,7 +95,6 @@ class EpayFragment : BaseFragment() {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         binding = DataBindingUtil.inflate(inflater, getLayout(), container, false)
         return binding.root
-
     }
 
 
@@ -474,6 +473,8 @@ class EpayFragment : BaseFragment() {
 
 
     fun tabfunction() {
+
+
         if(!DetailsFragment.delivery_present && DetailsFragment.pickup_present){
             menu_tabs.addTab(menu_tabs.newTab().setText(getString(R.string.pickup)))
             isPickup=true
@@ -486,7 +487,16 @@ class EpayFragment : BaseFragment() {
             isPickup=false
         }
 
-        if(isPickup)binding.pickupDeliveryTxt = DetailsFragment.pickup_text else binding.pickupDeliveryTxt = DetailsFragment.delivery_text
+        if(isPickup){
+            info_outline_img.visibility=View.GONE
+            binding.pickupDeliveryTxt = DetailsFragment.pickup_text
+        } else {
+            info_outline_img.visibility=View.VISIBLE
+            binding.pickupDeliveryTxt = DetailsFragment.delivery_text
+        }
+
+        info_outline_img.setOnClickListener{ CartListFunction.showDialog(restaurant = restaurant,context = context!!)}
+
         binding.executePendingBindings()
 
 
@@ -500,6 +510,7 @@ class EpayFragment : BaseFragment() {
                 when(menu_tabs.selectedTabPosition){
                     1->{
                         isPickup=true
+                        info_outline_img.visibility=View.GONE
                         binding.pickupDeliveryTxt = DetailsFragment.pickup_text.also { binding.executePendingBindings() }
                         DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!, R.color.black),msg = getString(R.string.you_are_ordering_pickup),title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
                             override fun onPositiveButtonClick(position: Int) {
@@ -510,6 +521,7 @@ class EpayFragment : BaseFragment() {
                     }
                     0->{
                         isPickup=false
+                        info_outline_img.visibility=View.VISIBLE
                         binding.pickupDeliveryTxt = DetailsFragment.delivery_text.also { binding.executePendingBindings() }
                     }
                 }

@@ -13,14 +13,6 @@ android {
         enabled = true
     }
 
-   /* sourceSets {
-        main {
-
-            assets.srcDirs = ['/res/raw']
-
-        }
-    }
-*/
     compileSdkVersion 27
     defaultConfig {
         applicationId "dk.eatmore.foodapp"
@@ -49,6 +41,10 @@ android {
 
 }
 
+repositories {
+    maven { url 'https://zendesk.jfrog.io/zendesk/repo' }
+}
+
 dependencies {
     implementation fileTree(include: ['*.jar'], dir: 'libs')
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
@@ -58,6 +54,7 @@ dependencies {
     // zendesk
     implementation group: 'com.zendesk', name: 'support', version: '2.2.1'
     implementation group: 'com.zendesk', name: 'belvedere', version: "1.1.1.1"
+    implementation group: 'com.zopim.android', name: 'sdk', version: '1.4.0'
     //Event Bus
     implementation 'org.greenrobot:eventbus:3.0.0'
 

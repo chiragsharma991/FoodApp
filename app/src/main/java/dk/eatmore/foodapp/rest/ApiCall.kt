@@ -101,6 +101,10 @@ class ApiCall {
             return getApiInterface().remove_favorite_restaurant(jsonObject)
         }
 
+        fun force_update (jsonObject: JsonObject) : Call<JsonObject> {
+            return getApiInterface().force_update(jsonObject)
+        }
+
         fun cancelordertransaction(r_token : String , r_key : String, order_no : Int ) : Call<JsonObject> {
             return getApiInterface().cancelordertransaction(r_token,r_key,order_no,Constants.RESTAURANT_FOOD_ANDROID)
         }

@@ -11,10 +11,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.support.v4.content.ContextCompat
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import com.google.android.gms.tasks.OnSuccessListener
+import com.google.firebase.iid.FirebaseInstanceId
+import com.google.firebase.iid.InstanceIdResult
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.BuildConfig
 import dk.eatmore.foodapp.R
@@ -47,6 +51,7 @@ class Profile : BaseFragment() {
     private var editaddress: EditAddress? = null
     private var ratetheapp: RatetheAPP? = null
     private var kundlesupport: KundleSupport? = null
+    private var kundlechatsupport: KundleChatSupport? = null
     private var coupan_fragment: Coupan? = null
     private lateinit var ui_model: UIModel
 
@@ -158,7 +163,16 @@ class Profile : BaseFragment() {
     }
 
     fun clearaccount(){
+        var mToken =""
+        val cpy_is_skip_version = PreferenceUtil.getBoolean(PreferenceUtil.IS_SKIP_VERSION,false)
+        val cpy_skiped_version_name = PreferenceUtil.getString(PreferenceUtil.SKIPED_VERSION_NAME,"")
 
+        FirebaseInstanceId.getInstance().getInstanceId().addOnSuccessListener(activity!!, object: OnSuccessListener<InstanceIdResult> {
+            override fun onSuccess(instanceIdResult:InstanceIdResult) {
+                mToken = instanceIdResult.getToken()
+                Log.e(TAG, "Refreshed token:--- " + mToken)
+            }
+        })
         showProgressDialog()
         callAPI(ApiCall.clearcart(
                 auth_key = Constants.AUTH_VALUE,
@@ -175,8 +189,10 @@ class Profile : BaseFragment() {
                 fragmentof.getOrderFragment().popAllFragment()
                 PreferenceUtil.save()
                 // clear all but add id again to collect non user item into cart.
-                PreferenceUtil.putValue(PreferenceUtil.DEVICE_TOKEN, Settings.Secure.getString(context!!.getContentResolver(), Settings.Secure.ANDROID_ID))
+                PreferenceUtil.putValue(PreferenceUtil.DEVICE_TOKEN, mToken)
                 PreferenceUtil.putValue(PreferenceUtil.CLOSE_INTRO_SLIDE,true)
+                PreferenceUtil.putValue(PreferenceUtil.IS_SKIP_VERSION,cpy_is_skip_version)
+                PreferenceUtil.putValue(PreferenceUtil.SKIPED_VERSION_NAME,cpy_skiped_version_name!!)
                 PreferenceUtil.save()
                 (activity as HomeActivity).onBackPressed()
                 if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true
@@ -234,6 +250,10 @@ class Profile : BaseFragment() {
             }
             else if (kundlesupport != null && kundlesupport!!.isVisible) {
                 childFragmentManager.popBackStack()
+                return true
+            }
+            else if (kundlechatsupport != null && kundlechatsupport!!.isVisible) {
+                kundlechatsupport!!.backpress()
                 return true
             }
             else {
@@ -308,17 +328,15 @@ class Profile : BaseFragment() {
         }
 
         fun kundle_support(view: View){
+            // chat support
+            profile.kundlechatsupport = KundleChatSupport.newInstance()
+            profile.addFragment(R.id.profile_container, profile.kundlechatsupport!!, KundleChatSupport.TAG, false)
+        }
+
+        fun kuntakt_os (view: View){
+            // msg support
             profile.kundlesupport = KundleSupport.newInstance()
             profile.addFragment(R.id.profile_container, profile.kundlesupport!!, KundleSupport.TAG, false)
-
-          /*  Zendesk.INSTANCE.init(profile.context!!, "https://xyz5070.zendesk.com", "5607f30269e67f046f086eae038d6c1abf60d0e6490a03ae", "mobile_sdk_client_e5c9b367c7d7adf62d77")
-            val identity = AnonymousIdentity()
-            Zendesk.INSTANCE.setIdentity(identity)
-            Support.INSTANCE.init(Zendesk.INSTANCE)
-
-            RequestActivity.builder().show(profile.context!!)*/
-
-
         }
 
         fun go_onfavorite(view: View) {
