@@ -484,6 +484,7 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
                     orderFragment.onRate(model)
             }
         }
+
         fun onfavourite(view: View, model: Orderresult) {
             Log.e(TAG, "taponfavourite ---")
             orderFragment.favourite(model)

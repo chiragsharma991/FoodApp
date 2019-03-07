@@ -77,6 +77,7 @@ class HomeFragment : CommanAPI() {
     companion object {
         var count: Int = 0
         var is_fav : Boolean = false
+        var is_from_reorder : Boolean = false
         var ui_model: UIModel? = null
         val TAG = "HomeFragment"
         fun newInstance(): HomeFragment {
@@ -138,8 +139,30 @@ class HomeFragment : CommanAPI() {
         } else {
             logd(TAG, "saveInstance NOT NULL")
         }
+    }
+
+    fun reorderfuntion(){
+        val fragment = DetailsFragment.newInstance(
+                restaurant = null,
+                status = "",
+                ordertype = ""
+        )
+        var enter: Slide? = null
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+            enter = Slide()
+            enter.setDuration(300)
+            enter.slideEdge = Gravity.BOTTOM
+            val changeBoundsTransition: ChangeBounds = ChangeBounds()
+            changeBoundsTransition.duration = 300
+            //fragment!!.sharedElementEnterTransition=changeBoundsTransition
+            fragment.sharedElementEnterTransition = changeBoundsTransition
+            fragment.sharedElementReturnTransition = changeBoundsTransition
+            fragment.enterTransition = enter
+        }
+        addFragment(R.id.home_fragment_container, fragment, DetailsFragment.TAG, false)
 
     }
+
 
 
     override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {

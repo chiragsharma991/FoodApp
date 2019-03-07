@@ -12,6 +12,7 @@ import android.databinding.DataBindingUtil
 import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
@@ -457,11 +458,22 @@ class DetailsFragment : CommanAPI() {
     fun onBackpress() {
         // parentFragment!!.childFragmentManager.popBackStack()
         showTabBar(true)
+        //-- Home fragment--
         if (parentFragment is HomeFragment) {
             val restaurantList = (parentFragment as HomeFragment).childFragmentManager.findFragmentByTag(RestaurantList.TAG)
-            if (restaurantList != null && canIrefreshpre_Function) (restaurantList as RestaurantList).fetch_ProductDetailList()
+            if (restaurantList != null && canIrefreshpre_Function) (restaurantList as RestaurantList).fetch_ProductDetailList() // if some one restaurant immediate closed then refresh current.
             canIrefreshpre_Function = false
-            (parentFragment as HomeFragment).childFragmentManager.popBackStack()
+            // this for re-order
+            if(HomeFragment.is_from_reorder){
+                HomeFragment.is_from_reorder=false
+                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(1) // if you are from reorder then go there.
+                if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true   // every time refresh :  order fragment
+                (parentFragment as HomeFragment).childFragmentManager.popBackStack()
+            }else{
+                (parentFragment as HomeFragment).childFragmentManager.popBackStack()
+            }
+
+            //--order fragmnt--
         } else {
             (parentFragment as OrderFragment).childFragmentManager.popBackStack()
             // call order and ordered screeen again

@@ -97,6 +97,7 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             error_view.visibility = View.GONE
+            HomeFragment.is_from_reorder=false
             clickEvent = MyClickHandler(this)
             binding.handler = clickEvent
             setToolbarforThis()

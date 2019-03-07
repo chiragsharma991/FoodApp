@@ -1,6 +1,7 @@
 package dk.eatmore.foodapp.utils
 
 import android.os.Build
+import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.transition.Slide
 import android.view.Gravity
@@ -9,6 +10,7 @@ import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
+import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.Dashboard.Order.Data
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
@@ -248,16 +250,26 @@ abstract class CommanAPI : BaseFragment() {
         // pop all fragment on homecontainer to open reorder framgment.
         if ((activity as HomeActivity).fragmentTab_is() == 1) {
             // order fragment
+            showProgressDialog()
             val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
             (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
-            fragmentof.getOrderFragment().addFragment(R.id.home_order_container, fragment, DetailsFragment.TAG, false)
+            HomeFragment.is_from_reorder=true
+            ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().reorderfuntion()
+            Handler().postDelayed({
+                showProgressDialog()
+                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0) // if user is login and press only back then move->Home
+            }, 2000)
+
+
+
+         //   fragmentof.getOrderFragment().addFragment(R.id.home_order_container, fragment, DetailsFragment.TAG, false)
         } else {
             // Home fragment + Account fragment
             val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
             (fragmentof as HomeContainerFragment).getOrderFragment().popAllFragment()
             fragmentof.getHomeFragment().addFragment(R.id.home_fragment_container, fragment, DetailsFragment.TAG, false)
         }
-        showTabBar(false)
+       // showTabBar(false)
 
     }
 

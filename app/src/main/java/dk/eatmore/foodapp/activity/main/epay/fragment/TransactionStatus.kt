@@ -778,7 +778,7 @@ class TransactionStatus : CommanAPI() {
         val fragment = (parentFragment as EpayFragment).parentFragment
         if (fragment is HomeFragment) {
             val homeFragment = fragment
-            for (i in 0 until (homeFragment.childFragmentManager.backStackEntryCount - 2)) {
+            for (i in 0 until (homeFragment.childFragmentManager.backStackEntryCount - if (HomeFragment.is_from_reorder) 1 else 2)) {
                 homeFragment.childFragmentManager.popBackStack()
             }
         } else {
@@ -797,6 +797,7 @@ class TransactionStatus : CommanAPI() {
 
         val fragment = (parentFragment as EpayFragment).parentFragment
         if (fragment is HomeFragment) {
+            HomeFragment.is_from_reorder=false
             val homeFragment = fragment
             for (i in 0 until (homeFragment.childFragmentManager.backStackEntryCount)) {
                 homeFragment.childFragmentManager.popBackStack()
