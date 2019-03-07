@@ -11,7 +11,7 @@ import java.util.concurrent.TimeUnit
 internal object ApiClient{
 
     val BASE_URL = "https://eatmoredev.dk/restapi/v3/"
-    val TERMS_CONDITION = "https://eatmoredev.dk/web-view/t-o-s"
+    val TERMS_CONDITION = "https://eatmore.dk/web-view/t-o-s"
     val COOKIES_POLICY= "https://eatmoredev.dk/web-view/cookies"
 
     private var retrofit: Retrofit? = null

@@ -314,6 +314,7 @@ abstract class BaseFragment : Fragment() {
 
                     /*TODO: this condition is happen when you are comming from reorder/Home before epayfragment*/
                     if(parentFragment is HomeFragment){
+                        DetailsFragment.canIrefreshpre_Function=true
                         val homeFragment =(parentFragment as HomeFragment)
                         homeFragment.popfrom_to(DetailsFragment)
                         val detailsFragment=homeFragment.childFragmentManager.findFragmentByTag(DetailsFragment.TAG)
@@ -328,6 +329,7 @@ abstract class BaseFragment : Fragment() {
 
                     /*TODO: this condition is happen when you are comming from reorder 2 tab after epayfragment*/
                     else if(parentFragment is EpayFragment){
+                        DetailsFragment.canIrefreshpre_Function=true
                         val epayFragment= parentFragment as EpayFragment
                         if(epayFragment.parentFragment is HomeFragment){
                             val homeFragment = epayFragment.parentFragment as HomeFragment

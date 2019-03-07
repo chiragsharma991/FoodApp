@@ -101,7 +101,9 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
             binding.handler = clickEvent
             setToolbarforThis()
             search_edt.addTextChangedListener(this)
-            search_again_btn.setOnClickListener { onBackpress() }
+            search_again_btn.setOnClickListener {
+                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().childFragmentManager.popBackStack()
+            }
             ui_model = createViewModel()
 
             if (ui_model!!.restaurantList.value == null) {
@@ -134,13 +136,10 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
             onBackpress()
         }
 
-
         //-- search list --//
-
 
         search_clear_btn.setOnClickListener{
             search_edt.text.clear()
-
         }
 
         search_edt.addTextChangedListener(object : TextWatcher {
@@ -357,6 +356,12 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
         ui_model!!.restaurantList.value = list
     }
 
+    @Subscribe
+    fun onEvent(parsingevents: ParsingEvents.EventItself) {
+        loge(TAG, "--EventItself")
+    }
+
+
 
 
     private fun refreshview() {
@@ -556,6 +561,19 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
 
     }
 
+    override fun onStart() {
+        super.onStart()
+        logd(TAG, "onStart...")
+        GlobalBus.bus.register(this)
+    }
+
+    override fun onStop() {
+        super.onStop()
+        logd(TAG, "onStop...")
+        GlobalBus.bus.unregister(this)
+
+    }
+
     fun onBackpress() {
 
         if(search_tool.visibility == View.VISIBLE){
@@ -567,8 +585,13 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
             hideKeyboard()
 
         }else{
-
-            ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().childFragmentManager.popBackStack()
+            if(txt_toolbar.text == getString(R.string.favourite_restauranter)){
+                val parsingEvents =ParsingEvents.EventFromRestaurantList ()
+                GlobalBus.bus.post(parsingEvents)
+                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2)
+            }else{
+                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().childFragmentManager.popBackStack()
+            }
         }
 
     }

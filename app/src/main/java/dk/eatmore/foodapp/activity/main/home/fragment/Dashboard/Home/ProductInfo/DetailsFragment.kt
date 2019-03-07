@@ -64,7 +64,6 @@ class DetailsFragment : CommanAPI() {
     private var mAdapter: OrderListAdapter? = null
     var adapter: ViewPagerAdapter? = null
     private lateinit var binding: FragmentDetailBinding
-    private var canIrefreshpre_Function: Boolean = false
     private lateinit var mYourBroadcastReceiver: BroadcastReceiver
     // private lateinit var restaurant : Restaurant
     private var call_category_menu: Call<JsonObject>? = null
@@ -83,6 +82,7 @@ class DetailsFragment : CommanAPI() {
         var pickup_present: Boolean = true
         val TAG = "DetailsFragment"
         var total_cartcnt: Int = 0
+        var canIrefreshpre_Function: Boolean = false
         var total_cartamt: String = ""
         var delivery_charge_title: String = ""
         var delivery_charge: String = ""
@@ -178,8 +178,6 @@ class DetailsFragment : CommanAPI() {
                     }
                 }
             })
-
-
             ui_model = createViewModel()
             fetch_category_menu()
 
@@ -273,9 +271,11 @@ class DetailsFragment : CommanAPI() {
                         title ="We are closed today. Please check opening hours",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
                     override fun onPositiveButtonClick(position: Int) {
                         //back press
+                       // canIrefreshpre_Function=true
                         onBackpress()
                     }
                     override fun onNegativeButtonClick() {
+                      //  canIrefreshpre_Function=true
                         // dismiss
                     }
                 })
@@ -295,9 +295,11 @@ class DetailsFragment : CommanAPI() {
                         title = "Denne restaurant har desværre lukket lige nu",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
                     override fun onPositiveButtonClick(position: Int) {
                         //back press
+                    //    canIrefreshpre_Function=true
                         onBackpress()
                     }
                     override fun onNegativeButtonClick() {
+                    //    canIrefreshpre_Function=true
                         // dismiss
                     }
                 })

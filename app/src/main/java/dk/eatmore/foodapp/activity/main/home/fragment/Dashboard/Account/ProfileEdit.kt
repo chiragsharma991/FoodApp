@@ -153,11 +153,19 @@ class ProfileEdit : BaseFragment(), TextWatcher {
             isvalidate = false
         }
         if (!inputValidStates[email_edt]!!) {
-            email_edt.error = getString(R.string.enter_valid_email_address)
+            if(email_edt.text.trim().length <= 0 ){
+                email_edt.error = getString(R.string.enter_your_email_address)
+            }else{
+                email_edt.error = getString(R.string.enter_valid_email_address)
+            }
             isvalidate = false
         }
         if (!inputValidStates[telephone_edt]!!) {
-            telephone_edt.error = getString(R.string.enter_the_valid_number)
+            if(telephone_edt.text.trim().length <= 0){
+                telephone_edt.error = getString(R.string.enter_your_number)
+            }else{
+                telephone_edt.error = getString(R.string.enter_the_valid_number)
+            }
             isvalidate = false
         }
 

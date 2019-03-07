@@ -29,6 +29,10 @@ import com.zopim.android.sdk.api.Chat
 import com.zopim.android.sdk.prechat.ChatListener
 import dk.eatmore.foodapp.utils.*
 import org.greenrobot.eventbus.Subscribe
+import com.crashlytics.android.Crashlytics
+import io.fabric.sdk.android.Fabric
+
+
 
 
 class HomeActivity : BaseActivity(), ChatListener {
@@ -49,9 +53,6 @@ class HomeActivity : BaseActivity(), ChatListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.home_activity)
         initView(savedInstanceState)
-
-     //   val parsingEvents =ParsingEvents.ActivityFragmentMessage ("chirag ActivityFragmentMessage")
-      //  GlobalBus.bus.post(parsingEvents)
         //   log(TAG, "savedInstanceState..."+savedInstanceState)
 
     }

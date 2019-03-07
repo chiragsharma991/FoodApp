@@ -147,13 +147,13 @@ class OrderedRestaurant : CommanAPI() {
         if (list.shipping != "Delivery" && list.shipping != "Udbringning") {
             // pick up:
             subtotal_layout.visibility = View.VISIBLE
-            restuptominimum_layout.visibility = if (list.upto_min_shipping.toDouble() <= 0) View.GONE else View.VISIBLE  // product price - mincharge
+            restuptominimum_layout.visibility = if (list.upto_min_shipping == null || list.upto_min_shipping!!.toDouble() <= 0) View.GONE else View.VISIBLE  // product price - mincharge
             shipping_layout.visibility = View.GONE
-            additional_charge_layout.visibility = if (list.additional_charge.toDouble() <= 0) View.GONE else View.VISIBLE    // online/cash tax
+            additional_charge_layout.visibility = if (list.additional_charge == null || list.additional_charge!!.toDouble() <= 0) View.GONE else View.VISIBLE    // online/cash tax
             total_layout.visibility = View.VISIBLE
             subtotal_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(list.order_total)
-            restuptominimum_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(list.upto_min_shipping)
-            additional_charge_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(list.additional_charge)
+            restuptominimum_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(list.upto_min_shipping?:"")
+            additional_charge_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(list.additional_charge?:"")
             discountcoupan_txt.text = String.format(getString(R.string.discount), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.discount_amount.toString()))
             discountgift_txt.text = String.format(getString(R.string.discount), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.discount_amount.toString()))
 
@@ -181,14 +181,14 @@ class OrderedRestaurant : CommanAPI() {
         else {
             // delivery :
             subtotal_layout.visibility = View.VISIBLE
-            restuptominimum_layout.visibility = if (list.upto_min_shipping.toDouble() <= 0) View.GONE else View.VISIBLE
-            shipping_layout.visibility = if (list.shipping_costs <= 0.0) View.GONE else View.VISIBLE
-            additional_charge_layout.visibility = if (list.additional_charge.toDouble() <= 0) View.GONE else View.VISIBLE
+            restuptominimum_layout.visibility = if (list.upto_min_shipping == null || list.upto_min_shipping!!.toDouble() <= 0) View.GONE else View.VISIBLE
+            shipping_layout.visibility = if (list.shipping_costs == null || list.shipping_costs!! <= 0.0) View.GONE else View.VISIBLE
+            additional_charge_layout.visibility = if (list.additional_charge == null || list.additional_charge!!.toDouble() <= 0) View.GONE else View.VISIBLE
             total_layout.visibility = View.VISIBLE
             subtotal_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(list.order_total)
-            restuptominimum_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(list.upto_min_shipping)
-            shipping_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(list.shipping_costs.toString())
-            additional_charge_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(list.additional_charge)
+            restuptominimum_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(list.upto_min_shipping ?: "")
+            shipping_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(list.shipping_costs?.toString() ?: "")
+            additional_charge_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(list.additional_charge ?: "")
             discountcoupan_txt.text = String.format(getString(R.string.discount), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.discount_amount.toString()))
             discountgift_txt.text = String.format(getString(R.string.discount), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.discount_amount.toString()))
 
@@ -809,15 +809,15 @@ data class Data(
         var order_status: String = "",
         var restaurant_phone: String = "",
         var payment_status: String = "",
-        var upto_min_shipping: String = "0.0",
-        var additional_charge: String = "0.0",
+        var upto_min_shipping: String? = null,
+        var additional_charge: String? = null,
         val total_rating: Float = 0.0f,
         val quality_of_food_rating: Float = 0.0f,
         val customer_service_rating: Float = 0.0f,
         val delivery_time_rating: Float = 0.0f,
         var discount_amount: Double = 0.0,
         var discount_type: String? = null,
-        var shipping_costs: Double = 0.0,
+        var shipping_costs: Double? = null,
         var accept_reject_time: String? = null,
         var expected_time: String = "",
         var review: String = "",

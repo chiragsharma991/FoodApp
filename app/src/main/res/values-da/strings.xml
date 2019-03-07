@@ -32,19 +32,19 @@
     <string name="go_on_playstore">Go on PlayStore</string>
     <string name="new_update">Ny opdatering!</string>
     <string name="dismiss">Dismiss</string>
-    <string name="login_val_email">Username/Password cannot be blank</string>
+    <string name="login_val_email">Brugernavn / adgangskode kan ikke være tomt</string>
     <string name="invalid_email">Invalid email Address</string>
     <string name="login_val_pass">Username/Password cannot be blank</string>
     <string name="internet_not_available">Please check internet connection</string>
     <string name="error_404">Server not found&#8230; Try after sometime</string>
     <string name="error_407">Server not responding\nPlease chenck the network connection.</string>
     <string name="please_wait">Please wait&#8230;</string>
-    <string name="enter_valid_email_address">Enter valid email address</string>
+    <string name="enter_valid_email_address">Indtast venligst en gyldig e-mail</string>
     <string name="password_must_consist">Adgangskode kan ikke være mindre end 6 tegn</string>
     <string name="enter_your_unique_password">Indtast venligst din adgangskode</string>
-    <string name="enter_your_new_password">Enter your new password</string>
-    <string name="enter_your_old_password">Enter your valid old password</string>
-    <string name="enter_your_confirm_password">Bekræft venligst adgangskode</string>
+    <string name="enter_your_new_password">Indtast venligst din nye adgangskode</string>
+    <string name="enter_your_old_password">Forrige adgangskode kan ikke være tomt!</string>
+    <string name="enter_your_confirm_password">Bekræft venligst din adgangskode</string>
     <string name="signup">Signup</string>
     <string name="add_to_cart">ADD TO CART %1$s</string>
     <string name="minues">- %1$s</string>
@@ -100,12 +100,12 @@
     <string name="pickup_caps">Pickup</string>
     <string name="delivery_caps">Delivery</string>
     <string name="you_are_ordering_pickup">Du er ved at bestille din mad til afhentning!</string>
-    <string name="enter_your_valid_name">Enter your valid name</string>
-    <string name="enter_your_postal_number">Enter your postal number</string>
-    <string name="enter_the_valid_number">Enter the valid number</string>
-    <string name="enter_your_street_number">Enter your street number</string>
-    <string name="enter_your_house_number">Husnummer</string>
-    <string name="postal_number_is_not_valid">Postal number is not valid</string>
+    <string name="enter_your_valid_name">Indtast venligst dit navn</string>
+    <string name="enter_your_postal_number">Indtast venligst dit postnummer</string>
+    <string name="enter_the_valid_number">Forkert telefon nummer</string>
+    <string name="enter_your_street_number">Indtast venligst dit gadenavn</string>
+    <string name="enter_your_house_number">Indtast venligst dit husnummer</string>
+    <string name="postal_number_is_not_valid">Forkert postnummer</string>
     <string name="request_successful">Request Successful</string>
     <string name="successful">successful</string>
     <string name="failed">failed</string>
@@ -280,5 +280,8 @@
     <string name="this_version_is_no_longer">Denne version er desværre ikke længere tilgængelig, venligst download vores nye version.</string>
     <string name="adress_titel">Adress titel</string>
     <string name="emoji_ikke_tilladt">Emoji ikke tilladt.</string>
+    <string name="enter_your_email_address">Indtast venligst din e-mail</string>
+    <string name="enter_your_number">Indtast venligst dit telefonnummer</string>
+    <string name="old_password_is_not_valid">Tidligere kodeord er ikke gyldigt</string>
 
 </resources>

@@ -44,6 +44,7 @@ import android.widget.CompoundButton
 import com.airbnb.lottie.LottieProperty
 import com.airbnb.lottie.TextDelegate
 import com.airbnb.lottie.model.KeyPath
+import com.crashlytics.android.Crashlytics
 import com.facebook.shimmer.ShimmerFrameLayout
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
@@ -51,6 +52,7 @@ import dk.eatmore.foodapp.activity.main.home.intro.Intro_slider
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
+import io.fabric.sdk.android.Fabric
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.splash_activity.*
 

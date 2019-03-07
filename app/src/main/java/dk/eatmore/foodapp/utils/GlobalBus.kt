@@ -17,12 +17,10 @@ object GlobalBus {
 class ParsingEvents {
 
     // Event used to send message from fragment to activity.
-    class FragmentActivityMessage(val message: String)
-
+    class EventFromRestaurantList
 
     // Event used to send message from activity to fragment.
-    class ActivityFragmentMessage(val message: String)
+    class EventItself
 
-    // Event used to send message from activity to activity.
-    class ActivityActivityMessage(val message: String)
+
 }

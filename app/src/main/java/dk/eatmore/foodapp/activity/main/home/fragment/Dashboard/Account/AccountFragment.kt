@@ -28,6 +28,7 @@ import android.text.TextUtils
 import android.view.KeyEvent
 import android.view.inputmethod.EditorInfo
 import android.widget.TextView
+import com.crashlytics.android.Crashlytics
 import com.facebook.internal.Utility
 import com.facebook.login.LoginManager
 import com.google.android.gms.auth.api.signin.GoogleSignIn
@@ -328,6 +329,8 @@ class AccountFragment : BaseFragment() {
         PreferenceUtil.putValue(PreferenceUtil.CUSTOMER_ID, customer_id)
         PreferenceUtil.putValue(PreferenceUtil.KSTATUS, true)  // show close restaurant
         PreferenceUtil.save()
+        Crashlytics.setUserName(PreferenceUtil.getString(PreferenceUtil.USER_NAME,""))
+        Crashlytics.setUserEmail(PreferenceUtil.getString(PreferenceUtil.E_MAIL,""))
         //showProgressDialog()
         val fragment = Profile.newInstance()
         addFragment(R.id.home_account_container, fragment, Profile.TAG, false)
@@ -364,11 +367,11 @@ class AccountFragment : BaseFragment() {
                 false
             }
             !validMail(acc_email_edt.text.trim().toString()) -> {
-                showSnackBar(acc_email_edt, getString(R.string.invalid_email))
+                showSnackBar(acc_email_edt, getString(R.string.enter_valid_email_address))
                 false
             }
             TextUtils.isEmpty(acc_password_edt.text.trim().toString()) -> {
-                showSnackBar(acc_password_edt, getString(R.string.login_val_pass))
+                showSnackBar(acc_password_edt, getString(R.string.login_val_email))
                 false
             }
             else -> true

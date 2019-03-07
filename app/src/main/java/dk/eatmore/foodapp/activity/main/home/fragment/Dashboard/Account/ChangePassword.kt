@@ -79,13 +79,13 @@ class ChangePassword : BaseActivity(), TextWatcher {
 
         if (old_password_edt.text.hashCode() == s!!.hashCode()) {
             old_password_edt.error = null
-            if (old_password_edt.text.trim().toString().length >= 8)
+            if (old_password_edt.text.trim().toString().length >= 6)
                 inputValidStates[old_password_edt] = true
             else
                 inputValidStates[old_password_edt] = false
         } else if (new_password_edt.text.hashCode() == s.hashCode()) {
             new_password_edt.error = null
-            if (new_password_edt.text.trim().toString().length >= 8)
+            if (new_password_edt.text.trim().toString().length >= 6)
                 inputValidStates[new_password_edt] = true
             else
                 inputValidStates[new_password_edt] = false
@@ -105,7 +105,11 @@ class ChangePassword : BaseActivity(), TextWatcher {
         var isvalidate: Boolean = true
 
         if (!inputValidStates[old_password_edt]!!) {
-            old_password_edt.error = getString(R.string.enter_your_old_password)
+            if(old_password_edt.text.trim().length <= 0 ){
+                old_password_edt.error = getString(R.string.enter_your_old_password)
+            }else{
+                old_password_edt.error = getString(R.string.old_password_is_not_valid)
+            }
             isvalidate = false
         }
 
@@ -115,8 +119,8 @@ class ChangePassword : BaseActivity(), TextWatcher {
             else
                 new_password_edt.error = getString(R.string.password_must_consist)
             isvalidate = false
-
         }
+
         if (!inputValidStates[confirm_password_edt]!!) {
             if (confirm_password_edt.text.trim().toString().length <= 0)
                 confirm_password_edt.error = getString(R.string.enter_your_confirm_password)

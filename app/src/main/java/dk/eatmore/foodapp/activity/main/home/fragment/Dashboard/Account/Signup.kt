@@ -112,7 +112,7 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
                             if (validMail(forgot_email_edt.text.toString())) {
                                 forgotFunction()
                             } else {
-                                forgot_email_inputlayout.error = getString(R.string.indtast_venligst_dine_mail)
+                                forgot_email_inputlayout.error = getString(R.string.enter_valid_email_address)
 
                             }
                         }
@@ -181,11 +181,15 @@ class Signup : BaseFragment(), TextWatcher, View.OnFocusChangeListener {
 
         if (!inputValidStates[first_name]!!) {
             sign_up_firstname_inputlayout.isErrorEnabled = true
-            sign_up_firstname_inputlayout.error = getString(R.string.indtast_vengligst_dit_navn)
+            sign_up_firstname_inputlayout.error = getString(R.string.enter_your_full_name)
             result = false
         }
         if (!inputValidStates[sign_up_email_edt]!!) {
-            sign_up_email_inputlayout.error = getString(R.string.indtast_venligst_en_gylding_e_mail)
+            if(sign_up_email_edt.text.trim().length <= 0 ){
+                sign_up_email_inputlayout.error = getString(R.string.enter_your_email_address)
+            }else{
+                sign_up_email_inputlayout.error = getString(R.string.enter_valid_email_address)
+            }
             result = false
         }
         if (!inputValidStates[sign_up_password_edt]!!) {

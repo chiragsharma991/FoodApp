@@ -111,15 +111,15 @@ class Address : BaseFragment(), TextWatcher {
                 }
             }
 
-       /*     postnumber_edt.imeOptions = EditorInfo.IME_ACTION_DONE
-            postnumber_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
-                override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
-                    loge(TAG, "post number edit...")
-                    moveon_next()
-                    return true
-                }
+            /*     postnumber_edt.imeOptions = EditorInfo.IME_ACTION_DONE
+                 postnumber_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
+                     override fun onEditorAction(v: TextView?, actionId: Int, event: KeyEvent?): Boolean {
+                         loge(TAG, "post number edit...")
+                         moveon_next()
+                         return true
+                     }
 
-            })*/
+                 })*/
             proceed_view_nxt.setOnClickListener {
                 moveon_next()
             }
@@ -261,21 +261,28 @@ class Address : BaseFragment(), TextWatcher {
                 isvalidate = false
             }
 
-
         } else {
 
             if (!inputValidStates[name_edt]!!) {
                 name_edt.error = getString(R.string.enter_your_valid_name)
                 isvalidate = false
             }
+
             if (!inputValidStates[postnumber_edt]!!) {
                 postnumber_edt.error = getString(R.string.enter_your_postal_number)
                 isvalidate = false
             }
+
             if (!inputValidStates[telephone_number_edt]!!) {
-                telephone_number_edt.error = getString(R.string.enter_the_valid_number)
+
+                if (telephone_number_edt.text.trim().length <= 0) {
+                    telephone_number_edt.error = getString(R.string.enter_your_number)
+                } else {
+                    telephone_number_edt.error = getString(R.string.enter_the_valid_number)
+                }
                 isvalidate = false
             }
+
             if (!inputValidStates[street_edt]!!) {
                 street_edt.error = getString(R.string.enter_your_street_number)
                 isvalidate = false
@@ -487,14 +494,14 @@ class Address : BaseFragment(), TextWatcher {
         EpayFragment.paymentattributes.postal_code = postnumber_edt.text.toString()
         //   EpayActivity.paymentattributes.discount_type=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.DISCOUNT_TYPE].asString
         // EpayActivity.paymentattributes.discount_amount=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.DISCOUNT_AMOUNT].asString
-        EpayFragment.paymentattributes.shipping_charge = if (!jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.SHIPPING_CHARGE)|| jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].isJsonNull || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString
-        EpayFragment.paymentattributes.upto_min_shipping = if (!jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.UPTO_MIN_SHIPPING)|| jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].isJsonNull || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString
-        EpayFragment.paymentattributes.minimum_order_price = if (!jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.MIN_ORDER_SHIPPING)|| jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].isJsonNull || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString
+        EpayFragment.paymentattributes.shipping_charge = if (!jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.SHIPPING_CHARGE) || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].isJsonNull || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.SHIPPING_CHARGE].asString
+        EpayFragment.paymentattributes.upto_min_shipping = if (!jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.UPTO_MIN_SHIPPING) || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].isJsonNull || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.UPTO_MIN_SHIPPING].asString
+        EpayFragment.paymentattributes.minimum_order_price = if (!jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.MIN_ORDER_SHIPPING) || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].isJsonNull || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.MIN_ORDER_SHIPPING].asString
         //  EpayActivity.paymentattributes.additional_charges_cash=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_CASH].asString
         EpayFragment.paymentattributes.additional_charges_online = if (!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_ONLINE)) || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString
         EpayFragment.paymentattributes.additional_charges_cash = if (!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_CASH)) || jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString
 
-        EpayFragment.paymentattributes.distance = if (!jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.USER_DISTANCE)|| jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].isJsonNull || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString
+        EpayFragment.paymentattributes.distance = if (!jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.USER_DISTANCE) || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].isJsonNull || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString
         EpayFragment.paymentattributes.first_time = if (!jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.FIRST_TIME) || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].isJsonNull || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString
 
 
@@ -534,7 +541,6 @@ class Address : BaseFragment(), TextWatcher {
           (activity as EpayActivity).popFragment()
 
       }*/
-
 
 
     override fun onDestroyView() {

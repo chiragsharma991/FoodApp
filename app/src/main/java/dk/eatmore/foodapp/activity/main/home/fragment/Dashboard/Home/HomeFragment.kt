@@ -31,6 +31,9 @@ import android.view.inputmethod.EditorInfo
 import android.widget.TextView
 import android.widget.Toast
 import com.bumptech.glide.Glide
+import com.crashlytics.android.Crashlytics
+import com.crashlytics.android.answers.Answers
+import com.crashlytics.android.answers.CustomEvent
 import com.facebook.*
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.adapter.OrderListAdapter
@@ -103,8 +106,8 @@ class HomeFragment : CommanAPI() {
             Glide.with(context!!).load(ContextCompat.getDrawable(context!!, R.mipmap.eatmore_search_backgrond)).into(imageview);
             restaurant_logo.visibility = View.VISIBLE
             img_toolbar_back.visibility = View.GONE
-            firebaseAnalytics = FirebaseAnalytics.getInstance(context!!);
-            checkFirebaseAnalytics()
+          //  firebaseAnalytics = FirebaseAnalytics.getInstance(context!!);
+           // checkFirebaseAnalytics()
             clickEvent = MyClickHandler(this)
             binding.handlers = clickEvent
             ui_model = createViewModel()
@@ -172,6 +175,9 @@ class HomeFragment : CommanAPI() {
     }
 
 
+
+
+
 /*
     override fun locationtracking_success(address: Address) {
         loge(TAG,"locationtracking_success-----")
@@ -189,10 +195,15 @@ class HomeFragment : CommanAPI() {
         bundle.putString("ButtonId", "1234");
         //   bundle.putString(FirebaseAnalytics.Param.ITEM_NAME, "test");
         //   bundle.putString(FirebaseAnalytics.Param.CONTENT_TYPE, "image");
+        Answers.getInstance().logCustom( CustomEvent("Played Song")
+                .putCustomAttribute("Custom String", "My String")
+                .putCustomAttribute("Custom Number", 25));
+        Crashlytics.setUserName("chirag")
+        Crashlytics.setUserEmail("chirag@gmail.com")
+        Crashlytics.log("on create home fragment")
         firebaseAnalytics.logEvent("checkButtonTest", bundle);
+
         //firebaseAnalytics.setAnalyticsCollectionEnabled(true);
-
-
     }
 
     fun getcurrent_location() {
