@@ -802,7 +802,7 @@ class TransactionStatus : CommanAPI() {
             for (i in 0 until (homeFragment.childFragmentManager.backStackEntryCount)) {
                 homeFragment.childFragmentManager.popBackStack()
             }
-            ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(1)
+            ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(1,800)
 
         } else {
             val orderfragment = fragment as OrderFragment

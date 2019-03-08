@@ -97,6 +97,7 @@
                                 android:layout_width="match_parent"
                                 android:layout_height="@dimen/_60sdp"
                                 android:layout_setImage="@{orderresult}"
+                                android:onClick="@{(v)-> myclickhandler.showmenu(v,orderresult)}"
                                 app:srcCompat="@color/gray"
                                 android:scaleType="fitXY" />
 
@@ -184,6 +185,7 @@
                             android:id="@+id/ordered_item_name"
                             style="@style/Titlelight_TextViewSmall"
                             android:singleLine="true"
+                            android:onClick="@{(v)-> myclickhandler.showmenu(v,orderresult)}"
                             android:text="@{orderresult.restaurant_name}" />
 
                         <android.support.v7.widget.AppCompatTextView
@@ -263,6 +265,7 @@
                             android:background="@color/background_light"
                             android:backgroundTint="@color/grey"
                             android:stateListAnimator="@null"
+                            android:onClick="@{(v)-> myclickhandler.onDetails(v,orderresult)}"
                             android:gravity="center"
                             android:text="@string/se_deltajer"
                             android:textColor="@color/black" />

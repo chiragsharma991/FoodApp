@@ -250,15 +250,15 @@ abstract class CommanAPI : BaseFragment() {
         // pop all fragment on homecontainer to open reorder framgment.
         if ((activity as HomeActivity).fragmentTab_is() == 1) {
             // order fragment
-            showProgressDialog()
+            //showProgressDialog()
             val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
             (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
-            HomeFragment.is_from_reorder=true
-            ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().reorderfuntion()
+            ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0,0) // if user is login and press only back then move->Home
             Handler().postDelayed({
-                showProgressDialog()
-                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0) // if user is login and press only back then move->Home
-            }, 2000)
+                //showProgressDialog()
+                HomeFragment.is_from_reorder=true
+                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().reorderfuntion()
+            }, 800)
 
 
 

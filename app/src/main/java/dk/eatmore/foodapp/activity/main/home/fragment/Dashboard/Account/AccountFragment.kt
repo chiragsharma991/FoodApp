@@ -340,13 +340,13 @@ class AccountFragment : BaseFragment() {
         // When user is comming from cart to login then:
         val epayFragment=((activity as HomeActivity).getHomeContainerFragment()as HomeContainerFragment).getHomeFragment().childFragmentManager.findFragmentByTag(EpayFragment.TAG)
         if(epayFragment !=null) epayFragment.epay_continue_btn.text=getString(R.string.continue_)
+        loge(TAG,"move on eapy--"+EpayFragment.moveonEpay)
         if (EpayFragment.moveonEpay){
             if(epayFragment !=null) (epayFragment as EpayFragment).continuefromviewcart()
-            // if(epayFragment !=null) (epayFragment as EpayFragment).fetch_viewCardList()
             Handler().postDelayed({
-                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0)
+                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0,0)
                 showProgressDialog()
-            },2000)
+            },4000)
 
         }else{
             showProgressDialog()
@@ -635,7 +635,7 @@ class AccountFragment : BaseFragment() {
             binding.viewIsSetting=true
             img_toolbar_back.visibility= View.GONE
         }else{
-            ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0)
+            ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0,0)
         }
 
     }

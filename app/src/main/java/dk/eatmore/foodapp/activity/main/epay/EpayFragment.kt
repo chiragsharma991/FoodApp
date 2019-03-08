@@ -37,6 +37,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 import java.util.ArrayList
 import dk.eatmore.foodapp.model.home.Restaurant
 import kotlinx.android.synthetic.main.activity_epay.*
+import kotlinx.android.synthetic.main.fragment_home_container.*
 import retrofit2.Call
 
 
@@ -141,8 +142,10 @@ class EpayFragment : BaseFragment() {
             addFragment(R.id.epay_container,fragment,Address.TAG,true)
 
         }else{
-            ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2)
+            ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).view_pager.setCurrentItem(2)
             moveonEpay=true
+            loge(TAG,"move on eapy--"+EpayFragment.moveonEpay)
+
 
             //setResult(RESULT_OK);
             // onBackPressed()

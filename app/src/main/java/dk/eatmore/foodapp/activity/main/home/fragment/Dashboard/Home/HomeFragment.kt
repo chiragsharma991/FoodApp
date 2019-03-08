@@ -16,6 +16,7 @@ import android.location.Address
 import android.net.Uri
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.support.design.widget.AppBarLayout
 import android.support.design.widget.CoordinatorLayout
 import android.support.v4.content.ContextCompat
@@ -515,10 +516,16 @@ class HomeFragment : CommanAPI() {
                 addFragment(R.id.home_fragment_container, fragment, RateOrder.TAG, false)
             }
         }
-        /*   fun onClose(view: View, model: OrderFragment.Orderresult) {
-               count = 0
-               swipeAdapter!!.notifyDataSetChanged()
-           }*/
+
+
+        fun showmenu (view: View , model: OrderFragment.Orderresult){
+            PreferenceUtil.putValue(PreferenceUtil.R_KEY,model.r_key)
+            PreferenceUtil.putValue(PreferenceUtil.R_TOKEN,model.r_token)
+            PreferenceUtil.save()
+            homefragment.reorderfuntion()
+        }
+
+
 
 
     }

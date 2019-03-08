@@ -466,9 +466,10 @@ class DetailsFragment : CommanAPI() {
             // this for re-order
             if(HomeFragment.is_from_reorder){
                 HomeFragment.is_from_reorder=false
-                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(1) // if you are from reorder then go there.
                 if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true   // every time refresh :  order fragment
+                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(1,800) // if you are from reorder then go there.
                 (parentFragment as HomeFragment).childFragmentManager.popBackStack()
+
             }else{
                 (parentFragment as HomeFragment).childFragmentManager.popBackStack()
             }

@@ -589,7 +589,7 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
             if(txt_toolbar.text == getString(R.string.favourite_restauranter)){
                 val parsingEvents =ParsingEvents.EventFromRestaurantList ()
                 GlobalBus.bus.post(parsingEvents)
-                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2)
+                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2,0)
             }else{
                 ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().childFragmentManager.popBackStack()
             }

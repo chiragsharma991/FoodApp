@@ -8,6 +8,7 @@ import android.databinding.BindingAdapter
 import android.databinding.DataBindingUtil
 import android.os.Build
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.content.ContextCompat
 import android.support.v4.widget.SwipeRefreshLayout
 import android.support.v7.widget.AppCompatImageView
@@ -49,7 +50,6 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
     private val myclickhandler = MyClickHandler(this@OrderFragment)
     public var mAdapter: UniversalAdapter<Orderresult, RowOrderedPizzaBinding>? = null
     private var call_favorite: Call<JsonObject>? = null
-
 
 
     companion object {
@@ -94,7 +94,7 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
             img_toolbar_back.visibility = View.GONE
             swipeRefresh.setOnRefreshListener(this)
             ui_model = createViewModel()
-            error_btn.setOnClickListener { ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2) }
+            error_btn.setOnClickListener { ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2,0) }
             if (!PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
                 show_ui_error(1)
                 return
@@ -300,49 +300,47 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
         val postParam = JsonObject()
         postParam.addProperty(Constants.AUTH_KEY, Constants.AUTH_VALUE)
         postParam.addProperty(Constants.EATMORE_APP, true)
-        postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,""))      // if restaurant is closed then
-        postParam.addProperty(Constants.RESTAURANT_ID,model.restaurant_id)
-        if(model.is_fav){
+        postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))      // if restaurant is closed then
+        postParam.addProperty(Constants.RESTAURANT_ID, model.restaurant_id)
+        if (model.is_fav) {
             // unfavourite--
-            DialogUtils.openDialog(context = context!!,btnNegative = getString(R.string.no) , btnPositive = getString(R.string.yes),color = ContextCompat.getColor(context!!, R.color.theme_color),msg = getString(R.string.vil_du_fjerne),title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+            DialogUtils.openDialog(context = context!!, btnNegative = getString(R.string.no), btnPositive = getString(R.string.yes), color = ContextCompat.getColor(context!!, R.color.theme_color), msg = getString(R.string.vil_du_fjerne), title = "", onDialogClickListener = object : DialogUtils.OnDialogClickListener {
                 override fun onPositiveButtonClick(position: Int) {
                     call_favorite = ApiCall.remove_favorite_restaurant(jsonObject = postParam)
-                    remove_favorite_restaurant(call_favorite!!,model)
+                    remove_favorite_restaurant(call_favorite!!, model)
                 }
+
                 override fun onNegativeButtonClick() {
 
                 }
             })
 
-        }else{
+        } else {
             // favourite---
             call_favorite = ApiCall.add_favorite_restaurant(jsonObject = postParam)
-            setfavorite(call_favorite!!,model)
+            setfavorite(call_favorite!!, model)
         }
     }
 
-    override fun comman_apisuccess(jsonObject: JsonObject,api_tag : String) {
-        when(api_tag ){
-             Constants.COM_ADD_FAVORITE_RESTAURANT->{
+    override fun comman_apisuccess(jsonObject: JsonObject, api_tag: String) {
+        when (api_tag) {
+            Constants.COM_ADD_FAVORITE_RESTAURANT -> {
                 onRefresh()
             }
-            else ->{
+            else -> {
                 moveon_reOrder("")
             }
         }
     }
 
-    override fun comman_apifailed(error: String,api_tag : String) {
+    override fun comman_apifailed(error: String, api_tag: String) {
 
-        when(api_tag ){
-            Constants.COM_ADD_FAVORITE_RESTAURANT->{
+        when (api_tag) {
+            Constants.COM_ADD_FAVORITE_RESTAURANT -> {
                 onRefresh()
             }
         }
     }
-
-
-
 
 
 /*
@@ -490,6 +488,28 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
             orderFragment.favourite(model)
         }
 
+
+        fun showmenu(view: View, model: Orderresult) {
+            if (orderFragment.swipeRefresh.isRefreshing == false) {
+                PreferenceUtil.putValue(PreferenceUtil.R_KEY, model.r_key)
+                PreferenceUtil.putValue(PreferenceUtil.R_TOKEN, model.r_token)
+                PreferenceUtil.save()
+              //  orderFragment.showProgressDialog()
+                //orderFragment.showProgressDialog()
+                if(orderFragment.parentFragment is HomeFragment){
+                    ((orderFragment.activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().reorderfuntion()
+                }else{
+                    val fragmentof = (orderFragment.activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
+                    (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
+                    ((orderFragment.activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0,0) // if user is login and press only back then move->Home
+                    Handler().postDelayed({
+                        HomeFragment.is_from_reorder = true
+                        ((orderFragment.activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().reorderfuntion()
+                    }, 800)
+                }
+            }
+        }
+
     }
 
     // we set one model for all API call.
@@ -508,14 +528,14 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
             var restaurant_id: String = "",
             var order_status: String = "",
             var payment_status: String = "",
-            var is_fav : Boolean = false,
+            var is_fav: Boolean = false,
             var order_no: String = "",
             var expected_time: String = "",
             var total_to_pay: String = "",
             var order_date: String = "",
             var discount_amount: String? = null,
             var restaurant_name: String = "",
-            var shipping : String = "",
+            var shipping: String = "",
             var postal_code: String = "",
             var app_icon: String = "",
             var is_restaurant_closed: Boolean = false,

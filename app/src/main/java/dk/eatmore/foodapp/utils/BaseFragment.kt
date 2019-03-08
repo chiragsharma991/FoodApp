@@ -25,6 +25,7 @@ import android.location.Geocoder
 import android.location.LocationManager
 import android.net.ParseException
 import android.os.Build
+import android.os.Handler
 import android.support.design.widget.AppBarLayout
 import android.support.v4.content.ContextCompat
 import android.support.v4.graphics.drawable.DrawableCompat
@@ -35,6 +36,7 @@ import android.view.animation.Animation
 import android.view.animation.AnimationUtils
 import android.view.animation.TranslateAnimation
 import android.widget.ProgressBar
+import android.widget.Toast
 import com.google.gson.Gson
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
@@ -71,6 +73,11 @@ abstract class BaseFragment : Fragment() {
     abstract fun initView(view: View?, savedInstanceState: Bundle?)
     lateinit var displayMetrics: DisplayMetrics
     private  var dialog: ProgressDialog? = null
+    private var backpress_timeout : Boolean = false
+    private val timeoutHandler = Handler()
+    private var finalizer: Runnable? = null
+
+
 
 
 
@@ -244,13 +251,28 @@ abstract class BaseFragment : Fragment() {
                 when(fragment){
 
                     is OrderFragment ->{
-                        ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0)
+                        ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0,0)
                     }
                     is AccountFragment ->{
                         fragment.onBackpress()
                     }
                     is HomeFragment ->{
-                        (activity as HomeActivity).finish()
+                        if(backpress_timeout){
+                            timeoutHandler.removeCallbacks(finalizer)
+                            (activity as HomeActivity).finish()
+                        }else{
+                            backpress_timeout=true
+                            Toast.makeText(context,"Press again to exit",Toast.LENGTH_SHORT).show()
+                            finalizer = object : Runnable {
+                                override fun run() {
+                                    backpress_timeout=false
+                                }
+                            }
+                            timeoutHandler.postDelayed(finalizer, 2 * 1000)
+                        }
+
+
+
                     }
 
                 }

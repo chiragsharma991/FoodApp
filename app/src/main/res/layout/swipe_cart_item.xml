@@ -76,40 +76,62 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_marginTop="8dp"
-                    android:layout_marginBottom="8dp"
+                    android:layout_marginBottom="4dp"
                     android:layout_weight="0.7"
                     android:orientation="vertical"
+                    android:clickable="true"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toStartOf="@+id/guideline"
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toTopOf="parent"
                     app:layout_constraintVertical_bias="0.0">
 
-                    <android.support.v7.widget.CardView
+                    <RelativeLayout
                         android:layout_width="@dimen/_60sdp"
-                        android:layout_height="@dimen/_60sdp"
-                        app:cardCornerRadius="@dimen/_5sdp"
-                        app:cardElevation="@dimen/_5sdp">
+                        android:layout_height="wrap_content"
+                        >
 
-                        <RelativeLayout
+                        <android.support.v7.widget.AppCompatImageView
+                            android:id="@+id/imageview"
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
-
-                            >
-
-                            <android.support.v7.widget.AppCompatImageView
-                                android:id="@+id/imageview"
-                                android:layout_width="match_parent"
-                                android:layout_height="match_parent"
-                                android:layout_setImage="@{orderresult}"
-                                android:background="@color/gray"
-                                android:scaleType="fitXY" />
+                            android:layout_height="@dimen/_60sdp"
+                            android:layout_setImage="@{orderresult}"
+                            app:srcCompat="@color/gray"
+                            android:onClick="@{(v)-> myclickhandler.showmenu(v,orderresult)}"
+                            android:scaleType="fitXY" />
 
 
-                        </RelativeLayout>
+                        <!--<android.support.v7.widget.AppCompatImageView
+                                                  android:id="@+id/imageview"
+                                                  android:layout_width="match_parent"
+                                                  android:layout_height="@dimen/_60sdp"
+                                                  android:layout_setImage="@{orderresult}"
+                                                  android:background="@color/gray"
+                                                  android:scaleType="fitXY" />-->
 
 
-                    </android.support.v7.widget.CardView>
+               <!--         <android.support.v7.widget.AppCompatImageView
+                            android:layout_width="@dimen/_15sdp"
+                            android:layout_height="@dimen/_15sdp"
+                            android:scaleType="fitXY"
+                            android:id="@+id/favorite_btn"
+                            android:src="@mipmap/heart_full"
+                            android:layout_marginTop="@dimen/_8sdp"
+                            android:background="?attr/selectableItemBackgroundBorderless"
+                            android:layout_below="@+id/imageview"
+                            android:layout_centerHorizontal="true"
+                            android:tint="@{orderresult.is_fav ? @color/theme_color : @color/gray}"
+                            android:onClick="@{(v)-> myclickhandler.onfavourite(v,orderresult)}"
+
+                            />-->
+
+
+
+                    </RelativeLayout>
+
+
+
+
 
 
                 </LinearLayout>
@@ -135,6 +157,7 @@
                         android:id="@+id/ordered_item_name"
                         style="@style/Titlelight_TextViewSmall"
                         android:singleLine="true"
+                        android:onClick="@{(v)-> myclickhandler.showmenu(v,orderresult)}"
                         android:text="@{orderresult.restaurant_name}" />
 
                     <android.support.v7.widget.AppCompatTextView
@@ -157,7 +180,7 @@
                         android:textColor="@color/theme_color"
                         android:visibility="@{util.showOrderstatus(orderresult.payment_status,orderresult.order_status,orderresult.enable_rating).equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}" />
 
-             <!--       <RatingBar
+                    <RatingBar
                         style="?android:attr/ratingBarStyleSmall"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
@@ -168,7 +191,6 @@
                         android:stepSize="0.0"
                         android:visibility="@{(orderresult.enable_rating == false &amp;&amp; orderresult.order_status.toLowerCase().equalsIgnoreCase(`accepted`)) ? View.VISIBLE : View.GONE}" />
 
--->
                 </LinearLayout>
 
                 <LinearLayout

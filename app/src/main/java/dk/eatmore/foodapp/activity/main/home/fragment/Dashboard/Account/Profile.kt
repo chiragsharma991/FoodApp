@@ -261,7 +261,7 @@ class Profile : BaseFragment() {
             return true
         } else {
             if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
-                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0) // if user is login and press only back then move->Home
+                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0,0) // if user is login and press only back then move->Home
                 return true
             } else {
                 return false  // this return would work for logout.
@@ -370,7 +370,7 @@ class Profile : BaseFragment() {
             homefragment.go_onfavorite()
             Handler().postDelayed({
                 profile.showProgressDialog()
-                ((profile.activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0)
+                ((profile.activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0,0)
             }, 2000)
         }
 

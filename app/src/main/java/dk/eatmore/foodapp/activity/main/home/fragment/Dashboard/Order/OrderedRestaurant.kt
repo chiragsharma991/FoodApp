@@ -776,6 +776,35 @@ class OrderedRestaurant : CommanAPI() {
 
         }
 
+        fun showmenu (view: View){
+            val r_key=(orderedRestaurant.arguments!!.getSerializable(Constants.ORDERRESULT) as OrderFragment.Orderresult).r_key
+            val r_token= (orderedRestaurant.arguments!!.getSerializable(Constants.ORDERRESULT) as OrderFragment.Orderresult).r_token
+            PreferenceUtil.putValue(PreferenceUtil.R_KEY,r_key)
+            PreferenceUtil.putValue(PreferenceUtil.R_TOKEN,r_token)
+            PreferenceUtil.save()
+           // orderedRestaurant.showProgressDialog()
+
+            if(orderedRestaurant.parentFragment is HomeFragment){
+                // home
+                ((orderedRestaurant.activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().reorderfuntion()
+
+            }else{
+                // order fragment
+                val fragmentof = (orderedRestaurant.activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
+                (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
+                ((orderedRestaurant.activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0,0) // if user is login and press only back then move->Home
+                Handler().postDelayed({
+                    //orderedRestaurant.showProgressDialog()
+                    HomeFragment.is_from_reorder=true
+                    ((orderedRestaurant.activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().reorderfuntion()
+                }, 800)
+            }
+
+
+
+
+        }
+
     }
 
 }

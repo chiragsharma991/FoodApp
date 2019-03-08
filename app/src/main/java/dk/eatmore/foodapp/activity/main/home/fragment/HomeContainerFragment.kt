@@ -2,6 +2,7 @@ package dk.eatmore.foodapp.fragment
 
 import android.graphics.Color
 import android.os.Bundle
+import android.os.Handler
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentStatePagerAdapter
@@ -96,8 +97,10 @@ class HomeContainerFragment : BaseFragment() {
 
     }
 
-    fun changeHomeview_page(position: Int){
-        view_pager.setCurrentItem(position)
+    fun changeHomeview_page(position: Int , time : Long){
+        Handler().postDelayed({
+            view_pager.setCurrentItem(position)
+        }, time)
     }
 
 
