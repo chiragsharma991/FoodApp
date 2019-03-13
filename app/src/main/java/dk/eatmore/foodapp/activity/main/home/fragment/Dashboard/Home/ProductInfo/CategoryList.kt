@@ -222,17 +222,19 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
                 if (jsonObject.get(Constants.STATUS).asBoolean) {
                     showProgressDialog()
 
-                    if ((jsonObject.has(Constants.IS_RESTAURANT_CLOSED) && jsonObject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean == true) &&
-                            (jsonObject.has(Constants.PRE_ORDER) && jsonObject.get(Constants.PRE_ORDER).asBoolean == false)) {
-                        val msg = if (jsonObject.has(Constants.MSG)) jsonObject.get(Constants.MSG).asString else getString(R.string.sorry_restaurant_has_been_closed)
-                        any_preorder_closedRestaurant(jsonObject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean, jsonObject.get(Constants.PRE_ORDER).asBoolean, msg)
+                    when(getrestaurantstatus(is_restaurant_closed =jsonObject.get(Constants.IS_RESTAURANT_CLOSED)?.asBoolean, pre_order =jsonObject.get(Constants.PRE_ORDER)?.asBoolean )){
 
-                    } else {
-                        val intent = Intent(Constants.CARTCOUNT_BROADCAST)
-                        intent.putExtra(Constants.CARTCNT, if (jsonObject.get(Constants.CARTCNT).isJsonNull || jsonObject.get(Constants.CARTCNT).asString == "0") 0 else (jsonObject.get(Constants.CARTCNT).asString).toInt())
-                        intent.putExtra(Constants.CARTAMT, if (jsonObject.get(Constants.CARTAMT).isJsonNull || jsonObject.get(Constants.CARTAMT).asString == "0") "00.00" else jsonObject.get(Constants.CARTAMT).asString)
-                        LocalBroadcastManager.getInstance(context!!).sendBroadcast(intent)
-                        Toast.makeText(context, getString(R.string.item_has_been), Toast.LENGTH_SHORT).show()
+                        RestaurantState.CLOSED ->{
+                            val msg = if (jsonObject.has(Constants.MSG)) jsonObject.get(Constants.MSG).asString else getString(R.string.sorry_restaurant_has_been_closed)
+                            any_preorder_closedRestaurant(is_restaurant_closed = true ,pre_order = false,msg =msg ) // set hard code to close restaurant.
+                        }
+                        else ->{
+                            val intent = Intent(Constants.CARTCOUNT_BROADCAST)
+                            intent.putExtra(Constants.CARTCNT, if (jsonObject.get(Constants.CARTCNT).isJsonNull || jsonObject.get(Constants.CARTCNT).asString == "0") 0 else (jsonObject.get(Constants.CARTCNT).asString).toInt())
+                            intent.putExtra(Constants.CARTAMT, if (jsonObject.get(Constants.CARTAMT).isJsonNull || jsonObject.get(Constants.CARTAMT).asString == "0") "00.00" else jsonObject.get(Constants.CARTAMT).asString)
+                            LocalBroadcastManager.getInstance(context!!).sendBroadcast(intent)
+                            Toast.makeText(context, getString(R.string.item_has_been), Toast.LENGTH_SHORT).show()
+                        }
                     }
 
                 } else {

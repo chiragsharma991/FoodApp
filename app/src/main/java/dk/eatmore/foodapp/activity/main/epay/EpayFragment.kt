@@ -41,7 +41,8 @@ import kotlinx.android.synthetic.main.fragment_home_container.*
 import retrofit2.Call
 
 
-class EpayFragment : BaseFragment() {
+class EpayFragment : CommanAPI() {
+
 
     var transition : Transition?=null
     private lateinit var addcart_fragment: AddCart
@@ -49,6 +50,8 @@ class EpayFragment : BaseFragment() {
     private lateinit var restaurant : Restaurant
     private var call_viewcartlist  : Call<ViewcardModel>? =null
     private var call_deleteitem  : Call<JsonObject>? =null
+    private var tablistner: TabLayout.OnTabSelectedListener? =null
+
 
 
 
@@ -100,25 +103,85 @@ class EpayFragment : BaseFragment() {
 
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
-        amIFinish=true
-        accessOnetime=true
-        restaurant=arguments!!.getSerializable(Constants.RESTAURANT) as Restaurant
+
+        if(savedInstanceState == null){
+            amIFinish=true
+            accessOnetime=true
+            restaurant=arguments!!.getSerializable(Constants.RESTAURANT) as Restaurant
+            setToolbarforThis()
+            epay_continue_btn.text=if(PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS,false)) getString(R.string.continue_) else getString(R.string.login_to_continue)
+            epay_continue_btn.setOnClickListener{
+                continuefromviewcart()
+            }
+            ui_model = createViewModel()
+            reloadScreen()
+        }
+    }
+
+    fun reloadScreen(){
         progress_bar.visibility=View.VISIBLE
         empty_view.visibility= View.GONE
         view_container.visibility= View.GONE
-        tabfunction()
-        setToolbarforThis()
-        epay_continue_btn.text=if(PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS,false)) getString(R.string.continue_) else getString(R.string.login_to_continue)
-        epay_continue_btn.setOnClickListener{
-            continuefromviewcart()
-        }
-        ui_model = createViewModel()
-        if (ui_model!!.viewcard_list.value == null) {
-            fetch_viewCardList()
-        } else {
+        checkinfo_restaurant_closed()
+    }
+
+    override fun comman_apisuccess(jsonObject: JsonObject, api_tag: String) {
+
+        when(api_tag ){
+
+            Constants.COM_INFO_RESTAURANT_CLOSED->{
+
+                val msg= if(jsonObject.has(Constants.MSG)) jsonObject.get(Constants.MSG).asString else ""
+                if(jsonObject.has(Constants.IS_DELIVERY_PRESENT) && jsonObject.has(Constants.IS_PICKUP_PRESENT)){
+                    DetailsFragment.delivery_present=jsonObject.get(Constants.IS_DELIVERY_PRESENT).asBoolean
+                    DetailsFragment.pickup_present=jsonObject.get(Constants.IS_PICKUP_PRESENT).asBoolean
+                }
+                when(getrestaurantstatus(is_restaurant_closed =jsonObject.get(Constants.IS_RESTAURANT_CLOSED)?.asBoolean, pre_order =jsonObject.get(Constants.PRE_ORDER)?.asBoolean )){
+
+                    RestaurantState.CLOSED ->{
+                        any_preorder_closedRestaurant(is_restaurant_closed = true ,pre_order = false,msg =msg ) // set hard code to close restaurant.
+                    }
+
+                    else ->{
+                        // if both tab is not present then:
+                        val message=getdeliverymsg_error(jsonObject)
+                        if(!DetailsFragment.delivery_present && !DetailsFragment.pickup_present){
+                            DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!, R.color.black),msg = message,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                                override fun onPositiveButtonClick(position: Int) {
+                                    (activity as HomeActivity).onBackPressed()
+                                }
+                                override fun onNegativeButtonClick() {
+                                }
+                            })
+
+                        }else{
+                            // normal flow
+                            tabfunction()
+                            fetch_viewCardList()
+                        }
+
+                    }
+                }
+
+            }
 
         }
     }
+
+    override fun comman_apifailed(error: String, api_tag: String) {
+        when(api_tag ){
+            Constants.COM_INFO_RESTAURANT_CLOSED->{
+                if(error == getString(R.string.error_404)){
+                    showSnackBarIndefinite(epay_container, getString(R.string.error_404))
+                }else if(error == getString(R.string.internet_not_available)){
+                    showSnackBarIndefinite(epay_container, getString(R.string.internet_not_available))
+                }
+            }
+        }
+
+    }
+
+
 
     fun setToolbarforThis(){
         img_toolbar_back.setImageResource(R.drawable.close)
@@ -174,22 +237,19 @@ class EpayFragment : BaseFragment() {
                 val viewcardmodel = body as ViewcardModel
                 if (viewcardmodel.status) {
 
-                    if(!any_preorder_closedRestaurant(viewcardmodel.is_restaurant_closed,viewcardmodel.pre_order,viewcardmodel.msg)){
-                        // restaurant is not closed then:
-                        ui_model!!.viewcard_list.value=viewcardmodel
-                        view_container.visibility= View.VISIBLE
-                    }
+                    ui_model!!.viewcard_list.value=viewcardmodel
+                    view_container.visibility= View.VISIBLE
+
                     progress_bar.visibility=View.GONE
 
 
                 } else {
 
-                    if(!any_preorder_closedRestaurant(viewcardmodel.is_restaurant_closed,viewcardmodel.pre_order,viewcardmodel.msg)){
-                        // restaurant is not closed then:
-                        ui_model!!.viewcard_list.value=null
-                        empty_view.visibility= View.VISIBLE
-                        view_container.visibility= View.GONE
-                    }
+                    // restaurant is not closed then:
+                    ui_model!!.viewcard_list.value=null
+                    empty_view.visibility= View.VISIBLE
+                    view_container.visibility= View.GONE
+
                     progress_bar.visibility=View.GONE
 
                 }
@@ -475,7 +535,12 @@ class EpayFragment : BaseFragment() {
 */
 
 
+
     fun tabfunction() {
+
+        menu_tabs.removeAllTabs()
+        info_outline_img.setOnClickListener(null)
+        tablistner?.let { menu_tabs.removeOnTabSelectedListener(it)  }
 
 
         if(!DetailsFragment.delivery_present && DetailsFragment.pickup_present){
@@ -501,9 +566,7 @@ class EpayFragment : BaseFragment() {
         info_outline_img.setOnClickListener{ CartListFunction.showDialog(restaurant = restaurant,context = context!!)}
 
         binding.executePendingBindings()
-
-
-        menu_tabs.addOnTabSelectedListener(object : TabLayout.OnTabSelectedListener{
+        tablistner = object : TabLayout.OnTabSelectedListener{
             override fun onTabReselected(tab: TabLayout.Tab?) {
             }
             override fun onTabUnselected(tab: TabLayout.Tab?) {
@@ -530,7 +593,9 @@ class EpayFragment : BaseFragment() {
                 }
 
             }
-        })
+        }
+
+        menu_tabs.addOnTabSelectedListener(tablistner!!)
     }
 
 

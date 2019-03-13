@@ -13,9 +13,9 @@
     <application
         android:name=".utils.EatMoreApplication"
         android:allowBackup="false"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/eatmore_rect_icon"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/eatmore_round_icon"
         android:supportsRtl="true"
         tools:replace="android:allowBackup"
         android:theme="@style/AppTheme"

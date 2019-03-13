@@ -30,6 +30,7 @@ import android.view.inputmethod.InputMethodManager.SHOW_IMPLICIT
 import android.widget.EditText
 import com.google.android.gms.common.util.InputMethodUtils.showSoftInput
 import android.content.Context.INPUT_METHOD_SERVICE
+import android.support.v4.content.ContextCompat
 import android.text.Editable
 import android.text.TextWatcher
 import android.view.MotionEvent
@@ -38,9 +39,13 @@ import java.util.regex.Pattern
 import dk.eatmore.foodapp.R.id.group
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.KundleSupport
 import dk.eatmore.foodapp.fragment.Dashboard.Home.Address
+import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
+import dk.eatmore.foodapp.utils.CommanAPI
+import dk.eatmore.foodapp.utils.DialogUtils
 
 
-class DeliveryTimeslot : BaseFragment(), TextWatcher {
+class DeliveryTimeslot : CommanAPI(), TextWatcher {
+
 
     var transition: Transition? = null
     private val userList = ArrayList<User>()
@@ -74,27 +79,13 @@ class DeliveryTimeslot : BaseFragment(), TextWatcher {
         return binding.root
 
     }
-
-
-
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
+            binding.isLoading=true
             time_list= arguments?.getSerializable(Constants.TIME_LIST) as? LinkedHashMap<String, String>
             setToolbarforThis()
             comment_edt.addTextChangedListener(this)
-            if(time_list !=null){
-                binding.isLoading=false
-                for (entries in time_list!!.entries ){
-                    // loop for one time to get first index name:
-                    delivery_time_slot.text= time_list!![entries.key].toString()
-                    break
-                }
-            }
-            else{
-                fetch_PickupTime()
-                binding.isLoading=true
-            }
             delivery_time_slot.setOnClickListener {
                 if( time_list?.size ?: 0 > 0 ){
 
@@ -129,7 +120,6 @@ class DeliveryTimeslot : BaseFragment(), TextWatcher {
                     seterror(address_container)
                 }
             }
-
             comment_edt.setOnTouchListener(View.OnTouchListener { view, motionEvent ->
                 view.parent.requestDisallowInterceptTouchEvent(true)
                 when (motionEvent.action and MotionEvent.ACTION_MASK) {
@@ -144,11 +134,74 @@ class DeliveryTimeslot : BaseFragment(), TextWatcher {
                 }
                 false
             })
-
+            checkinfo_restaurant_closed()
         }else{
             //  (parentFragment as EpayFragment).popWithTag(DeliveryTimeslot.TAG)
         }
     }
+
+
+    override fun comman_apisuccess(jsonObject: JsonObject, api_tag: String) {
+        when(api_tag ){
+            Constants.COM_INFO_RESTAURANT_CLOSED->{
+                // add tab var
+                val msg= if(jsonObject.has(Constants.MSG)) jsonObject.get(Constants.MSG).asString else ""
+                if(jsonObject.has(Constants.IS_DELIVERY_PRESENT) && jsonObject.has(Constants.IS_PICKUP_PRESENT)){
+                    DetailsFragment.delivery_present=jsonObject.get(Constants.IS_DELIVERY_PRESENT).asBoolean
+                    DetailsFragment.pickup_present=jsonObject.get(Constants.IS_PICKUP_PRESENT).asBoolean
+                }
+                when(getrestaurantstatus(is_restaurant_closed =jsonObject.get(Constants.IS_RESTAURANT_CLOSED)?.asBoolean, pre_order =jsonObject.get(Constants.PRE_ORDER)?.asBoolean )){
+
+                    RestaurantState.CLOSED ->{
+                        any_preorder_closedRestaurant(is_restaurant_closed = true ,pre_order = false,msg =msg ) // set hard code to close restaurant.
+                    }
+                    else ->{
+                        val message=getdeliverymsg_error(jsonObject)
+                        if((EpayFragment.isPickup && !DetailsFragment.pickup_present) || (!EpayFragment.isPickup && !DetailsFragment.delivery_present)){
+                            // [pickup(true) && pickuppresent(false) || delivery(true) && deliverypresent (false)]
+                            DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!, R.color.black),msg = message,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                                override fun onPositiveButtonClick(position: Int) {
+                                    (parentFragment as EpayFragment).popAllFragment()
+                                    (parentFragment as EpayFragment).reloadScreen()
+                                }
+                                override fun onNegativeButtonClick() {
+                                }
+                            })
+                        }else{
+                            //normal flow.
+                            if(time_list !=null){
+                                binding.isLoading=false
+                                for (entries in time_list!!.entries ){
+                                    // loop for one time to get first index name:
+                                    delivery_time_slot.text= time_list!![entries.key].toString()
+                                    break
+                                }
+                            }
+                            else{
+                                fetch_PickupTime()
+                                binding.isLoading=true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    override fun comman_apifailed(error: String, api_tag: String) {
+
+        when(api_tag ){
+            Constants.COM_INFO_RESTAURANT_CLOSED->{
+                if(error == getString(R.string.error_404)){
+                    showSnackBarIndefinite(address_container, getString(R.string.error_404))
+                }else if(error == getString(R.string.internet_not_available)){
+                    showSnackBarIndefinite(address_container, getString(R.string.internet_not_available))
+                }
+            }
+        }
+
+    }
+
 
 
     override fun afterTextChanged(s: Editable?) {

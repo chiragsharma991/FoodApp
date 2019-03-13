@@ -590,7 +590,7 @@ class TransactionStatus : CommanAPI() {
             val view = inflater.inflate(R.layout.dynamic_raw_item, null)
             view.remove_item.tag = i
             view.remove_item.visibility = View.GONE
-            view.item_name.text = EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].product_name
+            view.item_name.text = String.format(getString(R.string.qty_n_price),EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].quantity,EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].product_name)
             view.item_price.text = if (EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].p_price != null) BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.ui_model!!.viewcard_list.value!!.result!![i].p_price!!) else "null"
             view.add_subitem_view.removeAllViewsInLayout()
 

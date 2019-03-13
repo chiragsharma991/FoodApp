@@ -257,8 +257,11 @@ class DetailsFragment : CommanAPI() {
         adapter = ViewPagerAdapter(childFragmentManager)
 
 
-        if ((ui_model!!.category_menulist.value!!.is_restaurant_closed != null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) &&
-                (ui_model!!.category_menulist.value!!.pre_order != null && ui_model!!.category_menulist.value!!.pre_order == false)) {
+        if (((ui_model!!.category_menulist.value!!.is_restaurant_closed != null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) &&
+                (ui_model!!.category_menulist.value!!.pre_order != null && ui_model!!.category_menulist.value!!.pre_order == false))
+                                                                           ||
+                (ui_model!!.category_menulist.value!!.is_restaurant_closed != null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) && ui_model!!.category_menulist.value!!.pre_order == null
+        ) {
             // closed restaurant---
             is_restaurant_closed=true
             adapter!!.addFragment(Menu.newInstance(ui_model!!.category_menulist.value!!.menu!!, restaurant_info), getString(R.string.menu))

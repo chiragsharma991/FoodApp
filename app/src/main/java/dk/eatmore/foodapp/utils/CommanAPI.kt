@@ -44,36 +44,38 @@ abstract class CommanAPI : BaseFragment() {
                 val jsonObject = body as JsonObject
                 if (jsonObject.get(Constants.STATUS).asBoolean) {
                     // if restaurant is closed then block all next process.
-                    if ((jsonObject.has(Constants.IS_RESTAURANT_CLOSED) && jsonObject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean == true) &&
-                            (jsonObject.has(Constants.PRE_ORDER) && jsonObject.get(Constants.PRE_ORDER).asBoolean == false)) {
-                        val msg = if (jsonObject.has(Constants.MSG)) jsonObject.get(Constants.MSG).asString else getString(R.string.sorry_restaurant_has_been_closed)
-                        any_preorder_closedRestaurant(jsonObject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean, jsonObject.get(Constants.PRE_ORDER).asBoolean, msg)
-                    } else {
-                        // if restaurant wants to show some info only about then.
-                        if (jsonObject.get(Constants.SHOW_MSG).asBoolean) {
+
+                    when(getrestaurantstatus(is_restaurant_closed =jsonObject.get(Constants.IS_RESTAURANT_CLOSED)?.asBoolean, pre_order =jsonObject.get(Constants.PRE_ORDER)?.asBoolean )){
+
+                        RestaurantState.CLOSED ->{
                             val msg = if (jsonObject.has(Constants.MSG)) jsonObject.get(Constants.MSG).asString else getString(R.string.sorry_restaurant_has_been_closed)
-                            DialogUtils.openDialogDefault(context = context!!, btnNegative = "", btnPositive = getString(R.string.ok), color = ContextCompat.getColor(context!!, R.color.black), msg = msg, title = "", onDialogClickListener = object : DialogUtils.OnDialogClickListener {
-                                override fun onPositiveButtonClick(position: Int) {
-                                    //  OrderFragment.ui_model!!.restaurant_info.value = myorder_Model // move this response to another list to reorder perpose.
-                                    PreferenceUtil.putValue(PreferenceUtil.R_KEY, model.r_key)
-                                    PreferenceUtil.putValue(PreferenceUtil.R_TOKEN, model.r_token)
-                                    PreferenceUtil.save()
-                                    comman_apisuccess(jsonObject, "")
-                                }
-
-                                override fun onNegativeButtonClick() {}
-                            })
-                        } else {
-                            PreferenceUtil.putValue(PreferenceUtil.R_KEY, model.r_key)
-                            PreferenceUtil.putValue(PreferenceUtil.R_TOKEN, model.r_token)
-                            PreferenceUtil.save()
-                            comman_apisuccess(jsonObject, "")
-
-                            //   OrderFragment.ui_model!!.restaurant_info.value = myorder_Model // move this response to another list to reorder perpose.
+                            any_preorder_closedRestaurant(is_restaurant_closed = true ,pre_order = false,msg =msg ) // set hard code to close restaurant.
                         }
+                        else ->{
+                            // if restaurant wants to show some info only about then.
+                            if (jsonObject.get(Constants.SHOW_MSG).asBoolean) {
+                                val msg = if (jsonObject.has(Constants.MSG)) jsonObject.get(Constants.MSG).asString else getString(R.string.sorry_restaurant_has_been_closed)
+                                DialogUtils.openDialogDefault(context = context!!, btnNegative = "", btnPositive = getString(R.string.ok), color = ContextCompat.getColor(context!!, R.color.black), msg = msg, title = "", onDialogClickListener = object : DialogUtils.OnDialogClickListener {
+                                    override fun onPositiveButtonClick(position: Int) {
+                                        //  OrderFragment.ui_model!!.restaurant_info.value = myorder_Model // move this response to another list to reorder perpose.
+                                        PreferenceUtil.putValue(PreferenceUtil.R_KEY, model.r_key)
+                                        PreferenceUtil.putValue(PreferenceUtil.R_TOKEN, model.r_token)
+                                        PreferenceUtil.save()
+                                        comman_apisuccess(jsonObject, "")
+                                    }
 
+                                    override fun onNegativeButtonClick() {}
+                                })
+                            } else {
+                                PreferenceUtil.putValue(PreferenceUtil.R_KEY, model.r_key)
+                                PreferenceUtil.putValue(PreferenceUtil.R_TOKEN, model.r_token)
+                                PreferenceUtil.save()
+                                comman_apisuccess(jsonObject, "")
+
+                                //   OrderFragment.ui_model!!.restaurant_info.value = myorder_Model // move this response to another list to reorder perpose.
+                            }
+                        }
                     }
-
                     /*     fetchRestaurant_info(
                                  model=model,
                                  msg = jsonObject.get(Constants.MSG).asString,
@@ -224,6 +226,38 @@ abstract class CommanAPI : BaseFragment() {
                         // showSnackBar(containerview, getString(R.string.internet_not_available))
                         loge(TAG, getString(R.string.internet_not_available))
                         comman_apifailed(getString(R.string.internet_not_available), Constants.COM_ADD_FAVORITE_RESTAURANT)
+
+                    }
+                }
+            }
+        })
+
+    }
+    protected fun  checkinfo_restaurant_closed() {
+
+        val postParam = JsonObject()
+        postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
+        postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
+        postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
+        postParam.addProperty(Constants.LANGUAGE, Constants.DA)
+
+        callAPI(ApiCall.restaurant_closed(jsonObject = postParam), object : BaseFragment.OnApiCallInteraction {
+
+            override fun <T> onSuccess(body: T?) {
+                val jsonObject = body as JsonObject
+                    comman_apisuccess(jsonObject, Constants.COM_INFO_RESTAURANT_CLOSED)
+            }
+
+            override fun onFail(error: Int) {
+
+                when (error) {
+                    404 -> {
+                        comman_apifailed(getString(R.string.error_404), Constants.COM_INFO_RESTAURANT_CLOSED)
+
+
+                    }
+                    100 -> {
+                        comman_apifailed(getString(R.string.internet_not_available), Constants.COM_INFO_RESTAURANT_CLOSED)
 
                     }
                 }

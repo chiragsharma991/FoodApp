@@ -27,6 +27,7 @@ import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.Constants
 import dk.eatmore.foodapp.utils.DialogUtils
+import dk.eatmore.foodapp.utils.GlobalBus
 import kotlinx.android.synthetic.main.fragment_profile_edit.*
 import kotlinx.android.synthetic.main.fragment_signup.*
 import kotlinx.android.synthetic.main.toolbar.*
@@ -135,8 +136,6 @@ class ProfileEdit : BaseFragment(), TextWatcher {
                 inputValidStates[telephone_edt] = false
 
         }
-
-
     }
 
     override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
@@ -200,6 +199,7 @@ class ProfileEdit : BaseFragment(), TextWatcher {
                     PreferenceUtil.putValue(PreferenceUtil.TELEPHONE_NO, telephone_edt.text.trim().toString())
                     PreferenceUtil.putValue(PreferenceUtil.SUBSCRIBE, if (checkbox_subscribe.isChecked) true else false)
                     PreferenceUtil.save()
+                    (parentFragment as Profile).ui_model.init()
                     (activity as HomeActivity).onBackPressed()
                 } else {
                     showSnackBar(userprofile_container, jsonObject.get(Constants.MSG).asString)
@@ -270,6 +270,8 @@ class ProfileEdit : BaseFragment(), TextWatcher {
         logd(TAG, "on pause...")
 
     }
+
+
 
 
 }

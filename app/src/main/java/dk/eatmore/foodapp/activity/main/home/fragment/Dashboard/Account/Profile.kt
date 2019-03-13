@@ -52,7 +52,9 @@ class Profile : BaseFragment() {
     private var kundlesupport: KundleSupport? = null
     private var kundlechatsupport: KundleChatSupport? = null
     private var coupan_fragment: Coupan? = null
-    private lateinit var ui_model: UIModel
+    lateinit var ui_model: UIModel
+    private val myclickhandler = MyClickHandler(this)
+
 
 
     companion object {
@@ -84,6 +86,7 @@ class Profile : BaseFragment() {
             setCurrentVersion()
             ui_model = createViewModel()
             ui_model.init()
+
 
 /*
             health_report.setOnClickListener {
@@ -124,13 +127,14 @@ class Profile : BaseFragment() {
         ui_model!!.init()*/
     fun createViewModel(): UIModel =
             ViewModelProviders.of(this).get(UIModel::class.java).apply {
+                getUIModel().removeObservers(this@Profile)
                 getUIModel().observe(this@Profile, Observer<UI_Profile> {
                     refreshUI()
                 })
             }
 
     private fun refreshUI() {
-        val myclickhandler = MyClickHandler(this)
+        loge(TAG,"refresh----")
         val xml_profile = ui_model.getUIModel().value
         binding.xmlProfile = xml_profile
         binding.handlers = myclickhandler
@@ -285,6 +289,14 @@ class Profile : BaseFragment() {
     override fun onDestroy() {
         super.onDestroy()
         logd(TAG, "on destroy...")
+    }
+
+    override fun onDestroyView() {
+        logd(TAG, "onDestroyView...")
+        super.onDestroyView()
+        if (::ui_model.isInitialized) {
+            ViewModelProviders.of(this).get(UIModel::class.java).getUIModel().removeObservers(this@Profile)
+        }
     }
 
     override fun onDetach() {

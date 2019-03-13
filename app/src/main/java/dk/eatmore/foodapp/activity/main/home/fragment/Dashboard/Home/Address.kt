@@ -32,6 +32,7 @@ import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.RestaurantL
 import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.FragmentAddressBinding
 import dk.eatmore.foodapp.databinding.RowAddressBinding
+import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.rest.ApiCall
@@ -43,7 +44,7 @@ import kotlinx.android.synthetic.main.toolbar.*
 import retrofit2.Call
 
 
-class Address : BaseFragment(), TextWatcher {
+class Address : CommanAPI(), TextWatcher {
 
     private lateinit var binding: FragmentAddressBinding
     private var mAdapter: UniversalAdapter<User, RowAddressBinding>? = null
@@ -84,7 +85,7 @@ class Address : BaseFragment(), TextWatcher {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
-            progress_bar.visibility = View.GONE
+            progress_bar.visibility = View.VISIBLE
             restaurant = arguments!!.getSerializable(Constants.RESTAURANT) as Restaurant
             binding.isPickup = EpayFragment.isPickup
             binding.executePendingBindings()
@@ -138,17 +139,64 @@ class Address : BaseFragment(), TextWatcher {
                 }
             }
             ui_model = createViewModel()
-            if (ui_model!!.user_infoList.value == null) {
-                fetchuserInfo()
-            } else {
-                refreshview()
-            }
+            checkinfo_restaurant_closed()
 
         } else {
             logd(TAG, "saveInstance NOT NULL")
         }
 
     }
+
+    override fun comman_apisuccess(jsonObject: JsonObject, api_tag: String) {
+        when(api_tag ){
+            Constants.COM_INFO_RESTAURANT_CLOSED->{
+
+                val msg= if(jsonObject.has(Constants.MSG)) jsonObject.get(Constants.MSG).asString else ""
+                if(jsonObject.has(Constants.IS_DELIVERY_PRESENT) && jsonObject.has(Constants.IS_PICKUP_PRESENT)){
+                    DetailsFragment.delivery_present=jsonObject.get(Constants.IS_DELIVERY_PRESENT).asBoolean
+                    DetailsFragment.pickup_present=jsonObject.get(Constants.IS_PICKUP_PRESENT).asBoolean
+                }
+
+                when(getrestaurantstatus(is_restaurant_closed =jsonObject.get(Constants.IS_RESTAURANT_CLOSED)?.asBoolean, pre_order =jsonObject.get(Constants.PRE_ORDER)?.asBoolean )){
+
+                    RestaurantState.CLOSED ->{
+                        any_preorder_closedRestaurant(is_restaurant_closed = true ,pre_order = false,msg =msg ) // set hard code to close restaurant.
+                    }
+                    else ->{
+
+                        if((EpayFragment.isPickup && !DetailsFragment.pickup_present) || (!EpayFragment.isPickup && !DetailsFragment.delivery_present)){
+                            // [pickup(true) && pickuppresent(false) || delivery(true) && deliverypresent (false)]
+                            val message=getdeliverymsg_error(jsonObject)
+                            DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!, R.color.black),msg = message ,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                                override fun onPositiveButtonClick(position: Int) {
+                                    (parentFragment as EpayFragment).popAllFragment()
+                                    (parentFragment as EpayFragment).reloadScreen()
+                                }
+                                override fun onNegativeButtonClick() {
+                                }
+                            })
+                        }else{
+                            // normal flow.
+                            fetchuserInfo()
+                        }
+                    }
+                }
+               }
+            }
+        }
+
+    override fun comman_apifailed(error: String, api_tag: String) {
+        when(api_tag ){
+            Constants.COM_INFO_RESTAURANT_CLOSED->{
+                if(error == getString(R.string.error_404)){
+                    showSnackBarIndefinite(address_container, getString(R.string.error_404))
+                }else if(error == getString(R.string.internet_not_available)){
+                    showSnackBarIndefinite(address_container, getString(R.string.internet_not_available))
+                }
+            }
+        }
+    }
+
 
     fun moveon_next() {
 
@@ -332,7 +380,7 @@ class Address : BaseFragment(), TextWatcher {
 
     private fun fetchuserInfo() {
         // progresswheel(progresswheel,true)
-        progress_bar.visibility = View.VISIBLE
+     //   progress_bar.visibility = View.VISIBLE
         val postParam = JsonObject()
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
