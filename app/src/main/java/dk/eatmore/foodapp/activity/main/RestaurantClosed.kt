@@ -4,7 +4,6 @@ import android.databinding.DataBindingUtil
 import android.os.Bundle
 import android.view.View
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.epay.EpayActivity
 import dk.eatmore.foodapp.databinding.ActivityEpayBinding
 import dk.eatmore.foodapp.databinding.RestaurantclosedBinding
 import dk.eatmore.foodapp.utils.BaseActivity

@@ -244,6 +244,7 @@ class SearchMenu : BaseFragment() {
                     if (data.is_attributes == "0" && data.extra_topping_group == null) {
                         addToCard(data)
                     } else {
+                        hideKeyboard()
                         val intent = Intent(activity, CartActivity::class.java)
                         intent.putExtra("TITLE", data.p_name)
                         intent.putExtra("PID", data.p_id)

@@ -20,7 +20,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
-        android:id="@+id/address_container"
+        android:id="@+id/timeslot_container"
         android:clickable="true"
         android:focusable="true"
         android:background="@color/white"

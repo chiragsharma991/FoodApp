@@ -9,11 +9,12 @@ import android.graphics.Rect
 import android.opengl.ETC1.getWidth
 import android.support.constraint.solver.widgets.WidgetContainer.getBounds
 import android.graphics.drawable.Drawable
+import android.support.v7.widget.AppCompatEditText
 import android.util.AttributeSet
 import android.widget.EditText
 
 
-class CustomEditText : EditText {
+class CustomEditText : AppCompatEditText {
 
     private var drawableRight: Drawable? = null
     private var drawableLeft: Drawable? = null

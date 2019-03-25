@@ -22,7 +22,6 @@ import com.bumptech.glide.util.Util
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
-import dk.eatmore.foodapp.activity.main.epay.EpayActivity
 import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.epay.fragment.TransactionStatus
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
@@ -143,12 +142,12 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
     fun updatebatchcount(count: Int) {
 
         try {
-            badge_notification_txt.visibility = View.GONE
+           // badge_notification_txt.visibility = View.GONE
 
             if(DetailsFragment.is_restaurant_closed){
-                toolbar_badge_view.visibility = View.GONE
+                viewcart.visibility = View.GONE
             }else{
-                toolbar_badge_view.visibility = if (DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
+                viewcart.visibility = if (DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
             }
             //viewcart.alpha= if(DetailsFragment.total_cartcnt == 0) 0.3f else 0.9f
             //badge_notification_txt.text = DetailsFragment.total_cartcnt.toString()

@@ -44,7 +44,6 @@ import com.google.gson.JsonParser
 import dk.eatmore.foodapp.BuildConfig
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.RestaurantClosed
-import dk.eatmore.foodapp.activity.main.epay.EpayActivity
 import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.AccountFragment
@@ -152,8 +151,12 @@ abstract class BaseFragment : Fragment() {
 
     fun getpostalfrom_latlang(latitude: Double, longitude: Double): String {
 
+        /**
+         * TODO :  IOException: grpc failed
+         * */
+
         val gcd = Geocoder(context!!)
-        val addresses: List<Address> = gcd.getFromLocation(latitude, longitude, 1)
+        val addresses: List<Address> = gcd.getFromLocation(latitude, longitude, 1) // error
         for (address: Address in addresses) {
             if (address.getLocality() != null && address.getPostalCode() != null) {
                 // Log.e("",address.getLocality())
@@ -331,7 +334,7 @@ abstract class BaseFragment : Fragment() {
             DialogUtils.openDialogDefault(context = context!!, btnNegative = "", btnPositive = getString(R.string.ok), color = ContextCompat.getColor(context!!, R.color.black), msg = status, title = "", onDialogClickListener = object : DialogUtils.OnDialogClickListener {
                 override fun onPositiveButtonClick(position: Int) {
 
-                    /*TODO: this condition is happen when you are comming from reorder/Home before epayfragment*/
+                    // this condition is happen when you are comming from reorder/Home before epayfragment
                     if (parentFragment is HomeFragment) {
                         DetailsFragment.canIrefreshpre_Function = true
                         val homeFragment = (parentFragment as HomeFragment)
@@ -346,7 +349,7 @@ abstract class BaseFragment : Fragment() {
                         orderFragment.popAllFragment()
                     }
 
-                    /*TODO: this condition is happen when you are comming from reorder 2 tab after epayfragment*/
+                    // this condition is happen when you are comming from reorder 2 tab after epayfragment
                     else if (parentFragment is EpayFragment) {
                         DetailsFragment.canIrefreshpre_Function = true
                         val epayFragment = parentFragment as EpayFragment
@@ -481,13 +484,13 @@ abstract class BaseFragment : Fragment() {
         //                    val message=jsonObject.get(Constants.MSG_DELIVERY)?.asString?:jsonObject.get(Constants.MSG_PICKUP)?.asString?:getString(R.string.sorry_delivery_is_not_available)
         if (jsonObject.has(Constants.MSG_DELIVERY) && jsonObject.has(Constants.MSG_PICKUP)) {
             if (!jsonObject.get(Constants.MSG_DELIVERY).isJsonNull) {
-              return jsonObject.get(Constants.MSG_DELIVERY).asString
+                return jsonObject.get(Constants.MSG_DELIVERY).asString
             } else if (!jsonObject.get(Constants.MSG_PICKUP).isJsonNull) {
-              return jsonObject.get(Constants.MSG_PICKUP).asString
+                return jsonObject.get(Constants.MSG_PICKUP).asString
             } else {
-              return getString(R.string.sorry_delivery_is_not_available)
+                return getString(R.string.sorry_delivery_is_not_available)
             }
-        }else{
+        } else {
             return getString(R.string.sorry_delivery_is_not_available)
         }
     }
@@ -522,12 +525,12 @@ abstract class BaseFragment : Fragment() {
                 override fun onResponse(call: Call<T>, response: Response<T>) {
                     try {
                         if (response.isSuccessful) {
-                            loge("response.body----", response.body().toString())
+                            loge("response.body----", response.body().toString())  // all response into string
                             val gson = Gson()
-                            val json = gson.toJson(response.body()) // convert body to normal json
+                            val json = gson.toJson(response.body()) // convert body from your model class (body parms depend on your model class)
                             var convertedObject = gson.fromJson(json, JsonObject::class.java) // convert into Jsonobject
                             loge("response.convertedObject----", convertedObject.toString())
-
+                            // if convert object is not converting means your model class is not extend with ModelUtility()
                             if (convertedObject.has(Constants.WHOLE_SYSTEM)) {
                                 if (convertedObject.get(Constants.WHOLE_SYSTEM).isJsonNull) {
                                     onAliCallInteraction.onSuccess(response.body())

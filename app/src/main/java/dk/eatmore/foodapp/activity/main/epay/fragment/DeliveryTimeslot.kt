@@ -36,7 +36,6 @@ import android.text.TextWatcher
 import android.view.MotionEvent
 import android.view.inputmethod.InputMethodManager
 import java.util.regex.Pattern
-import dk.eatmore.foodapp.R.id.group
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.KundleSupport
 import dk.eatmore.foodapp.fragment.Dashboard.Home.Address
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
@@ -96,7 +95,7 @@ class DeliveryTimeslot : CommanAPI(), TextWatcher {
                     selectdeliverytime(list)
                 }
                 else {
-                    seterror(address_container)
+                    seterror(timeslot_container)
                 }
             }
             secure_payment_btn.setOnClickListener{
@@ -117,7 +116,7 @@ class DeliveryTimeslot : CommanAPI(), TextWatcher {
                     (parentFragment as EpayFragment).addFragment(R.id.epay_container,Paymentmethod.newInstance(),Paymentmethod.TAG,true)
                 }
                 else {
-                    seterror(address_container)
+                    seterror(timeslot_container)
                 }
             }
             comment_edt.setOnTouchListener(View.OnTouchListener { view, motionEvent ->
@@ -193,9 +192,9 @@ class DeliveryTimeslot : CommanAPI(), TextWatcher {
         when(api_tag ){
             Constants.COM_INFO_RESTAURANT_CLOSED->{
                 if(error == getString(R.string.error_404)){
-                    showSnackBarIndefinite(address_container, getString(R.string.error_404))
+                    showSnackBarIndefinite(timeslot_container, getString(R.string.error_404))
                 }else if(error == getString(R.string.internet_not_available)){
-                    showSnackBarIndefinite(address_container, getString(R.string.internet_not_available))
+                    showSnackBarIndefinite(timeslot_container, getString(R.string.internet_not_available))
                 }
             }
         }
@@ -249,7 +248,7 @@ class DeliveryTimeslot : CommanAPI(), TextWatcher {
                     binding.isLoading=false
 
                 }else{
-                    showSnackBar(address_container, getString(R.string.error_404))
+                    showSnackBar(timeslot_container, getString(R.string.error_404))
                     binding.isLoading=false
 
                 }
@@ -263,10 +262,10 @@ class DeliveryTimeslot : CommanAPI(), TextWatcher {
                 }
                 when (error) {
                     404 -> {
-                        showSnackBar(address_container, getString(R.string.error_404))
+                        showSnackBar(timeslot_container, getString(R.string.error_404))
                     }
                     100 -> {
-                        showSnackBar(address_container, getString(R.string.internet_not_available))
+                        showSnackBar(timeslot_container, getString(R.string.internet_not_available))
 
                     }
                 }

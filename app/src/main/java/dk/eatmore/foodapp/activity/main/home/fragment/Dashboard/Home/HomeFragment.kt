@@ -316,12 +316,26 @@ class HomeFragment : CommanAPI() {
         /**TODO: swipe view visible condition:
          * 1. from splash screen. 2. login and logout.
          */
-        swipe_recycler.layoutManager = LinearLayoutManager(activity)
-        swipeAdapter = SwipeAdapter(model, clickEvent)
-        swipe_recycler.adapter = swipeAdapter
-        // Swipe interface...
-        val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
-        itemTouchHelper.attachToRecyclerView(swipe_recycler)
+        if(swipeAdapter == null){
+
+            val animation = TranslateAnimation(0f, 0f, 200f, 0f)
+            animation.duration = 1000
+            animation.fillAfter = true
+            swipe_recycler.startAnimation(animation)
+
+            loge(TAG,"==null swipe")
+            swipe_recycler.layoutManager = LinearLayoutManager(activity)
+            swipeAdapter = SwipeAdapter(model, clickEvent)
+            swipe_recycler.adapter = swipeAdapter
+            // Swipe interface...
+            val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
+            itemTouchHelper.attachToRecyclerView(swipe_recycler)
+        }else{
+            loge(TAG,"not null swipe")
+            swipeAdapter!!.updatelist(model)
+            swipeAdapter!!.notifyDataSetChanged()
+        }
+
 
     }
 
@@ -367,7 +381,7 @@ class HomeFragment : CommanAPI() {
         }
     }
 
-    inner class SwipeAdapter(val model: OrderFragment.Myorder_Model, val clickEvent: MyClickHandler) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+    inner class SwipeAdapter(var model: OrderFragment.Myorder_Model, val clickEvent: MyClickHandler) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
         override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
             val binding: SwipeCartItemBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.swipe_cart_item, parent, false)
@@ -376,9 +390,11 @@ class HomeFragment : CommanAPI() {
 
         override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
             if (holder is MyViewHolder) {
+                loge(TAG,"on bind--"+model.last_order_details.restaurant_name)
                 holder.binding.orderresult = model.last_order_details
                 holder.binding.myclickhandler = clickEvent
                 holder.binding.util = BindDataUtils
+                holder.binding.executePendingBindings()
 
             }
 
@@ -387,6 +403,11 @@ class HomeFragment : CommanAPI() {
         override fun getItemCount(): Int {
             return count
         }
+
+        fun updatelist(model_: OrderFragment.Myorder_Model){
+            model=model_
+        }
+
 
 
         private inner class MyViewHolder(val binding: SwipeCartItemBinding) : RecyclerView.ViewHolder(binding.root) {
@@ -410,10 +431,10 @@ class HomeFragment : CommanAPI() {
                 if (model.status) {
                     loge(TAG, model.last_order_details.toString())
                     count = 1
-                    val animation = TranslateAnimation(0f, 0f, 200f, 0f)
+                  /*  val animation = TranslateAnimation(0f, 0f, 200f, 0f)
                     animation.duration = 1000
                     animation.fillAfter = true
-                    swipe_recycler.startAnimation(animation)
+                    swipe_recycler.startAnimation(animation)*/
                     swipeView(model)
 
                 } else {

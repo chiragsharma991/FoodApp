@@ -19,7 +19,6 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.epay.EpayActivity
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.RestaurantList
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerCallback

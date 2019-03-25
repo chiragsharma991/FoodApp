@@ -35,6 +35,7 @@ import java.util.ArrayList
 import dk.eatmore.foodapp.model.home.Restaurant
 
 
+/*
 class EpayActivity : BaseActivity() {
 
     var transition : Transition?=null
@@ -45,14 +46,16 @@ class EpayActivity : BaseActivity() {
 
 
 
-    /**TODO : Payment flow
+    */
+/**TODO : Payment flow
      *  all information regarding payment has been added in this compainon object and PaymentAttributes data class.
      *
      *  Make sure if you add other parms and variable please be add in dataclass or may be in compainion so you can accesss all this into payment activity.
      *
      *
      *
-     */
+     *//*
+
 
 
 
@@ -367,10 +370,12 @@ class EpayActivity : BaseActivity() {
 
                       is BamboraWebfunction ->{
                           fragment.onBackpress()
-                    /*      popFragment()
+                    */
+/*      popFragment()
                           txt_toolbar.text=getString(R.string.payment)
                           val fragment= supportFragmentManager.findFragmentByTag(Paymentmethod.TAG)
-                          (fragment as Paymentmethod).onlineTransactionFailed()*/
+                          (fragment as Paymentmethod).onlineTransactionFailed()*//*
+
 
                       }
                         else -> popFragment()
@@ -480,5 +485,6 @@ class EpayActivity : BaseActivity() {
 
 
 }
+*/
 
 

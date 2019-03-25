@@ -53,73 +53,63 @@
             </android.support.design.widget.AppBarLayout>
 
 
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:orientation="vertical"
-                >
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_margin="@dimen/_16sdp"
-                    android:gravity="center_vertical"
-                    android:orientation="horizontal">
+                android:layout_margin="@dimen/_16sdp"
+                android:gravity="center_vertical"
+                android:orientation="horizontal">
 
 
-                    <android.support.v7.widget.AppCompatTextView
-                        style="@style/TextViewMid"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/_3sdp"
-                        android:layout_weight="1"
-                        android:textColor="@color/black_txt_light"
-                        android:gravity="center_horizontal"
-                        android:textStyle="normal"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:text="@{xml_profile.userName}"
-                        />
-
-
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center_vertical"
-                    android:layout_marginStart="@dimen/_16sdp"
-                    android:layout_marginEnd="@dimen/_16sdp"
-                    android:layout_marginBottom="@dimen/_16sdp"
-                    android:orientation="horizontal">
-
-                    <android.support.v7.widget.AppCompatTextView
-                        style="@style/SubtitleMidium_TextViewSmall"
-                        android:layout_width="match_parent"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginLeft="@dimen/_3sdp"
-                        android:layout_weight="1"
-                        android:gravity="center_horizontal"
-                        android:textStyle="normal"
-                        android:layout_marginRight="@dimen/_5sdp"
-                        android:text="@{xml_profile.email}"
-                        />
-                    <!--      <android.support.v7.widget.AppCompatTextView
-                              style="@style/TextViewSmall"
-                              android:layout_gravity="center_vertical"
-                              android:layout_width="match_parent"
-                              android:layout_marginLeft="@dimen/_3sdp"
-                              android:layout_weight="1"
-                              android:layout_marginRight="@dimen/_5sdp"
-                              android:text=""
-                              android:textColor="@color/black_light"
-                              />
--->
-
-                </LinearLayout>
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TextViewMid"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_3sdp"
+                    android:layout_weight="1"
+                    android:textColor="@color/black_txt_light"
+                    android:gravity="center_horizontal"
+                    android:textStyle="normal"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:text="@{xml_profile.userName}"
+                    android:layout_width="0dp"/>
 
 
             </LinearLayout>
 
 
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:gravity="center_vertical"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginBottom="@dimen/_16sdp"
+                android:orientation="horizontal">
 
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/SubtitleMidium_TextViewSmall"
+                    android:layout_width="0dp"
+                    android:layout_gravity="center_vertical"
+                    android:layout_marginStart="@dimen/_3sdp"
+                    android:layout_weight="1"
+                    android:gravity="center_horizontal"
+                    android:textStyle="normal"
+                    android:layout_marginEnd="@dimen/_5sdp"
+                    android:text="@{xml_profile.email}"
+                    />
+                <!--      <android.support.v7.widget.AppCompatTextView
+                          style="@style/TextViewSmall"
+                          android:layout_gravity="center_vertical"
+                          android:layout_width="match_parent"
+                          android:layout_marginLeft="@dimen/_3sdp"
+                          android:layout_weight="1"
+                          android:layout_marginRight="@dimen/_5sdp"
+                          android:text=""
+                          android:textColor="@color/black_light"
+                          />
+-->
+
+            </LinearLayout>
 
 
             <android.support.v4.widget.NestedScrollView
@@ -155,7 +145,7 @@
                             android:textStyle="normal"
                             android:layout_margin="@dimen/_16sdp"
                             android:text="@string/brugeroplysninger"
-                            />
+                            android:layout_width="0dp" />
 
 
                     </LinearLayout>
@@ -182,7 +172,7 @@
                             android:textStyle="normal"
                             android:layout_margin="@dimen/_16sdp"
                             android:text="Favorit Restauranter"
-                            />
+                            android:layout_width="0dp" />
 
 
                     </LinearLayout>
@@ -209,7 +199,7 @@
                             android:textStyle="normal"
                             android:layout_margin="@dimen/_16sdp"
                             android:text="@string/kundle_support"
-                            />
+                            android:layout_width="0dp" />
 
 
                     </LinearLayout>
@@ -235,7 +225,7 @@
                             android:textStyle="normal"
                             android:layout_margin="@dimen/_16sdp"
                             android:text="@string/kontakt_os"
-                            />
+                            android:layout_width="0dp" />
 
 
                     </LinearLayout>
@@ -263,7 +253,7 @@
                             android:textStyle="normal"
                             android:layout_margin="@dimen/_16sdp"
                             android:text="Leveringsadresse(r)"
-                            />
+                            android:layout_width="0dp" />
 
 
                     </LinearLayout>
@@ -292,7 +282,7 @@
                             android:textStyle="normal"
                             android:layout_margin="@dimen/_16sdp"
                             android:text="@string/bed_m_app"
-                            />
+                            android:layout_width="0dp" />
 
 
                     </LinearLayout>
@@ -318,7 +308,7 @@
                             android:layout_margin="@dimen/_16sdp"
                             android:onClick="@{handlers::profileInfo}"
                             android:text="APP INFO"
-                            />
+                            android:layout_width="0dp" />
 
 
                     </LinearLayout>
@@ -347,7 +337,7 @@
                             android:textStyle="normal"
                             android:layout_margin="@dimen/_16sdp"
                             android:text="@string/payment_methods"
-                            />
+                            android:layout_width="0dp" />
 
 
                     </LinearLayout>
@@ -374,7 +364,7 @@
                             android:textStyle="normal"
                             android:layout_margin="@dimen/_16sdp"
                             android:text="Handelsbetingelser"
-                            />
+                            android:layout_width="0dp" />
 
 
                     </LinearLayout>
@@ -401,7 +391,7 @@
                             android:gravity="center_horizontal"
                             android:layout_margin="@dimen/_16sdp"
                             android:visibility="visible"
-                            />
+                            android:layout_width="0dp" />
 
 
                     </LinearLayout>
@@ -430,7 +420,7 @@
                             android:textColor="@color/theme_color"
                             android:layout_margin="@dimen/_16sdp"
                             android:text="@string/log_ud"
-                            />
+                            android:layout_width="0dp" />
 
 
                     </LinearLayout>
@@ -461,7 +451,7 @@
                             android:text="@string/app_version"
                             android:layout_margin="@dimen/_16sdp"
                             android:visibility="visible"
-                            />
+                            android:layout_width="0dp" />
 
 
                     </LinearLayout>

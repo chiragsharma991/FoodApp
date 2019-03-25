@@ -11,7 +11,6 @@ import com.bambora.nativepayment.handlers.BNPaymentHandler
 import com.bambora.nativepayment.managers.CreditCardManager
 import com.bambora.nativepayment.models.creditcard.CreditCard
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.epay.EpayActivity
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerCallback
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerClickInterface
 import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
@@ -62,7 +61,7 @@ class AddCart : BaseFragment(), RecyclerClickInterface , CreditCardManager.IOnCr
             logd(TAG,"saveInstance NULL")
             add_new_card.setOnClickListener{
                 editCart_fragment = EditCart.newInstance()
-                (activity as EpayActivity).addFragment(R.id.epay_container, editCart_fragment, EditCart.TAG, true)
+              //  (activity as EpayActivity).addFragment(R.id.epay_container, editCart_fragment, EditCart.TAG, true)
             }
 
             paymentHandler = BNPaymentHandler.getInstance()

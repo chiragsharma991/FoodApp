@@ -33,6 +33,7 @@ import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedRestaurant
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
+import dk.eatmore.foodapp.model.ModelUtility
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
@@ -521,7 +522,7 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
             val last_order_details: Orderresult,
             val restaurant_info: Restaurant
 
-    ) : Serializable
+    ) : ModelUtility() , Serializable
 
     data class Orderresult(
             var customer_id: String = "",

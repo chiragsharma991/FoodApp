@@ -43,6 +43,8 @@ import dk.eatmore.foodapp.utils.*
 import kotlinx.android.synthetic.main.dynamic_raw_item.view.*
 import kotlinx.android.synthetic.main.dynamic_raw_subitem.view.*
 import kotlinx.android.synthetic.main.fragment_ordered_restaurant.*
+import kotlinx.android.synthetic.main.include_orderedrest_info.*
+import kotlinx.android.synthetic.main.include_orderedrest_pricecalculation.*
 import kotlinx.android.synthetic.main.toolbar.*
 import retrofit2.Call
 import java.util.*
@@ -96,13 +98,10 @@ class OrderedRestaurant : CommanAPI() {
         if (savedInstanceState == null) {
             setToolbar()
             binding.isProgress = true
-            Handler().postDelayed({
-                model = arguments!!.getSerializable(Constants.ORDERRESULT) as OrderFragment.Orderresult
-                myclickhandler = MyClickHandler(this)
-                ui_model = createViewModel()
-                fetchRestaurant_info()
-
-            }, 300)
+            model = arguments!!.getSerializable(Constants.ORDERRESULT) as OrderFragment.Orderresult
+            myclickhandler = MyClickHandler(this)
+            ui_model = createViewModel()
+            fetchRestaurant_info()
         }
     }
 
@@ -782,7 +781,7 @@ class OrderedRestaurant : CommanAPI() {
             PreferenceUtil.putValue(PreferenceUtil.R_KEY,r_key)
             PreferenceUtil.putValue(PreferenceUtil.R_TOKEN,r_token)
             PreferenceUtil.save()
-           // orderedRestaurant.showProgressDialog()
+            // orderedRestaurant.showProgressDialog()
 
             if(orderedRestaurant.parentFragment is HomeFragment){
                 // home

@@ -240,7 +240,6 @@
                                             android:visibility="gone"
                                             android:scaleType="fitXY"
                                             android:onClick="@{handlers::googleSign}"
-                                            android:src="@mipmap/google"
                                             app:layout_constraintEnd_toEndOf="parent"
                                             app:layout_constraintHorizontal_bias="0.5"
                                             app:layout_constraintStart_toEndOf="@+id/acc_fb_btn"

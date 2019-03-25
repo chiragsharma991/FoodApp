@@ -1,0 +1,388 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:zhy="http://schemas.android.com/tools"
+    android:layout_height="match_parent"
+    android:layout_width="wrap_content"
+    android:orientation="vertical"
+    android:layout_margin="@dimen/_16sdp"
+    android:gravity="center"
+    >
+
+
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="0.2"
+        android:background="@color/divider_color"
+        android:visibility="invisible"
+
+        />
+
+    <android.support.v7.widget.AppCompatTextView
+        style="@style/Subtitle_TextViewSmall"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:singleLine="true"
+        android:text="@string/din_ordre" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:alpha="0.2"
+        android:background="@color/divider_color"
+
+        />
+
+
+    <LinearLayout
+        android:id="@+id/add_parentitem_view"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_5sdp"
+        android:orientation="vertical">
+
+
+    </LinearLayout>
+
+
+    <!--add page.-->
+
+    <View
+        android:id="@+id/view_bill_detail"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:layout_marginTop="8dp"
+        android:alpha="0.2"
+        android:background="@color/divider_color"
+
+        />
+
+
+    <LinearLayout
+        android:id="@+id/subtotal_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/Subtitle_TextViewSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_weight="1.2"
+            android:gravity="start"
+            android:singleLine="true"
+            android:text="@string/subtotal" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/subtotal_txt"
+            style="@style/Subtitle_TextViewSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:gravity="end"
+            android:singleLine="true"
+            android:text="45,00kr" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/discountcoupan_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/Subtitle_TextViewSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_weight="1.2"
+            android:gravity="start"
+            android:singleLine="true"
+            android:text="@string/rabat" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/discountcoupan_txt"
+            style="@style/Subtitle_TextViewSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:gravity="end"
+            android:singleLine="true"
+            android:text="145,00kr" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/restuptominimum_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/Subtitle_TextViewSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_weight="1.2"
+            android:gravity="start"
+            android:singleLine="true"
+            android:text="@string/rest_op_til_minimum" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/restuptominimum_txt"
+            style="@style/Subtitle_TextViewSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:gravity="end"
+            android:singleLine="true"
+            android:text="145,00kr" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/shipping_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/Subtitle_TextViewSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_weight="1.2"
+            android:gravity="start"
+            android:singleLine="true"
+            android:text="@string/leveringsomkostninger" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/shipping_txt"
+            style="@style/Subtitle_TextViewSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:gravity="end"
+            android:singleLine="true"
+            android:text="145,00kr" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/additional_charge_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/Subtitle_TextViewSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_weight="1.2"
+            android:gravity="start"
+            android:singleLine="true"
+            android:text="@string/servicegebyr" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/additional_charge_txt"
+            style="@style/Subtitle_TextViewSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:gravity="end"
+            android:singleLine="true"
+            android:text="145,00kr" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/discountgift_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/Subtitle_TextViewSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_weight="1.2"
+            android:gravity="start"
+            android:singleLine="true"
+            android:text="@string/rabat" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/discountgift_txt"
+            style="@style/Subtitle_TextViewSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:gravity="end"
+            android:singleLine="true"
+            android:text="145,00kr" />
+
+
+    </LinearLayout>
+
+
+    <ImageView
+        android:layout_width="match_parent"
+        android:layout_height="2dp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:contentDescription="@string/content_image"
+        android:layerType="software"
+        android:src="@drawable/dashline" />
+
+    <LinearLayout
+        android:id="@+id/total_layout"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_16sdp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatTextView
+            style="@style/SubtitleMidium_TextViewSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="@dimen/_8sdp"
+            android:layout_weight="1.2"
+            android:gravity="start"
+            android:singleLine="true"
+            android:text="@string/samlet_pris" />
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/total_txt"
+            style="@style/SubtitleMidium_TextViewSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.8"
+            android:gravity="end"
+            android:singleLine="true"
+            android:text="145,00kr" />
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:orientation="horizontal">
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/address_txt"
+            style="@style/Subtitle_TextViewSmall"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1.2"
+            android:alpha="0.8"
+            android:gravity="center_horizontal" />
+
+
+    </LinearLayout>
+
+    <android.support.constraint.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_5sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:orientation="horizontal">
+
+
+        <android.support.v7.widget.AppCompatImageView
+            android:id="@+id/paymenttype_img"
+            android:layout_width="@dimen/_20sdp"
+            android:layout_height="@dimen/_20sdp"
+            android:layout_centerVertical="true"
+            android:layout_marginEnd="5dp"
+            android:scaleType="fitXY"
+            android:visibility="visible"
+            app:layout_constraintEnd_toStartOf="@+id/deliverytime_txt"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="packed"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent" />
+
+
+        <android.support.v7.widget.AppCompatTextView
+            android:id="@+id/deliverytime_txt"
+            style="@style/Subtitle_TextViewSmall"
+            android:layout_centerVertical="true"
+            android:layout_toEndOf="@+id/paymenttype_img"
+            android:alpha="0.8"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintStart_toEndOf="@+id/paymenttype_img"
+            app:layout_constraintTop_toTopOf="@+id/paymenttype_img" />
+
+
+    </android.support.constraint.ConstraintLayout>
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:alpha="0.2"
+        android:background="@color/divider_color"
+
+        />
+
+    <android.support.v7.widget.AppCompatTextView
+        android:id="@+id/eatmore_contact"
+        style="@style/Subtitle_TextViewSmall"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginTop="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+        android:layout_marginBottom="@dimen/_8sdp"
+        android:alpha="0.8"
+        android:gravity="center"
+        android:text="@string/brug_for_hjælp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/paymenttype_img"
+        app:layout_constraintTop_toTopOf="@+id/paymenttype_img" />
+
+
+
+</LinearLayout>

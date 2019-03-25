@@ -20,7 +20,6 @@ import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.LocalBroadcastManager
-import android.support.v7.graphics.Palette
 import android.transition.ChangeBounds
 import android.transition.Slide
 import android.util.Log
@@ -139,7 +138,7 @@ class DetailsFragment : CommanAPI() {
             restaurant=arguments?.getSerializable(Constants.RESTAURANT) as Restaurant?
             ordertype=arguments?.getString(Constants.ORDERTYPE) as String
             loge(TAG,"---"+restaurant)
-            toolbar_badge_view.visibility = View.GONE  // By default viewcart should be gone.
+            viewcart.visibility = View.GONE  // By default viewcart should be gone.
             logd(DetailsFragment.TAG, "saveInstance NULL")
             img_toolbar_back.setOnClickListener {
                 onBackpress()
@@ -438,13 +437,13 @@ class DetailsFragment : CommanAPI() {
         // this is update method will call in both category and details.
         try {
             total_cartcnt = total_cartcnt + count
-            badge_notification_txt.visibility = View.GONE
+            //badge_notification_txt.visibility = View.GONE
             if ((ui_model!!.category_menulist.value!!.is_restaurant_closed != null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) &&
                     (ui_model!!.category_menulist.value!!.pre_order != null && ui_model!!.category_menulist.value!!.pre_order == false)) {
-                toolbar_badge_view.visibility = View.GONE
+                viewcart.visibility = View.GONE
 
             } else {
-                toolbar_badge_view.visibility = if (total_cartcnt == 0) View.GONE else View.VISIBLE
+                viewcart.visibility = if (total_cartcnt == 0) View.GONE else View.VISIBLE
             }
             //  badge_notification_txt.text= total_cartcnt.toString()
             if (total_cartcnt == 0 || total_cartcnt == 1)
@@ -483,7 +482,7 @@ class DetailsFragment : CommanAPI() {
             // call order and ordered screeen again
             val orderedfragment = (parentFragment as OrderFragment).childFragmentManager.findFragmentByTag(OrderedRestaurant.TAG)
             if(orderedfragment !=null){
-                (orderedfragment as OrderedRestaurant).fetchRestaurant_info()
+              //  (orderedfragment as OrderedRestaurant).fetchRestaurant_info()
             }else{
                 if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true   // every time refresh :  order fragment
             }
@@ -517,6 +516,7 @@ class DetailsFragment : CommanAPI() {
           }
       }*/
 
+/*
     fun setPalette() {
 
         val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.eatmore_search_backgrond)
@@ -543,6 +543,7 @@ class DetailsFragment : CommanAPI() {
 
 
     }
+*/
 
     fun favourite(){
         val restaurant_info= ui_model!!.category_menulist.value!!.restaurant_info

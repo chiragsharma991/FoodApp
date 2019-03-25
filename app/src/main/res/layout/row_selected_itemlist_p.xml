@@ -1,0 +1,97 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+
+
+<layout
+xmlns:android="http://schemas.android.com/apk/res/android"
+xmlns:app="http://schemas.android.com/apk/res-auto"
+xmlns:tools="http://schemas.android.com/tools">
+
+<data>
+
+</data>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical">
+
+
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="@dimen/_22sdp"
+            android:orientation="horizontal"
+            >
+
+            <android.support.v7.widget.AppCompatImageView
+                android:layout_width="@dimen/_22sdp"
+                android:layout_height="@dimen/_22sdp"
+                android:layout_marginEnd="8dp"
+                android:scaleType="fitXY"
+                android:id="@+id/remove_item"
+                app:srcCompat="@mipmap/minus"
+                android:tint="@color/white"
+                android:padding="@dimen/_5sdp"
+                android:background="@color/theme_color"
+                />
+
+            <!--  <android.support.v7.widget.AppCompatTextView
+                  style="@style/Subtitle_TextViewSmall"
+                  android:layout_width="@dimen/_25sdp"
+                  android:layout_height="@dimen/_25sdp"
+                  android:layout_marginEnd="8dp"
+                  android:scaleType="fitXY"
+                  android:gravity="center"
+                  android:background="@color/grey"
+                  android:text="-"
+                  android:textColor="@color/theme_color"
+                  android:textStyle="bold"
+                  android:id="@+id/remove_item"
+                  />-->
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/SubtitleMidium_TextViewSmall"
+                android:singleLine="true"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:layout_gravity="center_vertical"
+                android:gravity="start"
+                android:id="@+id/item_name"
+                android:text="sdfsdfdf"
+                android:layout_weight="1.2"
+                android:layout_marginEnd="@dimen/_8sdp"
+                />
+
+            <android.support.v7.widget.AppCompatTextView
+                style="@style/SubtitleMidium_TextViewSmall"
+                android:layout_height="wrap_content"
+                android:layout_width="0dp"
+                android:singleLine="true"
+                android:id="@+id/item_price"
+                android:text="sdfsd"
+                android:gravity="end"
+                android:layout_gravity="center_vertical"
+                android:layout_weight="0.8"
+                />
+
+
+
+
+        </LinearLayout>
+
+
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view"
+                android:clipToPadding="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                />
+
+
+
+    </LinearLayout>
+
+
+</layout>

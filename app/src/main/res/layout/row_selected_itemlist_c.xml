@@ -1,11 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="@dimen/_25sdp"
-    android:orientation="horizontal"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
 
-    >
+
+
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <data>
+
+    </data>
+
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
 
 
         <android.support.v7.widget.AppCompatImageView
@@ -23,6 +33,7 @@
             android:singleLine="true"
             android:layout_height="wrap_content"
             android:layout_width="0dp"
+            android:text="sdfsdfs"
             android:gravity="start"
             android:layout_marginStart="@dimen/_5sdp"
             android:id="@+id/subitem_name"
@@ -36,6 +47,7 @@
             android:layout_width="0dp"
             android:singleLine="true"
             android:id="@+id/subitem_price"
+            android:text="sdfsdf"
             android:gravity="end"
             android:layout_weight="1"
             />
@@ -43,5 +55,7 @@
 
 
 
+    </LinearLayout>
 
-</LinearLayout>
+
+</layout>

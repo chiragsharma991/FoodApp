@@ -88,7 +88,7 @@
                                     android:layout_width="wrap_content"
                                     android:id="@+id/quality_of_food_rating"
                                     android:layout_height="wrap_content"
-                                    android:isIndicator="false"
+                                    android:isIndicator="true"
                                     android:numStars="6"
                                     android:rating="@{restaurant.total_rating}"
                                     android:stepSize="0.0" />

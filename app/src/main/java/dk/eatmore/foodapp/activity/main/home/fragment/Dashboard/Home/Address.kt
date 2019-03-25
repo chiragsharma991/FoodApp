@@ -150,40 +150,43 @@ class Address : CommanAPI(), TextWatcher {
     override fun comman_apisuccess(jsonObject: JsonObject, api_tag: String) {
         when(api_tag ){
             Constants.COM_INFO_RESTAURANT_CLOSED->{
-
+                // add tab variables
                 val msg= if(jsonObject.has(Constants.MSG)) jsonObject.get(Constants.MSG).asString else ""
                 if(jsonObject.has(Constants.IS_DELIVERY_PRESENT) && jsonObject.has(Constants.IS_PICKUP_PRESENT)){
                     DetailsFragment.delivery_present=jsonObject.get(Constants.IS_DELIVERY_PRESENT).asBoolean
                     DetailsFragment.pickup_present=jsonObject.get(Constants.IS_PICKUP_PRESENT).asBoolean
                 }
+                if((EpayFragment.isPickup && !DetailsFragment.pickup_present) || (!EpayFragment.isPickup && !DetailsFragment.delivery_present)){
+                    // [pickup(true) && pickuppresent(false) || delivery(true) && deliverypresent (false)]
 
-                when(getrestaurantstatus(is_restaurant_closed =jsonObject.get(Constants.IS_RESTAURANT_CLOSED)?.asBoolean, pre_order =jsonObject.get(Constants.PRE_ORDER)?.asBoolean )){
+                    val message=getdeliverymsg_error(jsonObject)
+                    DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!, R.color.black),msg = message ,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                        override fun onPositiveButtonClick(position: Int) {
+                            (parentFragment as EpayFragment).popAllFragment()
+                            (parentFragment as EpayFragment).reloadScreen()
+                        }
+                        override fun onNegativeButtonClick() {
+                        }
+                    })
+                }else{
+                    // check if restaurant is closed or not
+                    // making restaurant closed equation to satisfy comman function.
+                    when(getrestaurantstatus(is_restaurant_closed =jsonObject.get(Constants.IS_RESTAURANT_CLOSED)?.asBoolean, pre_order =jsonObject.get(Constants.PRE_ORDER)?.asBoolean )){
 
-                    RestaurantState.CLOSED ->{
-                        any_preorder_closedRestaurant(is_restaurant_closed = true ,pre_order = false,msg =msg ) // set hard code to close restaurant.
-                    }
-                    else ->{
-
-                        if((EpayFragment.isPickup && !DetailsFragment.pickup_present) || (!EpayFragment.isPickup && !DetailsFragment.delivery_present)){
-                            // [pickup(true) && pickuppresent(false) || delivery(true) && deliverypresent (false)]
-                            val message=getdeliverymsg_error(jsonObject)
-                            DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!, R.color.black),msg = message ,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
-                                override fun onPositiveButtonClick(position: Int) {
-                                    (parentFragment as EpayFragment).popAllFragment()
-                                    (parentFragment as EpayFragment).reloadScreen()
-                                }
-                                override fun onNegativeButtonClick() {
-                                }
-                            })
-                        }else{
-                            // normal flow.
+                        RestaurantState.CLOSED ->{
+                            any_preorder_closedRestaurant(is_restaurant_closed = true ,pre_order = false,msg =msg ) // set hard code to close restaurant.
+                        }
+                        else ->{
                             fetchuserInfo()
                         }
                     }
                 }
-               }
+
             }
+
         }
+
+    }
 
     override fun comman_apifailed(error: String, api_tag: String) {
         when(api_tag ){
@@ -380,7 +383,7 @@ class Address : CommanAPI(), TextWatcher {
 
     private fun fetchuserInfo() {
         // progresswheel(progresswheel,true)
-     //   progress_bar.visibility = View.VISIBLE
+        progress_bar.visibility = View.VISIBLE
         val postParam = JsonObject()
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
@@ -421,7 +424,7 @@ class Address : CommanAPI(), TextWatcher {
 
                 } else {
                     progress_bar.visibility = View.GONE
-                    empty_view.visibility = View.VISIBLE
+                  //  empty_view.visibility = View.VISIBLE
                 }
 
 

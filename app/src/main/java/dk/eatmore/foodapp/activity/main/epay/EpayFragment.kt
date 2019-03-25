@@ -356,6 +356,9 @@ class EpayFragment : CommanAPI() {
                 viewcard_list.removeObservers(this@EpayFragment)
                 viewcard_list.observe(this@EpayFragment, Observer<ViewcardModel> {
                     refresh_viewCard()
+
+
+
                 })
             }
 
@@ -378,11 +381,11 @@ class EpayFragment : CommanAPI() {
         paymentattributes.order_total=ui_model!!.viewcard_list.value!!.order_total.toString()
         for (i in 0.until(restaurant.restpaymentmethods.size)){
             if(restaurant.restpaymentmethods[i].pm_id =="1"){
-             // online
-             paymentattributes.online_logo=restaurant.restpaymentmethods[i].logo
+                // online
+                paymentattributes.online_logo=restaurant.restpaymentmethods[i].logo
             }else{
-             //cash
-             paymentattributes.cash_logo=restaurant.restpaymentmethods[i].logo
+                //cash
+                paymentattributes.cash_logo=restaurant.restpaymentmethods[i].logo
             }
         }
         paymentattributes.restaurant_name=restaurant.restaurant_name
@@ -449,7 +452,7 @@ class EpayFragment : CommanAPI() {
                             val extratoppings= inflater.inflate(R.layout.dynamic_raw_subitem,null)
                             extratoppings.subitem_name.text=String.format(getString(R.string.plus),ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes!!.get(k).order_product_extra_topping_group!![l].ingredient_name)
                             // view.subitem_price.visibility=View.VISIBLE
-                           // extratoppings.subitem_price.text= BindDataUtils.convertCurrencyToDanishWithoutLabel(ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes!!.get(k).order_product_extra_topping_group!![l].t_price) ?: "null"
+                            // extratoppings.subitem_price.text= BindDataUtils.convertCurrencyToDanishWithoutLabel(ui_model!!.viewcard_list.value!!.result!![i].ordered_product_attributes!!.get(k).order_product_extra_topping_group!![l].t_price) ?: "null"
                             extratoppings.subitem_price.visibility=View.INVISIBLE
                             view.add_subitem_view.addView(extratoppings)
                         }
@@ -464,14 +467,14 @@ class EpayFragment : CommanAPI() {
                     val onlyextratoppings= inflater.inflate(R.layout.dynamic_raw_subitem,null)
                     onlyextratoppings.subitem_name.text=String.format(getString(R.string.plus),ui_model!!.viewcard_list.value!!.result!![i].order_product_extra_topping_group!!.get(k).ingredient_name)
                     // view.subitem_price.visibility=View.VISIBLE
-                  //  onlyextratoppings.subitem_price.text= BindDataUtils.convertCurrencyToDanishWithoutLabel(ui_model!!.viewcard_list.value!!.result!![i].order_product_extra_topping_group!!.get(k).t_price) ?: "null"
+                    //  onlyextratoppings.subitem_price.text= BindDataUtils.convertCurrencyToDanishWithoutLabel(ui_model!!.viewcard_list.value!!.result!![i].order_product_extra_topping_group!!.get(k).t_price) ?: "null"
                     onlyextratoppings.subitem_price.visibility=View.INVISIBLE
                     view.add_subitem_view.addView(onlyextratoppings)
                 }
             }
             add_parentitem_view.addView(view)
-            subtotal.text= BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.order_total.toString()) ?: "null"
-            total.text= BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.order_total.toString()) ?: "null"
+          //  subtotal.text= BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.order_total.toString()) ?: "null"
+          //  total.text= BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.order_total.toString()) ?: "null"
         }
     }
 

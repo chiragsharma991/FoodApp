@@ -108,26 +108,3 @@ class SearchlistChildAdapter(val context: Context, val listner: SearchlistParent
 
 }
 
-/*
-data class MenuListItem(val c_desc: String = "",
-                        val c_order: String = "",
-                        val restaurant_id: String = "",
-                        val c_id: String = "",
-                        val c_name: String = "",
-                        val product_list: ArrayList<ProductListItem>? = null) :Serializable
-
-
-data class ProductListItem(val productIngredients: String = "",
-                           val restaurantId: String = "",
-                           val product_attribute: ArrayList<ProductAttributeItem> = arrayListOf(),
-                           val p_desc: String = "",
-                           val p_price: String = "",
-                           val productNo: String = "",
-                           val p_name: String = "",
-                           val extraToppingGroup: String = "",
-                           val cId: String = "",
-                           val isAttributes: String = "",
-                           val pImage: String = "",
-                           val p_id: String = "") :Serializable{
-
-*/

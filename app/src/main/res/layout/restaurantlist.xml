@@ -20,6 +20,8 @@
         android:layout_height="match_parent"
         android:fitsSystemWindows="true"
         android:background="@color/white"
+        android:clickable="true"
+        android:focusable="true"
         >
 
 
@@ -33,12 +35,11 @@
             >
             <include layout="@layout/toolbar"
                 app:layout_scrollFlags="scroll|enterAlways"
-                android:theme="@style/ThemeOverlay.AppCompat.Dark.ActionBar"
                 app:popupTheme="@style/ThemeOverlay.AppCompat.Light"
                 android:layout_width="match_parent"
                 android:visibility="gone"
                 android:layout_height="?attr/actionBarSize"
-                >
+                tools:targetApi="m">
 
             </include>
 
@@ -58,7 +59,7 @@
                 app:contentInsetStart="0dp"
                 app:contentInsetRight="0dp"
                 app:contentInsetEnd="0dp"
-                >
+                tools:targetApi="lollipop">
 
 
 
@@ -120,7 +121,7 @@
                         app:srcCompat="@drawable/cancel"
                         android:tint="@color/black_default"
                         android:visibility="visible"
-                        android:layout_alignParentRight="true"
+                        android:layout_alignParentEnd="true"
                         />
 
 
@@ -146,13 +147,7 @@
 
 
 
-        <FrameLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:id="@+id/clayout_crt"
-            android:background="@color/background_light"
-            app:layout_behavior="@string/appbar_scrolling_view_behavior"
-            >
+
 
 
 
@@ -160,33 +155,25 @@
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
+                android:id="@+id/clayout_crt"
+                android:background="@color/background_light"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
                 android:orientation="vertical">
 
-                <FrameLayout
-                    android:id="@+id/cart_container"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content">
 
-                    <LinearLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical">
+
 
                         <android.support.design.widget.AppBarLayout
                             android:id="@+id/appbar"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content">
 
-                            <LinearLayout
-                                android:layout_width="match_parent"
-                                android:layout_height="@dimen/_42sdp"
-                                android:background="@color/white"
-                                android:orientation="horizontal">
 
                                 <android.support.constraint.ConstraintLayout
                                     android:layout_width="match_parent"
                                     android:id="@+id/constraint"
-                                    android:layout_height="match_parent">
+                                    android:background="@color/white"
+                                    android:layout_height="@dimen/_42sdp">
 
                                     <android.support.constraint.Guideline
                                         android:id="@+id/guideline7"
@@ -400,90 +387,43 @@
                                 </android.support.constraint.ConstraintLayout>
 
 
-                                <!--         <LinearLayout
-                                             android:layout_width="match_parent"
-                                             android:layout_height="match_parent"
-                                             android:orientation="vertical"
-                                             >
-
-
-
-                                         </LinearLayout>
-                                         <LinearLayout
-                                             android:layout_width="match_parent"
-                                             android:layout_height="match_parent"
-                                             android:orientation="vertical"
-                                             >
-
-                                         </LinearLayout>
-
-                                   -->
-
-                            </LinearLayout>
-
 
                         </android.support.design.widget.AppBarLayout>
-
-                        <!--         <android.support.v4.widget.NestedScrollView
-                                     android:id="@+id/nested_scroll"
-                                     android:layout_width="match_parent"
-                                     android:layout_height="match_parent">-->
-
-
-                        <!--  <android.support.v7.widget.CardView
-                              style="@style/CardViewStyle"
-                              android:id="@+id/search_view"
-                              android:layout_margin="8dp"
-                              app:cardUseCompatPadding="true"
-                              >
-
-
-                          </android.support.v7.widget.CardView>
--->
 
 
                         <android.support.v7.widget.RecyclerView
                             android:id="@+id/recycler_view_parent"
+                            android:layout_below="@+id/appbar"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
                             app:layout_behavior="@string/appbar_scrolling_view_behavior"
                             android:clipToPadding="false"
                             android:paddingTop="@dimen/_5sdp"
-                            android:nestedScrollingEnabled="true"
                             />
 
 
 
 
-                        <!--
-                                                </android.support.v4.widget.NestedScrollView>
-                        -->
-
-                    </LinearLayout>
 
 
-                </FrameLayout>
 
 
-                <LinearLayout
+
+                <RelativeLayout
                     android:id="@+id/error_view"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:gravity="center_vertical|center_horizontal"
                     android:visibility="gone">
 
-                    <RelativeLayout
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-
-                        >
 
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/error_txt"
                             style="@style/SubtitleMidium_TextViewSmall"
                             android:layout_height="wrap_content"
-                            android:gravity="center_horizontal"
+                            android:layout_centerInParent="true"
                             android:textColor="@color/black_default"
+                            android:gravity="center"
                             />
 
                         <android.support.v7.widget.AppCompatButton
@@ -497,10 +437,9 @@
                             />
 
 
-                    </RelativeLayout>
 
 
-                </LinearLayout>
+                </RelativeLayout>
 
                 <ProgressBar
                     android:id="@+id/progress_bar"
@@ -519,7 +458,6 @@
 
 
 
-        </FrameLayout>
 
 
     </android.support.design.widget.CoordinatorLayout>

@@ -28,20 +28,16 @@
     </data>
 
 
-    <FrameLayout
+    <RelativeLayout
         android:id="@+id/address_container"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:layout_marginTop="@dimen/_1sdp"
         android:background="@color/white"
         android:clickable="true"
         android:fitsSystemWindows="true"
-        android:focusable="true">
+        android:focusable="true"
 
-        <RelativeLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            >
+        >
 
             <android.support.design.widget.AppBarLayout
                 android:id="@+id/app_bar"
@@ -60,7 +56,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:id="@+id/empty_view"
-                android:visibility="@{user_Info ==null ? View.GONE : View.VISIBLE }"
                 >
 
 
@@ -69,299 +64,264 @@
                     android:id="@+id/nested_scroll"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
-                    android:layout_above="@+id/btn_view">
-
-                    <android.support.constraint.ConstraintLayout
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        >
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/name_txt"
-                            style="@style/SubtitleMidium_TextViewSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:text="@string/navn"
-                            app:layout_constraintBottom_toTopOf="@+id/name_edt"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toTopOf="parent"
-                            app:layout_constraintVertical_chainStyle="spread_inside" />
+                    android:layout_above="@+id/btn_view"
+                    android:visibility="@{user_Info ==null ? View.GONE : View.VISIBLE }"
+                    >
 
 
-                        <android.support.v7.widget.AppCompatEditText
-                            android:id="@+id/name_edt"
-                            style="@style/EditText_Normal"
+                        <android.support.constraint.ConstraintLayout
                             android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:nextFocusDown="@id/telephone_number_edt"
-                            android:imeOptions="actionNext"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:background="@drawable/rectangle_edittext"
-                            android:focusedByDefault="true"
-                            android:padding="@dimen/_8sdp"
-                            android:hint="@string/navn"
-                            android:singleLine="true"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/name_txt">
+                            android:layout_height="match_parent"
+                            >
 
-                        </android.support.v7.widget.AppCompatEditText>
-
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/telephone_number_txt"
-                            style="@style/SubtitleMidium_TextViewSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:text="@string/telefon_nummer"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/name_edt" />
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/name_txt"
+                                style="@style/SubtitleMidium_TextViewSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:text="@string/navn"
+                                app:layout_constraintBottom_toTopOf="@+id/name_edt"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toTopOf="parent"
+                                app:layout_constraintVertical_chainStyle="spread_inside" />
 
 
-                        <android.support.v7.widget.AppCompatEditText
-                            android:id="@+id/telephone_number_edt"
-                            style="@style/SubtitleRegular_TextViewSmall"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:maxLength="8"
-                            android:layout_marginEnd="8dp"
-                            android:layout_weight="1.5"
-                            android:hint="@string/telefon_nummer"
-                            android:nextFocusDown="@id/street_edt"
-                            android:background="@drawable/rectangle_edittext"
-                            android:inputType="number"
-                            android:padding="@dimen/_8sdp"
-                            android:singleLine="true"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/telephone_number_txt" />
+                            <android.support.v7.widget.AppCompatEditText
+                                android:id="@+id/name_edt"
+                                style="@style/EditText_Normal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:background="@drawable/rectangle_edittext"
+                                android:focusedByDefault="true"
+                                android:nextFocusDown="@id/telephone_number_edt"
+                                android:padding="@dimen/_8sdp"
+                                android:hint="@string/navn"
+                                android:singleLine="true"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/name_txt" tools:targetApi="o">
+
+                            </android.support.v7.widget.AppCompatEditText>
 
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/address_txt"
-                            style="@style/SubtitleMidium_TextViewSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:text="@string/address"
-                            android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/telephone_number_edt" />
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/change_txt"
-                            style="@style/Subtitle_TextViewSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:text="@string/change"
-                            android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
-                            android:textColor="@color/theme_color"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/telephone_number_edt" />
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/telephone_number_txt"
+                                style="@style/SubtitleMidium_TextViewSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:text="@string/telefon_nummer"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/name_edt" />
 
 
-                        <android.support.v7.widget.AppCompatEditText
-                            android:id="@+id/street_edt"
-                            style="@style/EditText_Normal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:hint="@string/vej"
-                            android:nextFocusDown="@id/house_edt"
-                            android:layout_weight="1.5"
-                            android:background="@drawable/rectangle_edittext"
-                            android:padding="@dimen/_8sdp"
-                            android:singleLine="true"
-                            android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/address_txt" />
-
-                        <android.support.v7.widget.AppCompatEditText
-                            android:id="@+id/house_edt"
-                            android:nextFocusDown="@id/floor_edt"
-                            style="@style/EditText_Normal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:hint="@string/enter_your_house_number"
-                            android:layout_weight="1.5"
-                            android:background="@drawable/rectangle_edittext"
-                            android:padding="@dimen/_8sdp"
-                            android:singleLine="true"
-                            android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/street_edt" />
+                            <android.support.v7.widget.AppCompatEditText
+                                android:id="@+id/telephone_number_edt"
+                                style="@style/SubtitleRegular_TextViewSmall"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                android:maxLength="8"
+                                android:layout_marginEnd="8dp"
+                                android:layout_weight="1.5"
+                                android:hint="@string/telefon_nummer"
+                                android:nextFocusDown="@id/street_edt"
+                                android:background="@drawable/rectangle_edittext"
+                                android:inputType="number"
+                                android:padding="@dimen/_8sdp"
+                                android:singleLine="true"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/telephone_number_txt" />
 
 
-                        <android.support.v7.widget.AppCompatEditText
-                            android:id="@+id/floor_edt"
-                            android:nextFocusDown="@id/postnumber_edt"
-                            style="@style/EditText_Normal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_weight="1.5"
-                            android:hint="@string/etage_dor_andet_valgfrit"
-                            android:background="@drawable/rectangle_edittext"
-                            android:padding="@dimen/_8sdp"
-                            android:singleLine="true"
-                            android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/house_edt" />
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/address_txt"
+                                style="@style/SubtitleMidium_TextViewSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:text="@string/address"
+                                android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/telephone_number_edt" />
+
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/change_txt"
+                                style="@style/Subtitle_TextViewSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:text="@string/change"
+                                android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
+                                android:textColor="@color/theme_color"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/telephone_number_edt" />
 
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/postnumber_txt"
-                            style="@style/SubtitleMidium_TextViewSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:text="@string/postnummer"
-                            android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/floor_edt" />
+                            <android.support.v7.widget.AppCompatEditText
+                                android:id="@+id/street_edt"
+                                style="@style/EditText_Normal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:hint="@string/vej"
+                                android:nextFocusDown="@id/house_edt"
+                                android:layout_weight="1.5"
+                                android:background="@drawable/rectangle_edittext"
+                                android:padding="@dimen/_8sdp"
+                                android:singleLine="true"
+                                android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/address_txt" />
+
+                            <android.support.v7.widget.AppCompatEditText
+                                android:id="@+id/house_edt"
+                                android:nextFocusDown="@id/floor_edt"
+                                style="@style/EditText_Normal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:hint="@string/enter_your_house_number"
+                                android:layout_weight="1.5"
+                                android:background="@drawable/rectangle_edittext"
+                                android:padding="@dimen/_8sdp"
+                                android:singleLine="true"
+                                android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/street_edt" />
 
 
-                        <android.support.v7.widget.AppCompatEditText
-                            android:id="@+id/postnumber_edt"
-                            style="@style/EditText_Normal"
-                            android:imeOptions="actionDone"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_weight="1.5"
-                            android:hint="@string/postnummer"
-                            android:background="@drawable/rectangle_edittext"
-                            android:inputType="number"
-                            android:padding="@dimen/_8sdp"
-                            android:singleLine="true"
-                            android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/postnumber_txt" />
+                            <android.support.v7.widget.AppCompatEditText
+                                android:id="@+id/floor_edt"
+                                android:nextFocusDown="@id/postnumber_edt"
+                                style="@style/EditText_Normal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_weight="1.5"
+                                android:hint="@string/etage_dor_andet_valgfrit"
+                                android:background="@drawable/rectangle_edittext"
+                                android:padding="@dimen/_8sdp"
+                                android:singleLine="true"
+                                android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/house_edt" />
 
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/city_txt"
-                            style="@style/SubtitleMidium_TextViewSmall"
-                            android:layout_width="wrap_content"
-                            android:layout_height="22dp"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:text="@string/by"
-                            android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/postnumber_edt" />
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/postnumber_txt"
+                                style="@style/SubtitleMidium_TextViewSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:text="@string/postnummer"
+                                android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/floor_edt" />
 
 
-                      <!--  <android.support.v7.widget.AppCompatEditText
-                            android:id="@+id/city_edt"
-                            style="@style/EditText_Normal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginBottom="@dimen/_16sdp"
-                            android:layout_weight="1.5"
-                            android:background="@drawable/rectgreycurve_shape"
-                            android:enabled="false"
-                            android:padding="@dimen/_8sdp"
-                            android:singleLine="true"
-                            android:text="sdfsdf"
-                            android:textColorHint="@color/black_txt_light"
-                            android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/city_txt"
-
-                            />
--->
-                        <android.support.v7.widget.AppCompatEditText
-                            android:id="@+id/city_edt"
-                            style="@style/EditText_Normal"
-                            android:layout_width="match_parent"
-                            android:layout_height="wrap_content"
-                            android:layout_marginStart="8dp"
-                            android:layout_marginTop="8dp"
-                            android:layout_marginEnd="8dp"
-                            android:layout_marginBottom="@dimen/_16sdp"
-                            android:layout_weight="1.5"
-                            android:background="@drawable/rectgreycurve_shape"
-                            android:enabled="false"
-                            android:padding="@dimen/_8sdp"
-                            android:singleLine="true"
-                            android:textColor="@color/black_light"
-                            android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/city_txt"
-
-                            />
+                            <android.support.v7.widget.AppCompatEditText
+                                android:id="@+id/postnumber_edt"
+                                style="@style/EditText_Normal"
+                                android:imeOptions="actionDone"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_weight="1.5"
+                                android:hint="@string/postnummer"
+                                android:background="@drawable/rectangle_edittext"
+                                android:inputType="number"
+                                android:padding="@dimen/_8sdp"
+                                android:singleLine="true"
+                                android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/postnumber_txt" />
 
 
-                        <!--<android.support.v7.widget.AppCompatButton
-                            android:id="@+id/proceed_view_nxt"
-                            style="@style/Button"
-                            android:layout_alignParentBottom="true"
-                            android:layout_marginStart="10dp"
-                            android:layout_marginTop="16dp"
-                            android:layout_marginEnd="16dp"
-                            android:layout_marginBottom="16dp"
-                            android:backgroundTint="@color/theme_color"
-                            android:text="@string/continue_"
-                            android:textColor="@color/white"
-                            app:layout_constraintBottom_toBottomOf="parent"
-                            app:layout_constraintEnd_toEndOf="parent"
-                            app:layout_constraintHorizontal_bias="0.0"
-                            app:layout_constraintStart_toStartOf="parent"
-                            app:layout_constraintTop_toBottomOf="@+id/city_edt" />
-        -->
+                            <android.support.v7.widget.AppCompatTextView
+                                android:id="@+id/city_txt"
+                                style="@style/SubtitleMidium_TextViewSmall"
+                                android:layout_width="wrap_content"
+                                android:layout_height="22dp"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:text="@string/by"
+                                android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintHorizontal_bias="0.0"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/postnumber_edt" />
 
 
-                    </android.support.constraint.ConstraintLayout>
+
+                            <android.support.v7.widget.AppCompatEditText
+                                android:id="@+id/city_edt"
+                                style="@style/EditText_Normal"
+                                android:layout_width="match_parent"
+                                android:layout_height="wrap_content"
+                                android:layout_marginStart="8dp"
+                                android:layout_marginTop="8dp"
+                                android:layout_marginEnd="8dp"
+                                android:layout_marginBottom="@dimen/_16sdp"
+                                android:layout_weight="1.5"
+                                android:background="@drawable/rectgreycurve_shape"
+                                android:enabled="false"
+                                android:padding="@dimen/_8sdp"
+                                android:singleLine="true"
+                                android:textColor="@color/black_light"
+                                android:visibility="@{isPickup == false ? View.VISIBLE : View.GONE}"
+                                app:layout_constraintBottom_toBottomOf="parent"
+                                app:layout_constraintEnd_toEndOf="parent"
+                                app:layout_constraintStart_toStartOf="parent"
+                                app:layout_constraintTop_toBottomOf="@+id/city_txt"
+
+                                />
+
+
+
+                        </android.support.constraint.ConstraintLayout>
+
+
+
+
 
 
                 </android.support.v4.widget.NestedScrollView>
@@ -372,7 +332,9 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:layout_alignParentBottom="true"
-                    android:background="@color/white">
+                    android:background="@color/white"
+                    android:visibility="@{user_Info ==null ? View.GONE : View.VISIBLE }"
+                    >
 
                     <View
                         android:id="@+id/view"
@@ -391,46 +353,31 @@
                         android:layout_marginBottom="8dp"
                         android:backgroundTint="@color/theme_color"
                         android:text="@string/næste"
-                        android:textColor="@color/white" />
+                        android:textColor="@color/white" tools:targetApi="lollipop"/>
 
                 </RelativeLayout>
 
 
 
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    style="?android:attr/progress"
+                    android:layout_marginTop="@dimen/_30sdp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:indeterminate="true" />
+
+
+
             </RelativeLayout>
 
-            <ProgressBar
-                android:id="@+id/progress_bar"
-                style="?android:attr/progress"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_centerInParent="true"
-                android:indeterminate="true" />
-
-
-        </RelativeLayout>
-
-
-        <dk.eatmore.foodapp.utils.ProgressWheel
-            android:id="@+id/progresswheel"
-            android:layout_width="50dp"
-            android:layout_height="50dp"
-            android:layout_centerInParent="true"
-            android:layout_gravity="center_vertical|center_horizontal"
-            ProgressWheel:pwTextColor="@android:color/transparent"
-            ProgressWheel:pwTextSize="9sp"
-            android:visibility="gone"
-            ProgressWheel:pwRimColor="@android:color/transparent"
-            ProgressWheel:pwBarLength="80dp"
-            ProgressWheel:pwBarColor ="@color/theme_color"
-            ProgressWheel:pwBarWidth="4dp"
-            ProgressWheel:pwRimWidth="1dp"
-            ProgressWheel:pwSpinSpeed="4dp"
-            />
 
 
 
-    </FrameLayout>
+
+
+    </RelativeLayout>
 
 
 </layout>

@@ -284,5 +284,7 @@
     <string name="enter_your_number">Indtast venligst dit telefonnummer</string>
     <string name="old_password_is_not_valid">Tidligere kodeord er ikke gyldigt</string>
     <string name="sorry_delivery_is_not_available">Sorry this restaurant does not deliver any more for today.</string>
+    <string name="content_image">content_image</string>
+    <string name="content_icon">content_icon</string>
 
 </resources>

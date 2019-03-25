@@ -52,8 +52,12 @@ import dk.eatmore.foodapp.utils.*
 import kotlinx.android.synthetic.main.deliverytimeslot.*
 import kotlinx.android.synthetic.main.dynamic_raw_item.view.*
 import kotlinx.android.synthetic.main.dynamic_raw_subitem.view.*
+import kotlinx.android.synthetic.main.include_calculationprice.*
 import kotlinx.android.synthetic.main.paymentmethod.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.runOnUiThread
+import org.jetbrains.anko.uiThread
 import retrofit2.Call
 
 
@@ -100,17 +104,28 @@ class Paymentmethod : CommanAPI(), TextWatcher {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
-          //  isPaymentonline=true
+            isPaymentonline=true
             val myclickhandler=MyClickHandler(this)
             binding.handlers=myclickhandler
             binding.executePendingBindings()
-            //setanim_toolbartitle(appbar,(activity as EpayActivity).txt_toolbar,getString(R.string.payment))
+            setToolbarforThis()
             applyonlinegift_edt.addTextChangedListener(this)
             applycashgift_edt.addTextChangedListener(this)
-            availablerest_paymethods()
-            setToolbarforThis()
-            showproductInfo()
-            addspantext()
+            //setanim_toolbartitle(appbar,(activity as EpayActivity).txt_toolbar,getString(R.string.payment))
+
+            doAsync {
+                loge(TAG,"thread---")
+
+                uiThread {
+                    loge(TAG,"UI thread---")
+                    availablerest_paymethods()
+                    showproductInfo()
+                    addspantext()
+
+                }
+            }
+
+
 
         }
     }
@@ -422,7 +437,7 @@ class Paymentmethod : CommanAPI(), TextWatcher {
 
         if(EpayFragment.paymentattributes.online_logo !="" && EpayFragment.paymentattributes.cash_logo==""){
             // only online---
-            cash_payment.visibility=View.GONE
+        //    cash_payment.visibility=View.GONE
             online_method.visibility=View.VISIBLE
             cash_method.visibility=View.GONE
             giftonline_view.visibility=View.GONE
@@ -444,7 +459,7 @@ class Paymentmethod : CommanAPI(), TextWatcher {
         }
         else if(EpayFragment.paymentattributes.online_logo =="" && EpayFragment.paymentattributes.cash_logo !=""){
             // only cash---
-            online_payment.visibility=View.GONE
+         //   online_payment.visibility=View.GONE
             online_method.visibility=View.GONE
             cash_method.visibility=View.VISIBLE
             giftonline_view.visibility=View.GONE
@@ -467,8 +482,8 @@ class Paymentmethod : CommanAPI(), TextWatcher {
 
         }else{
             // online and cash
-            cash_payment.visibility=View.VISIBLE
-            online_payment.visibility=View.VISIBLE
+        //    cash_payment.visibility=View.VISIBLE
+           // online_payment.visibility=View.VISIBLE
             isPaymentonline=true
             paymentmethod_visible_are()
 
@@ -815,6 +830,8 @@ class Paymentmethod : CommanAPI(), TextWatcher {
                     error_of_onlinegiftcard.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))
                 }
                 // this is progress bar and error text to settext and visible
+                /*TODO : differentiate error.
+                 */
                 progress_applyonlinegift.visibility=View.GONE
                 progress_applycashgift.visibility=View.GONE
                 applycash_txt.visibility=View.VISIBLE

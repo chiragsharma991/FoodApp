@@ -40,7 +40,6 @@ import com.google.android.gms.tasks.OnCompleteListener
 import com.google.android.gms.tasks.Task
 import com.google.firebase.auth.*
 import com.google.gson.JsonObject
-import dk.eatmore.foodapp.activity.main.epay.EpayActivity
 import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
@@ -143,7 +142,7 @@ class AccountFragment : BaseFragment() {
     }
 
     private fun moveon_login(username : String , password_hash : String){
-
+        hideKeyboard()
         if (isValidate()) {
             acc_email_edt.clearFocus()
             acc_password_edt.clearFocus()

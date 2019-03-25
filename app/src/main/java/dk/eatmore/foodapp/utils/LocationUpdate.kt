@@ -1,6 +1,7 @@
 package dk.eatmore.foodapp.utils
 
 import android.Manifest
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.IntentSender
 import android.content.pm.PackageManager
@@ -142,7 +143,8 @@ class LocationUpdate(private val context: Activity, val onLocationInteraction: O
         mRequestingLocationUpdates = isChange
     }
 
-    /**
+    @SuppressLint("MissingPermission")
+            /**
      * Requests location updates from the FusedLocationApi. Note: we don't call this unless location
      * runtime permission has been granted.
      */

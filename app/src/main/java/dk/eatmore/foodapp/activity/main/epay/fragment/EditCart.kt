@@ -26,7 +26,6 @@ import kotlinx.android.synthetic.main.fragment_edit_cart.*
 import java.util.HashMap
 import android.text.Editable
 import android.text.TextWatcher
-import dk.eatmore.foodapp.activity.main.epay.EpayActivity
 import kotlinx.android.synthetic.main.toolbar.*
 import kotlinx.android.synthetic.main.transaction_status.*
 
@@ -255,7 +254,7 @@ class EditCart : BaseFragment(), ICardRegistrationCallback, CardFormEditText.IOn
         fun backToOrder(view: View) {
             //loge("TAG","click---")
             Log.e("TAG","click---")
-            (editcart.activity as EpayActivity).finishActivity()
+          //  (editcart.activity as EpayActivity).finishActivity()
         }
 
 

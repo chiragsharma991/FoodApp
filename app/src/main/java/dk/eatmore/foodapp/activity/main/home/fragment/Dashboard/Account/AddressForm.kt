@@ -18,7 +18,6 @@ import android.widget.TextView
 import android.widget.Toast
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.epay.EpayActivity
 import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.EditAddress
@@ -279,6 +278,7 @@ class AddressForm : BaseFragment(), TextWatcher {
 
 
 
+/*
 
     fun setToolbarforThis(){
         (activity as EpayActivity).txt_toolbar.text=getString(R.string.add_new_address)
@@ -297,6 +297,7 @@ class AddressForm : BaseFragment(), TextWatcher {
             (parentFragment as Address).popFragment()
         }
     }
+*/
 
 
 
