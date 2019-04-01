@@ -189,8 +189,8 @@
                 style="@style/TextViewMid"
                 android:id="@+id/addtocart_txt"
                 android:text="@string/add_to_cart"
-                android:layout_centerInParent="true"
                 android:textColor="@color/white"
+                android:layout_centerInParent="true"
                 />
             <android.support.v7.widget.AppCompatTextView
                 style="@style/TextViewMid"

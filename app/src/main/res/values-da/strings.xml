@@ -132,7 +132,7 @@
     <string name="pay">Gå til betaling</string>
     <string name="basket">Indkøbskurv</string>
     <string name="info">Information</string>
-    <string name="payment">Hvordan til du betaling?</string>
+    <string name="payment">Hvordan vil du betale?</string>
     <string name="confirm_delivery_time">Bekræft din leveringstid</string>
     <string name="payment_methods">Payment Methods</string>
     <string name="addresses">Addresses</string>

@@ -6,6 +6,7 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModelProviders
+import android.content.Context
 import android.content.Intent
 import android.databinding.DataBindingUtil
 import android.os.Build
@@ -15,6 +16,11 @@ import android.support.annotation.RequiresApi
 import android.support.v4.content.ContextCompat
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v7.widget.LinearLayoutManager
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
+import android.text.style.StrikethroughSpan
 import android.transition.Slide
 import android.transition.Transition
 import android.util.Log
@@ -42,6 +48,7 @@ import dk.eatmore.foodapp.model.cart.Data
 import dk.eatmore.foodapp.model.cart.ProductAttributeListItem
 import dk.eatmore.foodapp.model.cart.ProductDetails
 import dk.eatmore.foodapp.model.cart.ProductIngredientsItem
+import dk.eatmore.foodapp.model.home.ProductListItem
 import java.util.*
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
@@ -61,13 +68,17 @@ class CartActivity : BaseActivity() {
     private var tagadapter: TagAdapter<String>? = null
     private lateinit var productdetails: ProductDetails
     private lateinit var binding: ActivityCartBinding
+    var item_p_id = ""
+    var actual_price = "0"
+    var actual_price_afterDiscount = "0"
+    var discountType = 0
+    var discount = "0"
+    var minimum_order_price = "0"
+    var offerDiscounted :Boolean = false
     // private var can_i_do_addtocart : Boolean = false
-
 
     companion object {
         val TAG = "CartActivity"
-        var item_p_id = ""
-        var p_price = ""
         var ui_model: UIModel? = null
         fun newInstance(): CartActivity {
             return CartActivity()
@@ -148,8 +159,23 @@ class CartActivity : BaseActivity() {
                 })
                 any_selection.observe(this@CartActivity, Observer<Boolean> {
 
-                    val text = String.format(getString(R.string.add_to_cart), BindDataUtils.convertCurrencyToDanish(CartListFunction.calculateValuesofAddtocart(ui_model!!.product_attribute_list, productdetails).toString()))
-                    addtocart_txt.text = text
+                    loge(TAG,"discount--"+discount)
+
+                    if(discountType == 0 || discountType == 2){
+                        // no discount || order discount
+                         actual_price = CartListFunction.calculateValuesofAddtocart(ui_model!!.product_attribute_list, productdetails).toString()
+                         addtocart_txt.text = Setproductprice(context = this@CartActivity,actual_price = actual_price, actual_price_afterDiscount = actual_price_afterDiscount ,discountType = discountType)
+                        // only need actual price
+                    }else{
+                        // discount is present (product discount)
+                        actual_price=CartListFunction.calculateValuesofAddtocart(ui_model!!.product_attribute_list, productdetails).toString()
+                        actual_price_afterDiscount = (actual_price.toDouble() - ((discount.toDouble() * actual_price.toDouble()) / 100)).toString()
+                        addtocart_txt.text = Setproductprice(context = this@CartActivity,actual_price = actual_price.toString(), actual_price_afterDiscount = actual_price_afterDiscount.toString() ,discountType = discountType)
+
+                    }
+
+
+
                 })
             }
 
@@ -238,7 +264,6 @@ class CartActivity : BaseActivity() {
 
                     addtocart_view.alpha =if(can_i_do_addtocart()) 1.0f else 0.5f
 
-
                     //----
 
 
@@ -298,9 +323,17 @@ class CartActivity : BaseActivity() {
         addtocart_view.setTag("ADD_TO_CART")
         addtocart_view.visibility = View.GONE
         addtocart_view.alpha =0.5f
+
         val title = intent.extras.getString("TITLE", "")
         item_p_id = intent.extras.getString("PID", "")
-        p_price = intent.extras.getString("p_price", "")
+        actual_price = intent.extras.getString("actual_price", "0")
+        actual_price_afterDiscount = intent.extras.getString("actual_price_afterDiscount", "0")
+        discountType = intent.extras.getInt("discountType", 0)
+        discount = intent.extras.getString("discount", "0")
+        minimum_order_price = intent.extras.getString("minimum_order_price", "0")
+        offerDiscounted = intent.extras.getBoolean("offerDiscounted", false)
+
+
         txt_toolbar.text = title
         toolbar.setNavigationIcon(ContextCompat.getDrawable(this, R.drawable.close))
         toolbar.setNavigationOnClickListener {
@@ -310,8 +343,12 @@ class CartActivity : BaseActivity() {
             transition = buildEnterTransition()
             window.enterTransition = transition
         }
-        val text = String.format(getString(R.string.add_to_cart), p_price)
-        addtocart_txt.text = text
+        //val text = String.format(getString(R.string.add_to_cart), p_price)
+        addtocart_txt.text = Setproductprice(context = this,actual_price = actual_price, actual_price_afterDiscount = actual_price_afterDiscount ,discountType = discountType)
+
+
+
+
         ui_model = createViewModel()
 
 
@@ -357,7 +394,35 @@ class CartActivity : BaseActivity() {
                 }
                 postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN, ""))
                 postParam.addProperty(Constants.P_ID, item_p_id)
-                postParam.addProperty(Constants.P_PRICE, CartListFunction.calculateValuesofAddtocart(ui_model!!.product_attribute_list, productdetails).toString())
+
+                when(discountType){
+                    0 ->{
+                        // no discount
+                        loge(TAG,"no discount--")
+                        postParam.addProperty(Constants.P_PRICE,actual_price)
+                        postParam.addProperty(Constants.DISCOUNT_APPLIED,  0 )
+                        postParam.addProperty(Constants.PRODUCT_DISCOUNT_,"0.00")
+                    }
+                    1->{
+                        // product discount
+                        loge(TAG,"product discount--")
+                        postParam.addProperty(Constants.P_PRICE,if(offerDiscounted) actual_price_afterDiscount else actual_price)
+                        postParam.addProperty(Constants.DISCOUNT_APPLIED,if(offerDiscounted) 1 else 0 )
+                        postParam.addProperty(Constants.PRODUCT_DISCOUNT_,if(offerDiscounted) discount else "0.00")
+                    }
+                    2->{
+                        // order discount
+                        val test =DetailsFragment.total_cartamt.toDouble() + actual_price.toDouble()
+                        loge(TAG,"order discount--"+test.toString())
+                        postParam.addProperty(Constants.P_PRICE, actual_price)
+                        if(DetailsFragment.total_cartamt.toDouble() + actual_price.toDouble() >= minimum_order_price.toDouble())
+                        postParam.addProperty(Constants.DISCOUNT_APPLIED,2)
+                        else
+                        postParam.addProperty(Constants.DISCOUNT_APPLIED,0)
+                        postParam.addProperty(Constants.PRODUCT_DISCOUNT_,discount)
+
+                    }
+                }
                 postParam.addProperty(Constants.P_QUANTITY, "1")
                 // pass 0,1,2 to get different INGREDIENTS/ATTRUBUTES/EXTRATOPPINGS
                 postParam.add(Constants.INGREDIENTS, getjsonparmsofAddtocart(item_p_id, ui_model!!.product_ingredients, ui_model!!.product_attribute_list, productdetails, 0))
@@ -374,17 +439,8 @@ class CartActivity : BaseActivity() {
                         val jsonObject = body as JsonObject
                         if (jsonObject.get(Constants.STATUS).asBoolean) {
 
-
-                            /*       2018-12-05 18:16:16.495 25542-26139/dk.eatmore.foodapp D/OkHttp:     "status": true,
-                                   2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "is_user_deleted": false,
-                                   2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "is_restaurant_closed": false,
-                                   2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "order_total": 65,
-                                   2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "msg": "all records.",
-                                   2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "cartcnt": "1",
-                                   2018-12-05 18:31:59.001 26334-26386/dk.eatmore.foodapp D/OkHttp:     "pre_order": true
-                                   2018-12-05 18:16:16.496 25542-26139/dk.eatmore.foodapp D/OkHttp:     "cartamt": "65.00"*/
                             if ((jsonObject.has(Constants.IS_RESTAURANT_CLOSED) && jsonObject.get(Constants.IS_RESTAURANT_CLOSED).asBoolean == true) &&
-                                    (jsonObject.has(Constants.PRE_ORDER) && jsonObject.get(Constants.PRE_ORDER).asBoolean == false)) {
+                                (jsonObject.has(Constants.PRE_ORDER) && jsonObject.get(Constants.PRE_ORDER).asBoolean == false)) {
                                 // restaurant is closed / preorder
                                 val msg = if (jsonObject.has(Constants.MSG)) jsonObject.get(Constants.MSG).asString else getString(R.string.sorry_restaurant_has_been_closed)
                                 val intent = Intent()
@@ -487,6 +543,36 @@ class CartActivity : BaseActivity() {
 
 
     }
+
+    fun Setproductprice(context : Context, actual_price : String , actual_price_afterDiscount : String , discountType : Int ) : SpannableStringBuilder {
+
+        if(discountType == 0 || discountType == 2){
+            // no discount || order discount
+            val builder = SpannableStringBuilder()
+            val span1 = SpannableString("ADD TO CART ")
+            val span2 = SpannableString(BindDataUtils.convertCurrencyToDanish(actual_price))
+            builder.append(span1).append(span2)
+            return builder
+
+        }else{
+            // discount is present (product discount)
+            //String.format("%2f", model.actual_price!!.toDouble()) // round decimal
+            val priceAfterDiscount = BindDataUtils.convertCurrencyToDanish(actual_price_afterDiscount)!! // add kr and change into danish
+            val priceBeforeDiscount = BindDataUtils.convertCurrencyToDanishWithoutLabel(actual_price)!!
+            val builder = SpannableStringBuilder()
+            val strikethroughSpan = StrikethroughSpan()
+            val span1 = SpannableString("ADD TO CART ")
+            val span2 = SpannableString(priceBeforeDiscount)
+            val span3 = SpannableString(" " + priceAfterDiscount)
+            span2.setSpan(strikethroughSpan, 0, priceBeforeDiscount.trim().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            span2.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.white)), 0, priceBeforeDiscount.trim().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            builder.append(span1).append(span2).append(span3)
+            return builder
+        }
+
+    }
+
+
 
 
     override fun onBackPressed() {

@@ -24,9 +24,14 @@ data class ProductListItem(val productIngredients: String = "",
                            val restaurantId: String = "",
                            val product_attribute: ArrayList<ProductAttributeItem>? = arrayListOf(),
                            val p_desc: String = "",
+
                            var actual_price: String ?=null,
                            var actual_price_afterDiscount: String ?=null, // first calculate and added discount into it.
                            var discountType: Int =0,  // 0 no any discount | 1: product discount | 2: order discount
+                           var discount : String? ="",
+                           var minimum_order_price : String? ="",
+                           var offerDiscounted : Boolean =false,
+
                            val p_price: String ?=null,
                            val productNo: String = "",
                            val p_name: String = "",

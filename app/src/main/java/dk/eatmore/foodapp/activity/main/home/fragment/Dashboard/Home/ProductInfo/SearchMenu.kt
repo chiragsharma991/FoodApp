@@ -185,6 +185,7 @@ class SearchMenu : BaseFragment() {
                                 val item =menu_list.get(i).product_list!![j]
                                 if(menu_list.get(i).product_list!!.get(j).product_attribute ==null){
 
+
                                     productlistitem.add(ProductListItem(
                                             productIngredients = "",
                                             restaurantId = "",
@@ -197,7 +198,15 @@ class SearchMenu : BaseFragment() {
                                             c_id = item.c_id,
                                             is_attributes =item.is_attributes ,
                                             pImage = item.pImage,
-                                            p_id = item.p_id)
+                                            p_id = item.p_id,
+
+                                            actual_price = item.actual_price,
+                                            actual_price_afterDiscount = item.actual_price_afterDiscount,
+                                            discountType = item.discountType,
+                                            discount = item.discount,
+                                            minimum_order_price = item.minimum_order_price,
+                                            offerDiscounted = item.offerDiscounted
+                                    )
                                     )
 
                                 }else{
@@ -227,7 +236,16 @@ class SearchMenu : BaseFragment() {
                                             c_id = item.c_id,
                                             is_attributes =item.is_attributes ,
                                             pImage = item.pImage,
-                                            p_id = item.p_id)
+                                            p_id = item.p_id,
+
+                                            actual_price = item.actual_price,
+                                            actual_price_afterDiscount = item.actual_price_afterDiscount,
+                                            discountType = item.discountType,
+                                            discount = item.discount,
+                                            minimum_order_price = item.minimum_order_price,
+                                            offerDiscounted = item.offerDiscounted
+
+                                    )
                                     )
 
                                 }
@@ -276,7 +294,12 @@ class SearchMenu : BaseFragment() {
                         val intent = Intent(activity, CartActivity::class.java)
                         intent.putExtra("TITLE", data.p_name)
                         intent.putExtra("PID", data.p_id)
-                        intent.putExtra("p_price", if (data.product_attribute == null) BindDataUtils.convertCurrencyToDanish(data.p_price ?: "0") else productpricecalculation.getprice(data))
+                        intent.putExtra("actual_price", data.actual_price?:"")
+                        intent.putExtra("actual_price_afterDiscount", data.actual_price_afterDiscount?:"")
+                        intent.putExtra("discountType", data.discountType)
+                        intent.putExtra("discount", data.discount?:"")
+                        intent.putExtra("offerDiscounted", data.offerDiscounted)
+                        intent.putExtra("minimum_order_price", data.minimum_order_price?:"")
                         val pairs: Array<Pair<View, String>> = TransitionHelper.createSafeTransitionParticipants(activity!!, true)
                         val transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, *pairs)
                         //startActivityForResult(intent,Constants.REQ_SEA_RESAURANT_CLOSED, transitionActivityOptions.toBundle())

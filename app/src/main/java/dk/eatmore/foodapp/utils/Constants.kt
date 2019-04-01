@@ -48,6 +48,8 @@ class Constants {
     const  val OP_ID = "op_id"
     const  val P_ID = "p_id"
     const  val USER_DETAILS = "user_details"
+    const  val DISCOUNT_APPLIED  = "discount_applied "
+    const  val PRODUCT_DISCOUNT_  = "product_discount "
     const  val P_PRICE = "p_price"
     const  val P_QUANTITY = "p_quantity"
     const  val INGREDIENTS = "ingredients"

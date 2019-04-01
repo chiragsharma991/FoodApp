@@ -106,14 +106,13 @@ class Paymentmethod : CommanAPI() {
 
     private fun refreshview(){
         paymentinfo_list = ArrayList<PaymentInfoModel>()
-        paymentinfo_list.add(PaymentInfoModel(payment_type = getString(R.string.online_payment) ,error_expand =false,gift_expand = false,image_path = EpayFragment.paymentattributes.online_logo,view_expand = true,btn_txt =online_btn_txt,gift_loader = false,edittextvalue = "chi" ))
-        paymentinfo_list.add(PaymentInfoModel(payment_type = getString(R.string.cash_payment) ,error_expand =false,gift_expand = false,image_path = EpayFragment.paymentattributes.cash_logo,view_expand = false,btn_txt = cash_btn_txt,gift_loader = false,edittextvalue = "moh"))
+        paymentinfo_list.add(PaymentInfoModel(payment_type = getString(R.string.online_payment) ,error_expand =false,gift_expand = false,image_path = EpayFragment.paymentattributes.online_logo,view_expand = true,btn_txt =online_btn_txt,gift_loader = false,edittextvalue = "" ))
+        paymentinfo_list.add(PaymentInfoModel(payment_type = getString(R.string.cash_payment) ,error_expand =false,gift_expand = false,image_path = EpayFragment.paymentattributes.cash_logo,view_expand = false,btn_txt = cash_btn_txt,gift_loader = false,edittextvalue = ""))
         //TODO : add dynamice condition for online/cash
         mAdapter = CashonlineAdapter(context!!,paymentinfo_list,myclickhandler,this)
         recycler_view.layoutManager = LinearLayoutManager(getActivityBase())
         recycler_view.adapter = mAdapter
         Handler().postDelayed({binding.isProgress=false},500)
-
     }
 
     data class PaymentInfoModel(

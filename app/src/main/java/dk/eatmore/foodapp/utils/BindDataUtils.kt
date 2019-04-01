@@ -239,8 +239,7 @@ object BindDataUtils {
             val builder = SpannableStringBuilder()
             val span1 = SpannableString("fra: ")
             val span2 = SpannableString(BindDataUtils.convertCurrencyToDanish(model.actual_price!!))
-            if (model.product_attribute != null)
-            builder.append(span1)
+            if (model.is_attributes == "1" || model.extra_topping_group != null ) builder.append(span1)
             builder.append(span2)
             return builder
 
@@ -256,7 +255,7 @@ object BindDataUtils {
             val span3 = SpannableString(" " + priceAfterDiscount)
             span2.setSpan(strikethroughSpan, 0, priceBeforeDiscount.trim().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
             span2.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.theme_color)), 0, priceBeforeDiscount.trim().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-            if (model.product_attribute != null) builder.append(span1).append(span2).append(span3)
+            if (model.is_attributes == "1" || model.extra_topping_group != null ) builder.append(span1).append(span2).append(span3)
             else builder.append(span2).append(span3)
             return builder
         }

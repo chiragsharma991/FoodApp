@@ -84,7 +84,7 @@ class DetailsFragment : CommanAPI() {
         val TAG = "DetailsFragment"
         var total_cartcnt: Int = 0
         var canIrefreshpre_Function: Boolean = false
-        var total_cartamt: String = ""
+        var total_cartamt: String = "0"
         var delivery_charge_title: String = ""
         var delivery_charge: String = ""
         var delivery_text : String =""
@@ -202,12 +202,12 @@ class DetailsFragment : CommanAPI() {
                 category_menulist.removeObservers(this@DetailsFragment)
 
                 category_menulist.observe(this@DetailsFragment, Observer<RestaurantInfoModel> {
-                    submitallDiscount(category_menulist.value!!.menu,category_menulist.value!!.restaurant_info)
+                    submitAllDiscount(category_menulist.value!!.menu,category_menulist.value!!.restaurant_info)
                 })
             }
 
 
-    fun submitallDiscount( menu: ArrayList<MenuListItem>? , restaurant_info: Restaurant?){
+    fun submitAllDiscount( menu: ArrayList<MenuListItem>? , restaurant_info: Restaurant?){
         if(menu !=null && restaurant_info !=null){
         for (i in 0 until menu.size){
             for (j in 0 until menu[i].product_list!!.size){
@@ -218,6 +218,10 @@ class DetailsFragment : CommanAPI() {
                     productListItem.discountType=0
                     productListItem.actual_price=  getprice(productListItem)
                     productListItem.actual_price_afterDiscount=  null
+                    productListItem.discount=  null
+                    productListItem.offerDiscounted=  false
+                    productListItem.minimum_order_price=  null
+
                 } else {
                     // discount
                     val productListItem= menu[i].product_list!![j]
@@ -229,24 +233,33 @@ class DetailsFragment : CommanAPI() {
                             if (restaurant_info.offer_details!!.category_id.contains(productListItem.c_id)) {
                                 // this product is for discount
                                 productListItem.discountType=1
+                                productListItem.discount=  restaurant_info.offer_details!!.discount!!
+                                productListItem.minimum_order_price=  null
                                 val priceBeforeDiscount = getprice(productListItem)
                                 val priceAfterDiscount = (priceBeforeDiscount.toDouble() - ((restaurant_info.offer_details!!.discount!!.toDouble() * priceBeforeDiscount.toDouble()) / 100))
                                 productListItem.actual_price=  priceBeforeDiscount
                                 productListItem.actual_price_afterDiscount=  priceAfterDiscount.toString()
+                                productListItem.offerDiscounted=  true
 
                             } else {
                                 // this product is not for discount
                                 productListItem.discountType=0
+                                productListItem.discount= null
                                 productListItem.actual_price=  getprice(productListItem)
                                 productListItem.actual_price_afterDiscount=  null
+                                productListItem.offerDiscounted=  false
+                                productListItem.minimum_order_price=  null
                             }
                         } else {
                             // all product have discount
                             productListItem.discountType=1
+                            productListItem.discount=  restaurant_info.offer_details!!.discount!!
                             val priceBeforeDiscount = getprice(productListItem)
                             val priceAfterDiscount = (priceBeforeDiscount.toDouble() - ((restaurant_info.offer_details!!.discount!!.toDouble() * priceBeforeDiscount.toDouble()) / 100))
                             productListItem.actual_price=  priceBeforeDiscount
                             productListItem.actual_price_afterDiscount=  priceAfterDiscount.toString()
+                            productListItem.offerDiscounted=  true
+                            productListItem.minimum_order_price=  null
                         }
 
 
@@ -255,7 +268,9 @@ class DetailsFragment : CommanAPI() {
                         productListItem.discountType=2
                         productListItem.actual_price=  getprice(productListItem)
                         productListItem.actual_price_afterDiscount=  null
-
+                        productListItem.discount=  restaurant_info.offer_details!!.discount!!
+                        productListItem.offerDiscounted=  true
+                        productListItem.minimum_order_price=  restaurant_info.offer_details!!.minimum_order_price
                     }
 
                 }
