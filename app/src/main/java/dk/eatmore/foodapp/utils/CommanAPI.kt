@@ -21,7 +21,6 @@ import retrofit2.Call
 
 abstract class CommanAPI : BaseFragment() {
 
-    val TAG: String = "CommanAPI"
 
     abstract fun comman_apisuccess(jsonObject: JsonObject, api_tag: String)
     abstract fun comman_apifailed(error: String, api_tag: String)
@@ -151,14 +150,14 @@ abstract class CommanAPI : BaseFragment() {
                 when (error) {
                     404 -> {
                         // showSnackBar(containerview, getString(R.string.error_404))
-                        loge(TAG, getString(R.string.error_404))
+                        loge("Comman API", getString(R.string.error_404))
                         comman_apifailed(getString(R.string.error_404), Constants.COM_ADD_FAVORITE_RESTAURANT)
 
 
                     }
                     100 -> {
                         // showSnackBar(containerview, getString(R.string.internet_not_available))
-                        loge(TAG, getString(R.string.internet_not_available))
+                        loge("Comman API", getString(R.string.internet_not_available))
                         comman_apifailed(getString(R.string.internet_not_available), Constants.COM_ADD_FAVORITE_RESTAURANT)
 
                     }
@@ -178,7 +177,7 @@ abstract class CommanAPI : BaseFragment() {
                 if (jsonObject.get(Constants.STATUS).asBoolean) {
                     if (restaurant != null) {
                         if (restaurant is Restaurant) {
-                            loge(TAG, "restaurant type")
+                            loge("Comman API", "restaurant type")
                             restaurant.is_fav = false
                             restaurant.fav_progress = false
                         } else if (restaurant is Data) {
@@ -190,7 +189,7 @@ abstract class CommanAPI : BaseFragment() {
                 } else {
                     if (restaurant != null) {
                         if (restaurant is Restaurant) {
-                            loge(TAG, "restaurant type")
+                            loge("Comman API", "restaurant type")
                             restaurant.is_fav = true  // if fail something then do not do unfavourite.
                             restaurant.fav_progress = false
                         } else if (restaurant is Data) {
@@ -205,7 +204,7 @@ abstract class CommanAPI : BaseFragment() {
             override fun onFail(error: Int) {
                 if (restaurant != null) {
                     if (restaurant is Restaurant) {
-                        loge(TAG, "restaurant type")
+                        loge("Comman API", "restaurant type")
                         restaurant.is_fav = true
                         restaurant.fav_progress = false
                     } else if (restaurant is Data) {
@@ -217,14 +216,14 @@ abstract class CommanAPI : BaseFragment() {
                 when (error) {
                     404 -> {
                         // showSnackBar(containerview, getString(R.string.error_404))
-                        loge(TAG, getString(R.string.error_404))
+                        loge("Comman API", getString(R.string.error_404))
                         comman_apifailed(getString(R.string.error_404), Constants.COM_ADD_FAVORITE_RESTAURANT)
 
 
                     }
                     100 -> {
                         // showSnackBar(containerview, getString(R.string.internet_not_available))
-                        loge(TAG, getString(R.string.internet_not_available))
+                        loge("Comman API", getString(R.string.internet_not_available))
                         comman_apifailed(getString(R.string.internet_not_available), Constants.COM_ADD_FAVORITE_RESTAURANT)
 
                     }

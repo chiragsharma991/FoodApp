@@ -241,6 +241,31 @@
     </style>
 
 
+    <style name="userEdittext" parent="styleEditText">
+        <item name="android:layout_width">match_parent</item>
+        <item name="android:layout_height">43dp</item>
+        <item name="android:layout_marginEnd">10dp</item>
+        <item name="android:layout_marginStart">10dp</item>
+        <item name="android:imeOptions">actionNext</item>
+        <item name="android:maxLines">1</item>
+        <item name="android:paddingEnd">0dp</item>
+        <item name="android:paddingLeft">10dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
+        <item name="android:paddingRight">0dp</item>
+        <item name="android:paddingStart">10dp</item>
+        <item name="android:textColor">@color/darkgray</item>
+        <item name="android:textColorHint">@color/darkgray</item>
+        <item name="android:textSize">15sp</item>
+        <item name="android:singleLine">true</item>
+    </style>
+
+    <style name="styleEditText" parent="Widget.AppCompat.EditText">
+        <item name="android:textColor">#000</item><!--?android:attr/textColorSecondary-->
+        <item name="android:textColorHint">#000</item><!--?android:attr/textColorSecondaryInverse-->
+    </style>
+
+
     <!--Card view-->
 
     <style name="CardViewStyle" parent="CardView">

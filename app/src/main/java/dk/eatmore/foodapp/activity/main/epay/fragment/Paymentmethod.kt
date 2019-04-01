@@ -1,67 +1,46 @@
 package dk.eatmore.foodapp.activity.main.epay.fragment
 
 import android.app.AlertDialog
-import android.content.Context
-import android.content.DialogInterface
 import android.content.Intent
 import android.content.pm.PackageManager
 import android.databinding.DataBindingUtil
-import android.graphics.drawable.Animatable
-import android.graphics.drawable.ColorDrawable
 import android.net.Uri
 import android.os.*
-import android.support.constraint.ConstraintSet
-import android.support.transition.ChangeBounds
-import android.support.transition.TransitionManager
 import android.support.v4.content.ContextCompat
-import android.support.v4.content.LocalBroadcastManager
-import android.support.v4.view.animation.FastOutSlowInInterpolator
+import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.LinearLayoutManager
 import android.text.*
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
+import android.text.style.StrikethroughSpan
 import android.transition.Transition
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.view.animation.AnimationUtils
-import android.view.animation.AnticipateOvershootInterpolator
 import android.widget.Toast
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.cart.CartActivity
-import dk.eatmore.foodapp.activity.main.cart.fragment.Extratoppings
 import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Menu
-import dk.eatmore.foodapp.adapter.PaymentmethodAdapter
-import dk.eatmore.foodapp.adapter.cart.CartViewAdapter
-import dk.eatmore.foodapp.databinding.DeliverytimeslotBinding
+import dk.eatmore.foodapp.adapter.CashonlineAdapter
 import dk.eatmore.foodapp.databinding.PaymentmethodBinding
-import dk.eatmore.foodapp.fragment.Dashboard.Home.Address
-import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
+import dk.eatmore.foodapp.databinding.RowPaymethodBinding
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
-import dk.eatmore.foodapp.model.User
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.*
-import kotlinx.android.synthetic.main.deliverytimeslot.*
 import kotlinx.android.synthetic.main.dynamic_raw_item.view.*
 import kotlinx.android.synthetic.main.dynamic_raw_subitem.view.*
 import kotlinx.android.synthetic.main.include_calculationprice.*
 import kotlinx.android.synthetic.main.paymentmethod.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.runOnUiThread
-import org.jetbrains.anko.uiThread
 import retrofit2.Call
 
 
-class Paymentmethod : CommanAPI(), TextWatcher {
+class Paymentmethod : CommanAPI() {
 
 
     var transition: Transition? = null
@@ -73,9 +52,13 @@ class Paymentmethod : CommanAPI(), TextWatcher {
     private var call_applycode  : Call<JsonObject>? =null
     private var call_cancelorder  : Call<JsonObject>? =null
     private var is_continuefrom_online : Boolean = false
-
-
-
+    private lateinit var mAdapter: CashonlineAdapter
+    private lateinit var paymentinfo_list: ArrayList<PaymentInfoModel>
+    val myclickhandler=MyClickHandler(this)
+    private val timeoutHandler = Handler()
+    private var finalizer: Runnable? = null
+    var online_btn_txt : String = ""
+    var cash_btn_txt : String = ""
     // we have two different API so we are passing call in "checkout API" it may be from pickup/delivery :
     private lateinit var checkout_api: Call<JsonObject>
 
@@ -104,44 +87,48 @@ class Paymentmethod : CommanAPI(), TextWatcher {
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
-            isPaymentonline=true
-            val myclickhandler=MyClickHandler(this)
-            binding.handlers=myclickhandler
-            binding.executePendingBindings()
             setToolbarforThis()
-            applyonlinegift_edt.addTextChangedListener(this)
-            applycashgift_edt.addTextChangedListener(this)
-            //setanim_toolbartitle(appbar,(activity as EpayActivity).txt_toolbar,getString(R.string.payment))
+            isPaymentonline=true
+            binding.isProgress=true
 
-            doAsync {
-                loge(TAG,"thread---")
-
-                uiThread {
-                    loge(TAG,"UI thread---")
-                    availablerest_paymethods()
+            finalizer = object : Runnable {
+                override fun run() {
+                    loge(TAG, "Handler-----")
                     showproductInfo()
                     addspantext()
-
+                    refreshview()
                 }
             }
-
-
-
+            timeoutHandler.postDelayed(finalizer,  600)
         }
     }
 
-    override fun afterTextChanged(s: Editable?) {
 
-        error_of_onlinegiftcard.visibility=View.GONE
-        error_of_cashgiftcard.visibility=View.GONE
-        generateBillDetails(Constants.OTHER)
+    private fun refreshview(){
+        paymentinfo_list = ArrayList<PaymentInfoModel>()
+        paymentinfo_list.add(PaymentInfoModel(payment_type = getString(R.string.online_payment) ,error_expand =false,gift_expand = false,image_path = EpayFragment.paymentattributes.online_logo,view_expand = true,btn_txt =online_btn_txt,gift_loader = false,edittextvalue = "chi" ))
+        paymentinfo_list.add(PaymentInfoModel(payment_type = getString(R.string.cash_payment) ,error_expand =false,gift_expand = false,image_path = EpayFragment.paymentattributes.cash_logo,view_expand = false,btn_txt = cash_btn_txt,gift_loader = false,edittextvalue = "moh"))
+        //TODO : add dynamice condition for online/cash
+        mAdapter = CashonlineAdapter(context!!,paymentinfo_list,myclickhandler,this)
+        recycler_view.layoutManager = LinearLayoutManager(getActivityBase())
+        recycler_view.adapter = mAdapter
+        Handler().postDelayed({binding.isProgress=false},500)
+
     }
 
-    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
-    }
+    data class PaymentInfoModel(
+            var payment_type : String,
+            var btn_txt : String,
+            var view_expand : Boolean,
+            val image_path : String,
+            var gift_expand : Boolean,
+            var error_expand : Boolean ,
+            var gift_loader : Boolean,
+            var edittextvalue : String
+    )
 
-    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
-    }
+
+
 
     private fun generateBillDetails(giftcardis : String){
 
@@ -188,7 +175,9 @@ class Paymentmethod : CommanAPI(), TextWatcher {
             }
 
             total_txt.text=String.format(getString(R.string.dkk_price),BindDataUtils.convertCurrencyToDanishWithoutLabel(String.format("%.2f",final_amount)))
-            online_btn.text = if(final_amount <= 0.0) getString(R.string.confirm) else getString(R.string.pay)
+          //  online_btn.text = if(final_amount <= 0.0) getString(R.string.confirm) else getString(R.string.pay)
+            online_btn_txt = if(final_amount <= 0.0) getString(R.string.confirm) else getString(R.string.pay)
+            cash_btn_txt = getString(R.string.confirm)
 
         }
 
@@ -239,21 +228,16 @@ class Paymentmethod : CommanAPI(), TextWatcher {
             }
 
             total_txt.text=String.format(getString(R.string.dkk_price),BindDataUtils.convertCurrencyToDanishWithoutLabel(String.format("%.2f",final_amount)))
-            online_btn.text = if(final_amount <= 0.0) getString(R.string.confirm) else getString(R.string.pay)
+        //    online_btn.text = if(final_amount <= 0.0) getString(R.string.confirm) else getString(R.string.pay)
+            online_btn_txt = if(final_amount <= 0.0) getString(R.string.confirm) else getString(R.string.pay)
+            cash_btn_txt = getString(R.string.confirm)
+
         }
 
         // Add restaurant address and time--
         address_txt.text=EpayFragment.paymentattributes.payment_address
         deliverytime_txt.text=EpayFragment.paymentattributes.payment_time
         paymenttype_img.setImageResource(if(EpayFragment.isPickup) R.mipmap.bag else R.mipmap.motorcycle)
-        Glide.with(context!!)
-                .load(EpayFragment.paymentattributes.online_logo)
-                .into(online_payment_icon)
-        Glide.with(context!!)
-                .load(EpayFragment.paymentattributes.cash_logo)
-                .apply(RequestOptions().error(BindDataUtils.getRandomDrawbleColor()))
-                .into(cash_payment_icon)
-
 
 
     }
@@ -266,6 +250,7 @@ class Paymentmethod : CommanAPI(), TextWatcher {
         eatmore_contact.text = span
         eatmore_contact.movementMethod = LinkMovementMethod.getInstance()
     }
+
 
     val clickableSpan = object : ClickableSpan() {
         var dialog: AlertDialog? = null
@@ -392,132 +377,9 @@ class Paymentmethod : CommanAPI(), TextWatcher {
     }
 
 
-    private fun paymentmethod_visible_are(){
-
-        if(isPaymentonline){
-            online_method.visibility=View.VISIBLE
-            cash_method.visibility=View.GONE
-            giftonline_view.visibility=View.GONE
-            giftcash_view.visibility=View.GONE
-            EpayFragment.paymentattributes.discount_amount=0.0
-            EpayFragment.paymentattributes.discount_id=0
-            EpayFragment.paymentattributes.discount_type=""
-            generateBillDetails(Constants.OTHER)
-            progress_applyonlinegift.visibility=View.GONE
-            progress_applycashgift.visibility=View.GONE
-            error_of_onlinegiftcard.visibility=View.GONE
-            error_of_cashgiftcard.visibility=View.GONE
-            applycash_txt.visibility=View.VISIBLE
-            applyonline_txt.visibility=View.VISIBLE
-            online_rht_img.setImageResource(R.drawable.up_arrow)
-            cash_rht_img.setImageResource(R.drawable.down_arrow)
-
-        }else{
-            online_method.visibility=View.GONE
-            cash_method.visibility=View.VISIBLE
-            giftonline_view.visibility=View.GONE
-            giftcash_view.visibility=View.GONE
-            EpayFragment.paymentattributes.discount_amount=0.0
-            EpayFragment.paymentattributes.discount_id=0
-            EpayFragment.paymentattributes.discount_type=""
-            generateBillDetails(Constants.OTHER)
-            progress_applyonlinegift.visibility=View.GONE
-            progress_applycashgift.visibility=View.GONE
-            error_of_onlinegiftcard.visibility=View.GONE
-            error_of_cashgiftcard.visibility=View.GONE
-            applycash_txt.visibility=View.VISIBLE
-            applyonline_txt.visibility=View.VISIBLE
-            online_rht_img.setImageResource(R.drawable.down_arrow)
-            cash_rht_img.setImageResource(R.drawable.up_arrow)
-
-
-        }
-    }
-    private fun availablerest_paymethods(){
-
-        if(EpayFragment.paymentattributes.online_logo !="" && EpayFragment.paymentattributes.cash_logo==""){
-            // only online---
-        //    cash_payment.visibility=View.GONE
-            online_method.visibility=View.VISIBLE
-            cash_method.visibility=View.GONE
-            giftonline_view.visibility=View.GONE
-            giftcash_view.visibility=View.GONE
-            EpayFragment.paymentattributes.discount_amount=0.0
-            EpayFragment.paymentattributes.discount_id=0
-            EpayFragment.paymentattributes.discount_type=""
-            generateBillDetails(Constants.OTHER)
-            progress_applyonlinegift.visibility=View.GONE
-            progress_applycashgift.visibility=View.GONE
-            error_of_onlinegiftcard.visibility=View.GONE
-            error_of_cashgiftcard.visibility=View.GONE
-            applycash_txt.visibility=View.VISIBLE
-            applyonline_txt.visibility=View.VISIBLE
-            online_rht_img.setImageResource(R.drawable.up_arrow)
-            cash_rht_img.setImageResource(R.drawable.down_arrow)
-            isPaymentonline=true
-
-        }
-        else if(EpayFragment.paymentattributes.online_logo =="" && EpayFragment.paymentattributes.cash_logo !=""){
-            // only cash---
-         //   online_payment.visibility=View.GONE
-            online_method.visibility=View.GONE
-            cash_method.visibility=View.VISIBLE
-            giftonline_view.visibility=View.GONE
-            giftcash_view.visibility=View.GONE
-            EpayFragment.paymentattributes.discount_amount=0.0
-            EpayFragment.paymentattributes.discount_id=0
-            EpayFragment.paymentattributes.discount_type=""
-            generateBillDetails(Constants.OTHER)
-            progress_applyonlinegift.visibility=View.GONE
-            progress_applycashgift.visibility=View.GONE
-            error_of_onlinegiftcard.visibility=View.GONE
-            error_of_cashgiftcard.visibility=View.GONE
-            applycash_txt.visibility=View.VISIBLE
-            applyonline_txt.visibility=View.VISIBLE
-            online_rht_img.setImageResource(R.drawable.down_arrow)
-            cash_rht_img.setImageResource(R.drawable.up_arrow)
-            isPaymentonline=false
 
 
 
-        }else{
-            // online and cash
-        //    cash_payment.visibility=View.VISIBLE
-           // online_payment.visibility=View.VISIBLE
-            isPaymentonline=true
-            paymentmethod_visible_are()
-
-
-
-        }
-    }
-
-
-    private fun showapplycoupanOnline(){
-        if(giftonline_view.visibility == View.VISIBLE)
-            giftonline_view.visibility=View.GONE
-        else
-            giftonline_view.visibility=View.VISIBLE
-    }
-
-    private fun showapplycoupanCash(){
-
-        if(giftcash_view.visibility == View.VISIBLE)
-            giftcash_view.visibility=View.GONE
-        else
-            giftcash_view.visibility=View.VISIBLE
-    }
-
-
-    private  fun press_applycoupanOnline(){
-        if(applyonlinegift_edt.text.trim().toString().length > 0)
-            applygiftcoupan()
-    }
-
-    private  fun press_applycoupanCash(){
-        if(applycashgift_edt.text.trim().toString().length > 0)
-            applygiftcoupan()
-    }
 
     private  fun continuefromOnline(){
 
@@ -552,6 +414,7 @@ class Paymentmethod : CommanAPI(), TextWatcher {
     override fun comman_apisuccess(jsonObject: JsonObject, api_tag: String) {
 
         when(api_tag ){
+
             Constants.COM_INFO_RESTAURANT_CLOSED->{
                 // add tab var
                 val msg= if(jsonObject.has(Constants.MSG)) jsonObject.get(Constants.MSG).asString else ""
@@ -582,7 +445,8 @@ class Paymentmethod : CommanAPI(), TextWatcher {
                             })
                         }else{
                             //normal flow
-                            if(is_continuefrom_online)  checkoutfrom_online() else checkoutfrom_cash()
+                            if(isPaymentonline)  checkoutfrom_online() else checkoutfrom_cash()
+                            //if(is_continuefrom_online)  checkoutfrom_online() else checkoutfrom_cash()
                         }
                     }
                 }
@@ -609,7 +473,8 @@ class Paymentmethod : CommanAPI(), TextWatcher {
     }
 
     private fun checkoutfrom_cash() {
-      //  showProgressDialog()
+        loge(TAG,"chechout cash---")
+
         call_checkout=CartListFunction.getcartpaymentAttributes(context!!)!!
         callAPI(call_checkout!!, object : BaseFragment.OnApiCallInteraction {
 
@@ -668,7 +533,7 @@ class Paymentmethod : CommanAPI(), TextWatcher {
 
     private fun checkoutfrom_online() {
        // showProgressDialog()
-
+        loge(TAG,"chechout online---")
         call_checkout=CartListFunction.getcartpaymentAttributes(context!!)!!
         callAPI(call_checkout!!, object : BaseFragment.OnApiCallInteraction {
 
@@ -787,17 +652,14 @@ class Paymentmethod : CommanAPI(), TextWatcher {
     }
 
 
-    private fun applygiftcoupan() {
-        progress_applyonlinegift.visibility=View.VISIBLE
-        progress_applycashgift.visibility=View.VISIBLE
-        applycash_txt.visibility=View.GONE
-        applyonline_txt.visibility=View.GONE
+     fun applygiftcoupan(binder: RowPaymethodBinding, model: PaymentInfoModel) {
+
         call_applycode= ApiCall.applycode(
                 r_token = PreferenceUtil.getString(PreferenceUtil.R_TOKEN,"")!!,
                 order_total = EpayFragment.paymentattributes.order_total,
                 customer_id = PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,"")!!,
                 additional_charge = if(isPaymentonline) EpayFragment.paymentattributes.additional_charges_online else EpayFragment.paymentattributes.additional_charges_cash,
-                code = if(isPaymentonline)applyonlinegift_edt.text.trim().toString() else applycashgift_edt.text.trim().toString(),
+                code = model.edittextvalue.trim(),
                 r_key = PreferenceUtil.getString(PreferenceUtil.R_KEY,"")!!,
                 shipping =if(EpayFragment.isPickup) getString(R.string.pickup_caps) else getString(R.string.delivery_caps),
                 shipping_costs = EpayFragment.paymentattributes.shipping_charge,
@@ -816,8 +678,9 @@ class Paymentmethod : CommanAPI(), TextWatcher {
                         generateBillDetails(Constants.GIFTCARD)
                     else if(EpayFragment.paymentattributes.discount_type == Constants.COUPON)
                         generateBillDetails(Constants.COUPON)
-                    error_of_cashgiftcard.setTextColor(ContextCompat.getColor(context!!,R.color.green))
-                    error_of_onlinegiftcard.setTextColor(ContextCompat.getColor(context!!,R.color.green))
+
+                   binder.errorOfPromotioncode.setTextColor(ContextCompat.getColor(context!!,R.color.green))
+                   binder.errorOfPromotioncode.setTextColor(ContextCompat.getColor(context!!,R.color.green))
 
 
                 }else{
@@ -826,20 +689,23 @@ class Paymentmethod : CommanAPI(), TextWatcher {
                     EpayFragment.paymentattributes.discount_id=0
                     EpayFragment.paymentattributes.discount_type=""
                     generateBillDetails(Constants.OTHER)
-                    error_of_cashgiftcard.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))
-                    error_of_onlinegiftcard.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))
+
+                    binder.errorOfPromotioncode.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))
+                    binder.errorOfPromotioncode.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))
                 }
-                // this is progress bar and error text to settext and visible
-                /*TODO : differentiate error.
-                 */
-                progress_applyonlinegift.visibility=View.GONE
-                progress_applycashgift.visibility=View.GONE
-                applycash_txt.visibility=View.VISIBLE
-                applyonline_txt.visibility=View.VISIBLE
-                error_of_onlinegiftcard.visibility=View.VISIBLE
-                error_of_cashgiftcard.visibility=View.VISIBLE
-                error_of_onlinegiftcard.text=jsonobject.get(Constants.MSG).asString
-                error_of_cashgiftcard.text=jsonobject.get(Constants.MSG).asString
+                paymentinfo_list[0].gift_loader=false
+                paymentinfo_list[1].gift_loader=false
+                if(model.payment_type == getString(R.string.online_payment)){
+                    paymentinfo_list[0].error_expand=true
+                    paymentinfo_list[1].error_expand=false
+                }else{
+                    paymentinfo_list[0].error_expand=false
+                    paymentinfo_list[1].error_expand=true
+                }
+
+                binder.errorOfPromotioncode.text=jsonobject.get(Constants.MSG).asString
+                binder.errorOfPromotioncode.visibility=View.VISIBLE
+                mAdapter.notifyDataSetChanged()
             }
 
             override fun onFail(error: Int) {
@@ -856,15 +722,16 @@ class Paymentmethod : CommanAPI(), TextWatcher {
 
                     }
                 }
-                progress_applyonlinegift.visibility=View.GONE
-                progress_applycashgift.visibility=View.GONE
-                applycash_txt.visibility=View.VISIBLE
-                applyonline_txt.visibility=View.VISIBLE
+                paymentinfo_list[0].gift_loader=false
+                paymentinfo_list[1].gift_loader=false
+                binder.errorOfPromotioncode.visibility=View.GONE
+                mAdapter.notifyDataSetChanged()
+
             }
         })
     }
 
-  /*  override fun onRequestPermissionsResult(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
+  /*  override fun promotion_view(requestCode: Int, permissions: Array<out String>, grantResults: IntArray) {
         loge(TAG,"permission result---")
         when (requestCode) {
             1 -> {
@@ -943,56 +810,37 @@ class Paymentmethod : CommanAPI(), TextWatcher {
     class  MyClickHandler(val paymentmethod: Paymentmethod) {
 
 
-        fun onClick(view: View, value :String) {
+        fun onClick(view: View, value : String , model : PaymentInfoModel) {
+            Log.e("TAG","click--"+model)
+
             when(value){
-                "11" ->{
-                    // online payment type selection
-                    if(!isPaymentonline && paymentmethod.progress_applycashgift.visibility == View.GONE ){
-                        isPaymentonline=true
-                        paymentmethod.paymentmethod_visible_are()
-                    }
-                }
 
-                "12" ->{
-                    // online gift apply text
-                    paymentmethod.showapplycoupanOnline()
-                }
-                "13" ->{
-                    // press apply gift button
-                    paymentmethod.press_applycoupanOnline()
-                }
-                "14" ->{
-                    // keep continue button from online (checkout Api would distinguish according : pickup/delivery)
-                    paymentmethod.is_continuefrom_online=true
-                    paymentmethod.continuefromOnline()
-                }
-
-
-
-
-                "21" ->{
-                    // cash payment type selection
-                    if(isPaymentonline && paymentmethod.progress_applycashgift.visibility == View.GONE){
-                        isPaymentonline=false
-                        paymentmethod.paymentmethod_visible_are()
+                "02"->{
+                    // click on expand gift card
+                    if(!model.gift_loader){
+                        model.gift_expand= if(model.gift_expand) false else true
+                        paymentmethod.paymentinfo_list[0].error_expand=false
+                        paymentmethod.paymentinfo_list[1].error_expand=false
+                        paymentmethod.mAdapter.notifyDataSetChanged()
                     }
 
                 }
+                "04"->{
+                    // proceed next online/cash.
+                    if(!model.gift_loader){
+                        if(model.payment_type == paymentmethod.getString(R.string.online_payment)){
+                            // online
 
-                "22" ->{
-                    // cash gift apply text
-                    paymentmethod.showapplycoupanCash()
-                }
-                "23" ->{
-                    // press apply gift button from cash
-                    paymentmethod.press_applycoupanCash()
-                }
-                "24" ->{
-                    // keep continue button from cash (checkout Api would distinguish according : pickup/delivery)
-                    paymentmethod.is_continuefrom_online=false
-                    paymentmethod.continuefromCash()
-                }
+                            isPaymentonline =true
+                            paymentmethod.continuefromOnline()
 
+                        }else{
+                            //cash
+                            isPaymentonline=false
+                            paymentmethod.continuefromCash()
+                        }
+                    }
+                }
             }
         }
 
@@ -1008,15 +856,14 @@ class Paymentmethod : CommanAPI(), TextWatcher {
 
         logd(TAG, "onDestroyView...")
 
+        timeoutHandler.removeCallbacks(finalizer)
+
+
         call_checkout?.let {
             clearProgressDialog()
             it.cancel()
         }
         call_applycode?.let {
-            progress_applyonlinegift.visibility=View.GONE
-            progress_applycashgift.visibility=View.GONE
-            applycash_txt.visibility=View.VISIBLE
-            applyonline_txt.visibility=View.VISIBLE
             it.cancel()
         }
         call_cancelorder?.let {

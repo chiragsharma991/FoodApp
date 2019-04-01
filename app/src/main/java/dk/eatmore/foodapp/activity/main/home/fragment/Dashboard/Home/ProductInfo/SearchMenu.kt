@@ -182,26 +182,54 @@ class SearchMenu : BaseFragment() {
                                 loge(TAG,"count ---"+count)
 
                                 val productattributeitem = ArrayList<ProductAttributeItem>()
-
+                                val item =menu_list.get(i).product_list!![j]
                                 if(menu_list.get(i).product_list!!.get(j).product_attribute ==null){
 
-                                    productlistitem.add(ProductListItem("","", arrayListOf(), menu_list.get(i).product_list!![j].p_desc,if(menu_list.get(i).product_list!![j].p_price == null) "" else menu_list.get(i).product_list!![j].p_price,menu_list.get(i).product_list!![j].productNo, menu_list.get(i).product_list!![j].p_name,menu_list.get(i).product_list!![j].extra_topping_group,menu_list.get(i).product_list!![j].cId,menu_list.get(i).product_list!![j].is_attributes,menu_list.get(i).product_list!![j].pImage,menu_list.get(i).product_list!![j].p_id))
+                                    productlistitem.add(ProductListItem(
+                                            productIngredients = "",
+                                            restaurantId = "",
+                                            product_attribute = arrayListOf(),
+                                            p_desc =item.p_desc,
+                                            p_price = if(item.p_price == null) "" else item.p_price,
+                                            productNo = item.productNo ,
+                                            p_name = item.p_name,
+                                            extra_topping_group =item.extra_topping_group ,
+                                            c_id = item.c_id,
+                                            is_attributes =item.is_attributes ,
+                                            pImage = item.pImage,
+                                            p_id = item.p_id)
+                                    )
 
                                 }else{
-                                    for (k in 0.until(menu_list.get(i).product_list!!.get(j).product_attribute.size) ){
+                                    for (k in 0.until(menu_list.get(i).product_list!!.get(j).product_attribute!!.size) ){
 
                                         productattributeitem.add(ProductAttributeItem(
-                                                menu_list.get(i).product_list!!.get(j).product_attribute.get(k).pam_id,
-                                                menu_list.get(i).product_list!!.get(j).product_attribute.get(k).a_name,
+                                                menu_list.get(i).product_list!!.get(j).product_attribute!!.get(k).pam_id,
+                                                menu_list.get(i).product_list!!.get(j).product_attribute!!.get(k).a_name,
                                                 DefaultAttributeValue(
-                                                        menu_list.get(i).product_list!!.get(j).product_attribute.get(k).default_attribute_value.pad_id,
-                                                        menu_list.get(i).product_list!!.get(j).product_attribute.get(k).default_attribute_value.a_price,
-                                                        menu_list.get(i).product_list!!.get(j).product_attribute.get(k).default_attribute_value.a_value
+                                                        menu_list.get(i).product_list!!.get(j).product_attribute!!.get(k).default_attribute_value.pad_id,
+                                                        menu_list.get(i).product_list!!.get(j).product_attribute!!.get(k).default_attribute_value.a_price,
+                                                        menu_list.get(i).product_list!!.get(j).product_attribute!!.get(k).default_attribute_value.a_value
                                                 )
                                         )
                                         )
                                     }
-                                    productlistitem.add(ProductListItem("","", productattributeitem, menu_list.get(i).product_list!![j].p_desc,if(menu_list.get(i).product_list!![j].p_price == null) "" else menu_list.get(i).product_list!![j].p_price,menu_list.get(i).product_list!![j].productNo, menu_list.get(i).product_list!![j].p_name,menu_list.get(i).product_list!![j].extra_topping_group,menu_list.get(i).product_list!![j].cId,menu_list.get(i).product_list!![j].is_attributes,menu_list.get(i).product_list!![j].pImage,menu_list.get(i).product_list!![j].p_id))
+
+                                    productlistitem.add(ProductListItem(
+                                            productIngredients = "",
+                                            restaurantId = "",
+                                            product_attribute = productattributeitem,
+                                            p_desc =item.p_desc,
+                                            p_price = if(item.p_price == null) "" else item.p_price,
+                                            productNo = item.productNo ,
+                                            p_name = item.p_name,
+                                            extra_topping_group =item.extra_topping_group ,
+                                            c_id = item.c_id,
+                                            is_attributes =item.is_attributes ,
+                                            pImage = item.pImage,
+                                            p_id = item.p_id)
+                                    )
+
                                 }
 
                             }
@@ -362,7 +390,7 @@ class SearchMenu : BaseFragment() {
         var attribute_cost: Double = 0.0
         fun getprice(productListItem: ProductListItem): String {
             attribute_cost = 0.0
-            for (i in 0..productListItem.product_attribute.size - 1) {
+            for (i in 0..productListItem.product_attribute!!.size - 1) {
                 attribute_cost = attribute_cost + productListItem.product_attribute.get(i).default_attribute_value.a_price.toDouble()
             }
             return BindDataUtils.convertCurrencyToDanish(attribute_cost.toString()) ?: "null"

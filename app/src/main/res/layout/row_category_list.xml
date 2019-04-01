@@ -111,7 +111,6 @@
                         android:layout_marginTop="8dp"
                         android:gravity="right"
                         android:maxLength="15"
-                        android:text="@{(data.is_attributes.equalsIgnoreCase(`0`) &amp;&amp; data.extra_topping_group == null) ? productpricecalculation.getprice(data) : `fra: `+productpricecalculation.getprice(data) }"
                         app:layout_constraintEnd_toStartOf="@+id/appCompatImageView"
                         app:layout_constraintHorizontal_bias="1.0"
                         app:layout_constraintHorizontal_chainStyle="packed"

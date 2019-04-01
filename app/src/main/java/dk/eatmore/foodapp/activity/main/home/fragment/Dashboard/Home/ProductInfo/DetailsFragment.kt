@@ -47,6 +47,7 @@ import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedRestaurant
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.model.ModelUtility
 import dk.eatmore.foodapp.model.home.MenuListItem
+import dk.eatmore.foodapp.model.home.ProductListItem
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
@@ -201,10 +202,71 @@ class DetailsFragment : CommanAPI() {
                 category_menulist.removeObservers(this@DetailsFragment)
 
                 category_menulist.observe(this@DetailsFragment, Observer<RestaurantInfoModel> {
-                    refreshview(category_menulist.value!!.restaurant_info!!)
-
+                    submitallDiscount(category_menulist.value!!.menu,category_menulist.value!!.restaurant_info)
                 })
             }
+
+
+    fun submitallDiscount( menu: ArrayList<MenuListItem>? , restaurant_info: Restaurant?){
+        if(menu !=null && restaurant_info !=null){
+        for (i in 0 until menu.size){
+            for (j in 0 until menu[i].product_list!!.size){
+                // pizza - > x,y,z category
+                if (restaurant_info.offer_details == null) {
+                    // no discount (ignore all discount and move on normal flow)
+                    val productListItem= menu[i].product_list!![j]
+                    productListItem.discountType=0
+                    productListItem.actual_price=  getprice(productListItem)
+                    productListItem.actual_price_afterDiscount=  null
+                } else {
+                    // discount
+                    val productListItem= menu[i].product_list!![j]
+                    if (restaurant_info.offer_details!!.offer_type == Constants.PRODUCT_DISCOUNT) {
+                        // product discount
+                        if (restaurant_info.offer_details!!.category_id.size > 0) {
+                            // some product have discount
+
+                            if (restaurant_info.offer_details!!.category_id.contains(productListItem.c_id)) {
+                                // this product is for discount
+                                productListItem.discountType=1
+                                val priceBeforeDiscount = getprice(productListItem)
+                                val priceAfterDiscount = (priceBeforeDiscount.toDouble() - ((restaurant_info.offer_details!!.discount!!.toDouble() * priceBeforeDiscount.toDouble()) / 100))
+                                productListItem.actual_price=  priceBeforeDiscount
+                                productListItem.actual_price_afterDiscount=  priceAfterDiscount.toString()
+
+                            } else {
+                                // this product is not for discount
+                                productListItem.discountType=0
+                                productListItem.actual_price=  getprice(productListItem)
+                                productListItem.actual_price_afterDiscount=  null
+                            }
+                        } else {
+                            // all product have discount
+                            productListItem.discountType=1
+                            val priceBeforeDiscount = getprice(productListItem)
+                            val priceAfterDiscount = (priceBeforeDiscount.toDouble() - ((restaurant_info.offer_details!!.discount!!.toDouble() * priceBeforeDiscount.toDouble()) / 100))
+                            productListItem.actual_price=  priceBeforeDiscount
+                            productListItem.actual_price_afterDiscount=  priceAfterDiscount.toString()
+                        }
+
+
+                    } else {
+                        // order discount
+                        productListItem.discountType=2
+                        productListItem.actual_price=  getprice(productListItem)
+                        productListItem.actual_price_afterDiscount=  null
+
+                    }
+
+                }
+
+            }
+        }
+            refreshview(restaurant_info)
+        }else{
+            //TODO : list is null
+        }
+    }
 
 
     private fun refreshview(restaurant_info: Restaurant) {
@@ -370,6 +432,7 @@ class DetailsFragment : CommanAPI() {
                 val restaurantInfoModel = GsonBuilder().create().fromJson(response.toString(), RestaurantInfoModel::class.java)
                 if (restaurantInfoModel.status) {
                     ui_model!!.category_menulist.value = restaurantInfoModel
+                    loge(TAG," result --"+ui_model!!.category_menulist.value!!.restaurant_info!!.offer_details.toString())
                 }
             }
 
@@ -710,6 +773,24 @@ class DetailsFragment : CommanAPI() {
 
     }
 
+    fun getprice(productListItem: ProductListItem): String {
+
+
+        if (productListItem.product_attribute == null) {
+            return productListItem.p_price!!
+        } else {
+            var attribute_cost = 0.0
+            for (i in 0..productListItem.product_attribute.size - 1) {
+                attribute_cost = attribute_cost + productListItem.product_attribute.get(i).default_attribute_value.a_price.toDouble()
+            }
+            return attribute_cost.toString()
+            //BindDataUtils.convertCurrencyToDanish(attribute_cost.toString())
+                    ?: "null"
+        }
+
+
+    }
+
 
     class MyClickHandler(val detailsfragment: DetailsFragment) {
 
@@ -737,6 +818,8 @@ class DetailsFragment : CommanAPI() {
         }
 
     }
+
+
 
 
 }

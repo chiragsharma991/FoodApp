@@ -52,7 +52,7 @@ class RestPaymentMethods : BaseFragment() {
     }
 
 
-    override fun getLayout(): Int {
+    override fun getLayout(): Int {p
         return R.layout.restpaymentmethods
     }
 

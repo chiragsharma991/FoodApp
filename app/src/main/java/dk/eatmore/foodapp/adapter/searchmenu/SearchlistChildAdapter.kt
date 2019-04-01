@@ -49,10 +49,11 @@ class SearchlistChildAdapter(val context: Context, val listner: SearchlistParent
             holder.binding.productlistItem= list_filtered[parentPosition].product_list!![position]
             holder.binding.catTitle.text = list_filtered[parentPosition].product_list!![position].p_name
             holder.binding.catDesc.text = list_filtered[parentPosition].product_list!![position].p_desc
-            val size=if(list_filtered[parentPosition].product_list!![position].product_attribute==null ) 0 else list_filtered[parentPosition].product_list!![position].product_attribute.size
+            val size=if(list_filtered[parentPosition].product_list!![position].product_attribute==null ) 0 else list_filtered[parentPosition].product_list!![position].product_attribute!!.size
             val fra_label = if(list_filtered[parentPosition].product_list!![position].is_attributes == "0" && list_filtered[parentPosition].product_list!![position].extra_topping_group == null ) "" else "fra: "
-            holder.binding.catPrice.text = if(size > 0)  fra_label+getprice(list_filtered[parentPosition].product_list!![position]) else fra_label+BindDataUtils.convertCurrencyToDanish(list_filtered[parentPosition].product_list!![position].p_price ?: "0")
-
+//            holder.binding.catPrice.text = if(size > 0)  fra_label+getprice(list_filtered[parentPosition].product_list!![position])
+//            else fra_label+BindDataUtils.convertCurrencyToDanish(list_filtered[parentPosition].product_list!![position].p_price ?: "0")
+            holder.binding.catPrice.text=BindDataUtils.getproductprice(context,list_filtered[parentPosition].product_list!![position])
 
             // Find charText in wp
             val p_name = list_filtered[parentPosition].product_list!![position].p_name.toLowerCase()
@@ -99,8 +100,8 @@ class SearchlistChildAdapter(val context: Context, val listner: SearchlistParent
     var attribute_cost: Double = 0.0
     fun getprice(productListItem: ProductListItem): String {
         attribute_cost = 0.0
-        for (i in 0..productListItem.product_attribute.size - 1) {
-            attribute_cost = attribute_cost + productListItem.product_attribute.get(i).default_attribute_value.a_price.toDouble()
+        for (i in 0..productListItem.product_attribute!!.size - 1) {
+            attribute_cost = attribute_cost + productListItem.product_attribute!!.get(i).default_attribute_value.a_price.toDouble()
         }
         return BindDataUtils.convertCurrencyToDanish(attribute_cost.toString()) ?: "null"
     }

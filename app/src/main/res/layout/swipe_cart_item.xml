@@ -95,7 +95,7 @@
                             android:id="@+id/imageview"
                             android:layout_width="match_parent"
                             android:layout_height="@dimen/_60sdp"
-                            android:layout_setImage="@{orderresult}"
+                            android:layout_setImage="@{orderresult.app_icon}"
                             app:srcCompat="@color/gray"
                             android:onClick="@{(v)-> myclickhandler.showmenu(v,orderresult)}"
                             android:scaleType="fitXY" />

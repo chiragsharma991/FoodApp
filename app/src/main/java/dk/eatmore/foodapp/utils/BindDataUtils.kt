@@ -21,12 +21,18 @@ import android.graphics.BitmapFactory
 import android.graphics.Bitmap
 import java.io.File
 import android.R.attr.src
+import android.content.Context
 import android.databinding.Bindable
 import android.opengl.ETC1.getHeight
 import android.opengl.ETC1.getWidth
 import android.graphics.Color.parseColor
 import android.graphics.drawable.ColorDrawable
 import android.support.v7.widget.AppCompatImageView
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
+import android.text.style.StrikethroughSpan
 
 
 object BindDataUtils {
@@ -221,6 +227,38 @@ object BindDataUtils {
         }else{
 
             return ""
+        }
+
+    }
+
+
+    fun getproductprice( context : Context, model: ProductListItem) : SpannableStringBuilder {
+
+        if(model.discountType == 0 || model.discountType == 2){
+            // no discount || order discount
+            val builder = SpannableStringBuilder()
+            val span1 = SpannableString("fra: ")
+            val span2 = SpannableString(BindDataUtils.convertCurrencyToDanish(model.actual_price!!))
+            if (model.product_attribute != null)
+            builder.append(span1)
+            builder.append(span2)
+            return builder
+
+        }else{
+            // discount is present (product discount)
+            //String.format("%2f", model.actual_price!!.toDouble()) // round decimal
+            val priceAfterDiscount = BindDataUtils.convertCurrencyToDanish(model.actual_price_afterDiscount!!)!! // add kr and change into danish
+            val priceBeforeDiscount = BindDataUtils.convertCurrencyToDanishWithoutLabel(model.actual_price!!)!!
+            val builder = SpannableStringBuilder()
+            val strikethroughSpan = StrikethroughSpan();
+            val span1 = SpannableString("fra: ")
+            val span2 = SpannableString(priceBeforeDiscount)
+            val span3 = SpannableString(" " + priceAfterDiscount)
+            span2.setSpan(strikethroughSpan, 0, priceBeforeDiscount.trim().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            span2.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.theme_color)), 0, priceBeforeDiscount.trim().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            if (model.product_attribute != null) builder.append(span1).append(span2).append(span3)
+            else builder.append(span2).append(span3)
+            return builder
         }
 
     }

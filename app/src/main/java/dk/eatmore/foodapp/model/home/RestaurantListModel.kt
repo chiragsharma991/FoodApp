@@ -70,7 +70,8 @@ data class Restaurant(
         var sort_min_order_price : Double = 0.0,
         var sort_created_date : Long = 0,
         var sort_delivery_charge : Double = 0.0,
-        var is_open_now : Boolean = false
+        var is_open_now : Boolean = false,
+        var offer_details : Category_id?=null
 
 
 
@@ -90,6 +91,16 @@ data class Shipping_charges(
         val price : String="",
         val to_pd : String=""
 
+):Serializable
 
+data class Category_id(
+
+        val category_id : ArrayList<String> = arrayListOf(),
+        val discount : String ?="",
+        val shipping : String?="",
+        val offer_type : String?="",
+        val minimum_order_price : String?="",
+        val offer_id : String?="",
+        val message : String?=""
 
 ):Serializable

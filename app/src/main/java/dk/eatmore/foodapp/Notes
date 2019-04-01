@@ -126,3 +126,28 @@ Notes :
 
 
 
+    if Session.offer_type == PRODUCT_DISCOUNT {
+
+
+               price = Session.offerOn(cat_id) (if offer is presenet) ? Price.unit.get_total().discounted() (discount percent "") : Price.unit.get_total()(total price)
+
+               discount_applied = Session.offerOn(cat_id) ? 1 : 0
+
+               product_discount = Session.offerOn(cat_id) ? Session.discount (discount percent) : "0.00"
+
+           } else if Session.offer_type == ORDER_DISCOUNT {
+
+            price = Price.unit.get_total()
+
+               if (Session.cartamt (total cart amount) + price (current product price)) >= Session.min_oprice {
+
+                   discount_applied = 2
+
+               }
+
+               product_discount = "\(Price.unit.get_total().discount()) (discount ammount from API like 20/30)"
+
+           }
+
+
+

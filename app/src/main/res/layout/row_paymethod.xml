@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<layout xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <data>
+
+        <import type="android.view.View">
+
+        </import>
+
+        <variable
+            name="paymentinfo"
+            type="dk.eatmore.foodapp.activity.main.epay.fragment.Paymentmethod.PaymentInfoModel">
+
+        </variable>
+
+        <variable
+            name="handlers"
+            type="dk.eatmore.foodapp.activity.main.epay.fragment.Paymentmethod.MyClickHandler">
+
+        </variable>
+
+    </data>
+
+
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+
+        >
+
+        <android.support.constraint.ConstraintLayout
+            android:id="@+id/constraint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+
+            <RelativeLayout
+                android:id="@+id/payment_selection"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_16sdp"
+                android:orientation="vertical"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintVertical_chainStyle="spread_inside">
+
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/TitleMidiumlight_TextViewMid"
+                    android:singleLine="true"
+                    android:text="@{paymentinfo.payment_type}"
+                    />
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/indicator_arrow"
+                    android:layout_width="@dimen/_20sdp"
+                    android:layout_height="@dimen/_20sdp"
+                    android:layout_alignParentEnd="true"
+                    android:layout_centerVertical="true"
+                    android:layout_marginTop="@dimen/_4sdp"
+                    android:scaleType="fitXY"
+                    android:visibility="visible"
+                    android:src="@{paymentinfo.view_expand ? @drawable/up_arrow : @drawable/down_arrow}"
+                    />
+
+
+            </RelativeLayout>
+
+
+
+            <android.support.constraint.ConstraintLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:visibility="@{paymentinfo.view_expand ? View.VISIBLE : View.GONE}"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                android:layout_marginTop="@dimen/_8sdp"
+                app:layout_constraintTop_toBottomOf="@+id/payment_selection"
+                >
+
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/paymentmethod_icon"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_32sdp"
+                    android:scaleType="fitCenter"
+                    android:visibility="@{paymentinfo.payment_type.equalsIgnoreCase(@string/online_payment) ? View.VISIBLE : View.GONE}"
+                    android:layout_setImage="@{paymentinfo.image_path}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent"
+                    />
+                <android.support.v7.widget.AppCompatImageView
+                    android:id="@+id/paymentmethod_icon_cash"
+                    android:layout_width="@dimen/_32sdp"
+                    app:layout_constraintHorizontal_bias="0"
+                    android:layout_height="@dimen/_32sdp"
+                    android:visibility="@{paymentinfo.payment_type.equalsIgnoreCase(@string/cash_payment) ? View.VISIBLE : View.GONE}"
+                    android:layout_marginTop="8dp"
+                    android:scaleType="fitCenter"
+                    android:layout_setImage="@{paymentinfo.image_path}"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/paymentmethod_icon"
+                    />
+
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/apply_promotion_txt"
+                    style="@style/Subtitle_TextViewSmall"
+                    android:layout_height="22dp"
+                    android:layout_gravity="center_vertical"
+                    android:onClick="@{(v) -> handlers.onClick(v,`02`,paymentinfo)}"
+                    android:layout_marginTop="8dp"
+                    android:text="@string/apply_coupon"
+                    android:textColor="@color/green"
+                    android:visibility="visible"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintHorizontal_bias="0.0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/paymentmethod_icon_cash"
+                    />
+
+
+
+                <LinearLayout
+                    android:id="@+id/promotion_view"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/rectangle_edittext"
+                    android:orientation="horizontal"
+                    android:visibility="@{paymentinfo.gift_expand ? View.VISIBLE : View.GONE}"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:weightSum="2"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/apply_promotion_txt">
+
+
+                    <android.support.v7.widget.AppCompatEditText
+                        android:id="@+id/promotioncode_edt"
+                        style="@style/EditText_Normal"
+                        android:layout_width="match_parent"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_weight="0.8"
+                        android:background="@drawable/rectangle_edittext"
+                        android:hint="Enter your postal code"
+                        android:inputType="textCapCharacters"
+                        android:lines="1"
+                        android:singleLine="true"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        >
+
+                    </android.support.v7.widget.AppCompatEditText>
+
+                    <RelativeLayout
+                        android:id="@+id/applypromotion_btn"
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent"
+                        android:layout_weight="1.2"
+                        android:background="@color/grey"
+                        android:foreground="?android:attr/selectableItemBackground"
+                        >
+
+
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/TextViewSmall"
+                            android:layout_centerInParent="true"
+                            android:fontFamily="@font/ubuntu_l"
+                            android:text="@string/benyt"
+                            android:visibility="@{paymentinfo.gift_loader ? View.GONE : View.VISIBLE}"
+
+                            />
+
+                        <include
+                            android:id="@+id/promotion_progress"
+                            layout="@layout/progressbar_x"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_centerInParent="true"
+                            android:visibility="@{paymentinfo.gift_loader ? View.VISIBLE : View.GONE}"
+                            >
+
+                        </include>
+
+                    </RelativeLayout>
+
+
+                </LinearLayout>
+
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/error_of_promotioncode"
+                    style="@style/Subtitle_TextViewSmall"
+                    android:layout_height="22dp"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:text="code is not valid"
+                    android:textColor="@color/theme_color"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    android:visibility="@{paymentinfo.error_expand ? View.VISIBLE : View.GONE}"
+                    app:layout_constraintHorizontal_bias="0"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/promotion_view" />
+
+
+
+
+                <android.support.v7.widget.AppCompatButton
+                    android:id="@+id/continue_btn"
+                    style="@style/Button"
+                    android:layout_marginTop="@dimen/_8sdp"
+                    android:textColor="@color/white"
+                    android:onClick="@{(v) -> handlers.onClick(v,`04`,paymentinfo)}"
+                    android:visibility="visible"
+                    android:text="@{paymentinfo.btn_txt}"
+                    android:background="@color/theme_color"
+                    android:layout_width="match_parent"
+                    android:layout_height="@dimen/_40sdp"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toBottomOf="@+id/error_of_promotioncode"
+                    />
+
+
+
+
+
+            </android.support.constraint.ConstraintLayout>
+
+
+
+
+        </android.support.constraint.ConstraintLayout>
+
+
+    </RelativeLayout>
+</layout>

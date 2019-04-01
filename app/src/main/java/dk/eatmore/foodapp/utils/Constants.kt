@@ -15,6 +15,7 @@ class Constants {
     const  val AUTH_VALUE="1025180533"
     const  val EATMORE_APP="eatmore_app"
     const  val RESTAURANT_ID="restaurant_id"
+    const  val PRODUCT_DISCOUNT="Product Discount"
     const  val USERNAME="username"
     const  val POSTAL_CODE="postal_code"
     const  val IS_FAV="is_fav"

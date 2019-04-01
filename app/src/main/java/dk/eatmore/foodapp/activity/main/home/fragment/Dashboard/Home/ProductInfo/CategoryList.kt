@@ -3,19 +3,29 @@ package dk.eatmore.foodapp.fragment.ProductInfo
 
 import android.app.Activity
 import android.content.Intent
+import android.graphics.Color
+import android.graphics.Paint
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
+import android.support.v4.content.ContextCompat
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.util.Pair
 import android.support.v7.app.AppCompatActivity
+import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.LinearLayoutManager
+import android.text.SpannableString
+import android.text.SpannableStringBuilder
+import android.text.Spanned
+import android.text.style.ForegroundColorSpan
+import android.text.style.StrikethroughSpan
 import android.transition.ChangeBounds
 import android.transition.Slide
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import android.widget.Toast
 import com.airbnb.lottie.utils.Utils
 import com.bumptech.glide.util.Util
@@ -142,11 +152,11 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
     fun updatebatchcount(count: Int) {
 
         try {
-           // badge_notification_txt.visibility = View.GONE
+            // badge_notification_txt.visibility = View.GONE
 
-            if(DetailsFragment.is_restaurant_closed){
+            if (DetailsFragment.is_restaurant_closed) {
                 viewcart.visibility = View.GONE
-            }else{
+            } else {
                 viewcart.visibility = if (DetailsFragment.total_cartcnt == 0) View.GONE else View.VISIBLE
             }
             //viewcart.alpha= if(DetailsFragment.total_cartcnt == 0) 0.3f else 0.9f
@@ -177,7 +187,7 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
     override fun <T> onClick(model: T?) {
 
         //Direct add to cart process condition
-        if(DetailsFragment.is_restaurant_closed) return // if restaurant is closed then nothing will happen
+        if (DetailsFragment.is_restaurant_closed) return // if restaurant is closed then nothing will happen
         val data = model as ProductListItem
         if (data.is_attributes == "0" && data.extra_topping_group == null) {
             addToCard(data)
@@ -185,7 +195,7 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
             val intent = Intent(activity, CartActivity::class.java)
             intent.putExtra("TITLE", data.p_name)
             intent.putExtra("PID", data.p_id)
-            intent.putExtra("p_price",productpricecalculation.getprice(data))
+            intent.putExtra("p_price", productpricecalculation.getprice(data))
             val pairs: Array<Pair<View, String>> = TransitionHelper.createSafeTransitionParticipants(activity!!, true)
             val transitionActivityOptions = ActivityOptionsCompat.makeSceneTransitionAnimation(activity!!, *pairs)
             //startActivityForResult(intent, Constants.REQ_CAT_RESAURANT_CLOSED, transitionActivityOptions.toBundle())
@@ -221,13 +231,13 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
                 if (jsonObject.get(Constants.STATUS).asBoolean) {
                     showProgressDialog()
 
-                    when(getrestaurantstatus(is_restaurant_closed =jsonObject.get(Constants.IS_RESTAURANT_CLOSED)?.asBoolean, pre_order =jsonObject.get(Constants.PRE_ORDER)?.asBoolean )){
+                    when (getrestaurantstatus(is_restaurant_closed = jsonObject.get(Constants.IS_RESTAURANT_CLOSED)?.asBoolean, pre_order = jsonObject.get(Constants.PRE_ORDER)?.asBoolean)) {
 
-                        RestaurantState.CLOSED ->{
+                        RestaurantState.CLOSED -> {
                             val msg = if (jsonObject.has(Constants.MSG)) jsonObject.get(Constants.MSG).asString else getString(R.string.sorry_restaurant_has_been_closed)
-                            any_preorder_closedRestaurant(is_restaurant_closed = true ,pre_order = false,msg =msg ) // set hard code to close restaurant.
+                            any_preorder_closedRestaurant(is_restaurant_closed = true, pre_order = false, msg = msg) // set hard code to close restaurant.
                         }
-                        else ->{
+                        else -> {
                             val intent = Intent(Constants.CARTCOUNT_BROADCAST)
                             intent.putExtra(Constants.CARTCNT, if (jsonObject.get(Constants.CARTCNT).isJsonNull || jsonObject.get(Constants.CARTCNT).asString == "0") 0 else (jsonObject.get(Constants.CARTCNT).asString).toInt())
                             intent.putExtra(Constants.CARTAMT, if (jsonObject.get(Constants.CARTAMT).isJsonNull || jsonObject.get(Constants.CARTAMT).asString == "0") "00.00" else jsonObject.get(Constants.CARTAMT).asString)
@@ -259,12 +269,25 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
 
 
     private fun setRecyclerData(binder: RowCategoryListBinding, model: ProductListItem) {
+        loge(TAG,"model---"+model.toString())
         binder.data = model
-        binder.isRestaurantClosed=DetailsFragment.is_restaurant_closed
+        binder.isRestaurantClosed = DetailsFragment.is_restaurant_closed
         binder.productpricecalculation = productpricecalculation
         binder.util = BindDataUtils
         binder.handler = this
+        binder.appCompatTextView.text = BindDataUtils.getproductprice(context!!,model)
         binder.executePendingBindings()
+    }
+
+    fun testspan(x: String, y: String, text: AppCompatTextView) {
+        // val result : String
+        val strikethroughSpan = StrikethroughSpan();
+        val span1 = SpannableString(x)
+        val span2 = SpannableString(y)
+        span1.setSpan(strikethroughSpan, 0, x.trim().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        span1.setSpan(ForegroundColorSpan(ContextCompat.getColor(context!!, R.color.theme_color)), 0, x.trim().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+        text.text = span1
+        text.append(" " + span2)
     }
 
     override fun onDestroy() {
@@ -299,18 +322,17 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
         fun getprice(productListItem: ProductListItem): String {
 
 
-                if (productListItem.product_attribute == null) {
-                    return BindDataUtils.convertCurrencyToDanish(productListItem.p_price!!)!!
-                } else {
-                    attribute_cost = 0.0
-                    for (i in 0..productListItem.product_attribute.size - 1) {
-                        attribute_cost = attribute_cost + productListItem.product_attribute.get(i).default_attribute_value.a_price.toDouble()
-                    }
-                    return BindDataUtils.convertCurrencyToDanish(attribute_cost.toString())
-                            ?: "null"
+            if (productListItem.product_attribute == null) {
+                return productListItem.p_price!!
+            } else {
+                attribute_cost = 0.0
+                for (i in 0..productListItem.product_attribute.size - 1) {
+                    attribute_cost = attribute_cost + productListItem.product_attribute.get(i).default_attribute_value.a_price.toDouble()
                 }
-
-
+                return attribute_cost.toString()
+                //BindDataUtils.convertCurrencyToDanish(attribute_cost.toString())
+                        ?: "null"
+            }
 
 
         }

@@ -581,11 +581,11 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
 
 
 @BindingAdapter("android:layout_setImage")
-fun setImage(view: AppCompatImageView, model: OrderFragment.Orderresult) {
+fun setImage(view: AppCompatImageView, image_path : String) {
     // i set 100 fixed dp in rating page thats why i am using 100
-    Log.e("set image", "----" + model.toString())
+    Log.e("set image", "----" + image_path)
     Glide.with(view.context)
-            .load(model.app_icon)
+            .load(image_path)
             .apply(RequestOptions().placeholder(BindDataUtils.getRandomDrawbleColor()).error(BindDataUtils.getRandomDrawbleColor()))
             .into(view)
 
