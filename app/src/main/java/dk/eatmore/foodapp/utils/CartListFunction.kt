@@ -17,9 +17,12 @@ import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
 import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.epay.fragment.Paymentmethod
+import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.model.cart.ProductAttributeListItem
 import dk.eatmore.foodapp.model.cart.ProductDetails
 import dk.eatmore.foodapp.model.cart.ProductIngredientsItem
+import dk.eatmore.foodapp.model.home.MenuListItem
+import dk.eatmore.foodapp.model.home.ProductListItem
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
@@ -195,9 +198,9 @@ object CartListFunction {
             postParam.addProperty(Constants.DISCOUNT_TYPE, EpayFragment.paymentattributes.discount_type)
             postParam.addProperty(Constants.DISCOUNT_AMOUNT, EpayFragment.paymentattributes.discount_amount)
             postParam.addProperty(Constants.DISCOUNT_ID,EpayFragment.paymentattributes.discount_id)
-            postParam.addProperty(Constants.SHIPPING, if (EpayFragment.isPickup) context.getString(R.string.pickup_) else context.getString(R.string.delivery_))
+            postParam.addProperty(Constants.SHIPPING, if (DetailsFragment.isPickup) context.getString(R.string.pickup_) else context.getString(R.string.delivery_))
             postParam.addProperty(Constants.TELEPHONE_NO, EpayFragment.paymentattributes.telephone_no)
-            postParam.addProperty(Constants.ORDER_TOTAL, EpayFragment.paymentattributes.order_total)
+            postParam.addProperty(Constants.ORDER_TOTAL, EpayFragment.paymentattributes.subtotal)
             postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
             postParam.addProperty(Constants.ACCEPT_TC, "1")
             postParam.addProperty(Constants.PAYMETHOD, if(Paymentmethod.isPaymentonline) "1" else "2" )
@@ -216,7 +219,7 @@ object CartListFunction {
             }
             postParam.add(Constants.CARTPRODUCTS,jsonarray )
 
-            if(EpayFragment.isPickup){
+            if(DetailsFragment.isPickup){
                 //pickup--
                 checkout_api=ApiCall.checkout_pickup(postParam)
             }else{
@@ -465,10 +468,9 @@ object CartListFunction {
                     val vparms = LinearLayout.LayoutParams(LinearLayout.LayoutParams.MATCH_PARENT, 2)
                     vparms.topMargin = 8
                     view.alpha = 0.3f
-                    view.background = ContextCompat.getDrawable(context!!, R.color.divider_color)
+                    view.background = ContextCompat.getDrawable(context, R.color.divider_color)
                     view.layoutParams = vparms
                     shippinginfo_container.addView(view)
-
 
                 }
 
@@ -631,6 +633,100 @@ object CartListFunction {
     }
 
 
+    fun submitAllDiscount(menu: ArrayList<MenuListItem>?, restaurant_info: Restaurant?){
+        if(menu !=null && restaurant_info !=null){
+            for (i in 0 until menu.size){
+                for (j in 0 until menu[i].product_list!!.size){
+                    // pizza - > x,y,z category
+                    if (restaurant_info.offer_details == null) {
+                        // no discount (ignore all discount and move on normal flow)
+                        val productListItem= menu[i].product_list!![j]
+                        productListItem.discountType=0
+                        productListItem.actual_price=  getprice(productListItem)
+                        productListItem.actual_price_afterDiscount=  null
+                        productListItem.discount=  null
+                        productListItem.offerDiscounted=  false
+                        productListItem.minimum_order_price=  null
+
+                    } else {
+                        // discount
+                        val productListItem= menu[i].product_list!![j]
+                        if (restaurant_info.offer_details!!.offer_type == Constants.PRODUCT_DISCOUNT) {
+                            // product discount
+                            if (restaurant_info.offer_details!!.category_id.size > 0) {
+                                // some product have discount
+
+                                if (restaurant_info.offer_details!!.category_id.contains(productListItem.c_id)) {
+                                    // this product is for discount
+                                    productListItem.discountType=1
+                                    productListItem.discount=  restaurant_info.offer_details!!.discount!!
+                                    productListItem.minimum_order_price=  null
+                                    val priceBeforeDiscount = getprice(productListItem)
+                                    val priceAfterDiscount = (priceBeforeDiscount.toDouble() - ((restaurant_info.offer_details!!.discount!!.toDouble() * priceBeforeDiscount.toDouble()) / 100))
+                                    productListItem.actual_price=  priceBeforeDiscount
+                                    productListItem.actual_price_afterDiscount=  priceAfterDiscount.toString()
+                                    productListItem.offerDiscounted=  true
+
+                                } else {
+                                    // this product is not for discount
+                                    productListItem.discountType=0
+                                    productListItem.discount= null
+                                    productListItem.actual_price=  getprice(productListItem)
+                                    productListItem.actual_price_afterDiscount=  null
+                                    productListItem.offerDiscounted=  false
+                                    productListItem.minimum_order_price=  null
+                                }
+                            } else {
+                                // all product have discount
+                                productListItem.discountType=1
+                                productListItem.discount=  restaurant_info.offer_details!!.discount!!
+                                val priceBeforeDiscount = getprice(productListItem)
+                                val priceAfterDiscount = (priceBeforeDiscount.toDouble() - ((restaurant_info.offer_details!!.discount!!.toDouble() * priceBeforeDiscount.toDouble()) / 100))
+                                productListItem.actual_price=  priceBeforeDiscount
+                                productListItem.actual_price_afterDiscount=  priceAfterDiscount.toString()
+                                productListItem.offerDiscounted=  true
+                                productListItem.minimum_order_price=  null
+                            }
+
+
+                        } else {
+                            // order discount
+                            productListItem.discountType=2
+                            productListItem.actual_price=  getprice(productListItem)
+                            productListItem.actual_price_afterDiscount=  null
+                            productListItem.discount=  restaurant_info.offer_details!!.discount!!
+                            productListItem.offerDiscounted=  true
+                            productListItem.minimum_order_price=  restaurant_info.offer_details!!.minimum_order_price
+                        }
+
+                    }
+
+                }
+            }
+        }else{
+            //TODO : list is null then:
+        }
+    }
+
+
+
+    fun getprice(productListItem: ProductListItem): String {
+
+
+        if (productListItem.product_attribute == null) {
+            return productListItem.p_price!!
+        } else {
+            var attribute_cost = 0.0
+            for (i in 0..productListItem.product_attribute.size - 1) {
+                attribute_cost = attribute_cost + productListItem.product_attribute.get(i).default_attribute_value.a_price.toDouble()
+            }
+            return attribute_cost.toString()
+            //BindDataUtils.convertCurrencyToDanish(attribute_cost.toString())
+                    ?: "null"
+        }
+
+
+    }
 
 
 

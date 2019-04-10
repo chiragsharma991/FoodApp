@@ -87,7 +87,7 @@ class Address : CommanAPI(), TextWatcher {
             logd(TAG, "saveInstance NULL")
             progress_bar.visibility = View.VISIBLE
             restaurant = arguments!!.getSerializable(Constants.RESTAURANT) as Restaurant
-            binding.isPickup = EpayFragment.isPickup
+            binding.isPickup = DetailsFragment.isPickup
             binding.executePendingBindings()
             setToolbarforThis()
             postnumber_edt.addTextChangedListener(this)
@@ -156,7 +156,7 @@ class Address : CommanAPI(), TextWatcher {
                     DetailsFragment.delivery_present=jsonObject.get(Constants.IS_DELIVERY_PRESENT).asBoolean
                     DetailsFragment.pickup_present=jsonObject.get(Constants.IS_PICKUP_PRESENT).asBoolean
                 }
-                if((EpayFragment.isPickup && !DetailsFragment.pickup_present) || (!EpayFragment.isPickup && !DetailsFragment.delivery_present)){
+                if((DetailsFragment.isPickup && !DetailsFragment.pickup_present) || (!DetailsFragment.isPickup && !DetailsFragment.delivery_present)){
                     // [pickup(true) && pickuppresent(false) || delivery(true) && deliverypresent (false)]
 
                     val message=getdeliverymsg_error(jsonObject)
@@ -213,7 +213,7 @@ class Address : CommanAPI(), TextWatcher {
              * - if i call api in "delivery time slot" only on one condition to get time, if i am coming from "Pickup"
              */
 
-            if (EpayFragment.isPickup) {
+            if (DetailsFragment.isPickup) {
                 //pickup address (on payment)
                 EpayFragment.paymentattributes.payment_address = "${restaurant.address} ${restaurant.postal_code}"
                 EpayFragment.paymentattributes.first_name = name_edt.text.toString()
@@ -300,7 +300,7 @@ class Address : CommanAPI(), TextWatcher {
     fun validationFields(): Boolean {
         var isvalidate: Boolean = true
         // Test validtion between pickup/delivery
-        if (EpayFragment.isPickup) {
+        if (DetailsFragment.isPickup) {
 
             if (!inputValidStates[name_edt]!!) {
                 name_edt.error = getString(R.string.enter_your_valid_name)
@@ -460,8 +460,8 @@ class Address : CommanAPI(), TextWatcher {
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
-        postParam.addProperty(Constants.ORDER_TOTAL, EpayFragment.paymentattributes.order_total)
-        postParam.addProperty(Constants.SHIPPING, if (EpayFragment.isPickup) context!!.getString(R.string.pickup_) else context!!.getString(R.string.delivery_))
+        postParam.addProperty(Constants.ORDER_TOTAL, EpayFragment.paymentattributes.subtotal)
+        postParam.addProperty(Constants.SHIPPING, if (DetailsFragment.isPickup) context!!.getString(R.string.pickup_) else context!!.getString(R.string.delivery_))
         postParam.addProperty(Constants.STREET, street_edt.text.toString())
         postParam.addProperty(Constants.HOUSE_NO, house_edt.text.toString())
         postParam.addProperty(Constants.FLOOR_DOOR, floor_edt.text.toString())
@@ -579,7 +579,7 @@ class Address : CommanAPI(), TextWatcher {
     fun setToolbarforThis() {
 
         txt_toolbar.text = getString(R.string.dine_oplysninger)
-        txt_toolbar_right_img.apply { visibility = if (EpayFragment.isPickup) View.GONE else View.VISIBLE; setImageResource(R.drawable.info_outline) }
+        txt_toolbar_right_img.apply { visibility = if (DetailsFragment.isPickup) View.GONE else View.VISIBLE; setImageResource(R.drawable.info_outline) }
         img_toolbar_back.setImageResource(R.drawable.back)
         img_toolbar_back.setOnClickListener { (activity as HomeActivity).onBackPressed() }
         txt_toolbar_right_img.setOnClickListener {

@@ -3,37 +3,23 @@ package dk.eatmore.foodapp.fragment.ProductInfo
 
 import android.app.Activity
 import android.content.Intent
-import android.graphics.Color
-import android.graphics.Paint
 import android.os.Build
 import android.os.Bundle
 import android.support.v4.app.ActivityOptionsCompat
-import android.support.v4.content.ContextCompat
 import android.support.v4.content.LocalBroadcastManager
 import android.support.v4.util.Pair
-import android.support.v7.app.AppCompatActivity
-import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.LinearLayoutManager
-import android.text.SpannableString
-import android.text.SpannableStringBuilder
-import android.text.Spanned
-import android.text.style.ForegroundColorSpan
-import android.text.style.StrikethroughSpan
 import android.transition.ChangeBounds
 import android.transition.Slide
 import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import android.widget.Toast
-import com.airbnb.lottie.utils.Utils
-import com.bumptech.glide.util.Util
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.cart.CartActivity
 import dk.eatmore.foodapp.activity.main.epay.EpayFragment
-import dk.eatmore.foodapp.activity.main.epay.fragment.TransactionStatus
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerCallback
 import dk.eatmore.foodapp.adapter.universalAdapter.RecyclerClickListner
@@ -99,6 +85,7 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
             updatebatchcount(0)
             restaurant = arguments?.getSerializable(Constants.RESTAURANT) as Restaurant
             val menuListItem = arguments?.getSerializable(Constants.PRODUCTLIST) as MenuListItem
+            loge(TAG,"--"+menuListItem.product_list!!.size)
             val bundle = arguments
             subtxt_toolbar.text = bundle?.getString(Constants.TITLE, "") ?: ""
             subtxt_desc.text = bundle?.getString(Constants.C_DESC, "") ?: ""
@@ -118,7 +105,7 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
             viewcart.setOnClickListener {
                 if (DetailsFragment.total_cartcnt == 0) return@setOnClickListener
 
-                val fragment = EpayFragment.newInstance(restaurant)
+                val fragment = EpayFragment.newInstance(restaurant, DetailsFragment.ui_model!!.category_menulist.value!!.menu!!)
                 var enter: Slide? = null
                 if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
                     enter = Slide()
@@ -214,6 +201,7 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
         val postParam = JsonObject()
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
+        postParam.addProperty(Constants.SHIPPING, if (DetailsFragment.isPickup) context!!.getString(R.string.pickup_) else context!!.getString(R.string.delivery_))
         if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
             postParam.addProperty(Constants.IS_LOGIN, "1")
             postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
@@ -222,7 +210,31 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
         }
         postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN, ""))
         postParam.addProperty(Constants.P_ID, data.p_id)
-        postParam.addProperty(Constants.P_PRICE, data.p_price)
+        when(data.discountType){
+            0 ->{
+                // no discount
+                postParam.addProperty(Constants.P_PRICE,data.actual_price)
+                postParam.addProperty(Constants.DISCOUNT_APPLIED,  0 )
+                postParam.addProperty(Constants.PRODUCT_DISCOUNT_,"0.00")
+            }
+            1->{
+                // product discount
+                postParam.addProperty(Constants.P_PRICE, data.actual_price)
+                postParam.addProperty(Constants.DISCOUNT_APPLIED,if(data.offerDiscounted) 1 else 0 )
+                postParam.addProperty(Constants.PRODUCT_DISCOUNT_,if(data.offerDiscounted) data.discount else "0.00")  // add discount amount from API
+            }
+            2->{
+                // order discount
+                postParam.addProperty(Constants.P_PRICE, data.actual_price)
+                if(DetailsFragment.total_cartamt.toDouble() + data.actual_price!!.toDouble() >= data.minimum_order_price!!.toDouble())
+                    postParam.addProperty(Constants.DISCOUNT_APPLIED,2)
+                else
+                    postParam.addProperty(Constants.DISCOUNT_APPLIED,0)
+                val discountprice_only = ((data.discount!!.toDouble() * data.actual_price!!.toDouble())/100)
+                postParam.addProperty(Constants.PRODUCT_DISCOUNT_,discountprice_only)  // add only discount amount on actual price
+
+            }
+        }
         postParam.addProperty(Constants.P_QUANTITY, "1")
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
         postParam.addProperty(Constants.LANGUAGE, Constants.DA)
@@ -274,26 +286,17 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
 
 
     private fun setRecyclerData(binder: RowCategoryListBinding, model: ProductListItem) {
-        loge(TAG,"model---"+model.toString())
         binder.data = model
         binder.isRestaurantClosed = DetailsFragment.is_restaurant_closed
         binder.productpricecalculation = productpricecalculation
         binder.util = BindDataUtils
         binder.handler = this
+        //loge(TAG,model.p_name+"-"+BindDataUtils.getproductprice(context!!,model)+"-"+model.p_desc)
         binder.appCompatTextView.text = BindDataUtils.getproductprice(context!!,model)
         binder.executePendingBindings()
     }
 
-    fun testspan(x: String, y: String, text: AppCompatTextView) {
-        // val result : String
-        val strikethroughSpan = StrikethroughSpan();
-        val span1 = SpannableString(x)
-        val span2 = SpannableString(y)
-        span1.setSpan(strikethroughSpan, 0, x.trim().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        span1.setSpan(ForegroundColorSpan(ContextCompat.getColor(context!!, R.color.theme_color)), 0, x.trim().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
-        text.text = span1
-        text.append(" " + span2)
-    }
+
 
     override fun onDestroy() {
         super.onDestroy()

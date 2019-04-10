@@ -9,6 +9,7 @@ import dk.eatmore.foodapp.model.home.ProductListModel
 import dk.eatmore.foodapp.model.LastOrder
 import dk.eatmore.foodapp.model.cart.Data
 import dk.eatmore.foodapp.model.cart.ProductDetails
+import dk.eatmore.foodapp.model.epay.ApplyCodeModel
 import dk.eatmore.foodapp.model.epay.ViewcardModel
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.model.home.RestaurantListModel
@@ -141,8 +142,8 @@ class ApiCall {
         fun lastLogin(auth_key : String  , customer_id : String , device_type: String,eatmore_app : Boolean ) : Call<JsonObject> {
             return getApiInterface().lastLogin(auth_key = auth_key, eatmore_app =eatmore_app, device_type = device_type, customer_id = customer_id,app = Constants.RESTAURANT_FOOD_ANDROID)
         }
-        fun applycode(r_token : String , r_key : String , customer_id : String , upto_min_shipping: String , shipping : String , code: String , order_total: String , additional_charge: String , shipping_costs: String ) : Call<JsonObject> {
-            return getApiInterface().applycode(r_token, r_key,customer_id , upto_min_shipping ,shipping , code, order_total , additional_charge , shipping_costs,Constants.RESTAURANT_FOOD_ANDROID)
+        fun applycode(jsonObject: JsonObject) : Call<ApplyCodeModel> {
+            return getApiInterface().applycode(jsonObject)
         }
         fun userInfo(jsonObject: JsonObject ) : Call<JsonObject> {
             return getApiInterface().userInfo(jsonObject)

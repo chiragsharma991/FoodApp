@@ -24,6 +24,7 @@ data class AreaDetails(val city_name: String = "", val postal_code: String = "")
 
 
 data class Restaurant(
+        var test : String = "test",
         val postal_code: String = "",
         val restaurant_name: String = "",
         val restaurant_id: String = "",
@@ -58,6 +59,7 @@ data class Restaurant(
         val created_date : String="",
         val health_report_link : String="",
         val shipping_unit : String="",
+        val giftcard_details : Giftcard_details?=null,
         val restpaymentmethods : ArrayList<Restpaymentmethods> = arrayListOf(),
         val rating_details : ArrayList<Rating_details> = arrayListOf(),
         val review_list : ArrayList<Review_list> = arrayListOf(),
@@ -71,7 +73,7 @@ data class Restaurant(
         var sort_created_date : Long = 0,
         var sort_delivery_charge : Double = 0.0,
         var is_open_now : Boolean = false,
-        var offer_details : Category_id?=null
+        var offer_details : Offer_details?=null
 
 
 
@@ -93,7 +95,7 @@ data class Shipping_charges(
 
 ):Serializable
 
-data class Category_id(
+data class Offer_details(
 
         val category_id : ArrayList<String> = arrayListOf(),
         val discount : String ?="",
@@ -102,5 +104,12 @@ data class Category_id(
         val minimum_order_price : String?="",
         val offer_id : String?="",
         val message : String?=""
+
+):Serializable
+
+data class Giftcard_details(
+
+        val eatmore : Double ?=null,
+        val restaurant : Double?=null
 
 ):Serializable

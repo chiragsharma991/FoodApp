@@ -21,24 +21,24 @@ import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.epay.fragment.*
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
-import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Order.OrderFragment
 import dk.eatmore.foodapp.databinding.ActivityEpayBinding
 import dk.eatmore.foodapp.fragment.Dashboard.Home.Address
-import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
+import dk.eatmore.foodapp.model.epay.ResultItem
 import dk.eatmore.foodapp.model.epay.ViewcardModel
+import dk.eatmore.foodapp.model.home.MenuListItem
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.*
 import kotlinx.android.synthetic.main.dynamic_raw_item.view.*
 import kotlinx.android.synthetic.main.dynamic_raw_subitem.view.*
 import kotlinx.android.synthetic.main.toolbar.*
-import java.util.ArrayList
 import dk.eatmore.foodapp.model.home.Restaurant
 import kotlinx.android.synthetic.main.activity_epay.*
 import kotlinx.android.synthetic.main.fragment_home_container.*
 import retrofit2.Call
+import kotlin.collections.ArrayList
 
 
 class EpayFragment : CommanAPI() {
@@ -48,6 +48,7 @@ class EpayFragment : CommanAPI() {
     private lateinit var addcart_fragment: AddCart
     private lateinit var binding: ActivityEpayBinding
     private lateinit var restaurant : Restaurant
+    private lateinit var menu : ArrayList<MenuListItem>
     private var call_viewcartlist  : Call<ViewcardModel>? =null
     private var call_deleteitem  : Call<JsonObject>? =null
     private var tablistner: TabLayout.OnTabSelectedListener? =null
@@ -82,10 +83,11 @@ class EpayFragment : CommanAPI() {
         var first_time : String =""
 
 
-        fun newInstance(restaurant: Restaurant): EpayFragment {
+        fun newInstance(restaurant: Restaurant, menu: ArrayList<MenuListItem>): EpayFragment {
             val fragment = EpayFragment()
             val bundle =Bundle()
             bundle.putSerializable(Constants.RESTAURANT,restaurant)
+            bundle.putSerializable(Constants.MENULISTITEM,menu)
             fragment.arguments=bundle
             return fragment
         }
@@ -108,6 +110,8 @@ class EpayFragment : CommanAPI() {
             amIFinish=true
             accessOnetime=true
             restaurant=arguments!!.getSerializable(Constants.RESTAURANT) as Restaurant
+            menu=arguments!!.getSerializable(Constants.MENULISTITEM) as ArrayList<MenuListItem>
+            loge(TAG,"menu list --"+menu.size)
             setToolbarforThis()
             epay_continue_btn.text=if(PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS,false)) getString(R.string.continue_) else getString(R.string.login_to_continue)
             epay_continue_btn.setOnClickListener{
@@ -156,7 +160,7 @@ class EpayFragment : CommanAPI() {
 
                         }else{
                             // normal flow
-                            tabfunction()
+                           // tabfunction()
                             fetch_viewCardList()
                         }
 
@@ -221,6 +225,7 @@ class EpayFragment : CommanAPI() {
         val postParam = JsonObject()
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN,""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY,""))
+        postParam.addProperty(Constants.SHIPPING, if (DetailsFragment.isPickup) context!!.getString(R.string.pickup_) else context!!.getString(R.string.delivery_))
         if(PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS,false)){
             postParam.addProperty(Constants.IS_LOGIN, "1")
             postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID,""))
@@ -237,11 +242,7 @@ class EpayFragment : CommanAPI() {
                 val viewcardmodel = body as ViewcardModel
                 if (viewcardmodel.status) {
 
-                    ui_model!!.viewcard_list.value=viewcardmodel
-                    view_container.visibility= View.VISIBLE
-
-                    progress_bar.visibility=View.GONE
-
+                    submitActualPrice(viewcardmodel)
 
                 } else {
 
@@ -249,7 +250,6 @@ class EpayFragment : CommanAPI() {
                     ui_model!!.viewcard_list.value=null
                     empty_view.visibility= View.VISIBLE
                     view_container.visibility= View.GONE
-
                     progress_bar.visibility=View.GONE
 
                 }
@@ -272,6 +272,34 @@ class EpayFragment : CommanAPI() {
                 progress_bar.visibility=View.GONE
             }
         })
+
+    }
+
+    private fun submitActualPrice(viewcardmodel : ViewcardModel){
+
+        // selected product list
+      loop@ for (resultitem in viewcardmodel.result!! ){
+
+            // check from privious list.
+            for (i in 0.until(menu.size)){
+
+                for (j in 0.until(menu[i].product_list!!.size)){
+
+                    if(menu[i].product_list!![j].p_id.trim() == resultitem.p_id.trim()){
+                     resultitem.actual_price=menu[i].product_list!![j].actual_price!!.trim()
+                     continue@loop
+                    }
+                }
+
+            }
+
+        }
+        ui_model!!.viewcard_list.value=viewcardmodel
+        view_container.visibility= View.VISIBLE
+        progress_bar.visibility=View.GONE
+
+
+
 
     }
 
@@ -371,14 +399,15 @@ class EpayFragment : CommanAPI() {
 
 
     private fun refresh_viewCard(){
-        if(ui_model!!.viewcard_list.value ==null){
+
+        val viewcardmodel = ui_model!!.viewcard_list.value
+        if(viewcardmodel ==null){
             // this condition will null if all item has been deleted : so just clear view and inflate empty view on screen.
             add_parentitem_view.removeAllViewsInLayout()
             add_parentitem_view.invalidate()
             return
         }
         paymentattributes=PaymentAttributes()
-        paymentattributes.order_total=ui_model!!.viewcard_list.value!!.order_total.toString()
         for (i in 0.until(restaurant.restpaymentmethods.size)){
             if(restaurant.restpaymentmethods[i].pm_id =="1"){
                 // online
@@ -394,11 +423,32 @@ class EpayFragment : CommanAPI() {
         paymentattributes.restaurant_appicon=restaurant.app_icon
         paymentattributes.is_fav=restaurant.is_fav
         paymentattributes.restaurant_id=restaurant.restaurant_id
-
-        epay_total_txt.text= BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.order_total.toString()) ?: "null"
+        restaurant.giftcard_details?.eatmore?.let { paymentattributes.giftcard_details[Constants.EATMORE]=it.toString() }
+        restaurant.giftcard_details?.restaurant?.let { paymentattributes.giftcard_details[Constants.RESTAURANT]=it.toString() }
+        if(viewcardmodel.offer_details !=null && viewcardmodel.offer_details!!.offer_type == Constants.ORDER_DISCOUNT && viewcardmodel.order_total >= viewcardmodel.offer_details!!.minimum_order_price!!.toDouble()){
+            loge(TAG,"Order discount--")
+            val discountPrice=((viewcardmodel.offer_details!!.discount!!.toDouble() * viewcardmodel.order_total)/100)
+            val actual_price_afterDiscount=viewcardmodel.order_total - discountPrice
+            epay_total_txt.text= String.format(getString(R.string.dkk_price),BindDataUtils.convertCurrencyToDanishWithoutLabel(actual_price_afterDiscount.toString()))
+            binding.offerDiscounted= true
+            subtotal_txt.text = String.format(getString(R.string.dkk_price),BindDataUtils.convertCurrencyToDanishWithoutLabel(viewcardmodel.order_total.toString()))
+            discount_txt.text = String.format(getString(R.string.minues),BindDataUtils.convertCurrencyToDanishWithoutLabel(discountPrice.toString()))
+            paymentattributes.subtotal=actual_price_afterDiscount.toString()
+            paymentattributes.discount_type=Constants.ORDER_DISCOUNT
+            paymentattributes.discount_amount=discountPrice
+        }else{
+            loge(TAG,"No discount--")
+            binding.offerDiscounted= false
+            epay_total_txt.text= String.format(getString(R.string.dkk_price),BindDataUtils.convertCurrencyToDanish(viewcardmodel.order_total.toString()))
+            paymentattributes.subtotal=viewcardmodel.order_total.toString()
+            paymentattributes.discount_type=""
+            paymentattributes.discount_amount=0.0
+        }
         epay_total_lbl.text=String.format(getString(R.string.total_goods),ui_model!!.viewcard_list.value!!.cartcnt)
         add_parentitem_view.removeAllViewsInLayout()
         for (i in 0 until ui_model!!.viewcard_list.value!!.result!!.size){
+
+            loge(TAG,"actual price-"+ui_model!!.viewcard_list.value!!.result!![i].actual_price)
             var inflater= context!!.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
             val view= inflater.inflate(R.layout.dynamic_raw_item,null)
             view.remove_item.tag=i
@@ -476,6 +526,7 @@ class EpayFragment : CommanAPI() {
           //  subtotal.text= BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.order_total.toString()) ?: "null"
           //  total.text= BindDataUtils.convertCurrencyToDanish(ui_model!!.viewcard_list.value!!.order_total.toString()) ?: "null"
         }
+        binding.executePendingBindings()
     }
 
 
@@ -539,67 +590,6 @@ class EpayFragment : CommanAPI() {
 
 
 
-    fun tabfunction() {
-
-        menu_tabs.removeAllTabs()
-        info_outline_img.setOnClickListener(null)
-        tablistner?.let { menu_tabs.removeOnTabSelectedListener(it)  }
-
-
-        if(!DetailsFragment.delivery_present && DetailsFragment.pickup_present){
-            menu_tabs.addTab(menu_tabs.newTab().setText(getString(R.string.pickup)))
-            isPickup=true
-        } else if(DetailsFragment.delivery_present && !DetailsFragment.pickup_present){
-            menu_tabs.addTab(menu_tabs.newTab().setText((if(DetailsFragment.delivery_charge_title=="") getString(R.string.delivery) else getString(R.string.delivery)+"\n"+ DetailsFragment.delivery_charge_title)+" "+ BindDataUtils.convertCurrencyToDanish(DetailsFragment.delivery_charge)))
-            isPickup=false
-        }else{
-            menu_tabs.addTab(menu_tabs.newTab().setText((if(DetailsFragment.delivery_charge_title=="") getString(R.string.delivery) else getString(R.string.delivery)+"\n"+ DetailsFragment.delivery_charge_title)+" "+ BindDataUtils.convertCurrencyToDanish(DetailsFragment.delivery_charge)))
-            menu_tabs.addTab(menu_tabs.newTab().setText(getString(R.string.pickup)))
-            isPickup=false
-        }
-
-        if(isPickup){
-            info_outline_img.visibility=View.GONE
-            binding.pickupDeliveryTxt = DetailsFragment.pickup_text
-        } else {
-            info_outline_img.visibility=View.VISIBLE
-            binding.pickupDeliveryTxt = DetailsFragment.delivery_text
-        }
-
-        info_outline_img.setOnClickListener{ CartListFunction.showDialog(restaurant = restaurant,context = context!!)}
-
-        binding.executePendingBindings()
-        tablistner = object : TabLayout.OnTabSelectedListener{
-            override fun onTabReselected(tab: TabLayout.Tab?) {
-            }
-            override fun onTabUnselected(tab: TabLayout.Tab?) {
-            }
-            override fun onTabSelected(tab: TabLayout.Tab?) {
-                logd(TAG, menu_tabs.selectedTabPosition.toString())
-                when(menu_tabs.selectedTabPosition){
-                    1->{
-                        isPickup=true
-                        info_outline_img.visibility=View.GONE
-                        binding.pickupDeliveryTxt = DetailsFragment.pickup_text.also { binding.executePendingBindings() }
-                        DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!, R.color.black),msg = getString(R.string.you_are_ordering_pickup),title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
-                            override fun onPositiveButtonClick(position: Int) {
-                            }
-                            override fun onNegativeButtonClick() {
-                            }
-                        })
-                    }
-                    0->{
-                        isPickup=false
-                        info_outline_img.visibility=View.VISIBLE
-                        binding.pickupDeliveryTxt = DetailsFragment.delivery_text.also { binding.executePendingBindings() }
-                    }
-                }
-
-            }
-        }
-
-        menu_tabs.addOnTabSelectedListener(tablistner!!)
-    }
 
 
 
@@ -675,7 +665,7 @@ class EpayFragment : CommanAPI() {
             var shipping_charge :String ="0",
             var upto_min_shipping :String ="0",
             var minimum_order_price :String ="0",
-            var order_total :String ="0", // this is same as subtotal + excluded Tax
+            var subtotal :String ="0", // this is same as subtotal + excluded Tax
             var additional_charge :String ="0",
             var additional_charges_online :String ="0",
             var additional_charges_cash :String ="0",
@@ -686,6 +676,7 @@ class EpayFragment : CommanAPI() {
             var paymenttype :String ="",
             var txnfee :String ="",
             var order_no :Int =0,
+            var giftcard_details: HashMap<String, String> = HashMap(),
             var final_amount :Double =0.0  // this is final amount + included Tax
 
     )

@@ -126,7 +126,7 @@
     <string name="apply">Apply</string>
     <string name="discount">- %1$s</string>
     <string name="count_ammount">%1$s | %2$s</string>
-    <string name="fra">fra\n%1$s</string>
+    <string name="fra">fra\n%1$s</string>Gå til Betaling
     <string name="transaction_has_been_declined">Transaction has been declined</string>
     <string name="confirm">Bekræfte</string>
     <string name="pay">Gå til betaling</string>
@@ -288,5 +288,7 @@
     <string name="content_icon">content_icon</string>
     <string name="benyt">Benyt</string>
     <string name="fra_">fra:%1$s</string>
+    <string name="you_are_about_to_order_your_food_for_pickup_one_or_more">Du er ved at bestille din mad til afhentning, Et eller flere produkter er ikke tilgængelige!</string>
+    <string name="you_are_about_to_order_your_food_for_delivery_one_or_more">Du er ved at bestille din mad til udbringning, Et eller flere produkter er ikke tilgængelige!</string>
 
 </resources>

@@ -9,6 +9,7 @@ import dk.eatmore.foodapp.model.home.ProductListModel
 import dk.eatmore.foodapp.model.LastOrder
 import dk.eatmore.foodapp.model.cart.Data
 import dk.eatmore.foodapp.model.cart.ProductDetails
+import dk.eatmore.foodapp.model.epay.ApplyCodeModel
 import dk.eatmore.foodapp.model.epay.ViewcardModel
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.model.home.RestaurantListModel
@@ -141,21 +142,9 @@ interface ApiInterface {
             @Field(Constants.APP) app : String
     ): Call<JsonObject>
 
-    @FormUrlEncoded
     @POST("Cart/cart/apply-code")
-    fun applycode(
-            @Field("r_token") r_token: String ,
-            @Field("r_key") r_key: String,
-            @Field("customer_id") customer_id: String,
-            @Field("upto_min_shipping") upto_min_shipping: String,
-            @Field("shipping") shipping: String,
-            @Field("code") code: String,
-            @Field("order_total") order_total: String,
-            @Field("additional_charge") additional_charge: String,
-            @Field("shipping_costs") shipping_costs: String,
-            @Field("app") app : String
-
-    ): Call<JsonObject>
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun applycode(@Body jsonObject: JsonObject): Call<ApplyCodeModel>
 
     @POST("Cart/cart/user-info")
     @Headers("Content-Type: application/x-www-form-urlencoded")

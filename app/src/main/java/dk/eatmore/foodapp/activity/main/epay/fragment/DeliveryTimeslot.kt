@@ -112,7 +112,7 @@ class DeliveryTimeslot : CommanAPI(), TextWatcher {
 //                    Delivery: "Levering ønsket til" + " " + TIME
 //                    Pickup: "Afhentining" + " " + TIME
                     EpayFragment.paymentattributes.comments=comment_edt.text.trim().toString().replace(":",",",false)
-                    EpayFragment.paymentattributes.payment_time=if(EpayFragment.isPickup)"Afhentining ${EpayFragment.paymentattributes.expected_time_display}" else "Levering ønsket til ${EpayFragment.paymentattributes.expected_time_display}"
+                    EpayFragment.paymentattributes.payment_time=if(DetailsFragment.isPickup)"Afhentining ${EpayFragment.paymentattributes.expected_time_display}" else "Levering ønsket til ${EpayFragment.paymentattributes.expected_time_display}"
                     (parentFragment as EpayFragment).addFragment(R.id.epay_container,Paymentmethod.newInstance(),Paymentmethod.TAG,true)
                 }
                 else {
@@ -156,7 +156,7 @@ class DeliveryTimeslot : CommanAPI(), TextWatcher {
                     }
                     else ->{
                         val message=getdeliverymsg_error(jsonObject)
-                        if((EpayFragment.isPickup && !DetailsFragment.pickup_present) || (!EpayFragment.isPickup && !DetailsFragment.delivery_present)){
+                        if((DetailsFragment.isPickup && !DetailsFragment.pickup_present) || (!DetailsFragment.isPickup && !DetailsFragment.delivery_present)){
                             // [pickup(true) && pickuppresent(false) || delivery(true) && deliverypresent (false)]
                             DialogUtils.openDialogDefault(context = context!!,btnNegative = "",btnPositive = getString(R.string.ok),color = ContextCompat.getColor(context!!, R.color.black),msg = message,title = "",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
                                 override fun onPositiveButtonClick(position: Int) {
@@ -221,7 +221,7 @@ class DeliveryTimeslot : CommanAPI(), TextWatcher {
         val postParam = JsonObject()
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
-        postParam.addProperty(Constants.SHIPPING, if (EpayFragment.isPickup) context!!.getString(R.string.pickup_) else context!!.getString(R.string.delivery_))
+        postParam.addProperty(Constants.SHIPPING, if (DetailsFragment.isPickup) context!!.getString(R.string.pickup_) else context!!.getString(R.string.delivery_))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
         postParam.addProperty(Constants.LANGUAGE, Constants.DA)
         call_pickupinfo=ApiCall.pickupinfo(jsonObject = postParam)
@@ -307,8 +307,8 @@ class DeliveryTimeslot : CommanAPI(), TextWatcher {
     // set common toolbar from this and set pre fragment toolbar from this.
 
     fun setToolbarforThis() {
-        txt_toolbar.text =if(EpayFragment.isPickup) getString(R.string.bekræft_din_hent_selv_tid) else getString(R.string.confirm_delivery_time)
-        delivery_time.text =if(EpayFragment.isPickup) getString(R.string.hent_selv_tid) else getString(R.string.leveringstid)
+        txt_toolbar.text =if(DetailsFragment.isPickup) getString(R.string.bekræft_din_hent_selv_tid) else getString(R.string.confirm_delivery_time)
+        delivery_time.text =if(DetailsFragment.isPickup) getString(R.string.hent_selv_tid) else getString(R.string.leveringstid)
         img_toolbar_back.setOnClickListener { (activity as HomeActivity).onBackPressed() }
     }
 

@@ -87,7 +87,7 @@
     <string name="login_to_continue">Login to continue</string>
     <string name="are_you_sure_would">Would you like to logout?</string>
     <string name="logout">Logout</string>
-    <string name="no">Nej</string>
+    <string name="no">No</string>
     <string name="yes">Ja</string>
     <string name="are_you_sure_to_delete">Vil du slette?</string>
     <string name="item_has_been">Item has been successfully added !</string>
@@ -97,7 +97,7 @@
     <string name="delivery_">delivery</string>
     <string name="pickup_caps">Pickup</string>
     <string name="delivery_caps">Delivery</string>
-    <string name="you_are_ordering_pickup">Du er ved at bestille din mad til afhentning!</string>
+    <string name="you_are_ordering_pickup">You are about to order your food for pickup</string>
     <string name="enter_your_valid_name">Indtast venligst dit navn</string>
     <string name="enter_your_postal_number">Indtast venligst dit postnummer</string>
     <string name="enter_the_valid_number">Forkert telefon nummer</string>
@@ -287,6 +287,8 @@
     <string name="content_icon">content_icon</string>
     <string name="benyt">Benyt</string>
     <string name="fra_">fra:%1$s</string>
+    <string name="you_are_about_to_order_your_food_for_pickup_one_or_more">You are about to order your food for pickup, One or more products may not be available!</string>
+    <string name="you_are_about_to_order_your_food_for_delivery_one_or_more">You are about to order your food for delivery, One or more products may not be available!</string>
 
 
 </resources>

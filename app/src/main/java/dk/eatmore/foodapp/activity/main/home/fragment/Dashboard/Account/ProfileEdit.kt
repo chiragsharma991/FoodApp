@@ -146,7 +146,7 @@ class ProfileEdit : BaseFragment(), TextWatcher {
 
     fun validationFields(): Boolean {
         var isvalidate: Boolean = true
-
+        inputValidStates.get(name_edt)
         if (!inputValidStates[name_edt]!!) {
             name_edt.error = getString(R.string.enter_your_valid_name)
             isvalidate = false

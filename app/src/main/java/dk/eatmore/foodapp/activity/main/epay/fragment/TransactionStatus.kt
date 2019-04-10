@@ -438,12 +438,12 @@ class TransactionStatus : CommanAPI() {
         addspantext()
 
 
-        if (EpayFragment.isPickup) {
+        if (DetailsFragment.isPickup) {
             // pickup
             rest_pickupdelivery_txt.text = getString(R.string.for_hent_selv)
             pickupdelivery_txt.text = String.format(getString(R.string.delivery_wid_expectedtime), getString(R.string.for_hent_selv), BindDataUtils.parseTimeToHHmm(EpayFragment.paymentattributes.expected_time))
-            rest_pickupdelivery_icon.setImageResource(if (EpayFragment.isPickup) R.mipmap.hent_selv_dark else R.mipmap.motorcycle_dark)
-            pickupdelivery_icon.setImageResource(if (EpayFragment.isPickup) R.mipmap.hent_selv_dark else R.mipmap.motorcycle_dark)
+            rest_pickupdelivery_icon.setImageResource(if (DetailsFragment.isPickup) R.mipmap.hent_selv_dark else R.mipmap.motorcycle_dark)
+            pickupdelivery_icon.setImageResource(if (DetailsFragment.isPickup) R.mipmap.hent_selv_dark else R.mipmap.motorcycle_dark)
             pickupdelivery_address.visibility = View.GONE
             customer_name.visibility = View.GONE
             ImageLoader.loadImagefromurl(context!!, EpayFragment.paymentattributes.restaurant_appicon, restaurant_img)
@@ -455,8 +455,8 @@ class TransactionStatus : CommanAPI() {
             // delivery
             rest_pickupdelivery_txt.text = getString(R.string.til_levering)
             pickupdelivery_txt.text = String.format(getString(R.string.delivery_wid_expectedtime), getString(R.string.til_levering),BindDataUtils.parseTimeToHHmm(EpayFragment.paymentattributes.expected_time))
-            rest_pickupdelivery_icon.setImageResource(if (EpayFragment.isPickup) R.mipmap.hent_selv_dark else R.mipmap.motorcycle_dark)
-            pickupdelivery_icon.setImageResource(if (EpayFragment.isPickup) R.mipmap.hent_selv_dark else R.mipmap.motorcycle_dark)
+            rest_pickupdelivery_icon.setImageResource(if (DetailsFragment.isPickup) R.mipmap.hent_selv_dark else R.mipmap.motorcycle_dark)
+            pickupdelivery_icon.setImageResource(if (DetailsFragment.isPickup) R.mipmap.hent_selv_dark else R.mipmap.motorcycle_dark)
             pickupdelivery_address.visibility = View.VISIBLE
             pickupdelivery_address.text = EpayFragment.paymentattributes.payment_address
             customer_name.text = EpayFragment.paymentattributes.first_name
@@ -474,14 +474,14 @@ class TransactionStatus : CommanAPI() {
 
         var final_amount: Double = 0.0   // calculating final amount with included all tax.
 
-        if (EpayFragment.isPickup) {
+        if (DetailsFragment.isPickup) {
             // pick up:
             subtotal_layout.visibility = View.VISIBLE
             restuptominimum_layout.visibility = if (EpayFragment.paymentattributes.upto_min_shipping.toDouble() <= 0.0) View.GONE else View.VISIBLE  // product price - mincharge
             shipping_layout.visibility = View.GONE
             additional_charge_layout.visibility = if (EpayFragment.paymentattributes.additional_charges_cash.toDouble() <= 0.0) View.GONE else View.VISIBLE    // online/cash tax
             total_layout.visibility = View.VISIBLE
-            subtotal_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.order_total)
+            subtotal_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.subtotal)
             restuptominimum_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.upto_min_shipping)
             additional_charge_txt.text = if (Paymentmethod.isPaymentonline) BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.additional_charges_online) else BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.additional_charges_cash)
             discountcoupan_txt.text = String.format(getString(R.string.discount), BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.discount_amount.toString()))
@@ -491,7 +491,7 @@ class TransactionStatus : CommanAPI() {
                 discountgift_layout.visibility = if (EpayFragment.paymentattributes.discount_amount <= 0) View.GONE else View.VISIBLE
                 discountcoupan_layout.visibility = View.GONE
                 final_amount = (
-                        (EpayFragment.paymentattributes.order_total.toDouble()
+                        (EpayFragment.paymentattributes.subtotal.toDouble()
                                 + EpayFragment.paymentattributes.upto_min_shipping.toDouble()
                                 + if (Paymentmethod.isPaymentonline) EpayFragment.paymentattributes.additional_charges_online.toDouble() else EpayFragment.paymentattributes.additional_charges_cash.toDouble())
                                 - EpayFragment.paymentattributes.discount_amount)
@@ -500,7 +500,7 @@ class TransactionStatus : CommanAPI() {
                 discountcoupan_layout.visibility = if (EpayFragment.paymentattributes.discount_amount <= 0) View.GONE else View.VISIBLE
                 discountgift_layout.visibility = View.GONE
                 final_amount = (
-                        (EpayFragment.paymentattributes.order_total.toDouble() - EpayFragment.paymentattributes.discount_amount)
+                        (EpayFragment.paymentattributes.subtotal.toDouble() - EpayFragment.paymentattributes.discount_amount)
                                 + EpayFragment.paymentattributes.upto_min_shipping.toDouble()
                                 + if (Paymentmethod.isPaymentonline) EpayFragment.paymentattributes.additional_charges_online.toDouble() else EpayFragment.paymentattributes.additional_charges_cash.toDouble())
 
@@ -508,7 +508,7 @@ class TransactionStatus : CommanAPI() {
                 discountgift_layout.visibility = View.GONE
                 discountcoupan_layout.visibility = View.GONE
                 final_amount = (
-                        EpayFragment.paymentattributes.order_total.toDouble()
+                        EpayFragment.paymentattributes.subtotal.toDouble()
                                 + EpayFragment.paymentattributes.upto_min_shipping.toDouble()
                                 + if (Paymentmethod.isPaymentonline) EpayFragment.paymentattributes.additional_charges_online.toDouble() else EpayFragment.paymentattributes.additional_charges_cash.toDouble())
 
@@ -528,7 +528,7 @@ class TransactionStatus : CommanAPI() {
             shipping_layout.visibility = if (EpayFragment.paymentattributes.shipping_charge.toDouble() <= 0.0) View.GONE else View.VISIBLE
             additional_charge_layout.visibility = if (EpayFragment.paymentattributes.additional_charges_online.toDouble() <= 0.0) View.GONE else View.VISIBLE
             total_layout.visibility = View.VISIBLE
-            subtotal_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.order_total)
+            subtotal_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.subtotal)
             restuptominimum_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.upto_min_shipping)
             shipping_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.shipping_charge)
             additional_charge_txt.text = if (Paymentmethod.isPaymentonline) BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.additional_charges_online) else BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.additional_charges_cash)
@@ -540,7 +540,7 @@ class TransactionStatus : CommanAPI() {
                 discountgift_layout.visibility = if (EpayFragment.paymentattributes.discount_amount <= 0) View.GONE else View.VISIBLE
                 discountcoupan_layout.visibility = View.GONE
                 final_amount = (
-                        (EpayFragment.paymentattributes.order_total.toDouble()
+                        (EpayFragment.paymentattributes.subtotal.toDouble()
                                 + EpayFragment.paymentattributes.upto_min_shipping.toDouble()
                                 + EpayFragment.paymentattributes.shipping_charge.toDouble()
                                 + if (Paymentmethod.isPaymentonline) EpayFragment.paymentattributes.additional_charges_online.toDouble() else EpayFragment.paymentattributes.additional_charges_cash.toDouble())
@@ -550,7 +550,7 @@ class TransactionStatus : CommanAPI() {
                 discountcoupan_layout.visibility = if (EpayFragment.paymentattributes.discount_amount <= 0) View.GONE else View.VISIBLE
                 discountgift_layout.visibility = View.GONE
                 final_amount = (
-                        (EpayFragment.paymentattributes.order_total.toDouble() - EpayFragment.paymentattributes.discount_amount)
+                        (EpayFragment.paymentattributes.subtotal.toDouble() - EpayFragment.paymentattributes.discount_amount)
                                 + EpayFragment.paymentattributes.upto_min_shipping.toDouble()
                                 + EpayFragment.paymentattributes.shipping_charge.toDouble()
                                 + if (Paymentmethod.isPaymentonline) EpayFragment.paymentattributes.additional_charges_online.toDouble() else EpayFragment.paymentattributes.additional_charges_cash.toDouble())
@@ -558,7 +558,7 @@ class TransactionStatus : CommanAPI() {
                 discountgift_layout.visibility = View.GONE
                 discountcoupan_layout.visibility = View.GONE
                 final_amount = (
-                        EpayFragment.paymentattributes.order_total.toDouble()
+                        EpayFragment.paymentattributes.subtotal.toDouble()
                                 + EpayFragment.paymentattributes.upto_min_shipping.toDouble()
                                 + EpayFragment.paymentattributes.shipping_charge.toDouble()
                                 + if (Paymentmethod.isPaymentonline) EpayFragment.paymentattributes.additional_charges_online.toDouble() else EpayFragment.paymentattributes.additional_charges_cash.toDouble())

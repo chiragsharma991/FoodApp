@@ -9,12 +9,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.databinding.DataBindingUtil
-import android.graphics.BitmapFactory
 import android.os.Build
 import android.os.Bundle
-import android.os.Handler
 import android.support.design.widget.AppBarLayout
-import android.support.design.widget.Snackbar
 import android.support.v4.app.Fragment
 import android.support.v4.app.FragmentManager
 import android.support.v4.app.FragmentPagerAdapter
@@ -27,7 +24,6 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.GsonBuilder
@@ -47,13 +43,11 @@ import dk.eatmore.foodapp.fragment.Dashboard.Order.OrderedRestaurant
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.model.ModelUtility
 import dk.eatmore.foodapp.model.home.MenuListItem
-import dk.eatmore.foodapp.model.home.ProductListItem
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.*
 import kotlinx.android.synthetic.main.fragment_detail.*
-import kotlinx.android.synthetic.main.test.view.*
 import retrofit2.Call
 import java.io.Serializable
 
@@ -72,6 +66,8 @@ class DetailsFragment : CommanAPI() {
     private var restaurant : Restaurant ? =null
     private var ordertype : String =""
     private var isShow = false
+    private val myclickhandler = MyClickHandler(this)
+
 
 
 
@@ -87,6 +83,7 @@ class DetailsFragment : CommanAPI() {
         var total_cartamt: String = "0"
         var delivery_charge_title: String = ""
         var delivery_charge: String = ""
+        var isPickup:Boolean = false
         var delivery_text : String =""
         var pickup_text : String=""
         var is_restaurant_closed : Boolean =false
@@ -138,7 +135,6 @@ class DetailsFragment : CommanAPI() {
             binding.kstatus=PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)
             restaurant=arguments?.getSerializable(Constants.RESTAURANT) as Restaurant?
             ordertype=arguments?.getString(Constants.ORDERTYPE) as String
-            loge(TAG,"---"+restaurant)
             viewcart.visibility = View.GONE  // By default viewcart should be gone.
             logd(DetailsFragment.TAG, "saveInstance NULL")
             img_toolbar_back.setOnClickListener {
@@ -202,111 +198,14 @@ class DetailsFragment : CommanAPI() {
                 category_menulist.removeObservers(this@DetailsFragment)
 
                 category_menulist.observe(this@DetailsFragment, Observer<RestaurantInfoModel> {
-                    submitAllDiscount(category_menulist.value!!.menu,category_menulist.value!!.restaurant_info)
+                    CartListFunction.submitAllDiscount(category_menulist.value!!.menu,category_menulist.value!!.restaurant_info)
+                    refreshview(category_menulist.value!!.restaurant_info!!)
                 })
             }
 
 
-    fun submitAllDiscount( menu: ArrayList<MenuListItem>? , restaurant_info: Restaurant?){
-        if(menu !=null && restaurant_info !=null){
-        for (i in 0 until menu.size){
-            for (j in 0 until menu[i].product_list!!.size){
-                // pizza - > x,y,z category
-                if (restaurant_info.offer_details == null) {
-                    // no discount (ignore all discount and move on normal flow)
-                    val productListItem= menu[i].product_list!![j]
-                    productListItem.discountType=0
-                    productListItem.actual_price=  getprice(productListItem)
-                    productListItem.actual_price_afterDiscount=  null
-                    productListItem.discount=  null
-                    productListItem.offerDiscounted=  false
-                    productListItem.minimum_order_price=  null
-
-                } else {
-                    // discount
-                    val productListItem= menu[i].product_list!![j]
-                    if (restaurant_info.offer_details!!.offer_type == Constants.PRODUCT_DISCOUNT) {
-                        // product discount
-                        if (restaurant_info.offer_details!!.category_id.size > 0) {
-                            // some product have discount
-
-                            if (restaurant_info.offer_details!!.category_id.contains(productListItem.c_id)) {
-                                // this product is for discount
-                                productListItem.discountType=1
-                                productListItem.discount=  restaurant_info.offer_details!!.discount!!
-                                productListItem.minimum_order_price=  null
-                                val priceBeforeDiscount = getprice(productListItem)
-                                val priceAfterDiscount = (priceBeforeDiscount.toDouble() - ((restaurant_info.offer_details!!.discount!!.toDouble() * priceBeforeDiscount.toDouble()) / 100))
-                                productListItem.actual_price=  priceBeforeDiscount
-                                productListItem.actual_price_afterDiscount=  priceAfterDiscount.toString()
-                                productListItem.offerDiscounted=  true
-
-                            } else {
-                                // this product is not for discount
-                                productListItem.discountType=0
-                                productListItem.discount= null
-                                productListItem.actual_price=  getprice(productListItem)
-                                productListItem.actual_price_afterDiscount=  null
-                                productListItem.offerDiscounted=  false
-                                productListItem.minimum_order_price=  null
-                            }
-                        } else {
-                            // all product have discount
-                            productListItem.discountType=1
-                            productListItem.discount=  restaurant_info.offer_details!!.discount!!
-                            val priceBeforeDiscount = getprice(productListItem)
-                            val priceAfterDiscount = (priceBeforeDiscount.toDouble() - ((restaurant_info.offer_details!!.discount!!.toDouble() * priceBeforeDiscount.toDouble()) / 100))
-                            productListItem.actual_price=  priceBeforeDiscount
-                            productListItem.actual_price_afterDiscount=  priceAfterDiscount.toString()
-                            productListItem.offerDiscounted=  true
-                            productListItem.minimum_order_price=  null
-                        }
-
-
-                    } else {
-                        // order discount
-                        productListItem.discountType=2
-                        productListItem.actual_price=  getprice(productListItem)
-                        productListItem.actual_price_afterDiscount=  null
-                        productListItem.discount=  restaurant_info.offer_details!!.discount!!
-                        productListItem.offerDiscounted=  true
-                        productListItem.minimum_order_price=  restaurant_info.offer_details!!.minimum_order_price
-                    }
-
-                }
-
-            }
-        }
-            refreshview(restaurant_info)
-        }else{
-            //TODO : list is null
-        }
-    }
-
 
     private fun refreshview(restaurant_info: Restaurant) {
-
-
-/*
-        val mInflater= context!!.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
-        val snackbar = Snackbar.make(testview, "-def-", Snackbar.LENGTH_INDEFINITE)
-        val layout = snackbar.getView() as Snackbar.SnackbarLayout
-        val textView = layout.findViewById(android.support.design.R.id.snackbar_text) as TextView
-        textView.setVisibility(View.INVISIBLE)
-        val snackView = mInflater.inflate(R.layout.test, null)
-     //   val imageView = snackView.findViewById(R.id.image) as ImageView
-      //  imageView.setImageBitmap(image)
-        snackView.item_name.text = "Add to cart test"
-        snackView.item_name.setOnClickListener({loge(TAG,"click---")})
-        layout.setPadding(0,0,0,0)
-        layout.addView(snackView, 0)
-        snackbar.show()
-
-*/
-
-
-
-
 
         loge(TAG, "refresh---")
         favorite_btn.setImageResource(if(restaurant_info.is_fav) R.mipmap.heartfilled_white else R.mipmap.heart_white)
@@ -314,108 +213,111 @@ class DetailsFragment : CommanAPI() {
         broadcastEvent(restaurant_info)
         delivery_present = restaurant_info.delivery_present
         pickup_present = restaurant_info.pickup_present
+        isPickup= if(!delivery_present) true else false
         delivery_charge = restaurant_info.delivery_charge ?: "0"
         delivery_charge_title = restaurant_info.delivery_charge_title ?: "null"
         total_cartcnt = if (restaurant_info.cartcnt == null || restaurant_info.cartcnt == "0") 0 else restaurant_info.cartcnt!!.toInt()
         total_cartamt = if (restaurant_info.cartamt == null || restaurant_info.cartamt == "0") "00.00" else restaurant_info.cartamt.toString()
-       /* delivery_text=restaurant_info.delivery_text
-        pickup_text=restaurant_info.pickup_text*/
         delivery_text="Se leveringspriser"
         pickup_text=""
         updatebatchcount(0)
-        val myclickhandler = MyClickHandler(this)
         binding.restaurant = restaurant_info
         binding.handler = myclickhandler
         Glide.with(context!!)
                 .load(restaurant_info.app_icon)
                 .apply(RequestOptions().placeholder(BindDataUtils.getRandomDrawbleColor()).error(BindDataUtils.getRandomDrawbleColor()))
                 .into(imageview)
-        adapter = ViewPagerAdapter(childFragmentManager)
 
 
-        if (((ui_model!!.category_menulist.value!!.is_restaurant_closed != null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) &&
-                (ui_model!!.category_menulist.value!!.pre_order != null && ui_model!!.category_menulist.value!!.pre_order == false))
-                                                                           ||
-                (ui_model!!.category_menulist.value!!.is_restaurant_closed != null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) && ui_model!!.category_menulist.value!!.pre_order == null
-        ) {
-            // closed restaurant---
-            is_restaurant_closed=true
-            adapter!!.addFragment(Menu.newInstance(ui_model!!.category_menulist.value!!.menu!!, restaurant_info), getString(R.string.menu))
-            adapter!!.addFragment(Rating.newInstance(restaurant_info), getString(R.string.rating))
-            adapter!!.addFragment(Info.newInstance(restaurant_info), getString(R.string.info))
-            viewpager.offscreenPageLimit = 2
-            viewpager.setAdapter(adapter)
-            //viewpager.setCurrentItem(1, true)
+
+            // initialise all layouts and tab
+            adapter = ViewPagerAdapter(childFragmentManager)
+            if (((ui_model!!.category_menulist.value!!.is_restaurant_closed != null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) &&
+                            (ui_model!!.category_menulist.value!!.pre_order != null && ui_model!!.category_menulist.value!!.pre_order == false))
+                    ||
+                    (ui_model!!.category_menulist.value!!.is_restaurant_closed != null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) && ui_model!!.category_menulist.value!!.pre_order == null
+            ) {
+                // closed restaurant---
+                is_restaurant_closed=true
+                adapter!!.addFragment(Menu.newInstance(ui_model!!.category_menulist.value!!.menu!!, restaurant_info), getString(R.string.menu))
+                adapter!!.addFragment(Rating.newInstance(restaurant_info), getString(R.string.rating))
+                adapter!!.addFragment(Info.newInstance(restaurant_info), getString(R.string.info))
+                viewpager.offscreenPageLimit = 2
+                viewpager.setAdapter(adapter)
+                //viewpager.setCurrentItem(1, true)
                 DialogUtils.openDialogDefault(context = context!!,btnNegative = "Se menukort",btnPositive = String.format(getString(R.string.find_andet_take_away),restaurant_info.city),
                         color = ContextCompat.getColor(context!!, R.color.theme_color),msg ="",
                         title ="We are closed today. Please check opening hours",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
                     override fun onPositiveButtonClick(position: Int) {
                         //back press
-                       // canIrefreshpre_Function=true
+                        // canIrefreshpre_Function=true
                         onBackpress()
                     }
                     override fun onNegativeButtonClick() {
-                      //  canIrefreshpre_Function=true
+                        //  canIrefreshpre_Function=true
                         // dismiss
                     }
                 })
 
 
-        } else if((ui_model!!.category_menulist.value!!.is_restaurant_closed != null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) &&
-                (ui_model!!.category_menulist.value!!.pre_order != null && ui_model!!.category_menulist.value!!.pre_order == true)) {
-            // preorder Restaurant---
-            is_restaurant_closed=false
-            adapter!!.addFragment(Menu.newInstance(ui_model!!.category_menulist.value!!.menu!!, restaurant_info), getString(R.string.menu))
-            adapter!!.addFragment(Rating.newInstance(restaurant_info), getString(R.string.rating))
-            adapter!!.addFragment(Info.newInstance(restaurant_info), getString(R.string.info))
-            viewpager.offscreenPageLimit = 3
-            viewpager.setAdapter(adapter)
+            } else if((ui_model!!.category_menulist.value!!.is_restaurant_closed != null && ui_model!!.category_menulist.value!!.is_restaurant_closed == true) &&
+                    (ui_model!!.category_menulist.value!!.pre_order != null && ui_model!!.category_menulist.value!!.pre_order == true)) {
+                // preorder Restaurant---
+                is_restaurant_closed=false
+                adapter!!.addFragment(Menu.newInstance(ui_model!!.category_menulist.value!!.menu!!, restaurant_info), getString(R.string.menu))
+                adapter!!.addFragment(Rating.newInstance(restaurant_info), getString(R.string.rating))
+                adapter!!.addFragment(Info.newInstance(restaurant_info), getString(R.string.info))
+                viewpager.offscreenPageLimit = 3
+                viewpager.setAdapter(adapter)
                 DialogUtils.openDialogDefault(context = context!!,btnNegative = "FORUDBESTIL NU",btnPositive = String.format(getString(R.string.find_andet_take_away),restaurant_info.city),
                         color = ContextCompat.getColor(context!!, R.color.theme_color),msg ="\nRestauranten ${restaurant_info.opening_title} ${restaurant_info.time}\n",
                         title = "Denne restaurant har desværre lukket lige nu",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
                     override fun onPositiveButtonClick(position: Int) {
                         //back press
-                    //    canIrefreshpre_Function=true
+                        //    canIrefreshpre_Function=true
                         onBackpress()
                     }
                     override fun onNegativeButtonClick() {
-                    //    canIrefreshpre_Function=true
+                        //    canIrefreshpre_Function=true
                         // dismiss
                     }
                 })
 
-        }else{
-            // Open Restaurant---
-            is_restaurant_closed=false
-            adapter!!.addFragment(Menu.newInstance(ui_model!!.category_menulist.value!!.menu!!, restaurant_info), getString(R.string.menu))
-            adapter!!.addFragment(Rating.newInstance(restaurant_info), getString(R.string.rating))
-            adapter!!.addFragment(Info.newInstance(restaurant_info), getString(R.string.info))
-            viewpager.offscreenPageLimit = 3
-            viewpager.setAdapter(adapter)
-        }
+            }else{
+                // Open Restaurant---
+                is_restaurant_closed=false
+                adapter!!.addFragment(Menu.newInstance(ui_model!!.category_menulist.value!!.menu!!, restaurant_info), getString(R.string.menu))
+                adapter!!.addFragment(Rating.newInstance(restaurant_info), getString(R.string.rating))
+                adapter!!.addFragment(Info.newInstance(restaurant_info), getString(R.string.info))
+                viewpager.offscreenPageLimit = 3
+                viewpager.setAdapter(adapter)
+            }
+            tabs.setupWithViewPager(viewpager)
+            viewcart.setOnClickListener {
+                loge(TAG,"view pager on click--")
+                //   if(total_cartcnt==0) return@setOnClickListener
 
-        tabs.setupWithViewPager(viewpager)
-        //  setPalette()
-        viewcart.setOnClickListener {
-            //   if(total_cartcnt==0) return@setOnClickListener
+                val fragment = EpayFragment.newInstance(restaurant_info,ui_model!!.category_menulist.value!!.menu!!)
+                var enter: Slide? = null
+                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
+                    enter = Slide()
+                    enter.setDuration(300)
+                    enter.slideEdge = Gravity.BOTTOM
+                    val changeBoundsTransition: ChangeBounds = ChangeBounds()
+                    changeBoundsTransition.duration = 300
+                    fragment.sharedElementEnterTransition = changeBoundsTransition
+                    fragment.enterTransition = enter
+                }
 
-            val fragment = EpayFragment.newInstance(restaurant_info)
-            var enter: Slide? = null
-            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                enter = Slide()
-                enter.setDuration(300)
-                enter.slideEdge = Gravity.BOTTOM
-                val changeBoundsTransition: ChangeBounds = ChangeBounds()
-                changeBoundsTransition.duration = 300
-                fragment.sharedElementEnterTransition = changeBoundsTransition
-                fragment.enterTransition = enter
+                if ((activity as HomeActivity).fragmentTab_is() == 1)
+                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment().addFragment(R.id.home_order_container, fragment, EpayFragment.TAG, false)
+                else
+                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().addFragment(R.id.home_fragment_container, fragment, EpayFragment.TAG, false)
             }
 
-            if ((activity as HomeActivity).fragmentTab_is() == 1)
-                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment().addFragment(R.id.home_order_container, fragment, EpayFragment.TAG, false)
-            else
-                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().addFragment(R.id.home_fragment_container, fragment, EpayFragment.TAG, false)
-        }
+
+
+
 
 
 
@@ -428,6 +330,7 @@ class DetailsFragment : CommanAPI() {
         val postParam = JsonObject()
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
+        postParam.addProperty(Constants.SHIPPING, if (isPickup) context!!.getString(R.string.pickup_) else context!!.getString(R.string.delivery_)) // set delivery default method
         if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
             postParam.addProperty(Constants.IS_LOGIN, "1")
             postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
@@ -477,38 +380,41 @@ class DetailsFragment : CommanAPI() {
 
 
     private fun broadcastEvent(restaurant_info: Restaurant) {
-        mYourBroadcastReceiver = object : BroadcastReceiver() {
-            override fun onReceive(context: Context?, intent: Intent?) {
-                loge(TAG, "broadcast receive...")
-                if (intent!!.action == Constants.CARTCOUNT_BROADCAST) {
-                    restaurant_info.cartcnt = intent.extras.getInt(Constants.CARTCNT).toString()
-                    restaurant_info.cartamt = intent.extras.getString(Constants.CARTAMT).toString()
-                    loge(TAG, "new model cartcnt is..." + restaurant_info.cartcnt)
-                    total_cartcnt = intent.extras.getInt(Constants.CARTCNT)
-                    total_cartamt = intent.extras.getString(Constants.CARTAMT)
-                    updatebatchcount(0)
 
-                    // check if category screen is present then update therir batch count as well as this screen.
-                    if ((activity as HomeActivity).fragmentTab_is() == 1) {
-                        val fragment = ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment().childFragmentManager.findFragmentByTag(CategoryList.TAG)
-                        if (fragment != null) {
-                            (fragment as CategoryList).updatebatchcount(0)
+        if (!::mYourBroadcastReceiver.isInitialized) {
+            loge(TAG,"broadcastEvent--")
+            mYourBroadcastReceiver = object : BroadcastReceiver() {
+                override fun onReceive(context: Context?, intent: Intent?) {
+                    loge(TAG, "broadcast receive..."+ui_model?.category_menulist?.value?.restaurant_info!!.test)
+                    if (intent!!.action == Constants.CARTCOUNT_BROADCAST) {
+                        restaurant_info.cartcnt = intent.extras.getInt(Constants.CARTCNT).toString()
+                        restaurant_info.cartamt = intent.extras.getString(Constants.CARTAMT).toString()
+                        loge(TAG, "new model cartcnt is..." + restaurant_info.cartcnt)
+                        total_cartcnt = intent.extras.getInt(Constants.CARTCNT)
+                        total_cartamt = intent.extras.getString(Constants.CARTAMT)
+                        updatebatchcount(0)
+
+                        // check if category screen is present then update therir batch count as well as this screen.
+                        if ((activity as HomeActivity).fragmentTab_is() == 1) {
+                            val fragment = ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment().childFragmentManager.findFragmentByTag(CategoryList.TAG)
+                            if (fragment != null) {
+                                (fragment as CategoryList).updatebatchcount(0)
+                            }
+                        } else {
+                            val homefragment: HomeFragment = ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment()
+                            val fragment = homefragment.childFragmentManager.findFragmentByTag(CategoryList.TAG)
+                            if (fragment != null) {
+                                (fragment as CategoryList).updatebatchcount(0)
+                            }
                         }
-                    } else {
-                        val homefragment: HomeFragment = ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment()
-                        val fragment = homefragment.childFragmentManager.findFragmentByTag(CategoryList.TAG)
-                        if (fragment != null) {
-                            (fragment as CategoryList).updatebatchcount(0)
-                        }
+
+
                     }
-
-
                 }
+
             }
-
+            LocalBroadcastManager.getInstance(activity!!).registerReceiver(mYourBroadcastReceiver, IntentFilter(Constants.CARTCOUNT_BROADCAST))
         }
-        LocalBroadcastManager.getInstance(activity!!).registerReceiver(mYourBroadcastReceiver, IntentFilter(Constants.CARTCOUNT_BROADCAST))
-
     }
 
     fun updatebatchcount(count: Int) {
@@ -567,61 +473,7 @@ class DetailsFragment : CommanAPI() {
         }
     }
 
-    /*   fun onFragmentResult(requestCode: Int, resultCode: Int) {
-          loge("onActivityResult Detail fragment---",""+resultCode+" "+requestCode)
-          // request : send code with request
-          // result :  get code from target activity.
-          val fragment= ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getContainerFragment()
-          if(fragment is OrderFragment){
-              // If user is coming from reorder>>>>
-              if(requestCode ==1 && resultCode == 1 && TransactionStatus.moveonsearch){
-                  // back press from transaction success and continue.
-                  TransactionStatus.moveonsearch=false
-                  fragment.popAllFragment()
-              }
-          }else{
-              // If user is coming from Homecontainer >>>>
-              if(requestCode ==1 && resultCode == 1 && TransactionStatus.moveonsearch){
-                  // back press from transaction success and continue.
-                  TransactionStatus.moveonsearch=false
-                  val fragmentof = (activity as HomeActivity).supportFragmentManager.findFragmentByTag(HomeContainerFragment.TAG)
-                  (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
-              }
 
-              else if(requestCode ==1 && resultCode == 2 && EpayFragment.moveonEpay ){
-                  ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(2)
-              }
-          }
-      }*/
-
-/*
-    fun setPalette() {
-
-        val bitmap = BitmapFactory.decodeResource(resources, R.mipmap.eatmore_search_backgrond)
-        Palette.from(bitmap).generate(object : Palette.PaletteAsyncListener {
-            override fun onGenerated(palette: Palette) {
-
-                val vibrant = palette.vibrantSwatch
-
-                if (vibrant != null) {
-                    val mutedColor = palette.vibrantSwatch!!.getRgb()
-                    collapse_toolbar.setBackgroundColor(mutedColor);
-                    collapse_toolbar.setStatusBarScrimColor(palette.getDarkMutedColor(mutedColor));
-                    collapse_toolbar.setContentScrimColor(palette.getMutedColor(mutedColor));
-
-                } else {
-
-                    collapse_toolbar.setBackgroundColor(ContextCompat.getColor(context!!, R.color.white));
-                    collapse_toolbar.setStatusBarScrimColor(ContextCompat.getColor(context!!, R.color.white))
-                    collapse_toolbar.setContentScrimColor(ContextCompat.getColor(context!!, R.color.white))
-                }
-
-            }
-        })
-
-
-    }
-*/
 
     fun favourite(){
         val restaurant_info= ui_model!!.category_menulist.value!!.restaurant_info
@@ -788,23 +640,6 @@ class DetailsFragment : CommanAPI() {
 
     }
 
-    fun getprice(productListItem: ProductListItem): String {
-
-
-        if (productListItem.product_attribute == null) {
-            return productListItem.p_price!!
-        } else {
-            var attribute_cost = 0.0
-            for (i in 0..productListItem.product_attribute.size - 1) {
-                attribute_cost = attribute_cost + productListItem.product_attribute.get(i).default_attribute_value.a_price.toDouble()
-            }
-            return attribute_cost.toString()
-            //BindDataUtils.convertCurrencyToDanish(attribute_cost.toString())
-                    ?: "null"
-        }
-
-
-    }
 
 
     class MyClickHandler(val detailsfragment: DetailsFragment) {

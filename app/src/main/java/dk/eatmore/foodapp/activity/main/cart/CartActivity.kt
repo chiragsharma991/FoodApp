@@ -170,7 +170,7 @@ class CartActivity : BaseActivity() {
                         // discount is present (product discount)
                         actual_price=CartListFunction.calculateValuesofAddtocart(ui_model!!.product_attribute_list, productdetails).toString()
                         actual_price_afterDiscount = (actual_price.toDouble() - ((discount.toDouble() * actual_price.toDouble()) / 100)).toString()
-                        addtocart_txt.text = Setproductprice(context = this@CartActivity,actual_price = actual_price.toString(), actual_price_afterDiscount = actual_price_afterDiscount.toString() ,discountType = discountType)
+                        addtocart_txt.text = Setproductprice(context = this@CartActivity,actual_price = actual_price, actual_price_afterDiscount = actual_price_afterDiscount,discountType = discountType)
 
                     }
 
@@ -386,6 +386,7 @@ class CartActivity : BaseActivity() {
                 val postParam = JsonObject()
                 postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
                 postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
+                postParam.addProperty(Constants.SHIPPING, if (DetailsFragment.isPickup) getString(R.string.pickup_) else getString(R.string.delivery_))
                 if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
                     postParam.addProperty(Constants.IS_LOGIN, "1")
                     postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
@@ -398,28 +399,25 @@ class CartActivity : BaseActivity() {
                 when(discountType){
                     0 ->{
                         // no discount
-                        loge(TAG,"no discount--")
                         postParam.addProperty(Constants.P_PRICE,actual_price)
                         postParam.addProperty(Constants.DISCOUNT_APPLIED,  0 )
                         postParam.addProperty(Constants.PRODUCT_DISCOUNT_,"0.00")
                     }
                     1->{
                         // product discount
-                        loge(TAG,"product discount--")
-                        postParam.addProperty(Constants.P_PRICE,if(offerDiscounted) actual_price_afterDiscount else actual_price)
+                        postParam.addProperty(Constants.P_PRICE, actual_price)
                         postParam.addProperty(Constants.DISCOUNT_APPLIED,if(offerDiscounted) 1 else 0 )
-                        postParam.addProperty(Constants.PRODUCT_DISCOUNT_,if(offerDiscounted) discount else "0.00")
+                        postParam.addProperty(Constants.PRODUCT_DISCOUNT_,if(offerDiscounted) discount else "0.00")  // add discount amount from API
                     }
                     2->{
                         // order discount
-                        val test =DetailsFragment.total_cartamt.toDouble() + actual_price.toDouble()
-                        loge(TAG,"order discount--"+test.toString())
                         postParam.addProperty(Constants.P_PRICE, actual_price)
                         if(DetailsFragment.total_cartamt.toDouble() + actual_price.toDouble() >= minimum_order_price.toDouble())
                         postParam.addProperty(Constants.DISCOUNT_APPLIED,2)
                         else
                         postParam.addProperty(Constants.DISCOUNT_APPLIED,0)
-                        postParam.addProperty(Constants.PRODUCT_DISCOUNT_,discount)
+                        val discountprice_only = ((discount.toDouble() * actual_price.toDouble())/100)
+                        postParam.addProperty(Constants.PRODUCT_DISCOUNT_,discountprice_only)  // add only discount amount on actual price
 
                     }
                 }

@@ -33,6 +33,8 @@ import android.text.SpannableStringBuilder
 import android.text.Spanned
 import android.text.style.ForegroundColorSpan
 import android.text.style.StrikethroughSpan
+import java.text.DecimalFormat
+import java.text.DecimalFormatSymbols
 
 
 object BindDataUtils {
@@ -260,6 +262,11 @@ object BindDataUtils {
             return builder
         }
 
+    }
+
+    fun reformatIntodecimal(amount : String) : Double{
+        val decimal_price=amount.replace(",",".").replace(".",".")
+        return decimal_price.toDouble()
     }
 
 }

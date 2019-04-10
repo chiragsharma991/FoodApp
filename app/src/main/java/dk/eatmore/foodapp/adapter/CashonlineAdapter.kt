@@ -4,36 +4,56 @@ package dk.eatmore.foodapp.adapter
 
 import android.content.Context
 import android.databinding.DataBindingUtil
+import android.support.v4.content.ContextCompat
 import android.support.v7.widget.RecyclerView
+import android.text.*
+import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
 import java.util.ArrayList
 import android.view.View
-import android.text.Editable
-import android.text.TextWatcher
+import android.text.style.StrikethroughSpan
 import android.util.Log
+import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.epay.fragment.Paymentmethod
+import dk.eatmore.foodapp.databinding.RowPaybalanceBinding
 import dk.eatmore.foodapp.databinding.RowPaymethodBinding
+import dk.eatmore.foodapp.utils.BindDataUtils
+import dk.eatmore.foodapp.utils.Constants
 
 
 class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.PaymentInfoModel>, val myclickhandler: Paymentmethod.MyClickHandler, val paymentmethod: Paymentmethod) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var count: Int = 1
+    private val TYPE_BALANCE = 0
+    private val TYPE_ITEM = 1
 
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): RecyclerView.ViewHolder {
         var vh: RecyclerView.ViewHolder? = null
-        val binding: RowPaymethodBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.row_paymethod, parent, false)
-        // binding.util= BindDataUtils
-        vh = MyViewHolder(binding,MyCustomEditTextListener())
 
+        if(viewType == TYPE_BALANCE){
+            val binding: RowPaybalanceBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.row_paybalance, parent, false)
+            vh = MyHeaderViewHolder(binding)
+            return vh
+        }else{
+            val binding: RowPaymethodBinding = DataBindingUtil.inflate(LayoutInflater.from(parent.context), R.layout.row_paymethod, parent, false)
+            vh = MyViewHolder(binding,MyCustomEditTextListener())
+            return vh
+        }
 
-        return vh
     }
 
+    override fun getItemViewType(position: Int): Int {
+        if(list[position].payment_type == Constants.EATMORE || list[position].payment_type == Constants.RESTAURANT)
+            return TYPE_BALANCE
+        else
+            return TYPE_ITEM
+    }
 
     override fun onBindViewHolder(holder: RecyclerView.ViewHolder, position: Int) {
+        Log.e("TAG"," on bind -"+position)
         if (holder is MyViewHolder) {
 
             holder.binding.paymentinfo=list[position]
@@ -46,47 +66,53 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
             holder.binding.paymentSelection.setOnClickListener{
                 // click on title
 
-                if(!list.get(0).gift_loader && !list.get(1).gift_loader){
-
-                    if(list.get(position).payment_type == context.getString(R.string.online_payment))
-                    {
-                        list[0].view_expand=true
-                        list[1].view_expand=false
-                        list[0].error_expand=if(holder.binding.errorOfPromotioncode.visibility == View.VISIBLE) true else false
-                        list[1].error_expand=false
-                        notifyDataSetChanged()
-                    }
-                    else
-                    {
-                        list[0].view_expand=false
-                        list[1].view_expand=true
-                        list[0].error_expand=false
-                        list[1].error_expand=if(holder.binding.errorOfPromotioncode.visibility == View.VISIBLE) true else false
-                        notifyDataSetChanged()
-                    }
+                for (i in 0.until(list.size)){
+                    list[i].view_expand=false
+                    list[i].error_expand=false
                 }
+                list[position].view_expand=true
+                list[position].error_expand=if(holder.binding.errorOfPromotioncode.visibility == View.VISIBLE) true else false
+                // change data defult to change segment .
+                paymentmethod.showproductInfo(EpayFragment.ui_model!!.viewcard_list.value?.result, EpayFragment.paymentattributes.discount_amount, EpayFragment.paymentattributes.discount_type)
+                notifyDataSetChanged()
+
             }
 
             holder.binding.applypromotionBtn.setOnClickListener{
-                if(!list[0].gift_loader && !list[1].gift_loader && list.get(position).edittextvalue.trim() != ""){
 
-                    if(list.get(position).payment_type == context.getString(R.string.online_payment)){
-                        list[0].gift_loader=true
-                        list[1].gift_loader=false
-                        notifyDataSetChanged()
-                        paymentmethod.applygiftcoupan(holder.binding,list[position])
-
-                    }else{
-                        list[0].gift_loader=false
-                        list[1].gift_loader=true
-                        notifyDataSetChanged()
-                        paymentmethod.applygiftcoupan(holder.binding,list[position])
-                    }
+                for (i in 0.until(list.size)){
+                    list[i].gift_loader=false
                 }
-
+                list[position].gift_loader=true
+                notifyDataSetChanged()
+                paymentmethod.applygiftcoupan(holder.binding,list[position])
 
             }
+
+
             holder.binding.executePendingBindings()
+
+
+        }else{
+            (holder as MyHeaderViewHolder).binding.paymentinfo=list[position]
+            val builder = SpannableStringBuilder()
+            val span1 = SpannableString("Use ${list[position].payment_type} balance ")
+            val span2 = SpannableString("(${BindDataUtils.convertCurrencyToDanishWithoutLabel(list[position].balance)})")
+            span2.setSpan(ForegroundColorSpan(ContextCompat.getColor(context, R.color.theme_color)), 0, span2.trim().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)
+            builder.append(span1).append(span2)
+            holder.binding.giftTitle.text=builder
+            holder.binding.handlers=myclickhandler
+            holder.binding.giftItem.setOnClickListener{
+                 if(holder.binding.giftCheck.isChecked) list[position].ischeck=false
+                 else list[position].ischeck=true
+                 notifyDataSetChanged()
+                 paymentmethod.applyeatmorebalance()
+            }
+
+            holder.binding.executePendingBindings()
+
+
+
 
 
         }
@@ -100,6 +126,13 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
         init {
             myCustomEditTextListener.updatebinder(binding)
             binding.promotioncodeEdt.addTextChangedListener(myCustomEditTextListener)
+
+        }
+    }
+   private  class MyHeaderViewHolder( val binding: RowPaybalanceBinding) : RecyclerView.ViewHolder(binding.root) {
+
+        init {
+
 
         }
     }

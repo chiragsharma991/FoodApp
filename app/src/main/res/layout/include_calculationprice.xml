@@ -238,17 +238,20 @@
         <android.support.v7.widget.AppCompatTextView
             style="@style/Subtitle_TextViewSmall"
             android:layout_width="0dp"
+            android:id="@+id/discountgift_txt"
             android:layout_height="wrap_content"
             android:layout_marginEnd="@dimen/_8sdp"
             android:layout_weight="1.2"
             android:gravity="start"
+            android:textColor="@color/theme_color"
             android:singleLine="true"
             android:text="@string/rabat" />
 
         <android.support.v7.widget.AppCompatTextView
-            android:id="@+id/discountgift_txt"
+            android:id="@+id/discountgift_value"
             style="@style/Subtitle_TextViewSmall"
             android:layout_width="0dp"
+            android:textColor="@color/theme_color"
             android:layout_height="wrap_content"
             android:layout_weight="0.8"
             android:gravity="end"

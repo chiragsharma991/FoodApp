@@ -61,14 +61,24 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content">
 
-                    <android.support.v7.widget.RecyclerView
-                        android:id="@+id/recycler_view"
-                        android:layout_marginStart="@dimen/_16sdp"
-                        android:layout_marginEnd="@dimen/_16sdp"
-                        android:layout_marginBottom="@dimen/_16sdp"
-                        android:clipToPadding="false"
+                    <LinearLayout
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"/>
+                        android:layout_height="wrap_content"
+                        android:orientation="vertical"
+                        >
+
+
+                        <android.support.v7.widget.RecyclerView
+                            android:id="@+id/recycler_paymethod"
+                            android:layout_marginStart="@dimen/_16sdp"
+                            android:layout_marginEnd="@dimen/_16sdp"
+                            android:layout_marginBottom="@dimen/_16sdp"
+                            android:clipToPadding="false"
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"/>
+
+                    </LinearLayout>
+
 
 
                 </android.support.v7.widget.CardView>
@@ -95,7 +105,7 @@
         </android.support.v4.widget.NestedScrollView>
 
 
-        <RelativeLayout
+     <!--   <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:background="@color/background_light"
@@ -111,7 +121,7 @@
                 android:indeterminate="true" />
 
 
-        </RelativeLayout>
+        </RelativeLayout>-->
 
 
 

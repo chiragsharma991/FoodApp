@@ -330,6 +330,7 @@ class SearchMenu : BaseFragment() {
         val postParam = JsonObject()
         postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
+        postParam.addProperty(Constants.SHIPPING, if (DetailsFragment.isPickup) context!!.getString(R.string.pickup_) else context!!.getString(R.string.delivery_))
         if (PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)) {
             postParam.addProperty(Constants.IS_LOGIN, "1")
             postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
@@ -338,7 +339,31 @@ class SearchMenu : BaseFragment() {
         }
         postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN, ""))
         postParam.addProperty(Constants.P_ID, data.p_id)
-        postParam.addProperty(Constants.P_PRICE, data.p_price)
+        when(data.discountType){
+            0 ->{
+                // no discount
+                postParam.addProperty(Constants.P_PRICE,data.actual_price)
+                postParam.addProperty(Constants.DISCOUNT_APPLIED,  0 )
+                postParam.addProperty(Constants.PRODUCT_DISCOUNT_,"0.00")
+            }
+            1->{
+                // product discount
+                postParam.addProperty(Constants.P_PRICE, data.actual_price)
+                postParam.addProperty(Constants.DISCOUNT_APPLIED,if(data.offerDiscounted) 1 else 0 )
+                postParam.addProperty(Constants.PRODUCT_DISCOUNT_,if(data.offerDiscounted) data.discount else "0.00")  // add discount amount from API
+            }
+            2->{
+                // order discount
+                postParam.addProperty(Constants.P_PRICE, data.actual_price)
+                if(DetailsFragment.total_cartamt.toDouble() + data.actual_price!!.toDouble() >= data.minimum_order_price!!.toDouble())
+                    postParam.addProperty(Constants.DISCOUNT_APPLIED,2)
+                else
+                    postParam.addProperty(Constants.DISCOUNT_APPLIED,0)
+                val discountprice_only = ((data.discount!!.toDouble() * data.actual_price!!.toDouble())/100)
+                postParam.addProperty(Constants.PRODUCT_DISCOUNT_,discountprice_only)  // add only discount amount on actual price
+
+            }
+        }
         postParam.addProperty(Constants.P_QUANTITY, "1")
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
         postParam.addProperty(Constants.LANGUAGE, Constants.DA)
