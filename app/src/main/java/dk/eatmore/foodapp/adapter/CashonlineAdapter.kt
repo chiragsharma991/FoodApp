@@ -11,9 +11,7 @@ import android.text.style.ForegroundColorSpan
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import dk.eatmore.foodapp.R
-import java.util.ArrayList
 import android.view.View
-import android.text.style.StrikethroughSpan
 import android.util.Log
 import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.epay.fragment.Paymentmethod
@@ -21,9 +19,10 @@ import dk.eatmore.foodapp.databinding.RowPaybalanceBinding
 import dk.eatmore.foodapp.databinding.RowPaymethodBinding
 import dk.eatmore.foodapp.utils.BindDataUtils
 import dk.eatmore.foodapp.utils.Constants
+import kotlin.collections.ArrayList
 
 
-class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.PaymentInfoModel>, val myclickhandler: Paymentmethod.MyClickHandler, val paymentmethod: Paymentmethod) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
+class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.PaymentInfoModel>, val myclickhandler: Paymentmethod.MyClickHandler, val paymentmethod: Paymentmethod, var canichangeSegment: Boolean, val appliedgift_list: ArrayList<Paymentmethod.AppliedGiftModel>) : RecyclerView.Adapter<RecyclerView.ViewHolder>() {
 
     private var count: Int = 1
     private val TYPE_BALANCE = 0
@@ -66,15 +65,26 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
             holder.binding.paymentSelection.setOnClickListener{
                 // click on title
 
-                for (i in 0.until(list.size)){
-                    list[i].view_expand=false
-                    list[i].error_expand=false
+                if(canichangeSegment){
+                    Log.e("adapter--","canichangeSegment"+canichangeSegment)
+                    for (i in 0.until(list.size)){
+                        list[i].view_expand=false
+                        list[i].error_expand=false
+                    }
+                    list[position].view_expand=true
+                  //  list[position].error_expand=if(holder.binding.errorOfPromotioncode.visibility == View.VISIBLE) true else false  // if you have error and click on same that
+                    if(holder.binding.errorOfPromotioncode.visibility == View.VISIBLE){
+                        // ignore if same segment click and gift applied
+                        list[position].error_expand = true
+                    }else{
+                        list[position].error_expand = false
+
+                        // change data defult to change segment .
+                        paymentmethod.showproductInfo(EpayFragment.ui_model!!.viewcard_list.value?.result, EpayFragment.paymentattributes.discount_amount, EpayFragment.paymentattributes.discount_type,false)
+                    }
+
+
                 }
-                list[position].view_expand=true
-                list[position].error_expand=if(holder.binding.errorOfPromotioncode.visibility == View.VISIBLE) true else false
-                // change data defult to change segment .
-                paymentmethod.showproductInfo(EpayFragment.ui_model!!.viewcard_list.value?.result, EpayFragment.paymentattributes.discount_amount, EpayFragment.paymentattributes.discount_type)
-                notifyDataSetChanged()
 
             }
 
@@ -84,7 +94,7 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
                     list[i].gift_loader=false
                 }
                 list[position].gift_loader=true
-                notifyDataSetChanged()
+                notifyDataSetChanged() // for loader only
                 paymentmethod.applygiftcoupan(holder.binding,list[position])
 
             }
@@ -103,10 +113,39 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
             holder.binding.giftTitle.text=builder
             holder.binding.handlers=myclickhandler
             holder.binding.giftItem.setOnClickListener{
-                 if(holder.binding.giftCheck.isChecked) list[position].ischeck=false
-                 else list[position].ischeck=true
-                 notifyDataSetChanged()
-                 paymentmethod.applyeatmorebalance()
+
+                if(!canichangeSegment && list[position].ischeck == false){
+                    // block other checkbox to perform check
+
+                }else{
+
+                    // allow check box to check
+
+                    if(holder.binding.giftCheck.isChecked) {
+                        //  Unchecked
+                        list[position].ischeck=false
+
+                        val iterator = appliedgift_list.iterator()
+                        while (iterator.hasNext()) {
+                            val appliedgiftmodel = iterator.next()
+                            if(appliedgiftmodel.gift_type == list[position].payment_type){
+                                iterator.remove()
+                            }
+                        }
+                    }
+                    else{
+                        // Checked
+                        list[position].ischeck = true
+                        appliedgift_list.add(Paymentmethod.AppliedGiftModel(
+                                gift_type = list[position].payment_type,
+                                actual_gift_value = list[position].balance,
+                                applied_gift_value = 0.0
+                        ))
+
+                    }
+                }
+                 paymentmethod.showproductInfo(EpayFragment.ui_model!!.viewcard_list.value?.result, EpayFragment.paymentattributes.discount_amount, EpayFragment.paymentattributes.discount_type,true)
+
             }
 
             holder.binding.executePendingBindings()

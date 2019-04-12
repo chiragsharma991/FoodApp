@@ -7,12 +7,10 @@ import android.databinding.DataBindingUtil
 import android.net.Uri
 import android.os.*
 import android.support.v4.content.ContextCompat
-import android.support.v7.widget.AppCompatTextView
 import android.support.v7.widget.LinearLayoutManager
 import android.text.*
 import android.text.method.LinkMovementMethod
 import android.text.style.ClickableSpan
-import android.text.style.StrikethroughSpan
 import android.transition.Transition
 import android.util.Log
 import android.view.LayoutInflater
@@ -26,13 +24,11 @@ import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Home.ProductInfo.Menu
 import dk.eatmore.foodapp.adapter.CashonlineAdapter
-import dk.eatmore.foodapp.adapter.universalAdapter.UniversalAdapter
 import dk.eatmore.foodapp.databinding.PaymentmethodBinding
 import dk.eatmore.foodapp.databinding.RowPaymethodBinding
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.model.epay.ApplyCodeModel
 import dk.eatmore.foodapp.model.epay.ResultItem
-import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.*
@@ -40,6 +36,7 @@ import kotlinx.android.synthetic.main.dynamic_raw_item.view.*
 import kotlinx.android.synthetic.main.dynamic_raw_subitem.view.*
 import kotlinx.android.synthetic.main.include_calculationprice.*
 import kotlinx.android.synthetic.main.paymentmethod.*
+import kotlinx.android.synthetic.main.raw_giftdiscount.view.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
 import retrofit2.Call
 
@@ -58,10 +55,13 @@ class Paymentmethod : CommanAPI() {
     private var is_continuefrom_online: Boolean = false
     private lateinit var mAdapter: CashonlineAdapter
     private lateinit var paymentinfo_list: ArrayList<PaymentInfoModel>
+    private  var appliedgift_list: ArrayList<AppliedGiftModel> = ArrayList()
     val myclickhandler = MyClickHandler(this)
     private val timeoutHandler = Handler()
     private var finalizer: Runnable? = null
     var final_amount: Double = 0.0
+    var canichangeSegment : Boolean = true
+    var defaultpaymentmethodType : String =""
 
     // we have two different API so we are passing call in "checkout API" it may be from pickup/delivery :
     private lateinit var checkout_api: Call<JsonObject>
@@ -100,7 +100,7 @@ class Paymentmethod : CommanAPI() {
                     loge(TAG, "Handler-----")
                     refreshview()
                     addspantext()
-                    showproductInfo(EpayFragment.ui_model!!.viewcard_list.value?.result,EpayFragment.paymentattributes.discount_amount,EpayFragment.paymentattributes.discount_type)
+                    showproductInfo(EpayFragment.ui_model!!.viewcard_list.value?.result,EpayFragment.paymentattributes.discount_amount,EpayFragment.paymentattributes.discount_type,false)
                 }
             }
             timeoutHandler.postDelayed(finalizer, 600)
@@ -111,6 +111,20 @@ class Paymentmethod : CommanAPI() {
     private fun refreshview() {
 
         paymentinfo_list = ArrayList<PaymentInfoModel>()
+
+        // set default payment method name
+        if(EpayFragment.paymentattributes.online_logo != ""){
+            // online is present don't go any where
+            defaultpaymentmethodType = getString(R.string.online_payment).trim()
+        }else if(EpayFragment.paymentattributes.cash_logo != ""){
+            // cash is present online is not present.
+            defaultpaymentmethodType = getString(R.string.cash_payment).trim()
+        }else{
+            // no one present
+            defaultpaymentmethodType=""
+        }
+
+        // prepare list for payment method.
         EpayFragment.paymentattributes.giftcard_details[Constants.EATMORE]?.let {
             loge(TAG, "eatmore balance-" + it)
             paymentinfo_list.add(PaymentInfoModel(payment_type = Constants.EATMORE, error_expand = false, gift_expand = false, image_path = EpayFragment.paymentattributes.online_logo, view_expand = false, btn_txt = getString(R.string.confirm), gift_loader = false, edittextvalue = "", balance = it))
@@ -128,7 +142,9 @@ class Paymentmethod : CommanAPI() {
         }
 
         //TODO : add loader to prevent from gift APIs
-        mAdapter = CashonlineAdapter(context!!, paymentinfo_list, myclickhandler, this)
+
+
+        mAdapter = CashonlineAdapter(context!!, paymentinfo_list, myclickhandler, this, canichangeSegment, appliedgift_list )
         recycler_paymethod.layoutManager = LinearLayoutManager(getActivityBase())
         recycler_paymethod.adapter = mAdapter
         Handler().postDelayed({ binding.isProgress = false }, 500)
@@ -138,6 +154,7 @@ class Paymentmethod : CommanAPI() {
             var payment_type: String,
             var btn_txt: String,
             var view_expand: Boolean,
+            var walletBtn_expand: Boolean=false,
             val image_path: String,
             var gift_expand: Boolean,
             var error_expand: Boolean,
@@ -146,9 +163,14 @@ class Paymentmethod : CommanAPI() {
             var ischeck: Boolean = false,
             var edittextvalue: String
     )
+    data class AppliedGiftModel(
+            var gift_type: String,
+            var actual_gift_value: String,
+            var applied_gift_value: Double
+    )
 
 
-    private fun generateBillDetails(subtotal : Double,discount_amount: Double, discount_type: String) {
+    private fun generateBillDetails(subtotal : Double,discount_amount: Double, discount_type: String,changeintoDefault : Boolean) {
 
         final_amount = subtotal
 
@@ -199,7 +221,7 @@ class Paymentmethod : CommanAPI() {
 
 
             // Check Eatmore balance:
-            applyeatmorebalance()
+            applyeatmorebalance(changeintoDefault)
         }
 
         //--------------------------------------//---------------------------------------------//
@@ -257,7 +279,7 @@ class Paymentmethod : CommanAPI() {
 
             // Check Eatmore balance:
 
-            applyeatmorebalance()
+            applyeatmorebalance(changeintoDefault)
 
         }
 
@@ -321,7 +343,7 @@ class Paymentmethod : CommanAPI() {
     }
 
 
-     fun showproductInfo (list: ArrayList<ResultItem>? , discount_amount: Double, discount_type: String) {
+     fun showproductInfo (list: ArrayList<ResultItem>? , discount_amount: Double, discount_type: String , changeintoDefault : Boolean) {
 
         loge(TAG,"showproductInfo--"+discount_amount+" type -"+discount_type)
         if (list == null) {
@@ -399,7 +421,7 @@ class Paymentmethod : CommanAPI() {
             add_parentitem_view.addView(view)
         }
 
-        generateBillDetails(subtotal,discount_amount,discount_type)
+        generateBillDetails(subtotal,discount_amount,discount_type,changeintoDefault)
 
     }
 
@@ -695,13 +717,13 @@ class Paymentmethod : CommanAPI() {
                 val applycodemodel = body as ApplyCodeModel
                 if (applycodemodel.status) {
                     loge(TAG, "status is true")
-                    showproductInfo(list =applycodemodel.result ,discount_amount = applycodemodel.discount_amount ?: 0.0 ,discount_type =Constants.COUPON )
+                    showproductInfo(list =applycodemodel.result ,discount_amount = applycodemodel.discount_amount ?: 0.0 ,discount_type =Constants.COUPON,changeintoDefault = false)
                     binder.errorOfPromotioncode.setTextColor(ContextCompat.getColor(context!!, R.color.green))
 
 
                 } else {
                     loge(TAG, "status is false")
-                    showproductInfo(list =applycodemodel.result ,discount_amount = EpayFragment.paymentattributes.discount_amount ,discount_type =EpayFragment.paymentattributes.discount_type )
+                    showproductInfo(list =applycodemodel.result ,discount_amount = EpayFragment.paymentattributes.discount_amount ,discount_type =EpayFragment.paymentattributes.discount_type,changeintoDefault = false )
                     binder.errorOfPromotioncode.setTextColor(ContextCompat.getColor(context!!, R.color.theme_color))
                 }
 
@@ -811,7 +833,11 @@ class Paymentmethod : CommanAPI() {
 
     }
 
-     fun applyeatmorebalance() {
+     /* changeintoDefault : when you want to set one payment method open by default on any click on check box then you can set this.
+     * **/
+
+     fun applyeatmorebalance(changeintoDefault : Boolean) {
+
         // as a gift cart from (eatmore/restaurant) type
         var totaltopay = final_amount
         var totalEatmore_balance = 0.0
@@ -820,23 +846,56 @@ class Paymentmethod : CommanAPI() {
                 totalEatmore_balance += paymentInfoModel.balance.toDouble()
             }
         }
-        loge(TAG,"totalEatmore_balance-"+totalEatmore_balance)
-        if (totalEatmore_balance > 0.0) {
+         setgiftdiscountprice(final_amount)  // set only discount text and gift button expand function
+
+         if (totalEatmore_balance > 0.0) {
+
             // applied gift eatmore balance
-            discountgift_layout.visibility = View.VISIBLE
+
             if (totalEatmore_balance >= totaltopay) {
                 // if eatmore balance is more then product selected
-                discountgift_value.text = String.format(getString(R.string.discount), totaltopay)
                 totaltopay= 0.0
+
+                for (paymentInfoModel in paymentinfo_list) {
+                     paymentInfoModel.view_expand=false
+                     paymentInfoModel.error_expand=false
+                }
+
+                mAdapter.canichangeSegment=false
+                mAdapter.notifyDataSetChanged()
+
             } else {
                 // eatmore balance is not enought then:
                 totaltopay=totaltopay - totalEatmore_balance
-                discountgift_value.text = String.format(getString(R.string.discount), totaltopay )
+
+                if(changeintoDefault){
+                    for (paymentinfomodel in paymentinfo_list)
+                    {
+                        paymentinfomodel.error_expand=false
+                        if(paymentinfomodel.payment_type.trim() == defaultpaymentmethodType.trim()) paymentinfomodel.view_expand=true  // set default open dynamically
+                        else paymentinfomodel.view_expand=false
+                    }
+                    mAdapter.canichangeSegment=true
+                }
+                mAdapter.notifyDataSetChanged()
             }
 
         } else {
             // Not applied gift eatmore balance
-            discountgift_layout.visibility = View.GONE
+            // When you uncheck from  balance
+
+            if(changeintoDefault){
+
+                for (paymentinfomodel in paymentinfo_list){
+                    paymentinfomodel.error_expand=false
+                    if(paymentinfomodel.payment_type.trim() == defaultpaymentmethodType.trim()) paymentinfomodel.view_expand=true  // set default open dynamically
+                    else paymentinfomodel.view_expand=false
+                }
+                mAdapter.canichangeSegment=true
+
+            }
+
+            mAdapter.notifyDataSetChanged()
 
         }
 
@@ -847,6 +906,63 @@ class Paymentmethod : CommanAPI() {
         deliverytime_txt.text = EpayFragment.paymentattributes.payment_time
         paymenttype_img.setImageResource(if (DetailsFragment.isPickup) R.mipmap.bag else R.mipmap.motorcycle)
 
+
+    }
+
+    private fun setgiftdiscountprice (final_amount : Double) {
+        var expandbtnName =""
+        var remaining_balance = final_amount
+        //discountgift_layout.removeAllViewsInLayout()
+        discountgift_layout.removeAllViews()
+        discountgift_layout.invalidate()
+
+        if(appliedgift_list.size > 0){
+            // one or morethen one gift balance are applied
+            loop@ for (appliedgiftmodel in appliedgift_list){
+
+                if(appliedgiftmodel.actual_gift_value.trim().toDouble() >= remaining_balance){
+                    // balance is enough no other required
+                    appliedgiftmodel.applied_gift_value=remaining_balance
+
+                    val inflater = context!!.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                    val view = inflater.inflate(R.layout.raw_giftdiscount, null)
+                    view.discountgift_txt.text = if(appliedgiftmodel.gift_type == Constants.EATMORE ) "Eatmore Giftcard"  else if(appliedgiftmodel.gift_type == Constants.RESTAURANT ) "Restaurant Giftcard" else appliedgiftmodel.gift_type
+                    view.discountgift_value.text = String.format(getString(R.string.discount), appliedgiftmodel.applied_gift_value)
+                    discountgift_layout.addView(view)
+
+                    expandbtnName=appliedgiftmodel.gift_type
+
+                    break@loop
+
+                }else{
+                    // balance is not enough
+                    remaining_balance = remaining_balance - appliedgiftmodel.actual_gift_value.trim().toDouble()
+                    appliedgiftmodel.applied_gift_value=appliedgiftmodel.actual_gift_value.trim().toDouble()
+
+                    val inflater = context!!.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
+                    val view = inflater.inflate(R.layout.raw_giftdiscount, null)
+                    view.discountgift_txt.text = if(appliedgiftmodel.gift_type == Constants.EATMORE ) "Eatmore Giftcard"  else if(appliedgiftmodel.gift_type == Constants.RESTAURANT ) "Restaurant Giftcard" else appliedgiftmodel.gift_type
+                    view.discountgift_value.text = String.format(getString(R.string.discount), appliedgiftmodel.applied_gift_value)
+                    discountgift_layout.addView(view)
+
+                    expandbtnName=""
+                }
+
+            }
+        }
+
+
+
+        // expand gift balance button
+
+
+        for (paymentInfoModel in paymentinfo_list) {
+            if (paymentInfoModel.payment_type.trim() == expandbtnName.trim()) {
+                paymentInfoModel.walletBtn_expand=true
+            }else{
+                paymentInfoModel.walletBtn_expand=false
+            }
+        }
 
     }
 

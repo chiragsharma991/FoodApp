@@ -423,8 +423,8 @@ class EpayFragment : CommanAPI() {
         paymentattributes.restaurant_appicon=restaurant.app_icon
         paymentattributes.is_fav=restaurant.is_fav
         paymentattributes.restaurant_id=restaurant.restaurant_id
-        restaurant.giftcard_details?.eatmore?.let { paymentattributes.giftcard_details[Constants.EATMORE]=it.toString() }
-        restaurant.giftcard_details?.restaurant?.let { paymentattributes.giftcard_details[Constants.RESTAURANT]=it.toString() }
+        restaurant.giftcard_details?.eatmore?.let { if(it > 0) paymentattributes.giftcard_details[Constants.EATMORE]=it.toString() }
+        restaurant.giftcard_details?.restaurant?.let { if(it > 0) paymentattributes.giftcard_details[Constants.RESTAURANT]=it.toString() }
         if(viewcardmodel.offer_details !=null && viewcardmodel.offer_details!!.offer_type == Constants.ORDER_DISCOUNT && viewcardmodel.order_total >= viewcardmodel.offer_details!!.minimum_order_price!!.toDouble()){
             loge(TAG,"Order discount--")
             val discountPrice=((viewcardmodel.offer_details!!.discount!!.toDouble() * viewcardmodel.order_total)/100)

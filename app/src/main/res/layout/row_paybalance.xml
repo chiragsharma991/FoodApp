@@ -69,12 +69,14 @@
             android:layout_marginTop="@dimen/_8sdp"
             android:textColor="@color/white"
             android:text="@{paymentinfo.btn_txt}"
-            android:visibility="@{paymentinfo.view_expand ? View.VISIBLE : View.GONE}"
+            android:visibility="@{paymentinfo.walletBtn_expand ? View.VISIBLE : View.GONE}"
             android:background="@color/theme_color"
             android:layout_width="match_parent"
             android:layout_height="@dimen/_40sdp"
             />
 
-
     </LinearLayout>
+
+
+
 </layout>
