@@ -423,26 +423,40 @@ class EpayFragment : CommanAPI() {
         paymentattributes.restaurant_appicon=restaurant.app_icon
         paymentattributes.is_fav=restaurant.is_fav
         paymentattributes.restaurant_id=restaurant.restaurant_id
-        restaurant.giftcard_details?.eatmore?.let { if(it > 0) paymentattributes.giftcard_details[Constants.EATMORE]=it.toString() }
-        restaurant.giftcard_details?.restaurant?.let { if(it > 0) paymentattributes.giftcard_details[Constants.RESTAURANT]=it.toString() }
+       // restaurant.giftcard_details?.eatmore?.let { if(it > 0) paymentattributes.giftcard_details[Constants.EATMORE]=it.toString() }
+        //restaurant.giftcard_details?.restaurant?.let { if(it > 0) paymentattributes.giftcard_details[Constants.RESTAURANT]=it.toString() }
         if(viewcardmodel.offer_details !=null && viewcardmodel.offer_details!!.offer_type == Constants.ORDER_DISCOUNT && viewcardmodel.order_total >= viewcardmodel.offer_details!!.minimum_order_price!!.toDouble()){
             loge(TAG,"Order discount--")
             val discountPrice=((viewcardmodel.offer_details!!.discount!!.toDouble() * viewcardmodel.order_total)/100)
             val actual_price_afterDiscount=viewcardmodel.order_total - discountPrice
-            epay_total_txt.text= String.format(getString(R.string.dkk_price),BindDataUtils.convertCurrencyToDanishWithoutLabel(actual_price_afterDiscount.toString()))
+            epay_total_txt.text= BindDataUtils.convertCurrencyToDanish(actual_price_afterDiscount.toString())
             binding.offerDiscounted= true
             subtotal_txt.text = String.format(getString(R.string.dkk_price),BindDataUtils.convertCurrencyToDanishWithoutLabel(viewcardmodel.order_total.toString()))
             discount_txt.text = String.format(getString(R.string.minues),BindDataUtils.convertCurrencyToDanishWithoutLabel(discountPrice.toString()))
+
             paymentattributes.subtotal=actual_price_afterDiscount.toString()
             paymentattributes.discount_type=Constants.ORDER_DISCOUNT
             paymentattributes.discount_amount=discountPrice
-        }else{
+            paymentattributes.discount_id=viewcardmodel.offer_details!!.offer_id!!
+
+        }
+        else if(viewcardmodel.offer_details !=null && viewcardmodel.offer_details!!.offer_type == Constants.PRODUCT_DISCOUNT){
+            loge(TAG,"Product discount--")
+            binding.offerDiscounted= false
+            epay_total_txt.text= BindDataUtils.convertCurrencyToDanish(viewcardmodel.order_total.toString())
+            paymentattributes.subtotal=viewcardmodel.order_total.toString()
+            paymentattributes.discount_type=Constants.PRODUCT_DISCOUNT
+            paymentattributes.discount_amount=0.0
+            paymentattributes.discount_id=viewcardmodel.offer_details!!.offer_id!!
+        }
+        else{
             loge(TAG,"No discount--")
             binding.offerDiscounted= false
-            epay_total_txt.text= String.format(getString(R.string.dkk_price),BindDataUtils.convertCurrencyToDanish(viewcardmodel.order_total.toString()))
+            epay_total_txt.text= BindDataUtils.convertCurrencyToDanish(viewcardmodel.order_total.toString())
             paymentattributes.subtotal=viewcardmodel.order_total.toString()
             paymentattributes.discount_type=""
             paymentattributes.discount_amount=0.0
+            paymentattributes.discount_id=""
         }
         epay_total_lbl.text=String.format(getString(R.string.total_goods),ui_model!!.viewcard_list.value!!.cartcnt)
         add_parentitem_view.removeAllViewsInLayout()
@@ -659,8 +673,8 @@ class EpayFragment : CommanAPI() {
             var first_time :String ="",
             var online_logo :String ="",
             var cash_logo :String ="",
-            var discount_id :Int =0,
-            var discount_type :String ="",
+            var discount_id :String ="",  // any product/order discount
+            var discount_type :String ="", // any product/order discount type
             var discount_amount :Double =0.0,
             var shipping_charge :String ="0",
             var upto_min_shipping :String ="0",
@@ -669,6 +683,7 @@ class EpayFragment : CommanAPI() {
             var additional_charge :String ="0",
             var additional_charges_online :String ="0",
             var additional_charges_cash :String ="0",
+            var additional_charges_giftcard :String ="0",
             var distance :String ="",
             var cardno :String ="",
             var txnid :String ="",

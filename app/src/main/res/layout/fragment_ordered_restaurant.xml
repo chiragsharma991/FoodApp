@@ -481,7 +481,7 @@
 
             <!--                        android:visibility="@{is_progress ? View.VISIBLE : View.GONE}"-->
 
-                                             <RelativeLayout
+                            <!--                 <RelativeLayout
                                                  android:layout_width="match_parent"
                                                  android:layout_height="match_parent"
                                                  android:background="@color/background_light"
@@ -497,7 +497,7 @@
 
 
                                              </RelativeLayout>
-
+-->
 
 
         </RelativeLayout>

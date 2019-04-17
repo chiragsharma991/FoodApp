@@ -21,6 +21,7 @@ import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.databinding.BamborawebfunctionBinding
 import dk.eatmore.foodapp.databinding.TransactionStatusBinding
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
+import dk.eatmore.foodapp.model.epay.ResultItem
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
 import dk.eatmore.foodapp.utils.BindDataUtils
@@ -41,13 +42,30 @@ class BamboraWebfunction : BaseFragment(), PaymentResultListener {
     private val data = HashMap<String, String>()
     private var isprocess_on : Boolean = true  // some time payment accept method calls multiple times so we are managing using this variable.
 
+    private var appliedgift_list: ArrayList<Paymentmethod.AppliedGiftModel> = ArrayList()
+    private var addedDiscount_amount : Double =0.0
+    private var addedDiscount_type : String=""
+    private var addedDiscount_id : String=""
+    private var addedProductlist: ArrayList<ResultItem> = arrayListOf()
+
 
     companion object {
         val TAG = "BamboraWebfunction"
 
-        fun newInstance(): BamboraWebfunction {
+
+        fun newInstance(addedProductlist: ArrayList<ResultItem>, addedDiscount_amount : Double, addedDiscount_type : String,addedDiscount_id : String, appliedgift_list: ArrayList<Paymentmethod.AppliedGiftModel>): BamboraWebfunction {
+
+            val fragment = TransactionStatus()
+            val bundle =Bundle()
+            bundle.putSerializable("addedProductlist",addedProductlist)
+            bundle.putSerializable("addedDiscount_amount", addedDiscount_amount)
+            bundle.putSerializable("addedDiscount_type", addedDiscount_type)
+            bundle.putSerializable("addedDiscount_id", addedDiscount_id)
+            bundle.putSerializable("appliedgift_list", appliedgift_list)
+            fragment.arguments=bundle
             return BamboraWebfunction()
         }
+
     }
 
     override fun getLayout(): Int {
@@ -66,6 +84,13 @@ class BamboraWebfunction : BaseFragment(), PaymentResultListener {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
             setToolbarforThis()
+
+            addedProductlist=arguments!!.getSerializable("addedProductlist") as ArrayList<ResultItem>
+            addedDiscount_amount=arguments!!.getSerializable("addedDiscount_amount") as Double
+            addedDiscount_type=arguments!!.getSerializable("addedDiscount_type") as String
+            appliedgift_list=arguments!!.getSerializable("appliedgift_list") as ArrayList<Paymentmethod.AppliedGiftModel>
+            addedDiscount_id=arguments!!.getSerializable("addedDiscount_id") as String
+
             progress_bar.visibility=View.VISIBLE
             val paymentView = EpayWebView(this@BamboraWebfunction, webiview, false)
             paymentView.LoadPaymentWindow(getData())
@@ -151,7 +176,7 @@ class BamboraWebfunction : BaseFragment(), PaymentResultListener {
             EpayFragment.paymentattributes.txnid=map.get(Constants.TXNID).toString()
             EpayFragment.paymentattributes.paymenttype=map.get(Constants.PAYMENTTYPE).toString()
             EpayFragment.paymentattributes.txnfee=map.get(Constants.TXNFEE).toString()
-            (parentFragment as EpayFragment).addFragment(R.id.epay_container,TransactionStatus.newInstance(),TransactionStatus.TAG,true)
+            (parentFragment as EpayFragment).addFragment(R.id.epay_container,TransactionStatus.newInstance(addedProductlist,addedDiscount_amount,addedDiscount_type,addedDiscount_id,appliedgift_list),TransactionStatus.TAG,true)
             isprocess_on=false
         }
 

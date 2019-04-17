@@ -105,6 +105,9 @@ class HomeFragment : CommanAPI() {
 
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
+
+
+
             Glide.with(context!!).load(ContextCompat.getDrawable(context!!, R.mipmap.eatmore_search_backgrond)).into(imageview);
             restaurant_logo.visibility = View.VISIBLE
             img_toolbar_back.visibility = View.GONE

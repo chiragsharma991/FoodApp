@@ -33,150 +33,98 @@
     </data>
 
     <RelativeLayout
+        android:id="@+id/rowChildItem"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         >
 
-
-        <RelativeLayout
-            android:id="@+id/rowChildItem"
+        <android.support.constraint.ConstraintLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginBottom="@dimen/_8sdp"
+            android:layout_marginStart="@dimen/_8sdp"
+            android:layout_marginEnd="@dimen/_8sdp"
             >
 
-            <android.support.constraint.ConstraintLayout
-                android:layout_width="match_parent"
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/cat_title"
+                style="@style/Subtitle_TextViewSmall"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
-
-                >
-
-                <android.support.constraint.ConstraintLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:id="@+id/constraint_ch_one"
-                    android:layout_marginStart="@dimen/_14sdp"
-                    android:layout_marginEnd="@dimen/_14sdp"
-                    android:layout_marginBottom="@dimen/_8sdp"
-                    >
+                android:layout_gravity="center_vertical"
+                android:singleLine="true"
+                android:visibility="visible"
+                android:textStyle="bold"
+                app:layout_constraintEnd_toStartOf="@+id/cat_price"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                app:layout_constraintWidth_percent="0.4" />
 
 
-                    <android.support.constraint.Guideline
-                        android:id="@+id/guidline_vertical_one"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.6" />
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/cat_price"
+                style="@style/TitleRegular_TextViewSmall"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:layout_marginStart="8dp"
+                android:gravity="right"
+                android:singleLine="true"
+                app:layout_constraintBottom_toBottomOf="@+id/cat_title"
+                app:layout_constraintEnd_toStartOf="@+id/appCompatImageView"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/cat_title"
+                app:layout_constraintTop_toTopOf="@+id/cat_title" />
 
-                    <android.support.constraint.Guideline
-                        android:id="@+id/guidline_vertical_two"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.9" />
-
-
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/cat_title"
-                        style="@style/Titlelight_TextViewSmall"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginEnd="8dp"
-                        android:layout_weight="1.05"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_one"
-                        app:layout_constraintHorizontal_bias="0.0"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0" />
-
-                    <!--
-                    Note : Fra : this is `from` label which can be add if Products having attributes, or ingredients or extra toppings assigned
-                    -->
-
-                    <android.support.v7.widget.AppCompatTextView
-                        style="@style/TitleRegular_TextViewSmall"
-                        android:id="@+id/cat_price"
-                        android:layout_width="100dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginTop="8dp"
-                        android:gravity="right"
-                        android:maxLength="15"
-                        app:layout_constraintEnd_toStartOf="@+id/appCompatImageView"
-                        app:layout_constraintHorizontal_bias="1.0"
-                        app:layout_constraintHorizontal_chainStyle="packed"
-                        app:layout_constraintStart_toEndOf="@+id/cat_title"
-                        app:layout_constraintStart_toStartOf="@+id/guidline_vertical_one"
-                        app:layout_constraintTop_toTopOf="parent" />
-
-                    <!--
-                                    android:text="@{data.product_attribute == null ? util.convertCurrencyToDanish(data.p_price) : `fra\n`+productpricecalculation.getprice(data)}"
-                    -->
+            <android.support.v7.widget.AppCompatImageView
+                android:id="@+id/appCompatImageView"
+                android:layout_width="@dimen/_23sdp"
+                android:layout_height="@dimen/_23sdp"
+                android:layout_gravity="top"
+                android:layout_marginStart="8dp"
+                android:background="@color/theme_color"
+                android:paddingStart="@dimen/_3sdp"
+                android:paddingTop="@dimen/_3sdp"
+                android:paddingEnd="@dimen/_3sdp"
+                android:paddingBottom="@dimen/_3sdp"
+                android:scaleType="fitXY"
+                android:visibility="@{is_restaurant_closed ? View.GONE : View.VISIBLE}"
+                app:layout_constraintBottom_toBottomOf="@+id/cat_price"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.5"
+                app:layout_constraintStart_toEndOf="@+id/cat_price"
+                app:layout_constraintTop_toTopOf="@+id/cat_price"
+                app:srcCompat="@drawable/add" />
 
 
-                    <android.support.v7.widget.AppCompatTextView
-                        android:id="@+id/cat_desc"
-                        style="@style/Subtitle_TextViewSmall"
-                        android:layout_width="0dp"
-                        android:layout_height="wrap_content"
-                        android:layout_gravity="center_vertical"
-                        android:layout_marginEnd="8dp"
-                        android:layout_weight="1.05"
-                        android:visibility="@{productlist_item.p_desc.equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}"
-                        app:layout_constraintEnd_toStartOf="@+id/guidline_vertical_one"
-                        app:layout_constraintStart_toStartOf="parent"
-                        app:layout_constraintTop_toBottomOf="@+id/cat_title" />
+            <android.support.v7.widget.AppCompatTextView
+                android:id="@+id/cat_desc"
+                style="@style/Subtitle_TextViewSmall"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center_vertical"
+                android:visibility="@{productlist_item.p_desc.equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cat_title" />
+
+
+            <View
+                android:id="@+id/view"
+                android:layout_width="match_parent"
+                android:layout_height="1dp"
+                android:layout_marginTop="8dp"
+                android:alpha="0.2"
+                android:background="@color/divider_color"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/cat_desc" />
 
 
 
-                    <android.support.v7.widget.AppCompatImageView
-                        android:id="@+id/appCompatImageView"
-                        android:layout_width="@dimen/_23sdp"
-                        android:layout_height="@dimen/_23sdp"
-                        android:layout_gravity="top"
-                        android:layout_marginStart="8dp"
-                        android:layout_marginTop="8dp"
-                        android:layout_marginBottom="8dp"
-                        android:background="@color/theme_color"
-                        android:paddingStart="@dimen/_3sdp"
-                        android:paddingTop="@dimen/_3sdp"
-                        android:paddingEnd="@dimen/_3sdp"
-                        android:paddingBottom="@dimen/_3sdp"
-                        android:scaleType="fitXY"
-                        android:visibility="@{is_restaurant_closed ? View.GONE : View.VISIBLE}"
-                        app:layout_constraintBottom_toBottomOf="parent"
-                        app:layout_constraintEnd_toEndOf="parent"
-                        app:layout_constraintHorizontal_bias="0.5"
-                        app:layout_constraintStart_toEndOf="@+id/cat_price"
-                        app:layout_constraintTop_toTopOf="parent"
-                        app:layout_constraintVertical_bias="0.0"
-                        app:srcCompat="@drawable/add" />
 
-
-                </android.support.constraint.ConstraintLayout>
-
-
-                <View
-                    android:id="@+id/view"
-                    android:layout_width="match_parent"
-                    android:layout_height="1dp"
-                    android:layout_marginTop="8dp"
-                    android:layout_marginStart="@dimen/_14sdp"
-                    android:layout_marginEnd="@dimen/_14sdp"
-                    android:alpha="0.2"
-                    android:background="@color/divider_color"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/constraint_ch_one" />
-
-            </android.support.constraint.ConstraintLayout>
-
-
-        </RelativeLayout>
-
+        </android.support.constraint.ConstraintLayout>
 
 
     </RelativeLayout>

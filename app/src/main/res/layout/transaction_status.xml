@@ -788,7 +788,7 @@
                                             android:layout_weight="1.2"
                                             android:gravity="start"
                                             android:singleLine="true"
-                                            android:text="Discount:"
+                                            android:text="@string/rabat"
                                             />
 
                                         <android.support.v7.widget.AppCompatTextView
@@ -821,7 +821,7 @@
                                             android:layout_weight="1.2"
                                             android:gravity="start"
                                             android:singleLine="true"
-                                            android:text="Rest upto minimum:"
+                                            android:text="@string/rest_op_til_minimum"
                                             />
 
                                         <android.support.v7.widget.AppCompatTextView
@@ -854,7 +854,7 @@
                                             android:layout_weight="1.2"
                                             android:gravity="start"
                                             android:singleLine="true"
-                                            android:text="Shipping Charges:"
+                                            android:text="@string/leveringsomkostninger"
                                             />
 
                                         <android.support.v7.widget.AppCompatTextView
@@ -887,7 +887,7 @@
                                             android:layout_weight="1.2"
                                             android:gravity="start"
                                             android:singleLine="true"
-                                            android:text="Additional Charges:"
+                                            android:text="@string/servicegebyr"
                                             />
 
                                         <android.support.v7.widget.AppCompatTextView
@@ -909,34 +909,15 @@
                                         android:id="@+id/discountgift_layout"
                                         android:layout_width="match_parent"
                                         android:layout_height="wrap_content"
-                                        android:layout_marginTop="@dimen/_5sdp"
+                                        android:layout_marginTop="-3dp"
                                         android:orientation="horizontal">
 
-                                        <android.support.v7.widget.AppCompatTextView
-                                            style="@style/Subtitle_TextViewSmall"
-                                            android:layout_width="0dp"
-                                            android:layout_height="wrap_content"
-                                            android:layout_marginEnd="@dimen/_8sdp"
-                                            android:layout_weight="1.2"
-                                            android:gravity="start"
-                                            android:singleLine="true"
-                                            android:text="Discount:"
-                                            />
 
-                                        <android.support.v7.widget.AppCompatTextView
-                                            android:id="@+id/discountgift_txt"
-                                            style="@style/Subtitle_TextViewSmall"
-                                            android:layout_width="0dp"
-                                            android:layout_height="wrap_content"
-                                            android:layout_alignParentEnd="true"
-                                            android:layout_weight="0.8"
-                                            android:gravity="end"
-                                            android:singleLine="true"
-                                            android:text="145,00kr"
-                                            />
 
 
                                     </LinearLayout>
+
+
 
                                     <LinearLayout
                                         android:id="@+id/total_layout"
@@ -953,7 +934,7 @@
                                             android:layout_weight="1.2"
                                             android:gravity="start"
                                             android:singleLine="true"
-                                            android:text="Total:"
+                                            android:text="@string/samlet_pris"
                                             />
 
                                         <android.support.v7.widget.AppCompatTextView

@@ -39,6 +39,7 @@ import kotlinx.android.synthetic.main.paymentmethod.*
 import kotlinx.android.synthetic.main.raw_giftdiscount.view.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
 import retrofit2.Call
+import java.io.Serializable
 
 
 class Paymentmethod : CommanAPI() {
@@ -55,27 +56,47 @@ class Paymentmethod : CommanAPI() {
     private var is_continuefrom_online: Boolean = false
     private lateinit var mAdapter: CashonlineAdapter
     private lateinit var paymentinfo_list: ArrayList<PaymentInfoModel>
-    private  var appliedgift_list: ArrayList<AppliedGiftModel> = ArrayList()
     val myclickhandler = MyClickHandler(this)
     private val timeoutHandler = Handler()
     private var finalizer: Runnable? = null
-    var final_amount: Double = 0.0
-    var canichangeSegment : Boolean = true
-    var defaultpaymentmethodType : String =""
+
+
+   private var canichangeSegment : Boolean = true
+   var defaultpaymentmethodType : String =""
+   var final_amount: Double = 0.0  // subtotal + additional (without eatmore balance)
+   private var subtotal = 0.0 // only calculated subtotal
+   var totaltopay = 0.0 // subtotal + additional (with eatmore balance)
+   var eatmoreAppliedBalance = 0.0
+   var restaurantAppliedBalance = 0.0
+   var cpn_discount_type =""  // coupan_discount type if applied
+   var cpn_discount_id ="" // coupan_discount id if applied
+   var cpn_discount_amount=0.0 // coupan_discount amount if applied
+
+   // you can get every discont/gift from here
+   var appliedgift_list: ArrayList<AppliedGiftModel> = ArrayList()
+   var addedDiscount_amount : Double =0.0
+   var addedDiscount_type : String=""
+   var addedDiscount_id : String=""
+   var addedProductlist: ArrayList<ResultItem> = arrayListOf()
 
     // we have two different API so we are passing call in "checkout API" it may be from pickup/delivery :
     private lateinit var checkout_api: Call<JsonObject>
 
 
     companion object {
-        var isPaymentonline: Boolean = true
         val TAG = "Paymentmethod"
+        var whatisthePaymethod : WhatIsThePaymethod? = null
 
 
         fun newInstance(): Paymentmethod {
             return Paymentmethod()
         }
     }
+
+    enum class WhatIsThePaymethod {
+        GIFT, ONLINE, CASH
+    }
+
 
     override fun getLayout(): Int {
         return R.layout.paymentmethod
@@ -92,7 +113,6 @@ class Paymentmethod : CommanAPI() {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
             setToolbarforThis()
-            isPaymentonline = true
             binding.isProgress = true
 
             finalizer = object : Runnable {
@@ -100,7 +120,7 @@ class Paymentmethod : CommanAPI() {
                     loge(TAG, "Handler-----")
                     refreshview()
                     addspantext()
-                    showproductInfo(EpayFragment.ui_model!!.viewcard_list.value?.result,EpayFragment.paymentattributes.discount_amount,EpayFragment.paymentattributes.discount_type,false)
+                    showproductInfo(EpayFragment.ui_model!!.viewcard_list.value?.result,EpayFragment.paymentattributes.discount_amount,EpayFragment.paymentattributes.discount_type,EpayFragment.paymentattributes.discount_id,false)
                 }
             }
             timeoutHandler.postDelayed(finalizer, 600)
@@ -116,11 +136,15 @@ class Paymentmethod : CommanAPI() {
         if(EpayFragment.paymentattributes.online_logo != ""){
             // online is present don't go any where
             defaultpaymentmethodType = getString(R.string.online_payment).trim()
+            whatisthePaymethod = WhatIsThePaymethod.ONLINE
+
         }else if(EpayFragment.paymentattributes.cash_logo != ""){
             // cash is present online is not present.
             defaultpaymentmethodType = getString(R.string.cash_payment).trim()
+            whatisthePaymethod = WhatIsThePaymethod.CASH
+
         }else{
-            // no one present
+            // no one present (this condition will not present)
             defaultpaymentmethodType=""
         }
 
@@ -167,12 +191,13 @@ class Paymentmethod : CommanAPI() {
             var gift_type: String,
             var actual_gift_value: String,
             var applied_gift_value: Double
-    )
+    ) : Serializable
 
 
     private fun generateBillDetails(subtotal : Double,discount_amount: Double, discount_type: String,changeintoDefault : Boolean) {
 
         final_amount = subtotal
+        EpayFragment.paymentattributes.upto_min_shipping = calculateuptominPrice(subtotal)
 
         loge(TAG,"generateBillDetails--"+final_amount)
 
@@ -181,28 +206,26 @@ class Paymentmethod : CommanAPI() {
             subtotal_layout.visibility = View.VISIBLE
             restuptominimum_layout.visibility = if (EpayFragment.paymentattributes.upto_min_shipping.toDouble() <= 0.0) View.GONE else View.VISIBLE  // product price - mincharge
             shipping_layout.visibility = View.GONE
-            additional_charge_layout.visibility = if (EpayFragment.paymentattributes.additional_charges_cash.toDouble() <= 0.0) View.GONE else View.VISIBLE    // online/cash tax
+            additional_charge_layout.visibility = if (getAdditionalCharge(whatisthePaymethod!!).toDouble() <= 0.0) View.GONE else View.VISIBLE    // online/cash tax
             total_layout.visibility = View.VISIBLE
 
             subtotal_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(subtotal.toString())
             restuptominimum_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.upto_min_shipping)
-            additional_charge_txt.text = if (isPaymentonline) BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.additional_charges_online) else BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.additional_charges_cash)
-
-
+            additional_charge_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(getAdditionalCharge(whatisthePaymethod!!))
 
             if (discount_type == Constants.ORDER_DISCOUNT) {
                 if (discount_amount > 0.0) {
                     discountcoupan_layout.visibility = View.VISIBLE
-                    discountcoupan_txt.text = String.format(getString(R.string.discount), discount_amount)
+                    discountcoupan_txt.text = String.format(getString(R.string.discount),BindDataUtils.convertCurrencyToDanishWithoutLabel(discount_amount.toString().trim()) )
                     final_amount = final_amount - discount_amount
                 } else {
                     discountcoupan_layout.visibility = View.GONE
                 }
 
-            } else if (discount_type == Constants.COUPON) {
+            } else if (discount_type == Constants.EATMORE_COUPON  || discount_type == Constants.RESTAURANT_COUPON) {
                 if (discount_amount > 0.0) {
                     discountcoupan_layout.visibility = View.VISIBLE
-                    discountcoupan_txt.text = String.format(getString(R.string.discount), discount_amount)
+                    discountcoupan_txt.text = String.format(getString(R.string.discount),BindDataUtils.convertCurrencyToDanishWithoutLabel(discount_amount.toString().trim()))
                     final_amount = final_amount - discount_amount
                 } else {
                     discountcoupan_layout.visibility = View.GONE
@@ -217,7 +240,7 @@ class Paymentmethod : CommanAPI() {
             final_amount =
                     (   final_amount
                       + EpayFragment.paymentattributes.upto_min_shipping.toDouble()
-                      + if (isPaymentonline) EpayFragment.paymentattributes.additional_charges_online.toDouble() else EpayFragment.paymentattributes.additional_charges_cash.toDouble())
+                      + getAdditionalCharge(whatisthePaymethod!!).toDouble())
 
 
             // Check Eatmore balance:
@@ -233,13 +256,13 @@ class Paymentmethod : CommanAPI() {
             subtotal_layout.visibility = View.VISIBLE
             restuptominimum_layout.visibility = if (EpayFragment.paymentattributes.upto_min_shipping.toDouble() <= 0.0) View.GONE else View.VISIBLE
             shipping_layout.visibility = if (EpayFragment.paymentattributes.shipping_charge.toDouble() <= 0.0) View.GONE else View.VISIBLE
-            additional_charge_layout.visibility = if (EpayFragment.paymentattributes.additional_charges_online.toDouble() <= 0.0) View.GONE else View.VISIBLE
+            additional_charge_layout.visibility = if (getAdditionalCharge(whatisthePaymethod!!).toDouble() <= 0.0) View.GONE else View.VISIBLE
             total_layout.visibility = View.VISIBLE
 
             subtotal_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(subtotal.toString())
             restuptominimum_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.upto_min_shipping)
             shipping_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.shipping_charge)
-            additional_charge_txt.text = if (isPaymentonline) BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.additional_charges_online) else BindDataUtils.convertCurrencyToDanishWithoutLabel(EpayFragment.paymentattributes.additional_charges_cash)
+            additional_charge_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(getAdditionalCharge(whatisthePaymethod!!))
 
 
 
@@ -247,7 +270,7 @@ class Paymentmethod : CommanAPI() {
                 loge(TAG,"ORDER_DISCOUNT-"+discount_amount)
                 if (discount_amount > 0.0) {
                     discountcoupan_layout.visibility = View.VISIBLE
-                    discountcoupan_txt.text = String.format(getString(R.string.discount), discount_amount)
+                    discountcoupan_txt.text = String.format(getString(R.string.discount),BindDataUtils.convertCurrencyToDanishWithoutLabel(discount_amount.toString().trim()))
                     final_amount = final_amount - discount_amount
                 } else {
                     discountcoupan_layout.visibility = View.GONE
@@ -257,7 +280,7 @@ class Paymentmethod : CommanAPI() {
                 loge(TAG,"COUPON_DISCOUNT-"+discount_amount)
                 if (discount_amount > 0.0) {
                     discountcoupan_layout.visibility = View.VISIBLE
-                    discountcoupan_txt.text = String.format(getString(R.string.discount), discount_amount)
+                    discountcoupan_txt.text = String.format(getString(R.string.discount),BindDataUtils.convertCurrencyToDanishWithoutLabel(discount_amount.toString().trim()))
                     final_amount = final_amount - discount_amount
                 } else {
                     discountcoupan_layout.visibility = View.GONE
@@ -274,7 +297,7 @@ class Paymentmethod : CommanAPI() {
                     (         final_amount
                             + EpayFragment.paymentattributes.upto_min_shipping.toDouble()
                             + EpayFragment.paymentattributes.shipping_charge.toDouble()
-                            + if (isPaymentonline) EpayFragment.paymentattributes.additional_charges_online.toDouble() else EpayFragment.paymentattributes.additional_charges_cash.toDouble())
+                            + getAdditionalCharge(whatisthePaymethod!!).toDouble())
 
 
             // Check Eatmore balance:
@@ -285,6 +308,34 @@ class Paymentmethod : CommanAPI() {
 
 
 
+
+    }
+
+
+    private  fun calculateuptominPrice(subtotal: Double) : String {
+
+        val min_orderprice = EpayFragment.paymentattributes.minimum_order_price.trim().toDouble()
+
+        if(subtotal >= min_orderprice ){
+            // no amount would charge for uptomin
+            return "0"
+
+        }else{
+            // calculate uptomin amount on sutotal not on any discount
+            val result = min_orderprice - subtotal
+            return  result.toString()
+        }
+
+    }
+
+     fun getAdditionalCharge(whatisthePaymethod : WhatIsThePaymethod) : String{
+
+        when (whatisthePaymethod) {
+            WhatIsThePaymethod.GIFT ->   { return EpayFragment.paymentattributes.additional_charges_giftcard.trim()}
+            WhatIsThePaymethod.ONLINE -> { return EpayFragment.paymentattributes.additional_charges_online.trim()}
+            WhatIsThePaymethod.CASH ->   { return EpayFragment.paymentattributes.additional_charges_cash.trim() }
+            else ->                      { return "0" }
+        }
 
     }
 
@@ -343,9 +394,10 @@ class Paymentmethod : CommanAPI() {
     }
 
 
-     fun showproductInfo (list: ArrayList<ResultItem>? , discount_amount: Double, discount_type: String , changeintoDefault : Boolean) {
+     fun showproductInfo (list: ArrayList<ResultItem>? , discount_amount: Double, discount_type: String , discount_id: String , changeintoDefault : Boolean) {
 
         loge(TAG,"showproductInfo--"+discount_amount+" type -"+discount_type)
+
         if (list == null) {
             // this condition will null if all item has been deleted : so just clear view and inflate empty view on screen.
             add_parentitem_view.removeAllViewsInLayout()
@@ -353,7 +405,12 @@ class Paymentmethod : CommanAPI() {
            // generateBillDetails(Constants.OTHER, 0.0)
             return
         }
-        var subtotal = 0.0
+         addedProductlist = list
+         addedDiscount_amount = discount_amount
+         addedDiscount_type=discount_type
+         addedDiscount_id=discount_id
+         subtotal = 0.0
+
         add_parentitem_view.removeAllViewsInLayout()
         for (i in 0 until list.size) {
             var inflater = context!!.getSystemService(android.content.Context.LAYOUT_INFLATER_SERVICE) as LayoutInflater
@@ -440,7 +497,7 @@ class Paymentmethod : CommanAPI() {
         checkinfo_restaurant_closed()
     }
 
-    private fun continuefromCash() {
+    private fun continuefromCash () {
 
         if (!isInternetAvailable()) {
             showSnackBar(pamentmethod_container, getString(R.string.internet_not_available))
@@ -478,6 +535,7 @@ class Paymentmethod : CommanAPI() {
                     else -> {
                         val message = getdeliverymsg_error(jsonObject)
                         if ((DetailsFragment.isPickup && !DetailsFragment.pickup_present) || (!DetailsFragment.isPickup && !DetailsFragment.delivery_present)) {
+                            // if you are comming from pickup and end of the movement pickup is not present then:
                             // [pickup(true) && pickuppresent(false) || delivery(true) && deliverypresent (false)]
                             showProgressDialog()
                             DialogUtils.openDialogDefault(context = context!!, btnNegative = "", btnPositive = getString(R.string.ok), color = ContextCompat.getColor(context!!, R.color.black), msg = message, title = "", onDialogClickListener = object : DialogUtils.OnDialogClickListener {
@@ -491,8 +549,23 @@ class Paymentmethod : CommanAPI() {
                             })
                         } else {
                             //normal flow
-                            if (isPaymentonline) checkoutfrom_online() else checkoutfrom_cash()
-                            //if(is_continuefrom_online)  checkoutfrom_online() else checkoutfrom_cash()
+                            eatmoreAppliedBalance = 0.0
+                            restaurantAppliedBalance = 0.0
+                            for(appliedgiftmodel in appliedgift_list){
+                                if(appliedgiftmodel.gift_type ==Constants.EATMORE){
+                                    eatmoreAppliedBalance =appliedgiftmodel.applied_gift_value
+                                }
+                                else if(appliedgiftmodel.gift_type == Constants.RESTAURANT){
+                                    restaurantAppliedBalance =appliedgiftmodel.applied_gift_value
+                                }
+                            }
+
+                            if(totaltopay > 0){
+                                if (whatisthePaymethod == WhatIsThePaymethod.ONLINE) checkoutfrom_online() else checkoutfrom_cash()
+                            }
+                            else{
+                                checkoutfrom_cash()  // if balance is 0 then move on cash .
+                            }
                         }
                     }
                 }
@@ -519,7 +592,7 @@ class Paymentmethod : CommanAPI() {
     private fun checkoutfrom_cash() {
         loge(TAG, "chechout cash---")
 
-        call_checkout = CartListFunction.getcartpaymentAttributes(context!!)!!
+        call_checkout = CartListFunction.getcartpaymentAttributes(context!!,this)!!
         callAPI(call_checkout!!, object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
@@ -534,7 +607,9 @@ class Paymentmethod : CommanAPI() {
                         }
                         else -> {
                             EpayFragment.paymentattributes.order_no = jsonobject.get(Constants.ORDER_NO).asInt
-                            (parentFragment as EpayFragment).addFragment(R.id.epay_container, TransactionStatus.newInstance(), TransactionStatus.TAG, true)
+                            (parentFragment as EpayFragment).addFragment(R.id.epay_container, TransactionStatus.newInstance(addedProductlist,addedDiscount_amount,addedDiscount_type,addedDiscount_id,appliedgift_list), TransactionStatus.TAG, true)
+                            EpayFragment.paymentattributes.final_amount = jsonobject.get(Constants.ORDER_TOTAL).asDouble
+
                         }
                     }
 
@@ -579,7 +654,7 @@ class Paymentmethod : CommanAPI() {
     private fun checkoutfrom_online() {
         // showProgressDialog()
         loge(TAG, "chechout online---")
-        call_checkout = CartListFunction.getcartpaymentAttributes(context!!)!!
+        call_checkout = CartListFunction.getcartpaymentAttributes(context!!,this)!!
         callAPI(call_checkout!!, object : BaseFragment.OnApiCallInteraction {
 
             override fun <T> onSuccess(body: T?) {
@@ -598,11 +673,15 @@ class Paymentmethod : CommanAPI() {
                             EpayFragment.paymentattributes.order_no = jsonobject.get(Constants.ORDER_NO).asInt
                             if (jsonobject.has(Constants.EPAY_MERCHANT)) EpayFragment.paymentattributes.epay_merchant = jsonobject.get(Constants.EPAY_MERCHANT).asString
                             EpayFragment.paymentattributes.final_amount = jsonobject.get(Constants.ORDER_TOTAL).asDouble
-                            if (EpayFragment.paymentattributes.final_amount <= 0.0) {
+
+                      /*      if (EpayFragment.paymentattributes.final_amount <= 0.0) {
                                 (parentFragment as EpayFragment).addFragment(R.id.epay_container, TransactionStatus.newInstance(), TransactionStatus.TAG, true)
                             } else {
                                 (parentFragment as EpayFragment).addFragment(R.id.epay_container, BamboraWebfunction.newInstance(), BamboraWebfunction.TAG, true)
-                            }
+                            }*/
+
+                            (parentFragment as EpayFragment).addFragment(R.id.epay_container, BamboraWebfunction.newInstance(addedProductlist,addedDiscount_amount,addedDiscount_type,addedDiscount_id,appliedgift_list), BamboraWebfunction.TAG, true)
+
                         }
                     }
                 } else {
@@ -642,20 +721,22 @@ class Paymentmethod : CommanAPI() {
             postParam.addProperty(Constants.FIRST_TIME, EpayFragment.paymentattributes.first_time)
             postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN, ""))
             // postParam.addProperty(Constants.POSTAL_CODE, EpayFragment.paymentattributes.postal_code)
-            postParam.addProperty(Constants.DISCOUNT_TYPE, EpayFragment.paymentattributes.discount_type)
-            postParam.addProperty(Constants.DISCOUNT_AMOUNT, EpayFragment.paymentattributes.discount_amount)
-            postParam.addProperty(Constants.DISCOUNT_ID, EpayFragment.paymentattributes.discount_id)
+            postParam.addProperty(Constants.EATMORE_GIFTCARD, eatmoreAppliedBalance)
+            postParam.addProperty(Constants.RESTAURANT_GIFTCARD, restaurantAppliedBalance)
+            postParam.addProperty(Constants.DISCOUNT_TYPE, addedDiscount_type)
+            postParam.addProperty(Constants.DISCOUNT_AMOUNT, addedDiscount_amount)
+            postParam.addProperty(Constants.DISCOUNT_ID, addedDiscount_id)
             postParam.addProperty(Constants.SHIPPING, if (DetailsFragment.isPickup) context!!.getString(R.string.pickup_) else context!!.getString(R.string.delivery_))
             postParam.addProperty(Constants.TELEPHONE_NO, EpayFragment.paymentattributes.telephone_no)
-            postParam.addProperty(Constants.ORDER_TOTAL, EpayFragment.paymentattributes.subtotal)
+            postParam.addProperty(Constants.ORDER_TOTAL, totaltopay.toString())
             postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
             postParam.addProperty(Constants.ACCEPT_TC, "1")
-            postParam.addProperty(Constants.PAYMETHOD, if (Paymentmethod.isPaymentonline) "1" else "2")
+            postParam.addProperty(Constants.PAYMETHOD, if (whatisthePaymethod == WhatIsThePaymethod.ONLINE) "1" else "2")
             postParam.addProperty(Constants.EXPECTED_TIME, EpayFragment.paymentattributes.expected_time)
             postParam.addProperty(Constants.COMMENTS, EpayFragment.paymentattributes.comments)
             postParam.addProperty(Constants.DEVICE_TYPE, Constants.DEVICE_TYPE_VALUE)
             postParam.addProperty(Constants.FIRST_NAME, EpayFragment.paymentattributes.first_name)
-            postParam.addProperty(Constants.ADDITIONAL_CHARGE, if (Paymentmethod.isPaymentonline) EpayFragment.paymentattributes.additional_charges_online else EpayFragment.paymentattributes.additional_charges_cash)
+            postParam.addProperty(Constants.ADDITIONAL_CHARGE,getAdditionalCharge(whatisthePaymethod!!))
             postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
             postParam.addProperty(Constants.LANGUAGE, Constants.DA)
             val jsonarray = JsonArray()
@@ -701,14 +782,14 @@ class Paymentmethod : CommanAPI() {
         postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
         postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)
         postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
-        postParam.addProperty(Constants.ORDER_TOTAL, EpayFragment.paymentattributes.subtotal)
-        postParam.addProperty(Constants.ADDITIONAL_CHARGE, if (isPaymentonline) EpayFragment.paymentattributes.additional_charges_online else EpayFragment.paymentattributes.additional_charges_cash)
+        postParam.addProperty(Constants.ORDER_TOTAL, subtotal)
+        postParam.addProperty(Constants.ADDITIONAL_CHARGE, getAdditionalCharge(whatisthePaymethod!!))
         postParam.addProperty(Constants.CODE, model.edittextvalue.trim())
         postParam.addProperty(Constants.SHIPPING, if (DetailsFragment.isPickup) getString(R.string.pickup_caps) else getString(R.string.delivery_caps))
         postParam.addProperty(Constants.SHIPPING_COSTS, EpayFragment.paymentattributes.shipping_charge)
         postParam.addProperty(Constants.IS_LOGIN, "1")
         postParam.addProperty(Constants.UPTO_MIN_SHIPPING, EpayFragment.paymentattributes.upto_min_shipping)
-        postParam.addProperty(Constants.CHECKOUT_PAYMENT, if (isPaymentonline) getString(R.string.online_payment) else getString(R.string.cash_payment))
+        postParam.addProperty(Constants.CHECKOUT_PAYMENT, if (whatisthePaymethod == WhatIsThePaymethod.ONLINE) getString(R.string.online_payment) else getString(R.string.cash_payment))
 
         call_applycode = ApiCall.applycode(postParam)
         callAPI(call_applycode!!, object : BaseFragment.OnApiCallInteraction {
@@ -716,14 +797,22 @@ class Paymentmethod : CommanAPI() {
             override fun <T> onSuccess(body: T?) {
                 val applycodemodel = body as ApplyCodeModel
                 if (applycodemodel.status) {
-                    loge(TAG, "status is true")
-                    showproductInfo(list =applycodemodel.result ,discount_amount = applycodemodel.discount_amount ?: 0.0 ,discount_type =Constants.COUPON,changeintoDefault = false)
+
+                    cpn_discount_amount=applycodemodel.discount_amount!!
+                    cpn_discount_id=applycodemodel.discount_id!!.trim()
+                    cpn_discount_type=applycodemodel.discount_type!!.trim()
+
+                    showproductInfo(list =applycodemodel.result ,discount_amount = cpn_discount_amount ?: 0.0 ,discount_type =cpn_discount_type,discount_id =cpn_discount_id ,changeintoDefault = false)
                     binder.errorOfPromotioncode.setTextColor(ContextCompat.getColor(context!!, R.color.green))
 
 
                 } else {
-                    loge(TAG, "status is false")
-                    showproductInfo(list =applycodemodel.result ,discount_amount = EpayFragment.paymentattributes.discount_amount ,discount_type =EpayFragment.paymentattributes.discount_type,changeintoDefault = false )
+
+                    cpn_discount_amount=0.0
+                    cpn_discount_id=""
+                    cpn_discount_type=""
+
+                    showproductInfo(list =applycodemodel.result ,discount_amount = EpayFragment.paymentattributes.discount_amount ,discount_type =EpayFragment.paymentattributes.discount_type,discount_id = EpayFragment.paymentattributes.discount_id,changeintoDefault = false )
                     binder.errorOfPromotioncode.setTextColor(ContextCompat.getColor(context!!, R.color.theme_color))
                 }
 
@@ -839,7 +928,7 @@ class Paymentmethod : CommanAPI() {
      fun applyeatmorebalance(changeintoDefault : Boolean) {
 
         // as a gift cart from (eatmore/restaurant) type
-        var totaltopay = final_amount
+        totaltopay = final_amount
         var totalEatmore_balance = 0.0
         for (paymentInfoModel in paymentinfo_list) {
             if (paymentInfoModel.ischeck) {
@@ -866,7 +955,7 @@ class Paymentmethod : CommanAPI() {
 
             } else {
                 // eatmore balance is not enought then:
-                totaltopay=totaltopay - totalEatmore_balance
+                totaltopay = totaltopay - totalEatmore_balance
 
                 if(changeintoDefault){
                     for (paymentinfomodel in paymentinfo_list)
@@ -876,6 +965,7 @@ class Paymentmethod : CommanAPI() {
                         else paymentinfomodel.view_expand=false
                     }
                     mAdapter.canichangeSegment=true
+
                 }
                 mAdapter.notifyDataSetChanged()
             }
@@ -892,7 +982,6 @@ class Paymentmethod : CommanAPI() {
                     else paymentinfomodel.view_expand=false
                 }
                 mAdapter.canichangeSegment=true
-
             }
 
             mAdapter.notifyDataSetChanged()
@@ -908,6 +997,7 @@ class Paymentmethod : CommanAPI() {
 
 
     }
+
 
     private fun setgiftdiscountprice (final_amount : Double) {
         var expandbtnName =""
@@ -986,12 +1076,12 @@ class Paymentmethod : CommanAPI() {
                     if (model.payment_type == paymentmethod.getString(R.string.online_payment)) {
                         // online
 
-                        isPaymentonline = true
+                      //  paymentmethod.whatisthePaymethod=WhatIsThePaymethod.ONLINE
                         paymentmethod.continuefromOnline()
 
                     } else {
                         //cash
-                        isPaymentonline = false
+                        //paymentmethod.whatisthePaymethod=WhatIsThePaymethod.CASH
                         paymentmethod.continuefromCash()
 
                     }

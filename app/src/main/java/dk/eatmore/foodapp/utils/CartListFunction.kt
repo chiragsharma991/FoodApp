@@ -8,27 +8,29 @@ import android.support.v4.content.ContextCompat
 import android.support.v7.widget.AppCompatTextView
 import android.util.Log
 import android.view.Gravity
+import android.view.LayoutInflater
 import android.view.View
 import android.view.Window
 import android.widget.LinearLayout
 import com.google.gson.JsonArray
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
-import dk.eatmore.foodapp.activity.main.cart.CartActivity
 import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.epay.fragment.Paymentmethod
+import dk.eatmore.foodapp.activity.main.epay.fragment.TransactionStatus
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.model.cart.ProductAttributeListItem
 import dk.eatmore.foodapp.model.cart.ProductDetails
 import dk.eatmore.foodapp.model.cart.ProductIngredientsItem
+import dk.eatmore.foodapp.model.epay.ResultItem
 import dk.eatmore.foodapp.model.home.MenuListItem
 import dk.eatmore.foodapp.model.home.ProductListItem
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
+import kotlinx.android.synthetic.main.dynamic_raw_item.view.*
+import kotlinx.android.synthetic.main.dynamic_raw_subitem.view.*
 import kotlinx.android.synthetic.main.infodialog.*
-import org.json.JSONException
-import org.json.JSONObject
 import retrofit2.Call
 
 object CartListFunction {
@@ -185,30 +187,34 @@ object CartListFunction {
       "pre_order": true*/
 
 
-    fun getcartpaymentAttributes (context : Context) : Call<JsonObject>? {
+    fun getcartpaymentAttributes (context: Context, paymentmethod: Paymentmethod) : Call<JsonObject>? {
         val checkout_api : Call<JsonObject>
 
         val postParam = JsonObject()
         try {
+
+
             postParam.addProperty(Constants.R_TOKEN_N, PreferenceUtil.getString(PreferenceUtil.R_TOKEN, ""))
             postParam.addProperty(Constants.R_KEY_N, PreferenceUtil.getString(PreferenceUtil.R_KEY, ""))
             postParam.addProperty(Constants.FIRST_TIME, EpayFragment.paymentattributes.first_time)
             postParam.addProperty(Constants.IP, PreferenceUtil.getString(PreferenceUtil.DEVICE_TOKEN,"") )
             // postParam.addProperty(Constants.POSTAL_CODE, EpayFragment.paymentattributes.postal_code)
-            postParam.addProperty(Constants.DISCOUNT_TYPE, EpayFragment.paymentattributes.discount_type)
-            postParam.addProperty(Constants.DISCOUNT_AMOUNT, EpayFragment.paymentattributes.discount_amount)
-            postParam.addProperty(Constants.DISCOUNT_ID,EpayFragment.paymentattributes.discount_id)
+            postParam.addProperty(Constants.EATMORE_GIFTCARD, paymentmethod.eatmoreAppliedBalance)
+            postParam.addProperty(Constants.RESTAURANT_GIFTCARD, paymentmethod.restaurantAppliedBalance)
+            postParam.addProperty(Constants.DISCOUNT_TYPE, paymentmethod.addedDiscount_type)
+            postParam.addProperty(Constants.DISCOUNT_AMOUNT, paymentmethod.addedDiscount_amount)
+            postParam.addProperty(Constants.DISCOUNT_ID, paymentmethod.addedDiscount_id)
             postParam.addProperty(Constants.SHIPPING, if (DetailsFragment.isPickup) context.getString(R.string.pickup_) else context.getString(R.string.delivery_))
             postParam.addProperty(Constants.TELEPHONE_NO, EpayFragment.paymentattributes.telephone_no)
-            postParam.addProperty(Constants.ORDER_TOTAL, EpayFragment.paymentattributes.subtotal)
+            postParam.addProperty(Constants.ORDER_TOTAL, paymentmethod.totaltopay.toString())
             postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
             postParam.addProperty(Constants.ACCEPT_TC, "1")
-            postParam.addProperty(Constants.PAYMETHOD, if(Paymentmethod.isPaymentonline) "1" else "2" )
+            postParam.addProperty(Constants.PAYMETHOD, if(Paymentmethod.whatisthePaymethod == Paymentmethod.WhatIsThePaymethod.ONLINE) "1" else "2" )
             postParam.addProperty(Constants.EXPECTED_TIME, EpayFragment.paymentattributes.expected_time)
             postParam.addProperty(Constants.COMMENTS, EpayFragment.paymentattributes.comments)
             postParam.addProperty(Constants.DEVICE_TYPE,Constants.DEVICE_TYPE_VALUE)
             postParam.addProperty(Constants.FIRST_NAME, EpayFragment.paymentattributes.first_name)
-            postParam.addProperty(Constants.ADDITIONAL_CHARGE, if(Paymentmethod.isPaymentonline) EpayFragment.paymentattributes.additional_charges_online else EpayFragment.paymentattributes.additional_charges_cash)
+            postParam.addProperty(Constants.ADDITIONAL_CHARGE, getAdditionalCharge(Paymentmethod.whatisthePaymethod!!))
             postParam.addProperty(Constants.LANGUAGE, Constants.DA)
             postParam.addProperty(Constants.APP, Constants.RESTAURANT_FOOD_ANDROID)      // if restaurant is closed then
             val jsonarray=JsonArray()
@@ -240,6 +246,18 @@ object CartListFunction {
         }
 
         return checkout_api
+
+    }
+
+
+    fun getAdditionalCharge(whatisthePaymethod : Paymentmethod.WhatIsThePaymethod) : String{
+
+        when (whatisthePaymethod) {
+            Paymentmethod.WhatIsThePaymethod.GIFT ->   { return EpayFragment.paymentattributes.additional_charges_giftcard.trim()}
+            Paymentmethod.WhatIsThePaymethod.ONLINE -> { return EpayFragment.paymentattributes.additional_charges_online.trim()}
+            Paymentmethod.WhatIsThePaymethod.CASH ->   { return EpayFragment.paymentattributes.additional_charges_cash.trim() }
+            else ->                                    { return "0" }
+        }
 
     }
 
@@ -727,6 +745,10 @@ object CartListFunction {
 
 
     }
+
+
+
+
 
 
 

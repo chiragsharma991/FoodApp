@@ -130,7 +130,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/discountcoupan_layout"
+                android:id="@+id/discount_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
@@ -147,7 +147,7 @@
                     android:text="@string/rabat" />
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/discountcoupan_txt"
+                    android:id="@+id/discount_txt"
                     style="@style/Subtitle_TextViewSmall"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
@@ -250,7 +250,7 @@
             </LinearLayout>
 
             <LinearLayout
-                android:id="@+id/discountgift_layout"
+                android:id="@+id/eatmoregift_layout"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="@dimen/_5sdp"
@@ -263,16 +263,49 @@
                     android:layout_marginEnd="@dimen/_8sdp"
                     android:layout_weight="1.2"
                     android:gravity="start"
+                    android:textColor="@color/theme_color"
                     android:singleLine="true"
-                    android:text="@string/rabat" />
+                    android:text="@string/eatmore_giftcard" />
 
                 <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/discountgift_txt"
+                    android:id="@+id/eatmoregift_txt"
                     style="@style/Subtitle_TextViewSmall"
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="0.8"
                     android:gravity="end"
+                    android:textColor="@color/theme_color"
+                    android:singleLine="true"
+                    android:text="145,00kr" />
+
+
+            </LinearLayout>
+            <LinearLayout
+                android:id="@+id/restaurantgift_layout"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="@dimen/_5sdp"
+                android:orientation="horizontal">
+
+                <android.support.v7.widget.AppCompatTextView
+                    style="@style/Subtitle_TextViewSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginEnd="@dimen/_8sdp"
+                    android:layout_weight="1.2"
+                    android:gravity="start"
+                    android:textColor="@color/theme_color"
+                    android:singleLine="true"
+                    android:text="@string/restaurant_giftcard" />
+
+                <android.support.v7.widget.AppCompatTextView
+                    android:id="@+id/restaurantgift_txt"
+                    style="@style/Subtitle_TextViewSmall"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="0.8"
+                    android:gravity="end"
+                    android:textColor="@color/theme_color"
                     android:singleLine="true"
                     android:text="145,00kr" />
 

@@ -416,6 +416,17 @@ class Address : CommanAPI(), TextWatcher {
 
                     )
 
+
+                    if(jsonObject.getAsJsonObject(Constants.USER_INFO).has("giftcard_details") && !jsonObject.getAsJsonObject(Constants.USER_INFO).get("giftcard_details").isJsonNull) {
+
+                        if(jsonObject.getAsJsonObject(Constants.USER_INFO).getAsJsonObject("giftcard_details").has("eatmore") && 0 < jsonObject.getAsJsonObject(Constants.USER_INFO).getAsJsonObject("giftcard_details").get("eatmore").asDouble){
+                            EpayFragment.paymentattributes.giftcard_details[Constants.EATMORE]=jsonObject.getAsJsonObject(Constants.USER_INFO).getAsJsonObject("giftcard_details").get("eatmore").asString
+                        }
+                        if(jsonObject.getAsJsonObject(Constants.USER_INFO).getAsJsonObject("giftcard_details").has("restaurant") && 0 < jsonObject.getAsJsonObject(Constants.USER_INFO).getAsJsonObject("giftcard_details").get("restaurant").asDouble){
+                            EpayFragment.paymentattributes.giftcard_details[Constants.RESTAURANT]=jsonObject.getAsJsonObject(Constants.USER_INFO).getAsJsonObject("giftcard_details").get("restaurant").asString
+                        }
+                    }
+
                     ui_model!!.user_infoList.value = userinfo_model
                     loge(TAG, "data is---" + userinfo_model.user_info.telephone_no + " " + userinfo_model.user_info.name)
                     //  progresswheel(progresswheel,false)
@@ -551,6 +562,7 @@ class Address : CommanAPI(), TextWatcher {
         //  EpayActivity.paymentattributes.additional_charges_cash=jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_CASH].asString
         EpayFragment.paymentattributes.additional_charges_online = if (!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_ONLINE)) || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.ADDITIONAL_CHARGES_ONLINE].asString
         EpayFragment.paymentattributes.additional_charges_cash = if (!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_CASH)) || jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_CASH).asString
+        EpayFragment.paymentattributes.additional_charges_giftcard = if (!(jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.ADDITIONAL_CHARGES_GIFTCARD)) || jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_GIFTCARD).asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT).get(Constants.ADDITIONAL_CHARGES_GIFTCARD).asString
 
         EpayFragment.paymentattributes.distance = if (!jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.USER_DISTANCE) || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].isJsonNull || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.USER_DISTANCE].asString
         EpayFragment.paymentattributes.first_time = if (!jsonObject.getAsJsonObject(Constants.RESULT).has(Constants.FIRST_TIME) || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].isJsonNull || jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString == "") "0" else jsonObject.getAsJsonObject(Constants.RESULT)[Constants.FIRST_TIME].asString

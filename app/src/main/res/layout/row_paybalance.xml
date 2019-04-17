@@ -50,6 +50,7 @@
                 android:id="@+id/giftCheck"
                 android:paddingRight="-6dp"
                 android:clickable="false"
+                android:buttonTint="@color/theme_color"
                 android:checked="@{paymentinfo.ischeck}"
                 />
 
@@ -68,6 +69,7 @@
             style="@style/Button"
             android:layout_marginTop="@dimen/_8sdp"
             android:textColor="@color/white"
+            android:onClick="@{(v) -> handlers.onClick(v,`04`,paymentinfo)}"
             android:text="@{paymentinfo.btn_txt}"
             android:visibility="@{paymentinfo.walletBtn_expand ? View.VISIBLE : View.GONE}"
             android:background="@color/theme_color"

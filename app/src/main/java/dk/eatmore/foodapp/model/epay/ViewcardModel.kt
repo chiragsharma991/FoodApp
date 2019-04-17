@@ -2,6 +2,7 @@ package dk.eatmore.foodapp.model.epay
 
 import com.google.gson.annotations.SerializedName
 import dk.eatmore.foodapp.model.ModelUtility
+import java.io.Serializable
 
 data class ViewcardModel(
         val msg: String? = null,
@@ -21,10 +22,10 @@ data class ApplyCodeModel(
         val order_total: Double,
         val discount_amount: Double?=0.0,
         val discount_type: String?="",
-        val discount_id: Int?=0,
+        val discount_id: String?="",
         val result: ArrayList<ResultItem>?
 
-) : ModelUtility()
+) : ModelUtility() , Serializable
 
 data class ResultItem(
                       val order_no: String = "",
@@ -46,7 +47,7 @@ data class ResultItem(
                       val ordered_product_attributes: List<OrderedProductAttributesItem>?= null,
                       val order_product_extra_topping_group: List<OrderProductExtraToppingGroupItem>?= null,
                       val customerId: String = "",
-                      val p_id: String = "")
+                      val p_id: String = "") : Serializable
 
 
 data class RemovedIngredientsItem(
@@ -55,7 +56,7 @@ data class RemovedIngredientsItem(
                                   val ingredient_name: String = "",
                                   val opi_id: String = "",
                                   val op_id: String = "",
-                                  val customer_id: String = "")
+                                  val customer_id: String = "") : Serializable
 
 
 data class OrderedProductAttributesItem(
@@ -68,7 +69,7 @@ data class OrderedProductAttributesItem(
                                         val attributeName: String = "",
                                         val opaId: String = "",
                                         val customerId: String = "",
-                                        val attribute_value_name: String = "")
+                                        val attribute_value_name: String = ""): Serializable
 
 
 data class OrderProductExtraToppingGroupItem(
@@ -79,7 +80,7 @@ data class OrderProductExtraToppingGroupItem(
                                              val opId: String = "",
                                              val op_id: String = "",
                                              val customer_id: String = "",
-                                             val opt_id: String = "")
+                                             val opt_id: String = ""): Serializable
 
 data class Offer_details(
 

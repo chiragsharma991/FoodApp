@@ -289,6 +289,8 @@
     <string name="fra_">fra:%1$s</string>
     <string name="you_are_about_to_order_your_food_for_pickup_one_or_more">You are about to order your food for pickup, One or more products may not be available!</string>
     <string name="you_are_about_to_order_your_food_for_delivery_one_or_more">You are about to order your food for delivery, One or more products may not be available!</string>
+    <string name="eatmore_giftcard">Eatmore Giftcard</string>
+    <string name="restaurant_giftcard">Restaurant Giftcard</string>
 
 
 </resources>

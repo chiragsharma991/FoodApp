@@ -290,5 +290,7 @@
     <string name="fra_">fra:%1$s</string>
     <string name="you_are_about_to_order_your_food_for_pickup_one_or_more">Du er ved at bestille din mad til afhentning, Et eller flere produkter er ikke tilgængelige!</string>
     <string name="you_are_about_to_order_your_food_for_delivery_one_or_more">Du er ved at bestille din mad til udbringning, Et eller flere produkter er ikke tilgængelige!</string>
+    <string name="eatmore_giftcard">Eatmore Giftcard</string>
+    <string name="restaurant_giftcard">Restaurant Giftcard</string>
 
 </resources>

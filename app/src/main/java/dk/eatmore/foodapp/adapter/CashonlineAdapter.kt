@@ -63,15 +63,18 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
 
 
             holder.binding.paymentSelection.setOnClickListener{
-                // click on title
+                // click on title and change segment
 
                 if(canichangeSegment){
-                    Log.e("adapter--","canichangeSegment"+canichangeSegment)
+
+
                     for (i in 0.until(list.size)){
                         list[i].view_expand=false
                         list[i].error_expand=false
                     }
                     list[position].view_expand=true
+                    Paymentmethod.whatisthePaymethod=if(list[position].payment_type == context.getString(R.string.online_payment)) Paymentmethod.WhatIsThePaymethod.ONLINE else Paymentmethod.WhatIsThePaymethod.CASH
+
                   //  list[position].error_expand=if(holder.binding.errorOfPromotioncode.visibility == View.VISIBLE) true else false  // if you have error and click on same that
                     if(holder.binding.errorOfPromotioncode.visibility == View.VISIBLE){
                         // ignore if same segment click and gift applied
@@ -79,8 +82,12 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
                     }else{
                         list[position].error_expand = false
 
+                        paymentmethod.cpn_discount_amount=0.0
+                        paymentmethod.cpn_discount_id=""
+                        paymentmethod.cpn_discount_type=""
+
                         // change data defult to change segment .
-                        paymentmethod.showproductInfo(EpayFragment.ui_model!!.viewcard_list.value?.result, EpayFragment.paymentattributes.discount_amount, EpayFragment.paymentattributes.discount_type,false)
+                        paymentmethod.showproductInfo(EpayFragment.ui_model!!.viewcard_list.value?.result, EpayFragment.paymentattributes.discount_amount, EpayFragment.paymentattributes.discount_type,EpayFragment.paymentattributes.discount_id,false)
                     }
 
 
@@ -112,6 +119,7 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
             builder.append(span1).append(span2)
             holder.binding.giftTitle.text=builder
             holder.binding.handlers=myclickhandler
+
             holder.binding.giftItem.setOnClickListener{
 
                 if(!canichangeSegment && list[position].ischeck == false){
@@ -122,7 +130,9 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
                     // allow check box to check
 
                     if(holder.binding.giftCheck.isChecked) {
+
                         //  Unchecked
+
                         list[position].ischeck=false
 
                         val iterator = appliedgift_list.iterator()
@@ -132,19 +142,28 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
                                 iterator.remove()
                             }
                         }
+
+                        setpaymentMethod()
+
                     }
                     else{
+
                         // Checked
+
                         list[position].ischeck = true
+
+                        // appliedgift_list manage to set text from selected wallet balance
+
                         appliedgift_list.add(Paymentmethod.AppliedGiftModel(
                                 gift_type = list[position].payment_type,
                                 actual_gift_value = list[position].balance,
                                 applied_gift_value = 0.0
                         ))
 
+                        setpaymentMethod()
                     }
                 }
-                 paymentmethod.showproductInfo(EpayFragment.ui_model!!.viewcard_list.value?.result, EpayFragment.paymentattributes.discount_amount, EpayFragment.paymentattributes.discount_type,true)
+                 paymentmethod.showproductInfo(EpayFragment.ui_model!!.viewcard_list.value?.result, EpayFragment.paymentattributes.discount_amount, EpayFragment.paymentattributes.discount_type,EpayFragment.paymentattributes.discount_id,true)
 
             }
 
@@ -156,6 +175,8 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
 
         }
     }
+
+
 
 
    private  class MyViewHolder( val binding: RowPaymethodBinding, val myCustomEditTextListener: MyCustomEditTextListener) : RecyclerView.ViewHolder(binding.root) {
@@ -201,6 +222,49 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
         override fun afterTextChanged(editable: Editable) {
             // no op
         }
+    }
+
+    private fun setpaymentMethod () {
+
+        /*
+        * Using this method you can set additional price before the calculation so it is really helpful to identify that applied giftcard is real (eatmore balance > total to pay) or not
+        *
+        * Condition : =>
+        *
+        * if(eatmore balance > total to pay) Gift Additional charge else online/offline additional charge.
+        *
+        * */
+
+
+        paymentmethod.cpn_discount_amount=0.0
+        paymentmethod.cpn_discount_id=""
+        paymentmethod.cpn_discount_type=""
+
+        val appliedAdditionalprice = paymentmethod.getAdditionalCharge(Paymentmethod.whatisthePaymethod!!).toDouble()
+        val appliedfinalprice= paymentmethod.final_amount
+        val priceWithoutAdditionalcharge= appliedfinalprice-appliedAdditionalprice
+
+        var totalEatmore_balance = 0.0
+        for (paymentInfoModel in list) {
+            if (paymentInfoModel.ischeck) {
+                totalEatmore_balance += paymentInfoModel.balance.toDouble()
+            }
+        }
+
+        if(totalEatmore_balance >= (priceWithoutAdditionalcharge + EpayFragment.paymentattributes.additional_charges_giftcard.trim().toDouble())){
+            // selection is actual gift card
+            Paymentmethod.whatisthePaymethod = Paymentmethod.WhatIsThePaymethod.GIFT
+
+        }else
+        {
+            // selection is not actual gift card it may be online/offline it is depend on default parms
+            if(paymentmethod.defaultpaymentmethodType == context.getString(R.string.online_payment).trim())
+                Paymentmethod.whatisthePaymethod = Paymentmethod.WhatIsThePaymethod.ONLINE
+            else
+                Paymentmethod.whatisthePaymethod = Paymentmethod.WhatIsThePaymethod.CASH
+        }
+
+
     }
 
 
