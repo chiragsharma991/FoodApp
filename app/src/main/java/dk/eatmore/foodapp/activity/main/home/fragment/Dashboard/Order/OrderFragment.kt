@@ -21,6 +21,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
@@ -178,6 +181,7 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
                     binder.orderresult = model
                     binder.util = BindDataUtils
                     binder.myclickhandler = myclickhandler
+                    ImageLoader.loadImageRoundCornerFromUrl(context = context,cornerSize = 32,fromFile = model.app_icon,imageView = binder.imageview)
                     binder.executePendingBindings()
                     //   binder.handler=this@OrderFragment
                 }

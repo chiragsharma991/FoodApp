@@ -59,6 +59,8 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
             holder.myCustomEditTextListener.updatePosition(position)
             holder.binding.handlers=myclickhandler
             holder.binding.promotioncodeEdt.setText(list.get(position).edittextvalue)
+            holder.binding.errorOfPromotioncode.text=list[position].promotioncodeMsg
+            holder.binding.errorOfPromotioncode.setTextColor(if(list[position].errorOfPromotioncode) ContextCompat.getColor(context, R.color.theme_color) else ContextCompat.getColor(context, R.color.green))
 
 
 
@@ -85,6 +87,10 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
                         paymentmethod.cpn_discount_amount=0.0
                         paymentmethod.cpn_discount_id=""
                         paymentmethod.cpn_discount_type=""
+
+                        holder.binding.promotioncodeEdt.text.clear()
+                        holder.binding.promotioncodeEdt.clearFocus()
+                        list[position].canishowpromotionMsg = false
 
                         // change data defult to change segment .
                         paymentmethod.showproductInfo(EpayFragment.ui_model!!.viewcard_list.value?.result, EpayFragment.paymentattributes.discount_amount, EpayFragment.paymentattributes.discount_type,EpayFragment.paymentattributes.discount_id,false)
@@ -121,6 +127,8 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
             holder.binding.handlers=myclickhandler
 
             holder.binding.giftItem.setOnClickListener{
+
+
 
                 if(!canichangeSegment && list[position].ischeck == false){
                     // block other checkbox to perform check

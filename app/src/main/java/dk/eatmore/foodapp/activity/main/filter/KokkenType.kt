@@ -80,19 +80,18 @@ class KokkenType : Kokken_tilpas_filter() {
         }
         refreshview()
 
-
     }
 
 
 
-    private fun refreshview(){
+    private fun refreshview()
+    {
         loge(SelectAddress.TAG,"refresh view...")
         mAdapter = UniversalAdapter(this,kokkenType_list, R.layout.row_kokkentype, object : RecyclerCallback<RowKokkentypeBinding,RestaurantList.kokken_Model> {
             override fun bindData(binder: RowKokkentypeBinding, model: RestaurantList.kokken_Model) {
                 binder.kokkenModel=model
                 binder.myClickHandler=myclickhandler
                 binder.executePendingBindings()
-
             }
         })
         recycler_view.layoutManager = LinearLayoutManager(this)

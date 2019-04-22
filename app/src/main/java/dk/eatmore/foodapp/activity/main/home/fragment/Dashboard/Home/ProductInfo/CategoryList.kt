@@ -113,13 +113,13 @@ class CategoryList : BaseFragment(), RecyclerClickListner {
                     enter.slideEdge = Gravity.BOTTOM
                     val changeBoundsTransition: ChangeBounds = ChangeBounds()
                     changeBoundsTransition.duration = 300
-                    fragment.sharedElementEnterTransition = changeBoundsTransition
-                    fragment.enterTransition = enter
+                  //  fragment.sharedElementEnterTransition = changeBoundsTransition
+                   // fragment.enterTransition = enter
                 }
                 if ((activity as HomeActivity).fragmentTab_is() == 1)
-                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment().addFragment(R.id.home_order_container, fragment, EpayFragment.TAG, false)
+                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment().addFragment(R.id.home_order_container, fragment, EpayFragment.TAG, true)
                 else
-                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().addFragment(R.id.home_fragment_container, fragment, EpayFragment.TAG, false)
+                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().addFragment(R.id.home_fragment_container, fragment, EpayFragment.TAG, true)
 
 
                 /*   val intent = Intent(activity, EpayActivity::class.java)

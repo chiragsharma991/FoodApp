@@ -44,6 +44,7 @@
                 android:layout_height="match_parent"
                 >
 
+<!--
 
                 <android.support.design.widget.AppBarLayout
                     android:layout_width="match_parent"
@@ -58,6 +59,7 @@
 
 
                 </android.support.design.widget.AppBarLayout>
+-->
 
 
 
@@ -74,6 +76,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:id="@+id/imageview"
+                        android:visibility="visible"
                         android:fitsSystemWindows="true"
                         android:scaleType="centerCrop"
                         />
@@ -88,9 +91,22 @@
         -->
 
 
+                    <android.support.v7.widget.AppCompatImageView
+                        android:id="@+id/eatmore_logo_img"
+                        android:layout_width="@dimen/_200sdp"
+                        android:layout_height="@dimen/_35sdp"
+                        android:scaleType="fitXY"
+                        android:layout_marginTop="@dimen/_26sdp"
+                        android:layout_centerHorizontal="true"
+                        android:visibility="visible"
+                        android:tint="@color/theme_color"
+                        app:srcCompat="@mipmap/eatmore_logo" />
+
+
                     <TextView
                         style="@style/TextViewLarge"
                         android:id="@+id/order_eat_enjoy_lbl"
+                        android:layout_below="@+id/eatmore_logo_img"
                         android:layout_centerHorizontal="true"
                         android:layout_marginTop="@dimen/_50sdp"
                         android:fontFamily="@font/josefinsans_regular"
@@ -115,9 +131,9 @@
                         android:layout_below="@+id/bestil_din_lbl"
                         android:layout_marginLeft="@dimen/_32sdp"
                         android:layout_marginRight="@dimen/_32sdp"
-                        android:layout_marginTop="@dimen/_26sdp"
-                        app:cardElevation="@dimen/_5sdp"
-                        app:cardCornerRadius="@dimen/_5sdp"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        app:cardElevation="0dp"
+                        app:cardBackgroundColor="@color/theme_color"
                         app:layout_anchorGravity="bottom|center_horizontal"
 
                         >
@@ -125,6 +141,8 @@
                         <RelativeLayout
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
+                            android:background="@color/white"
+                            android:layout_margin="@dimen/_2sdp"
                             >
 
                             <android.support.v7.widget.AppCompatEditText
@@ -185,14 +203,16 @@
                                 >
 
                                 <ImageView
-                                    android:layout_width="@dimen/_40sdp"
-                                    android:layout_height="@dimen/_40sdp"
+                                    android:layout_width="@dimen/_20sdp"
+                                    android:layout_height="@dimen/_20sdp"
                                     android:scaleType="centerInside"
                                     android:visibility="visible"
                                     android:id="@+id/search_icon"
                                     android:contentDescription="@string/content_image"
                                     android:layout_centerInParent="true"
-                                    app:srcCompat="@drawable/search" />
+                                    app:srcCompat="@mipmap/search"
+                                    android:tint="@color/white"
+                                    />
 
 
 

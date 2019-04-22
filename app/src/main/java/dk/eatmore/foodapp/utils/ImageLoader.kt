@@ -6,6 +6,9 @@ import android.text.TextUtils
 import android.widget.ImageView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.load.engine.DiskCacheStrategy
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 
 object ImageLoader {
@@ -85,4 +88,15 @@ object ImageLoader {
     fun loadImageFromUri(context: Context, fromFile: Uri, placeholderImg: Int, imageView: ImageView) {
         Glide.with(context).load(fromFile).apply(RequestOptions().placeholder(placeholderImg)).into(imageView)
     }
+
+    fun loadImageRoundCornerFromUrl(context: Context, fromFile: String, imageView: ImageView,cornerSize : Int){
+
+        Glide.with(context)
+                .load(fromFile)
+                .apply(RequestOptions().transform(CenterCrop()).transform(RoundedCorners(cornerSize)).error(BindDataUtils.getRandomDrawbleColor()))
+                .transition(DrawableTransitionOptions.withCrossFade()).into(imageView)
+
+    }
+
+
 }

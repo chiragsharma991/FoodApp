@@ -27,7 +27,7 @@
     </string>
     <string name="search_the_menu">Søg i menukortet</string>
     <string name="transition_string">card_transition</string>
-    <string name="continue_">Til kassen</string>
+    <string name="continue_">Bekræft</string>
     <string name="add">Tilføj</string>
     <string name="go_on_playstore">Go on PlayStore</string>
     <string name="new_update">Ny opdatering!</string>
@@ -219,7 +219,7 @@
     <string name="bed_m_app">Bedøm App!</string>
     <string name="qty_n_price">%1$s x %2$s</string>
     <string name="se_deltajer">Se deltajer</string>
-    <string name="new_rest">ny</string>
+    <string name="new_rest">Ny</string>
     <string name="opening_hours">Åbningstider</string>
     <string name="navn">Navn</string>
     <string name="telefon_nummer">Telefon nummer</string>
@@ -239,6 +239,7 @@
     <string name="baseret_p_anmeldelser">Baseret på %1$s anmeldelser</string>
     <string name="etage_dor_andet_valgfrit">Etage/dor/andet(valgfrit)</string>
     <string name="vej">Vej</string>
+    <string name="no_rating_yet">Ingen bedømmelser endnu</string>
     <string name="dine_oplysninger">Dine Oplysninger</string>
     <string name="næste">Næste</string>
     <string name="bekræft_din_hent_selv_tid">Bekræft din hent selv tid</string>

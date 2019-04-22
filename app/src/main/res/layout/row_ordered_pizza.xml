@@ -36,25 +36,26 @@
         android:layout_width="match_parent"
         android:onClick="@{(v)-> myclickhandler.onDetails(v,orderresult)}"
         android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/_8sdp"
+        android:layout_marginEnd="@dimen/_8sdp"
+
         >
 
         <android.support.v7.widget.CardView
             style="@style/CardViewStyle"
             android:id="@+id/search_view"
-            android:layout_marginStart="@dimen/_8sdp"
-            android:layout_marginEnd="@dimen/_8sdp"
-            android:layout_marginTop="@dimen/_8sdp"
+            android:layout_margin="0dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             app:cardUseCompatPadding="true"
             >
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/_3sdp"
                 >
                 <android.support.constraint.ConstraintLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:padding="@dimen/_3sdp"
                     >
 
                     <android.support.constraint.Guideline
@@ -62,7 +63,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.25" />
+                        app:layout_constraintGuide_percent="0.21" />
 
                     <android.support.constraint.Guideline
                         android:id="@+id/guideline6"
@@ -88,15 +89,14 @@
                         app:layout_constraintVertical_bias="0.0">
 
                         <RelativeLayout
-                            android:layout_width="@dimen/_60sdp"
+                            android:layout_width="@dimen/_55sdp"
                             android:layout_height="wrap_content"
                             >
 
                             <android.support.v7.widget.AppCompatImageView
                                 android:id="@+id/imageview"
                                 android:layout_width="match_parent"
-                                android:layout_height="@dimen/_60sdp"
-                                android:layout_setImage="@{orderresult.app_icon}"
+                                android:layout_height="@dimen/_55sdp"
                                 android:onClick="@{(v)-> myclickhandler.showmenu(v,orderresult)}"
                                 app:srcCompat="@color/gray"
                                 android:scaleType="fitXY" />
@@ -147,7 +147,8 @@
                                 android:scaleType="fitXY"
                                 android:id="@+id/favorite_btn"
                                 android:src="@mipmap/heart_full"
-                                android:layout_marginTop="@dimen/_8sdp"
+                                android:padding="@dimen/_1sdp"
+                                android:layout_marginTop="@dimen/_3sdp"
                                 android:background="?attr/selectableItemBackgroundBorderless"
                                 android:layout_below="@+id/imageview"
                                 android:layout_centerHorizontal="true"
@@ -183,19 +184,23 @@
 
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/ordered_item_name"
-                            style="@style/Titlelight_TextViewSmall"
+                            style="@style/Subtitle_TextViewSmall"
+                            android:textColor="@color/black"
+                            android:textStyle="bold"
+                            android:textSize="13sp"
                             android:singleLine="true"
                             android:onClick="@{(v)-> myclickhandler.showmenu(v,orderresult)}"
                             android:text="@{orderresult.restaurant_name}" />
 
                         <android.support.v7.widget.AppCompatTextView
                             style="@style/Subtitle_TextViewSmall"
-                            android:layout_marginTop="@dimen/_5sdp"
+                            android:textSize="11sp"
                             android:text="@{util.convertCurrencyToDanishWithoutLabel(orderresult.total_to_pay)}" />
 
                         <android.support.v7.widget.AppCompatTextView
                             style="@style/Subtitle_TextViewSmall"
                             android:layout_gravity="center_vertical"
+                            android:textSize="11sp"
                             android:text="@{orderresult.shipping.equalsIgnoreCase(@string/pickup_caps) ? util.parsewithoutTimeToddMMyyyy(orderresult.order_date)+` `+@string/for_hent_selv : util.parsewithoutTimeToddMMyyyy(orderresult.order_date)+` `+@string/til_levering}" />
 
 
@@ -204,6 +209,7 @@
                             android:onClick="@{(v)-> myclickhandler.onRate(v,orderresult)}"
                             android:text="@{util.showOrderstatus(orderresult.payment_status,orderresult.order_status,orderresult.enable_rating)}"
                             android:textColor="@color/theme_color"
+                            android:textSize="11sp"
                             android:visibility="@{util.showOrderstatus(orderresult.payment_status,orderresult.order_status,orderresult.enable_rating).equalsIgnoreCase(``) ? View.GONE : View.VISIBLE}" />
 
                         <!--
@@ -221,7 +227,6 @@
                             android:rating="@{orderresult.total_rating}"
                             android:stepSize="0.0"
                             android:visibility="@{(orderresult.enable_rating == false &amp;&amp; orderresult.order_status.toLowerCase().equalsIgnoreCase(`accepted`)) ? View.VISIBLE : View.GONE}" />
-
 
                     </LinearLayout>
 
@@ -249,6 +254,7 @@
                             android:background="@color/background_light"
                             android:backgroundTint="@color/theme_color"
                             android:stateListAnimator="@null"
+                            android:textSize="11sp"
                             android:gravity="center"
                             android:onClick="@{(v)-> myclickhandler.reOrder(v,orderresult)}"
                             android:text="@string/genbestil"
@@ -263,6 +269,7 @@
                             android:layout_marginTop="@dimen/_5sdp"
                             android:fontFamily="@font/hindvadodara_light"
                             android:background="@color/background_light"
+                            android:textSize="11sp"
                             android:backgroundTint="@color/grey"
                             android:stateListAnimator="@null"
                             android:onClick="@{(v)-> myclickhandler.onDetails(v,orderresult)}"

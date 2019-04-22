@@ -405,7 +405,7 @@ class TransactionStatus : CommanAPI() {
             pickupdelivery_icon.setImageResource(if (DetailsFragment.isPickup) R.mipmap.hent_selv_dark else R.mipmap.motorcycle_dark)
             pickupdelivery_address.visibility = View.GONE
             customer_name.visibility = View.GONE
-            ImageLoader.loadImagefromurl(context!!, EpayFragment.paymentattributes.restaurant_appicon, restaurant_img)
+            ImageLoader.loadImageRoundCornerFromUrl(context = context!!,cornerSize = 32,fromFile = EpayFragment.paymentattributes.restaurant_appicon,imageView = restaurant_img)
             restaurant_name.text = EpayFragment.paymentattributes.restaurant_name
             restaurant_contact.text = EpayFragment.paymentattributes.restaurant_phone
             restaurant_address.text = EpayFragment.paymentattributes.restaurant_address
@@ -420,7 +420,7 @@ class TransactionStatus : CommanAPI() {
             pickupdelivery_address.text = EpayFragment.paymentattributes.payment_address
             customer_name.text = EpayFragment.paymentattributes.first_name
             customer_name.visibility = View.VISIBLE
-            ImageLoader.loadImagefromurl(context!!, EpayFragment.paymentattributes.restaurant_appicon, restaurant_img)
+            ImageLoader.loadImageRoundCornerFromUrl(context = context!!,cornerSize = 32,fromFile = EpayFragment.paymentattributes.restaurant_appicon,imageView = restaurant_img)
             restaurant_name.text = EpayFragment.paymentattributes.restaurant_name
             restaurant_contact.text = EpayFragment.paymentattributes.restaurant_phone
             restaurant_address.text = EpayFragment.paymentattributes.restaurant_address

@@ -210,10 +210,8 @@ class OrderedRestaurant : CommanAPI() {
         val data = ui_model!!.ordered_details.value!!.data!![0]
         showOrderstatus(payment_status = data.payment_status, enable_rating = data.enable_rating, order_status = data.order_status)
 
-        Glide.with(imageview.context)
-                .load(ui_model!!.ordered_details.value!!.data!![0].app_icon)
-                .apply(RequestOptions().placeholder(BindDataUtils.getRandomDrawbleColor()).error(BindDataUtils.getRandomDrawbleColor()))
-                .into(imageview)
+        ImageLoader.loadImageRoundCornerFromUrl(context = imageview.context,cornerSize = 32,fromFile = ui_model!!.ordered_details.value!!.data!![0].app_icon,imageView = imageview)
+
 
         add_parentitem_view.removeAllViewsInLayout()
         val list = ui_model!!.ordered_details.value!!.data!![0].order_products_details

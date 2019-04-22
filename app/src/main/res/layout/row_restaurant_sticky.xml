@@ -34,10 +34,9 @@
                     >
                     <RelativeLayout
                         android:layout_width="match_parent"
-                        android:layout_height="@dimen/_35sdp"
+                        android:layout_height="wrap_content"
                         android:id="@+id/header_view"
-                        android:layout_marginTop="@dimen/_5sdp"
-                        android:layout_marginBottom="@dimen/_5sdp"
+
                         >
 
 
@@ -45,7 +44,7 @@
 
                         <LinearLayout
                             android:layout_width="match_parent"
-                            android:layout_height="match_parent"
+                            android:layout_height="wrap_content"
                             android:orientation="vertical"
                             >
 
@@ -58,24 +57,27 @@
                                 android:gravity="center_vertical"
                                 android:visibility="visible"
                                 android:orientation="horizontal">
-
+<!--
                                 <View
                                     android:layout_width="@dimen/_5sdp"
                                     android:layout_height="match_parent"
-                                    android:visibility="visible"
+                                    android:visibility="gone"
                                     android:id="@+id/view_one"
                                     android:layout_marginTop="@dimen/_3sdp"
                                     android:layout_marginBottom="@dimen/_3sdp"
                                     android:background="@color/theme_color"
                                     >
-                                </View>
+                                </View>-->
 
 
                                 <android.support.v7.widget.AppCompatTextView
                                     style="@style/TitleMidium_TextViewSmall"
                                     android:id="@+id/row_cart_txt"
-                                    android:layout_margin="@dimen/_8sdp"
                                     android:textStyle="normal"
+                                    android:layout_marginStart="@dimen/_10sdp"
+                                    android:layout_marginEnd="@dimen/_10sdp"
+                                    android:layout_marginTop="@dimen/_5sdp"
+                                    android:layout_marginBottom="@dimen/_5sdp"
                                     android:layout_gravity="center_vertical"
                                     android:layout_weight="1"
 

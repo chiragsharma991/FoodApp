@@ -173,7 +173,9 @@
                                     android:layout_width="match_parent"
                                     android:id="@+id/constraint"
                                     android:background="@color/white"
-                                    android:layout_height="@dimen/_42sdp">
+                                    android:layout_height="@dimen/_30sdp"
+                                    android:layout_marginBottom="@dimen/_5sdp"
+                                    >
 
                                     <android.support.constraint.Guideline
                                         android:id="@+id/guideline7"
@@ -398,7 +400,6 @@
                             android:layout_height="wrap_content"
                             app:layout_behavior="@string/appbar_scrolling_view_behavior"
                             android:clipToPadding="false"
-                            android:paddingTop="@dimen/_5sdp"
                             />
 
 

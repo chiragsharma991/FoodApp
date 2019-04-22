@@ -134,10 +134,13 @@ class Menu : BaseFragment(), RecyclerClickListner {
             menu_tabs.addTab(menu_tabs.newTab().setText(getString(R.string.pickup)))
             DetailsFragment.isPickup=true
         } else if(DetailsFragment.delivery_present && !DetailsFragment.pickup_present){
-            menu_tabs.addTab(menu_tabs.newTab().setText((if(DetailsFragment.delivery_charge_title=="") getString(R.string.delivery) else getString(R.string.delivery)+"\n"+ DetailsFragment.delivery_charge_title)+" "+ BindDataUtils.convertCurrencyToDanish(DetailsFragment.delivery_charge)))
+            menu_tabs.addTab(menu_tabs.newTab().setText(if(DetailsFragment.delivery_charge_title=="") getString(R.string.delivery)+" "+(if(DetailsFragment.delivery_charge.trim() == "") "" else "\n"+BindDataUtils.convertCurrencyToDanish(DetailsFragment.delivery_charge))
+                                                        else getString(R.string.delivery)+"\n"+ DetailsFragment.delivery_charge_title+" "+BindDataUtils.convertCurrencyToDanish(DetailsFragment.delivery_charge) ))
             DetailsFragment.isPickup=false
         }else{
-            menu_tabs.addTab(menu_tabs.newTab().setText((if(DetailsFragment.delivery_charge_title=="") getString(R.string.delivery) else getString(R.string.delivery)+"\n"+ DetailsFragment.delivery_charge_title)+" "+ BindDataUtils.convertCurrencyToDanish(DetailsFragment.delivery_charge)))
+           // menu_tabs.addTab(menu_tabs.newTab().setText((if(DetailsFragment.delivery_charge_title=="") getString(R.string.delivery) else getString(R.string.delivery)+"\n"+ DetailsFragment.delivery_charge_title)+" "+ BindDataUtils.convertCurrencyToDanish(DetailsFragment.delivery_charge)))
+            menu_tabs.addTab(menu_tabs.newTab().setText(if(DetailsFragment.delivery_charge_title=="") getString(R.string.delivery)+" "+(if(DetailsFragment.delivery_charge.trim() == "") "" else "\n"+BindDataUtils.convertCurrencyToDanish(DetailsFragment.delivery_charge))
+            else getString(R.string.delivery)+"\n"+ DetailsFragment.delivery_charge_title+" "+BindDataUtils.convertCurrencyToDanish(DetailsFragment.delivery_charge) ))
             menu_tabs.addTab(menu_tabs.newTab().setText(getString(R.string.pickup)))
             DetailsFragment.isPickup=false
         }

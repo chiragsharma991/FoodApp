@@ -119,7 +119,7 @@
                             android:layout_marginTop="@dimen/_5sdp"
                             android:layout_width="wrap_content"
                             android:fontFamily="@font/ubuntu_l"
-                            android:text="@{@string/baseret_p_anmeldelser(restaurant.total_review_count)}"
+                            android:text="@{restaurant.total_review_count.equalsIgnoreCase(`0`) ? @string/no_rating_yet : @string/baseret_p_anmeldelser(restaurant.total_review_count)}"
                             />
 
 
@@ -137,6 +137,7 @@
                     android:layout_width="wrap_content"
                     android:id="@+id/checkbox_filter"
                     android:checked="false"
+                    android:buttonTint="@color/theme_color"
                     android:visibility="@{restaurant.review_list.size() > 0 ? View.VISIBLE : View.GONE}"
                     android:layout_marginTop="@dimen/_16sdp"
                     android:layout_height="wrap_content"
@@ -163,6 +164,7 @@
                     android:nestedScrollingEnabled="false"
                     android:clipToPadding="false"
                     android:layout_width="match_parent"
+                    android:paddingBottom="@dimen/_100sdp"
                     android:layout_height="match_parent"/>
 
 

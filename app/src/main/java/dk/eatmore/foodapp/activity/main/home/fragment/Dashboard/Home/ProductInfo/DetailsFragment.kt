@@ -9,6 +9,9 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.databinding.DataBindingUtil
+import android.graphics.Color
+import android.graphics.PorterDuff
+import android.graphics.drawable.LayerDrawable
 import android.os.Build
 import android.os.Bundle
 import android.support.design.widget.AppBarLayout
@@ -25,6 +28,9 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import com.bumptech.glide.Glide
+import com.bumptech.glide.load.resource.bitmap.CenterCrop
+import com.bumptech.glide.load.resource.bitmap.RoundedCorners
+import com.bumptech.glide.load.resource.drawable.DrawableTransitionOptions
 import com.bumptech.glide.request.RequestOptions
 import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
@@ -130,21 +136,29 @@ class DetailsFragment : CommanAPI() {
 
 
         if (savedInstanceState == null) {
+
+
+
+
+
           //  restaurant = arguments?.getSerializable(Constants.RESTAURANT) as Restaurant
+            logd(DetailsFragment.TAG, "saveInstance NULL")
             binding.isUiprogress = true  // you are also comming back so no loader is required.
             binding.kstatus=PreferenceUtil.getBoolean(PreferenceUtil.KSTATUS, false)
             restaurant=arguments?.getSerializable(Constants.RESTAURANT) as Restaurant?
             ordertype=arguments?.getString(Constants.ORDERTYPE) as String
             viewcart.visibility = View.GONE  // By default viewcart should be gone.
-            logd(DetailsFragment.TAG, "saveInstance NULL")
+
+
+
             img_toolbar_back.setOnClickListener {
                 onBackpress()
             }
 
            // App bar default text and background color.
-            badge_countprice.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))
-            addtocart_bascket.setColorFilter(ContextCompat.getColor(context!!,R.color.theme_color))
-            viewcart.background=ContextCompat.getDrawable(context!!,R.drawable.rectangle_curvewhite_shape)
+           // badge_countprice.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))
+           // addtocart_bascket.setColorFilter(ContextCompat.getColor(context!!,R.color.theme_color))
+          //  viewcart.background=ContextCompat.getDrawable(context!!,R.drawable.rectangle_curvewhite_shape)
             appbar.addOnOffsetChangedListener(object : AppBarLayout.OnOffsetChangedListener {
                 override fun onOffsetChanged(appBarLayout: AppBarLayout, verticalOffset: Int) {
 
@@ -152,11 +166,11 @@ class DetailsFragment : CommanAPI() {
                     if (Math.abs(verticalOffset) > 200) {
                         if(!isShow){
                             loge(TAG,"expanded >200---"+Math.abs(verticalOffset))
-                            badge_countprice.setTextColor(ContextCompat.getColor(context!!,R.color.white))
-                            addtocart_bascket.setColorFilter(ContextCompat.getColor(context!!,R.color.white))
-                            viewcart.background=ContextCompat.getDrawable(context!!,R.drawable.rectangle_curve_shape)
-                            txt_toolbar.text= ui_model?.category_menulist?.value?.restaurant_info?.restaurant_name ?: ""
-                            img_toolbar_back.setColorFilter(ContextCompat.getColor(context!!,R.color.black_default))
+                         //   badge_countprice.setTextColor(ContextCompat.getColor(context!!,R.color.white))
+                         //   addtocart_bascket.setColorFilter(ContextCompat.getColor(context!!,R.color.white))
+                         //   viewcart.background=ContextCompat.getDrawable(context!!,R.drawable.rectangle_curve_shape)
+                          //  txt_toolbar.text= ui_model?.category_menulist?.value?.restaurant_info?.restaurant_name ?: ""
+                         //   img_toolbar_back.setColorFilter(ContextCompat.getColor(context!!,R.color.black_default))
 
                             isShow=true
                         }
@@ -164,11 +178,11 @@ class DetailsFragment : CommanAPI() {
                     } else {
                         if(isShow){
                             loge(TAG,"expanded true---"+Math.abs(verticalOffset))
-                            badge_countprice.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))
-                            addtocart_bascket.setColorFilter(ContextCompat.getColor(context!!,R.color.theme_color))
-                            viewcart.background=ContextCompat.getDrawable(context!!,R.drawable.rectangle_curvewhite_shape)
-                            txt_toolbar.text=""
-                            img_toolbar_back.setColorFilter(ContextCompat.getColor(context!!,R.color.white))
+                          //  badge_countprice.setTextColor(ContextCompat.getColor(context!!,R.color.theme_color))
+                          //  addtocart_bascket.setColorFilter(ContextCompat.getColor(context!!,R.color.theme_color))
+                          //  viewcart.background=ContextCompat.getDrawable(context!!,R.drawable.rectangle_curvewhite_shape)
+                          //  txt_toolbar.text=""
+                         //   img_toolbar_back.setColorFilter(ContextCompat.getColor(context!!,R.color.white))
                             isShow=false
                         }
 
@@ -223,12 +237,16 @@ class DetailsFragment : CommanAPI() {
         updatebatchcount(0)
         binding.restaurant = restaurant_info
         binding.handler = myclickhandler
-        Glide.with(context!!)
-                .load(restaurant_info.app_icon)
-                .apply(RequestOptions().placeholder(BindDataUtils.getRandomDrawbleColor()).error(BindDataUtils.getRandomDrawbleColor()))
-                .into(imageview)
 
+        val stars : LayerDrawable = rating.getProgressDrawable() as LayerDrawable
+        stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(0).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
+        stars.getDrawable(1).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
+        rating.rating=restaurant_info.total_rating
 
+        binding.executePendingBindings()
+
+        ImageLoader.loadImageRoundCornerFromUrl(context = context!!,cornerSize = 32,fromFile = restaurant_info.app_icon,imageView = imageview)
 
             // initialise all layouts and tab
             adapter = ViewPagerAdapter(childFragmentManager)
@@ -305,14 +323,14 @@ class DetailsFragment : CommanAPI() {
                     enter.slideEdge = Gravity.BOTTOM
                     val changeBoundsTransition: ChangeBounds = ChangeBounds()
                     changeBoundsTransition.duration = 300
-                    fragment.sharedElementEnterTransition = changeBoundsTransition
-                    fragment.enterTransition = enter
+                   // fragment.sharedElementEnterTransition = changeBoundsTransition
+                 //   fragment.enterTransition = enter
                 }
 
                 if ((activity as HomeActivity).fragmentTab_is() == 1)
-                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment().addFragment(R.id.home_order_container, fragment, EpayFragment.TAG, false)
+                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getOrderFragment().addFragment(R.id.home_order_container, fragment, EpayFragment.TAG, true)
                 else
-                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().addFragment(R.id.home_fragment_container, fragment, EpayFragment.TAG, false)
+                    ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().addFragment(R.id.home_fragment_container, fragment, EpayFragment.TAG, true)
             }
 
 

@@ -188,7 +188,7 @@ class EpayFragment : CommanAPI() {
 
 
     fun setToolbarforThis(){
-        img_toolbar_back.setImageResource(R.drawable.close)
+        //img_toolbar_back.setImageResource(R.drawable.close)
         txt_toolbar.text=getString(R.string.basket)
         img_toolbar_back.setOnClickListener{
             loge(TAG,"eapay finishing...")

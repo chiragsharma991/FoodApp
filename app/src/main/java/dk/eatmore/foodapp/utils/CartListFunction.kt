@@ -206,7 +206,7 @@ object CartListFunction {
             postParam.addProperty(Constants.DISCOUNT_ID, paymentmethod.addedDiscount_id)
             postParam.addProperty(Constants.SHIPPING, if (DetailsFragment.isPickup) context.getString(R.string.pickup_) else context.getString(R.string.delivery_))
             postParam.addProperty(Constants.TELEPHONE_NO, EpayFragment.paymentattributes.telephone_no)
-            postParam.addProperty(Constants.ORDER_TOTAL, paymentmethod.totaltopay.toString())
+            postParam.addProperty(Constants.ORDER_TOTAL, paymentmethod.subtotal.toString())
             postParam.addProperty(Constants.CUSTOMER_ID, PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
             postParam.addProperty(Constants.ACCEPT_TC, "1")
             postParam.addProperty(Constants.PAYMETHOD, if(Paymentmethod.whatisthePaymethod == Paymentmethod.WhatIsThePaymethod.ONLINE) "1" else "2" )

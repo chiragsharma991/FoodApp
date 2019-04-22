@@ -122,6 +122,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerVertical="true"
+                    android:translationY="-3dp"
                     android:layout_marginStart="@dimen/_16sdp"
                     android:layout_toEndOf="@+id/cardviewtab"
                     android:indeterminate="true"
@@ -171,36 +172,73 @@
             <android.support.v7.widget.CardView
                 android:id="@+id/search_view"
                 style="@style/CardViewStyle"
+                android:layout_height="@dimen/_37sdp"
+                android:layout_width="match_parent"
                 android:layout_below="@+id/freetxtInfo"
                 android:layout_margin="0dp"
+                app:cardElevation="0dp"
+                app:cardBackgroundColor="@color/theme_color"
                 android:transitionName="@string/transition_string">
+
+
 
                 <RelativeLayout
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:gravity="center_vertical">
+                    android:background="@color/white"
+                    android:layout_margin="@dimen/_2sdp"
+                    >
 
-                    <EditText
+                    <android.support.v7.widget.AppCompatEditText
                         android:id="@+id/menu_search"
                         android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:background="@android:color/white"
-                        android:drawableStart="@drawable/search"
-                        android:drawablePadding="@dimen/_10sdp"
-                        android:drawableTint="@color/black_default"
+                        android:layout_height="@dimen/_40sdp"
+                        android:singleLine="true"
                         android:focusable="false"
                         android:focusableInTouchMode="false"
                         android:fontFamily="@font/hindvadodara_light"
                         android:hint="@string/search_the_menu"
-                        android:importantForAutofill="no"
-                        android:inputType=""
+                        android:inputType="number"
                         android:lines="1"
-                        android:padding="@dimen/_10sdp"
-                        android:singleLine="true"
-                        android:textAppearance="?android:textAppearanceSmall" />
+                        android:imeOptions="actionDone"
+                        android:layout_toStartOf="@+id/search_button"
+                        android:background="@android:color/transparent"
+                        style="@style/EditText_Normal"
+                        android:textAppearance="?android:attr/textAppearanceSmall"
+                        >
 
+                    </android.support.v7.widget.AppCompatEditText>
+
+
+                    <RelativeLayout
+                        android:layout_width="@dimen/_35sdp"
+                        android:layout_height="@dimen/_40sdp"
+                        android:layout_alignParentEnd="true"
+                        android:id="@+id/search_button"
+                        android:background="@color/theme_color"
+                        >
+
+                        <ImageView
+                            android:layout_width="@dimen/_20sdp"
+                            android:layout_height="@dimen/_20sdp"
+                            android:scaleType="centerInside"
+                            android:visibility="visible"
+                            android:id="@+id/search_icon"
+                            android:contentDescription="@string/content_image"
+                            android:layout_centerInParent="true"
+                            app:srcCompat="@mipmap/search"
+                            android:tint="@color/white"
+                            />
+
+
+
+
+                    </RelativeLayout>
 
                 </RelativeLayout>
+
+
+
 
 
             </android.support.v7.widget.CardView>
@@ -220,6 +258,7 @@
                     android:layout_height="wrap_content"
                     android:clipToPadding="false"
                     android:nestedScrollingEnabled="true"
+                    android:paddingBottom="@dimen/_100sdp"
                     android:paddingTop="@dimen/_3sdp" />
 
 

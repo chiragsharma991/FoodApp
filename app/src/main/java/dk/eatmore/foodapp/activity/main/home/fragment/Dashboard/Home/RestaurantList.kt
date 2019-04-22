@@ -466,7 +466,7 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
                 }
             })
 
-            val sectionItemDecoration = RecyclerSectionItemDecoration(resources.getDimensionPixelSize(R.dimen._45sdp),
+            val sectionItemDecoration = RecyclerSectionItemDecoration(90,
                     true,
                     getSectionCallback(list))
           //  removeItemDecoration(sectionItemDecoration)

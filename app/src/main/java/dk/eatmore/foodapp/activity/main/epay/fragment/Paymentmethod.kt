@@ -64,7 +64,7 @@ class Paymentmethod : CommanAPI() {
    private var canichangeSegment : Boolean = true
    var defaultpaymentmethodType : String =""
    var final_amount: Double = 0.0  // subtotal + additional (without eatmore balance)
-   private var subtotal = 0.0 // only calculated subtotal
+   var subtotal = 0.0 // only calculated subtotal
    var totaltopay = 0.0 // subtotal + additional (with eatmore balance)
    var eatmoreAppliedBalance = 0.0
    var restaurantAppliedBalance = 0.0
@@ -149,13 +149,13 @@ class Paymentmethod : CommanAPI() {
         }
 
         // prepare list for payment method.
-        EpayFragment.paymentattributes.giftcard_details[Constants.EATMORE]?.let {
-            loge(TAG, "eatmore balance-" + it)
-            paymentinfo_list.add(PaymentInfoModel(payment_type = Constants.EATMORE, error_expand = false, gift_expand = false, image_path = EpayFragment.paymentattributes.online_logo, view_expand = false, btn_txt = getString(R.string.confirm), gift_loader = false, edittextvalue = "", balance = it))
-        }
         EpayFragment.paymentattributes.giftcard_details[Constants.RESTAURANT]?.let {
             loge(TAG, "restaurant balance-" + it)
             paymentinfo_list.add(PaymentInfoModel(payment_type = Constants.RESTAURANT, error_expand = false, gift_expand = false, image_path = EpayFragment.paymentattributes.online_logo, view_expand = false, btn_txt = getString(R.string.confirm), gift_loader = false, edittextvalue = "", balance = it))
+        }
+        EpayFragment.paymentattributes.giftcard_details[Constants.EATMORE]?.let {
+            loge(TAG, "eatmore balance-" + it)
+            paymentinfo_list.add(PaymentInfoModel(payment_type = Constants.EATMORE, error_expand = false, gift_expand = false, image_path = EpayFragment.paymentattributes.online_logo, view_expand = false, btn_txt = getString(R.string.confirm), gift_loader = false, edittextvalue = "", balance = it))
         }
         if (EpayFragment.paymentattributes.online_logo != "") {
             paymentinfo_list.add(PaymentInfoModel(payment_type = getString(R.string.online_payment), error_expand = false, gift_expand = false, image_path = EpayFragment.paymentattributes.online_logo, view_expand = true, btn_txt = getString(R.string.pay), gift_loader = false, edittextvalue = ""))
@@ -185,6 +185,11 @@ class Paymentmethod : CommanAPI() {
             var gift_loader: Boolean,
             var balance: String = "",
             var ischeck: Boolean = false,
+
+            var errorOfPromotioncode : Boolean = false,   // promotion text color
+            var promotioncodeMsg : String = "", // promotion msg
+            var canishowpromotionMsg : Boolean = false, // if you expand collapse then you have to hide somewhere.
+
             var edittextvalue: String
     )
     data class AppliedGiftModel(
@@ -199,7 +204,7 @@ class Paymentmethod : CommanAPI() {
         final_amount = subtotal
         EpayFragment.paymentattributes.upto_min_shipping = calculateuptominPrice(subtotal)
 
-        loge(TAG,"generateBillDetails--"+final_amount)
+        loge(TAG,"generateBillDetails--"+discount_type+" - "+discount_amount)
 
         if (DetailsFragment.isPickup) {
             // pick up:
@@ -276,7 +281,7 @@ class Paymentmethod : CommanAPI() {
                     discountcoupan_layout.visibility = View.GONE
                 }
 
-            } else if (discount_type == Constants.COUPON) {
+            } else if (discount_type == Constants.EATMORE_COUPON  || discount_type == Constants.RESTAURANT_COUPON) {
                 loge(TAG,"COUPON_DISCOUNT-"+discount_amount)
                 if (discount_amount > 0.0) {
                     discountcoupan_layout.visibility = View.VISIBLE
@@ -803,7 +808,9 @@ class Paymentmethod : CommanAPI() {
                     cpn_discount_type=applycodemodel.discount_type!!.trim()
 
                     showproductInfo(list =applycodemodel.result ,discount_amount = cpn_discount_amount ?: 0.0 ,discount_type =cpn_discount_type,discount_id =cpn_discount_id ,changeintoDefault = false)
-                    binder.errorOfPromotioncode.setTextColor(ContextCompat.getColor(context!!, R.color.green))
+                 //   binder.errorOfPromotioncode.setTextColor(ContextCompat.getColor(context!!, R.color.green))
+                    model.errorOfPromotioncode = false
+                    model.canishowpromotionMsg = true
 
 
                 } else {
@@ -813,14 +820,15 @@ class Paymentmethod : CommanAPI() {
                     cpn_discount_type=""
 
                     showproductInfo(list =applycodemodel.result ,discount_amount = EpayFragment.paymentattributes.discount_amount ,discount_type =EpayFragment.paymentattributes.discount_type,discount_id = EpayFragment.paymentattributes.discount_id,changeintoDefault = false )
-                    binder.errorOfPromotioncode.setTextColor(ContextCompat.getColor(context!!, R.color.theme_color))
+                   // binder.errorOfPromotioncode.setTextColor(ContextCompat.getColor(context!!, R.color.theme_color))
+                    model.errorOfPromotioncode = true
+                    model.canishowpromotionMsg = true
                 }
 
 
                 model.gift_loader = false
                 model.error_expand = true
-                binder.errorOfPromotioncode.text = applycodemodel.msg
-                binder.errorOfPromotioncode.visibility = View.VISIBLE
+                model.promotioncodeMsg=applycodemodel.msg!!
                 binder.executePendingBindings()
                 mAdapter.notifyDataSetChanged()
             }
@@ -841,9 +849,8 @@ class Paymentmethod : CommanAPI() {
                 }
                 model.gift_loader = false
                 model.error_expand = true
-                binder.errorOfPromotioncode.visibility = View.VISIBLE
-                binder.errorOfPromotioncode.setTextColor(ContextCompat.getColor(context!!, R.color.theme_color))
-                binder.errorOfPromotioncode.text = getString(R.string.error_404)
+                model.errorOfPromotioncode = true
+                model.promotioncodeMsg=getString(R.string.error_404)
                 binder.executePendingBindings()
                 mAdapter.notifyDataSetChanged()
 
@@ -1067,8 +1074,9 @@ class Paymentmethod : CommanAPI() {
 
 
                 "02" -> {
+                    // click on apply promotion text
                     model.gift_expand = if (model.gift_expand) false else true
-                    model.error_expand = false
+                    model.error_expand = if (model.error_expand) false else if(model.canishowpromotionMsg) true else false
                     paymentmethod.mAdapter.notifyDataSetChanged()
                 }
                 "04" -> {
