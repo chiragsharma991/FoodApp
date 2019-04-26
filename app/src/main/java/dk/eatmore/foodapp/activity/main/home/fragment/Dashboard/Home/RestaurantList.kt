@@ -390,7 +390,7 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
                 error_view.visibility = View.VISIBLE
                 error_txt.text =getString(R.string.didnot_match_restaurant_error)
                 search_again_btn.visibility=View.GONE
-                is_from_filter=false
+              //  is_from_filter=false
             }else{
                 error_view.visibility = View.VISIBLE
                 error_txt.text =getString(R.string.unfortunately_error)
@@ -615,7 +615,7 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
 
         fun kokkenType(view: View) {
 
-            if(restaurantlist.progress_bar.visibility == View.GONE  && restaurantlist.list.size  > 0 ){
+            if(restaurantlist.progress_bar.visibility == View.GONE  && restaurantlist.list.size > 0  || restaurantlist.is_from_filter){
                 val intent = Intent(restaurantlist.context, KokkenType::class.java)
                 val bundle = Bundle()
                 if(restaurantlist.restaurantlistmodel !=null){
@@ -630,7 +630,7 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
 
         fun searchType(view: View) {
 
-            if(restaurantlist.progress_bar.visibility == View.GONE && restaurantlist.list.size > 0){
+            if(restaurantlist.progress_bar.visibility == View.GONE && restaurantlist.list.size > 0 ){
                 restaurantlist.app_bar.setExpanded(true)
                 restaurantlist.search_edt.requestFocus()
                 restaurantlist.showKeyboard()
@@ -642,7 +642,7 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
 
         fun tilpas(view: View) {
 
-            if(restaurantlist.progress_bar.visibility == View.GONE && restaurantlist.list.size  > 0){
+            if(restaurantlist.progress_bar.visibility == View.GONE && restaurantlist.list.size  > 0 || restaurantlist.is_from_filter ){
                 val intent = Intent(restaurantlist.context, Tilpas::class.java)
                 val bundle = Bundle()
                 restaurantlist.is_from_filter=true

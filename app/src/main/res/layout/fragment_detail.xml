@@ -43,7 +43,6 @@
     <android.support.design.widget.CoordinatorLayout
         android:id="@+id/detail_container"
         android:fitsSystemWindows="true"
-        android:clickable="true"
         android:focusable="true"
         android:background="@color/background_light"
         android:layout_width="match_parent"
@@ -87,7 +86,7 @@
                     <android.support.constraint.ConstraintLayout
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="@dimen/_55sdp"
+                        android:layout_marginBottom="@dimen/_16sdp"
                         >
 
                         <android.support.constraint.Guideline
@@ -227,7 +226,7 @@
                             android:id="@+id/favorite_btn"
                             android:layout_width="@dimen/_28sdp"
                             android:layout_height="@dimen/_26sdp"
-                            android:onClick="@{handler :: taponfavourite}"
+                            android:onClick="@{handler::tapOnfavourite}"
                             android:layout_centerHorizontal="true"
                             android:background="?attr/selectableItemBackgroundBorderless"
                             android:padding="@dimen/_6sdp"
@@ -379,7 +378,7 @@
 
                 -->
 
-                <android.support.v7.widget.Toolbar
+    <!--            <android.support.v7.widget.Toolbar
                     android:id="@+id/anim_toolbar"
                     android:layout_width="match_parent"
                     android:layout_height="?attr/actionBarSize"
@@ -391,26 +390,8 @@
                     app:popupTheme="@style/ThemeOverlay.AppCompat.Light">
 
 
-
-
-
                 </android.support.v7.widget.Toolbar>
-
-
-
-                <android.support.design.widget.TabLayout
-                    android:id="@+id/tabs"
-                    android:fitsSystemWindows="true"
-                    android:background="@color/white"
-                    android:layout_width="match_parent"
-                    android:layout_height="@dimen/_42sdp"
-                    android:layout_gravity="bottom"
-                    app:layout_collapseMode="pin"
-                    app:tabTextAppearance="@style/tab_text"
-                    app:tabIndicatorColor="@color/theme_color"
-                    app:tabSelectedTextColor="@color/theme_color"
-                    app:tabTextColor="@color/black_txt_regular"/>
-
+-->
 
 
 
@@ -423,6 +404,24 @@
 
 
             </android.support.design.widget.CollapsingToolbarLayout>
+
+
+
+            <android.support.design.widget.TabLayout
+                android:id="@+id/tabs"
+                android:fitsSystemWindows="true"
+                android:background="@color/white"
+                android:layout_width="match_parent"
+                android:layout_height="@dimen/_42sdp"
+                android:layout_gravity="bottom"
+                app:layout_collapseMode="pin"
+                app:tabTextAppearance="@style/tab_text"
+                app:tabIndicatorColor="@color/theme_color"
+                app:tabSelectedTextColor="@color/theme_color"
+                app:tabTextColor="@color/black_txt_regular"/>
+
+
+
 
         </android.support.design.widget.AppBarLayout>
 
@@ -521,7 +520,6 @@
 
 
 
-<!--
         <RelativeLayout
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -544,7 +542,6 @@
 
 
 
--->
 
 
 

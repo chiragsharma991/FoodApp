@@ -123,7 +123,6 @@ class DetailsFragment : CommanAPI() {
 
     override fun setUserVisibleHint(isVisibleToUser: Boolean) {
         loge(TAG, "setUserVisibleHint--" + isVisibleToUser)
-
         super.setUserVisibleHint(isVisibleToUser)
     }
 
@@ -667,7 +666,7 @@ class DetailsFragment : CommanAPI() {
             Log.e(TAG, "click ---")
             detailsfragment.tapOnRating()
         }
-        fun taponfavourite(view: View) {
+        fun tapOnfavourite(view: View) {
             Log.e(TAG, "taponfavourite ---")
             detailsfragment.favourite()
         }

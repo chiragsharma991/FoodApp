@@ -85,6 +85,7 @@ class Paymentmethod : CommanAPI() {
 
     companion object {
         val TAG = "Paymentmethod"
+        var anythingisInprogress : Boolean = false
         var whatisthePaymethod : WhatIsThePaymethod? = null
 
 
@@ -113,6 +114,7 @@ class Paymentmethod : CommanAPI() {
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
             setToolbarforThis()
+            anythingisInprogress=false
             binding.isProgress = true
 
             finalizer = object : Runnable {
@@ -684,7 +686,7 @@ class Paymentmethod : CommanAPI() {
                             } else {
                                 (parentFragment as EpayFragment).addFragment(R.id.epay_container, BamboraWebfunction.newInstance(), BamboraWebfunction.TAG, true)
                             }*/
-
+                            loge(TAG,"product list size - "+addedProductlist.size)
                             (parentFragment as EpayFragment).addFragment(R.id.epay_container, BamboraWebfunction.newInstance(addedProductlist,addedDiscount_amount,addedDiscount_type,addedDiscount_id,appliedgift_list), BamboraWebfunction.TAG, true)
 
                         }
@@ -829,6 +831,7 @@ class Paymentmethod : CommanAPI() {
                 model.gift_loader = false
                 model.error_expand = true
                 model.promotioncodeMsg=applycodemodel.msg!!
+                anythingisInprogress=false
                 binder.executePendingBindings()
                 mAdapter.notifyDataSetChanged()
             }
@@ -850,6 +853,7 @@ class Paymentmethod : CommanAPI() {
                 model.gift_loader = false
                 model.error_expand = true
                 model.errorOfPromotioncode = true
+                anythingisInprogress=false
                 model.promotioncodeMsg=getString(R.string.error_404)
                 binder.executePendingBindings()
                 mAdapter.notifyDataSetChanged()
@@ -935,67 +939,86 @@ class Paymentmethod : CommanAPI() {
      fun applyeatmorebalance(changeintoDefault : Boolean) {
 
         // as a gift cart from (eatmore/restaurant) type
-        totaltopay = final_amount
+        totaltopay = final_amount // Without eatmore balance (Subtotal + discount + Additional)
         var totalEatmore_balance = 0.0
         for (paymentInfoModel in paymentinfo_list) {
             if (paymentInfoModel.ischeck) {
                 totalEatmore_balance += paymentInfoModel.balance.toDouble()
             }
         }
-         setgiftdiscountprice(final_amount)  // set only discount text and gift button expand function
+         val isCoupanfullDiscount = setgiftdiscountprice(final_amount)  // set only discount text and gift button expand function
 
-         if (totalEatmore_balance > 0.0) {
+         if(isCoupanfullDiscount){
 
-            // applied gift eatmore balance
+             // discout is full so that totaltopay goes to 0 with (applied eatmore balance + before applied discount)
 
-            if (totalEatmore_balance >= totaltopay) {
-                // if eatmore balance is more then product selected
-                totaltopay= 0.0
+             if (totalEatmore_balance >= totaltopay)
+                 totaltopay= 0.0
+             else
+                 totaltopay = totaltopay - totalEatmore_balance
 
-                for (paymentInfoModel in paymentinfo_list) {
-                     paymentInfoModel.view_expand=false
-                     paymentInfoModel.error_expand=false
-                }
+             total_txt.text = String.format(getString(R.string.dkk_price), BindDataUtils.convertCurrencyToDanishWithoutLabel(String.format("%.2f", totaltopay)))
+             mAdapter.notifyDataSetChanged()
 
-                mAdapter.canichangeSegment=false
-                mAdapter.notifyDataSetChanged()
 
-            } else {
-                // eatmore balance is not enought then:
-                totaltopay = totaltopay - totalEatmore_balance
+         }else{
+             // coupan may be not present if present then value would be small compare eatmore balance.
 
-                if(changeintoDefault){
-                    for (paymentinfomodel in paymentinfo_list)
-                    {
-                        paymentinfomodel.error_expand=false
-                        if(paymentinfomodel.payment_type.trim() == defaultpaymentmethodType.trim()) paymentinfomodel.view_expand=true  // set default open dynamically
-                        else paymentinfomodel.view_expand=false
-                    }
-                    mAdapter.canichangeSegment=true
+             if (totalEatmore_balance > 0.0) {
 
-                }
-                mAdapter.notifyDataSetChanged()
-            }
+                 // applied gift eatmore balance
 
-        } else {
-            // Not applied gift eatmore balance
-            // When you uncheck from  balance
+                 if (totalEatmore_balance >= totaltopay) {
+                     // if eatmore balance is more then product selected
+                     totaltopay= 0.0
 
-            if(changeintoDefault){
+                     for (paymentInfoModel in paymentinfo_list) {
+                         paymentInfoModel.view_expand=false
+                         paymentInfoModel.error_expand=false
+                     }
 
-                for (paymentinfomodel in paymentinfo_list){
-                    paymentinfomodel.error_expand=false
-                    if(paymentinfomodel.payment_type.trim() == defaultpaymentmethodType.trim()) paymentinfomodel.view_expand=true  // set default open dynamically
-                    else paymentinfomodel.view_expand=false
-                }
-                mAdapter.canichangeSegment=true
-            }
+                     mAdapter.canichangeSegment=false
+                     mAdapter.notifyDataSetChanged()
 
-            mAdapter.notifyDataSetChanged()
+                 } else {
+                     // eatmore balance is not enought then:
+                     totaltopay = totaltopay - totalEatmore_balance
 
-        }
+                     if(changeintoDefault){
+                         for (paymentinfomodel in paymentinfo_list)
+                         {
+                             paymentinfomodel.error_expand=false
+                             if(paymentinfomodel.payment_type.trim() == defaultpaymentmethodType.trim()) paymentinfomodel.view_expand=true  // set default open dynamically
+                             else paymentinfomodel.view_expand=false
+                         }
+                         mAdapter.canichangeSegment=true
 
-        total_txt.text = String.format(getString(R.string.dkk_price), BindDataUtils.convertCurrencyToDanishWithoutLabel(String.format("%.2f", totaltopay)))
+                     }
+                     mAdapter.notifyDataSetChanged()
+                 }
+
+             } else {
+                 // Not applied gift eatmore balance
+                 // When you uncheck from  balance
+
+                 if(changeintoDefault){
+
+                     for (paymentinfomodel in paymentinfo_list){
+                         paymentinfomodel.error_expand=false
+                         if(paymentinfomodel.payment_type.trim() == defaultpaymentmethodType.trim()) paymentinfomodel.view_expand=true  // set default open dynamically
+                         else paymentinfomodel.view_expand=false
+                     }
+                     mAdapter.canichangeSegment=true
+                 }
+
+                 mAdapter.notifyDataSetChanged()
+
+             }
+
+             total_txt.text = String.format(getString(R.string.dkk_price), BindDataUtils.convertCurrencyToDanishWithoutLabel(String.format("%.2f", totaltopay)))
+
+         }
+
 
         // Add restaurant address and time--
         address_txt.text = EpayFragment.paymentattributes.payment_address
@@ -1006,7 +1029,11 @@ class Paymentmethod : CommanAPI() {
     }
 
 
-    private fun setgiftdiscountprice (final_amount : Double) {
+
+
+    private fun setgiftdiscountprice (final_amount : Double) : Boolean {
+
+        var isCoupanfullDiscount = false  // if coupan have a full amount == totalto pay
         var expandbtnName =""
         var remaining_balance = final_amount
         //discountgift_layout.removeAllViewsInLayout()
@@ -1015,7 +1042,33 @@ class Paymentmethod : CommanAPI() {
 
         if(appliedgift_list.size > 0){
             // one or morethen one gift balance are applied
-            loop@ for (appliedgiftmodel in appliedgift_list){
+            loop@ for (i in 0.until(appliedgift_list.size)){
+
+                val appliedgiftmodel = appliedgift_list[i]
+
+                if(remaining_balance == 0.0){
+                    // if total balance goes to 0 and gift already applied : no one gift should apply
+
+                    val iterator = appliedgift_list.iterator()
+                    while (iterator.hasNext()) {
+                        iterator.next()
+                        iterator.remove()
+                    }
+
+                    for(j in 0.until(paymentinfo_list.size)){
+                        // first uncheck all and then check
+                        paymentinfo_list[j].ischeck = false
+                    }
+
+                    // Not call any expand function because payment done by : Discount + (online/cash)
+
+                    isCoupanfullDiscount = true
+
+                    break@loop
+
+
+                }
+
 
                 if(appliedgiftmodel.actual_gift_value.trim().toDouble() >= remaining_balance){
                     // balance is enough no other required
@@ -1027,7 +1080,59 @@ class Paymentmethod : CommanAPI() {
                     view.discountgift_value.text = String.format(getString(R.string.discount), appliedgiftmodel.applied_gift_value)
                     discountgift_layout.addView(view)
 
-                    expandbtnName=appliedgiftmodel.gift_type
+                    if(i == appliedgift_list.size -1){
+
+                        // you click on gift and total has been 0 then: (case : if you apply gift card then position i and list size would be "==")
+
+                        if(cpn_discount_amount > 0){
+                            // Not call any expand function because payment done by : Discount + (online/cash)
+                            isCoupanfullDiscount = true
+
+                        }else{
+                            // payment done by eatmore balance : call expand function
+                            expandbtnName=appliedgiftmodel.gift_type
+                            isCoupanfullDiscount = false
+                        }
+
+                    }else{
+
+                      /* - you did not click any gift (gift already selected) , you apply coupan > total to pay then:
+                         - remove other check box and do not collapse rather amount will go to 0
+
+                       */
+
+                        for (j in (i+1).until(appliedgift_list.size)){
+                            // remove other checkbox except ...
+                            val iterator = appliedgift_list.iterator()
+                            while (iterator.hasNext()) {
+                                val appliedgiftmodel = iterator.next()
+                                if(appliedgiftmodel.gift_type == appliedgift_list[j].gift_type){
+                                    iterator.remove()
+                                }
+                            }
+                        }
+
+
+                        for(j in 0.until(paymentinfo_list.size)){
+                            // first uncheck all and then check
+                            paymentinfo_list[j].ischeck = false
+                        }
+
+
+                        for(j in 0.until(appliedgift_list.size)){
+                            // checked marked
+                            for(k in 0.until(paymentinfo_list.size)){
+                                if(paymentinfo_list[k].payment_type == appliedgift_list[j].gift_type){
+                                    paymentinfo_list[k].ischeck = true
+                                }
+                            }
+                        }
+
+                        // Not call any expand function because payment done by : Discount + (online/cash)
+
+                        isCoupanfullDiscount = true
+
+                    }
 
                     break@loop
 
@@ -1043,16 +1148,28 @@ class Paymentmethod : CommanAPI() {
                     discountgift_layout.addView(view)
 
                     expandbtnName=""
+
+                    // normal flow goes if  apply eatmore balance : which is not enough
+                    isCoupanfullDiscount = false
+
+
                 }
 
             }
         }
+        else{
+            // normal flow goes if no apply eatmore balance
+            isCoupanfullDiscount = false
+
+        }
+
+
+
+
 
 
 
         // expand gift balance button
-
-
         for (paymentInfoModel in paymentinfo_list) {
             if (paymentInfoModel.payment_type.trim() == expandbtnName.trim()) {
                 paymentInfoModel.walletBtn_expand=true
@@ -1060,6 +1177,9 @@ class Paymentmethod : CommanAPI() {
                 paymentInfoModel.walletBtn_expand=false
             }
         }
+
+
+        return isCoupanfullDiscount
 
     }
 
@@ -1074,12 +1194,18 @@ class Paymentmethod : CommanAPI() {
 
 
                 "02" -> {
+
+                    if(Paymentmethod.anythingisInprogress)return  // if any progress is running
+
                     // click on apply promotion text
                     model.gift_expand = if (model.gift_expand) false else true
                     model.error_expand = if (model.error_expand) false else if(model.canishowpromotionMsg) true else false
                     paymentmethod.mAdapter.notifyDataSetChanged()
                 }
                 "04" -> {
+
+                    if(Paymentmethod.anythingisInprogress)return  // if any progress is running
+
                     // proceed next online/cash.
                     if (model.payment_type == paymentmethod.getString(R.string.online_payment)) {
                         // online

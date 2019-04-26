@@ -55,7 +55,7 @@ class BamboraWebfunction : BaseFragment(), PaymentResultListener {
 
         fun newInstance(addedProductlist: ArrayList<ResultItem>, addedDiscount_amount : Double, addedDiscount_type : String,addedDiscount_id : String, appliedgift_list: ArrayList<Paymentmethod.AppliedGiftModel>): BamboraWebfunction {
 
-            val fragment = TransactionStatus()
+            val fragment = BamboraWebfunction()
             val bundle =Bundle()
             bundle.putSerializable("addedProductlist",addedProductlist)
             bundle.putSerializable("addedDiscount_amount", addedDiscount_amount)
@@ -63,7 +63,7 @@ class BamboraWebfunction : BaseFragment(), PaymentResultListener {
             bundle.putSerializable("addedDiscount_id", addedDiscount_id)
             bundle.putSerializable("appliedgift_list", appliedgift_list)
             fragment.arguments=bundle
-            return BamboraWebfunction()
+            return fragment
         }
 
     }

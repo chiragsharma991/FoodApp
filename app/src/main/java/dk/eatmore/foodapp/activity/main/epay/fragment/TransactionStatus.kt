@@ -698,8 +698,10 @@ class TransactionStatus : CommanAPI() {
      fun generateBillDetails(subtotal : Double,discount_amount: Double, discount_type: String) {
 
         var final_amount = subtotal
+         loge(TAG,"discount type - "+discount_type)
 
-        loge(TAG,"generateBillDetails--"+final_amount)
+
+         loge(TAG,"generateBillDetails--"+final_amount)
 
         if (DetailsFragment.isPickup) {
             // pick up:
@@ -722,7 +724,7 @@ class TransactionStatus : CommanAPI() {
                     discountcoupan_layout.visibility = View.GONE
                 }
 
-            } else if (discount_type == Constants.COUPON) {
+            } else if (discount_type == Constants.EATMORE_COUPON  || discount_type == Constants.RESTAURANT_COUPON) {
                 if (discount_amount > 0.0) {
                     discountcoupan_layout.visibility = View.VISIBLE
                     discountcoupan_txt.text = String.format(getString(R.string.discount), discount_amount)
@@ -797,7 +799,7 @@ class TransactionStatus : CommanAPI() {
                     discountcoupan_layout.visibility = View.GONE
                 }
 
-            } else if (discount_type == Constants.COUPON) {
+            } else if (discount_type == Constants.EATMORE_COUPON  || discount_type == Constants.RESTAURANT_COUPON) {
                 loge(TAG,"COUPON_DISCOUNT-"+discount_amount)
                 if (discount_amount > 0.0) {
                     discountcoupan_layout.visibility = View.VISIBLE

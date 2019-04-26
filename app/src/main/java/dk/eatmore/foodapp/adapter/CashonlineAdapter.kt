@@ -65,6 +65,9 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
 
 
             holder.binding.paymentSelection.setOnClickListener{
+
+                if(Paymentmethod.anythingisInprogress)return@setOnClickListener  // if any progress is running
+
                 // click on title and change segment
 
                 if(canichangeSegment){
@@ -103,12 +106,20 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
 
             holder.binding.applypromotionBtn.setOnClickListener{
 
+                if(Paymentmethod.anythingisInprogress)return@setOnClickListener  // if any progress is running
+
+                if(list[position].edittextvalue.trim().length <= 0) return@setOnClickListener // if edit text have no value
+
                 for (i in 0.until(list.size)){
                     list[i].gift_loader=false
                 }
                 list[position].gift_loader=true
+                Paymentmethod.anythingisInprogress = true
                 notifyDataSetChanged() // for loader only
                 paymentmethod.applygiftcoupan(holder.binding,list[position])
+
+
+
 
             }
 
@@ -134,6 +145,8 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
                     // block other checkbox to perform check
 
                 }else{
+
+                    if(Paymentmethod.anythingisInprogress)return@setOnClickListener  // if any progress is running
 
                     // allow check box to check
 
@@ -170,6 +183,10 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
 
                         setpaymentMethod()
                     }
+
+
+
+
                 }
                  paymentmethod.showproductInfo(EpayFragment.ui_model!!.viewcard_list.value?.result, EpayFragment.paymentattributes.discount_amount, EpayFragment.paymentattributes.discount_type,EpayFragment.paymentattributes.discount_id,true)
 
@@ -239,8 +256,11 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
         *
         * Condition : =>
         *
+        *-  additional charge may be : gift/online/cash depends on: (if whole payment is from gift then apply gift additional anotherwise : online/cash)
+        *
         * if(eatmore balance > total to pay) Gift Additional charge else online/offline additional charge.
         *
+        * This methods you have to test only when you apply any gift
         * */
 
 

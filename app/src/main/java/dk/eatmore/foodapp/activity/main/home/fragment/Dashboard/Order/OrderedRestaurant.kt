@@ -150,16 +150,19 @@ class OrderedRestaurant : CommanAPI() {
             shipping_layout.visibility = View.GONE
             additional_charge_layout.visibility = if (list.additional_charge == null || list.additional_charge!!.toDouble() <= 0) View.GONE else View.VISIBLE    // online/cash tax
             total_layout.visibility = View.VISIBLE
-            eatmoregift_layout.visibility= if(list.eatmore_giftcard.trim() != "" && list.eatmore_giftcard.trim().toDouble() > 0) View.VISIBLE else View.GONE
-            restaurantgift_layout.visibility= if(list.restaurant_giftcard.trim() != "" && list.restaurant_giftcard.trim().toDouble() > 0) View.VISIBLE else View.GONE
-            discount_layout.visibility= if(list.discount_amount > 0) View.VISIBLE else View.GONE
+            eatmoregift_layout.visibility= if(list.eatmore_giftcard == null || list.eatmore_giftcard!!.trim().toDouble() <= 0) View.GONE else View.VISIBLE
+            restaurantgift_layout.visibility= if(list.restaurant_giftcard == null || list.restaurant_giftcard!!.trim().toDouble() <= 0) View.GONE else View.VISIBLE
+            discount_layout.visibility= if(list.discount_amount == null || list.discount_amount!! <= 0.0) View.GONE else View.VISIBLE
+
+
+
 
             subtotal_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(list.order_total)
             restuptominimum_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(list.upto_min_shipping?:"")
             additional_charge_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(list.additional_charge?:"")
             discount_txt.text = String.format(getString(R.string.discount), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.discount_amount.toString()))
-            eatmoregift_txt.text = String.format(getString(R.string.discount), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.eatmore_giftcard))
-            restaurantgift_txt.text = String.format(getString(R.string.discount), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.restaurant_giftcard))
+            eatmoregift_txt.text = String.format(getString(R.string.discount), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.eatmore_giftcard!!))
+            restaurantgift_txt.text = String.format(getString(R.string.discount), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.restaurant_giftcard!!))
 
             total_txt.text = String.format(getString(R.string.dkk_price), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.total_to_pay))
 
@@ -175,9 +178,9 @@ class OrderedRestaurant : CommanAPI() {
             shipping_layout.visibility = if (list.shipping_costs == null || list.shipping_costs!! <= 0.0) View.GONE else View.VISIBLE
             additional_charge_layout.visibility = if (list.additional_charge == null || list.additional_charge!!.toDouble() <= 0) View.GONE else View.VISIBLE
             total_layout.visibility = View.VISIBLE
-            eatmoregift_layout.visibility= if(list.eatmore_giftcard.trim() != "" && list.eatmore_giftcard.trim().toDouble() > 0) View.VISIBLE else View.GONE
-            restaurantgift_layout.visibility= if(list.restaurant_giftcard.trim() != "" && list.restaurant_giftcard.trim().toDouble() > 0) View.VISIBLE else View.GONE
-            discount_layout.visibility= if(list.discount_amount > 0) View.VISIBLE else View.GONE
+            eatmoregift_layout.visibility= if(list.eatmore_giftcard == null || list.eatmore_giftcard!!.trim().toDouble() <= 0) View.GONE else View.VISIBLE
+            restaurantgift_layout.visibility= if(list.restaurant_giftcard == null || list.restaurant_giftcard!!.trim().toDouble() <= 0) View.GONE else View.VISIBLE
+            discount_layout.visibility= if(list.discount_amount == null || list.discount_amount!! <= 0.0) View.GONE else View.VISIBLE
 
 
             subtotal_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(list.order_total)
@@ -185,8 +188,8 @@ class OrderedRestaurant : CommanAPI() {
             shipping_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(list.shipping_costs?.toString() ?: "")
             additional_charge_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(list.additional_charge ?: "")
             discount_txt.text = String.format(getString(R.string.discount), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.discount_amount.toString()))
-            eatmoregift_txt.text = String.format(getString(R.string.discount), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.eatmore_giftcard))
-            restaurantgift_txt.text = String.format(getString(R.string.discount), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.restaurant_giftcard))
+            eatmoregift_txt.text = String.format(getString(R.string.discount), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.eatmore_giftcard!!))
+            restaurantgift_txt.text = String.format(getString(R.string.discount), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.restaurant_giftcard!!))
 
             total_txt.text = String.format(getString(R.string.dkk_price), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.total_to_pay))
 
@@ -822,11 +825,11 @@ data class Data(
         val quality_of_food_rating: Float = 0.0f,
         val customer_service_rating: Float = 0.0f,
         val delivery_time_rating: Float = 0.0f,
-        var discount_amount: Double = 0.0,
+        var discount_amount: Double? = 0.0,
         var discount_type: String? = null,
         var discount_id: String? = null,
-        var eatmore_giftcard: String = "",
-        var restaurant_giftcard: String = "",
+        var eatmore_giftcard: String? = null,
+        var restaurant_giftcard: String? = null,
         var shipping_costs: Double? = null,
         var accept_reject_time: String? = null,
         var expected_time: String = "",
