@@ -139,7 +139,7 @@
     <string name="customer_service">Customer service</string>
     <string name="rate_the_app">Rate the App!</string>
     <string name="streethousefloor">%1$s %2$s %3$s,</string>
-    <string name="giftcard">Giftcard</string>
+    <string name="giftcard">Gavekort</string>
     <string name="postalcity">%1$s %2$s</string>
     <string name="title">Title</string>
     <string name="save">Gem</string>
@@ -293,5 +293,8 @@
     <string name="you_are_about_to_order_your_food_for_delivery_one_or_more">Du er ved at bestille din mad til udbringning, Et eller flere produkter er ikke tilgængelige!</string>
     <string name="eatmore_giftcard">Eatmore Giftcard</string>
     <string name="restaurant_giftcard">Restaurant Giftcard</string>
+    <string name="giftcart">Gavekort</string>
+    <string name="saldo_kr">Saldo: kr. %1$s</string>
+    <string name="vaerdi_kr">Værdi: kr. %1$s</string>
 
 </resources>

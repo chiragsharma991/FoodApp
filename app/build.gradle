@@ -80,7 +80,8 @@ dependencies {
     // shimmer
     implementation 'com.facebook.shimmer:shimmer:0.1.0@aar'
     // Anko
-    implementation 'org.jetbrains.anko:anko-common:0.9'
+    implementation "org.jetbrains.anko:anko:$anko_version"
+
     //Flow layout
     implementation 'com.zhy:flowlayout-lib:1.0.3'
     // Bambora payment gateway

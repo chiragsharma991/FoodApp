@@ -28,7 +28,6 @@
 
             >
 
-
             <android.support.design.widget.AppBarLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -42,72 +41,14 @@
             </android.support.design.widget.AppBarLayout>
 
 
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/epay_total_lbl"
-                    style="@style/TextViewMid"
-                    android:layout_marginTop="8dp"
-                    android:singleLine="true"
-                    android:text="Gift card balance"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="parent" />
-
-                <android.support.v7.widget.AppCompatTextView
-                    android:id="@+id/epay_total_txt"
-                    style="@style/TextViewLarge"
-                    android:layout_marginTop="8dp"
-                    android:singleLine="true"
-                    android:text="0,00 Kr,"
-                    android:textColor="@color/theme_color_secondary_dark"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/epay_total_lbl" />
-
-
-                <android.support.v7.widget.AppCompatTextView
-                    style="@style/TextViewSmall"
-                    android:layout_marginTop="8dp"
-                    android:text="this is simple text theiyrt yuioter foet manertyiu aurbey and the chrther man close"
-                    android:textColor="@color/black_light"
-                    android:gravity="center_horizontal"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/epay_total_lbl" />
-
-
-            <android.support.v7.widget.AppCompatEditText
-                android:id="@+id/acc_email_edt"
-                style="@style/EditText"
-                android:layout_marginTop="8dp"
-                android:textAppearance="?android:attr/textAppearanceSmall"
-                android:background="@color/white"
-                android:hint=""
-                android:inputType="textEmailAddress"
-                android:singleLine="true"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent">
-
-            </android.support.v7.widget.AppCompatEditText>
-
-
-                <android.support.v7.widget.AppCompatButton
-                    android:id="@+id/epay_continue_btn"
-                    style="@style/Button"
-                    android:layout_alignParentBottom="true"
-                    android:layout_marginEnd="32dp"
-                    android:layout_marginStart="32dp"
-                    android:layout_marginTop="16dp"
-                    android:backgroundTint="@color/theme_color"
-                    android:text="@string/continue_"
-                    android:textColor="@color/white"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintHorizontal_bias="0.0"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toBottomOf="@+id/epay_total_txt" />
-
-
-
+            <android.support.v7.widget.RecyclerView
+                android:id="@+id/recycler_view_parent"
+                android:paddingTop="@dimen/_3sdp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                app:layout_behavior="@string/appbar_scrolling_view_behavior"
+                android:clipToPadding="false"
+                />
 
 
         </LinearLayout>

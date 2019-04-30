@@ -5,12 +5,15 @@ import android.arch.lifecycle.MutableLiveData
 import android.arch.lifecycle.Observer
 import android.arch.lifecycle.ViewModel
 import android.arch.lifecycle.ViewModelProviders
+import android.content.DialogInterface.BUTTON_POSITIVE
 import android.content.Intent
 import android.databinding.DataBindingUtil
+import android.graphics.Color
 import android.os.Bundle
 import android.os.Handler
 import android.provider.Settings
 import android.support.v4.content.ContextCompat
+import android.support.v7.app.AlertDialog
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -19,6 +22,7 @@ import android.widget.Toast
 import com.google.android.gms.tasks.OnSuccessListener
 import com.google.firebase.iid.FirebaseInstanceId
 import com.google.firebase.iid.InstanceIdResult
+import com.google.gson.GsonBuilder
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.BuildConfig
 import dk.eatmore.foodapp.R
@@ -31,14 +35,19 @@ import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.*
+import kotlinx.android.synthetic.main.design_layout_snackbar_include.view.*
 import kotlinx.android.synthetic.main.fragment_profile.*
 import kotlinx.android.synthetic.main.fragment_signup.*
 import kotlinx.android.synthetic.main.toolbar.*
 import org.greenrobot.eventbus.Subscribe
+import org.jetbrains.anko.*
+import org.jetbrains.anko.appcompat.v7.Appcompat
+import org.jetbrains.anko.support.v4.alert
 import zendesk.core.AnonymousIdentity
 import zendesk.core.Zendesk
 import zendesk.support.Support
 import zendesk.support.request.RequestActivity
+import java.io.Serializable
 
 class Profile : BaseFragment() {
 
@@ -162,6 +171,88 @@ class Profile : BaseFragment() {
             }
 
             override fun onNegativeButtonClick() {
+            }
+        })
+    }
+
+
+
+    private fun giftDetails(){
+
+
+        showProgressDialog()
+        val postParam = getDefaultApiParms()
+        postParam.addProperty(Constants.CUSTOMER_ID,PreferenceUtil.getString(PreferenceUtil.CUSTOMER_ID, ""))
+        postParam.addProperty(Constants.IS_LOGIN,"1")
+
+        callAPI(ApiCall.giftCard(postParam), object : BaseFragment.OnApiCallInteraction {
+            override fun <T> onSuccess(body: T?) {
+                val response = body as JsonObject
+                val giftcardModel = GsonBuilder().create().fromJson(response.toString(), GiftcardModel::class.java)
+                showProgressDialog()
+                  if(giftcardModel.status){
+
+                      val list = ArrayList<GiftType>()
+
+                      // not null and size > 0 then add in the list.
+
+                      giftcardModel.eatmore_giftcards?.let { if(it.size > 0) {
+
+                          var totalbalance = 0.0
+                          for(giftcardsInfo in it){
+                              totalbalance += giftcardsInfo.balance.trim().toDouble()
+                          }
+
+                          list.add(GiftType(
+                                  giftType =Constants.EATMORE,
+                                  giftTotal = totalbalance.toString(),
+                                  eatmore_giftcards = it,
+                                  restaurant_giftcards = null))
+                      } }
+
+                      giftcardModel.restaurant_giftcards?.let { if(it.size > 0) {
+
+                          var totalbalance = 0.0
+                          for(giftcardsInfo in it){
+                              totalbalance += giftcardsInfo.balance.trim().toDouble()
+                          }
+
+                          list.add(GiftType(
+                                  giftType =Constants.RESTAURANT,
+                                  giftTotal = totalbalance.toString(),
+                                  eatmore_giftcards = null,
+                                  restaurant_giftcards = it))
+                      } }
+
+
+                      coupan_fragment = Coupan.newInstance(list)
+                      addFragment(R.id.profile_container, coupan_fragment!!, Coupan.TAG, false)
+
+
+
+                  }else{
+
+                      DialogUtils.openDialog(context = context!!, btnNegative = "", btnPositive = getString(R.string.ok), color = ContextCompat.getColor(context!!, R.color.black), msg = giftcardModel.msg, title = "", onDialogClickListener = object : DialogUtils.OnDialogClickListener {
+                          override fun onPositiveButtonClick(position: Int) {
+                          }
+
+                          override fun onNegativeButtonClick() {}
+                      })
+                  }
+
+            }
+
+            override fun onFail(error: Int) {
+                showProgressDialog()
+                when (error) {
+                    404 -> {
+                        showSnackBar(profile_container, getString(R.string.error_404))
+                    }
+                    100 -> {
+
+                        showSnackBar(profile_container, getString(R.string.internet_not_available))
+                    }
+                }
             }
         })
     }
@@ -327,9 +418,8 @@ class Profile : BaseFragment() {
             profile.addFragment(R.id.profile_container, profile.profileEdit_fragment!!, ProfileEdit.TAG, false)
         }
 
-        fun giftcart(view: View) {
-            profile.coupan_fragment = Coupan.newInstance()
-            profile.addFragment(R.id.profile_container, profile.coupan_fragment!!, Coupan.TAG, false)
+        fun giftCart(view: View) {
+            profile.giftDetails()
         }
 
         fun termsofservices(view: View) {
@@ -368,6 +458,7 @@ class Profile : BaseFragment() {
             profile.addFragment(R.id.profile_container, profile.kundlechatsupport!!, KundleChatSupport.TAG, false)
         }
 
+
         fun kuntakt_os(view: View) {
             // msg support
             profile.kundlesupport = KundleSupport.newInstance()
@@ -405,6 +496,39 @@ class Profile : BaseFragment() {
     }
 
     data class UI_Profile(var userName: String, var phone: String, var email: String)
+
+
+    data class GiftType(
+
+            val giftType: String = "",
+            val giftTotal: String = "0.0",
+            val eatmore_giftcards: ArrayList<GiftcardsInfo>? = arrayListOf(),
+            val restaurant_giftcards: ArrayList<GiftcardsInfo>? = arrayListOf()
+
+    ) : Serializable
+
+    data class GiftcardModel(
+            val status: Boolean,
+            val msg: String,
+            val eatmore_giftcards: ArrayList<GiftcardsInfo>? = arrayListOf(),
+            val restaurant_giftcards: ArrayList<GiftcardsInfo>? = arrayListOf()
+
+    ) :Serializable
+
+
+    data class GiftcardsInfo (
+           val restaurant_name : String = "",
+           val r_key : String="",
+           val r_token : String="",
+           val is_new : String="0", // hide in all condition and show only one condition.
+           val balance : String="",
+           val app_icon : String="",
+           val name : String="",
+           val address : String="",
+           val value : String?="",
+           val valid_till : String?="",
+           val valid_from : String?=""
+    ) : Serializable
 
 
 }

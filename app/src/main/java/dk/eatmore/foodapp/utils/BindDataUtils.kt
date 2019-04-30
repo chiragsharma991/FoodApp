@@ -239,7 +239,7 @@ object BindDataUtils {
         if(model.discountType == 0 || model.discountType == 2){
             // no discount || order discount
             val builder = SpannableStringBuilder()
-            val span1 = SpannableString("fra: ")
+            val span1 = SpannableString("")
             val span2 = SpannableString(BindDataUtils.convertCurrencyToDanish(model.actual_price!!))
             if (model.is_attributes == "1" || model.extra_topping_group != null ) builder.append(span1)
             builder.append(span2)
@@ -252,7 +252,7 @@ object BindDataUtils {
             val priceBeforeDiscount = BindDataUtils.convertCurrencyToDanishWithoutLabel(model.actual_price!!)!!
             val builder = SpannableStringBuilder()
             val strikethroughSpan = StrikethroughSpan();
-            val span1 = SpannableString("fra: ")
+            val span1 = SpannableString("")
             val span2 = SpannableString(priceBeforeDiscount)
             val span3 = SpannableString(" " + priceAfterDiscount)
             span2.setSpan(strikethroughSpan, 0, priceBeforeDiscount.trim().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)

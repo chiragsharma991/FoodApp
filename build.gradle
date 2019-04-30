@@ -6,6 +6,7 @@ buildscript {
     ext.firebse_version = '15.0.0'
     ext.support_version = '27.1.1'
     ext.googleServiceVersion = "15.0.1"
+    ext.anko_version='0.10.8'
 
 
 

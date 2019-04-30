@@ -13,22 +13,21 @@
         -->
         <import type="android.view.View" />
 
+        <variable
+            name="util"
+            type="dk.eatmore.foodapp.utils.BindDataUtils"
+            />
+
 
         <variable
-            name="ordertype"
-            type="String">
-
+            name="giftcardsInfo"
+            type="dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.Profile.GiftcardsInfo"
+            >
         </variable>
 
         <variable
-            name="kstatus"
-            type="Boolean">
-
-        </variable>
-
-        <variable
-            name="restaurant"
-            type="dk.eatmore.foodapp.model.home.Restaurant">
+            name="handler"
+            type="dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.Coupan.MyClickHandler">
 
         </variable>
 
@@ -41,11 +40,9 @@
         android:layout_width="match_parent"
         android:layout_marginStart="@dimen/_5sdp"
         android:layout_marginEnd="@dimen/_5sdp"
-        android:layout_below="@+id/free_txt"
         android:background="?attr/selectableItemBackgroundBorderless"
-        android:transitionName="@string/transition_string"
-        app:cardBackgroundColor="@{(ordertype.equalsIgnoreCase(@string/preorder)) ? @color/white_light : @color/white }"
         app:cardUseCompatPadding="true"
+        app:cardElevation="1dp"
 
         >
 
@@ -80,7 +77,7 @@
                         android:layout_width="match_parent"
                         android:layout_height="match_parent"
                         android:orientation="vertical"
-                        app:layout_constraintGuide_percent="0.62" />
+                        app:layout_constraintGuide_percent="0.70" />
 
 
                     <LinearLayout
@@ -125,7 +122,7 @@
                                 android:rotation="-40"
                                 android:translationX="-12dp"
                                 android:translationY="3dp"
-                                android:visibility="@{restaurant.is_new.equalsIgnoreCase(`1`) ? View.VISIBLE : View.GONE}"
+                                android:visibility="@{giftcardsInfo.is_new.equalsIgnoreCase(`1`) ? View.VISIBLE : View.GONE}"
                                 >
 
                                 <dk.eatmore.foodapp.utils.ZigzagView
@@ -181,22 +178,14 @@
 
                         <android.support.v7.widget.AppCompatTextView
                             style="@style/Subtitle_TextViewSmall"
+                            android:id="@+id/restaurant_name"
                             android:textSize="@dimen/_13sdp"
-                            android:text="@{restaurant.restaurant_name}"
                             android:textColor="@color/black"
                             android:textStyle="bold"
+
                             />
 
 
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/cuisines_txt"
-                            style="@style/Subtitle_TextViewSmall"
-                            android:layout_gravity="center_vertical"
-                            android:layout_marginLeft="@dimen/_3sdp"
-                            android:textSize="@dimen/_11sdp"
-                            android:maxLines="3"
-                            android:text="@{restaurant.cuisines}"
-                            />
 
                         <FrameLayout
                             android:layout_width="match_parent"
@@ -245,25 +234,55 @@
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="@dimen/_3sdp"
                                 android:textSize="@dimen/_11sdp"
-                                android:text="@{restaurant.address}"
+                                android:text="@{giftcardsInfo.address}"
+
                                 />
 
 
                         </LinearLayout>
-<!--
+
+
 
                         <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/not_available_txt"
+                            android:id="@+id/value_txt"
                             style="@style/Subtitle_TextViewSmall"
                             android:layout_gravity="center_vertical"
-                            android:layout_marginStart="@dimen/_23sdp"
-                            android:ellipsize="end"
-                            android:maxLines="1"
+                            android:layout_marginLeft="@dimen/_3sdp"
                             android:textSize="@dimen/_11sdp"
-                            android:text="@string/ikke_tilg_ngelig"
+                            android:maxLines="3"
                             android:textColor="@color/theme_color"
-                            android:visibility="@{(ordertype.equalsIgnoreCase(@string/notavailable)) ? View.VISIBLE : View.GONE }" />
+                            android:text="@{@string/vaerdi_kr(util.convertCurrencyToDanishWithoutLabel(giftcardsInfo.value))}"
+
+                            />
+                        <android.support.v7.widget.AppCompatTextView
+                            style="@style/Subtitle_TextViewSmall"
+                            android:id="@+id/validtill"
+                            android:layout_gravity="center_vertical"
+                            android:layout_marginLeft="@dimen/_3sdp"
+                            android:textSize="@dimen/_11sdp"
+                            android:visibility="@{giftcardsInfo.valid_till == null ? View.GONE : View.VISIBLE}"
+                            android:text="@{giftcardsInfo.valid_till == null ? `` : `Udløbsdato : `+handler.parseTimeTommddyy(giftcardsInfo.valid_till)}"
+                            />
+
+<!--
+                        android:text="@{@string/vaerdi_kr(util.convertCurrencyToDanishWithoutLabel(String.valueOf(giftcardsInfo.value)))}"
 -->
+
+
+                        <!--
+
+                                                <android.support.v7.widget.AppCompatTextView
+                                                    android:id="@+id/not_available_txt"
+                                                    style="@style/Subtitle_TextViewSmall"
+                                                    android:layout_gravity="center_vertical"
+                                                    android:layout_marginStart="@dimen/_23sdp"
+                                                    android:ellipsize="end"
+                                                    android:maxLines="1"
+                                                    android:textSize="@dimen/_11sdp"
+                                                    android:text="@string/ikke_tilg_ngelig"
+                                                    android:textColor="@color/theme_color"
+                                                    android:visibility="@{(ordertype.equalsIgnoreCase(@string/notavailable)) ? View.VISIBLE : View.GONE }" />
+                        -->
 
 
                     </LinearLayout>
@@ -293,119 +312,35 @@
                                 android:clickable="true"
                                 android:orientation="vertical">
 
-
-                                <RelativeLayout
-                                    android:layout_width="match_parent"
-                                    android:layout_height="wrap_content"
-                                    android:gravity="end"
-                                    >
-
-                                    <!-- <android.support.v7.widget.AppCompatImageView
-                                         android:id="@+id/favorite_btn"
-                                         android:layout_width="@dimen/_15sdp"
-                                         android:layout_height="@dimen/_15sdp"
-                                         android:layout_centerVertical="true"
-                                         android:background="?attr/selectableItemBackgroundBorderless"
-                                         android:scaleType="fitXY"
-                                         android:src="@mipmap/heart_full"
-                                         android:tint="@color/gray"
-                                         android:visibility="@{kstatus ? View.VISIBLE : View.GONE}" />
-
-                                     <ProgressBar
-                                         android:id="@+id/fav_progress"
-                                         style="@style/Widget.AppCompat.ProgressBar.Horizontal"
-                                         android:layout_width="@dimen/_8sdp"
-                                         android:layout_height="2dp"
-                                         android:layout_alignEnd="@+id/favorite_btn"
-                                         android:layout_alignBottom="@+id/favorite_btn"
-                                         android:layout_marginEnd="4dp"
-                                         android:indeterminate="true"
-                                         android:progress="20"
-                                         android:rotation="180"
-                                         android:scaleY="4"
-                                         android:visibility="gone" />
-
-                                     <View
-                                         android:id="@+id/vertical_divider"
-                                         android:layout_width="@dimen/_1sdp"
-                                         android:layout_height="@dimen/_15sdp"
-                                         android:layout_centerVertical="true"
-                                         android:layout_marginStart="@dimen/_5sdp"
-                                         android:layout_marginEnd="@dimen/_5sdp"
-                                         android:layout_toStartOf="@+id/favorite_btn"
-                                         android:alpha="0.2"
-                                         android:background="@color/divider_color"
-                                         android:visibility="@{kstatus ? View.VISIBLE : View.GONE}" />-->
-
-                                    <android.support.v7.widget.AppCompatImageView
-                                        android:id="@+id/favorite_btn"
-                                        android:layout_width="@dimen/_15sdp"
-                                        android:layout_height="@dimen/_15sdp"
-                                        android:padding="@dimen/_1sdp"
-                                        android:layout_centerVertical="true"
-                                        android:layout_toStartOf="@+id/vertical_divider"
-                                        android:background="?attr/selectableItemBackgroundBorderless"
-                                        android:scaleType="fitXY"
-                                        android:src="@mipmap/heart_full"
-                                        android:tint="@color/gray"
-                                        android:visibility="@{kstatus ? View.VISIBLE : View.GONE}" />
-
-
-                                    <View
-                                        android:id="@+id/vertical_divider"
-                                        android:layout_width="@dimen/_1sdp"
-                                        android:layout_height="@dimen/_15sdp"
-                                        android:layout_centerVertical="true"
-                                        android:layout_marginStart="@dimen/_5sdp"
-                                        android:layout_marginEnd="@dimen/_5sdp"
-                                        android:layout_toStartOf="@+id/rating"
-                                        android:alpha="0.2"
-                                        android:background="@color/divider_color"
-                                        android:visibility="@{kstatus ? View.VISIBLE : View.GONE}" />
-
-                                    <RatingBar
-                                        android:id="@+id/rating"
-                                        style="?android:attr/ratingBarStyleSmall"
-                                        android:layout_width="wrap_content"
-                                        android:layout_height="wrap_content"
-                                        android:layout_centerVertical="true"
-                                        android:layout_alignParentEnd="true"
-                                        android:isIndicator="true"
-                                        android:numStars="6"
-                                        android:layout_alignParentRight="true"
-                                        android:rating="@{restaurant.total_rating}"
-                                        android:stepSize="0.0" />
-
-                                </RelativeLayout>
-
-
                                 <android.support.v7.widget.AppCompatTextView
-                                    android:id="@+id/ratingtxt"
                                     style="@style/Subtitle_TextViewSmall"
-                                    android:layout_gravity="end"
-                                    android:layout_marginTop="@dimen/_5sdp"
-                                    android:fontFamily="@font/hindvadodara_regular"
-                                    android:singleLine="true"
-                                    android:text="@{@string/restaurant_rating(restaurant.total_review_count)}"
-                                    android:textSize="@dimen/_11sdp"
-                                    android:textColor="@color/black_light">
+                                    android:textSize="@dimen/_13sdp"
+                                    android:id="@+id/balance_txt"
+                                    android:textColor="@color/theme_color"
+                                    android:text="@{@string/saldo_kr(util.convertCurrencyToDanishWithoutLabel(String.valueOf(giftcardsInfo.balance)))}"
+                                    android:textStyle="bold"
+                                    />
 
-                                </android.support.v7.widget.AppCompatTextView>
+                                <!--
+                                                                    android:text="@{@string/saldo_kr(util.convertCurrencyToDanishWithoutLabel(String.valueOf(giftcardsInfo.balance)))}"
+                                -->
+
 
                                 <android.support.v7.widget.AppCompatButton
                                     android:id="@+id/order_now"
                                     style="@style/Button"
-                                    android:layout_gravity="end"
+                                    android:layout_gravity="start"
                                     android:layout_width="wrap_content"
                                     android:layout_height="@dimen/_25sdp"
                                     android:layout_marginTop="@dimen/_8sdp"
+                                    android:onClick="@{(v)-> handler.on_click(v,giftcardsInfo)}"
                                     android:background="@color/background_light"
+                                    android:text="@string/ordernow"
                                     android:backgroundTint="@color/theme_color"
                                     android:fontFamily="@font/hindvadodara_light"
-                                    android:text="@{ordertype}"
                                     android:textSize="@dimen/_11sdp"
                                     android:textColor="@color/white"
-                                    android:visibility="@{(ordertype.equalsIgnoreCase(@string/notavailable)) ? View.INVISIBLE : View.VISIBLE }" />
+                                    />
 
 
                             </LinearLayout>
@@ -431,95 +366,6 @@
                     app:layout_constraintStart_toStartOf="parent"
                     app:layout_constraintTop_toBottomOf="@+id/constraint_one" />
 
-                <LinearLayout
-                    android:id="@+id/linear_restinfo"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/_5sdp"
-                    android:layout_marginBottom="@dimen/_8sdp"
-                    android:visibility="@{(ordertype.equalsIgnoreCase(@string/notavailable)) ? View.GONE : View.VISIBLE }"
-                    app:layout_constraintBottom_toBottomOf="parent"
-                    app:layout_constraintEnd_toEndOf="parent"
-                    app:layout_constraintStart_toStartOf="parent"
-                    app:layout_constraintTop_toTopOf="@+id/view_divider">
-
-                    <LinearLayout
-                        android:id="@+id/deliverypresent_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/_8sdp"
-                        android:layout_weight="1"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical">
-
-                        <android.support.v7.widget.AppCompatImageView
-                            android:layout_width="18dp"
-                            android:layout_height="@dimen/_18sdp"
-                            android:scaleType="fitXY"
-                            android:src="@mipmap/motorcycle" />
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/delivery_present"
-                            style="@style/SubtitleRegular_TextViewSmall"
-                            android:textSize="@dimen/_11sdp"
-                            android:text="sdfsdf"
-                            android:gravity="center" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/minimum_order_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_marginEnd="@dimen/_8sdp"
-                        android:layout_weight="1"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical">
-
-                        <android.support.v7.widget.AppCompatImageView
-                            android:layout_width="18dp"
-                            android:layout_height="@dimen/_18sdp"
-                            android:scaleType="fitXY"
-                            android:src="@mipmap/danish_krone" />
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/minimum_order"
-                            style="@style/SubtitleRegular_TextViewSmall"
-                            android:text="sdfsd"
-                            android:textSize="@dimen/_11sdp"
-                            android:gravity="center" />
-
-
-                    </LinearLayout>
-
-                    <LinearLayout
-                        android:id="@+id/opening_hours_view"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"
-                        android:layout_weight="1"
-                        android:gravity="center_horizontal"
-                        android:orientation="vertical">
-
-                        <android.support.v7.widget.AppCompatImageView
-                            android:layout_width="@dimen/_18sdp"
-                            android:layout_height="@dimen/_18sdp"
-                            android:scaleType="fitXY"
-                            android:src="@mipmap/stopwatch" />
-
-                        <android.support.v7.widget.AppCompatTextView
-                            android:id="@+id/opening_hour"
-                            style="@style/SubtitleRegular_TextViewSmall"
-                            android:text="sdfsdf"
-                            android:textSize="@dimen/_11sdp"
-                            android:gravity="center" />
-
-
-                    </LinearLayout>
-
-
-                </LinearLayout>
 
                 <!--      <View
                           android:id="@+id/view_divider_two"
@@ -539,42 +385,23 @@
                           />
       -->
 
-                <ProgressBar
+                <!--<ProgressBar
                     android:id="@+id/fav_proress"
                     style="@style/Widget.AppCompat.ProgressBar.Horizontal"
                     android:layout_width="match_parent"
                     android:layout_height="2dp"
                     android:indeterminate="true"
                     android:scaleY="4"
-                    android:visibility="@{restaurant.fav_progress ? View.VISIBLE  : View.GONE}"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toStartOf="parent" />
-
+-->
             </android.support.constraint.ConstraintLayout>
 
 
         </RelativeLayout>
 
-        <RelativeLayout
-            android:id="@+id/blocking_view"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:alpha="0.7"
-            android:background="#99ffffff"
-            android:visibility="@{(ordertype.equalsIgnoreCase(@string/notavailable)) ? View.VISIBLE : View.GONE }">
 
-        </RelativeLayout>
-        <!--
-                <RelativeLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:alpha="0.4"
-                    android:background="#99ffffff"
-                    android:visibility="@{(ordertype.equalsIgnoreCase(@string/preorder)) ? View.VISIBLE : View.GONE }">
-
-                </RelativeLayout>
-        -->
 
     </android.support.v7.widget.CardView>
 

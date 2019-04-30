@@ -45,6 +45,7 @@ class CashonlineAdapter(val context: Context, val list: ArrayList<Paymentmethod.
     }
 
     override fun getItemViewType(position: Int): Int {
+
         if(list[position].payment_type == Constants.EATMORE || list[position].payment_type == Constants.RESTAURANT)
             return TYPE_BALANCE
         else

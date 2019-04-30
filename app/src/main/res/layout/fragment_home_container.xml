@@ -44,6 +44,8 @@
         </RelativeLayout>
 
 
+
+
         <include
             android:id="@+id/bottom_menu"
             layout="@layout/layout_bottom_menu"
