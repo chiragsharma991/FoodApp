@@ -508,7 +508,8 @@ class OrderFragment : CommanAPI(), SwipeRefreshLayout.OnRefreshListener {
                     (fragmentof as HomeContainerFragment).getHomeFragment().popAllFragment()
                     ((orderFragment.activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0,0) // if user is login and press only back then move->Home
                     Handler().postDelayed({
-                        HomeFragment.is_from_reorder = true
+                        //HomeFragment.is_from_reorder = true
+                        HomeFragment.isFrom=HomeFragment.IsFrom.ORDER
                         ((orderFragment.activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().reorderfuntion()
                     }, 800)
                 }

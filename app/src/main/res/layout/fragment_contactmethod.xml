@@ -1,0 +1,257 @@
+<?xml version="1.0" encoding="utf-8"?>
+<layout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+
+    >
+
+    <data>
+
+        <import type="android.view.View">
+
+        </import>
+
+        <variable
+            name="notificationSetModel"
+            type="dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.ContactMethod.NotificationSetModel">
+
+        </variable>
+
+
+        <variable
+            name="uiHandler"
+            type="dk.eatmore.foodapp.activity.main.home.fragment.Dashboard.Account.ContactMethod.UiHandler">
+
+        </variable>
+
+    </data>
+
+
+    <FrameLayout
+        xmlns:app="http://schemas.android.com/apk/res-auto"
+        android:id="@+id/viewcontainer"
+        android:layout_width="match_parent"
+        android:background="@color/background_light"
+        android:layout_height="match_parent"
+        android:fitsSystemWindows="true"
+        android:orientation="vertical">
+
+        <RelativeLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:id="@+id/main"
+            android:orientation="vertical"
+            android:background="@color/white"
+
+            >
+
+
+
+
+            <android.support.design.widget.AppBarLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:id="@+id/appbar"
+                >
+                <include layout="@layout/toolbar"
+                    >
+
+                </include>
+
+            </android.support.design.widget.AppBarLayout>
+
+            <android.support.v4.widget.NestedScrollView
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_below="@+id/appbar"
+                android:layout_marginStart="@dimen/_16sdp"
+                android:layout_marginEnd="@dimen/_16sdp"
+                android:layout_marginTop="@dimen/_16sdp"
+                >
+
+                <LinearLayout
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:orientation="vertical"
+                    >
+
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/SubtitleMidium_TextViewSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:text="få opdateringer om din ordre via"
+
+                        />
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/black"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        >
+
+                    </View>
+
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        style="@style/Subtitle_TextViewSmall"
+                        android:layout_width="wrap_content"
+                        android:enabled="false"
+                        android:id="@+id/ordersms_chk"
+                        android:alpha="0.5"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:checked="@{notificationSetModel.order_sms}"
+                        android:buttonTint="@color/theme_color"
+                        android:layout_height="wrap_content"
+                        android:text="SMS (Kun vigtige opdateringer)"
+
+                        />
+                    <android.support.v7.widget.AppCompatCheckBox
+                        style="@style/Subtitle_TextViewSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:enabled="false"
+                        android:alpha="0.5"
+                        android:id="@+id/orderemail_chk"
+                        android:checked="@{notificationSetModel.order_email}"
+                        android:buttonTint="@color/theme_color"
+                        android:layout_height="wrap_content"
+                        android:text="E-mail (Kvittering for din bestilling sendes via mail)"
+
+                        />
+                    <android.support.v7.widget.AppCompatCheckBox
+                        style="@style/Subtitle_TextViewSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:id="@+id/orderpush_chk"
+                        android:checked="@{notificationSetModel.order_notification}"
+                        android:buttonTint="@color/theme_color"
+                        android:layout_height="wrap_content"
+                        android:text="Push notifikation (kun vigtige opdateringer)"
+
+                        />
+
+
+
+                    <android.support.v7.widget.AppCompatTextView
+                        style="@style/SubtitleMidium_TextViewSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_marginTop="@dimen/_16sdp"
+                        android:text="få nyheder og gode tilbud via"
+
+                        />
+
+
+                    <View
+                        android:layout_width="match_parent"
+                        android:layout_height="0.5dp"
+                        android:background="@color/black"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        >
+
+                    </View>
+
+
+                    <android.support.v7.widget.AppCompatCheckBox
+                        style="@style/Subtitle_TextViewSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:checked="@{notificationSetModel.other_sms}"
+                        android:id="@+id/othersms_chk"
+                        android:buttonTint="@color/theme_color"
+                        android:layout_height="wrap_content"
+                        android:text="SMS"
+
+                        />
+                    <android.support.v7.widget.AppCompatCheckBox
+                        style="@style/Subtitle_TextViewSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:checked="@{notificationSetModel.other_email}"
+                        android:id="@+id/otheremail_chk"
+                        android:buttonTint="@color/theme_color"
+                        android:layout_height="wrap_content"
+                        android:text="E-mail"
+
+                        />
+                    <android.support.v7.widget.AppCompatCheckBox
+                        style="@style/Subtitle_TextViewSmall"
+                        android:layout_width="wrap_content"
+                        android:layout_marginTop="@dimen/_8sdp"
+                        android:checked="@{notificationSetModel.other_notification}"
+                        android:id="@+id/otherpush_chk"
+                        android:buttonTint="@color/theme_color"
+                        android:layout_height="wrap_content"
+                        android:text="Push notifikation"
+                        />
+
+
+
+                    <android.support.v7.widget.AppCompatButton
+                        android:id="@+id/save_btn"
+                        style="@style/Button"
+                        android:layout_marginTop="@dimen/_32sdp"
+                        android:text="@string/save_changes"
+                        android:onClick="@{uiHandler::submitdata}"
+                        android:textColor="@color/white"
+                        android:layout_alignParentBottom="true"
+
+
+                        />
+
+
+
+                </LinearLayout>
+
+            </android.support.v4.widget.NestedScrollView>
+
+
+
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:id="@+id/progress_bar_layout"
+                android:layout_below="@+id/appbar"
+                android:background="@color/white"
+                android:visibility="@{notificationSetModel.isloder ? View.VISIBLE : View.GONE}"
+                >
+
+                <ProgressBar
+                    android:id="@+id/progress_bar"
+                    style="?android:attr/progress"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_centerInParent="true"
+                    android:indeterminate="true" />
+
+
+            </RelativeLayout>
+
+
+
+
+
+
+
+
+
+
+
+        </RelativeLayout>
+
+
+
+
+
+
+    </FrameLayout>
+
+
+
+
+
+
+</layout>
+

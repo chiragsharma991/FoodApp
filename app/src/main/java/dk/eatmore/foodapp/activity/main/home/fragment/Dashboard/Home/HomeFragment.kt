@@ -78,7 +78,7 @@ class HomeFragment : CommanAPI() {
     companion object {
         var count: Int = 0
         var is_fav : Boolean = false
-        var is_from_reorder : Boolean = false
+        var isFrom : IsFrom = IsFrom.HOME
         var ui_model: UIModel? = null
         val TAG = "HomeFragment"
         fun newInstance(): HomeFragment {
@@ -98,12 +98,16 @@ class HomeFragment : CommanAPI() {
         return R.layout.fragment_home_fragment
     }
 
+    enum class IsFrom {
+        // This is three tab position
+        HOME, ORDER, PROFILE
+    }
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
 
         if (savedInstanceState == null) {
             logd(TAG, "saveInstance NULL")
-
+            loge(TAG,"is from ="+isFrom)
 
 
             Glide.with(context!!).load(ContextCompat.getDrawable(context!!, R.mipmap.eatmore_search_backgrond)).into(imageview);

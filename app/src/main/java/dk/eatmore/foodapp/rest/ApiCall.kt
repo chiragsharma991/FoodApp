@@ -71,6 +71,9 @@ class ApiCall {
         fun orderdetails(jsonObject: JsonObject) : Call<OrderedDetails> {
             return getApiInterface().orderdetails(jsonObject)
         }
+        fun notificationSetting(jsonObject: JsonObject) : Call<JsonObject> {
+            return getApiInterface().notificationSetting(jsonObject)
+        }
         fun giftCard(jsonObject: JsonObject) : Call<JsonObject> {
             return getApiInterface().giftCard(jsonObject)
         }

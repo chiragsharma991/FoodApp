@@ -42,6 +42,7 @@
         android:layout_marginStart="@dimen/_5sdp"
         android:layout_marginEnd="@dimen/_5sdp"
         android:layout_below="@+id/free_txt"
+        app:cardElevation="1dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:transitionName="@string/transition_string"
         app:cardBackgroundColor="@{(ordertype.equalsIgnoreCase(@string/preorder)) ? @color/white_light : @color/white }"

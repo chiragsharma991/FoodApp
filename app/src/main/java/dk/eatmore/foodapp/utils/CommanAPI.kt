@@ -289,7 +289,8 @@ abstract class CommanAPI : BaseFragment() {
             ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(0,0) // if user is login and press only back then move->Home
             Handler().postDelayed({
                 //showProgressDialog()
-                HomeFragment.is_from_reorder=true
+                //HomeFragment.is_from_reorder=true
+                HomeFragment.isFrom = HomeFragment.IsFrom.ORDER
                 ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).getHomeFragment().reorderfuntion()
             }, 800)
 

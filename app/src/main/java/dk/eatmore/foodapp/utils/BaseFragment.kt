@@ -216,6 +216,7 @@ abstract class BaseFragment : Fragment() {
                 hideKeyboard()
                 loge("backStackCount", childFragmentManager.backStackEntryCount.toString())
                 val fragment = childFragmentManager.findFragmentByTag(childFragmentManager.getBackStackEntryAt(childFragmentManager.backStackEntryCount - 1).name)
+
                 if (fragment != null && fragment.isVisible) {
                     isPop = true
                     when (fragment) {

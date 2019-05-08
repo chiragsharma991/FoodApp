@@ -38,13 +38,13 @@
         android:layout_height="wrap_content"
         android:layout_marginStart="@dimen/_8sdp"
         android:layout_marginEnd="@dimen/_8sdp"
-
         >
 
         <android.support.v7.widget.CardView
             style="@style/CardViewStyle"
             android:id="@+id/search_view"
             android:layout_margin="0dp"
+            app:cardElevation="1dp"
             android:background="?attr/selectableItemBackgroundBorderless"
             app:cardUseCompatPadding="true"
             >

@@ -46,6 +46,7 @@ class Constants {
     const  val EATMORE_VERSION_ANDROID = "eatmore_version_android"
     const  val APP = "app"
     const  val IS_LOGIN = "is_login"
+    const  val IS_EDIT = "is_edit"
     const  val ID = "id"
     const  val OP_ID = "op_id"
     const  val P_ID = "p_id"

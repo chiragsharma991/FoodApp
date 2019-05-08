@@ -211,6 +211,10 @@ interface ApiInterface {
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun orderdetails(@Body jsonObject: JsonObject): Call<OrderedDetails>
 
+    @POST("Enduser/enduser/notification-settings")
+    @Headers("Content-Type: application/x-www-form-urlencoded")
+    fun notificationSetting(@Body jsonObject: JsonObject): Call<JsonObject>
+
     @POST("Cart/cart/giftcard-balance")
     @Headers("Content-Type: application/x-www-form-urlencoded")
     fun giftCard(@Body jsonObject: JsonObject): Call<JsonObject>

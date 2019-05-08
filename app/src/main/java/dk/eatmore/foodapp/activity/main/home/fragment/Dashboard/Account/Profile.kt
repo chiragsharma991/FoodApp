@@ -61,6 +61,7 @@ class Profile : BaseFragment() {
     private var kundlesupport: KundleSupport? = null
     private var kundlechatsupport: KundleChatSupport? = null
     private var coupan_fragment: Coupan? = null
+    private var contactMethod: ContactMethod? = null
     lateinit var ui_model: UIModel
     private val myclickhandler = MyClickHandler(this)
 
@@ -257,6 +258,7 @@ class Profile : BaseFragment() {
         })
     }
 
+
     fun clearaccount() {
         var mToken = ""
         val cpy_is_skip_version = PreferenceUtil.getBoolean(PreferenceUtil.IS_SKIP_VERSION, false)
@@ -345,7 +347,12 @@ class Profile : BaseFragment() {
         } else if (coupan_fragment != null && coupan_fragment!!.isVisible) {
             childFragmentManager.popBackStack()
             return true
-        } else if (ratetheapp != null && ratetheapp!!.isVisible) {
+        }
+          else if (contactMethod != null && contactMethod!!.isVisible) {
+            childFragmentManager.popBackStack()
+            return true
+        }
+          else if (ratetheapp != null && ratetheapp!!.isVisible) {
             childFragmentManager.popBackStack()
             return true
         } else if (kundlesupport != null && kundlesupport!!.isVisible) {
@@ -420,6 +427,10 @@ class Profile : BaseFragment() {
 
         fun giftCart(view: View) {
             profile.giftDetails()
+        }
+        fun contactMethod(view: View) {
+            profile.contactMethod = ContactMethod.newInstance()
+            profile.addFragment(R.id.profile_container,profile.contactMethod!!, ProfileEdit.TAG, false)
         }
 
         fun termsofservices(view: View) {

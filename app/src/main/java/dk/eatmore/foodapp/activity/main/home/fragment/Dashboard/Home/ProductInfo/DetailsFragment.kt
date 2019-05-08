@@ -467,10 +467,10 @@ class DetailsFragment : CommanAPI() {
             if (restaurantList != null && canIrefreshpre_Function) (restaurantList as RestaurantList).fetch_ProductDetailList() // if some one restaurant immediate closed then refresh current.
             canIrefreshpre_Function = false
             // this for re-order
-            if(HomeFragment.is_from_reorder){
-                HomeFragment.is_from_reorder=false
+            if(HomeFragment.isFrom == HomeFragment.IsFrom.ORDER || HomeFragment.isFrom == HomeFragment.IsFrom.PROFILE ){
                 if(OrderFragment.ui_model?.reloadfragment !=null) OrderFragment.ui_model!!.reloadfragment.value=true   // every time refresh :  order fragment
-                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(1,800) // if you are from reorder then go there.
+                ((activity as HomeActivity).getHomeContainerFragment() as HomeContainerFragment).changeHomeview_page(if(HomeFragment.isFrom == HomeFragment.IsFrom.ORDER) 1 else 2 , 800) // if you are from reorder then go there.
+                HomeFragment.isFrom = HomeFragment.IsFrom.HOME
                 (parentFragment as HomeFragment).childFragmentManager.popBackStack()
 
             }else{

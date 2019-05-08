@@ -296,5 +296,6 @@
     <string name="giftcart">Gavekort</string>
     <string name="saldo_kr">Saldo: kr. %1$s</string>
     <string name="vaerdi_kr">Værdi: kr. %1$s</string>
+    <string name="save_changes">Gem ændringer</string>
 
 </resources>
