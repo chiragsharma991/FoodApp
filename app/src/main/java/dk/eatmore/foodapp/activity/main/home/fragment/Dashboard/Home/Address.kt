@@ -21,7 +21,9 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.LinearLayout
 import android.widget.TextView
+import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.epay.fragment.DeliveryTimeslot
@@ -34,6 +36,7 @@ import dk.eatmore.foodapp.databinding.FragmentAddressBinding
 import dk.eatmore.foodapp.databinding.RowAddressBinding
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
 import dk.eatmore.foodapp.model.User
+import dk.eatmore.foodapp.model.home.Postalcity
 import dk.eatmore.foodapp.model.home.Restaurant
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
@@ -84,6 +87,7 @@ class Address : CommanAPI(), TextWatcher {
 
     override fun initView(view: View?, savedInstanceState: Bundle?) {
         if (savedInstanceState == null) {
+
             logd(TAG, "saveInstance NULL")
             progress_bar.visibility = View.VISIBLE
             restaurant = arguments!!.getSerializable(Constants.RESTAURANT) as Restaurant
@@ -103,14 +107,21 @@ class Address : CommanAPI(), TextWatcher {
             inputValidStates[house_edt] = false
             inputValidStates[city_edt] = false
 
+
+
+
             if (RestaurantList.ui_model != null) {
                 // Add postal code if restaurant list is open anotherwise null
-                loge(AddressForm.TAG, "postal size is-" + RestaurantList.ui_model!!.restaurantList.value!!.postal_city.size.toString())
+                val list_ = PreferenceUtil.getString(PreferenceUtil.POSTALCITY,"")
+                val type = object:TypeToken<ArrayList<Postalcity>>() {}.getType()
+                val list : ArrayList<Postalcity>? = Gson().fromJson(list_,type)
+
                 postalcity = java.util.LinkedHashMap<String, String>()
-                for (i in 0 until RestaurantList.ui_model!!.restaurantList.value!!.postal_city.size) {
+                for (i in 0 until if(list == null ) 0 else list.size) {
                     postalcity!!.put(RestaurantList.ui_model!!.restaurantList.value!!.postal_city[i].postal_code, RestaurantList.ui_model!!.restaurantList.value!!.postal_city[i].city_name)
                 }
             }
+
 
             /*     postnumber_edt.imeOptions = EditorInfo.IME_ACTION_DONE
                  postnumber_edt.setOnEditorActionListener(object : TextView.OnEditorActionListener {
@@ -372,12 +383,16 @@ class Address : CommanAPI(), TextWatcher {
 
         binding.userInfo = ui_model!!.user_infoList.value!!.user_info
         binding.executePendingBindings()
+        val json = Gson().toJson(ui_model!!.user_infoList.value!!.postal_city)
+        PreferenceUtil.putValue(PreferenceUtil.POSTALCITY,json).also { PreferenceUtil.save() }
         name_edt.setText(ui_model!!.user_infoList.value!!.user_info.name)
         telephone_number_edt.setText(ui_model!!.user_infoList.value!!.user_info.telephone_no)
         street_edt.setText(ui_model!!.user_infoList.value!!.user_info.street)
         house_edt.setText(ui_model!!.user_infoList.value!!.user_info.house_no)
         floor_edt.setText(ui_model!!.user_infoList.value!!.user_info.floor_door)
         postnumber_edt.setText(ui_model!!.user_infoList.value!!.user_info.postal_code)
+
+
     }
 
 
@@ -578,13 +593,14 @@ class Address : CommanAPI(), TextWatcher {
 
     }
 
-    private fun getpostal_city(jsonObject: JsonObject): Map<String, String> {
-        val map = HashMap<String, String>()
+    private fun getpostal_city(jsonObject: JsonObject): ArrayList<Postalcity> {
+
+        val list = ArrayList<Postalcity>()
         val entrySet = jsonObject.getAsJsonObject(Constants.POSTAL_CITY).entrySet()
         for (entry in entrySet) {
-            map.put(entry.key, jsonObject.getAsJsonObject(Constants.POSTAL_CITY).get(entry.key).asString)
+            list.add(Postalcity(postal_code = entry.key ,city_name = jsonObject.getAsJsonObject(Constants.POSTAL_CITY).get(entry.key).asString))
         }
-        return map
+        return list
     }
 
 
@@ -650,9 +666,10 @@ class Address : CommanAPI(), TextWatcher {
     data class UserInfoModel(
             val status: Boolean = false,
             val user_info: User_Info,
-            val postal_city: Map<String, String>
+            val postal_city: ArrayList<Postalcity> = arrayListOf()
 
-    )
+
+            )
 
     data class User_Info(
             var name: String = "",

@@ -149,6 +149,12 @@ abstract class BaseFragment : Fragment() {
 
     }
 
+    fun test (){
+
+        loge("tag","backpress-----------")
+    }
+
+
     fun getpostalfrom_latlang(latitude: Double, longitude: Double): String {
 
         /**
@@ -216,7 +222,7 @@ abstract class BaseFragment : Fragment() {
                 hideKeyboard()
                 loge("backStackCount", childFragmentManager.backStackEntryCount.toString())
                 val fragment = childFragmentManager.findFragmentByTag(childFragmentManager.getBackStackEntryAt(childFragmentManager.backStackEntryCount - 1).name)
-
+             //   (fragment as BaseFragment).test()
                 if (fragment != null && fragment.isVisible) {
                     isPop = true
                     when (fragment) {

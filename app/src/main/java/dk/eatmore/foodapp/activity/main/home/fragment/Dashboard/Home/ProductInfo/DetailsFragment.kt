@@ -367,7 +367,7 @@ class DetailsFragment : CommanAPI() {
                 val restaurantInfoModel = GsonBuilder().create().fromJson(response.toString(), RestaurantInfoModel::class.java)
                 if (restaurantInfoModel.status) {
                     ui_model!!.category_menulist.value = restaurantInfoModel
-                    loge(TAG," result --"+ui_model!!.category_menulist.value!!.restaurant_info!!.offer_details.toString())
+                    loge(TAG," result --"+ui_model!!.category_menulist.value!!.restaurant_info!!.cartamt)
                 }
             }
 
@@ -402,7 +402,7 @@ class DetailsFragment : CommanAPI() {
             loge(TAG,"broadcastEvent--")
             mYourBroadcastReceiver = object : BroadcastReceiver() {
                 override fun onReceive(context: Context?, intent: Intent?) {
-                    loge(TAG, "broadcast receive..."+ui_model?.category_menulist?.value?.restaurant_info!!.test)
+                    loge(TAG, "broadcast receive...")
                     if (intent!!.action == Constants.CARTCOUNT_BROADCAST) {
                         restaurant_info.cartcnt = intent.extras.getInt(Constants.CARTCNT).toString()
                         restaurant_info.cartamt = intent.extras.getString(Constants.CARTAMT).toString()

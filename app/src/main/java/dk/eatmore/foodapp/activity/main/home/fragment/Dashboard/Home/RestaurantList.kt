@@ -21,6 +21,7 @@ import android.view.Gravity
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import com.google.gson.Gson
 import com.google.gson.JsonObject
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.filter.KokkenType
@@ -29,6 +30,7 @@ import dk.eatmore.foodapp.activity.main.filter.Tilpas
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.adapter.restaurantList.RestaurantListParentAdapter
 import dk.eatmore.foodapp.databinding.RestaurantlistBinding
+import dk.eatmore.foodapp.fragment.Dashboard.Home.Address
 import dk.eatmore.foodapp.fragment.Dashboard.Home.HomeFragment
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.fragment.ProductInfo.DetailsFragment
@@ -369,6 +371,10 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
 
     private fun refreshview() {
         loge(TAG, "refresh---")
+
+        val json = Gson().toJson(ui_model!!.restaurantList.value!!.postal_city)
+        PreferenceUtil.putValue(PreferenceUtil.POSTALCITY,json).also { PreferenceUtil.save() }
+
         var statuswiserestaurant: StatusWiseRestaurant
         list = ArrayList()
         val open_now = ui_model!!.restaurantList.value!!.restaurant_list.open_now

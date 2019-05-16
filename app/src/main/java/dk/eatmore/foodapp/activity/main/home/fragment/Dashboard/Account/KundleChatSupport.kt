@@ -56,7 +56,6 @@ import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.utils.BindDataUtils
 import dk.eatmore.foodapp.utils.DialogUtils
 import kotlinx.android.synthetic.main.kundlesupport.*
-import kotlinx.android.synthetic.main.zs_activity_help_center.*
 import org.json.JSONObject
 import zendesk.support.*
 import java.util.ArrayList

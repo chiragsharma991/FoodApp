@@ -71,6 +71,7 @@ object PreferenceUtil {
         editor!!.putBoolean(key, value)
     }
 
+
     /**
      * saves the values from the editor to the SharedPreference
      */
@@ -151,6 +152,7 @@ object PreferenceUtil {
     val KSTATUS = "kStatus"
     val SUBSCRIBE = "subscribe"
     val IS_SKIP_VERSION = "is_skip_version"
+    val POSTALCITY = "postal_city"
     val SKIPED_VERSION_NAME = "skiped_version_name"
 
 

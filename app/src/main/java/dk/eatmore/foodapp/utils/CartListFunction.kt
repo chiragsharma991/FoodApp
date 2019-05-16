@@ -201,9 +201,11 @@ object CartListFunction {
             // postParam.addProperty(Constants.POSTAL_CODE, EpayFragment.paymentattributes.postal_code)
             postParam.addProperty(Constants.EATMORE_GIFTCARD, paymentmethod.eatmoreAppliedBalance)
             postParam.addProperty(Constants.RESTAURANT_GIFTCARD, paymentmethod.restaurantAppliedBalance)
-            postParam.addProperty(Constants.DISCOUNT_TYPE, paymentmethod.addedDiscount_type)
-            postParam.addProperty(Constants.DISCOUNT_AMOUNT, paymentmethod.addedDiscount_amount)
-            postParam.addProperty(Constants.DISCOUNT_ID, paymentmethod.addedDiscount_id)
+            // if you are coming from product discount then not pass any amount,id,type.
+            postParam.addProperty(Constants.DISCOUNT_TYPE, if(paymentmethod.addedDiscount_type == Constants.PRODUCT_DISCOUNT) "" else paymentmethod.addedDiscount_type )
+            postParam.addProperty(Constants.DISCOUNT_AMOUNT, if(paymentmethod.addedDiscount_type == Constants.PRODUCT_DISCOUNT) 0.0 else paymentmethod.addedDiscount_amount)
+            postParam.addProperty(Constants.DISCOUNT_ID, if(paymentmethod.addedDiscount_type == Constants.PRODUCT_DISCOUNT) "" else paymentmethod.addedDiscount_id)
+
             postParam.addProperty(Constants.SHIPPING, if (DetailsFragment.isPickup) context.getString(R.string.pickup_) else context.getString(R.string.delivery_))
             postParam.addProperty(Constants.TELEPHONE_NO, EpayFragment.paymentattributes.telephone_no)
             postParam.addProperty(Constants.ORDER_TOTAL, paymentmethod.subtotal.toString())

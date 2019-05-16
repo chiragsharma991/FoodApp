@@ -16,7 +16,9 @@ import android.view.inputmethod.EditorInfo
 import android.widget.EditText
 import android.widget.TextView
 import android.widget.Toast
+import com.google.gson.Gson
 import com.google.gson.JsonObject
+import com.google.gson.reflect.TypeToken
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.epay.EpayFragment
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
@@ -28,6 +30,7 @@ import dk.eatmore.foodapp.adapter.cart.CartViewAdapter
 import dk.eatmore.foodapp.databinding.RagistrationFormBinding
 import dk.eatmore.foodapp.fragment.HomeContainerFragment
 import dk.eatmore.foodapp.model.User
+import dk.eatmore.foodapp.model.home.Postalcity
 import dk.eatmore.foodapp.rest.ApiCall
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import dk.eatmore.foodapp.utils.BaseFragment
@@ -89,9 +92,14 @@ class AddressForm : BaseFragment(), TextWatcher {
             //   setToolbarforThis()
             if(RestaurantList.ui_model !=null){
                 // Add postal code if restaurant list is open anotherwise null
+                val list_ = PreferenceUtil.getString(PreferenceUtil.POSTALCITY,"")
+                val type = object: TypeToken<ArrayList<Postalcity>>() {}.getType()
+                val list : ArrayList<Postalcity>? = Gson().fromJson(list_,type)
+
+
                 loge(TAG,"postal size is-"+ RestaurantList.ui_model!!.restaurantList.value!!.postal_city.size.toString())
                 postalcity =LinkedHashMap<String,String>()
-                for(i in 0 until RestaurantList.ui_model!!.restaurantList.value!!.postal_city.size){
+                for(i in 0 until if(list == null ) 0 else list.size){
                     postalcity!!.put(RestaurantList.ui_model!!.restaurantList.value!!.postal_city[i].postal_code,RestaurantList.ui_model!!.restaurantList.value!!.postal_city[i].city_name)
                 }
             }
