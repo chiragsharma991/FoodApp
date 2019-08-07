@@ -115,6 +115,7 @@ class RestaurantListChildAdapter(val context: Context, val listner: RestaurantLi
 
             //Minimum order
             if (restaurant.delivery_present) {
+
                 holder.binding.minimumOrderView.visibility = View.VISIBLE
                 if ((restaurant.minimum_order_price == null) || (restaurant.minimum_order_price == "")) {
                     restaurant.sort_min_order_price = 0.0

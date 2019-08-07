@@ -61,6 +61,7 @@ import dk.eatmore.foodapp.rest.ApiInterface
 import dk.eatmore.foodapp.storage.PreferenceUtil
 import kotlinx.android.synthetic.main.category_list.*
 import kotlinx.android.synthetic.main.fragment_home_container.*
+import kotlinx.android.synthetic.main.fragment_home_fragment.*
 import kotlinx.android.synthetic.main.toolbar_plusone.*
 import org.json.JSONObject
 import java.util.regex.Pattern
@@ -160,16 +161,26 @@ abstract class BaseFragment : Fragment() {
         /**
          * TODO :  IOException: grpc failed
          * */
+        try {
 
-        val gcd = Geocoder(context!!)
-        val addresses: List<Address> = gcd.getFromLocation(latitude, longitude, 1) // error
-        for (address: Address in addresses) {
-            if (address.getLocality() != null && address.getPostalCode() != null) {
-                // Log.e("",address.getLocality())
-                Log.e("getpostalfrom_latlang", address.getPostalCode())
-                return address.getPostalCode()
+            val gcd = Geocoder(context!!)
+            val addresses: List<Address> = gcd.getFromLocation(latitude, longitude, 1) // error
+            for (address: Address in addresses) {
+                if (address.getLocality() != null && address.getPostalCode() != null) {
+                    // Log.e("",address.getLocality())
+                    Log.e("getpostalfrom_latlang", address.getPostalCode())
+                    return address.getPostalCode()
+                }
             }
+
+        }catch (e: Exception){
+            Toast.makeText(context,"Grpc failed, Please try again sometime",Toast.LENGTH_SHORT).show()
+            loge("TAG","grpc failed Exception--"+e.message)
+            gps_img.visibility = View.VISIBLE
+            progress_bar.visibility = View.GONE
+
         }
+
         return ""
     }
 

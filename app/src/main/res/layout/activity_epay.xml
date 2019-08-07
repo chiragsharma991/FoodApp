@@ -47,7 +47,9 @@
         android:clickable="true"
         android:fitsSystemWindows="true"
         android:focusable="true"
-        android:visibility="visible">
+        android:visibility="visible"
+
+        >
 
 
         <RelativeLayout

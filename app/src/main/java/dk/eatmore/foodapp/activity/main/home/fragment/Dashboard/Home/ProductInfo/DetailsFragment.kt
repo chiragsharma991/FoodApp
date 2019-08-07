@@ -237,12 +237,6 @@ class DetailsFragment : CommanAPI() {
         binding.restaurant = restaurant_info
         binding.handler = myclickhandler
 
-        val stars : LayerDrawable = rating.getProgressDrawable() as LayerDrawable
-        stars.getDrawable(2).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
-        stars.getDrawable(0).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
-        stars.getDrawable(1).setColorFilter(Color.YELLOW, PorterDuff.Mode.SRC_ATOP);
-        rating.rating=restaurant_info.total_rating
-
         binding.executePendingBindings()
 
         ImageLoader.loadImageRoundCornerFromUrl(context = context!!,cornerSize = 32,fromFile = restaurant_info.app_icon,imageView = imageview)

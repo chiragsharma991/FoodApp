@@ -196,6 +196,9 @@
                             android:layout_marginTop="5dp"
                             android:layout_marginEnd="8dp"
                             android:isIndicator="true"
+                            android:rating="@{restaurant.total_rating}"
+                            android:progressTint="@color/yello"
+                            android:progressBackgroundTint="@color/black"
                             android:numStars="6"
                             android:visibility="@{is_uiprogress ? View.GONE : View.VISIBLE}"
                             android:stepSize="0.0"
@@ -518,8 +521,8 @@
 
 
 
-<!--
 
+<!--
 
         <RelativeLayout
             android:layout_width="match_parent"
@@ -540,8 +543,8 @@
 
 
         </RelativeLayout>
-
 -->
+
 
 
 

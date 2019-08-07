@@ -96,7 +96,7 @@ class RestaurantList : SearchRestaurant(), TextWatcher {
     }
 
 
-    override fun initView(view: View?, savedInstanceState: Bundle?) {
+    override fun initView(view: View?, savedInstanceState: Bundle?) {recycler_view_parent
         if (savedInstanceState == null) {
 
             error_view.visibility = View.GONE
