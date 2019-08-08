@@ -432,7 +432,7 @@ class Address : CommanAPI(), TextWatcher {
                     )
 
 
-                    if(jsonObject.getAsJsonObject(Constants.USER_INFO).has("giftcard_details") && !jsonObject.getAsJsonObject(Constants.USER_INFO).get("giftcard_details").isJsonNull) {
+                    if(jsonObject.getAsJsonObject(Constants.USER_INFO).has("giftcard_details") && !jsonObject.getAsJsonObject(Constants.USER_INFO).get("giftcard_details").isJsonNull && jsonObject.getAsJsonObject(Constants.USER_INFO).getAsJsonArray("giftcard_details").size() > 0) {
 
                         if(jsonObject.getAsJsonObject(Constants.USER_INFO).getAsJsonObject("giftcard_details").has("eatmore") && 0 < jsonObject.getAsJsonObject(Constants.USER_INFO).getAsJsonObject("giftcard_details").get("eatmore").asDouble){
                             EpayFragment.paymentattributes.giftcard_details[Constants.EATMORE]=jsonObject.getAsJsonObject(Constants.USER_INFO).getAsJsonObject("giftcard_details").get("eatmore").asString

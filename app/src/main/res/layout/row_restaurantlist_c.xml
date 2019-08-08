@@ -41,6 +41,7 @@
         android:layout_width="match_parent"
         android:layout_marginStart="@dimen/_5sdp"
         android:layout_marginEnd="@dimen/_5sdp"
+        android:layout_margin="@dimen/_5sdp"
         android:layout_below="@+id/free_txt"
         app:cardElevation="1dp"
         android:background="?attr/selectableItemBackgroundBorderless"
@@ -404,6 +405,7 @@
                                     android:backgroundTint="@color/theme_color"
                                     android:fontFamily="@font/hindvadodara_light"
                                     android:text="@{ordertype}"
+                                    android:textStyle="bold"
                                     android:textSize="@dimen/_11sdp"
                                     android:textColor="@color/white"
                                     android:visibility="@{(ordertype.equalsIgnoreCase(@string/notavailable)) ? View.INVISIBLE : View.VISIBLE }" />
