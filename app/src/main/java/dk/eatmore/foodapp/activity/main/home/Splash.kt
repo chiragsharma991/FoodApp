@@ -200,7 +200,7 @@ class Splash : BaseActivity() {
                         val pInfo = pm.getPackageInfo(packageName, 0)
                         androidversion=pInfo.versionName
                         latestversion=jsonObject.get(Constants.DATA).asJsonObject.get(Constants.EATMORE_VERSION_ANDROID).asString
-                        if(latestversion == androidversion){
+                        if(latestversion == androidversion || latestversion.trim().length <= 0){
                             //ignore
                             savedevice_token()
                         }else{

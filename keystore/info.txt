@@ -1,0 +1,9 @@
+key store path : E:\FoodApp\keystore\keystore_foodapp.jks
+key store password : password@123
+
+Key Alias: EatMore
+Password: password@123
+
+First Name and Last Name : EatMore
+
+debug hash key:  xSLzBBuLJunOQPB89rtzM54FXx4=

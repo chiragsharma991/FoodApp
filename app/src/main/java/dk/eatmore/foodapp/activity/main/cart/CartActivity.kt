@@ -547,7 +547,7 @@ class CartActivity : BaseActivity() {
         if(discountType == 0 || discountType == 2){
             // no discount || order discount
             val builder = SpannableStringBuilder()
-            val span1 = SpannableString("ADD TO CART ")
+            val span1 = SpannableString("Bekræft ")
             val span2 = SpannableString(BindDataUtils.convertCurrencyToDanish(actual_price))
             builder.append(span1).append(span2)
             return builder
@@ -559,7 +559,7 @@ class CartActivity : BaseActivity() {
             val priceBeforeDiscount = BindDataUtils.convertCurrencyToDanishWithoutLabel(actual_price)!!
             val builder = SpannableStringBuilder()
             val strikethroughSpan = StrikethroughSpan()
-            val span1 = SpannableString("ADD TO CART ")
+            val span1 = SpannableString("Bekræft ")
             val span2 = SpannableString(priceBeforeDiscount)
             val span3 = SpannableString(" " + priceAfterDiscount)
             span2.setSpan(strikethroughSpan, 0, priceBeforeDiscount.trim().length, Spanned.SPAN_EXCLUSIVE_EXCLUSIVE)

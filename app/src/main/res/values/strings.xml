@@ -45,7 +45,7 @@
     <string name="enter_your_old_password">Forrige adgangskode kan ikke være tomt!</string>
     <string name="enter_your_confirm_password">Bekræft venligst din adgangskode</string>
     <string name="signup">Signup</string>
-    <string name="add_to_cart">ADD TO CART %1$s</string>
+    <string name="add_to_cart">Bekræft %1$s</string>
     <string name="minues">- %1$s</string>
     <string name="total_goods">I alt (%1$s produkt(er))</string>
     <string name="plus">+ %1$s</string>

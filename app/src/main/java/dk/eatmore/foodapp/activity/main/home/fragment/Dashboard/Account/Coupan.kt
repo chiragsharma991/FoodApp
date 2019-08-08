@@ -8,6 +8,7 @@ import android.support.v7.widget.LinearLayoutManager
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import dk.eatmore.foodapp.R
 import dk.eatmore.foodapp.activity.main.home.HomeActivity
 import dk.eatmore.foodapp.adapter.gift.GiftBalanceParentAdapter
@@ -67,6 +68,7 @@ class Coupan : BaseFragment() {
                 refresh()
             }else{
                 // no data found
+                Toast.makeText(context,getString(R.string.no_data_found),Toast.LENGTH_SHORT).show()
             }
 
 

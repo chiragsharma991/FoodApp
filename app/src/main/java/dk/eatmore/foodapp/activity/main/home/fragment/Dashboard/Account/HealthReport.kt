@@ -82,6 +82,7 @@ class HealthReport : BaseFragment() {
     fun setwebview(){
 
         webview.getSettings().setJavaScriptEnabled(true) // enable javascript
+        loge(TAG,"url is-"+arguments!!.getString(Constants.HEALTH_REPORT_LINK) )
         webview.loadUrl(arguments!!.getString(Constants.HEALTH_REPORT_LINK) as String)
         webview.setWebViewClient(WebViewController())
     }

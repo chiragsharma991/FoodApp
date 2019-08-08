@@ -55,7 +55,6 @@
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
 
-
         <activity android:name=".activity.main.filter.Tilpas"
             android:screenOrientation="portrait"
             android:configChanges="keyboardHidden|orientation|screenSize"
@@ -79,8 +78,6 @@
             android:configChanges="keyboardHidden|orientation|screenSize"
             android:theme="@style/AppTheme.NoActionBar">
         </activity>
-
-
 
         <!-- Firebase Start-->
         <service
