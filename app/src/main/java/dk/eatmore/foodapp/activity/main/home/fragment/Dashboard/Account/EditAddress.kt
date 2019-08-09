@@ -73,6 +73,7 @@ class EditAddress : BaseFragment() {
             error_txt.visibility=View.GONE
             txt_toolbar.text=getString(R.string.leveringsadresse)
             txt_toolbar_right.text= getString(R.string.add)
+            txt_toolbar_right.visibility=View.VISIBLE
             txt_toolbar_right.setOnClickListener{ editAddress(null) }
             img_toolbar_back.setOnClickListener{(activity as HomeActivity).onBackPressed()}
             if(RestaurantList.ui_model == null) is_visible = false else is_visible= true
