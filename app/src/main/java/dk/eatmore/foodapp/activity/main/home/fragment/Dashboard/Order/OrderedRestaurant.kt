@@ -188,8 +188,8 @@ class OrderedRestaurant : CommanAPI() {
             shipping_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(list.shipping_costs?.toString() ?: "")
             additional_charge_txt.text = BindDataUtils.convertCurrencyToDanishWithoutLabel(list.additional_charge ?: "")
             discount_txt.text = String.format(getString(R.string.discount), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.discount_amount.toString()))
-            eatmoregift_txt.text = String.format(getString(R.string.discount), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.eatmore_giftcard!!))
-            restaurantgift_txt.text = String.format(getString(R.string.discount), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.restaurant_giftcard!!))
+            eatmoregift_txt.text = String.format(getString(R.string.discount), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.eatmore_giftcard?:""))
+            restaurantgift_txt.text = String.format(getString(R.string.discount), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.restaurant_giftcard?:""))
 
             total_txt.text = String.format(getString(R.string.dkk_price), BindDataUtils.convertCurrencyToDanishWithoutLabel(list.total_to_pay))
 

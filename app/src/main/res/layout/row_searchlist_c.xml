@@ -55,6 +55,7 @@
                 android:singleLine="true"
                 android:visibility="visible"
                 android:textStyle="bold"
+                android:textColor="@color/black"
                 app:layout_constraintEnd_toStartOf="@+id/cat_price"
                 app:layout_constraintHorizontal_bias="0.5"
                 app:layout_constraintStart_toStartOf="parent"

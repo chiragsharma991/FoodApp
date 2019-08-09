@@ -181,7 +181,6 @@
                             style="@style/Subtitle_TextViewSmall"
                             android:text="@{restaurant.cuisines}"
                             android:textColor="@color/white"
-                            android:textSize="@dimen/_11sdp"
                             android:layout_width="0dp"
                             app:layout_constraintEnd_toStartOf="@+id/guidelinetwo"
                             app:layout_constraintHorizontal_bias="0.0"
@@ -211,7 +210,6 @@
                         <TextView
                             android:id="@+id/textView3"
                             style="@style/Subtitle_TextViewSmall"
-                            android:textSize="@dimen/_11sdp"
                             android:layout_marginTop="5dp"
                             android:layout_marginEnd="8dp"
                             android:text="@{@string/restaurant_rating(restaurant.total_review_count)}"

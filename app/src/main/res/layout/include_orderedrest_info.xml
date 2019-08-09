@@ -114,7 +114,7 @@
             <android.support.v7.widget.AppCompatTextView
                 android:id="@+id/restaurant_contact"
                 style="@style/Subtitle_TextViewSmall"
-                android:layout_marginTop="@dimen/_5sdp"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:layout_gravity="center_vertical"
                 android:text="@{`DKK `+ util.convertCurrencyToDanishWithoutLabel(data.order_total)}" />
 
@@ -123,6 +123,7 @@
                 android:id="@+id/restaurant_address"
                 style="@style/Subtitle_TextViewSmall"
                 android:layout_gravity="center_vertical"
+                android:layout_marginTop="@dimen/_8sdp"
                 android:text="@{data.shipping.equalsIgnoreCase(@string/pickup_caps) ? util.parsewithoutTimeToddMMyyyy(data.order_date)+` `+@string/for_hent_selv : util.parsewithoutTimeToddMMyyyy(data.order_date)+` `+@string/til_levering}" />
 
 

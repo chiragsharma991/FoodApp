@@ -39,10 +39,9 @@
         android:id="@+id/search_view"
         android:layout_height="wrap_content"
         android:layout_width="match_parent"
-        android:layout_marginStart="@dimen/_5sdp"
-        android:layout_marginEnd="@dimen/_5sdp"
         android:layout_margin="@dimen/_5sdp"
         android:layout_below="@+id/free_txt"
+
         app:cardElevation="1dp"
         android:background="?attr/selectableItemBackgroundBorderless"
         android:transitionName="@string/transition_string"
@@ -54,7 +53,8 @@
         <RelativeLayout
             android:id="@+id/rowChildItem"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            android:layout_height="wrap_content"
+            >
 
 
             <android.support.constraint.ConstraintLayout
@@ -182,8 +182,7 @@
                         app:layout_constraintVertical_bias="0.0">
 
                         <android.support.v7.widget.AppCompatTextView
-                            style="@style/Subtitle_TextViewSmall"
-                            android:textSize="@dimen/_13sdp"
+                            style="@style/Titlelight_TextViewSmall"
                             android:text="@{restaurant.restaurant_name}"
                             android:textColor="@color/black"
                             android:textStyle="bold"
@@ -195,7 +194,6 @@
                             style="@style/Subtitle_TextViewSmall"
                             android:layout_gravity="center_vertical"
                             android:layout_marginLeft="@dimen/_3sdp"
-                            android:textSize="@dimen/_11sdp"
                             android:maxLines="3"
                             android:text="@{restaurant.cuisines}"
                             />
@@ -243,10 +241,10 @@
 
 
                             <android.support.v7.widget.AppCompatTextView
-                                style="@style/SubtitleRegular_TextViewSmall"
+                                style="@style/Subtitle_TextViewSmall"
                                 android:layout_gravity="center_vertical"
                                 android:layout_marginLeft="@dimen/_3sdp"
-                                android:textSize="@dimen/_11sdp"
+                                android:textColor="@color/black"
                                 android:text="@{restaurant.address}"
                                 />
 
@@ -389,7 +387,6 @@
                                     android:fontFamily="@font/hindvadodara_regular"
                                     android:singleLine="true"
                                     android:text="@{@string/restaurant_rating(restaurant.total_review_count)}"
-                                    android:textSize="@dimen/_11sdp"
                                     android:textColor="@color/black_light">
 
                                 </android.support.v7.widget.AppCompatTextView>
@@ -405,8 +402,6 @@
                                     android:backgroundTint="@color/theme_color"
                                     android:fontFamily="@font/hindvadodara_light"
                                     android:text="@{ordertype}"
-                                    android:textStyle="bold"
-                                    android:textSize="@dimen/_11sdp"
                                     android:textColor="@color/white"
                                     android:visibility="@{(ordertype.equalsIgnoreCase(@string/notavailable)) ? View.INVISIBLE : View.VISIBLE }" />
 
@@ -439,7 +434,7 @@
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:orientation="horizontal"
-                    android:layout_marginTop="@dimen/_5sdp"
+                    android:layout_marginTop="@dimen/_8sdp"
                     android:layout_marginBottom="@dimen/_8sdp"
                     android:visibility="@{(ordertype.equalsIgnoreCase(@string/notavailable)) ? View.GONE : View.VISIBLE }"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -464,8 +459,7 @@
 
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/delivery_present"
-                            style="@style/SubtitleRegular_TextViewSmall"
-                            android:textSize="@dimen/_11sdp"
+                            style="@style/Subtitle_TextViewSmall"
                             android:text="sdfsdf"
                             android:gravity="center" />
 
@@ -489,9 +483,8 @@
 
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/minimum_order"
-                            style="@style/SubtitleRegular_TextViewSmall"
+                            style="@style/Subtitle_TextViewSmall"
                             android:text="sdfsd"
-                            android:textSize="@dimen/_11sdp"
                             android:gravity="center" />
 
 
@@ -513,9 +506,8 @@
 
                         <android.support.v7.widget.AppCompatTextView
                             android:id="@+id/opening_hour"
-                            style="@style/SubtitleRegular_TextViewSmall"
+                            style="@style/Subtitle_TextViewSmall"
                             android:text="sdfsdf"
-                            android:textSize="@dimen/_11sdp"
                             android:gravity="center" />
 
 

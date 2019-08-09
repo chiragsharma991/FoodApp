@@ -134,7 +134,7 @@
     <string name="info">Information</string>
     <string name="payment">Hvordan vil du betale?</string>
     <string name="confirm_delivery_time">Bekræft din leveringstid</string>
-    <string name="payment_methods">Payment Methods</string>
+    <string name="payment_methods">Betalingsmetoder</string>
     <string name="addresses">Addresses</string>
     <string name="customer_service">Customer service</string>
     <string name="rate_the_app">Rate the App!</string>

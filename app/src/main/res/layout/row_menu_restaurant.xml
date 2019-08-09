@@ -37,13 +37,14 @@
 
 
             <android.support.v7.widget.AppCompatTextView
-                style="@style/Titlelight_TextViewSmall"
+                style="@style/Subtitle_TextViewSmall"
                 android:id="@+id/menu_raw_txt"
                 android:layout_gravity="center_vertical"
                 android:layout_marginLeft="@dimen/_3sdp"
                 android:layout_weight="1"
                 android:layout_marginRight="@dimen/_5sdp"
                 android:text="@{data.c_name}"
+                android:textColor="@color/black"
                 />
 
 
