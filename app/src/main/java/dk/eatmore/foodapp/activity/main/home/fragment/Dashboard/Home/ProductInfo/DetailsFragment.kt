@@ -258,7 +258,7 @@ class DetailsFragment : CommanAPI() {
                 //viewpager.setCurrentItem(1, true)
                 DialogUtils.openDialogDefault(context = context!!,btnNegative = "Se menukort",btnPositive = String.format(getString(R.string.find_andet_take_away),restaurant_info.city),
                         color = ContextCompat.getColor(context!!, R.color.theme_color),msg ="",
-                        title ="We are closed today. Please check opening hours",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
+                        title ="Vi har desværre lukket i dag. Se venligst vores åbningstider",onDialogClickListener = object : DialogUtils.OnDialogClickListener{
                     override fun onPositiveButtonClick(position: Int) {
                         //back press
                         // canIrefreshpre_Function=true

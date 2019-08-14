@@ -160,10 +160,12 @@ class Paymentmethod : CommanAPI() {
             paymentinfo_list.add(PaymentInfoModel(payment_type = Constants.EATMORE, error_expand = false, gift_expand = false, image_path = EpayFragment.paymentattributes.online_logo, view_expand = false, btn_txt = getString(R.string.confirm), gift_loader = false, edittextvalue = "", balance = it))
         }
         if (EpayFragment.paymentattributes.online_logo != "") {
+            loge(TAG,"online logo--"+EpayFragment.paymentattributes.online_logo)
             paymentinfo_list.add(PaymentInfoModel(payment_type = getString(R.string.online_payment), error_expand = false, gift_expand = false, image_path = EpayFragment.paymentattributes.online_logo, view_expand = true, btn_txt = getString(R.string.pay), gift_loader = false, edittextvalue = ""))
         }
 
         if (EpayFragment.paymentattributes.cash_logo != "") {
+            loge(TAG,"cash logo--"+EpayFragment.paymentattributes.cash_logo)
             paymentinfo_list.add(PaymentInfoModel(payment_type = getString(R.string.cash_payment), error_expand = false, gift_expand = false, image_path = EpayFragment.paymentattributes.cash_logo, view_expand = false, btn_txt = getString(R.string.confirm), gift_loader = false, edittextvalue = ""))
         }
 
@@ -795,6 +797,7 @@ class Paymentmethod : CommanAPI() {
         postParam.addProperty(Constants.SHIPPING, if (DetailsFragment.isPickup) getString(R.string.pickup_caps) else getString(R.string.delivery_caps))
         postParam.addProperty(Constants.SHIPPING_COSTS, EpayFragment.paymentattributes.shipping_charge)
         postParam.addProperty(Constants.IS_LOGIN, "1")
+        postParam.addProperty(Constants.LANGUAGE,Constants.DA)
         postParam.addProperty(Constants.UPTO_MIN_SHIPPING, EpayFragment.paymentattributes.upto_min_shipping)
         postParam.addProperty(Constants.CHECKOUT_PAYMENT, if (whatisthePaymethod == WhatIsThePaymethod.ONLINE) getString(R.string.online_payment) else getString(R.string.cash_payment))
 

@@ -163,7 +163,7 @@ abstract class BaseFragment : Fragment() {
          * */
         try {
 
-            val gcd = Geocoder(context!!)
+            val gcd = Geocoder(activity!!.applicationContext, Locale.getDefault())
             val addresses: List<Address> = gcd.getFromLocation(latitude, longitude, 1) // error
             for (address: Address in addresses) {
                 if (address.getLocality() != null && address.getPostalCode() != null) {

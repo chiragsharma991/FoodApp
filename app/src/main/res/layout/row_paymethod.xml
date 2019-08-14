@@ -148,7 +148,7 @@
                         android:layout_weight="0.8"
                         android:background="@drawable/rectangle_edittext"
                         android:hint="Enter your postal code"
-                        android:inputType="textCapCharacters"
+                        android:inputType="text"
                         android:lines="1"
                         android:singleLine="true"
                         android:textAppearance="?android:attr/textAppearanceSmall"

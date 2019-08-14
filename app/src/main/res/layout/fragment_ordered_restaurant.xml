@@ -131,19 +131,19 @@
                                     android:id="@+id/order_status_txt"
                                     style="@style/Titlelight_TextViewSmall"
                                     android:layout_width="wrap_content"
+                                    android:layout_toLeftOf="@+id/transaction_progress_bar"
+                                    android:layout_alignParentLeft="true"
                                     android:layout_height="wrap_content"
                                     android:layout_centerVertical="true"
-                                    android:maxLength="38"
-                                    android:ellipsize="end"
-                                    android:text="Order accepteret " />
+                                    android:text="Order accepteret" />
 
 
                                 <WebView
                                     android:layout_width="@dimen/_40sdp"
                                     android:layout_height="@dimen/_40sdp"
                                     android:id="@+id/transaction_progress_bar"
+                                    android:layout_alignParentRight="true"
                                     android:scrollIndicators="none"
-                                    android:layout_toEndOf="@+id/order_status_txt"
                                     android:layout_marginStart="@dimen/_8sdp"
                                     android:visibility="visible"
                                     tools:targetApi="m">

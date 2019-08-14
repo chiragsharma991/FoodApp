@@ -105,6 +105,7 @@ class TransactionStatus : CommanAPI() {
             addedDiscount_type=arguments!!.getSerializable("addedDiscount_type") as String
             appliedgift_list=arguments!!.getSerializable("appliedgift_list") as ArrayList<Paymentmethod.AppliedGiftModel>
             addedDiscount_id=arguments!!.getSerializable("addedDiscount_id") as String
+            favorite_btn.text=if(EpayFragment.paymentattributes.is_fav)getString(R.string.fjern_favorit) else getString(R.string.markere_som_favorit)
 
 
             loge(TAG,"check list--"+addedProductlist.size+"--"+addedDiscount_amount+"--"+addedDiscount_type)
@@ -950,10 +951,10 @@ class TransactionStatus : CommanAPI() {
             Constants.COM_ADD_FAVORITE_RESTAURANT->{
                 if(EpayFragment.paymentattributes.is_fav){
                     EpayFragment.paymentattributes.is_fav=false
-                    favorite_btn.text=if(EpayFragment.paymentattributes.is_fav)getString(R.string.markere_som_favorit) else getString(R.string.fjern_favorit)
+                    favorite_btn.text=if(EpayFragment.paymentattributes.is_fav)getString(R.string.fjern_favorit) else getString(R.string.markere_som_favorit)
                 }else{
                     EpayFragment.paymentattributes.is_fav=true
-                    favorite_btn.text=if(EpayFragment.paymentattributes.is_fav)getString(R.string.markere_som_favorit) else getString(R.string.fjern_favorit)
+                    favorite_btn.text=if(EpayFragment.paymentattributes.is_fav)getString(R.string.fjern_favorit) else getString(R.string.markere_som_favorit)
                 }
             }
 
@@ -964,7 +965,7 @@ class TransactionStatus : CommanAPI() {
         when(api_tag ){
 
             Constants.COM_ADD_FAVORITE_RESTAURANT->{
-                favorite_btn.text=if(EpayFragment.paymentattributes.is_fav)getString(R.string.markere_som_favorit) else getString(R.string.fjern_favorit)
+                favorite_btn.text=if(EpayFragment.paymentattributes.is_fav)getString(R.string.fjern_favorit) else getString(R.string.markere_som_favorit)
             }
         }
     }
